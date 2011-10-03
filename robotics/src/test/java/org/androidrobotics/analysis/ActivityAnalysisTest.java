@@ -39,6 +39,6 @@ public class ActivityAnalysisTest {
 
     @Activity(ActivityAnalysisTest.TEST_NAME)
     @Layout(ActivityAnalysisTest.TEST_LAYOUT_ID)
-    private class TestActivity {
+    public class TestActivity {
     }
 }

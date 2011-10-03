@@ -1,9 +1,7 @@
 package org.androidrobotics;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
@@ -12,6 +10,7 @@ import java.util.Set;
  * @author John Ericksen
  */
 @SupportedAnnotationTypes("org.androidrobotics.annotations.Activity")
+@SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
     private boolean processorRan = false;
@@ -27,8 +26,6 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
         if (!processorRan) {
-
-            System.out.println("Found: " + roundEnvironment);
 
             for (Element element : roundEnvironment.getRootElements()) {
                 roboticsProcessor.processRootElement(element);
