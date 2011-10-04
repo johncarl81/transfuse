@@ -2,10 +2,12 @@ package org.androidrobotics;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
 import org.androidrobotics.analysis.ActivityAnalysis;
+import org.androidrobotics.analysis.ElementAnalysisBridge;
 import org.androidrobotics.gen.ActivityDescriptor;
 import org.androidrobotics.gen.ActivityGenerator;
-import org.androidrobotics.util.AnnotatedElementBridge;
+import org.androidrobotics.gen.InjectionGenerator;
 import org.androidrobotics.util.FilerSourceCodeWriter;
 
 import javax.annotation.processing.Filer;
@@ -23,6 +25,7 @@ public class RoboticsProcessor {
 
     private ActivityGenerator activityGenerator;
     private JCodeModel codeModel;
+    private InjectionGenerator injectonGenerator;
 
     private RoboticsProcessor() {
         //private singleton constructor
@@ -30,6 +33,7 @@ public class RoboticsProcessor {
         codeModel = new JCodeModel();
         activityAnalysis = new ActivityAnalysis();
         activityGenerator = new ActivityGenerator(codeModel);
+        injectonGenerator = new InjectionGenerator(codeModel);
     }
 
     public static RoboticsProcessor getInstance() {
@@ -41,14 +45,18 @@ public class RoboticsProcessor {
     }
 
     public void processRootElement(Element element) {
-        ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(new AnnotatedElementBridge(element));
+        ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(new ElementAnalysisBridge(element));
 
         if (activityDescriptor != null) {
             try {
-                activityGenerator.generate(activityDescriptor);
+                JDefinedClass injectorDefinedClass = injectonGenerator.buildInjector(activityDescriptor);
+
+                activityGenerator.generate(activityDescriptor, injectorDefinedClass);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JClassAlreadyExistsException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
