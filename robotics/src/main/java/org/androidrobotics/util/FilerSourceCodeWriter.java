@@ -7,6 +7,8 @@ import javax.annotation.processing.Filer;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * @author John Ericksen
@@ -14,6 +16,7 @@ import java.io.OutputStream;
 public class FilerSourceCodeWriter extends CodeWriter {
 
     private Filer filer;
+    private Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     public FilerSourceCodeWriter(Filer filer) {
         this.filer = filer;
@@ -22,7 +25,11 @@ public class FilerSourceCodeWriter extends CodeWriter {
     @Override
     public OutputStream openBinary(JPackage jPackage, String fileName) throws IOException {
         JavaFileObject sourceFile = filer.createSourceFile(toQualifiedClassName(jPackage, fileName));
-        return sourceFile.openOutputStream();
+
+        OutputStream os = sourceFile.openOutputStream();
+        openStreams.add(os);
+
+        return os;
     }
 
     private String toQualifiedClassName(JPackage pkg, String fileName) {
@@ -32,6 +39,9 @@ public class FilerSourceCodeWriter extends CodeWriter {
 
     @Override
     public void close() throws IOException {
-        System.out.println("CLOSE CALLED");
+        for (OutputStream openStream : openStreams) {
+            openStream.flush();
+            openStream.close();
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.androidrobotics.annotations.OnCreate;
 public class TestActivityDelegate {
 
     private boolean onCreateCalled = false;
+    private boolean secondOnCreatCalled = false;
 
     @OnCreate
     public void callMe() {
@@ -17,7 +18,17 @@ public class TestActivityDelegate {
         onCreateCalled = true;
     }
 
+    @OnCreate
+    public void anotherCall(){
+        Log.i("test", "test");
+        secondOnCreatCalled = true;
+    }
+
     public boolean isOnCreateCalled() {
         return onCreateCalled;
+    }
+
+    public boolean isSecondOnCreatCalled() {
+        return secondOnCreatCalled;
     }
 }

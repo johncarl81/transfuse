@@ -35,5 +35,6 @@ public class TestActivityTest {
         delegateField.setAccessible(false);
 
         assertTrue(testActivityDelegate.isOnCreateCalled());
+        assertTrue(testActivityDelegate.isSecondOnCreatCalled());
     }
 }
