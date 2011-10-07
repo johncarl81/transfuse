@@ -19,7 +19,7 @@ public class TestActivityDelegate {
     }
 
     @OnCreate
-    public void anotherCall(){
+    public void anotherCall() {
         Log.i("test", "test");
         secondOnCreatCalled = true;
     }

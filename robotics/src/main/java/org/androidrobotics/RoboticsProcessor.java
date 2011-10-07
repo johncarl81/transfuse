@@ -3,12 +3,14 @@ package org.androidrobotics;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.writer.PrologCodeWriter;
 import org.androidrobotics.analysis.ActivityAnalysis;
 import org.androidrobotics.analysis.ElementAnalysisBridge;
 import org.androidrobotics.gen.ActivityDescriptor;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.gen.InjectionGenerator;
 import org.androidrobotics.util.FilerSourceCodeWriter;
+import org.androidrobotics.util.ResourceCodeWriter;
 
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
@@ -18,6 +20,8 @@ import java.io.IOException;
  * @author John Ericksen
  */
 public class RoboticsProcessor {
+
+    private static final String CODE_COMMENT = "Created by Robotics";
 
     private static RoboticsProcessor INSTANCE;
 
@@ -65,7 +69,9 @@ public class RoboticsProcessor {
     public void writeSource(Filer filer) {
 
         try {
-            codeModel.build(new FilerSourceCodeWriter(filer));
+            codeModel.build(
+                    new FilerSourceCodeWriter(filer),
+                    new ResourceCodeWriter(filer));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println(e);
