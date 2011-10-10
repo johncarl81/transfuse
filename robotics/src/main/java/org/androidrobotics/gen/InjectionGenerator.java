@@ -19,7 +19,7 @@ public class InjectionGenerator {
     public JDefinedClass buildInjector(ActivityDescriptor descriptor) throws JClassAlreadyExistsException, ClassNotFoundException {
 
         if (injectorClass == null) {
-            injectorClass = codeModel._class(JMod.PUBLIC, "org.androidrobotics.example.simple.Injector", ClassType.CLASS);
+            injectorClass = codeModel._class(JMod.PUBLIC, descriptor.getPackage() + "." + descriptor.getName() + "Injector", ClassType.CLASS);
             //singleton constructor
             injectorClass.constructor(JMod.PRIVATE);
             JFieldVar instance = injectorClass.field(JMod.PRIVATE | JMod.STATIC, injectorClass, "INSTANCE");
@@ -32,7 +32,7 @@ public class InjectionGenerator {
             getInstanceBody._return(instance);
         }
 
-        JDefinedClass factoryClass = buildFactory(descriptor.getDelegateClass());
+        JDefinedClass factoryClass = buildFactory(descriptor);
 
         JFieldVar factoryField = injectorClass.field(JMod.PRIVATE, factoryClass, descriptor.getShorDelegateClassName() + "_factory");
         factoryField.assign(JExpr._new(factoryClass));
@@ -45,13 +45,38 @@ public class InjectionGenerator {
 
     }
 
-    private JDefinedClass buildFactory(String name) throws JClassAlreadyExistsException, ClassNotFoundException {
+    private JDefinedClass buildFactory(ActivityDescriptor descriptor) throws JClassAlreadyExistsException, ClassNotFoundException {
 
-        JDefinedClass factoryClass = codeModel._class(JMod.PUBLIC, "org.androidrobotics.example.simple." + name + "Factory", ClassType.CLASS);
+        String name = descriptor.getDelegateClass();
+
+        JDefinedClass factoryClass = codeModel._class(JMod.PUBLIC, descriptor.getPackage() + "." + name + "Factory", ClassType.CLASS);
 
         JBlock buildIntanceBody = factoryClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.parseType(name), "buildInstance").body();
 
-        buildIntanceBody._return(JExpr._new(codeModel.parseType(name)));
+
+        JVar variable = buildIntanceBody.decl(codeModel.parseType(descriptor.getPackage() + ".TestActivityDelegate"), "activityDelegate");
+        buildIntanceBody.assign(variable, JExpr._new(codeModel.parseType(name)));
+
+        for (InjectionPoint injectionPoint : descriptor.getInjectionPoints()) {
+            JTryBlock jTryBlock = buildIntanceBody._try();
+
+            JBlock tryBuildInstancebody = jTryBlock.body();
+
+            JVar fieldVariable = tryBuildInstancebody.decl(codeModel.parseType("java.lang.reflect.Field"), "field");
+            tryBuildInstancebody.assign(fieldVariable, codeModel.ref(descriptor.getPackage() + ".TestActivityDelegate").dotclass()
+                    .invoke("getDeclaredField").arg("controller"));
+
+
+            tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.TRUE));
+            tryBuildInstancebody.add(fieldVariable.invoke("set").arg(variable).arg(JExpr._new(codeModel.parseType((descriptor.getPackage() + ".TestController")))));
+            tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.FALSE));
+
+            jTryBlock._catch(codeModel.directClass("java.lang.IllegalAccessException"));
+            jTryBlock._catch(codeModel.directClass("java.lang.NoSuchFieldException"));
+        }
+
+
+        buildIntanceBody._return(variable);
 
         return factoryClass;
     }

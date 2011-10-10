@@ -1,5 +1,6 @@
 package org.androidrobotics.analysis;
 
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -52,5 +53,10 @@ public class ClassAnalysisBridge implements AnalysisBridge {
             bridgedElements.add(new FieldAnalysisBridge(fieldt));
         }
         return bridgedElements;
+    }
+
+    @Override
+    public ElementKind getType() {
+        return ElementKind.CLASS;
     }
 }

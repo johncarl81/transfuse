@@ -5,12 +5,17 @@ import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.annotations.OnCreate;
 
+import javax.inject.Inject;
+
 @Activity("TestActivity")
 @Layout(R.layout.main)
 public class TestActivityDelegate {
 
     private boolean onCreateCalled = false;
     private boolean secondOnCreatCalled = false;
+
+    @Inject
+    private TestController controller;
 
     @OnCreate
     public void callMe() {
@@ -30,5 +35,9 @@ public class TestActivityDelegate {
 
     public boolean isSecondOnCreatCalled() {
         return secondOnCreatCalled;
+    }
+
+    public TestController getController() {
+        return controller;
     }
 }

@@ -1,5 +1,6 @@
 package org.androidrobotics.analysis;
 
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
@@ -13,4 +14,7 @@ public interface AnalysisBridge {
     String getName();
 
     Collection<AnalysisBridge> getEnclosedElements();
+
+    ElementKind getType();
+
 }

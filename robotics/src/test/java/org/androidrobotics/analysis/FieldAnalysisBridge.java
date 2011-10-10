@@ -1,33 +1,39 @@
 package org.androidrobotics.analysis;
 
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Collections;
 
 /**
  * @author John Ericksen
  */
-public class MethodAnalysisBridge implements AnalysisBridge {
+public class FieldAnalysisBridge implements AnalysisBridge {
 
-    private Method method;
+    private Field field;
 
-    public MethodAnalysisBridge(Method method) {
-        this.method = method;
+    public FieldAnalysisBridge(Field field) {
+        this.field = field;
     }
 
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-        return method.getAnnotation(annotationClass);
+        return field.getAnnotation(annotationClass);
     }
 
     @Override
     public String getName() {
-        return method.getName();
+        return field.getName();
     }
 
     @Override
     public Collection<AnalysisBridge> getEnclosedElements() {
         return Collections.emptySet();
+    }
+
+    @Override
+    public ElementKind getType() {
+        return ElementKind.FIELD;
     }
 }

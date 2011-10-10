@@ -5,6 +5,9 @@ import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.annotations.OnCreate;
 import org.androidrobotics.gen.ActivityDescriptor;
 
+import javax.inject.Inject;
+import javax.lang.model.element.ElementKind;
+
 /**
  * @author John Ericksen
  */
@@ -22,13 +25,22 @@ public class ActivityAnalysis implements RoboticsAnalysis<ActivityDescriptor> {
 
             activityDescriptor.setName(activityAnnotation.value());
             activityDescriptor.setLayout(layoutAnnotation.value());
-            activityDescriptor.setDelegateClass(input.getName());
+
+            String name = input.getName();
+            int lastDot = name.lastIndexOf('.');
+
+            activityDescriptor.setDelegateClass(input.getName().substring(lastDot + 1));
+            activityDescriptor.setPackage(input.getName().substring(0, lastDot));
 
             //scan enclosed elements
             for (AnalysisBridge enclosedElement : input.getEnclosedElements()) {
-                if (enclosedElement.getAnnotation(OnCreate.class) != null) {
+                if (enclosedElement.getType() == ElementKind.METHOD && enclosedElement.getAnnotation(OnCreate.class) != null) {
                     activityDescriptor.addMethod(OnCreate.class, enclosedElement.getName());
                 }
+                if (enclosedElement.getType() == ElementKind.FIELD && enclosedElement.getAnnotation(Inject.class) != null) {
+                    activityDescriptor.addInjectionPoint(enclosedElement);
+                }
+
             }
         }
         return activityDescriptor;

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.Field;
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -21,20 +22,25 @@ public class TestActivityTest {
     private TestActivityDelegate testActivityDelegate;
 
     @Before
-    public void setup() {
+    public void setup() throws IllegalAccessException, NoSuchFieldException {
         testActivity = new TestActivity();
         testActivity.onCreate(null);
-    }
 
-    @Test
-    public void testOnCreate() throws IllegalAccessException, NoSuchFieldException {
         Field delegateField = TestActivity.class.getDeclaredField("delegate");
 
         delegateField.setAccessible(true);
         testActivityDelegate = (TestActivityDelegate) delegateField.get(testActivity);
         delegateField.setAccessible(false);
+    }
 
+    @Test
+    public void testOnCreate() {
         assertTrue(testActivityDelegate.isOnCreateCalled());
         assertTrue(testActivityDelegate.isSecondOnCreatCalled());
+    }
+
+    @Test
+    public void testPrivateInject() {
+        assertNotNull(testActivityDelegate.getController());
     }
 }

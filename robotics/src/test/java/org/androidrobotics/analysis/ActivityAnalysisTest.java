@@ -50,7 +50,12 @@ public class ActivityAnalysisTest {
 
     @Test
     public void testDelegateClassName() {
-        assertEquals(TestActivity.class.getName(), activityDescriptor.getDelegateClass());
+        String name = TestActivity.class.getName();
+        String packageName = name.substring(0, name.lastIndexOf('.'));
+        String className = name.substring(name.lastIndexOf('.') + 1);
+
+        assertEquals(className, activityDescriptor.getDelegateClass());
+        assertEquals(packageName, activityDescriptor.getPackage());
     }
 
     @Activity(ActivityAnalysisTest.TEST_NAME)

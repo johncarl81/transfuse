@@ -2,10 +2,8 @@ package org.androidrobotics;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.writer.PrologCodeWriter;
 import org.androidrobotics.analysis.ActivityAnalysis;
-import org.androidrobotics.analysis.ElementAnalysisBridge;
+import org.androidrobotics.analysis.TypeElementAnalysisBridge;
 import org.androidrobotics.gen.ActivityDescriptor;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.gen.InjectionGenerator;
@@ -13,7 +11,7 @@ import org.androidrobotics.util.FilerSourceCodeWriter;
 import org.androidrobotics.util.ResourceCodeWriter;
 
 import javax.annotation.processing.Filer;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import java.io.IOException;
 
 /**
@@ -29,15 +27,16 @@ public class RoboticsProcessor {
 
     private ActivityGenerator activityGenerator;
     private JCodeModel codeModel;
-    private InjectionGenerator injectonGenerator;
+    private InjectionGenerator injectionGenerator;
 
     private RoboticsProcessor() {
         //private singleton constructor
 
         codeModel = new JCodeModel();
         activityAnalysis = new ActivityAnalysis();
-        activityGenerator = new ActivityGenerator(codeModel);
-        injectonGenerator = new InjectionGenerator(codeModel);
+        injectionGenerator = new InjectionGenerator(codeModel);
+        activityGenerator = new ActivityGenerator(codeModel, injectionGenerator);
+
     }
 
     public static RoboticsProcessor getInstance() {
@@ -48,14 +47,12 @@ public class RoboticsProcessor {
         return INSTANCE;
     }
 
-    public void processRootElement(Element element) {
-        ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(new ElementAnalysisBridge(element));
+    public void processRootElement(TypeElement element) {
+        ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(new TypeElementAnalysisBridge(element));
 
         if (activityDescriptor != null) {
             try {
-                JDefinedClass injectorDefinedClass = injectonGenerator.buildInjector(activityDescriptor);
-
-                activityGenerator.generate(activityDescriptor, injectorDefinedClass);
+                activityGenerator.generate(activityDescriptor);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JClassAlreadyExistsException e) {

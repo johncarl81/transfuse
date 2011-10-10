@@ -14,14 +14,16 @@ public class ActivityGenerator {
     private static final String DELEGATE_NAME = "delegate";
 
     private JCodeModel codeModel;
+    private InjectionGenerator injectionGenerator;
 
-    public ActivityGenerator(JCodeModel codeModel) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionGenerator injectionGenerator) {
         this.codeModel = codeModel;
+        this.injectionGenerator = injectionGenerator;
     }
 
-    public void generate(ActivityDescriptor descriptor, JDefinedClass injectorDefinedClass) throws IOException, JClassAlreadyExistsException {
+    public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
-        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, "org.androidrobotics.example.simple." + descriptor.getName(), ClassType.CLASS);
+        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackage() + "." + descriptor.getName(), ClassType.CLASS);
 
         definedClass._extends(android.app.Activity.class);
 
@@ -37,6 +39,8 @@ public class ActivityGenerator {
 
         //layout setting
         block.invoke("setContentView").arg(JExpr.lit(descriptor.getLayout()));
+
+        JDefinedClass injectorDefinedClass = injectionGenerator.buildInjector(descriptor);
 
         block.assign(delegateField, injectorDefinedClass.staticInvoke("getInstance").invoke("build_" + descriptor.getShorDelegateClassName()));
 

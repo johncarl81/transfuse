@@ -2,7 +2,7 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
+import org.androidrobotics.analysis.ParameterAnalysisBridge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,25 +21,25 @@ public class ActivityGeneratorTest {
 
     private ActivityGenerator generator;
     private JCodeModel codeModel;
-    private InjectionGenerator injector;
 
     @Before
     public void setup() {
         codeModel = new JCodeModel();
-        generator = new ActivityGenerator(codeModel);
-        injector = new InjectionGenerator(codeModel);
+        InjectionGenerator injectionGenerator = new InjectionGenerator(codeModel);
+        generator = new ActivityGenerator(codeModel, injectionGenerator);
+
     }
 
     @Test
-    public void testActivityGeneration() {
+    public void testActivityGeneration() throws NoSuchFieldException {
         ActivityDescriptor descriptor = new ActivityDescriptor();
         descriptor.setName(TEST_NAME);
         descriptor.setLayout(TEST_LAYOUT_ID);
         descriptor.setDelegateClass(DELEGATE_TEST_NAME);
+        descriptor.addInjectionPoint(new ParameterAnalysisBridge(DelegateTestClass.class.getDeclaredField("test")));
 
         try {
-            JDefinedClass injectorDefinedClass = injector.buildInjector(descriptor);
-            generator.generate(descriptor, injectorDefinedClass);
+            generator.generate(descriptor);
 
             assertEquals(3, codeModel.countArtifacts());
         } catch (IOException e) {

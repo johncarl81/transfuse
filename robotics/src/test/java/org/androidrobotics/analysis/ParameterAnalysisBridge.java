@@ -1,5 +1,6 @@
 package org.androidrobotics.analysis;
 
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -8,11 +9,11 @@ import java.util.Collections;
 /**
  * @author John Ericksen
  */
-public class FieldAnalysisBridge implements AnalysisBridge {
+public class ParameterAnalysisBridge implements AnalysisBridge {
 
     private Field field;
 
-    public FieldAnalysisBridge(Field field) {
+    public ParameterAnalysisBridge(Field field) {
         this.field = field;
     }
 
@@ -29,5 +30,10 @@ public class FieldAnalysisBridge implements AnalysisBridge {
     @Override
     public Collection<AnalysisBridge> getEnclosedElements() {
         return Collections.emptySet();
+    }
+
+    @Override
+    public ElementKind getType() {
+        return ElementKind.PARAMETER;
     }
 }
