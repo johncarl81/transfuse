@@ -5,7 +5,7 @@ package org.androidrobotics.analysis;
  */
 public interface RoboticsAnalysis<T> {
 
-    T analyzeElement(AnalysisBridge input);
+    T analyzeElement(TypeAnalysisBridge input);
 
     Class<? extends T> getTargetDescriptor();
 

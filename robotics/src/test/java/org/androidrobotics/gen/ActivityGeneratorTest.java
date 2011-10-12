@@ -1,8 +1,11 @@
 package org.androidrobotics.gen;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.ParameterAnalysisBridge;
+import org.androidrobotics.analysis.ClassAnalysisBridge;
+import org.androidrobotics.config.RoboticsModule;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,10 +27,10 @@ public class ActivityGeneratorTest {
 
     @Before
     public void setup() {
-        codeModel = new JCodeModel();
-        InjectionGenerator injectionGenerator = new InjectionGenerator(codeModel);
-        generator = new ActivityGenerator(codeModel, injectionGenerator);
+        Injector injector = Guice.createInjector(new RoboticsModule());
 
+        codeModel = injector.getInstance(JCodeModel.class);
+        generator = injector.getInstance(ActivityGenerator.class);
     }
 
     @Test
@@ -36,7 +39,7 @@ public class ActivityGeneratorTest {
         descriptor.setName(TEST_NAME);
         descriptor.setLayout(TEST_LAYOUT_ID);
         descriptor.setDelegateClass(DELEGATE_TEST_NAME);
-        descriptor.addInjectionPoint(new ParameterAnalysisBridge(DelegateTestClass.class.getDeclaredField("test")));
+        descriptor.setDelegateAnalysis(new ClassAnalysisBridge(DelegateTestClass.class));
 
         try {
             generator.generate(descriptor);
@@ -52,5 +55,6 @@ public class ActivityGeneratorTest {
     }
 
     public class DelegateTestClass {
+        private String test;
     }
 }

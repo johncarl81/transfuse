@@ -4,6 +4,7 @@ import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidrobotics.annotations.OnCreate;
 
+import javax.inject.Inject;
 import java.io.IOException;
 
 /**
@@ -14,11 +15,12 @@ public class ActivityGenerator {
     private static final String DELEGATE_NAME = "delegate";
 
     private JCodeModel codeModel;
-    private InjectionGenerator injectionGenerator;
+    private InjectorGenerator injectorGenerator;
 
-    public ActivityGenerator(JCodeModel codeModel, InjectionGenerator injectionGenerator) {
+    @Inject
+    public ActivityGenerator(JCodeModel codeModel, InjectorGenerator injectorGenerator) {
         this.codeModel = codeModel;
-        this.injectionGenerator = injectionGenerator;
+        this.injectorGenerator = injectorGenerator;
     }
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
@@ -40,9 +42,8 @@ public class ActivityGenerator {
         //layout setting
         block.invoke("setContentView").arg(JExpr.lit(descriptor.getLayout()));
 
-        JDefinedClass injectorDefinedClass = injectionGenerator.buildInjector(descriptor);
-
-        block.assign(delegateField, injectorDefinedClass.staticInvoke("getInstance").invoke("build_" + descriptor.getShorDelegateClassName()));
+        FactoryDescriptor factoryDescriptor = injectorGenerator.buildInjector(descriptor);
+        block.assign(delegateField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()).invoke(factoryDescriptor.getBuilderMethodName()));
 
         for (String methodNames : descriptor.getMethods(OnCreate.class)) {
             block.invoke(delegateField, methodNames);

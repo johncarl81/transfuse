@@ -5,7 +5,7 @@ import javax.lang.model.element.TypeElement;
 /**
  * @author John Ericksen
  */
-public class TypeElementAnalysisBridge extends ElementAnalysisBridgeBase<TypeElement> {
+public class TypeElementAnalysisBridge extends ElementAnalysisBridgeBase<TypeElement> implements TypeAnalysisBridge {
 
     public TypeElementAnalysisBridge(TypeElement element) {
         super(element);

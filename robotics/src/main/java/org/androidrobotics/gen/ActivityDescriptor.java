@@ -1,6 +1,6 @@
 package org.androidrobotics.gen;
 
-import org.androidrobotics.analysis.AnalysisBridge;
+import org.androidrobotics.analysis.TypeAnalysisBridge;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class ActivityDescriptor {
     private int layout;
     private String delegateClass;
     private Map<Class<?>, Collection<String>> delegateMethods = new HashMap<Class<?>, Collection<String>>();
-    private List<InjectionPoint> injectionPoints = new ArrayList<InjectionPoint>();
+    private TypeAnalysisBridge delegateAnalysis;
 
     public String getName() {
         return name;
@@ -54,16 +54,8 @@ public class ActivityDescriptor {
         this.delegateClass = delegateClass;
     }
 
-    public String getShorDelegateClassName() {
+    public String getShortDelegateClassName() {
         return delegateClass.substring(delegateClass.lastIndexOf(".") + 1);
-    }
-
-    public void addInjectionPoint(AnalysisBridge enclosedElement) {
-        injectionPoints.add(new InjectionPoint(enclosedElement));
-    }
-
-    public List<InjectionPoint> getInjectionPoints() {
-        return injectionPoints;
     }
 
     public void setPackage(String activityPackage) {
@@ -72,5 +64,13 @@ public class ActivityDescriptor {
 
     public String getPackage() {
         return activityPackage;
+    }
+
+    public void setDelegateAnalysis(TypeAnalysisBridge delegateAnalysis) {
+        this.delegateAnalysis = delegateAnalysis;
+    }
+
+    public TypeAnalysisBridge getDelegateAnalysis() {
+        return delegateAnalysis;
     }
 }

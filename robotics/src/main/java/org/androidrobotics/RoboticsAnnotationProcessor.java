@@ -1,5 +1,8 @@
 package org.androidrobotics;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.androidrobotics.config.RoboticsModule;
 import org.androidrobotics.util.ElementVisitorAdaptor;
 
 import javax.annotation.processing.*;
@@ -21,7 +24,8 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        roboticsProcessor = RoboticsProcessor.getInstance();
+        Injector injector = Guice.createInjector(new RoboticsModule());
+        roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
     }
 
     @Override
@@ -30,6 +34,12 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
         if (!processorRan) {
 
             for (Element element : roundEnvironment.getRootElements()) {
+
+                System.out.println(element.getSimpleName() + ":");
+                for (Element innerElement : element.getEnclosedElements()) {
+                    System.out.println(innerElement.getSimpleName());
+                }
+
                 element.accept(new ElementVisitorAdaptor() {
                     @Override
                     public Object visitType(TypeElement typeElement, Object o) {

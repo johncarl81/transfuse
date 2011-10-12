@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-public class ClassAnalysisBridge implements AnalysisBridge {
+public class ClassAnalysisBridge implements TypeAnalysisBridge {
 
     private Class<?> clazz;
 
