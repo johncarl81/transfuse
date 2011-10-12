@@ -28,6 +28,11 @@ public abstract class ElementAnalysisBridgeBase<T extends Element> implements An
     }
 
     @Override
+    public <A extends Annotation> boolean isAnnotated(Class<A> annotationClass) {
+        return getAnnotation(annotationClass) != null;
+    }
+
+    @Override
     public String getName() {
         return element.getSimpleName().toString();
     }

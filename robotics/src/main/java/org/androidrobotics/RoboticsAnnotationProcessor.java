@@ -35,11 +35,6 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
             for (Element element : roundEnvironment.getRootElements()) {
 
-                System.out.println(element.getSimpleName() + ":");
-                for (Element innerElement : element.getEnclosedElements()) {
-                    System.out.println(innerElement.getSimpleName());
-                }
-
                 element.accept(new ElementVisitorAdaptor() {
                     @Override
                     public Object visitType(TypeElement typeElement, Object o) {

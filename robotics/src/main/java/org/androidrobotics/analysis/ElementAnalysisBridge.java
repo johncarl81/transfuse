@@ -7,7 +7,7 @@ import javax.lang.model.element.Element;
  */
 public class ElementAnalysisBridge<T extends Element> extends ElementAnalysisBridgeBase<T> {
 
-    protected ElementAnalysisBridge(T element) {
+    public ElementAnalysisBridge(T element) {
         super(element);
     }
 

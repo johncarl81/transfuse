@@ -17,4 +17,5 @@ public interface AnalysisBridge {
 
     ElementKind getType();
 
+    <A extends Annotation> boolean isAnnotated(Class<A> annotationClass);
 }

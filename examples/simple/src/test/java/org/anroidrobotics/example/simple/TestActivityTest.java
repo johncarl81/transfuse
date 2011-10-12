@@ -43,4 +43,9 @@ public class TestActivityTest {
     public void testPrivateInject() {
         assertNotNull(testActivityDelegate.getController());
     }
+
+    @Test
+    public void testContructorInject() {
+        assertTrue(testActivityDelegate.isConstructorInjected());
+    }
 }

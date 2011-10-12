@@ -9,7 +9,7 @@ import java.util.Collections;
 /**
  * @author John Ericksen
  */
-public class MethodAnalysisBridge implements AnalysisBridge {
+public class MethodAnalysisBridge extends ReflectionAnalysisBridgeBase {
 
     private Method method;
 

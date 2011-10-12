@@ -16,6 +16,12 @@ public class TestActivityDelegate {
 
     @Inject
     private TestController controller;
+    private ContructorValue value;
+
+    @Inject
+    public TestActivityDelegate(ContructorValue value) {
+        this.value = value;
+    }
 
     @OnCreate
     public void callMe() {
@@ -39,5 +45,9 @@ public class TestActivityDelegate {
 
     public TestController getController() {
         return controller;
+    }
+
+    public boolean isConstructorInjected() {
+        return value != null;
     }
 }

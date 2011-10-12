@@ -7,4 +7,6 @@ public interface AnalysisBridgeVisitor {
     void visit(ElementAnalysisBridge elementAnalysisBridge);
 
     void visit(TypeElementAnalysisBridge typeElementAnalysisBridge);
+
+    void visit(VariableElementAnalysisBridge typeParameterElementAnalysisBridge);
 }

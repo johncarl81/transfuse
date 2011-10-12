@@ -9,7 +9,7 @@ import java.util.Collections;
 /**
  * @author John Ericksen
  */
-public class ParameterAnalysisBridge implements AnalysisBridge {
+public class ParameterAnalysisBridge extends ReflectionAnalysisBridgeBase {
 
     private Field field;
 
