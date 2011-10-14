@@ -5,7 +5,8 @@ import com.google.inject.Injector;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.ClassAnalysisBridge;
-import org.androidrobotics.config.RoboticsModule;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.model.ActivityDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class ActivityGeneratorTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(new RoboticsModule());
+        Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
 
         codeModel = injector.getInstance(JCodeModel.class);
         generator = injector.getInstance(ActivityGenerator.class);

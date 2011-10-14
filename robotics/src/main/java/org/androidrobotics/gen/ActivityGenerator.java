@@ -3,6 +3,8 @@ package org.androidrobotics.gen;
 import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidrobotics.annotations.OnCreate;
+import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.FactoryDescriptor;
 
 import javax.inject.Inject;
 import java.io.IOException;

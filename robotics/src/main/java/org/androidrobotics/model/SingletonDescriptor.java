@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.model;
 
 import com.sun.codemodel.JMethod;
 

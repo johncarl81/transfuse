@@ -3,7 +3,7 @@ package org.androidrobotics.analysis;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.annotations.OnCreate;
-import org.androidrobotics.gen.ActivityDescriptor;
+import org.androidrobotics.model.ActivityDescriptor;
 
 import javax.lang.model.element.ElementKind;
 

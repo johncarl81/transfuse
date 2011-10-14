@@ -2,6 +2,7 @@ package org.androidrobotics.analysis;
 
 import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,7 +35,17 @@ public class ClassAnalysisBridge extends ReflectionAnalysisBridgeBase implements
         ArrayList<AnalysisBridge> analysisBridges = new ArrayList<AnalysisBridge>();
         analysisBridges.addAll(wrap(clazz.getDeclaredFields()));
         analysisBridges.addAll(wrap(clazz.getDeclaredMethods()));
+        analysisBridges.addAll(wrap(clazz.getConstructors()));
         return analysisBridges;
+    }
+
+    private Collection<AnalysisBridge> wrap(Constructor<?>[] constructors) {
+        List<AnalysisBridge> bridgedElements = new ArrayList<AnalysisBridge>();
+
+        for (Constructor constructor : constructors) {
+            bridgedElements.add(new ConstructorAnalysisBridge(constructor));
+        }
+        return bridgedElements;
     }
 
     private Collection<AnalysisBridge> wrap(Method[] declaredMethods) {

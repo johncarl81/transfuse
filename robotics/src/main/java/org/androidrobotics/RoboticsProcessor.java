@@ -5,8 +5,8 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.ActivityAnalysis;
 import org.androidrobotics.analysis.TypeElementAnalysisBridge;
 import org.androidrobotics.annotations.Activity;
-import org.androidrobotics.gen.ActivityDescriptor;
 import org.androidrobotics.gen.ActivityGenerator;
+import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.util.FilerSourceCodeWriter;
 import org.androidrobotics.util.ResourceCodeWriter;
 

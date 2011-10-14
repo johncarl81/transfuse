@@ -1,6 +1,7 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
+import org.androidrobotics.model.SingletonDescriptor;
 
 /**
  * @author John Ericksen

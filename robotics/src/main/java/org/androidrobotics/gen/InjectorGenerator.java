@@ -2,6 +2,9 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.TypeAnalysisBridge;
+import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.FactoryDescriptor;
+import org.androidrobotics.model.SingletonDescriptor;
 
 import javax.inject.Inject;
 

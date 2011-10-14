@@ -2,7 +2,7 @@ package org.androidrobotics;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.androidrobotics.config.RoboticsModule;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.util.ElementVisitorAdaptor;
 
 import javax.annotation.processing.*;
@@ -24,7 +24,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        Injector injector = Guice.createInjector(new RoboticsModule());
+        Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
         roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
     }
 

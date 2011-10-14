@@ -5,8 +5,8 @@ import com.google.inject.Injector;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.annotations.OnCreate;
-import org.androidrobotics.config.RoboticsModule;
-import org.androidrobotics.gen.ActivityDescriptor;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.model.ActivityDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,13 +22,12 @@ public class ActivityAnalysisTest {
     public static final String TEST_NAME = "TestName";
     public static final int TEST_LAYOUT_ID = 123456;
 
-    private ActivityAnalysis activityAnalysis;
     private ActivityDescriptor activityDescriptor;
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(new RoboticsModule());
-        activityAnalysis = injector.getInstance(ActivityAnalysis.class);
+        Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
+        ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
         activityDescriptor = activityAnalysis.analyzeElement(new ClassAnalysisBridge(TestActivity.class));
     }
 

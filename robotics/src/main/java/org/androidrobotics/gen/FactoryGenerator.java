@@ -5,6 +5,8 @@ import org.androidrobotics.analysis.AnalysisBridge;
 import org.androidrobotics.analysis.ElementAnalysisBridge;
 import org.androidrobotics.analysis.TypeAnalysisBridge;
 import org.androidrobotics.analysis.VariableElementAnalysisBridge;
+import org.androidrobotics.model.FactoryDescriptor;
+import org.androidrobotics.model.SingletonDescriptor;
 import org.androidrobotics.util.RoboticsGenerationException;
 
 import javax.inject.Inject;
