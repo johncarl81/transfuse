@@ -16,10 +16,10 @@ public class TestActivityDelegate {
 
     @Inject
     private TestController controller;
-    private ContructorValue value;
+    private ConstructorValue value;
 
     @Inject
-    public TestActivityDelegate(ContructorValue value) {
+    public TestActivityDelegate(ConstructorValue value) {
         this.value = value;
     }
 
