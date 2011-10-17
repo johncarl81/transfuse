@@ -1,17 +1,26 @@
 package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.VariableElement;
 
 /**
  * @author John Ericksen
  */
 public class ASTElementParameter implements ASTParameter {
 
-    private TypeParameterElement typeParameterElement;
+    private String name;
     private ASTType astType;
 
+    public ASTElementParameter(VariableElement variableElement, ASTType astType) {
+        this(variableElement.getSimpleName().toString(), astType);
+    }
+
     public ASTElementParameter(TypeParameterElement typeParameterElement, ASTType astType) {
-        this.typeParameterElement = typeParameterElement;
+        this(typeParameterElement.getSimpleName().toString(), astType);
+    }
+
+    public ASTElementParameter(String name, ASTType astType) {
+        this.name = name;
         this.astType = astType;
     }
 
@@ -22,6 +31,6 @@ public class ASTElementParameter implements ASTParameter {
 
     @Override
     public String getName() {
-        return typeParameterElement.getSimpleName().toString();
+        return name;
     }
 }

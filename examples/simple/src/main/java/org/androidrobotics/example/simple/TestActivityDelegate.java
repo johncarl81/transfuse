@@ -18,10 +18,10 @@ public class TestActivityDelegate {
     private TestController controller;
     private ContructorValue value;
 
-    /*@Inject
+    @Inject
     public TestActivityDelegate(ContructorValue value) {
         this.value = value;
-    }*/
+    }
 
     @OnCreate
     public void callMe() {

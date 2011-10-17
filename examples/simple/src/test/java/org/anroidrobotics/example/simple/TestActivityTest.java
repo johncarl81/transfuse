@@ -9,6 +9,9 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.Field;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
 /**
  * @author John Ericksen
  */
@@ -32,11 +35,11 @@ public class TestActivityTest {
 
     @Test
     public void testPrivateInject() {
-        //todo:assertNotNull(testActivityDelegate.getController());
+        assertNotNull(testActivityDelegate.getController());
     }
 
     @Test
     public void testContructorInject() {
-        //todo:assertTrue(testActivityDelegate.isConstructorInjected());
+        assertTrue(testActivityDelegate.isConstructorInjected());
     }
 }

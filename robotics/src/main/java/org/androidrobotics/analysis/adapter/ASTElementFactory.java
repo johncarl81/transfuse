@@ -43,19 +43,24 @@ public class ASTElementFactory {
 
     public ASTMethod buildASTElementMethod(ExecutableElement executableElement) {
 
-        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getTypeParameters());
+        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
 
         return new ASTElementMethod(executableElement, parameters);
     }
 
-    private List<ASTParameter> buildASTElementParameters(List<? extends TypeParameterElement> typeParameters) {
+    private List<ASTParameter> buildASTElementParameters(List<? extends VariableElement> variableElements) {
         List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
 
-        for (TypeParameterElement typeParameter : typeParameters) {
-            astParameters.add(buildASTElementParameter(typeParameter));
+        for (VariableElement variables : variableElements) {
+            astParameters.add(buildASTElementParameter(variables));
         }
 
         return astParameters;
+    }
+
+    private ASTParameter buildASTElementParameter(VariableElement variableElement) {
+        ASTType type = variableElement.asType().accept(astTypeBuilderVisitor, null);
+        return new ASTElementParameter(variableElement, type);
     }
 
     public ASTParameter buildASTElementParameter(TypeParameterElement typeParameterElement) {
@@ -64,7 +69,7 @@ public class ASTElementFactory {
     }
 
     public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
-        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getTypeParameters());
+        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         return new ASTElementConstructor(executableElement, parameters);
     }
 }

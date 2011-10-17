@@ -41,10 +41,10 @@ public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
 
             @Override
             public T visitExecutable(ExecutableElement executableElement, Void aVoid) {
-                if (astTypeClass.isAssignableFrom(ASTConstructor.class) &&
-                        executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
-                    return (T) astElementFactory.buildASTElementConstructor(executableElement);
-
+                if (executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
+                    if (astTypeClass.isAssignableFrom(ASTConstructor.class)) {
+                        return (T) astElementFactory.buildASTElementConstructor(executableElement);
+                    }
                 } else if (astTypeClass.isAssignableFrom(ASTMethod.class)) {
                     return (T) astElementFactory.buildASTElementMethod(executableElement);
                 }
