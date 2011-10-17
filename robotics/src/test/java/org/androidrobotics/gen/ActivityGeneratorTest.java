@@ -2,16 +2,20 @@ package org.androidrobotics.gen;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.TestInjectorBuilder;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.PackageClass;
+import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -28,19 +32,19 @@ public class ActivityGeneratorTest {
     private static final PackageClass TEST_PACKAGE_FILENAME = new PackageClass(TEST_PACKLAGE, TEST_NAME);
     private static final int TEST_LAYOUT = 1234;
 
+    @Inject
     private ActivityGenerator activityGenerator;
+    @Inject
     private JCodeModel codeModel;
+    @Inject
     private MemoryClassLoader classLoader;
+    @Inject
     private StringCodeWriter stringCodeWriter;
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = TestInjectorBuilder.createInjector(this);
-
-        activityGenerator = injector.getInstance(ActivityGenerator.class);
-        codeModel = injector.getInstance(JCodeModel.class);
-        classLoader = injector.getInstance(MemoryClassLoader.class);
-        stringCodeWriter = injector.getInstance(StringCodeWriter.class);
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
+        injector.injectMembers(this);
     }
 
     @Test

@@ -7,8 +7,8 @@ public class JavaUtilLogger implements Logger {
 
     private java.util.logging.Logger logger;
 
-    public JavaUtilLogger(java.util.logging.Logger logger) {
-        this.logger = logger;
+    public JavaUtilLogger(Object targetInstance) {
+        this.logger = java.util.logging.Logger.getLogger(targetInstance.getClass().getCanonicalName());
     }
 
     @Override

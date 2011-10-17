@@ -1,17 +1,21 @@
 package org.androidrobotics.gen;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.TestInjectorBuilder;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
 import org.androidrobotics.gen.target.ConstructorInjectable;
 import org.androidrobotics.gen.target.FieldInjectable;
 import org.androidrobotics.gen.target.InjectionTarget;
 import org.androidrobotics.gen.target.MethodInjectable;
 import org.androidrobotics.model.*;
+import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -23,21 +27,20 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class FactoryGeneratorTest {
 
+    @Inject
     private FactoryGenerator factoryGenerator;
-    //private TestProvider provider;
+    @Inject
     private MemoryClassLoader classLoader;
-    private Map<Class, PackageClass> classFactories;
+    @Inject
     private JCodeModel codeModel;
+    @Inject
     private StringCodeWriter stringCodeWriter;
+    private Map<Class, PackageClass> classFactories;
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = TestInjectorBuilder.createInjector(this);
-
-        factoryGenerator = injector.getInstance(FactoryGenerator.class);
-        codeModel = injector.getInstance(JCodeModel.class);
-        classLoader = injector.getInstance(MemoryClassLoader.class);
-        stringCodeWriter = injector.getInstance(StringCodeWriter.class);
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
+        injector.injectMembers(this);
     }
 
     @Test
@@ -95,8 +98,6 @@ public class FactoryGeneratorTest {
         FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
 
         codeModel.build(stringCodeWriter);
-
-        System.out.println(stringCodeWriter.getValue(factoryPackageClass.addDotJava()));
 
         classLoader.add(stringCodeWriter.getOutput());
         Class<?> generatedFactoryClass = classLoader.loadClass(factoryPackageClass.getFullyQualifiedName());

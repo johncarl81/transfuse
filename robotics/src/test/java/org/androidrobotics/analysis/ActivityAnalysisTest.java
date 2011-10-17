@@ -1,11 +1,14 @@
 package org.androidrobotics.analysis;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.androidrobotics.TestInjectorBuilder;
+import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.targets.MockActivityDelegate;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
+import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,10 +28,10 @@ public class ActivityAnalysisTest {
 
     @Before
     public void setup() {
-        Injector injector = TestInjectorBuilder.createInjector(this);
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
+
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
-
         activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
     }
 

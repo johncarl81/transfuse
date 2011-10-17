@@ -1,15 +1,19 @@
 package org.androidrobotics.module;
 
+import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.androidrobotics.TestInjectorBuilder;
+import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.targets.MockAnalysisClass;
+import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.model.*;
+import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -23,15 +27,15 @@ import static junit.framework.Assert.assertEquals;
  */
 public class InjectionPointFactoryTest {
 
+    @Inject
     private InjectionPointFactory injectionPointFactory;
+    @Inject
     private ASTClassFactory astClassFactory;
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = TestInjectorBuilder.createInjector(this);
-
-        astClassFactory = injector.getInstance(ASTClassFactory.class);
-        injectionPointFactory = injector.getInstance(InjectionPointFactory.class);
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
+        injector.injectMembers(this);
     }
 
     @Test
