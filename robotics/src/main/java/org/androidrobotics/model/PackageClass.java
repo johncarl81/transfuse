@@ -5,12 +5,29 @@ package org.androidrobotics.model;
  */
 public class PackageClass {
 
+    private static final String DOT_JAVA = ".java";
+
     private String pkg;
     private String fileName;
+    private boolean dotJava;
 
     public PackageClass(String pkg, String fileName) {
+        this(pkg, fileName, false);
+    }
+
+    private PackageClass(String pkg, String fileName, boolean dotJava) {
         this.pkg = pkg;
-        this.fileName = fileName;
+        if (fileName.endsWith(DOT_JAVA)) {
+            this.fileName = fileName.substring(0, fileName.length() - DOT_JAVA.length());
+            this.dotJava = true;
+        } else {
+            this.fileName = fileName;
+            this.dotJava = dotJava;
+        }
+    }
+
+    public PackageClass(Class<?> injectionTargetClass) {
+        this(injectionTargetClass.getPackage().getName(), injectionTargetClass.getSimpleName());
     }
 
     public String getPackage() {
@@ -18,15 +35,23 @@ public class PackageClass {
     }
 
     public String getClassName() {
-        return fileName;
+        return fileName + (dotJava ? DOT_JAVA : "");
     }
 
     public String getFullyQualifiedName() {
-        return pkg + "." + fileName;
+        return pkg + "." + getClassName();
     }
 
     public PackageClass addDotJava() {
-        return new PackageClass(pkg, fileName + ".java");
+        return new PackageClass(pkg, fileName, true);
+    }
+
+    public PackageClass removeDotJava() {
+        return new PackageClass(pkg, fileName, false);
+    }
+
+    public PackageClass add(String addName) {
+        return new PackageClass(pkg, fileName + addName, dotJava);
     }
 
     public String toString() {

@@ -5,7 +5,13 @@ package org.androidrobotics.model;
  */
 public class MethodInjectionPoint extends InjectionPointBase {
 
+    private String name;
+
     public MethodInjectionPoint(String name) {
-        super(name);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

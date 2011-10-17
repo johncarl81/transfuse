@@ -8,14 +8,14 @@ import java.util.Set;
  */
 public class InjectionNode {
 
-    private String name;
+    private String className;
 
     private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
     private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
     private Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
 
-    public InjectionNode(String name) {
-        this.name = name;
+    public InjectionNode(String className) {
+        this.className = className;
     }
 
     public ConstructorInjectionPoint getConstructorInjectionPoint() {
@@ -34,19 +34,19 @@ public class InjectionNode {
         return fieldInjectionPoints;
     }
 
-    public void addConstructorInjectionPoint(ConstructorInjectionPoint constructorInjectionPoint) {
+    public void addInjectionPoint(ConstructorInjectionPoint constructorInjectionPoint) {
         constructorInjectionPoints.add(constructorInjectionPoint);
     }
 
-    public void addMethodInjectionPoint(MethodInjectionPoint methodInjectionPoint) {
+    public void addInjectionPoint(MethodInjectionPoint methodInjectionPoint) {
         methodInjectionPoints.add(methodInjectionPoint);
     }
 
-    public void addParameterInjectionPoint(FieldInjectionPoint fieldInjectionPoint) {
+    public void addInjectionPoint(FieldInjectionPoint fieldInjectionPoint) {
         fieldInjectionPoints.add(fieldInjectionPoint);
     }
 
     public String getClassName() {
-        return name;
+        return className;
     }
 }

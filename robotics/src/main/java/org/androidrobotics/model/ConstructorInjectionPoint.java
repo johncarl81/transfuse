@@ -5,7 +5,6 @@ package org.androidrobotics.model;
  */
 public class ConstructorInjectionPoint extends InjectionPointBase {
 
-    public ConstructorInjectionPoint(String name) {
-        super(name);
+    public ConstructorInjectionPoint() {
     }
 }

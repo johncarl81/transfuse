@@ -1,10 +1,7 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
-import org.androidrobotics.model.ConstructorInjectionPoint;
-import org.androidrobotics.model.FactoryDescriptor;
-import org.androidrobotics.model.InjectionNode;
-import org.androidrobotics.model.SingletonDescriptor;
+import org.androidrobotics.model.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -59,48 +56,78 @@ public class FactoryGenerator {
 
         //constructor injection
         buildIntanceBody.assign(variable,
-                buildConstructorCall(injectionNode, returnType, constructorBody, factoryClass));
+                buildConstructorCall(injectionNode.getConstructorInjectionPoint(), returnType, constructorBody, factoryClass));
 
-
-        //parameter injection
-        buildParameterInjection(injectionNode, variable, buildIntanceBody, packageName);
+        //field injection
+        for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
+            buildParameterInjection(injectionNode, fieldInjectionPoint, variable, buildIntanceBody, packageName, constructorBody, factoryClass);
+        }
 
         //method injection
-        buildMethodInjection(injectionNode);
+        for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
+            buildMethodInjection(methodInjectionPoint, variable, buildIntanceBody, constructorBody, factoryClass);
+        }
 
         buildIntanceBody._return(variable);
 
         return new FactoryDescriptor(factoryClass, singletonDescriptor.getGetInstanceMethod().name(), returnType, buildInstanceMethod.name());
     }
 
-    private void buildMethodInjection(InjectionNode injectionNode) {
+    private void buildMethodInjection(MethodInjectionPoint methodInjectionPoint, JVar variable, JBlock buildInstancebody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+
+        JInvocation methodInvocation = variable.invoke(methodInjectionPoint.getName());
+        for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
+            FactoryDescriptor descriptor = buildFactory(injectionNode);
+
+            String name = injectionNode.getClassName().substring(injectionNode.getClassName().lastIndexOf('.') + 1).toLowerCase();
+
+            JFieldVar factoryField = factoryClass.field(JMod.PRIVATE, descriptor.getClassDefinition(), name + "Factory");
+
+            constructorBody.assign(factoryField, descriptor.getClassDefinition().staticInvoke(descriptor.getInstanceMethodName()));
+
+            methodInvocation.arg(factoryField.invoke(descriptor.getBuilderMethodName()));
+        }
+
+        buildInstancebody.add(methodInvocation);
 
     }
 
-    private void buildParameterInjection(InjectionNode injectionNode, JVar variable, JBlock buildIntanceBody, String packageName) throws ClassNotFoundException {
-        /*JTryBlock jTryBlock = buildIntanceBody._try();
+    private void buildParameterInjection(InjectionNode injectionNode, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, String packageName, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+        JTryBlock jTryBlock = buildIntanceBody._try();
 
         JBlock tryBuildInstancebody = jTryBlock.body();
 
+        FactoryDescriptor descriptor = buildFactory(fieldInjectionPoint.getInjectionNode());
+        InjectionNode node = fieldInjectionPoint.getInjectionNode();
+
+        String name = node.getClassName().substring(node.getClassName().lastIndexOf('.') + 1).toLowerCase();
+
+        JFieldVar factoryField = factoryClass.field(JMod.PRIVATE, descriptor.getClassDefinition(), name + "Factory");
+
+        constructorBody.assign(factoryField, descriptor.getClassDefinition().staticInvoke(descriptor.getInstanceMethodName()));
+
+
         JVar fieldVariable = tryBuildInstancebody.decl(codeModel.parseType("java.lang.reflect.Field"), "field");
         tryBuildInstancebody.assign(fieldVariable, codeModel.ref(injectionNode.getClassName()).dotclass()
-                .invoke("getDeclaredField").arg("controller"));
+                .invoke("getDeclaredField").arg(fieldInjectionPoint.getName()));
 
 
         tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.TRUE));
-        tryBuildInstancebody.add(fieldVariable.invoke("set").arg(variable).arg(JExpr._new(codeModel.parseType((packageName + ".TestController")))));
+        tryBuildInstancebody.add(fieldVariable.invoke("set").arg(variable).arg(factoryField.invoke(descriptor.getBuilderMethodName())));
         tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.FALSE));
 
-        jTryBlock._catch(codeModel.directClass("java.lang.IllegalAccessException"));
-        jTryBlock._catch(codeModel.directClass("java.lang.NoSuchFieldException"));*/
+        JCatchBlock illegalAccessExceptionBlock = jTryBlock._catch(codeModel.directClass("java.lang.IllegalAccessException"));
+        JVar e1 = illegalAccessExceptionBlock.param("e");
+        illegalAccessExceptionBlock.body().add(e1.invoke("printStackTrace"));
+        JCatchBlock noSuchFieldExceptionBlock = jTryBlock._catch(codeModel.directClass("java.lang.NoSuchFieldException"));
+        JVar e2 = noSuchFieldExceptionBlock.param("e");
+        noSuchFieldExceptionBlock.body().add(e2.invoke("printStackTrace"));
     }
 
-    private JInvocation buildConstructorCall(InjectionNode injectionNode, JType returnType, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
-        ConstructorInjectionPoint injectionPoint = injectionNode.getConstructorInjectionPoint();
-
+    private JInvocation buildConstructorCall(ConstructorInjectionPoint injectionNode, JType returnType, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
         JInvocation constructorInvocation = JExpr._new(returnType);
 
-        for (InjectionNode node : injectionPoint.getInjectionNodes()) {
+        for (InjectionNode node : injectionNode.getInjectionNodes()) {
 
             FactoryDescriptor descriptor = buildFactory(node);
 

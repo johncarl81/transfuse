@@ -1,151 +1,115 @@
 package org.androidrobotics.gen;
 
-import com.sun.codemodel.JClassAlreadyExistsException;
+import com.google.inject.Injector;
+import com.sun.codemodel.JCodeModel;
+import org.androidrobotics.TestInjectorBuilder;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
-import org.androidrobotics.model.PackageClass;
+import org.androidrobotics.gen.target.ConstructorInjectable;
+import org.androidrobotics.gen.target.FieldInjectable;
+import org.androidrobotics.gen.target.InjectionTarget;
+import org.androidrobotics.gen.target.MethodInjectable;
+import org.androidrobotics.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import java.io.IOException;
-import java.util.HashMap;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * @author John Ericksen
  */
 public class FactoryGeneratorTest {
 
-    private static final String TEST_PROPERTY = "Test property";
-    private static final int TEST_VALUE = 42;
-
+    private FactoryGenerator factoryGenerator;
     //private TestProvider provider;
     private MemoryClassLoader classLoader;
     private Map<Class, PackageClass> classFactories;
+    private JCodeModel codeModel;
+    private StringCodeWriter stringCodeWriter;
 
     @Before
-    public void setup() throws ClassNotFoundException, JClassAlreadyExistsException, IOException {
-        /*Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
-        FactoryGenerator factoryGeneratorTwo = injector.getInstance(FactoryGenerator.class);
-        JCodeModel codeModel = injector.getInstance(JCodeModel.class);
+    public void setUp() throws Exception {
+        Injector injector = TestInjectorBuilder.createInjector(this);
 
-        factoryGenerator.buildFactory(new ClassAnalysisBridge(ConstructorProvided.class));
-        factoryGenerator.buildFactory(new ClassAnalysisBridge(SetterProvided.class));
-        factoryGenerator.buildFactory(new ClassAnalysisBridge(ParameterProvided.class));
-
-        StringCodeWriter codeWriter = new StringCodeWriter();
-
-        //write out the built code
-        codeModel.build(codeWriter);
-
-        //build classes
-        Map<String, String> factoryClassContentMap = new HashMap<String, String>();
-        classFactories = buildClassFactoryNames(new Class<?>[]{ConstructorProvided.class, SetterProvided.class, ParameterProvided.class});
-        for (Map.Entry<Class, PackageFileName> factoryMapEntry : classFactories.entrySet()) {
-            String factoryClassContents = codeWriter.getValue(factoryMapEntry.getValue().addDotJava());
-
-            factoryClassContentMap.put(factoryMapEntry.getValue().getName(), factoryClassContents);
-        }
-
-        //setup class loader
-        classLoader = new MemoryClassLoader(factoryClassContentMap);*/
-
-    }
-
-    private Map<Class, PackageClass> buildClassFactoryNames(Class<?>[] classes) {
-        Map<Class, PackageClass> classFactoryMap = new HashMap<Class, PackageClass>();
-
-        for (Class clazz : classes) {
-            classFactoryMap.put(clazz,
-                    new PackageClass(
-                            clazz.getPackage().getName(),
-                            clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + "Factory"
-                    ));
-        }
-
-        return classFactoryMap;
+        factoryGenerator = injector.getInstance(FactoryGenerator.class);
+        codeModel = injector.getInstance(JCodeModel.class);
+        classLoader = injector.getInstance(MemoryClassLoader.class);
+        stringCodeWriter = injector.getInstance(StringCodeWriter.class);
     }
 
     @Test
-    public void testContructorInjection() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        /*Class<Provider> factoryClass = (Class<Provider>) classLoader.loadClass(classFactories.get(ConstructorProvided.class).toString());
-        Provider<ConstructorProvided> factoryInstance = factoryClass.newInstance();
+    public void testContructorInjection() throws Exception {
+        InjectionNode injectionNode = buildInjectionNode(ConstructorInjectable.class);
+        injectionNode.getConstructorInjectionPoints().clear();
 
-        ConstructorProvided provided = factoryInstance.get();
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
+        constructorInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
+        injectionNode.addInjectionPoint(constructorInjectionPoint);
 
-        provided.validate();*/
+        ConstructorInjectable constructorInjectable = buildInstance(ConstructorInjectable.class, injectionNode);
+
+        assertNotNull(constructorInjectable.getInjectionTarget());
     }
 
-    //@Test
-    public void testSetterInjection() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Class<Provider> factoryClass = (Class<Provider>) classLoader.loadClass(classFactories.get(SetterProvided.class).toString());
-        Provider<SetterProvided> factoryInstance = factoryClass.newInstance();
+    @Test
+    public void testMethodInjection() throws Exception {
+        InjectionNode injectionNode = buildInjectionNode(MethodInjectable.class);
 
-        SetterProvided provided = factoryInstance.get();
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint("setInjectionTarget");
+        methodInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
+        injectionNode.addInjectionPoint(methodInjectionPoint);
 
-        provided.validate();
+        MethodInjectable methodInjectable = buildInstance(MethodInjectable.class, injectionNode);
+
+        assertNotNull(methodInjectable.getInjectionTarget());
     }
 
-    //@Test
-    public void testParameterInjection() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Class<Provider> factoryClass = (Class<Provider>) classLoader.loadClass(classFactories.get(ParameterProvided.class).toString());
-        Provider<ParameterProvided> factoryInstance = factoryClass.newInstance();
+    @Test
+    public void testFieldInjection() throws Exception {
+        InjectionNode injectionNode = buildInjectionNode(FieldInjectable.class);
 
-        ParameterProvided provided = factoryInstance.get();
+        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint("injectionTarget", buildInjectionNode(InjectionTarget.class));
+        injectionNode.addInjectionPoint(fieldInjectionPoint);
 
-        provided.validate();
+        FieldInjectable fieldInjectable = buildInstance(FieldInjectable.class, injectionNode);
+
+        assertNotNull(fieldInjectable.getInjectionTarget());
     }
 
-    public static class ConstructorProvided {
+    private InjectionNode buildInjectionNode(Class<?> instanceClass) {
+        PackageClass packageClass = new PackageClass(instanceClass);
+        InjectionNode injectionNode = new InjectionNode(packageClass.getFullyQualifiedName());
 
-        String property;
-        int value;
+        ConstructorInjectionPoint noArgConstructorInjectionPoint = new ConstructorInjectionPoint();
+        injectionNode.addInjectionPoint(noArgConstructorInjectionPoint);
 
-        @Inject
-        public ConstructorProvided(String property, int value) {
-            this.property = property;
-            this.value = value;
-        }
-
-        public void validate() {
-            assertEquals(TEST_PROPERTY, property);
-            assertEquals(TEST_VALUE, value);
-        }
+        return injectionNode;
     }
 
-    public static class SetterProvided {
+    private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
+        PackageClass factoryPackageClass = new PackageClass(instanceClass).add("Factory");
 
-        String property;
-        int value;
+        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
 
-        @Inject
-        public void setProperty(String property) {
-            this.property = property;
-        }
+        codeModel.build(stringCodeWriter);
 
-        @Inject
-        public void setValue(int value) {
-            this.value = value;
-        }
+        System.out.println(stringCodeWriter.getValue(factoryPackageClass.addDotJava()));
 
-        public void validate() {
-            assertEquals(TEST_PROPERTY, property);
-            assertEquals(TEST_VALUE, value);
-        }
-    }
+        classLoader.add(stringCodeWriter.getOutput());
+        Class<?> generatedFactoryClass = classLoader.loadClass(factoryPackageClass.getFullyQualifiedName());
 
-    public static class ParameterProvided {
-        @Inject
-        String property;
-        @Inject
-        int value;
+        assertNotNull(generatedFactoryClass);
+        Method getInstance = generatedFactoryClass.getMethod(factoryDescriptor.getInstanceMethodName());
+        Method buildInstance = generatedFactoryClass.getMethod(factoryDescriptor.getBuilderMethodName());
+        assertNotNull(getInstance);
+        assertNotNull(buildInstance);
+        Object factory = getInstance.invoke(generatedFactoryClass);
+        Object result = buildInstance.invoke(factory);
+        assertEquals(instanceClass, result.getClass());
 
-        public void validate() {
-            assertEquals(TEST_PROPERTY, property);
-            assertEquals(TEST_VALUE, value);
-        }
+        return (T) result;
     }
 }

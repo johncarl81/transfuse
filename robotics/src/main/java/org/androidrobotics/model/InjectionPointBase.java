@@ -8,16 +8,8 @@ import java.util.List;
  */
 public abstract class InjectionPointBase {
 
-    private String name;
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
 
-    public InjectionPointBase(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public void addInjectionNode(InjectionNode injectionNode) {
         this.injectionNodes.add(injectionNode);

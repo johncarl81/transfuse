@@ -27,7 +27,7 @@ public class TypeInjectionAnalyzer {
 
         for (ASTConstructor astConstructor : astType.getConstructors()) {
             if (astConstructor.isAnnotated(Inject.class)) {
-                node.addConstructorInjectionPoint(injectionPointFactory.buildInjectionPoint(astConstructor));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astConstructor));
                 constructorFound = true;
             }
             if (astConstructor.getParameters().size() == 0) {
@@ -36,18 +36,18 @@ public class TypeInjectionAnalyzer {
         }
 
         if (!constructorFound) {
-            node.addConstructorInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor));
+            node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor));
         }
 
         for (ASTMethod astMethod : astType.getMethods()) {
             if (astMethod.isAnnotated(Inject.class)) {
-                node.addMethodInjectionPoint(injectionPointFactory.buildInjectionPoint(astMethod));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astMethod));
             }
         }
 
         for (ASTField astField : astType.getFields()) {
             if (astField.isAnnotated(Inject.class)) {
-                node.addParameterInjectionPoint(injectionPointFactory.buildInjectionPoint(astField));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astField));
             }
         }
 

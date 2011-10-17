@@ -17,7 +17,7 @@ public class InjectionPointFactory {
 
     public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor) {
 
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astConstructor.getName());
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         for (ASTParameter astParameter : astConstructor.getParameters()) {
             constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType()));
         }
