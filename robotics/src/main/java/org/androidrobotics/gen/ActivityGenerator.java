@@ -2,9 +2,9 @@ package org.androidrobotics.gen;
 
 import android.os.Bundle;
 import com.sun.codemodel.*;
-import org.androidrobotics.annotations.OnCreate;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FactoryDescriptor;
+import org.androidrobotics.model.FieldInjectionPoint;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -31,7 +31,6 @@ public class ActivityGenerator {
 
         definedClass._extends(android.app.Activity.class);
 
-        JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(descriptor.getDelegateClass()), DELEGATE_NAME);
 
         JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
         JVar savedInstanceState = onCreateMethod.param(Bundle.class, "savedInstanceState");
@@ -44,12 +43,22 @@ public class ActivityGenerator {
         //layout setting
         block.invoke("setContentView").arg(JExpr.lit(descriptor.getLayout()));
 
-        FactoryDescriptor factoryDescriptor = injectorGenerator.buildInjector(descriptor);
-        block.assign(delegateField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()).invoke(factoryDescriptor.getBuilderMethodName()));
+        //injector and injection points
+        //todo: more than one?
+        if (descriptor.getInjectionPoints().size() > 0) {
+            FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-        for (String methodNames : descriptor.getMethods(OnCreate.class)) {
-            block.invoke(delegateField, methodNames);
+            FactoryDescriptor factoryDescriptor = injectorGenerator.buildInjector(fieldInjectionPoint);
+
+            JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(fieldInjectionPoint.getName()), DELEGATE_NAME);
+            block.assign(delegateField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()).invoke(factoryDescriptor.getBuilderMethodName()));
+
         }
+
+
+        /*for (String methodNames : descriptor.getMethods(OnCreate.class)) {
+            block.invoke(delegateField, methodNames);
+        }*/
 
     }
 }

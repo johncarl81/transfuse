@@ -2,15 +2,15 @@ package org.androidrobotics.analysis;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.androidrobotics.annotations.Activity;
-import org.androidrobotics.annotations.Layout;
-import org.androidrobotics.annotations.OnCreate;
+import org.androidrobotics.analysis.adapter.ASTClassFactory;
+import org.androidrobotics.analysis.targets.MockActivityDelegate;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.FieldInjectionPoint;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -19,7 +19,7 @@ import static junit.framework.Assert.assertEquals;
  */
 public class ActivityAnalysisTest {
 
-    public static final String TEST_NAME = "TestName";
+    public static final String TEST_NAME = "ActivityTestTarget";
     public static final int TEST_LAYOUT_ID = 123456;
 
     private ActivityDescriptor activityDescriptor;
@@ -28,7 +28,9 @@ public class ActivityAnalysisTest {
     public void setup() {
         Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
-        activityDescriptor = activityAnalysis.analyzeElement(new ClassAnalysisBridge(TestActivity.class));
+        ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
+
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
     }
 
     @Test
@@ -42,32 +44,13 @@ public class ActivityAnalysisTest {
     }
 
     @Test
-    public void testOnCreateMethod() {
-        Collection<String> onCreateMethods = activityDescriptor.getMethods(OnCreate.class);
+    public void testDelegateInjectionPoint() {
+        List<FieldInjectionPoint> injectionPoints = activityDescriptor.getInjectionPoints();
 
-        String method = TestActivity.class.getMethods()[0].getName();
-
-        assertEquals(1, onCreateMethods.size());
-        assertEquals(method, onCreateMethods.iterator().next());
+        assertEquals(1, injectionPoints.size());
+        FieldInjectionPoint injectionPoint = injectionPoints.get(0);
+        assertEquals(MockActivityDelegate.class.getName(), injectionPoint.getName());
     }
 
-    @Test
-    public void testDelegateClassName() {
-        String name = TestActivity.class.getName();
-        String packageName = name.substring(0, name.lastIndexOf('.'));
-        String className = name.substring(name.lastIndexOf('.') + 1);
 
-        assertEquals(className, activityDescriptor.getDelegateClass());
-        assertEquals(packageName, activityDescriptor.getPackage());
-    }
-
-    @Activity(ActivityAnalysisTest.TEST_NAME)
-    @Layout(ActivityAnalysisTest.TEST_LAYOUT_ID)
-    public class TestActivity {
-
-        @OnCreate
-        public void onCreate() {
-
-        }
-    }
 }

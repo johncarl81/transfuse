@@ -1,9 +1,8 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
-import org.androidrobotics.analysis.TypeAnalysisBridge;
-import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FactoryDescriptor;
+import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.SingletonDescriptor;
 
 import javax.inject.Inject;
@@ -29,24 +28,24 @@ public class InjectorGenerator {
 
     }
 
-    public FactoryDescriptor buildInjector(ActivityDescriptor descriptor) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public FactoryDescriptor buildInjector(FieldInjectionPoint fieldInjectionPoint) throws JClassAlreadyExistsException, ClassNotFoundException {
 
         if (injectorClass == null) {
-            injectorClass = codeModel._class(JMod.PUBLIC, descriptor.getPackage() + "." + descriptor.getShortDelegateClassName() + "Injector", ClassType.CLASS);
+            injectorClass = codeModel._class(JMod.PUBLIC, fieldInjectionPoint.getName() + "Injector", ClassType.CLASS);
             //singleton constructor
             SingletonDescriptor singletonDescriptor = singletonCodeBuilder.makeSingleton(injectorClass);
             constructor = singletonDescriptor.getConstructor();
             getInstanceMethod = singletonDescriptor.getGetInstanceMethod();
         }
 
-        return addFactoryMethod(descriptor.getDelegateAnalysis());
+        return addFactoryMethod(fieldInjectionPoint);
     }
 
-    private FactoryDescriptor addFactoryMethod(TypeAnalysisBridge delegateAnalysis) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private FactoryDescriptor addFactoryMethod(FieldInjectionPoint fieldInjectionPoint) throws ClassNotFoundException, JClassAlreadyExistsException {
         //build factory for delegate
-        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(delegateAnalysis);
+        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(fieldInjectionPoint.getInjectionNode());
 
-        String shortName = delegateAnalysis.getName().substring(delegateAnalysis.getName().lastIndexOf('.') + 1).toLowerCase();
+        String shortName = fieldInjectionPoint.getName().substring(fieldInjectionPoint.getName().lastIndexOf('.') + 1).toLowerCase();
 
         JFieldVar factoryField = injectorClass.field(JMod.PRIVATE, factoryDescriptor.getClassDefinition(), shortName + "factory");
 

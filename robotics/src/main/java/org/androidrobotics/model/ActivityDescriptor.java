@@ -1,8 +1,7 @@
 package org.androidrobotics.model;
 
-import org.androidrobotics.analysis.TypeAnalysisBridge;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -12,9 +11,8 @@ public class ActivityDescriptor {
     private String name;
     private String activityPackage;
     private int layout;
-    private String delegateClass;
-    private Map<Class<?>, Collection<String>> delegateMethods = new HashMap<Class<?>, Collection<String>>();
-    private TypeAnalysisBridge delegateAnalysis;
+    //todo: private Map<Class<?>, Collection<String>> delegateMethods = new HashMap<Class<?>, Collection<String>>();
+    private List<FieldInjectionPoint> injectionPoint = new ArrayList<FieldInjectionPoint>();
 
     public String getName() {
         return name;
@@ -32,7 +30,7 @@ public class ActivityDescriptor {
         this.layout = layout;
     }
 
-    public Collection<String> getMethods(Class<?> annotationClass) {
+    /*public Collection<String> getMethods(Class<?> annotationClass) {
         if (delegateMethods.containsKey(annotationClass)) {
             return delegateMethods.get(annotationClass);
         }
@@ -44,19 +42,7 @@ public class ActivityDescriptor {
             delegateMethods.put(annotation, new HashSet<String>());
         }
         delegateMethods.get(annotation).add(methodName);
-    }
-
-    public String getDelegateClass() {
-        return delegateClass;
-    }
-
-    public void setDelegateClass(String delegateClass) {
-        this.delegateClass = delegateClass;
-    }
-
-    public String getShortDelegateClassName() {
-        return delegateClass.substring(delegateClass.lastIndexOf(".") + 1);
-    }
+    }*/
 
     public void setPackage(String activityPackage) {
         this.activityPackage = activityPackage;
@@ -66,11 +52,11 @@ public class ActivityDescriptor {
         return activityPackage;
     }
 
-    public void setDelegateAnalysis(TypeAnalysisBridge delegateAnalysis) {
-        this.delegateAnalysis = delegateAnalysis;
+    public void addInjectionPoint(FieldInjectionPoint fieldInjectionPoint) {
+        injectionPoint.add(fieldInjectionPoint);
     }
 
-    public TypeAnalysisBridge getDelegateAnalysis() {
-        return delegateAnalysis;
+    public List<FieldInjectionPoint> getInjectionPoints() {
+        return injectionPoint;
     }
 }
