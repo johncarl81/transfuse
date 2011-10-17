@@ -1,4 +1,4 @@
-package org.androidrobotics.analysis;
+package org.androidrobotics.module;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -7,9 +7,7 @@ import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.targets.MockAnalysisClass;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.model.ConstructorInjectionPoint;
-import org.androidrobotics.model.FieldInjectionPoint;
-import org.androidrobotics.model.MethodInjectionPoint;
+import org.androidrobotics.model.*;
 import org.junit.Before;
 import org.junit.Test;
 

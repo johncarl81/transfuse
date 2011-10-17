@@ -1,7 +1,5 @@
 package org.androidrobotics.model;
 
-import org.androidrobotics.analysis.InjectionNode;
-
 /**
  * @author John Ericksen
  */

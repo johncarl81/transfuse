@@ -1,6 +1,6 @@
 package org.androidrobotics.analysis.adapter;
 
-import org.androidrobotics.util.TypeCollectionUtil;
+import org.androidrobotics.util.CollectionConverterUtil;
 
 import javax.inject.Inject;
 import javax.lang.model.element.ExecutableElement;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ASTElementFactory {
 
     @Inject
-    private TypeCollectionUtil typeCollectionUtil;
+    private CollectionConverterUtil collectionConverterUtil;
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
@@ -24,13 +24,13 @@ public class ASTElementFactory {
 
     public ASTType buildASTElementType(TypeElement typeElement) {
 
-        List<ASTConstructor> constructors = typeCollectionUtil.wrapCollection(typeElement.getEnclosedElements(),
+        List<ASTConstructor> constructors = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
                 astElementConverterFactory.buildASTElementConverter(ASTConstructor.class));
 
-        List<ASTField> fields = typeCollectionUtil.wrapCollection(typeElement.getEnclosedElements(),
+        List<ASTField> fields = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
                 astElementConverterFactory.buildASTElementConverter(ASTField.class));
 
-        List<ASTMethod> methods = typeCollectionUtil.wrapCollection(typeElement.getEnclosedElements(),
+        List<ASTMethod> methods = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
                 astElementConverterFactory.buildASTElementConverter(ASTMethod.class));
 
         return new ASTElementType(typeElement, constructors, methods, fields);

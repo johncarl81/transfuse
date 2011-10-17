@@ -1,8 +1,4 @@
-package org.androidrobotics.analysis;
-
-import org.androidrobotics.model.ConstructorInjectionPoint;
-import org.androidrobotics.model.FieldInjectionPoint;
-import org.androidrobotics.model.MethodInjectionPoint;
+package org.androidrobotics.model;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -2,6 +2,7 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
+import org.androidrobotics.model.PackageClass;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,11 +15,11 @@ import java.util.Map;
  */
 public class StringCodeWriter extends CodeWriter {
 
-    private Map<PackageFileName, ByteArrayOutputStream> streams = new HashMap<PackageFileName, ByteArrayOutputStream>();
+    private Map<PackageClass, ByteArrayOutputStream> streams = new HashMap<PackageClass, ByteArrayOutputStream>();
 
     @Override
     public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
-        PackageFileName packageFileName = new PackageFileName(pkg.name(), fileName);
+        PackageClass packageFileName = new PackageClass(pkg.name(), fileName);
         if (!streams.containsKey(packageFileName)) {
             streams.put(packageFileName, new ByteArrayOutputStream());
         }
@@ -34,7 +35,7 @@ public class StringCodeWriter extends CodeWriter {
         }
     }
 
-    public String getValue(PackageFileName packageFileName) {
+    public String getValue(PackageClass packageFileName) {
         return new String(streams.get(packageFileName).toByteArray());
     }
 }

@@ -1,4 +1,4 @@
-package org.androidrobotics.util;
+package org.androidrobotics.gen;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;

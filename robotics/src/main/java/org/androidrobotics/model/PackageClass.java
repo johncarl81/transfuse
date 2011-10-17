@@ -1,14 +1,14 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.model;
 
 /**
  * @author John Ericksen
  */
-public class PackageFileName {
+public class PackageClass {
 
     private String pkg;
     private String fileName;
 
-    public PackageFileName(String pkg, String fileName) {
+    public PackageClass(String pkg, String fileName) {
         this.pkg = pkg;
         this.fileName = fileName;
     }
@@ -18,7 +18,7 @@ public class PackageFileName {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PackageFileName that = (PackageFileName) o;
+        PackageClass that = (PackageClass) o;
 
         if (!fileName.equals(that.fileName)) return false;
         if (!pkg.equals(that.pkg)) return false;
@@ -33,15 +33,23 @@ public class PackageFileName {
         return result;
     }
 
-    public String getName() {
+    public String getPackage() {
+        return pkg;
+    }
+
+    public String getClassName() {
         return fileName;
     }
 
-    public PackageFileName addDotJava() {
-        return new PackageFileName(pkg, fileName + ".java");
+    public String getFullyQualifiedName() {
+        return pkg + "." + fileName;
+    }
+
+    public PackageClass addDotJava() {
+        return new PackageClass(pkg, fileName + ".java");
     }
 
     public String toString() {
-        return pkg + "." + fileName;
+        return getFullyQualifiedName();
     }
 }

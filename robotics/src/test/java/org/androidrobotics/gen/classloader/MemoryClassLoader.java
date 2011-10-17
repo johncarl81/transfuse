@@ -15,11 +15,11 @@ public class MemoryClassLoader extends ClassLoader {
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
-    public MemoryClassLoader(String classname, String filecontent) {
-        this(Collections.singletonMap(classname, filecontent));
+    public void add(String classname, String filecontent) {
+        add(Collections.singletonMap(classname, filecontent));
     }
 
-    public MemoryClassLoader(Map<String, String> map) {
+    public void add(Map<String, String> map) {
         List<Source> list = new ArrayList<Source>();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), JavaFileObject.Kind.SOURCE, entry.getValue()));

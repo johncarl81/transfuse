@@ -1,9 +1,7 @@
-package org.androidrobotics.analysis;
+package org.androidrobotics.model;
 
+import org.androidrobotics.analysis.TypeInjectionAnalyzer;
 import org.androidrobotics.analysis.adapter.*;
-import org.androidrobotics.model.ConstructorInjectionPoint;
-import org.androidrobotics.model.FieldInjectionPoint;
-import org.androidrobotics.model.MethodInjectionPoint;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

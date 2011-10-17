@@ -4,6 +4,8 @@ import org.androidrobotics.analysis.adapter.ASTConstructor;
 import org.androidrobotics.analysis.adapter.ASTField;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.InjectionPointFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

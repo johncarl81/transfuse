@@ -2,6 +2,7 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
+import org.androidrobotics.model.PackageClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class FactoryGeneratorTest {
 
     //private TestProvider provider;
     private MemoryClassLoader classLoader;
-    private Map<Class, PackageFileName> classFactories;
+    private Map<Class, PackageClass> classFactories;
 
     @Before
     public void setup() throws ClassNotFoundException, JClassAlreadyExistsException, IOException {
@@ -31,9 +32,9 @@ public class FactoryGeneratorTest {
         FactoryGenerator factoryGeneratorTwo = injector.getInstance(FactoryGenerator.class);
         JCodeModel codeModel = injector.getInstance(JCodeModel.class);
 
-        //factoryGeneratorTwo.buildProvider(new ClassAnalysisBridge(ConstructorProvided.class));
-        //factoryGeneratorTwo.buildProvider(new ClassAnalysisBridge(SetterProvided.class));
-        //factoryGeneratorTwo.buildProvider(new ClassAnalysisBridge(ParameterProvided.class));
+        factoryGenerator.buildFactory(new ClassAnalysisBridge(ConstructorProvided.class));
+        factoryGenerator.buildFactory(new ClassAnalysisBridge(SetterProvided.class));
+        factoryGenerator.buildFactory(new ClassAnalysisBridge(ParameterProvided.class));
 
         StringCodeWriter codeWriter = new StringCodeWriter();
 
@@ -54,12 +55,12 @@ public class FactoryGeneratorTest {
 
     }
 
-    private Map<Class, PackageFileName> buildClassFactoryNames(Class<?>[] classes) {
-        Map<Class, PackageFileName> classFactoryMap = new HashMap<Class, PackageFileName>();
+    private Map<Class, PackageClass> buildClassFactoryNames(Class<?>[] classes) {
+        Map<Class, PackageClass> classFactoryMap = new HashMap<Class, PackageClass>();
 
         for (Class clazz : classes) {
             classFactoryMap.put(clazz,
-                    new PackageFileName(
+                    new PackageClass(
                             clazz.getPackage().getName(),
                             clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + "Factory"
                     ));

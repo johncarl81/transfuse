@@ -7,9 +7,9 @@ import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.util.FilerSourceCodeWriter;
-import org.androidrobotics.util.ResourceCodeWriter;
-import org.androidrobotics.util.TypeCollectionUtil;
+import org.androidrobotics.gen.FilerSourceCodeWriter;
+import org.androidrobotics.gen.ResourceCodeWriter;
+import org.androidrobotics.util.CollectionConverterUtil;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -30,7 +30,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
     private boolean processorRan = false;
     private RoboticsProcessor roboticsProcessor;
-    private TypeCollectionUtil typeCollectionUtil;
+    private CollectionConverterUtil collectionConverterUtil;
     private ASTElementConverterFactory astElementConverterFactory;
 
     @Override
@@ -39,7 +39,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
         try {
             Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
             roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
-            typeCollectionUtil = injector.getInstance(TypeCollectionUtil.class);
+            collectionConverterUtil = injector.getInstance(CollectionConverterUtil.class);
             astElementConverterFactory = injector.getInstance(ASTElementConverterFactory.class);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -77,7 +77,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     }
 
     private Collection<? extends ASTType> wrapASTCollection(Set<? extends Element> elementCollection) {
-        return typeCollectionUtil.wrapCollection(elementCollection,
+        return collectionConverterUtil.wrapCollection(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
     }

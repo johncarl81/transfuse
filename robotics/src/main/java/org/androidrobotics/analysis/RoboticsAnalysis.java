@@ -9,6 +9,4 @@ public interface RoboticsAnalysis<T> {
 
     T analyzeElement(ASTType input);
 
-    Class<? extends T> getTargetDescriptor();
-
 }

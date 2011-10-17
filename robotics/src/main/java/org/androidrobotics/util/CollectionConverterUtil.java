@@ -9,7 +9,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @Singleton
-public class TypeCollectionUtil {
+public class CollectionConverterUtil {
 
     public <T, V> List<V> wrapCollection(Collection<? extends T> input, CollectionConverter<? super T, ? extends V> converter) {
         List<V> wrappedCollection = new ArrayList<V>();

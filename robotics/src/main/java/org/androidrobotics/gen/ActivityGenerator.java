@@ -7,11 +7,13 @@ import org.androidrobotics.model.FactoryDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 
 /**
  * @author John Ericksen
  */
+@Singleton
 public class ActivityGenerator {
 
     private static final String DELEGATE_NAME = "delegate";
@@ -27,7 +29,7 @@ public class ActivityGenerator {
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
-        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackage() + "." + descriptor.getName(), ClassType.CLASS);
+        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
         definedClass._extends(android.app.Activity.class);
 

@@ -4,6 +4,8 @@ import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.InjectionPointFactory;
+import org.androidrobotics.model.PackageClass;
 
 import javax.inject.Inject;
 
@@ -30,32 +32,16 @@ public class ActivityAnalysis implements RoboticsAnalysis<ActivityDescriptor> {
         if (activityAnnotation != null) {
             activityDescriptor = new ActivityDescriptor();
 
-            activityDescriptor.setName(activityAnnotation.value());
+            String name = input.getName();
+            String packageName = name.substring(0, name.lastIndexOf('.'));
+
+            activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.value()));
             activityDescriptor.setLayout(layoutAnnotation.value());
 
             activityDescriptor.addInjectionPoint(
                     injectionPointFactory.buildInjectionPoint(input)
             );
-
-            String name = input.getName();
-            int lastDot = name.lastIndexOf('.');
-
-            //activityDescriptor.setDelegateClass(input.getName().substring(lastDot + 1));
-            activityDescriptor.setPackage(input.getName().substring(0, lastDot));
-
-            //scan enclosed elements
-            /*for (AnalysisBridge enclosedElement : input.getEnclosedElements()) {
-                if (enclosedElement.getType() == ElementKind.METHOD && enclosedElement.getAnnotation(OnCreate.class) != null) {
-                    activityDescriptor.addMethod(OnCreate.class, enclosedElement.getName());
-                }
-
-            }*/
         }
         return activityDescriptor;
-    }
-
-    @Override
-    public Class<? extends ActivityDescriptor> getTargetDescriptor() {
-        return ActivityDescriptor.class;
     }
 }

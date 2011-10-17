@@ -35,7 +35,7 @@ public class ActivityAnalysisTest {
 
     @Test
     public void testActivityAnnotation() {
-        assertEquals(TEST_NAME, activityDescriptor.getName());
+        assertEquals(TEST_NAME, activityDescriptor.getPackageClass().getClassName());
     }
 
     @Test
