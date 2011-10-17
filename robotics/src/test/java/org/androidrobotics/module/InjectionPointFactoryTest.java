@@ -1,12 +1,11 @@
 package org.androidrobotics.module;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.androidrobotics.TestInjectorBuilder;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.targets.MockAnalysisClass;
-import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class InjectionPointFactoryTest {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
+        Injector injector = TestInjectorBuilder.createInjector(this);
 
         astClassFactory = injector.getInstance(ASTClassFactory.class);
         injectionPointFactory = injector.getInstance(InjectionPointFactory.class);

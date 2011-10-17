@@ -12,7 +12,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ActivityAnalysis implements RoboticsAnalysis<ActivityDescriptor> {
+public class ActivityAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
 
@@ -21,7 +21,6 @@ public class ActivityAnalysis implements RoboticsAnalysis<ActivityDescriptor> {
         this.injectionPointFactory = injectionPointFactory;
     }
 
-    @Override
     public ActivityDescriptor analyzeElement(ASTType input) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);

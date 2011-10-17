@@ -13,26 +13,6 @@ public class PackageClass {
         this.fileName = fileName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PackageClass that = (PackageClass) o;
-
-        if (!fileName.equals(that.fileName)) return false;
-        if (!pkg.equals(that.pkg)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = pkg.hashCode();
-        result = 31 * result + fileName.hashCode();
-        return result;
-    }
-
     public String getPackage() {
         return pkg;
     }
@@ -51,5 +31,25 @@ public class PackageClass {
 
     public String toString() {
         return getFullyQualifiedName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PackageClass that = (PackageClass) o;
+
+        if (!fileName.equals(that.fileName)) return false;
+        if (!pkg.equals(that.pkg)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = pkg.hashCode();
+        result = 31 * result + fileName.hashCode();
+        return result;
     }
 }

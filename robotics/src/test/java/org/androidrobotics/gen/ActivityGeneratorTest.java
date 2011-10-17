@@ -2,11 +2,10 @@ package org.androidrobotics.gen;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.TestInjectorBuilder;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.PackageClass;
@@ -36,7 +35,7 @@ public class ActivityGeneratorTest {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
+        Injector injector = TestInjectorBuilder.createInjector(this);
 
         activityGenerator = injector.getInstance(ActivityGenerator.class);
         codeModel = injector.getInstance(JCodeModel.class);

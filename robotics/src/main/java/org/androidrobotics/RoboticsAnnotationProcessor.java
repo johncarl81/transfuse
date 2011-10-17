@@ -10,6 +10,8 @@ import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.FilerSourceCodeWriter;
 import org.androidrobotics.gen.ResourceCodeWriter;
 import org.androidrobotics.util.CollectionConverterUtil;
+import org.androidrobotics.util.Logger;
+import org.androidrobotics.util.MessagerLogger;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -37,7 +39,8 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         try {
-            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule());
+            Logger logger = new MessagerLogger(processingEnv.getMessager());
+            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(logger));
             roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
             collectionConverterUtil = injector.getInstance(CollectionConverterUtil.class);
             astElementConverterFactory = injector.getInstance(ASTElementConverterFactory.class);
