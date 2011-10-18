@@ -1,8 +1,6 @@
-package org.anroidrobotics.example.simple;
+package org.androidrobotics.example.simple;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
-import org.androidrobotics.example.simple.TestActivity;
-import org.androidrobotics.example.simple.TestActivityDelegate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
