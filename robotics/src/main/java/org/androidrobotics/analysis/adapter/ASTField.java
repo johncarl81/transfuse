@@ -1,15 +1,17 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.inject.Inject;
-
 /**
+ * Abstract Syntax Tree Field node
+ *
  * @author John Ericksen
  */
-public interface ASTField {
-    boolean isAnnotated(Class<Inject> annotation);
+public interface ASTField extends ASTBase {
 
+    /**
+     * Supplies the type of the field represented.
+     *
+     * @return field type
+     */
     ASTType getASTType();
-
-    String getName();
 
 }

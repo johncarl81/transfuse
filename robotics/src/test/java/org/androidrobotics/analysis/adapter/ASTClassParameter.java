@@ -23,13 +23,17 @@ public class ASTClassParameter implements ASTParameter {
         }
     }
 
-    @Override
-    public String getName() {
-        return typeVariable.getName();
+    public boolean isAnnotated(Class<? extends Annotation> annotation) {
+        return annotationMap.containsKey(annotation);
     }
 
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return (A) annotationMap.get(annotation);
+    }
+
+    @Override
+    public String getName() {
+        return typeVariable.getName();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
@@ -17,11 +17,6 @@ public class ASTClassField implements ASTField {
     }
 
     @Override
-    public boolean isAnnotated(Class<Inject> annotation) {
-        return field.isAnnotationPresent(annotation);
-    }
-
-    @Override
     public ASTType getASTType() {
         return astType;
     }
@@ -29,5 +24,15 @@ public class ASTClassField implements ASTField {
     @Override
     public String getName() {
         return field.getName();
+    }
+
+    @Override
+    public boolean isAnnotated(Class<? extends Annotation> annotation) {
+        return field.isAnnotationPresent(annotation);
+    }
+
+    @Override
+    public <A extends Annotation> A getAnnotation(Class<A> annotation) {
+        return field.getAnnotation(annotation);
     }
 }

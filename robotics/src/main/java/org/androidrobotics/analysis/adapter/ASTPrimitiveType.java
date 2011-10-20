@@ -17,6 +17,11 @@ public class ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(Class<? extends Annotation> annotation) {
+        return false;
+    }
+
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return null;
     }

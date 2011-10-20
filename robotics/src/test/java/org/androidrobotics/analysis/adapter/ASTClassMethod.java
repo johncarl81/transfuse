@@ -1,6 +1,6 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -18,7 +18,12 @@ public class ASTClassMethod implements ASTMethod {
     }
 
     @Override
-    public boolean isAnnotated(Class<Inject> annotation) {
+    public <A extends Annotation> A getAnnotation(Class<A> annotation) {
+        return method.getAnnotation(annotation);
+    }
+
+    @Override
+    public boolean isAnnotated(Class<? extends Annotation> annotation) {
         return method.isAnnotationPresent(annotation);
     }
 

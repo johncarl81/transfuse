@@ -1,34 +1,24 @@
 package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.ExecutableElement;
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
+ * Element specific implementation of the AST Constructor
+ *
  * @author John Ericksen
  */
-public class ASTElementConstructor implements ASTConstructor {
+public class ASTElementConstructor extends ASTElementBase implements ASTConstructor {
 
-    private ExecutableElement executableElement;
     private List<ASTParameter> parameters;
 
     public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters) {
-        this.executableElement = executableElement;
+        super(executableElement);
         this.parameters = parameters;
-    }
-
-    @Override
-    public boolean isAnnotated(Class<? extends Annotation> annotation) {
-        return executableElement.getAnnotation(annotation) != null;
     }
 
     @Override
     public List<ASTParameter> getParameters() {
         return parameters;
-    }
-
-    @Override
-    public String getName() {
-        return executableElement.getSimpleName().toString();
     }
 }
