@@ -1,8 +1,8 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
-import org.androidrobotics.model.FactoryDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
+import org.androidrobotics.model.ProviderDescriptor;
 import org.androidrobotics.model.SingletonDescriptor;
 
 import javax.inject.Inject;
@@ -16,19 +16,19 @@ public class InjectorGenerator {
     private JDefinedClass injectorClass;
     private JMethod constructor;
     private JMethod getInstanceMethod;
-    private FactoryGenerator factoryGenerator;
+    private ProviderGenerator providerGenerator;
     private SingletonCodeBuilder singletonCodeBuilder;
 
     @Inject
-    public InjectorGenerator(JCodeModel codeModel, FactoryGenerator factoryGenerator, SingletonCodeBuilder singletonCodeBuilder) {
+    public InjectorGenerator(JCodeModel codeModel, ProviderGenerator providerGenerator, SingletonCodeBuilder singletonCodeBuilder) {
         this.codeModel = codeModel;
-        this.factoryGenerator = factoryGenerator;
+        this.providerGenerator = providerGenerator;
         this.singletonCodeBuilder = singletonCodeBuilder;
         this.injectorClass = null;
 
     }
 
-    public FactoryDescriptor buildInjector(FieldInjectionPoint fieldInjectionPoint) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public ProviderDescriptor buildInjector(FieldInjectionPoint fieldInjectionPoint) throws JClassAlreadyExistsException, ClassNotFoundException {
 
         if (injectorClass == null) {
             injectorClass = codeModel._class(JMod.PUBLIC, fieldInjectionPoint.getName() + "Injector", ClassType.CLASS);
@@ -41,22 +41,22 @@ public class InjectorGenerator {
         return addFactoryMethod(fieldInjectionPoint);
     }
 
-    private FactoryDescriptor addFactoryMethod(FieldInjectionPoint fieldInjectionPoint) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private ProviderDescriptor addFactoryMethod(FieldInjectionPoint fieldInjectionPoint) throws ClassNotFoundException, JClassAlreadyExistsException {
         //build factory for delegate
-        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(fieldInjectionPoint.getInjectionNode());
+        ProviderDescriptor providerDescriptor = providerGenerator.buildFactory(fieldInjectionPoint.getInjectionNode());
 
         String shortName = fieldInjectionPoint.getName().substring(fieldInjectionPoint.getName().lastIndexOf('.') + 1).toLowerCase();
 
-        JFieldVar factoryField = injectorClass.field(JMod.PRIVATE, factoryDescriptor.getClassDefinition(), shortName + "factory");
+        JFieldVar factoryField = injectorClass.field(JMod.PRIVATE, providerDescriptor.getClassDefinition(), shortName + "factory");
 
-        constructor.body().assign(factoryField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()));
+        constructor.body().assign(factoryField, providerDescriptor.getClassDefinition().staticInvoke(providerDescriptor.getInstanceMethodName()));
 
         //factoryField.assign(JExpr._new(factoryClass));
-        JMethod builderMethod = injectorClass.method(JMod.PUBLIC, factoryDescriptor.getReturnType(), "build" + shortName);
+        JMethod builderMethod = injectorClass.method(JMod.PUBLIC, providerDescriptor.getReturnType(), "build" + shortName);
         JBlock buildDescriptorMethodBlock = builderMethod.body();
 
-        buildDescriptorMethodBlock._return(factoryField.invoke(factoryDescriptor.getBuilderMethodName()));
+        buildDescriptorMethodBlock._return(factoryField.invoke(providerDescriptor.getBuilderMethodName()));
 
-        return new FactoryDescriptor(injectorClass, getInstanceMethod.name(), factoryDescriptor.getReturnType(), builderMethod.name());
+        return new ProviderDescriptor(injectorClass, getInstanceMethod.name(), providerDescriptor.getReturnType(), builderMethod.name());
     }
 }

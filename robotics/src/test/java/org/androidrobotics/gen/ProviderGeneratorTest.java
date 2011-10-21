@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -25,10 +26,10 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-public class FactoryGeneratorTest {
+public class ProviderGeneratorTest {
 
     @Inject
-    private FactoryGenerator factoryGenerator;
+    private ProviderGenerator providerGenerator;
     @Inject
     private MemoryClassLoader classLoader;
     @Inject
@@ -93,22 +94,22 @@ public class FactoryGeneratorTest {
     }
 
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
-        PackageClass factoryPackageClass = new PackageClass(instanceClass).add("Factory");
+        PackageClass providerPackageClass = new PackageClass(instanceClass).add("Factory");
 
-        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
+        ProviderDescriptor providerDescriptor = providerGenerator.buildFactory(injectionNode);
 
         codeModel.build(stringCodeWriter);
 
         classLoader.add(stringCodeWriter.getOutput());
-        Class<?> generatedFactoryClass = classLoader.loadClass(factoryPackageClass.getFullyQualifiedName());
+        Class<?> generatedFactoryClass = classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);
-        Method getInstance = generatedFactoryClass.getMethod(factoryDescriptor.getInstanceMethodName());
-        Method buildInstance = generatedFactoryClass.getMethod(factoryDescriptor.getBuilderMethodName());
+        Method getInstance = generatedFactoryClass.getMethod(providerDescriptor.getInstanceMethodName());
+        Method buildInstance = generatedFactoryClass.getMethod(providerDescriptor.getBuilderMethodName());
         assertNotNull(getInstance);
         assertNotNull(buildInstance);
-        Object factory = getInstance.invoke(generatedFactoryClass);
-        Object result = buildInstance.invoke(factory);
+        Provider provider = (Provider) getInstance.invoke(generatedFactoryClass);
+        Object result = provider.get();
         assertEquals(instanceClass, result.getClass());
 
         return (T) result;
