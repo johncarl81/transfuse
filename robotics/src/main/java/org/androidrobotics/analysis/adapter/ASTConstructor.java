@@ -1,16 +1,18 @@
 package org.androidrobotics.analysis.adapter;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
+ * Abstract Syntax Tree Constructor node
+ *
  * @author John Ericksen
  */
-public interface ASTConstructor {
+public interface ASTConstructor extends ASTBase {
 
-    boolean isAnnotated(Class<? extends Annotation> annotation);
-
+    /**
+     * Supplies the contained constructor parameters
+     *
+     * @return list of constructor parameters
+     */
     List<ASTParameter> getParameters();
-
-    String getName();
 }

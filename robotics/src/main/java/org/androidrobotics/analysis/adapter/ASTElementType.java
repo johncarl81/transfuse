@@ -1,13 +1,12 @@
 package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.TypeElement;
-import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
  * @author John Ericksen
  */
-public class ASTElementType implements ASTType {
+public class ASTElementType extends ASTElementBase implements ASTType {
 
     private TypeElement typeElement;
     private Collection<ASTMethod> methods;
@@ -15,6 +14,7 @@ public class ASTElementType implements ASTType {
     private Collection<ASTField> fields;
 
     public ASTElementType(TypeElement typeElement, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields) {
+        super(typeElement);
         this.typeElement = typeElement;
         this.constructors = constructors;
         this.methods = methods;
@@ -26,10 +26,6 @@ public class ASTElementType implements ASTType {
         return typeElement.getQualifiedName().toString();
     }
 
-    @Override
-    public <A extends Annotation> A getAnnotation(Class<A> annotation) {
-        return typeElement.getAnnotation(annotation);
-    }
 
     @Override
     public Collection<ASTMethod> getMethods() {

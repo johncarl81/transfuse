@@ -1,15 +1,18 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.inject.Inject;
 import java.util.List;
 
 /**
+ * Abstract Syntax Tree Method node
+ *
  * @author John Ericksen
  */
-public interface ASTMethod {
-    boolean isAnnotated(Class<Inject> annotation);
+public interface ASTMethod extends ASTBase {
 
-    String getName();
-
+    /**
+     * Supplies all parameters of this method
+     *
+     * @return method parameters
+     */
     List<ASTParameter> getParameters();
 }

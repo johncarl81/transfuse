@@ -23,6 +23,11 @@ public class ASTClassConstructor implements ASTConstructor {
     }
 
     @Override
+    public <A extends Annotation> A getAnnotation(Class<A> annotation) {
+        return (A) constructor.getAnnotation(annotation);
+    }
+
+    @Override
     public List<ASTParameter> getParameters() {
         return parameters;
     }

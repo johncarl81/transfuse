@@ -1,20 +1,32 @@
 package org.androidrobotics.analysis.adapter;
 
-import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
+ * Abstract Syntax Tree Type node
+ *
  * @author John Ericksen
  */
-public interface ASTType {
+public interface ASTType extends ASTBase {
 
-    <A extends Annotation> A getAnnotation(Class<A> annotation);
-
+    /**
+     * Supplies all available methods
+     *
+     * @return available methods
+     */
     Collection<ASTMethod> getMethods();
 
+    /**
+     * Supplies all available fields
+     *
+     * @return fields
+     */
     Collection<ASTField> getFields();
 
+    /**
+     * Supplies all available constructors
+     *
+     * @return constructors
+     */
     Collection<ASTConstructor> getConstructors();
-
-    String getName();
 }

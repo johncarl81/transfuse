@@ -26,6 +26,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(Class<? extends Annotation> annotation) {
+        return clazz.isAnnotationPresent(annotation);
+    }
+
+    @Override
     public Collection<ASTMethod> getMethods() {
         return methods;
     }
