@@ -5,6 +5,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.*;
 
 /**
+ * Builder of an ASTType from a TypeMirror input
+ *
  * @author John Ericksen
  */
 public class ASTTypeBuilderVisitor implements TypeVisitor<ASTType, Void> {

@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.lang.model.element.Element;
 
 /**
+ * Factory to build the ASTElementConverter
+ *
  * @author John Ericksen
  */
 public class ASTElementConverterFactory {

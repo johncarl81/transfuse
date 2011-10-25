@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * Element specific primitive AST type
+ *
  * @author John Ericksen
  */
 public class ASTPrimitiveType implements ASTType {

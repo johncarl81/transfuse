@@ -5,6 +5,8 @@ import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 
 /**
+ * Element specific implementation of a AST method parameter
+ *
  * @author John Ericksen
  */
 public class ASTElementParameter extends ASTElementBase implements ASTParameter {

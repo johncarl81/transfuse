@@ -6,6 +6,9 @@ import org.androidrobotics.util.ElementVisitorAdaptor;
 import javax.lang.model.element.*;
 
 /**
+ * Element to AST converter, converts the given type of javax.lang.model.element.Element to the
+ * robotics internal AST representation.
+ *
  * @author John Ericksen
  */
 public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
@@ -22,6 +25,8 @@ public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
 
     @Override
     public T convert(Element element) {
+        //visit the given element to determine its type, feed it inot the appropriate
+        //ASTElementFactory method and return the result
         return element.accept(new ElementVisitorAdaptor<T, Void>() {
             @Override
             public T visitType(TypeElement typeElement, Void aVoid) {
@@ -41,6 +46,8 @@ public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
 
             @Override
             public T visitExecutable(ExecutableElement executableElement, Void aVoid) {
+                //constructors and methods share this Element, the indication that the method is a constructor
+                //is that it is named <init>
                 if (executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
                     if (astTypeClass.isAssignableFrom(ASTConstructor.class)) {
                         return (T) astElementFactory.buildASTElementConstructor(executableElement);

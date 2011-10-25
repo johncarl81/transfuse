@@ -4,12 +4,13 @@ import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.model.ActivityDescriptor;
-import org.androidrobotics.model.InjectionPointFactory;
 import org.androidrobotics.model.PackageClass;
 
 import javax.inject.Inject;
 
 /**
+ * Activity related Analysis
+ *
  * @author John Ericksen
  */
 public class ActivityAnalysis {

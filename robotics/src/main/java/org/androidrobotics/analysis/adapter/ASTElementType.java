@@ -4,6 +4,8 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collection;
 
 /**
+ * Element specific Type of an AST object
+ *
  * @author John Ericksen
  */
 public class ASTElementType extends ASTElementBase implements ASTType {

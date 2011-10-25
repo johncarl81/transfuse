@@ -4,6 +4,8 @@ import javax.lang.model.element.ExecutableElement;
 import java.util.List;
 
 /**
+ * Element specific implementation of the AST Method
+ *
  * @author John Ericksen
  */
 public class ASTElementMethod extends ASTElementBase implements ASTMethod {
