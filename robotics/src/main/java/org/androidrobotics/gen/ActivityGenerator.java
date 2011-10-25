@@ -3,8 +3,8 @@ package org.androidrobotics.gen;
 import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.FactoryDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
-import org.androidrobotics.model.ProviderDescriptor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -50,10 +50,10 @@ public class ActivityGenerator {
         if (descriptor.getInjectionPoints().size() > 0) {
             FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-            ProviderDescriptor providerDescriptor = injectorGenerator.buildInjector(fieldInjectionPoint);
+            FactoryDescriptor factoryDescriptor = injectorGenerator.buildInjector(fieldInjectionPoint);
 
             JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(fieldInjectionPoint.getName()), DELEGATE_NAME);
-            block.assign(delegateField, providerDescriptor.getClassDefinition().staticInvoke(providerDescriptor.getInstanceMethodName()).invoke(providerDescriptor.getBuilderMethodName()));
+            block.assign(delegateField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()).invoke(factoryDescriptor.getBuilderMethodName()));
 
         }
 

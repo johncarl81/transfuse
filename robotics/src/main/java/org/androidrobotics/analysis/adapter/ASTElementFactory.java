@@ -8,7 +8,9 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -16,6 +18,8 @@ import java.util.List;
  * @author John Ericksen
  */
 public class ASTElementFactory {
+
+    private Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
 
     @Inject
     private CollectionConverterUtil collectionConverterUtil;
@@ -31,18 +35,29 @@ public class ASTElementFactory {
      * @return ASTType constructed using teh input Element
      */
     public ASTType buildASTElementType(TypeElement typeElement) {
+        if (!typeCache.containsKey(typeElement)) {
 
-        //iterate and build the contained elements within this TypeElement
-        List<ASTConstructor> constructors = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
-                astElementConverterFactory.buildASTElementConverter(ASTConstructor.class));
+            //build placeholder for ASTElementType and contained data structures to allow for children population
+            //while avoiding back link loops
+            List<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
+            List<ASTField> fields = new ArrayList<ASTField>();
+            List<ASTMethod> methods = new ArrayList<ASTMethod>();
 
-        List<ASTField> fields = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
-                astElementConverterFactory.buildASTElementConverter(ASTField.class));
+            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields));
 
-        List<ASTMethod> methods = collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
-                astElementConverterFactory.buildASTElementConverter(ASTMethod.class));
+            //iterate and build the contained elements within this TypeElement
+            constructors.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+                    astElementConverterFactory.buildASTElementConverter(ASTConstructor.class)));
 
-        return new ASTElementType(typeElement, constructors, methods, fields);
+            fields.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+                    astElementConverterFactory.buildASTElementConverter(ASTField.class)));
+
+            methods.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+                    astElementConverterFactory.buildASTElementConverter(ASTMethod.class)));
+
+        }
+
+        return typeCache.get(typeElement);
     }
 
     /**

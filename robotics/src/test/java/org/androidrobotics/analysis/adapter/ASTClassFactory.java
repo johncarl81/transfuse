@@ -5,14 +5,38 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author John Ericksen
  */
 public class ASTClassFactory {
+
+    private Map<Class<?>, ASTType> typeCache = new HashMap<Class<?>, ASTType>();
+
+    public ASTType buildASTClassType(Class<?> parameterType) {
+        if (!typeCache.containsKey(parameterType)) {
+            Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
+            Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
+            Collection<ASTField> fields = new ArrayList<ASTField>();
+
+            typeCache.put(parameterType, new ASTClassType(parameterType, constructors, methods, fields));
+
+            //fill in the guts after building the tree
+            for (Constructor constructor : parameterType.getDeclaredConstructors()) {
+                constructors.add(buildASTClassConstructor(constructor));
+            }
+
+            for (Method method : parameterType.getDeclaredMethods()) {
+                methods.add(buildASTClassMethod(method));
+            }
+
+            for (Field field : parameterType.getDeclaredFields()) {
+                fields.add(buildASTClassField(field));
+            }
+        }
+        return typeCache.get(parameterType);
+    }
 
     private List<ASTParameter> buildASTTypeParameters(Constructor constructor) {
         return buildASTTypeParameters(constructor.getTypeParameters(), constructor.getParameterTypes(), constructor.getParameterAnnotations());
@@ -36,26 +60,6 @@ public class ASTClassFactory {
 
     public ASTParameter buildASTClassParameter(TypeVariable typeVariable, Class<?> parameterType, Annotation[] annotations) {
         return new ASTClassParameter(typeVariable, annotations, buildASTClassType(parameterType));
-    }
-
-    public ASTType buildASTClassType(Class<?> parameterType) {
-        Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
-        Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
-        Collection<ASTField> fields = new ArrayList<ASTField>();
-
-        for (Constructor constructor : parameterType.getConstructors()) {
-            constructors.add(buildASTClassConstructor(constructor));
-        }
-
-        for (Method method : parameterType.getDeclaredMethods()) {
-            methods.add(buildASTClassMethod(method));
-        }
-
-        for (Field field : parameterType.getDeclaredFields()) {
-            fields.add(buildASTClassField(field));
-        }
-
-        return new ASTClassType(parameterType, constructors, methods, fields);
     }
 
     public ASTMethod buildASTClassMethod(Method method) {

@@ -9,6 +9,7 @@ import java.util.Set;
 public class InjectionNode {
 
     private String className;
+    private boolean proxyRequired;
 
     private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
     private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
@@ -48,5 +49,13 @@ public class InjectionNode {
 
     public String getClassName() {
         return className;
+    }
+
+    public void setProxyRequired(boolean proxyRequired) {
+        this.proxyRequired = proxyRequired;
+    }
+
+    public boolean isProxyRequired() {
+        return proxyRequired;
     }
 }

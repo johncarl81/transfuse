@@ -10,7 +10,6 @@ public abstract class InjectionPointBase {
 
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
 
-
     public void addInjectionNode(InjectionNode injectionNode) {
         this.injectionNodes.add(injectionNode);
     }

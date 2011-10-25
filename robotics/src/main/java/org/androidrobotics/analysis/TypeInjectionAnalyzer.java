@@ -28,14 +28,32 @@ public class TypeInjectionAnalyzer {
      * @return InjectionNode root
      */
     public InjectionNode analyze(ASTType astType) {
+        AnalysisContext analysisContext = new AnalysisContext();
+
+        return analyze(astType, analysisContext);
+    }
+
+    protected InjectionNode analyze(ASTType astType, AnalysisContext context) {
         InjectionNode node = new InjectionNode(astType.getName());
+
+        if (context.isDependent(astType)) {
+            //if this type is a depenency of itself, we've found a back link.
+            //This injection must be performed using a delayed injection proxy
+            InjectionNode injectionNode = context.getInjectionNode(astType);
+
+            injectionNode.setProxyRequired(true);
+
+            return injectionNode;
+        }
+
+        AnalysisContext nextContext = context.addDependent(astType, node);
 
         ASTConstructor noArgConstructor = null;
         boolean constructorFound = false;
 
         for (ASTConstructor astConstructor : astType.getConstructors()) {
             if (astConstructor.isAnnotated(Inject.class)) {
-                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astConstructor));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astConstructor, nextContext));
                 constructorFound = true;
             }
             if (astConstructor.getParameters().size() == 0) {
@@ -44,18 +62,18 @@ public class TypeInjectionAnalyzer {
         }
 
         if (!constructorFound) {
-            node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor));
+            node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor, nextContext));
         }
 
         for (ASTMethod astMethod : astType.getMethods()) {
             if (astMethod.isAnnotated(Inject.class)) {
-                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astMethod));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astMethod, nextContext));
             }
         }
 
         for (ASTField astField : astType.getFields()) {
             if (astField.isAnnotated(Inject.class)) {
-                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astField));
+                node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astField, nextContext));
             }
         }
 

@@ -6,14 +6,14 @@ import com.sun.codemodel.JType;
 /**
  * @author John Ericksen
  */
-public class ProviderDescriptor {
+public class FactoryDescriptor {
 
     private String builderMethodName;
     private String instanceMethodName;
     private JDefinedClass classDefinition;
     private JType returnType;
 
-    public ProviderDescriptor(JDefinedClass classDefinition, String instanceMethodName, JType returnType, String builderMethodName) {
+    public FactoryDescriptor(JDefinedClass classDefinition, String instanceMethodName, JType returnType, String builderMethodName) {
         this.builderMethodName = builderMethodName;
         this.instanceMethodName = instanceMethodName;
         this.classDefinition = classDefinition;

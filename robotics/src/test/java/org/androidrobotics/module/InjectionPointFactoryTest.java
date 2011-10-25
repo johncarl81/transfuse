@@ -3,6 +3,7 @@ package org.androidrobotics.module;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
@@ -31,6 +32,8 @@ import static junit.framework.Assert.assertEquals;
  */
 public class InjectionPointFactoryTest {
 
+    private AnalysisContext emptyContext;
+
     @Inject
     private InjectionPointFactory injectionPointFactory;
     @Inject
@@ -40,6 +43,7 @@ public class InjectionPointFactoryTest {
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
+        emptyContext = new AnalysisContext();
     }
 
     @Test
@@ -47,7 +51,7 @@ public class InjectionPointFactoryTest {
         Constructor<?>[] constructors = MockAnalysisClass.class.getConstructors();
         Constructor constructor = constructors[0];
 
-        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassConstructor(constructor));
+        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassConstructor(constructor), emptyContext);
 
         TypeVariable[] typeParameters = constructor.getTypeParameters();
         List<InjectionNode> injectionNodes = constructorInjectionPoint.getInjectionNodes();
@@ -67,7 +71,7 @@ public class InjectionPointFactoryTest {
         List<ASTParameter> astParameters = astClassFactory.buildASTTypeParameters(method);
         ASTMethod astMethod = astClassFactory.buildASTClassMethod(method);
 
-        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(astMethod);
+        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(astMethod, emptyContext);
 
 
         List<InjectionNode> injectionNodes = methodInjectionPoint.getInjectionNodes();
@@ -84,7 +88,7 @@ public class InjectionPointFactoryTest {
         Field[] fields = MockAnalysisClass.class.getDeclaredFields();
         Field field = fields[0];
 
-        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassField(field));
+        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassField(field), emptyContext);
 
         InjectionNode injectionNode = fieldInjectionPoint.getInjectionNode();
 

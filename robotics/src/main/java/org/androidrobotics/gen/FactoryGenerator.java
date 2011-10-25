@@ -13,29 +13,29 @@ import java.util.Map;
  * @author John Ericksen
  */
 @Singleton
-public class ProviderGenerator {
+public class FactoryGenerator {
 
     public static final String BUILDER_METHOD = "get";
 
     private JCodeModel codeModel;
     private SingletonCodeBuilder singletonCodeBuilder;
-    private Map<String, ProviderDescriptor> factoryMap = new HashMap<String, ProviderDescriptor>();
+    private Map<String, FactoryDescriptor> factoryMap = new HashMap<String, FactoryDescriptor>();
 
     @Inject
-    public ProviderGenerator(JCodeModel codeModel, SingletonCodeBuilder singletonCodeBuilder) {
+    public FactoryGenerator(JCodeModel codeModel, SingletonCodeBuilder singletonCodeBuilder) {
         this.codeModel = codeModel;
         this.singletonCodeBuilder = singletonCodeBuilder;
     }
 
-    public ProviderDescriptor buildFactory(InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public FactoryDescriptor buildFactory(InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
         if (!factoryMap.containsKey(injectionNode.getClassName())) {
-            ProviderDescriptor descriptor = innerBuildFactory(injectionNode);
+            FactoryDescriptor descriptor = innerBuildFactory(injectionNode);
             factoryMap.put(injectionNode.getClassName(), descriptor);
         }
         return factoryMap.get(injectionNode.getClassName());
     }
 
-    private ProviderDescriptor innerBuildFactory(InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private FactoryDescriptor innerBuildFactory(InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         JDefinedClass factoryClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "Factory", ClassType.CLASS);
 
@@ -49,40 +49,37 @@ public class ProviderGenerator {
         JBlock constructorBody = singletonDescriptor.getConstructor().body();
 
         String name = injectionNode.getClassName().substring(injectionNode.getClassName().lastIndexOf('.') + 1);
-        String packageName = injectionNode.getClassName().substring(0, injectionNode.getClassName().lastIndexOf('.'));
 
         JType returnType = codeModel.parseType(name);
         JMethod buildInstanceMethod = factoryClass.method(JMod.PUBLIC, returnType, BUILDER_METHOD);
-        JBlock buildIntanceBody = buildInstanceMethod.body();
+        JBlock buildInstanceBody = buildInstanceMethod.body();
 
-
-        JVar variable = buildIntanceBody.decl(codeModel.parseType(injectionNode.getClassName()), "activityDelegate");
-
+        JVar variable = buildInstanceBody.decl(codeModel.parseType(injectionNode.getClassName()), "activityDelegate");
 
         //constructor injection
-        buildIntanceBody.assign(variable,
+        buildInstanceBody.assign(variable,
                 buildConstructorCall(injectionNode.getConstructorInjectionPoint(), returnType, constructorBody, factoryClass));
 
         //field injection
         for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
-            buildParameterInjection(injectionNode, fieldInjectionPoint, variable, buildIntanceBody, packageName, constructorBody, factoryClass);
+            buildParameterInjection(injectionNode, fieldInjectionPoint, variable, buildInstanceBody, constructorBody, factoryClass);
         }
 
         //method injection
         for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
-            buildMethodInjection(methodInjectionPoint, variable, buildIntanceBody, constructorBody, factoryClass);
+            buildMethodInjection(methodInjectionPoint, variable, buildInstanceBody, constructorBody, factoryClass);
         }
 
-        buildIntanceBody._return(variable);
+        buildInstanceBody._return(variable);
 
-        return new ProviderDescriptor(factoryClass, singletonDescriptor.getGetInstanceMethod().name(), returnType, buildInstanceMethod.name());
+        return new FactoryDescriptor(factoryClass, singletonDescriptor.getGetInstanceMethod().name(), returnType, buildInstanceMethod.name());
     }
 
     private void buildMethodInjection(MethodInjectionPoint methodInjectionPoint, JVar variable, JBlock buildInstancebody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         JInvocation methodInvocation = variable.invoke(methodInjectionPoint.getName());
         for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
-            ProviderDescriptor descriptor = buildFactory(injectionNode);
+            FactoryDescriptor descriptor = buildFactory(injectionNode);
 
             String name = injectionNode.getClassName().substring(injectionNode.getClassName().lastIndexOf('.') + 1).toLowerCase();
 
@@ -97,12 +94,12 @@ public class ProviderGenerator {
 
     }
 
-    private void buildParameterInjection(InjectionNode injectionNode, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, String packageName, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private void buildParameterInjection(InjectionNode injectionNode, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
         JTryBlock jTryBlock = buildIntanceBody._try();
 
         JBlock tryBuildInstancebody = jTryBlock.body();
 
-        ProviderDescriptor descriptor = buildFactory(fieldInjectionPoint.getInjectionNode());
+        FactoryDescriptor descriptor = buildFactory(fieldInjectionPoint.getInjectionNode());
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
         String name = node.getClassName().substring(node.getClassName().lastIndexOf('.') + 1).toLowerCase();
@@ -134,7 +131,7 @@ public class ProviderGenerator {
 
         for (InjectionNode node : injectionNode.getInjectionNodes()) {
 
-            ProviderDescriptor descriptor = buildFactory(node);
+            FactoryDescriptor descriptor = buildFactory(node);
 
             String name = node.getClassName().substring(node.getClassName().lastIndexOf('.') + 1).toLowerCase();
 

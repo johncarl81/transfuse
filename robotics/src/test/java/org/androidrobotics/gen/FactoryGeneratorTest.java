@@ -26,10 +26,10 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-public class ProviderGeneratorTest {
+public class FactoryGeneratorTest {
 
     @Inject
-    private ProviderGenerator providerGenerator;
+    private FactoryGenerator factoryGenerator;
     @Inject
     private MemoryClassLoader classLoader;
     @Inject
@@ -96,7 +96,7 @@ public class ProviderGeneratorTest {
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
         PackageClass providerPackageClass = new PackageClass(instanceClass).add("Factory");
 
-        ProviderDescriptor providerDescriptor = providerGenerator.buildFactory(injectionNode);
+        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
 
         codeModel.build(stringCodeWriter);
 
@@ -104,8 +104,8 @@ public class ProviderGeneratorTest {
         Class<?> generatedFactoryClass = classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);
-        Method getInstance = generatedFactoryClass.getMethod(providerDescriptor.getInstanceMethodName());
-        Method buildInstance = generatedFactoryClass.getMethod(providerDescriptor.getBuilderMethodName());
+        Method getInstance = generatedFactoryClass.getMethod(factoryDescriptor.getInstanceMethodName());
+        Method buildInstance = generatedFactoryClass.getMethod(factoryDescriptor.getBuilderMethodName());
         assertNotNull(getInstance);
         assertNotNull(buildInstance);
         Provider provider = (Provider) getInstance.invoke(generatedFactoryClass);

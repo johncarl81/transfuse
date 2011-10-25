@@ -26,11 +26,11 @@ public class InjectionPointFactory {
      * @param astConstructor required ASTConstructor
      * @return ConstructorInjectionPoint
      */
-    public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor) {
+    public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {
 
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         for (ASTParameter astParameter : astConstructor.getParameters()) {
-            constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType()));
+            constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType(), context));
         }
 
         return constructorInjectionPoint;
@@ -42,12 +42,12 @@ public class InjectionPointFactory {
      * @param astMethod required ASTMEthod
      * @return MethodInjectionPoint
      */
-    public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod) {
+    public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
 
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getName());
 
         for (ASTParameter astField : astMethod.getParameters()) {
-            methodInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astField.getASTType()));
+            methodInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astField.getASTType(), context));
         }
 
         return methodInjectionPoint;
@@ -59,9 +59,9 @@ public class InjectionPointFactory {
      * @param astField required ASTField
      * @return FieldInjectionPoint
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTField astField) {
+    public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
 
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astField.getASTType());
+        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astField.getASTType(), context);
 
         return new FieldInjectionPoint(astField.getName(), injectionNode);
     }
