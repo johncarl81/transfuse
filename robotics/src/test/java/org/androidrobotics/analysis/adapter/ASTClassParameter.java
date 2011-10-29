@@ -1,7 +1,6 @@
 package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +9,10 @@ import java.util.Map;
  */
 public class ASTClassParameter implements ASTParameter {
 
-    private TypeVariable typeVariable;
     private ASTType astType;
     private Map<Class<?>, Annotation> annotationMap = new HashMap<Class<?>, Annotation>();
 
-    public ASTClassParameter(TypeVariable typeVariable, Annotation[] annotations, ASTType astType) {
-        this.typeVariable = typeVariable;
+    public ASTClassParameter(Annotation[] annotations, ASTType astType) {
         this.astType = astType;
 
         for (Annotation annotation : annotations) {
@@ -33,7 +30,7 @@ public class ASTClassParameter implements ASTParameter {
 
     @Override
     public String getName() {
-        return typeVariable.getName();
+        return astType.getName();
     }
 
     @Override

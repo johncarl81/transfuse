@@ -30,10 +30,10 @@ public class TypeInjectionAnalyzer {
     public InjectionNode analyze(ASTType astType) {
         AnalysisContext analysisContext = new AnalysisContext();
 
-        return analyze(astType, analysisContext);
+        return analyze(astType, analysisContext, false);
     }
 
-    protected InjectionNode analyze(ASTType astType, AnalysisContext context) {
+    protected InjectionNode analyze(ASTType astType, AnalysisContext context, boolean proxyDepenency) {
         InjectionNode node = new InjectionNode(astType.getName());
 
         if (context.isDependent(astType)) {
@@ -41,7 +41,11 @@ public class TypeInjectionAnalyzer {
             //This injection must be performed using a delayed injection proxy
             InjectionNode injectionNode = context.getInjectionNode(astType);
 
-            injectionNode.setProxyRequired(true);
+            //if its a proxy dependency then the given dependent object will have to be build using a delayed
+            //proxy object
+            if (proxyDepenency) {
+                injectionNode.setProxyRequired(true);
+            }
 
             return injectionNode;
         }

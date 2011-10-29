@@ -30,7 +30,7 @@ public class InjectionPointFactory {
 
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         for (ASTParameter astParameter : astConstructor.getParameters()) {
-            constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType(), context));
+            constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType(), context, true));
         }
 
         return constructorInjectionPoint;
@@ -47,7 +47,7 @@ public class InjectionPointFactory {
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getName());
 
         for (ASTParameter astField : astMethod.getParameters()) {
-            methodInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astField.getASTType(), context));
+            methodInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astField.getASTType(), context, false));
         }
 
         return methodInjectionPoint;
@@ -61,7 +61,7 @@ public class InjectionPointFactory {
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
 
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astField.getASTType(), context);
+        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astField.getASTType(), context, false);
 
         return new FieldInjectionPoint(astField.getName(), injectionNode);
     }

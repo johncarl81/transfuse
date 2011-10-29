@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.util.*;
 
 /**
@@ -39,27 +38,27 @@ public class ASTClassFactory {
     }
 
     private List<ASTParameter> buildASTTypeParameters(Constructor constructor) {
-        return buildASTTypeParameters(constructor.getTypeParameters(), constructor.getParameterTypes(), constructor.getParameterAnnotations());
+        return buildASTTypeParameters(constructor.getParameterTypes(), constructor.getParameterAnnotations());
     }
 
     public List<ASTParameter> buildASTTypeParameters(Method method) {
 
-        return buildASTTypeParameters(method.getTypeParameters(), method.getParameterTypes(), method.getParameterAnnotations());
+        return buildASTTypeParameters(method.getParameterTypes(), method.getParameterAnnotations());
     }
 
-    public List<ASTParameter> buildASTTypeParameters(TypeVariable<Method>[] typeParameters, Class<?>[] parameterTypes, Annotation[][] parameterAnnotations) {
+    public List<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Annotation[][] parameterAnnotations) {
 
         List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
 
-        for (int i = 0; i < typeParameters.length; i++) {
-            astParameters.add(buildASTClassParameter(typeParameters[i], parameterTypes[i], parameterAnnotations[i]));
+        for (int i = 0; i < parameterTypes.length; i++) {
+            astParameters.add(buildASTClassParameter(parameterTypes[i], parameterAnnotations[i]));
         }
 
         return astParameters;
     }
 
-    public ASTParameter buildASTClassParameter(TypeVariable typeVariable, Class<?> parameterType, Annotation[] annotations) {
-        return new ASTClassParameter(typeVariable, annotations, buildASTClassType(parameterType));
+    public ASTParameter buildASTClassParameter(Class<?> parameterType, Annotation[] annotations) {
+        return new ASTClassParameter(annotations, buildASTClassType(parameterType));
     }
 
     public ASTMethod buildASTClassMethod(Method method) {
