@@ -33,17 +33,17 @@ public class ProxyGeneratorTest {
     private static final String INPUT_VALUE = "input";
 
     private ASTType interfaceAST;
-    private ASTType delegateAST;
     private InjectionNode delegateInjectionNode;
     @Inject
     private ProxyGenerator proxyGenerator;
-
     @Inject
     public ASTClassFactory astClassFactory;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private TypeInjectionAnalyzer typeInjectionAnalyzer;
+    @Inject
+    private DelegateInstantiationGeneratorStrategyFactory delegateInstantiationGeneratorFactory;
 
     @Before
     public void setup() {
@@ -51,13 +51,16 @@ public class ProxyGeneratorTest {
         injector.injectMembers(this);
 
         interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
-        delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
+        ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = typeInjectionAnalyzer.analyze(delegateAST);
     }
 
     @Test
-    public void testProxy() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST, delegateInjectionNode);
+    public void testProxyByConstructor() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+
+
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
+                delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
@@ -66,17 +69,35 @@ public class ProxyGeneratorTest {
         MockDelegate delegate = new MockDelegate();
 
         Constructor<?> proxyConstructor = proxyClass.getConstructor(MockDelegate.class);
-        MockInterface proxy = (MockInterface) proxyConstructor.newInstance(delegate);
 
+        runMockDelegateTests((MockInterface) proxyConstructor.newInstance(delegate), delegate);
+    }
+
+    @Test
+    public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
+                delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
+
+        ClassLoader classLoader = codeGenerationUtil.build();
+
+        Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
+
+        MockDelegate delegate = new MockDelegate();
+
+        DelayedLoad<MockDelegate> delayedLoadProxy = (DelayedLoad<MockDelegate>) proxyClass.newInstance();
+
+        delayedLoadProxy.load(delegate);
+
+        runMockDelegateTests((MockInterface) delayedLoadProxy, delegate);
+    }
+
+    private void runMockDelegateTests(MockInterface proxy, MockDelegate delegate) {
         proxy.execute();
         assertEquals(TEST_VALUE, proxy.getValue());
         proxy.setValue(INPUT_VALUE);
         assertEquals(TEST_VALUE, proxy.passThroughValue(INPUT_VALUE));
 
         assertTrue(delegate.validate(INPUT_VALUE, INPUT_VALUE));
-
-
     }
-
 
 }

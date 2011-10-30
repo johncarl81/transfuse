@@ -4,8 +4,6 @@ import com.sun.codemodel.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.model.FactoryDescriptor;
-import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 
 import javax.inject.Inject;
@@ -17,8 +15,6 @@ import java.util.Map;
  */
 public class ProxyGenerator {
 
-    private static final String DELEGATE_NAME = "delegate";
-
     private JCodeModel codeModel;
     private FactoryGenerator factoryGenerator;
 
@@ -28,19 +24,14 @@ public class ProxyGenerator {
         this.factoryGenerator = factoryGenerator;
     }
 
-    public ProxyDescriptor generateProxy(ASTType interfaceType, InjectionNode delegateNode) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public ProxyDescriptor generateProxy(ASTType interfaceType, String proxyClassName, DelegateInstantiationGeneratorStrategy delegateInstansiationGenerator) throws JClassAlreadyExistsException, ClassNotFoundException {
 
-        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, delegateNode.getClassName() + "Proxy", ClassType.CLASS);
+        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, proxyClassName, ClassType.CLASS);
         //implements interface
         definedClass._implements(codeModel.ref(interfaceType.getName()));
 
-        //define delegate from constructor input
-        JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(delegateNode.getClassName()), DELEGATE_NAME);
-        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(delegateNode);
-        JMethod constructor = definedClass.constructor(JMod.PUBLIC);
-
-        JVar delegateParam = constructor.param(codeModel.ref(delegateNode.getClassName()), "todo");
-        constructor.body().assign(delegateField, delegateParam);
+        //define delegate
+        JFieldVar delegateField = delegateInstansiationGenerator.addDelegateInstantiation(definedClass);
 
         //implement methods
         for (ASTMethod method : interfaceType.getMethods()) {
