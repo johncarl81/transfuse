@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author John Ericksen
@@ -26,16 +27,24 @@ public class TypeInjectionAnalyzerTest {
 
     public static class A {
         private B b;
+        private E e;
 
         @Inject
-        public void setB(B b) {
+        public void setMultiVariables(B b, E e) {
             this.b = b;
+            this.e = e;
         }
     }
 
     public static class B {
         @Inject
         private C c;
+        private F f;
+
+        @Inject
+        public B(F f) {
+            this.f = f;
+        }
 
     }
 
@@ -52,6 +61,19 @@ public class TypeInjectionAnalyzerTest {
         public D(B b) {
             this.b = b;
         }
+    }
+
+    public static class E {
+        private F f;
+
+        @Inject
+        public E(F f) {
+            this.f = f;
+        }
+    }
+
+    public static class F {
+        //empty
     }
 
     private TypeInjectionAnalyzer typeInjectionAnalyzer;
@@ -71,23 +93,51 @@ public class TypeInjectionAnalyzerTest {
 
         InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astType);
 
+        //A -> B && A -> E
+        assertEquals(1, injectionNode.getMethodInjectionPoints().size());
         MethodInjectionPoint bInjectionPoint = injectionNode.getMethodInjectionPoints().iterator().next();
 
+        assertEquals(2, bInjectionPoint.getInjectionNodes().size());
+        //A -> B
         InjectionNode bInjectionNode = bInjectionPoint.getInjectionNodes().get(0);
+        assertTrue(bInjectionNode.isProxyRequired());
         assertEquals(B.class.getName(), bInjectionNode.getClassName());
 
-        FieldInjectionPoint cInjectionPoint = bInjectionNode.getFieldInjectionPoints().iterator().next();
+        //A -> E
+        InjectionNode eInjectionNode = bInjectionPoint.getInjectionNodes().get(1);
+        assertFalse(eInjectionNode.isProxyRequired());
+        assertEquals(E.class.getName(), eInjectionNode.getClassName());
 
+        //B -> C
+        assertEquals(1, bInjectionNode.getFieldInjectionPoints().size());
+        FieldInjectionPoint cInjectionPoint = bInjectionNode.getFieldInjectionPoints().iterator().next();
         InjectionNode cInjectionNode = cInjectionPoint.getInjectionNode();
+        assertFalse(cInjectionNode.isProxyRequired());
         assertEquals(C.class.getName(), cInjectionNode.getClassName());
 
-        FieldInjectionPoint dInjectionPoint = cInjectionNode.getFieldInjectionPoints().iterator().next();
+        //B -> F
+        ConstructorInjectionPoint fNonBackLinkInjectionPoint = bInjectionNode.getConstructorInjectionPoint();
+        assertEquals(1, fNonBackLinkInjectionPoint.getInjectionNodes().size());
+        InjectionNode fInjectionNode = fNonBackLinkInjectionPoint.getInjectionNodes().get(0);
+        assertFalse(fInjectionNode.isProxyRequired());
+        assertEquals(F.class.getName(), fInjectionNode.getClassName());
 
+        //E -> F
+        ConstructorInjectionPoint fNonBackLinkInjectionPoint2 = eInjectionNode.getConstructorInjectionPoint();
+        assertEquals(1, fNonBackLinkInjectionPoint2.getInjectionNodes().size());
+        InjectionNode fInjectionNode2 = fNonBackLinkInjectionPoint2.getInjectionNodes().get(0);
+        assertFalse(fInjectionNode2.isProxyRequired());
+
+        //C -> D
+        assertEquals(1, cInjectionNode.getFieldInjectionPoints().size());
+        FieldInjectionPoint dInjectionPoint = cInjectionNode.getFieldInjectionPoints().iterator().next();
         InjectionNode dInjectionNode = dInjectionPoint.getInjectionNode();
+        assertFalse(dInjectionNode.isProxyRequired());
         assertEquals(D.class.getName(), dInjectionNode.getClassName());
 
+        //D -> B back link
         ConstructorInjectionPoint bBackLinkInjectionPoint = dInjectionNode.getConstructorInjectionPoint();
-
+        assertEquals(1, bBackLinkInjectionPoint.getInjectionNodes().size());
         InjectionNode bBackLinkInjectionNode = bBackLinkInjectionPoint.getInjectionNodes().get(0);
         assertEquals(B.class.getName(), bBackLinkInjectionNode.getClassName());
         assertTrue(bBackLinkInjectionNode.isProxyRequired());

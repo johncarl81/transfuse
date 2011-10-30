@@ -40,7 +40,7 @@ public class FactoryGeneratorTest {
     }
 
     @Test
-    public void testContructorInjection() throws Exception {
+    public void testConstrictorInjection() throws Exception {
         InjectionNode injectionNode = buildInjectionNode(ConstructorInjectable.class);
         injectionNode.getConstructorInjectionPoints().clear();
 
