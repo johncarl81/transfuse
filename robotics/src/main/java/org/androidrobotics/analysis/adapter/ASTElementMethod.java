@@ -11,14 +11,21 @@ import java.util.List;
 public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
     private List<ASTParameter> parameters;
+    private ASTType returnType;
 
-    public ASTElementMethod(ExecutableElement executableElement, List<ASTParameter> parameters) {
+    public ASTElementMethod(ExecutableElement executableElement, ASTType returnType, List<ASTParameter> parameters) {
         super(executableElement);
         this.parameters = parameters;
+        this.returnType = returnType;
     }
 
     @Override
     public List<ASTParameter> getParameters() {
         return parameters;
+    }
+
+    @Override
+    public ASTType getReturnType() {
+        return returnType;
     }
 }

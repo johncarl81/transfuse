@@ -5,10 +5,6 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.analysis.typeInjectionAnalyzer.A;
-import org.androidrobotics.analysis.typeInjectionAnalyzer.B;
-import org.androidrobotics.analysis.typeInjectionAnalyzer.C;
-import org.androidrobotics.analysis.typeInjectionAnalyzer.D;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
@@ -18,6 +14,8 @@ import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
@@ -25,6 +23,36 @@ import static junit.framework.Assert.assertTrue;
  * @author John Ericksen
  */
 public class TypeInjectionAnalyzerTest {
+
+    public static class A {
+        private B b;
+
+        @Inject
+        public void setB(B b) {
+            this.b = b;
+        }
+    }
+
+    public static class B {
+        @Inject
+        private C c;
+
+    }
+
+    public static class C {
+        @Inject
+        private D d;
+    }
+
+    public static class D {
+        //back link
+        private B b;
+
+        @Inject
+        public D(B b) {
+            this.b = b;
+        }
+    }
 
     private TypeInjectionAnalyzer typeInjectionAnalyzer;
     private ASTClassFactory astClassFactory;

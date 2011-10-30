@@ -34,6 +34,7 @@ public class TestActivityTest {
     @Test
     public void testPrivateInject() {
         assertNotNull(testActivityDelegate.getController());
+        assertTrue(testActivityDelegate.getController().validate());
     }
 
     @Test

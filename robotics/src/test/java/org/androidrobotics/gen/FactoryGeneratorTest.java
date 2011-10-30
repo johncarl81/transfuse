@@ -3,9 +3,7 @@ package org.androidrobotics.gen;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.classloader.MemoryClassLoader;
 import org.androidrobotics.gen.target.ConstructorInjectable;
 import org.androidrobotics.gen.target.FieldInjectable;
 import org.androidrobotics.gen.target.InjectionTarget;
@@ -31,11 +29,8 @@ public class FactoryGeneratorTest {
     @Inject
     private FactoryGenerator factoryGenerator;
     @Inject
-    private MemoryClassLoader classLoader;
-    @Inject
-    private JCodeModel codeModel;
-    @Inject
-    private StringCodeWriter stringCodeWriter;
+    private CodeGenerationUtil codeGenerationUtil;
+
     private Map<Class, PackageClass> classFactories;
 
     @Before
@@ -98,9 +93,7 @@ public class FactoryGeneratorTest {
 
         FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
 
-        codeModel.build(stringCodeWriter);
-
-        classLoader.add(stringCodeWriter.getOutput());
+        ClassLoader classLoader = codeGenerationUtil.build();
         Class<?> generatedFactoryClass = classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);

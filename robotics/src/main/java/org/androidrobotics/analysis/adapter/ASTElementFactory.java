@@ -81,7 +81,7 @@ public class ASTElementFactory {
 
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
 
-        return new ASTElementMethod(executableElement, parameters);
+        return new ASTElementMethod(executableElement, executableElement.getReturnType().accept(astTypeBuilderVisitor, null), parameters);
     }
 
     /**

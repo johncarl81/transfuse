@@ -15,4 +15,11 @@ public interface ASTMethod extends ASTBase {
      * @return method parameters
      */
     List<ASTParameter> getParameters();
+
+    /**
+     * Supplies the return type of this method
+     *
+     * @return return type
+     */
+    ASTType getReturnType();
 }

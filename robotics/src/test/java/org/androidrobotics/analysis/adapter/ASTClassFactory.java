@@ -65,7 +65,7 @@ public class ASTClassFactory {
 
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
 
-        return new ASTClassMethod(method, astParameters);
+        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters);
     }
 
     public ASTField buildASTClassField(Field field) {

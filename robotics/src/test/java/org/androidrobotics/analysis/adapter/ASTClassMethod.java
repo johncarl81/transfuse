@@ -11,10 +11,12 @@ public class ASTClassMethod implements ASTMethod {
 
     private Method method;
     private List<ASTParameter> parameters;
+    private ASTType returnType;
 
-    public ASTClassMethod(Method method, List<ASTParameter> parameters) {
+    public ASTClassMethod(Method method, ASTType returnType, List<ASTParameter> parameters) {
         this.method = method;
         this.parameters = parameters;
+        this.returnType = returnType;
     }
 
     @Override
@@ -35,5 +37,10 @@ public class ASTClassMethod implements ASTMethod {
     @Override
     public List<ASTParameter> getParameters() {
         return parameters;
+    }
+
+    @Override
+    public ASTType getReturnType() {
+        return returnType;
     }
 }
