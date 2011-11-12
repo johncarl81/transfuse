@@ -2,6 +2,7 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.model.*;
+import org.androidrobotics.util.InjectionUtil;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -95,9 +96,6 @@ public class FactoryGenerator {
     }
 
     private void buildParameterInjection(InjectionNode injectionNode, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
-        JTryBlock jTryBlock = buildIntanceBody._try();
-
-        JBlock tryBuildInstancebody = jTryBlock.body();
 
         FactoryDescriptor descriptor = buildFactory(fieldInjectionPoint.getInjectionNode());
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
@@ -108,22 +106,8 @@ public class FactoryGenerator {
 
         constructorBody.assign(factoryField, descriptor.getClassDefinition().staticInvoke(descriptor.getInstanceMethodName()));
 
-
-        JVar fieldVariable = tryBuildInstancebody.decl(codeModel.parseType("java.lang.reflect.Field"), "field");
-        tryBuildInstancebody.assign(fieldVariable, codeModel.ref(injectionNode.getClassName()).dotclass()
-                .invoke("getDeclaredField").arg(fieldInjectionPoint.getName()));
-
-
-        tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.TRUE));
-        tryBuildInstancebody.add(fieldVariable.invoke("set").arg(variable).arg(factoryField.invoke(descriptor.getBuilderMethodName())));
-        tryBuildInstancebody.add(fieldVariable.invoke("setAccessible").arg(JExpr.FALSE));
-
-        JCatchBlock illegalAccessExceptionBlock = jTryBlock._catch(codeModel.directClass("java.lang.IllegalAccessException"));
-        JVar e1 = illegalAccessExceptionBlock.param("e");
-        illegalAccessExceptionBlock.body().add(e1.invoke("printStackTrace"));
-        JCatchBlock noSuchFieldExceptionBlock = jTryBlock._catch(codeModel.directClass("java.lang.NoSuchFieldException"));
-        JVar e2 = noSuchFieldExceptionBlock.param("e");
-        noSuchFieldExceptionBlock.body().add(e2.invoke("printStackTrace"));
+        buildIntanceBody.add(codeModel.ref(InjectionUtil.class).staticInvoke("setField")
+                .arg(variable).arg(fieldInjectionPoint.getName()).arg(factoryField.invoke(descriptor.getBuilderMethodName())));
     }
 
     private JInvocation buildConstructorCall(ConstructorInjectionPoint injectionNode, JType returnType, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
