@@ -24,7 +24,7 @@ public class TestActivityTest {
         testActivity = new TestActivity();
         testActivity.onCreate(null);
 
-        Field delegateField = TestActivity.class.getDeclaredField("delegate");
+        Field delegateField = findDelegateField(TestActivity.class, TestActivityDelegate.class);
 
         delegateField.setAccessible(true);
         testActivityDelegate = (TestActivityDelegate) delegateField.get(testActivity);
@@ -40,5 +40,20 @@ public class TestActivityTest {
     @Test
     public void testContructorInject() {
         assertTrue(testActivityDelegate.isConstructorInjected());
+    }
+
+    private Field findDelegateField(Class<TestActivity> target, Class<TestActivityDelegate> type) {
+        Field delegateField = null;
+
+        for (Field field : target.getDeclaredFields()) {
+            if (field.getType() == type) {
+                if (delegateField != null) {
+                    throw new RoboticsTestException("Type found more than once");
+                }
+                delegateField = field;
+            }
+        }
+
+        return delegateField;
     }
 }

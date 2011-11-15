@@ -63,7 +63,7 @@ public class FactoryGenerator {
 
         //field injection
         for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
-            buildParameterInjection(injectionNode, fieldInjectionPoint, variable, buildInstanceBody, constructorBody, factoryClass);
+            buildParameterInjection(fieldInjectionPoint, variable, buildInstanceBody, constructorBody, factoryClass);
         }
 
         //method injection
@@ -95,7 +95,7 @@ public class FactoryGenerator {
 
     }
 
-    private void buildParameterInjection(InjectionNode injectionNode, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private void buildParameterInjection(FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock buildIntanceBody, JBlock constructorBody, JDefinedClass factoryClass) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         FactoryDescriptor descriptor = buildFactory(fieldInjectionPoint.getInjectionNode());
         InjectionNode node = fieldInjectionPoint.getInjectionNode();

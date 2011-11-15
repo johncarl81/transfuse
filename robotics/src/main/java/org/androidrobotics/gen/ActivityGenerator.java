@@ -3,7 +3,6 @@ package org.androidrobotics.gen;
 import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.ActivityDescriptor;
-import org.androidrobotics.model.FactoryDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 
 import javax.inject.Inject;
@@ -19,12 +18,12 @@ public class ActivityGenerator {
     private static final String DELEGATE_NAME = "delegate";
 
     private JCodeModel codeModel;
-    private InjectorGenerator injectorGenerator;
+    private InjectionFragmentGenerator injectionFragmentGenerator;
 
     @Inject
-    public ActivityGenerator(JCodeModel codeModel, InjectorGenerator injectorGenerator) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
         this.codeModel = codeModel;
-        this.injectorGenerator = injectorGenerator;
+        this.injectionFragmentGenerator = injectionFragmentGenerator;
     }
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
@@ -50,17 +49,7 @@ public class ActivityGenerator {
         if (descriptor.getInjectionPoints().size() > 0) {
             FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-            FactoryDescriptor factoryDescriptor = injectorGenerator.buildInjector(fieldInjectionPoint);
-
-            JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(fieldInjectionPoint.getName()), DELEGATE_NAME);
-            block.assign(delegateField, factoryDescriptor.getClassDefinition().staticInvoke(factoryDescriptor.getInstanceMethodName()).invoke(factoryDescriptor.getBuilderMethodName()));
-
+            injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode());
         }
-
-
-        /*for (String methodNames : descriptor.getMethods(OnCreate.class)) {
-            block.invoke(delegateField, methodNames);
-        }*/
-
     }
 }

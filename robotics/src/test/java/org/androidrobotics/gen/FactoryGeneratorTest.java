@@ -16,7 +16,6 @@ import org.junit.Test;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -30,8 +29,6 @@ public class FactoryGeneratorTest {
     private FactoryGenerator factoryGenerator;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
-
-    private Map<Class, PackageClass> classFactories;
 
     @Before
     public void setUp() throws Exception {

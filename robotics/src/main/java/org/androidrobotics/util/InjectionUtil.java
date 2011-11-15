@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
  */
 public class InjectionUtil {
 
+    public static final String SET_FIELD_METHOD = "setField";
+
     public static void setField(Object target, String field, Object source) {
 
         try {
