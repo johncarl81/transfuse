@@ -62,7 +62,7 @@ public class ProxyGeneratorTest {
         ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
                 delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
 
-        ClassLoader classLoader = codeGenerationUtil.build();
+        ClassLoader classLoader = codeGenerationUtil.build(false);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 
@@ -78,7 +78,7 @@ public class ProxyGeneratorTest {
         ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
                 delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
 
-        ClassLoader classLoader = codeGenerationUtil.build();
+        ClassLoader classLoader = codeGenerationUtil.build(false);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 

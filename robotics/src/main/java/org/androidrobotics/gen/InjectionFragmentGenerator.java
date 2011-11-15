@@ -25,11 +25,11 @@ public class InjectionFragmentGenerator {
         this.variableNamer = variableNamer;
     }
 
-    public void buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JVar buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         Map<InjectionNode, JVar> nodeVariableMap = new HashMap<InjectionNode, JVar>();
 
-        buildConstructorCall(nodeVariableMap, block, definedClass, injectionNode);
+        JVar variable = buildConstructorCall(nodeVariableMap, block, definedClass, injectionNode);
 
         for (Map.Entry<InjectionNode, JVar> nodeEntry : nodeVariableMap.entrySet()) {
 
@@ -43,9 +43,11 @@ public class InjectionFragmentGenerator {
                 buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue(), block, definedClass);
             }
         }
+
+        return variable;
     }
 
-    private void buildConstructorCall(Map<InjectionNode, JVar> nodeMap, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JVar buildConstructorCall(Map<InjectionNode, JVar> nodeMap, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
 
 
         for (InjectionNode node : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
@@ -70,6 +72,8 @@ public class InjectionFragmentGenerator {
         block.assign(variable, buildConstructorCall(nodeMap, injectionNode.getConstructorInjectionPoint(), nodeType));
 
         nodeMap.put(injectionNode, variable);
+
+        return variable;
     }
 
     private void buildMethodInjection(Map<InjectionNode, JVar> nodeMap, MethodInjectionPoint methodInjectionPoint, JVar variable, JBlock body, JDefinedClass definedClass) throws ClassNotFoundException, JClassAlreadyExistsException {

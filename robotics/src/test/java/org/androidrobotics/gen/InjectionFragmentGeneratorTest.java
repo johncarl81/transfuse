@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.lang.reflect.Method;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -23,10 +22,10 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-public class FactoryGeneratorTest {
+public class InjectionFragmentGeneratorTest {
 
     @Inject
-    private FactoryGenerator factoryGenerator;
+    private InjectionFragmentGeneratorHarness fragementGeneratorHarness;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
 
@@ -86,19 +85,15 @@ public class FactoryGeneratorTest {
     }
 
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
-        PackageClass providerPackageClass = new PackageClass(instanceClass).add("Factory");
+        PackageClass providerPackageClass = new PackageClass(instanceClass).add("Provider");
 
-        FactoryDescriptor factoryDescriptor = factoryGenerator.buildFactory(injectionNode);
+        fragementGeneratorHarness.buildProvider(injectionNode, providerPackageClass);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
-        Class<?> generatedFactoryClass = classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
+        Class<Provider> generatedFactoryClass = (Class<Provider>) classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);
-        Method getInstance = generatedFactoryClass.getMethod(factoryDescriptor.getInstanceMethodName());
-        Method buildInstance = generatedFactoryClass.getMethod(factoryDescriptor.getBuilderMethodName());
-        assertNotNull(getInstance);
-        assertNotNull(buildInstance);
-        Provider provider = (Provider) getInstance.invoke(generatedFactoryClass);
+        Provider provider = generatedFactoryClass.newInstance();
         Object result = provider.get();
         assertEquals(instanceClass, result.getClass());
 
