@@ -16,12 +16,10 @@ import java.util.Map;
 public class ProxyGenerator {
 
     private JCodeModel codeModel;
-    private FactoryGenerator factoryGenerator;
 
     @Inject
-    public ProxyGenerator(JCodeModel codeModel, FactoryGenerator factoryGenerator) {
+    public ProxyGenerator(JCodeModel codeModel) {
         this.codeModel = codeModel;
-        this.factoryGenerator = factoryGenerator;
     }
 
     public ProxyDescriptor generateProxy(ASTType interfaceType, String proxyClassName, DelegateInstantiationGeneratorStrategy delegateInstansiationGenerator) throws JClassAlreadyExistsException, ClassNotFoundException {
