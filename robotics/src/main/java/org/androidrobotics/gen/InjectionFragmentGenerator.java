@@ -25,76 +25,80 @@ public class InjectionFragmentGenerator {
         this.variableNamer = variableNamer;
     }
 
-    public JVar buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JExpression buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, Map<String, VariableBuilder> variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        Map<InjectionNode, JVar> nodeVariableMap = new HashMap<InjectionNode, JVar>();
+        Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
 
-        JVar variable = buildConstructorCall(nodeVariableMap, block, definedClass, injectionNode);
+        JExpression variable = buildVariable(nodeVariableMap, block, definedClass, injectionNode, variableBuilderMap);
 
-        for (Map.Entry<InjectionNode, JVar> nodeEntry : nodeVariableMap.entrySet()) {
+        for (Map.Entry<InjectionNode, JExpression> nodeEntry : nodeVariableMap.entrySet()) {
 
             //field injection
             for (FieldInjectionPoint fieldInjectionPoint : nodeEntry.getKey().getFieldInjectionPoints()) {
-                buildParameterInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue(), block, definedClass);
+                block.add(buildParameterInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
             }
 
             //method injection
             for (MethodInjectionPoint methodInjectionPoint : nodeEntry.getKey().getMethodInjectionPoints()) {
-                buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue(), block, definedClass);
+                block.add(buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue()));
             }
         }
 
         return variable;
     }
 
-    private JVar buildConstructorCall(Map<InjectionNode, JVar> nodeMap, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JExpression buildVariable(Map<InjectionNode, JExpression> variableMap, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, Map<String, VariableBuilder> variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-
-        for (InjectionNode node : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
-            buildConstructorCall(nodeMap, block, definedClass, node);
-        }
-        //field injection
-        for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
-            buildConstructorCall(nodeMap, block, definedClass, fieldInjectionPoint.getInjectionNode());
-        }
-        //method injection
-        for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
-            for (InjectionNode node : methodInjectionPoint.getInjectionNodes()) {
-                buildConstructorCall(nodeMap, block, definedClass, node);
+        JExpression variable;
+        if (variableBuilderMap.containsKey(injectionNode.getClassName())) {
+            variable = variableBuilderMap.get(injectionNode.getClassName()).buildVariable();
+        } else {
+            for (InjectionNode node : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
+                buildVariable(variableMap, block, definedClass, node, variableBuilderMap);
             }
+            //field injection
+            for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
+                buildVariable(variableMap, block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
+            }
+            //method injection
+            for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
+                for (InjectionNode node : methodInjectionPoint.getInjectionNodes()) {
+                    buildVariable(variableMap, block, definedClass, node, variableBuilderMap);
+                }
+            }
+
+            JType nodeType = codeModel.parseType(injectionNode.getClassName());
+
+            JVar variableRef = definedClass.field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
+            variable = variableRef;
+
+            //constructor injection
+            block.assign(variableRef, buildConstructorCall(variableMap, injectionNode.getConstructorInjectionPoint(), nodeType));
         }
 
-        JType nodeType = codeModel.parseType(injectionNode.getClassName());
-
-        JVar variable = definedClass.field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
-
-        //constructor injection
-        block.assign(variable, buildConstructorCall(nodeMap, injectionNode.getConstructorInjectionPoint(), nodeType));
-
-        nodeMap.put(injectionNode, variable);
+        variableMap.put(injectionNode, variable);
 
         return variable;
     }
 
-    private void buildMethodInjection(Map<InjectionNode, JVar> nodeMap, MethodInjectionPoint methodInjectionPoint, JVar variable, JBlock body, JDefinedClass definedClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JInvocation buildMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         JInvocation methodInvocation = variable.invoke(methodInjectionPoint.getName());
 
         for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
             methodInvocation.arg(nodeMap.get(injectionNode));
         }
 
-        body.add(methodInvocation);
-
+        return methodInvocation;
     }
 
-    private void buildParameterInjection(Map<InjectionNode, JVar> nodeMap, FieldInjectionPoint fieldInjectionPoint, JVar variable, JBlock body, JDefinedClass definedClass) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JInvocation buildParameterInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
-        body.add(codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
-                .arg(variable).arg(fieldInjectionPoint.getName()).arg(nodeMap.get(node)));
+        return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
+                .arg(variable).arg(fieldInjectionPoint.getName()).arg(nodeMap.get(node));
     }
 
-    private JInvocation buildConstructorCall(Map<InjectionNode, JVar> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException, JClassAlreadyExistsException {
         JInvocation constructorInvocation = JExpr._new(type);
 
         for (InjectionNode node : injectionNode.getInjectionNodes()) {

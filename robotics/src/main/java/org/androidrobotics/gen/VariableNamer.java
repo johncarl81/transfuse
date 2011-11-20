@@ -1,11 +1,13 @@
 package org.androidrobotics.gen;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
+@Singleton
 public class VariableNamer {
 
     private Map<String, Integer> nameMap = new HashMap<String, Integer>();
@@ -14,7 +16,7 @@ public class VariableNamer {
         return generateName(clazz.getName());
     }
 
-    public String generateName(String fullClassName) {
+    public synchronized String generateName(String fullClassName) {
         if (!nameMap.containsKey(fullClassName)) {
             nameMap.put(fullClassName, 0);
         } else {
