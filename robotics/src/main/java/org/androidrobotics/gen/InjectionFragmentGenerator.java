@@ -68,7 +68,7 @@ public class InjectionFragmentGenerator {
             }
 
             JType nodeType = codeModel.parseType(injectionNode.getClassName());
-
+ 
             JVar variableRef = definedClass.field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
             variable = variableRef;
 
