@@ -11,6 +11,7 @@
 
 
     <modules>
+	<module>robotics-api</module>
         <module>robotics</module>
         <module>examples</module>
     </modules>

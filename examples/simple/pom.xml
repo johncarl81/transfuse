@@ -16,6 +16,11 @@
             <version>0.1-SNAPSHOT</version>
 	    <scope>compile</scope>
         </dependency>
+	<dependency>
+            <groupId>org.androidrobotics</groupId>
+            <artifactId>robotics-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
