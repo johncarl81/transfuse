@@ -14,9 +14,9 @@
             <groupId>org.androidrobotics</groupId>
             <artifactId>robotics</artifactId>
             <version>0.1-SNAPSHOT</version>
-	    <scope>compile</scope>
+            <scope>compile</scope>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.androidrobotics</groupId>
             <artifactId>robotics-api</artifactId>
             <version>0.1-SNAPSHOT</version>
@@ -24,10 +24,10 @@
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-	    <version>2.2.1</version>
+            <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
- 	<dependency>
+        <dependency>
             <groupId>com.google.android.maps</groupId>
             <artifactId>maps</artifactId>
             <version>3_r3</version>

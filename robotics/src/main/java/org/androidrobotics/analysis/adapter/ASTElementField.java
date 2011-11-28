@@ -10,14 +10,20 @@ import javax.lang.model.element.VariableElement;
 public class ASTElementField extends ASTElementBase implements ASTField {
 
     private ASTType astType;
+    private VariableElement variableElement;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
-    public ASTElementField(VariableElement variableElement, ASTType astType) {
+    public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         super(variableElement);
-        this.astType = astType;
+        this.variableElement = variableElement;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     @Override
-    public ASTType getASTType() {
+    public synchronized ASTType getASTType() {
+        if (astType == null) {
+            astType = variableElement.asType().accept(astTypeBuilderVisitor, null);
+        }
         return astType;
     }
 }

@@ -10,7 +10,7 @@ public class ActivityDescriptor {
 
     private PackageClass packageClass;
     private int layout;
-    private List<FieldInjectionPoint> injectionPoint = new ArrayList<FieldInjectionPoint>();
+    private List<FieldInjectionPoint> injectionPoints = new ArrayList<FieldInjectionPoint>();
 
     public PackageClass getPackageClass() {
         return packageClass;
@@ -29,10 +29,10 @@ public class ActivityDescriptor {
     }
 
     public void addInjectionPoint(FieldInjectionPoint fieldInjectionPoint) {
-        injectionPoint.add(fieldInjectionPoint);
+        injectionPoints.add(fieldInjectionPoint);
     }
 
     public List<FieldInjectionPoint> getInjectionPoints() {
-        return injectionPoint;
+        return injectionPoints;
     }
 }

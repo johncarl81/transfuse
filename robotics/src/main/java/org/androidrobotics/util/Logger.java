@@ -9,4 +9,6 @@ public interface Logger {
     void warning(String value);
 
     void error(String value);
+
+    void error(String s, Throwable e);
 }

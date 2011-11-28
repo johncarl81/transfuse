@@ -37,15 +37,15 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
+        Logger logger = new MessagerLogger(processingEnv.getMessager());
         super.init(processingEnv);
         try {
-            Logger logger = new MessagerLogger(processingEnv.getMessager());
             Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(logger));
             roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
             collectionConverterUtil = injector.getInstance(CollectionConverterUtil.class);
             astElementConverterFactory = injector.getInstance(ASTElementConverterFactory.class);
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            logger.error("Error during init of RoboticsAnnotationProcessor", e);
             throw e;
         }
     }

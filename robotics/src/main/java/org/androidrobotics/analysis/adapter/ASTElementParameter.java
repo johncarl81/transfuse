@@ -12,22 +12,28 @@ import javax.lang.model.element.VariableElement;
 public class ASTElementParameter extends ASTElementBase implements ASTParameter {
 
     private ASTType astType;
+    private Element element;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
-    public ASTElementParameter(VariableElement variableElement, ASTType astType) {
-        this((Element) variableElement, astType);
+    public ASTElementParameter(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+        this((Element) variableElement, astTypeBuilderVisitor);
     }
 
-    public ASTElementParameter(TypeParameterElement typeParameterElement, ASTType astType) {
-        this((Element) typeParameterElement, astType);
+    public ASTElementParameter(TypeParameterElement typeParameterElement, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+        this((Element) typeParameterElement, astTypeBuilderVisitor);
     }
 
-    private ASTElementParameter(Element element, ASTType astType) {
+    private ASTElementParameter(Element element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         super(element);
-        this.astType = astType;
+        this.element = element;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     @Override
-    public ASTType getASTType() {
+    public synchronized ASTType getASTType() {
+        if (astType == null) {
+            astType = element.asType().accept(astTypeBuilderVisitor, null);
+        }
         return astType;
     }
 }

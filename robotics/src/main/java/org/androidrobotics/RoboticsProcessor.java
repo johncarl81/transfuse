@@ -7,6 +7,7 @@ import org.androidrobotics.analysis.ActivityAnalysis;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,6 +26,8 @@ public class RoboticsProcessor {
     private ActivityGenerator activityGenerator;
     @Inject
     private JCodeModel codeModel;
+    @Inject
+    private Logger logger;
 
     public void processModuleElements(Collection<? extends ASTType> astTypes) {
         for (ASTType astType : astTypes) {
@@ -33,7 +36,6 @@ public class RoboticsProcessor {
     }
 
     public void processRootElement(Collection<? extends ASTType> astTypes) {
-
         for (ASTType astType : astTypes) {
             ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType);
 
@@ -41,11 +43,11 @@ public class RoboticsProcessor {
                 try {
                     activityGenerator.generate(activityDescriptor);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {
-                    e.printStackTrace();
+                    logger.error("IOException while generating activity", e);
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    logger.error("IOException while generating activity", e);
                 }
             }
         }
@@ -63,7 +65,7 @@ public class RoboticsProcessor {
                     recourceWriter);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error while writing source files", e);
         }
 
     }

@@ -25,4 +25,9 @@ public class JavaUtilLogger implements Logger {
     public void error(String value) {
         logger.severe(value);
     }
+
+    @Override
+    public void error(String s, Throwable e) {
+        logger.throwing(s, e.getMessage(), e);
+    }
 }

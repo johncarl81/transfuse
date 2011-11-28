@@ -33,17 +33,17 @@ public class TypeInjectionAnalyzer {
         return analyze(astType, analysisContext, false);
     }
 
-    protected InjectionNode analyze(ASTType astType, AnalysisContext context, boolean proxyDepenency) {
+    protected InjectionNode analyze(ASTType astType, AnalysisContext context, boolean proxyDependencyPossible) {
         InjectionNode node = new InjectionNode(astType.getName());
 
         if (context.isDependent(astType)) {
-            //if this type is a depenency of itself, we've found a back link.
+            //if this type is a dependency of itself, we've found a back link.
             //This injection must be performed using a delayed injection proxy
             InjectionNode injectionNode = context.getInjectionNode(astType);
 
             //if its a proxy dependency then the given dependent object will have to be build using a delayed
             //proxy object
-            if (proxyDepenency) {
+            if (proxyDependencyPossible) {
                 injectionNode.setProxyRequired(true);
             }
 
@@ -66,6 +66,9 @@ public class TypeInjectionAnalyzer {
         }
 
         if (!constructorFound) {
+            if (noArgConstructor == null) {
+                throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + node.getClassName());
+            }
             node.addInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor, nextContext));
         }
 

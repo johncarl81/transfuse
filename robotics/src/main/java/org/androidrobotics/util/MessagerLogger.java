@@ -28,4 +28,9 @@ public class MessagerLogger implements Logger {
     public void error(String value) {
         messager.printMessage(Diagnostic.Kind.ERROR, value);
     }
+
+    @Override
+    public void error(String s, Throwable e) {
+        messager.printMessage(Diagnostic.Kind.ERROR, s + "\n" + e.getMessage());
+    }
 }

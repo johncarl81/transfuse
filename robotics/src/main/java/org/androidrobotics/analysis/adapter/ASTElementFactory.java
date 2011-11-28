@@ -67,8 +67,7 @@ public class ASTElementFactory {
      * @return ASTElementField
      */
     public ASTElementField buildASTElementVariable(VariableElement variableElement) {
-        ASTType type = variableElement.asType().accept(astTypeBuilderVisitor, null);
-        return new ASTElementField(variableElement, type);
+        return new ASTElementField(variableElement, astTypeBuilderVisitor);
     }
 
     /**
@@ -81,7 +80,7 @@ public class ASTElementFactory {
 
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
 
-        return new ASTElementMethod(executableElement, executableElement.getReturnType().accept(astTypeBuilderVisitor, null), parameters);
+        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters);
     }
 
     /**
@@ -107,8 +106,7 @@ public class ASTElementFactory {
      * @return ASTParameter
      */
     private ASTParameter buildASTElementParameter(VariableElement variableElement) {
-        ASTType type = variableElement.asType().accept(astTypeBuilderVisitor, null);
-        return new ASTElementParameter(variableElement, type);
+        return new ASTElementParameter(variableElement, astTypeBuilderVisitor);
     }
 
     /**
@@ -118,8 +116,7 @@ public class ASTElementFactory {
      * @return ASTParameter
      */
     public ASTParameter buildASTElementParameter(TypeParameterElement typeParameterElement) {
-        ASTType type = typeParameterElement.asType().accept(astTypeBuilderVisitor, null);
-        return new ASTElementParameter(typeParameterElement, type);
+        return new ASTElementParameter(typeParameterElement, astTypeBuilderVisitor);
     }
 
     /**

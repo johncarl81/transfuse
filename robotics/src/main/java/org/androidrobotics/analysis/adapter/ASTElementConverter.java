@@ -25,7 +25,7 @@ public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
 
     @Override
     public T convert(Element element) {
-        //visit the given element to determine its type, feed it inot the appropriate
+        //visit the given element to determine its type, feed it into the appropriate
         //ASTElementFactory method and return the result
         return element.accept(new ElementVisitorAdaptor<T, Void>() {
             @Override

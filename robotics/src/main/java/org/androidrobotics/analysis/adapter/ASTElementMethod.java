@@ -12,11 +12,14 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
     private List<ASTParameter> parameters;
     private ASTType returnType;
+    private ExecutableElement executableElement;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
-    public ASTElementMethod(ExecutableElement executableElement, ASTType returnType, List<ASTParameter> parameters) {
+    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters) {
         super(executableElement);
+        this.executableElement = executableElement;
         this.parameters = parameters;
-        this.returnType = returnType;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     @Override
@@ -25,7 +28,10 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     }
 
     @Override
-    public ASTType getReturnType() {
+    public synchronized ASTType getReturnType() {
+        if (returnType == null) {
+            returnType = executableElement.getReturnType().accept(astTypeBuilderVisitor, null);
+        }
         return returnType;
     }
 }
