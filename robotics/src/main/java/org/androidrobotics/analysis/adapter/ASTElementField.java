@@ -1,5 +1,6 @@
 package org.androidrobotics.analysis.adapter;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 
 /**
@@ -9,21 +10,15 @@ import javax.lang.model.element.VariableElement;
  */
 public class ASTElementField extends ASTElementBase implements ASTField {
 
-    private ASTType astType;
-    private VariableElement variableElement;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private ASTTypeLazyLoader<Element> astTypeLoader;
 
     public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         super(variableElement);
-        this.variableElement = variableElement;
-        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.astTypeLoader = new ElementASTTypeLazyLoader(variableElement, astTypeBuilderVisitor);
     }
 
     @Override
     public synchronized ASTType getASTType() {
-        if (astType == null) {
-            astType = variableElement.asType().accept(astTypeBuilderVisitor, null);
-        }
-        return astType;
+        return astTypeLoader.getASTType();
     }
 }

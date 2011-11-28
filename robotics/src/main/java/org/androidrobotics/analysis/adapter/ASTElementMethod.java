@@ -10,16 +10,18 @@ import java.util.List;
  */
 public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
+    private ASTTypeLazyLoader<ExecutableElement> astTypeLoader;
     private List<ASTParameter> parameters;
-    private ASTType returnType;
-    private ExecutableElement executableElement;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
     public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters) {
         super(executableElement);
-        this.executableElement = executableElement;
+        this.astTypeLoader = new ASTTypeLazyLoader<ExecutableElement>(executableElement, astTypeBuilderVisitor) {
+            @Override
+            protected ASTType buildASTType(ExecutableElement element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+                return element.getReturnType().accept(astTypeBuilderVisitor, null);
+            }
+        };
         this.parameters = parameters;
-        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     @Override
@@ -28,10 +30,7 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     }
 
     @Override
-    public synchronized ASTType getReturnType() {
-        if (returnType == null) {
-            returnType = executableElement.getReturnType().accept(astTypeBuilderVisitor, null);
-        }
-        return returnType;
+    public ASTType getReturnType() {
+        return astTypeLoader.getASTType();
     }
 }
