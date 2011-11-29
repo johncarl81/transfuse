@@ -8,7 +8,7 @@ import com.sun.codemodel.JExpression;
  */
 public class ContextVariableBuilder implements VariableBuilder {
     @Override
-    public JExpression buildVariable() {
+    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
         return JExpr._this();
     }
 }

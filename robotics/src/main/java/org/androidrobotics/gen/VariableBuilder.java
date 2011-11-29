@@ -7,5 +7,5 @@ import com.sun.codemodel.JExpression;
  */
 public interface VariableBuilder {
 
-    JExpression buildVariable();
+    JExpression buildVariable(InjectionBuilderContext injectionBuilderContext);
 }

@@ -15,8 +15,6 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.HashMap;
-import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -32,6 +30,10 @@ public class InjectionFragmentGeneratorTest {
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private JCodeModel codeModel;
+    @Inject
+    private VariableBuilderRepository variableBuilderRepository;
+    @Inject
+    private ProviderVariableBuilderFactory providerVariableBuilderFactory;
 
     @Before
     public void setUp() throws Exception {
@@ -86,18 +88,27 @@ public class InjectionFragmentGeneratorTest {
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint("target", buildInjectionNode(VariableTarget.class));
         injectionNode.addInjectionPoint(fieldInjectionPoint);
 
-        Map<String, VariableBuilder> builderMap = new HashMap<String, VariableBuilder>();
-
-        builderMap.put(VariableTarget.class.getName(), new VariableBuilder() {
+        variableBuilderRepository.put(VariableTarget.class.getName(), new VariableBuilder() {
             @Override
-            public JExpression buildVariable() {
+            public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
                 return JExpr._new(codeModel.ref(VariableTarget.class));
             }
         });
 
-        VariableBuilderInjectable vbInjectable = buildInstance(VariableBuilderInjectable.class, injectionNode, builderMap);
+        VariableBuilderInjectable vbInjectable = buildInstance(VariableBuilderInjectable.class, injectionNode);
 
         assertNotNull(vbInjectable.getTarget());
+    }
+
+    @Test
+    public void testProviderBuidler() throws Exception {
+        InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
+
+        variableBuilderRepository.put(VariableTarget.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VariableTargetProvider.class));
+
+        VariableTarget target = buildInstance(VariableTarget.class, injectionNode);
+
+        assertNotNull(target);
     }
 
     private InjectionNode buildInjectionNode(Class<?> instanceClass) {
@@ -111,13 +122,9 @@ public class InjectionFragmentGeneratorTest {
     }
 
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
-        return buildInstance(instanceClass, injectionNode, new HashMap<String, VariableBuilder>());
-    }
-
-    private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode, Map<String, VariableBuilder> builderMap) throws Exception {
         PackageClass providerPackageClass = new PackageClass(instanceClass).add("Provider");
 
-        fragementGeneratorHarness.buildProvider(injectionNode, providerPackageClass, builderMap);
+        fragementGeneratorHarness.buildProvider(injectionNode, providerPackageClass, variableBuilderRepository);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
         Class<Provider> generatedFactoryClass = (Class<Provider>) classLoader.loadClass(providerPackageClass.getFullyQualifiedName());

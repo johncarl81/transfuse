@@ -3,15 +3,16 @@ package org.androidrobotics.gen;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
+import org.androidrobotics.provider.VibratorProvider;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -19,15 +20,19 @@ import java.util.Map;
 @Singleton
 public class ActivityGenerator {
 
-    private static final String DELEGATE_NAME = "delegate";
-
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
+    private Provider<ContextVariableBuilder> contextVariableBuilderProvider;
+    private ProviderVariableBuilderFactory providerVariableBuilderFactory;
+    private Provider<VariableBuilderRepository> variableBuilderRepositoryProvider;
 
     @Inject
-    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, Provider<ContextVariableBuilder> contextVariableBuilderProvider, ProviderVariableBuilderFactory providerVariableBuilderFactory, Provider<VariableBuilderRepository> variableBuilderRepositoryProvider) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.contextVariableBuilderProvider = contextVariableBuilderProvider;
+        this.providerVariableBuilderFactory = providerVariableBuilderFactory;
+        this.variableBuilderRepositoryProvider = variableBuilderRepositoryProvider;
     }
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
@@ -53,19 +58,21 @@ public class ActivityGenerator {
         if (descriptor.getInjectionPoints().size() > 0) {
             FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-            Map<String, VariableBuilder> variableBuilderMap = buildVariableBuilderMap();
+            VariableBuilderRepository variableBuilderMap = buildVariableBuilderMap();
 
             injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
         }
     }
 
-    private Map<String, VariableBuilder> buildVariableBuilderMap() {
-        Map<String, VariableBuilder> builderMap = new HashMap<String, VariableBuilder>();
+    private VariableBuilderRepository buildVariableBuilderMap() {
 
-        builderMap.put(Context.class.getName(), new ContextVariableBuilder());
-        builderMap.put(Activity.class.getName(), new ContextVariableBuilder());
+        VariableBuilderRepository repository = variableBuilderRepositoryProvider.get();
 
-        return builderMap;
+        repository.put(Context.class.getName(), contextVariableBuilderProvider.get());
+        repository.put(Activity.class.getName(), contextVariableBuilderProvider.get());
+        repository.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VibratorProvider.class));
+
+        return repository;
 
     }
 }

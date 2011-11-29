@@ -12,11 +12,11 @@ import static junit.framework.Assert.assertEquals;
  */
 public class VariableNamerTest {
 
-    private VariableNamer variableNamer;
+    private UniqueVariableNamer variableNamer;
 
     @Before
     public void setup() {
-        variableNamer = new VariableNamer();
+        variableNamer = new UniqueVariableNamer();
     }
 
     @Test

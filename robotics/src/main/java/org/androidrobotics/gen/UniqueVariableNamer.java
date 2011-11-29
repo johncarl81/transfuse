@@ -8,7 +8,7 @@ import java.util.Map;
  * @author John Ericksen
  */
 @Singleton
-public class VariableNamer {
+public class UniqueVariableNamer {
 
     private Map<String, Integer> nameMap = new HashMap<String, Integer>();
 

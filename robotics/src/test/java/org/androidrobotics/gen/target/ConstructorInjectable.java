@@ -14,6 +14,4 @@ public class ConstructorInjectable {
     public InjectionTarget getInjectionTarget() {
         return injectionTarget;
     }
-
-
 }

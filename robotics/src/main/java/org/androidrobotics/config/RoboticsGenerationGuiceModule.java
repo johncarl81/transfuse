@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.gen.DelegateInstantiationGeneratorStrategyFactory;
+import org.androidrobotics.gen.ProviderVariableBuilderFactory;
+import org.androidrobotics.gen.VariableInjectionBuilderFactory;
 import org.androidrobotics.util.Logger;
 
 /**
@@ -27,5 +29,11 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder
                 .build(DelegateInstantiationGeneratorStrategyFactory.class));
+
+        install(factoryModuleBuilder
+                .build(VariableInjectionBuilderFactory.class));
+
+        install(factoryModuleBuilder
+                .build(ProviderVariableBuilderFactory.class));
     }
 }

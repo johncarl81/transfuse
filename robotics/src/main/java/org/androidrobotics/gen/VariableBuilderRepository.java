@@ -1,0 +1,30 @@
+package org.androidrobotics.gen;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author John Ericksen
+ */
+public class VariableBuilderRepository {
+
+    private Map<String, VariableBuilder> builderMap = new HashMap<String, VariableBuilder>();
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+
+    @Inject
+    public VariableBuilderRepository(VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+    }
+
+    public void put(String name, VariableBuilder variableBuilder) {
+        builderMap.put(name, variableBuilder);
+    }
+
+    public VariableBuilder get(String name) {
+        if (!builderMap.containsKey(name)) {
+            builderMap.put(name, variableInjectionBuilderFactory.buildVariableInjectionBuilder());
+        }
+        return builderMap.get(name);
+    }
+}
