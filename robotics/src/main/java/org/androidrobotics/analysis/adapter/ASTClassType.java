@@ -49,4 +49,9 @@ public class ASTClassType implements ASTType {
     public String getName() {
         return clazz.getName();
     }
+
+    @Override
+    public boolean isConcreteClass() {
+        return !clazz.isInterface() && !clazz.isSynthetic();
+    }
 }

@@ -3,11 +3,9 @@ package org.androidrobotics.gen;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Vibrator;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
-import org.androidrobotics.provider.VibratorProvider;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -23,19 +21,17 @@ public class ActivityGenerator {
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
     private Provider<ContextVariableBuilder> contextVariableBuilderProvider;
-    private ProviderVariableBuilderFactory providerVariableBuilderFactory;
-    private Provider<VariableBuilderRepository> variableBuilderRepositoryProvider;
+    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Inject
-    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, Provider<ContextVariableBuilder> contextVariableBuilderProvider, ProviderVariableBuilderFactory providerVariableBuilderFactory, Provider<VariableBuilderRepository> variableBuilderRepositoryProvider) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, Provider<ContextVariableBuilder> contextVariableBuilderProvider, VariableBuilderRepositoryFactory variableBuilderRepositoryFactory) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
-        this.providerVariableBuilderFactory = providerVariableBuilderFactory;
-        this.variableBuilderRepositoryProvider = variableBuilderRepositoryProvider;
+        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
     }
 
-    public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
+    public void generate(ActivityDescriptor descriptor, VariableBuilderRepository variableBuilderRepository) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
         JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
@@ -58,21 +54,20 @@ public class ActivityGenerator {
         if (descriptor.getInjectionPoints().size() > 0) {
             FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-            VariableBuilderRepository variableBuilderMap = buildVariableBuilderMap();
+            VariableBuilderRepository variableBuilderMap = buildVariableBuilderMap(variableBuilderRepository);
 
             injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
         }
     }
 
-    private VariableBuilderRepository buildVariableBuilderMap() {
+    private VariableBuilderRepository buildVariableBuilderMap(VariableBuilderRepository variableBuilderRepository) {
 
-        VariableBuilderRepository repository = variableBuilderRepositoryProvider.get();
+        VariableBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(variableBuilderRepository);
 
-        repository.put(Context.class.getName(), contextVariableBuilderProvider.get());
-        repository.put(Activity.class.getName(), contextVariableBuilderProvider.get());
-        repository.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VibratorProvider.class));
+        subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
+        subRepository.put(Activity.class.getName(), contextVariableBuilderProvider.get());
 
-        return repository;
+        return subRepository;
 
     }
 }

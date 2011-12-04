@@ -10,6 +10,7 @@ import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.targets.MockAnalysisClass;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -38,12 +39,14 @@ public class InjectionPointFactoryTest {
     private InjectionPointFactory injectionPointFactory;
     @Inject
     private ASTClassFactory astClassFactory;
+    @Inject
+    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
-        emptyContext = new AnalysisContext();
+        emptyContext = new AnalysisContext(variableBuilderRepositoryFactory.buildRepository());
     }
 
     @Test

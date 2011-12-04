@@ -18,16 +18,22 @@ import java.util.Map;
 public class InjectionFragmentGenerator {
 
     private InjectionInvocationBuilder injectionInvocationBuilder;
+    private DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory;
+    private ProxyVariableBuilder proxyVariableBuilder;
+    private ProxyGenerator proxyGenerator;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder) {
+    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder, DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory, ProxyVariableBuilder proxyVariableBuilder, ProxyGenerator proxyGenerator) {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
+        this.proxyStrategyFactory = proxyStrategyFactory;
+        this.proxyVariableBuilder = proxyVariableBuilder;
+        this.proxyGenerator = proxyGenerator;
     }
 
     public JExpression buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
-        InjectionBuilderContext injectionBuilderContext = new InjectionBuilderContext(nodeVariableMap, block, definedClass, injectionNode, variableBuilderMap);
+        InjectionBuilderContext injectionBuilderContext = new InjectionBuilderContext(nodeVariableMap, block, definedClass, injectionNode, variableBuilderMap, proxyStrategyFactory, proxyVariableBuilder, proxyGenerator);
 
         JExpression variable = injectionBuilderContext.buildVariable();
 

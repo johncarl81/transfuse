@@ -1,6 +1,10 @@
 package org.androidrobotics.model;
 
+import org.androidrobotics.analysis.adapter.ASTType;
+
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -8,15 +12,17 @@ import java.util.Set;
  */
 public class InjectionNode {
 
-    private String className;
+    private ASTType astType;
     private boolean proxyRequired;
+    private Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
 
     private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
     private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
     private Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
+    private Map<String, InjectionNode> builderResources = new HashMap<String, InjectionNode>();
 
-    public InjectionNode(String className) {
-        this.className = className;
+    public InjectionNode(ASTType astType) {
+        this.astType = astType;
     }
 
     public ConstructorInjectionPoint getConstructorInjectionPoint() {
@@ -48,7 +54,11 @@ public class InjectionNode {
     }
 
     public String getClassName() {
-        return className;
+        return astType.getName();
+    }
+
+    public ASTType getAstType() {
+        return astType;
     }
 
     public void setProxyRequired(boolean proxyRequired) {
@@ -57,5 +67,21 @@ public class InjectionNode {
 
     public boolean isProxyRequired() {
         return proxyRequired;
+    }
+
+    public void putBuilderResource(String name, InjectionNode injectionNode) {
+        builderResources.put(name, injectionNode);
+    }
+
+    public InjectionNode getBuilderResource(String name) {
+        return builderResources.get(name);
+    }
+
+    public void addProxyInterface(ASTType astType) {
+        proxyInterfaces.add(astType);
+    }
+
+    public Set<ASTType> getProxyInterfaces() {
+        return proxyInterfaces;
     }
 }

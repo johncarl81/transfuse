@@ -28,7 +28,7 @@ public class DelegateConstructionGeneratorStrategy implements DelegateInstantiat
 
         JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(delegateNode.getClassName()), DELEGATE_NAME);
 
-        JVar delegateParam = constructor.param(codeModel.ref(delegateNode.getClassName()), "todo");
+        JVar delegateParam = constructor.param(codeModel.ref(delegateNode.getClassName()), "delegateInput");
         constructor.body().assign(delegateField, delegateParam);
 
         return delegateField;

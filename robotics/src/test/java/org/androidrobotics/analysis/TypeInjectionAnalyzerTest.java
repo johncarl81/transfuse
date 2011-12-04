@@ -6,6 +6,9 @@ import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.gen.VariableBuilderRepository;
+import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
+import org.androidrobotics.gen.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -25,6 +28,9 @@ import static org.junit.Assert.assertFalse;
  */
 public class TypeInjectionAnalyzerTest {
 
+    public static interface B {
+    }
+
     public static class A {
         private B b;
         private E e;
@@ -36,13 +42,13 @@ public class TypeInjectionAnalyzerTest {
         }
     }
 
-    public static class B {
+    public static class BImpl implements B {
         @Inject
         private C c;
         private F f;
 
         @Inject
-        public B(F f) {
+        public BImpl(F f) {
             this.f = f;
         }
 
@@ -78,6 +84,8 @@ public class TypeInjectionAnalyzerTest {
 
     private TypeInjectionAnalyzer typeInjectionAnalyzer;
     private ASTClassFactory astClassFactory;
+    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Before
     public void setup() {
@@ -85,13 +93,19 @@ public class TypeInjectionAnalyzerTest {
 
         typeInjectionAnalyzer = injector.getInstance(TypeInjectionAnalyzer.class);
         astClassFactory = injector.getInstance(ASTClassFactory.class);
+        variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
+        variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
     }
 
     @Test
     public void testBackLinkAnalysis() {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astType);
+        VariableBuilderRepository variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
+
+        variableBuilderRepository.put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
+
+        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astType, variableBuilderRepository);
 
         //A -> B && A -> E
         assertEquals(1, injectionNode.getMethodInjectionPoints().size());
@@ -101,7 +115,7 @@ public class TypeInjectionAnalyzerTest {
         //A -> B
         InjectionNode bInjectionNode = bInjectionPoint.getInjectionNodes().get(0);
         assertTrue(bInjectionNode.isProxyRequired());
-        assertEquals(B.class.getName(), bInjectionNode.getClassName());
+        assertEquals(BImpl.class.getName(), bInjectionNode.getClassName());
 
         //A -> E
         InjectionNode eInjectionNode = bInjectionPoint.getInjectionNodes().get(1);
@@ -139,7 +153,7 @@ public class TypeInjectionAnalyzerTest {
         ConstructorInjectionPoint bBackLinkInjectionPoint = dInjectionNode.getConstructorInjectionPoint();
         assertEquals(1, bBackLinkInjectionPoint.getInjectionNodes().size());
         InjectionNode bBackLinkInjectionNode = bBackLinkInjectionPoint.getInjectionNodes().get(0);
-        assertEquals(B.class.getName(), bBackLinkInjectionNode.getClassName());
+        assertEquals(BImpl.class.getName(), bBackLinkInjectionNode.getClassName());
         assertTrue(bBackLinkInjectionNode.isProxyRequired());
     }
 }

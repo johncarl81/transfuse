@@ -44,6 +44,8 @@ public class ProxyGeneratorTest {
     private TypeInjectionAnalyzer typeInjectionAnalyzer;
     @Inject
     private DelegateInstantiationGeneratorStrategyFactory delegateInstantiationGeneratorFactory;
+    @Inject
+    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Before
     public void setup() {
@@ -52,17 +54,17 @@ public class ProxyGeneratorTest {
 
         interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
         ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
-        delegateInjectionNode = typeInjectionAnalyzer.analyze(delegateAST);
+        delegateInjectionNode = typeInjectionAnalyzer.analyze(delegateAST, variableBuilderRepositoryFactory.buildRepository());
+
+        delegateInjectionNode.addProxyInterface(interfaceAST);
     }
 
     @Test
     public void testProxyByConstructor() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
 
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
-                delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
-
-        ClassLoader classLoader = codeGenerationUtil.build(false);
+        ClassLoader classLoader = codeGenerationUtil.build(true);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 
@@ -75,10 +77,9 @@ public class ProxyGeneratorTest {
 
     @Test
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(interfaceAST,
-                delegateInjectionNode.getClassName() + "Proxy", delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
 
-        ClassLoader classLoader = codeGenerationUtil.build(false);
+        ClassLoader classLoader = codeGenerationUtil.build(true);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 

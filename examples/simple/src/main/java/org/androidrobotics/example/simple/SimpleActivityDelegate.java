@@ -7,19 +7,19 @@ import org.androidrobotics.annotations.OnCreate;
 
 import javax.inject.Inject;
 
-@Activity("TestActivity")
+@Activity("SimpleActivity")
 @Layout(R.layout.main)
-public class TestActivityDelegate {
+public class SimpleActivityDelegate {
 
     private boolean onCreateCalled = false;
     private boolean secondOnCreatCalled = false;
 
     @Inject
-    private TestController controller;
+    private SimpleController controller;
     private ConstructorValue value;
 
     @Inject
-    public TestActivityDelegate(ConstructorValue value) {
+    public SimpleActivityDelegate(ConstructorValue value) {
         this.value = value;
     }
 
@@ -43,7 +43,7 @@ public class TestActivityDelegate {
         return secondOnCreatCalled;
     }
 
-    public TestController getController() {
+    public SimpleController getController() {
         return controller;
     }
 

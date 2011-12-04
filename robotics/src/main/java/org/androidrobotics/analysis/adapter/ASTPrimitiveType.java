@@ -47,4 +47,9 @@ public class ASTPrimitiveType implements ASTType {
     public String getName() {
         return primitiveType.getKind().name();
     }
+
+    @Override
+    public boolean isConcreteClass() {
+        return false;
+    }
 }

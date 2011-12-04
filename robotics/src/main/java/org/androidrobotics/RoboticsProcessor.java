@@ -1,15 +1,22 @@
 package org.androidrobotics;
 
+import android.app.Activity;
+import android.os.Vibrator;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.ActivityAnalysis;
+import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.gen.ActivityGenerator;
+import org.androidrobotics.annotations.ImplementedBy;
+import org.androidrobotics.annotations.RoboticsModule;
+import org.androidrobotics.gen.*;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.provider.VibratorProvider;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Collection;
@@ -20,28 +27,69 @@ import java.util.Collection;
 @Singleton
 public class RoboticsProcessor {
 
-    @Inject
     private ActivityAnalysis activityAnalysis;
-    @Inject
     private ActivityGenerator activityGenerator;
-    @Inject
     private JCodeModel codeModel;
-    @Inject
     private Logger logger;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+
+    private VariableBuilderRepository variableBuilders;
+
+    @Inject
+    public RoboticsProcessor(ActivityAnalysis activityAnalysis,
+                             ActivityGenerator activityGenerator,
+                             JCodeModel codeModel,
+                             Logger logger,
+                             VariableBuilderRepositoryFactory variableBuilderRepositoryProvider,
+                             Provider<PotentialVariableBuilder> potentialVariableBuilderProvider,
+                             ProviderVariableBuilderFactory providerVariableBuilderFactory,
+                             VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+        this.activityAnalysis = activityAnalysis;
+        this.activityGenerator = activityGenerator;
+        this.codeModel = codeModel;
+        this.logger = logger;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+
+        variableBuilders = variableBuilderRepositoryProvider.buildRepository();
+
+        //temporary
+        variableBuilders.put(android.content.Context.class.getName(), potentialVariableBuilderProvider.get());
+        variableBuilders.put(Activity.class.getName(), potentialVariableBuilderProvider.get());
+        variableBuilders.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VibratorProvider.class));
+    }
 
     public void processModuleElements(Collection<? extends ASTType> astTypes) {
+
         for (ASTType astType : astTypes) {
-            //todo: module configuration
+            if (astType.isAnnotated(RoboticsModule.class)) {
+
+                for (ASTMethod astMethod : astType.getMethods()) {
+                    if (astMethod.isAnnotated(ImplementedBy.class)) {
+                        ASTType superType = astMethod.getReturnType();
+
+                        if (astMethod.getParameters().size() == 1) {
+                            ASTType implType = astMethod.getParameters().get(0).getASTType();
+
+                            System.out.println("Associating: " + superType.getName() + " with: " + implType.getName());
+
+                            variableBuilders.put(superType.getName(),
+                                    variableInjectionBuilderFactory.buildVariableInjectionBuilder(implType));
+                        } else {
+                            //todo: throw exception
+                        }
+                    }
+                }
+            }
         }
     }
 
     public void processRootElement(Collection<? extends ASTType> astTypes) {
         for (ASTType astType : astTypes) {
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, variableBuilders);
 
             if (activityDescriptor != null) {
                 try {
-                    activityGenerator.generate(activityDescriptor);
+                    activityGenerator.generate(activityDescriptor, variableBuilders);
                 } catch (IOException e) {
                     logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {
@@ -57,12 +105,12 @@ public class RoboticsProcessor {
 
     }
 
-    public void writeSource(CodeWriter codeWriter, CodeWriter recourceWriter) {
+    public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {
 
         try {
             codeModel.build(
                     codeWriter,
-                    recourceWriter);
+                    resourceWriter);
 
         } catch (IOException e) {
             logger.error("Error while writing source files", e);

@@ -14,20 +14,20 @@ import static junit.framework.Assert.assertTrue;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-public class TestActivityTest {
+public class SimpleActivityTest {
 
-    private TestActivity testActivity;
-    private TestActivityDelegate testActivityDelegate;
+    private SimpleActivity simpleActivity;
+    private SimpleActivityDelegate testActivityDelegate;
 
     @Before
     public void setup() throws IllegalAccessException, NoSuchFieldException {
-        testActivity = new TestActivity();
-        testActivity.onCreate(null);
+        simpleActivity = new SimpleActivity();
+        simpleActivity.onCreate(null);
 
-        Field delegateField = findDelegateField(TestActivity.class, TestActivityDelegate.class);
+        Field delegateField = findDelegateField(SimpleActivity.class, SimpleActivityDelegate.class);
 
         delegateField.setAccessible(true);
-        testActivityDelegate = (TestActivityDelegate) delegateField.get(testActivity);
+        testActivityDelegate = (SimpleActivityDelegate) delegateField.get(simpleActivity);
         delegateField.setAccessible(false);
     }
 
@@ -42,7 +42,7 @@ public class TestActivityTest {
         assertTrue(testActivityDelegate.isConstructorInjected());
     }
 
-    private Field findDelegateField(Class<TestActivity> target, Class<TestActivityDelegate> type) {
+    private Field findDelegateField(Class<SimpleActivity> target, Class<SimpleActivityDelegate> type) {
         Field delegateField = null;
 
         for (Field field : target.getDeclaredFields()) {

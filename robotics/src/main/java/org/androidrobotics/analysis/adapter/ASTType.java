@@ -29,4 +29,11 @@ public interface ASTType extends ASTBase {
      * @return constructors
      */
     Collection<ASTConstructor> getConstructors();
+
+    /**
+     * Determines if the given AST type represents a concrete class
+     *
+     * @return concrete class status
+     */
+    boolean isConcreteClass();
 }

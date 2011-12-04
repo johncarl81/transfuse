@@ -43,4 +43,9 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     public Collection<ASTConstructor> getConstructors() {
         return constructors;
     }
+
+    @Override
+    public boolean isConcreteClass() {
+        return typeElement.getKind().isClass();
+    }
 }

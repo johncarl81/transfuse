@@ -1,6 +1,5 @@
 package org.androidrobotics.gen;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,10 +10,16 @@ public class VariableBuilderRepository {
 
     private Map<String, VariableBuilder> builderMap = new HashMap<String, VariableBuilder>();
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private VariableBuilderRepository parentRepository;
 
-    @Inject
     public VariableBuilderRepository(VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+    }
+
+    public VariableBuilderRepository(VariableBuilderRepository parentRepository, VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+        this(variableInjectionBuilderFactory);
+
+        this.parentRepository = parentRepository;
     }
 
     public void put(String name, VariableBuilder variableBuilder) {
@@ -23,6 +28,9 @@ public class VariableBuilderRepository {
 
     public VariableBuilder get(String name) {
         if (!builderMap.containsKey(name)) {
+            if (parentRepository != null) {
+                return parentRepository.get(name);
+            }
             builderMap.put(name, variableInjectionBuilderFactory.buildVariableInjectionBuilder());
         }
         return builderMap.get(name);

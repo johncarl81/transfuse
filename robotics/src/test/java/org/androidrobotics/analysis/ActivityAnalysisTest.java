@@ -6,6 +6,8 @@ import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.targets.MockActivityDelegate;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
+import org.androidrobotics.gen.VariableBuilderRepository;
+import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -32,7 +34,9 @@ public class ActivityAnalysisTest {
 
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
+        VariableBuilderRepository variableBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
+
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), variableBuilderRepository);
     }
 
     @Test

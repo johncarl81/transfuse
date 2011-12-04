@@ -8,10 +8,10 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class TestController {
+public class SimpleController {
 
     @Inject
-    private SubComponent subComponent;
+    private AnotherValue anotherValue;
     @Inject
     private Context activity;
     private Vibrator vibrator;
@@ -24,7 +24,7 @@ public class TestController {
     }
 
     public boolean validate() {
-        return subComponent != null && activity != null && vibrator != null;
+        return anotherValue != null && activity != null && vibrator != null;
     }
 
 }

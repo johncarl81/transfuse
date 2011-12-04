@@ -1,9 +1,11 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
+import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 
 import javax.inject.Inject;
@@ -15,56 +17,68 @@ import java.util.Map;
  */
 public class ProxyGenerator {
 
+    private static final String VOID_TYPE_NAME = "void";
+
     private JCodeModel codeModel;
+    private UniqueVariableNamer variableNamer;
 
     @Inject
-    public ProxyGenerator(JCodeModel codeModel) {
+    public ProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer) {
         this.codeModel = codeModel;
+        this.variableNamer = variableNamer;
     }
 
-    public ProxyDescriptor generateProxy(ASTType interfaceType, String proxyClassName, DelegateInstantiationGeneratorStrategy delegateInstansiationGenerator) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public ProxyDescriptor generateProxy(InjectionNode injectionNode, DelegateInstantiationGeneratorStrategy delegateInstantiationGenerator) {
 
-        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, proxyClassName, ClassType.CLASS);
-        //implements interface
-        definedClass._implements(codeModel.ref(interfaceType.getName()));
+        JDefinedClass definedClass;
+        try {
 
-        //define delegate
-        JFieldVar delegateField = delegateInstansiationGenerator.addDelegateInstantiation(definedClass);
+            definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Proxy", ClassType.CLASS);
 
-        //implement methods
-        for (ASTMethod method : interfaceType.getMethods()) {
-            // public <type> <method_name> ( <parameters...>)
-            JClass returnType = codeModel.ref(method.getReturnType().getName());
-            JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
+            //define delegate
+            JFieldVar delegateField = delegateInstantiationGenerator.addDelegateInstantiation(definedClass);
 
-            //define method parameter
-            Map<ASTParameter, JVar> parmaeterMap = new HashMap<ASTParameter, JVar>();
-            for (ASTParameter parameter : method.getParameters()) {
-                parmaeterMap.put(parameter,
-                        methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()), "todo"));
+            //implements interfaces
+            for (ASTType interfaceType : injectionNode.getProxyInterfaces()) {
+                definedClass._implements(codeModel.ref(interfaceType.getName()));
+
+                //implement methods
+                for (ASTMethod method : interfaceType.getMethods()) {
+                    // public <type> <method_name> ( <parameters...>)
+                    JClass returnType = codeModel.ref(method.getReturnType().getName());
+                    JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
+
+                    //define method parameter
+                    Map<ASTParameter, JVar> parmaeterMap = new HashMap<ASTParameter, JVar>();
+                    for (ASTParameter parameter : method.getParameters()) {
+                        parmaeterMap.put(parameter,
+                                methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
+                                        variableNamer.generateName(parameter.getASTType().getName())));
+                    }
+
+                    //define method body
+                    JBlock body = methodDeclaration.body();
+
+                    //delegate invocation
+                    JInvocation invocation = delegateField.invoke(method.getName());
+
+                    for (ASTParameter parameter : method.getParameters()) {
+                        invocation.arg(parmaeterMap.get(parameter));
+                    }
+
+                    //todo: add AOP here?
+
+                    if (!VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
+                        body._return(invocation);
+                    } else {
+                        body.add(invocation);
+                    }
+                }
             }
-
-            //define method body
-            JBlock body = methodDeclaration.body();
-
-            //delegate invocation
-            JInvocation invocation = delegateField.invoke(method.getName());
-
-            for (ASTParameter parameter : method.getParameters()) {
-                invocation.arg(parmaeterMap.get(parameter));
-            }
-
-            //todo: add AOP here
-
-            body.add(invocation);
-
-            if (!"void".equals(method.getReturnType().getName())) {
-                body._return(invocation);
-            }
-
+        } catch (JClassAlreadyExistsException e) {
+            throw new RoboticsAnalysisException("Error while trying to build new class", e);
         }
 
         return new ProxyDescriptor(definedClass);
-
     }
 }

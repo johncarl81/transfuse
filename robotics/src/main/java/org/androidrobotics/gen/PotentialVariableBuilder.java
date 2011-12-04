@@ -1,18 +1,19 @@
 package org.androidrobotics.gen;
 
-import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidrobotics.analysis.AnalysisDependencyProcessingCallback;
+import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.model.InjectionNode;
 
 /**
  * @author John Ericksen
  */
-public class ContextVariableBuilder implements VariableBuilder {
+public class PotentialVariableBuilder implements VariableBuilder {
     @Override
     public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
-        return JExpr._this();
+
+        throw new RoboticsAnalysisException("Expected injection does not exist");
     }
 
     @Override
