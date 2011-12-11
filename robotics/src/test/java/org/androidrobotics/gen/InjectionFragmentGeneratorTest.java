@@ -163,7 +163,7 @@ public class InjectionFragmentGeneratorTest {
 
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPackageClass, variableBuilderRepository);
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build(false);
         Class<Provider> generatedFactoryClass = (Class<Provider>) classLoader.loadClass(providerPackageClass.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);

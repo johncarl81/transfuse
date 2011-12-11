@@ -64,7 +64,7 @@ public class ProxyGeneratorTest {
 
         ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build(false);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 
@@ -79,7 +79,7 @@ public class ProxyGeneratorTest {
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build(false);
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 
