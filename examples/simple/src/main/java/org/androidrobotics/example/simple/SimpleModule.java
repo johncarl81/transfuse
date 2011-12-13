@@ -1,6 +1,6 @@
 package org.androidrobotics.example.simple;
 
-import org.androidrobotics.annotations.ImplementedBy;
+import org.androidrobotics.annotations.Bind;
 import org.androidrobotics.annotations.RoboticsModule;
 
 /**
@@ -9,6 +9,6 @@ import org.androidrobotics.annotations.RoboticsModule;
 @RoboticsModule
 public interface SimpleModule {
 
-    @ImplementedBy
-    AnotherValue providedBy(AnotherValueImpl input);
+    @Bind(AnotherValueImpl.class)
+    AnotherValue binding(AnotherValueImpl temp);
 }

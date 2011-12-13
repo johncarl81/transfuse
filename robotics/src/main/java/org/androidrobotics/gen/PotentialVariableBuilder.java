@@ -1,7 +1,7 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.JExpression;
-import org.androidrobotics.analysis.AnalysisDependencyProcessingCallback;
+import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.model.InjectionNode;
@@ -17,7 +17,7 @@ public class PotentialVariableBuilder implements VariableBuilder {
     }
 
     @Override
-    public InjectionNode processInjectionNode(ASTType astType, AnalysisDependencyProcessingCallback callback) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         return new InjectionNode(astType);
     }
 }

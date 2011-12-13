@@ -4,7 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import org.androidrobotics.analysis.TypeInjectionAnalyzer;
+import org.androidrobotics.analysis.AnalysisContext;
+import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
@@ -41,11 +42,9 @@ public class ProxyGeneratorTest {
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
-    private TypeInjectionAnalyzer typeInjectionAnalyzer;
+    private Analyzer analyzer;
     @Inject
     private DelegateInstantiationGeneratorStrategyFactory delegateInstantiationGeneratorFactory;
-    @Inject
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Before
     public void setup() {
@@ -54,7 +53,7 @@ public class ProxyGeneratorTest {
 
         interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
         ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
-        delegateInjectionNode = typeInjectionAnalyzer.analyze(delegateAST, variableBuilderRepositoryFactory.buildRepository());
+        delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, new AnalysisContext());
 
         delegateInjectionNode.addProxyInterface(interfaceAST);
     }

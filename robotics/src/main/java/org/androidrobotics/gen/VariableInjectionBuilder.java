@@ -2,7 +2,8 @@ package org.androidrobotics.gen;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
-import org.androidrobotics.analysis.AnalysisDependencyProcessingCallback;
+import org.androidrobotics.analysis.AnalysisContext;
+import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.model.InjectionNode;
 
@@ -13,9 +14,12 @@ import javax.inject.Inject;
  */
 public class VariableInjectionBuilder extends VariableInjectionBuilderBase {
 
+    private Analyzer analyzer;
+
     @Inject
-    public VariableInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer variableNamer, InjectionInvocationBuilder injectionInvocationBuilder) {
+    public VariableInjectionBuilder(Analyzer analyzer, JCodeModel codeModel, UniqueVariableNamer variableNamer, InjectionInvocationBuilder injectionInvocationBuilder) {
         super(codeModel, variableNamer, injectionInvocationBuilder);
+        this.analyzer = analyzer;
     }
 
     @Override
@@ -24,7 +28,7 @@ public class VariableInjectionBuilder extends VariableInjectionBuilderBase {
     }
 
     @Override
-    public InjectionNode processInjectionNode(ASTType astType, AnalysisDependencyProcessingCallback callback) {
-        return callback.processInjectionNode(astType);
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
+        return analyzer.analyze(astType, astType, context);
     }
 }

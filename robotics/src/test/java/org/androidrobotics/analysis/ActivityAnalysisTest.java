@@ -32,11 +32,11 @@ public class ActivityAnalysisTest {
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
 
-        ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
-        ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
         VariableBuilderRepository variableBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
+        ActivityAnalysis activityAnalysis = new ActivityAnalysis(new InjectionPointFactory(variableBuilderRepository));
+        ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), variableBuilderRepository);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
     }
 
     @Test

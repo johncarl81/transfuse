@@ -1,25 +1,25 @@
 package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.adapter.*;
+import org.androidrobotics.gen.VariableBuilder;
 import org.androidrobotics.gen.VariableBuilderRepository;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * InjectionPoint Factory for building the various InjectionPoints from the AST
  *
  * @author John Ericksen
  */
-@Singleton
 public class InjectionPointFactory {
 
-    @Inject
-    private TypeInjectionAnalyzer typeInjectionAnalyzer;
+    private VariableBuilderRepository variableBuilderRepository;
+
+    public InjectionPointFactory(VariableBuilderRepository variableBuilderRepository) {
+        this.variableBuilderRepository = variableBuilderRepository;
+    }
 
     /**
      * Build a Constructor InjectionPoint from the given ASTConstructor
@@ -31,7 +31,8 @@ public class InjectionPointFactory {
 
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         for (ASTParameter astParameter : astConstructor.getParameters()) {
-            constructorInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astParameter.getASTType(), context, true));
+
+            constructorInjectionPoint.addInjectionNode(buildInjectionNode(astParameter.getASTType(), context));
         }
 
         return constructorInjectionPoint;
@@ -48,7 +49,7 @@ public class InjectionPointFactory {
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getName());
 
         for (ASTParameter astField : astMethod.getParameters()) {
-            methodInjectionPoint.addInjectionNode(typeInjectionAnalyzer.analyze(astField.getASTType(), context, false));
+            methodInjectionPoint.addInjectionNode(buildInjectionNode(astField.getASTType(), context));
         }
 
         return methodInjectionPoint;
@@ -61,23 +62,25 @@ public class InjectionPointFactory {
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
-
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astField.getASTType(), context, false);
-
-        return new FieldInjectionPoint(astField.getName(), injectionNode);
+        return buildFieldInjectionPoint(astField.getName(), astField.getASTType(), context);
     }
 
     /**
      * Build a Field InjectionPoint directly from the given ASTType
      *
      * @param astType
-     * @param variableBuilderRepository
      * @return
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType astType, VariableBuilderRepository variableBuilderRepository) {
+    public FieldInjectionPoint buildInjectionPoint(ASTType astType) {
+        return buildFieldInjectionPoint(astType.getName(), astType, new AnalysisContext());
+    }
 
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astType, variableBuilderRepository);
+    private FieldInjectionPoint buildFieldInjectionPoint(String name, ASTType astType, AnalysisContext context) {
+        return new FieldInjectionPoint(name, buildInjectionNode(astType, context));
+    }
 
-        return new FieldInjectionPoint(astType.getName(), injectionNode);
+    private InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
+        VariableBuilder variableBuilder = variableBuilderRepository.get(astType.getName());
+        return variableBuilder.buildInjectionNode(astType, context);
     }
 }

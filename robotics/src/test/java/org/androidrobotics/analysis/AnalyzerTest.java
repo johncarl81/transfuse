@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author John Ericksen
  */
-public class TypeInjectionAnalyzerTest {
+public class AnalyzerTest {
 
     public static interface B {
     }
@@ -82,7 +82,7 @@ public class TypeInjectionAnalyzerTest {
         //empty
     }
 
-    private TypeInjectionAnalyzer typeInjectionAnalyzer;
+    private Analyzer analyzer;
     private ASTClassFactory astClassFactory;
     private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
@@ -91,21 +91,24 @@ public class TypeInjectionAnalyzerTest {
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
 
-        typeInjectionAnalyzer = injector.getInstance(TypeInjectionAnalyzer.class);
+        analyzer = injector.getInstance(Analyzer.class);
         astClassFactory = injector.getInstance(ASTClassFactory.class);
         variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
         variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
+
+        VariableBuilderRepository variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
+        variableBuilderRepository.put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
+
+        AnalysisRepositoryFactory analysisRepositoryFactory = new AnalysisRepositoryFactory(new InjectionPointFactory(variableBuilderRepository));
+
+        injector.getInstance(AnalysisRepositoryProvider.class).setAnalysisRepository(analysisRepositoryFactory.buildAnalysisRepository());
     }
 
     @Test
     public void testBackLinkAnalysis() {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
-        VariableBuilderRepository variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
-
-        variableBuilderRepository.put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
-
-        InjectionNode injectionNode = typeInjectionAnalyzer.analyze(astType, variableBuilderRepository);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, new AnalysisContext());
 
         //A -> B && A -> E
         assertEquals(1, injectionNode.getMethodInjectionPoints().size());
