@@ -2,6 +2,7 @@ package org.androidrobotics.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.InjectionInvocationBuilder;
 import org.androidrobotics.gen.UniqueVariableNamer;
@@ -31,11 +32,13 @@ public abstract class VariableInjectionBuilderBase implements VariableBuilder {
 
             variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
 
+            //assuming that constructor exists
+            ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
             //constructor injection
             injectionBuilderContext.getBlock().assign(variableRef,
                     injectionInvocationBuilder.buildConstructorCall(
                             injectionBuilderContext.getVariableMap(),
-                            injectionNode.getConstructorInjectionPoint(),
+                            injectionAspect.getConstructorInjectionPoint(),
                             nodeType
                     ));
         } catch (ClassNotFoundException e) {

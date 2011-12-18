@@ -4,6 +4,8 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
+import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
 import org.androidrobotics.gen.proxy.DelegateDelayedGeneratorStrategy;
 import org.androidrobotics.gen.proxy.ProxyGenerator;
 import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
@@ -35,7 +37,8 @@ public class InjectionBuilderContext {
                                    @Assisted JDefinedClass definedClass,
                                    @Assisted VariableBuilderRepository variableBuilderMap,
                                    ProxyVariableBuilder proxyVariableBuilder,
-                                   ProxyGenerator proxyGenerator, DelegateDelayedGeneratorStrategy delayedGeneratorStrategy) {
+                                   ProxyGenerator proxyGenerator,
+                                   DelegateDelayedGeneratorStrategy delayedGeneratorStrategy) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
@@ -52,7 +55,8 @@ public class InjectionBuilderContext {
         if (variableMap.containsKey(injectionNode)) {
             variable = variableMap.get(injectionNode);
         } else {
-            if (injectionNode.isProxyRequired()) {
+            ProxyAspect proxyAspect = injectionNode.getAspect(ProxyAspect.class);
+            if (proxyAspect != null && proxyAspect.isProxyRequired()) {
                 //proxy
                 ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(injectionNode, delayedGeneratorStrategy);
                 JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, injectionNode, proxyDescriptor);
@@ -77,18 +81,21 @@ public class InjectionBuilderContext {
     }
 
     public void setupInjectionRequirements(InjectionNode injectionNode) {
-        //constructor injection
-        for (InjectionNode constructorNode : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
-            buildVariable(constructorNode);
-        }
-        //field injection
-        for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
-            buildVariable(fieldInjectionPoint.getInjectionNode());
-        }
-        //method injection
-        for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
-            for (InjectionNode methodNode : methodInjectionPoint.getInjectionNodes()) {
-                buildVariable(methodNode);
+        ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
+        if (injectionAspect != null) {
+            //constructor injection
+            for (InjectionNode constructorNode : injectionAspect.getConstructorInjectionPoint().getInjectionNodes()) {
+                buildVariable(constructorNode);
+            }
+            //field injection
+            for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
+                buildVariable(fieldInjectionPoint.getInjectionNode());
+            }
+            //method injection
+            for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
+                for (InjectionNode methodNode : methodInjectionPoint.getInjectionNodes()) {
+                    buildVariable(methodNode);
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package org.androidrobotics.example.simple;
 
 import android.content.Context;
 import android.os.Vibrator;
+import org.androidrobotics.annotations.OnTouch;
 
 import javax.inject.Inject;
 
@@ -19,7 +20,10 @@ public class SimpleController {
     @Inject
     public void setVibrator(Vibrator vibrator) {
         this.vibrator = vibrator;
+    }
 
+    @OnTouch
+    public void vibrate() {
         vibrator.vibrate(1000);
     }
 

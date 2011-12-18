@@ -4,6 +4,7 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
@@ -26,26 +27,31 @@ public class InjectionFragmentGenerator {
         this.injectionBuilderContextFactory = injectionBuilderContextFactory;
     }
 
-    public JExpression buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public Map<InjectionNode, JExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
         InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass, variableBuilderMap);
 
-        JExpression variable = injectionBuilderContext.buildVariable(injectionNode);
+        injectionBuilderContext.buildVariable(injectionNode);
 
         for (Map.Entry<InjectionNode, JExpression> nodeEntry : nodeVariableMap.entrySet()) {
 
-            //field injection
-            for (FieldInjectionPoint fieldInjectionPoint : nodeEntry.getKey().getFieldInjectionPoints()) {
-                block.add(injectionInvocationBuilder.buildParameterInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
-            }
+            if (nodeEntry.getKey().containsAspect(ASTInjectionAspect.class)) {
 
-            //method injection
-            for (MethodInjectionPoint methodInjectionPoint : nodeEntry.getKey().getMethodInjectionPoints()) {
-                block.add(injectionInvocationBuilder.buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue()));
+                ASTInjectionAspect injectionToken = nodeEntry.getKey().getAspect(ASTInjectionAspect.class);
+
+                //field injection
+                for (FieldInjectionPoint fieldInjectionPoint : injectionToken.getFieldInjectionPoints()) {
+                    block.add(injectionInvocationBuilder.buildParameterInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
+                }
+
+                //method injection
+                for (MethodInjectionPoint methodInjectionPoint : injectionToken.getMethodInjectionPoints()) {
+                    block.add(injectionInvocationBuilder.buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue()));
+                }
             }
         }
 
-        return variable;
+        return nodeVariableMap;
     }
 }

@@ -19,7 +19,6 @@ import javax.inject.Provider;
 public class ProviderVariableBuilder implements VariableBuilder {
 
     private static final String PROVIDER_METHOD = "get";
-    public static final String PROVIDER_INJECTION_NODE = "provider";
 
     private Class<? extends Provider<?>> providerClass;
     private ASTClassFactory astClassFactory;
@@ -37,7 +36,7 @@ public class ProviderVariableBuilder implements VariableBuilder {
     @Override
     public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
-        InjectionNode providerInjectionNode = injectionNode.getBuilderResource(PROVIDER_INJECTION_NODE);
+        InjectionNode providerInjectionNode = injectionNode.getAspect(ProviderAspect.class).getProviderInjectionNode();
 
         if (providerInjectionNode == null) {
             throw new RoboticsAnalysisException("Analysis and build failed to associate provider for " + injectionNode.getClassName());
@@ -54,7 +53,7 @@ public class ProviderVariableBuilder implements VariableBuilder {
 
         ASTType providerType = astClassFactory.buildASTClassType(providerClass);
 
-        injectionNode.putBuilderResource(PROVIDER_INJECTION_NODE, analyzer.analyze(providerType, providerType, context));
+        injectionNode.addAspect(new ProviderAspect(analyzer.analyze(providerType, providerType, context)));
 
         return injectionNode;
     }

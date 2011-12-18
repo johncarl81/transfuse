@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.astAnalyzer.InjectionAnalyzer;
+import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAnalysis;
 
 import javax.inject.Inject;
 
@@ -15,9 +16,8 @@ public class AnalysisRepositoryFactory {
     public AnalysisRepository buildAnalysisRepository() {
         AnalysisRepository analysisRepository = new AnalysisRepository();
 
-        InjectionAnalyzer injectionAnalyzer = new InjectionAnalyzer(injectionPointFactory);
-
-        analysisRepository.addAnalysis(injectionAnalyzer);
+        analysisRepository.addAnalysis(new InjectionAnalyzer(injectionPointFactory));
+        analysisRepository.addAnalysis(new MethodCallbackAnalysis());
 
         return analysisRepository;
     }

@@ -59,7 +59,6 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
                     roundEnvironment.getElementsAnnotatedWith(RoboticsModule.class)
             ));
 
-
             for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
                 roboticsProcessor.processRootElement(wrapASTCollection(
                         roundEnvironment.getElementsAnnotatedWith(annotationClass)

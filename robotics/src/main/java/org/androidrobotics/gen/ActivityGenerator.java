@@ -3,15 +3,21 @@ package org.androidrobotics.gen;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import com.sun.codemodel.*;
+import org.androidrobotics.analysis.adapter.ASTMethod;
+import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidrobotics.gen.variableBuilder.ContextVariableBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
+import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -57,7 +63,34 @@ public class ActivityGenerator {
 
             VariableBuilderRepository variableBuilderMap = buildVariableBuilderMap(variableBuilderRepository);
 
-            injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
+            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
+
+            addMethodCallbacks(block, "onCreate", expressionMap);
+
+            //ontouch method
+
+            JMethod onTouchEventMethod = definedClass.method(JMod.PUBLIC, codeModel.BOOLEAN, "onTouchEvent");
+            onTouchEventMethod.param(MotionEvent.class, "motionEvent");
+            JBlock onTouchBody = onTouchEventMethod.body();
+
+            addMethodCallbacks(onTouchBody, "onTouch", expressionMap);
+            onTouchBody._return(JExpr.TRUE);
+        }
+    }
+
+    private void addMethodCallbacks(JBlock block, String name, Map<InjectionNode, JExpression> expressionMap) {
+        for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
+            MethodCallbackAspect methodCallbackToken = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
+
+            if (methodCallbackToken != null) {
+                Set<ASTMethod> astMethods = methodCallbackToken.getMethods(name);
+
+                if (astMethods != null) {
+                    for (ASTMethod astMethod : methodCallbackToken.getMethods(name)) {
+                        block.add(injectionNodeJExpressionEntry.getValue().invoke(astMethod.getName()));
+                    }
+                }
+            }
         }
     }
 

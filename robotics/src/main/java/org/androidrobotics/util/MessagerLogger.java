@@ -13,7 +13,6 @@ public class MessagerLogger implements Logger {
         this.messager = messager;
     }
 
-
     @Override
     public void info(String value) {
         messager.printMessage(Diagnostic.Kind.NOTE, value);

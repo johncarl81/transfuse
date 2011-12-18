@@ -3,6 +3,7 @@ package org.androidrobotics.analysis;
 import org.androidrobotics.analysis.adapter.ASTField;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
 import org.androidrobotics.model.InjectionNode;
 
 /**
@@ -29,12 +30,10 @@ public class Analyzer {
             //This injection must be performed using a delayed injection proxy
             injectionNode = context.getInjectionNode(concreteType);
 
-            injectionNode.setProxyRequired(true);
+            ProxyAspect proxyAspect = getProxyAspect(injectionNode);
+            proxyAspect.setProxyRequired(true);
+            proxyAspect.getProxyInterfaces().add(instanceType);
 
-            injectionNode.addProxyInterface(instanceType);
-            //if its a proxy dependency then the given dependent object will have to be build using a delayed
-            //proxy object
-            injectionNode.setProxyRequired(true);
         } else {
             injectionNode = new InjectionNode(concreteType);
             AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
@@ -54,5 +53,12 @@ public class Analyzer {
         }
 
         return injectionNode;
+    }
+
+    private ProxyAspect getProxyAspect(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(ProxyAspect.class)) {
+            injectionNode.addAspect(new ProxyAspect());
+        }
+        return injectionNode.getAspect(ProxyAspect.class);
     }
 }

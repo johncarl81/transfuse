@@ -10,9 +10,11 @@ import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
+import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.target.*;
-import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.ProviderAspect;
 import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.model.*;
@@ -60,7 +62,7 @@ public class InjectionFragmentGeneratorTest {
         //setup constructor injection
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         constructorInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
-        injectionNode.addInjectionPoint(constructorInjectionPoint);
+        getInjectionAspect(injectionNode).add(constructorInjectionPoint);
 
         ConstructorInjectable constructorInjectable = buildInstance(ConstructorInjectable.class, injectionNode);
 
@@ -73,7 +75,7 @@ public class InjectionFragmentGeneratorTest {
 
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint("setInjectionTarget");
         methodInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
-        injectionNode.addInjectionPoint(methodInjectionPoint);
+        getInjectionAspect(injectionNode).add(methodInjectionPoint);
 
         MethodInjectable methodInjectable = buildInstance(MethodInjectable.class, injectionNode);
 
@@ -85,7 +87,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = buildInjectionNode(FieldInjectable.class);
 
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint("injectionTarget", buildInjectionNode(InjectionTarget.class));
-        injectionNode.addInjectionPoint(fieldInjectionPoint);
+        getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
         FieldInjectable fieldInjectable = buildInstance(FieldInjectable.class, injectionNode);
 
@@ -96,19 +98,22 @@ public class InjectionFragmentGeneratorTest {
     public void testDelayedProxyInjection() throws Exception {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxyTarget.class));
 
-        injectionNode.setProxyRequired(true);
-        injectionNode.addProxyInterface(astClassFactory.buildASTClassType(DelayedProxy.class));
+        ProxyAspect proxyAspect = new ProxyAspect();
+        proxyAspect.setProxyRequired(true);
+        proxyAspect.getProxyInterfaces().add(astClassFactory.buildASTClassType(DelayedProxy.class));
+
+        injectionNode.addAspect(proxyAspect);
 
         //setup constructor injection
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         InjectionNode dependencyInjectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxyDependency.class));
         constructorInjectionPoint.addInjectionNode(dependencyInjectionNode);
-        injectionNode.addInjectionPoint(constructorInjectionPoint);
+        getInjectionAspect(injectionNode).add(constructorInjectionPoint);
 
         //reference circle
         ConstructorInjectionPoint dependencyConstructorInjectionPoint = new ConstructorInjectionPoint();
         dependencyConstructorInjectionPoint.addInjectionNode(injectionNode);
-        dependencyInjectionNode.addInjectionPoint(dependencyConstructorInjectionPoint);
+        getInjectionAspect(dependencyInjectionNode).add(dependencyConstructorInjectionPoint);
 
         DelayedProxyTarget proxyTarget = buildInstance(DelayedProxyTarget.class, injectionNode);
 
@@ -123,7 +128,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = buildInjectionNode(VariableBuilderInjectable.class);
 
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint("target", buildInjectionNode(VariableTarget.class));
-        injectionNode.addInjectionPoint(fieldInjectionPoint);
+        getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
         variableBuilderRepository.put(VariableTarget.class.getName(), new VariableBuilder() {
             @Override
@@ -148,7 +153,7 @@ public class InjectionFragmentGeneratorTest {
         variableBuilderRepository.put(VariableTarget.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VariableTargetProvider.class));
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
-        injectionNode.putBuilderResource(ProviderVariableBuilder.PROVIDER_INJECTION_NODE, buildInjectionNode(VariableTargetProvider.class));
+        injectionNode.addAspect(new ProviderAspect(buildInjectionNode(VariableTargetProvider.class)));
 
         VariableTarget target = buildInstance(VariableTarget.class, injectionNode);
 
@@ -159,7 +164,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(instanceClass));
 
         ConstructorInjectionPoint noArgConstructorInjectionPoint = new ConstructorInjectionPoint();
-        injectionNode.addInjectionPoint(noArgConstructorInjectionPoint);
+        getInjectionAspect(injectionNode).add(noArgConstructorInjectionPoint);
 
         return injectionNode;
     }
@@ -178,5 +183,12 @@ public class InjectionFragmentGeneratorTest {
         assertEquals(instanceClass, result.getClass());
 
         return (T) result;
+    }
+
+    private ASTInjectionAspect getInjectionAspect(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
+            injectionNode.addAspect(new ASTInjectionAspect());
+        }
+        return injectionNode.getAspect(ASTInjectionAspect.class);
     }
 }

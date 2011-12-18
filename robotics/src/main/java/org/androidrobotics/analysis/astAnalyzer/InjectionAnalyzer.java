@@ -31,7 +31,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
 
         for (ASTConstructor astConstructor : astType.getConstructors()) {
             if (astConstructor.isAnnotated(Inject.class)) {
-                injectionNode.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astConstructor, context));
+                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));
                 constructorFound = true;
             }
             if (astConstructor.getParameters().size() == 0) {
@@ -43,21 +43,28 @@ public class InjectionAnalyzer implements ASTAnalysis {
             if (noArgConstructor == null) {
                 throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
-            injectionNode.addInjectionPoint(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
+            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
         }
     }
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
         if (astMethod.isAnnotated(Inject.class)) {
-            injectionNode.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astMethod, context));
+            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astMethod, context));
         }
     }
 
     @Override
     public void analyzeField(InjectionNode injectionNode, ASTField astField, AnalysisContext context) {
         if (astField.isAnnotated(Inject.class)) {
-            injectionNode.addInjectionPoint(injectionPointFactory.buildInjectionPoint(astField, context));
+            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astField, context));
         }
+    }
+
+    private ASTInjectionAspect getInjectionToken(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
+            injectionNode.addAspect(new ASTInjectionAspect());
+        }
+        return injectionNode.getAspect(ASTInjectionAspect.class);
     }
 }

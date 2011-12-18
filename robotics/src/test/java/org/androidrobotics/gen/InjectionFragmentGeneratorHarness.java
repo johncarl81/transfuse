@@ -6,6 +6,7 @@ import org.androidrobotics.model.PackageClass;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -25,8 +26,8 @@ public class InjectionFragmentGeneratorHarness {
         JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(injectionNode.getClassName()), "get");
 
         JBlock block = getMethod.body();
-        JExpression variable = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, variableBuilderRepository);
+        Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, variableBuilderRepository);
 
-        block._return(variable);
+        block._return(expressionMap.get(injectionNode));
     }
 }

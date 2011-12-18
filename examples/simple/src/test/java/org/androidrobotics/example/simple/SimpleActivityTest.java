@@ -42,6 +42,12 @@ public class SimpleActivityTest {
         assertTrue(testActivityDelegate.isConstructorInjected());
     }
 
+    @Test
+    public void testOnCreateCalled() {
+        assertTrue(testActivityDelegate.isOnCreateCalled());
+        assertTrue(testActivityDelegate.isSecondOnCreatCalled());
+    }
+
     private Field findDelegateField(Class<SimpleActivity> target, Class<SimpleActivityDelegate> type) {
         Field delegateField = null;
 

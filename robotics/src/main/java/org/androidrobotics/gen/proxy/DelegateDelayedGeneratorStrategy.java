@@ -12,6 +12,7 @@ import javax.inject.Inject;
 public class DelegateDelayedGeneratorStrategy implements DelegateInstantiationGeneratorStrategy {
 
     private static final String DELEGATE_NAME = "delegate";
+    private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
     protected static final String DELAYED_LOAD_METHOD_NAME = "load";
 
     private JCodeModel codeModel;
@@ -32,12 +33,11 @@ public class DelegateDelayedGeneratorStrategy implements DelegateInstantiationGe
         definedClass._implements(providerInterface);
 
         JMethod method = definedClass.method(JMod.PUBLIC, codeModel.VOID, DELAYED_LOAD_METHOD_NAME);
-        JVar delegateParam = method.param(delegateClass, "delegateInput");
+        JVar delegateParam = method.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
         method.body().assign(delegateField, delegateParam);
 
         return delegateField;
     }
-
 
     public JExpression initalizeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
 
