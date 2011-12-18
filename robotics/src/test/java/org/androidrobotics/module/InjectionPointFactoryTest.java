@@ -5,14 +5,12 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
+import org.androidrobotics.analysis.SimpleAnalysisContextFactory;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.targets.MockAnalysisClass;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.VariableBuilderRepository;
-import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
-import org.androidrobotics.gen.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -36,20 +34,18 @@ import static junit.framework.Assert.assertEquals;
 public class InjectionPointFactoryTest {
 
     private AnalysisContext emptyContext;
-
-    private InjectionPointFactory injectionPointFactory;
     @Inject
     private ASTClassFactory astClassFactory;
     @Inject
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private SimpleAnalysisContextFactory contextFactory;
+    @Inject
+    private InjectionPointFactory injectionPointFactory;
 
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
-        emptyContext = new AnalysisContext();
-
-        injectionPointFactory = new InjectionPointFactory(new VariableBuilderRepository(injector.getInstance(VariableInjectionBuilderFactory.class)));
+        emptyContext = contextFactory.buildContext();
     }
 
     @Test

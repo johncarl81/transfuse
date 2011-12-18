@@ -7,6 +7,7 @@ import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderBase;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -30,8 +31,8 @@ public class VariableImplementationInjectionBuilder extends VariableInjectionBui
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
-        return innerBuildVariable(implementationClass.getName(), injectionBuilderContext);
+    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+        return innerBuildVariable(implementationClass.getName(), injectionBuilderContext, injectionNode);
     }
 
     @Override

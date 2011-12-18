@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.proxy;
 
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JFieldVar;

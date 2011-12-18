@@ -1,6 +1,7 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.VariableImplementationInjectionBuilder;
 
 /**
  * @author John Ericksen

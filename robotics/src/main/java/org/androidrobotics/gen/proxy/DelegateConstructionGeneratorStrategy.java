@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.proxy;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;

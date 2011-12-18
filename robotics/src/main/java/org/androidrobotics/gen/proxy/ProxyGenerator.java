@@ -1,10 +1,11 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.proxy;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 

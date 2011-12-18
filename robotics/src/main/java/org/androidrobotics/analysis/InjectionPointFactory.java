@@ -1,8 +1,8 @@
 package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.adapter.*;
-import org.androidrobotics.gen.VariableBuilder;
 import org.androidrobotics.gen.VariableBuilderRepository;
+import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -14,12 +14,6 @@ import org.androidrobotics.model.MethodInjectionPoint;
  * @author John Ericksen
  */
 public class InjectionPointFactory {
-
-    private VariableBuilderRepository variableBuilderRepository;
-
-    public InjectionPointFactory(VariableBuilderRepository variableBuilderRepository) {
-        this.variableBuilderRepository = variableBuilderRepository;
-    }
 
     /**
      * Build a Constructor InjectionPoint from the given ASTConstructor
@@ -69,10 +63,11 @@ public class InjectionPointFactory {
      * Build a Field InjectionPoint directly from the given ASTType
      *
      * @param astType
+     * @param variableBuilders
      * @return
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType astType) {
-        return buildFieldInjectionPoint(astType.getName(), astType, new AnalysisContext());
+    public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisRepository analysisRepository, VariableBuilderRepository variableBuilders) {
+        return buildFieldInjectionPoint(astType.getName(), astType, new AnalysisContext(analysisRepository, variableBuilders));
     }
 
     private FieldInjectionPoint buildFieldInjectionPoint(String name, ASTType astType, AnalysisContext context) {
@@ -80,7 +75,7 @@ public class InjectionPointFactory {
     }
 
     private InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        VariableBuilder variableBuilder = variableBuilderRepository.get(astType.getName());
+        VariableBuilder variableBuilder = context.getVariableBuilders().get(astType.getName());
         return variableBuilder.buildInjectionNode(astType, context);
     }
 }

@@ -2,17 +2,15 @@ package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.astAnalyzer.InjectionAnalyzer;
 
+import javax.inject.Inject;
+
 /**
  * @author John Ericksen
  */
 public class AnalysisRepositoryFactory {
 
+    @Inject
     private InjectionPointFactory injectionPointFactory;
-
-    public AnalysisRepositoryFactory(InjectionPointFactory injectionPointFactory) {
-        this.injectionPointFactory = injectionPointFactory;
-    }
-
 
     public AnalysisRepository buildAnalysisRepository() {
         AnalysisRepository analysisRepository = new AnalysisRepository();

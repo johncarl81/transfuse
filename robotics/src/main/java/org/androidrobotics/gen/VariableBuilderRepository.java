@@ -1,5 +1,8 @@
 package org.androidrobotics.gen;
 
+import org.androidrobotics.gen.variableBuilder.VariableBuilder;
+import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 

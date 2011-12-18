@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.proxy;
 
 /**
  * @author John Ericksen

@@ -1,9 +1,10 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.model.InjectionNode;
 
 /**
@@ -11,7 +12,7 @@ import org.androidrobotics.model.InjectionNode;
  */
 public class ContextVariableBuilder implements VariableBuilder {
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
+    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         return JExpr._this();
     }
 

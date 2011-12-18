@@ -4,13 +4,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
+import org.androidrobotics.analysis.SimpleAnalysisContextFactory;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.proxy.MockDelegate;
-import org.androidrobotics.gen.proxy.MockInterface;
+import org.androidrobotics.gen.proxy.*;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -33,7 +32,6 @@ public class ProxyGeneratorTest {
     public static final String TEST_VALUE = "test";
     private static final String INPUT_VALUE = "input";
 
-    private ASTType interfaceAST;
     private InjectionNode delegateInjectionNode;
     @Inject
     private ProxyGenerator proxyGenerator;
@@ -45,15 +43,17 @@ public class ProxyGeneratorTest {
     private Analyzer analyzer;
     @Inject
     private DelegateInstantiationGeneratorStrategyFactory delegateInstantiationGeneratorFactory;
+    @Inject
+    private SimpleAnalysisContextFactory contextFactory;
 
     @Before
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
 
-        interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
+        ASTType interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
         ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
-        delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, new AnalysisContext());
+        delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
         delegateInjectionNode.addProxyInterface(interfaceAST);
     }

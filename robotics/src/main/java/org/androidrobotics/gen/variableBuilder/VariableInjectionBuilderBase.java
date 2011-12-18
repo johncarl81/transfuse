@@ -1,7 +1,11 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.gen.InjectionBuilderContext;
+import org.androidrobotics.gen.InjectionInvocationBuilder;
+import org.androidrobotics.gen.UniqueVariableNamer;
+import org.androidrobotics.model.InjectionNode;
 
 /**
  * @author John Ericksen
@@ -18,24 +22,24 @@ public abstract class VariableInjectionBuilderBase implements VariableBuilder {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
     }
 
-    public JExpression innerBuildVariable(String className, InjectionBuilderContext injectionBuilderContext) {
+    public JExpression innerBuildVariable(String className, InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         JVar variableRef;
         try {
-            injectionBuilderContext.setupInjectionRequirements();
+            injectionBuilderContext.setupInjectionRequirements(injectionNode);
 
             JType nodeType = codeModel.parseType(className);
 
-            variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionBuilderContext.getInjectionNode().getClassName()));
+            variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
 
             //constructor injection
             injectionBuilderContext.getBlock().assign(variableRef,
                     injectionInvocationBuilder.buildConstructorCall(
                             injectionBuilderContext.getVariableMap(),
-                            injectionBuilderContext.getInjectionNode().getConstructorInjectionPoint(),
+                            injectionNode.getConstructorInjectionPoint(),
                             nodeType
                     ));
         } catch (ClassNotFoundException e) {
-            throw new RoboticsAnalysisException("Unable to parse class: " + injectionBuilderContext.getInjectionNode().getClassName(), e);
+            throw new RoboticsAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);
         } catch (JClassAlreadyExistsException e) {
             throw new RoboticsAnalysisException("Class generation tried to generate a class that already existed", e);
         }

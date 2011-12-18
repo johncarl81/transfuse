@@ -3,6 +3,11 @@ package org.androidrobotics.gen;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidrobotics.gen.proxy.DelegateDelayedGeneratorStrategy;
+import org.androidrobotics.gen.proxy.DelegateInstantiationGeneratorStrategyFactory;
+import org.androidrobotics.gen.proxy.ProxyGenerator;
+import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
@@ -18,24 +23,28 @@ public class InjectionBuilderContext {
     private Map<InjectionNode, JExpression> variableMap;
     private JBlock block;
     private JDefinedClass definedClass;
-    private InjectionNode injectionNode;
     private VariableBuilderRepository variableBuilderMap;
     private ProxyGenerator proxyGenerator;
     private DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory;
     private ProxyVariableBuilder proxyVariableBuilder;
 
-    public InjectionBuilderContext(Map<InjectionNode, JExpression> variableMap, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap, DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory, ProxyVariableBuilder proxyVariableBuilder, ProxyGenerator proxyGenerator) {
+    public InjectionBuilderContext(Map<InjectionNode, JExpression> variableMap,
+                                   JBlock block,
+                                   JDefinedClass definedClass,
+                                   VariableBuilderRepository variableBuilderMap,
+                                   DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory,
+                                   ProxyVariableBuilder proxyVariableBuilder,
+                                   ProxyGenerator proxyGenerator) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
-        this.injectionNode = injectionNode;
         this.variableBuilderMap = variableBuilderMap;
         this.proxyStrategyFactory = proxyStrategyFactory;
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.proxyGenerator = proxyGenerator;
     }
 
-    public JExpression buildVariable() {
+    public JExpression buildVariable(InjectionNode injectionNode) {
 
         JExpression variable;
 
@@ -46,15 +55,15 @@ public class InjectionBuilderContext {
                 DelegateDelayedGeneratorStrategy delayedGeneratorStrategy = proxyStrategyFactory.buildDelayedStrategy(injectionNode);
                 //proxy
                 ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(injectionNode, delayedGeneratorStrategy);
-                JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, proxyDescriptor);
+                JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, injectionNode, proxyDescriptor);
                 variableMap.put(injectionNode, proxyVariable);
                 //then init dependencies
-                setupInjectionRequirements();
+                setupInjectionRequirements(injectionNode);
                 //and initialize
-                variable = delayedGeneratorStrategy.initalizeProxy(this, proxyVariable, executeVariableBuilder());
+                variable = delayedGeneratorStrategy.initalizeProxy(this, proxyVariable, executeVariableBuilder(injectionNode));
                 variableMap.put(injectionNode, variable);
             } else {
-                variable = executeVariableBuilder();
+                variable = executeVariableBuilder(injectionNode);
                 variableMap.put(injectionNode, variable);
             }
         }
@@ -62,30 +71,26 @@ public class InjectionBuilderContext {
         return variable;
     }
 
-    private JExpression executeVariableBuilder() {
+    private JExpression executeVariableBuilder(InjectionNode injectionNode) {
         VariableBuilder variableBuilder = variableBuilderMap.get(injectionNode.getClassName());
-        return variableBuilder.buildVariable(this);
+        return variableBuilder.buildVariable(this, injectionNode);
     }
 
-    public void setupInjectionRequirements() {
+    public void setupInjectionRequirements(InjectionNode injectionNode) {
         //constructor injection
-        for (InjectionNode node : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
-            buildNextContext(node).buildVariable();
+        for (InjectionNode constructorNode : injectionNode.getConstructorInjectionPoint().getInjectionNodes()) {
+            buildVariable(constructorNode);
         }
         //field injection
         for (FieldInjectionPoint fieldInjectionPoint : injectionNode.getFieldInjectionPoints()) {
-            buildNextContext(fieldInjectionPoint.getInjectionNode()).buildVariable();
+            buildVariable(fieldInjectionPoint.getInjectionNode());
         }
         //method injection
         for (MethodInjectionPoint methodInjectionPoint : injectionNode.getMethodInjectionPoints()) {
-            for (InjectionNode node : methodInjectionPoint.getInjectionNodes()) {
-                buildNextContext(node).buildVariable();
+            for (InjectionNode methodNode : methodInjectionPoint.getInjectionNodes()) {
+                buildVariable(methodNode);
             }
         }
-    }
-
-    public InjectionBuilderContext buildNextContext(InjectionNode node) {
-        return new InjectionBuilderContext(variableMap, block, definedClass, node, variableBuilderMap, proxyStrategyFactory, proxyVariableBuilder, proxyGenerator);
     }
 
     public Map<InjectionNode, JExpression> getVariableMap() {
@@ -98,9 +103,5 @@ public class InjectionBuilderContext {
 
     public JDefinedClass getDefinedClass() {
         return definedClass;
-    }
-
-    public InjectionNode getInjectionNode() {
-        return injectionNode;
     }
 }

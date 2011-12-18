@@ -6,9 +6,7 @@ import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.VariableBuilderRepository;
-import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
-import org.androidrobotics.gen.VariableInjectionBuilderFactory;
+import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -84,31 +82,27 @@ public class AnalyzerTest {
 
     private Analyzer analyzer;
     private ASTClassFactory astClassFactory;
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private AnalysisContext analysisContext;
 
     @Before
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
 
+        VariableInjectionBuilderFactory variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
+
         analyzer = injector.getInstance(Analyzer.class);
         astClassFactory = injector.getInstance(ASTClassFactory.class);
-        variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
-        variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
 
-        VariableBuilderRepository variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
-        variableBuilderRepository.put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
+        analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
 
-        AnalysisRepositoryFactory analysisRepositoryFactory = new AnalysisRepositoryFactory(new InjectionPointFactory(variableBuilderRepository));
-
-        injector.getInstance(AnalysisRepositoryProvider.class).setAnalysisRepository(analysisRepositoryFactory.buildAnalysisRepository());
+        analysisContext.getVariableBuilders().put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
     }
 
     @Test
     public void testBackLinkAnalysis() {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, new AnalysisContext());
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
 
         //A -> B && A -> E
         assertEquals(1, injectionNode.getMethodInjectionPoints().size());

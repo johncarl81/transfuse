@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
@@ -7,6 +7,7 @@ import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -18,7 +19,7 @@ import javax.inject.Provider;
 public class ProviderVariableBuilder implements VariableBuilder {
 
     private static final String PROVIDER_METHOD = "get";
-    protected static final String PROVIDER_INJECTION_NODE = "provider";
+    public static final String PROVIDER_INJECTION_NODE = "provider";
 
     private Class<? extends Provider<?>> providerClass;
     private ASTClassFactory astClassFactory;
@@ -34,16 +35,15 @@ public class ProviderVariableBuilder implements VariableBuilder {
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
+    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
-        InjectionNode providerInjectionNode = injectionBuilderContext.getInjectionNode().getBuilderResource(PROVIDER_INJECTION_NODE);
+        InjectionNode providerInjectionNode = injectionNode.getBuilderResource(PROVIDER_INJECTION_NODE);
 
         if (providerInjectionNode == null) {
-            throw new RoboticsAnalysisException("Analysis and build failed to associate provider for " + injectionBuilderContext.getInjectionNode().getClassName());
+            throw new RoboticsAnalysisException("Analysis and build failed to associate provider for " + injectionNode.getClassName());
         }
 
-        InjectionBuilderContext providerInjectionBuilderContext = injectionBuilderContext.buildNextContext(providerInjectionNode);
-        JExpression providerVar = providerInjectionBuilderContext.buildVariable();
+        JExpression providerVar = injectionBuilderContext.buildVariable(providerInjectionNode);
 
         return providerVar.invoke(PROVIDER_METHOD);
     }

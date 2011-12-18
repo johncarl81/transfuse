@@ -5,22 +5,12 @@ import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.model.InjectionNode;
 
-import javax.inject.Inject;
-
 /**
  * Analysis class for ASTType Injection Analysis
  *
  * @author John Ericksen
  */
 public class Analyzer {
-
-    private AnalysisRepositoryProvider analysisRepositoryProvider;
-
-    @Inject
-    public Analyzer(AnalysisRepositoryProvider analysisRepositoryProvider) {
-        this.analysisRepositoryProvider = analysisRepositoryProvider;
-    }
-
 
     /**
      * Analyze the given ASTType and produces a corresponding InjectionNode with the contained
@@ -49,7 +39,7 @@ public class Analyzer {
             injectionNode = new InjectionNode(concreteType);
             AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
 
-            for (ASTAnalysis analysis : analysisRepositoryProvider.get().getAnalysisSet()) {
+            for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {
 
                 analysis.analyzeType(injectionNode, concreteType, nextContext);
 

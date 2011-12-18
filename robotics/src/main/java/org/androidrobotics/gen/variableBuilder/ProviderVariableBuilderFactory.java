@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import javax.inject.Provider;
 

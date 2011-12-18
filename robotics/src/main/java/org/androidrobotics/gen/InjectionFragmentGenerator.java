@@ -4,6 +4,9 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidrobotics.gen.proxy.DelegateInstantiationGeneratorStrategyFactory;
+import org.androidrobotics.gen.proxy.ProxyGenerator;
+import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
@@ -33,9 +36,9 @@ public class InjectionFragmentGenerator {
     public JExpression buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
-        InjectionBuilderContext injectionBuilderContext = new InjectionBuilderContext(nodeVariableMap, block, definedClass, injectionNode, variableBuilderMap, proxyStrategyFactory, proxyVariableBuilder, proxyGenerator);
+        InjectionBuilderContext injectionBuilderContext = new InjectionBuilderContext(nodeVariableMap, block, definedClass, variableBuilderMap, proxyStrategyFactory, proxyVariableBuilder, proxyGenerator);
 
-        JExpression variable = injectionBuilderContext.buildVariable();
+        JExpression variable = injectionBuilderContext.buildVariable(injectionNode);
 
         for (Map.Entry<InjectionNode, JExpression> nodeEntry : nodeVariableMap.entrySet()) {
 

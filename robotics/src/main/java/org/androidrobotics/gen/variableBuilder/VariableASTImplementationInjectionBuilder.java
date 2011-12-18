@@ -1,4 +1,4 @@
-package org.androidrobotics.gen;
+package org.androidrobotics.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
@@ -6,6 +6,9 @@ import com.sun.codemodel.JExpression;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.InjectionBuilderContext;
+import org.androidrobotics.gen.InjectionInvocationBuilder;
+import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -27,8 +30,8 @@ public class VariableASTImplementationInjectionBuilder extends VariableInjection
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
-        return innerBuildVariable(astType.getName(), injectionBuilderContext);
+    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+        return innerBuildVariable(astType.getName(), injectionBuilderContext, injectionNode);
     }
 
     @Override

@@ -12,6 +12,9 @@ import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.target.*;
+import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
+import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.model.*;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
@@ -124,7 +127,7 @@ public class InjectionFragmentGeneratorTest {
 
         variableBuilderRepository.put(VariableTarget.class.getName(), new VariableBuilder() {
             @Override
-            public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext) {
+            public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
                 return JExpr._new(codeModel.ref(VariableTarget.class));
             }
 

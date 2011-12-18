@@ -1,5 +1,7 @@
 package org.androidrobotics.gen;
 
+import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
+
 import javax.inject.Inject;
 
 /**
