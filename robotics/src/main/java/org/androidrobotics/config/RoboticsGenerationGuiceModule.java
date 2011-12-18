@@ -3,7 +3,7 @@ package org.androidrobotics.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.gen.proxy.DelegateInstantiationGeneratorStrategyFactory;
+import org.androidrobotics.gen.InjectionBuilderContextFactory;
 import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.util.Logger;
@@ -28,7 +28,7 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
         install(factoryModuleBuilder
-                .build(DelegateInstantiationGeneratorStrategyFactory.class));
+                .build(InjectionBuilderContextFactory.class));
 
         install(factoryModuleBuilder
                 .build(VariableInjectionBuilderFactory.class));

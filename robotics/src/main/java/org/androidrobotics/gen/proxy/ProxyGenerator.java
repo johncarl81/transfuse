@@ -37,7 +37,7 @@ public class ProxyGenerator {
             definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Proxy", ClassType.CLASS);
 
             //define delegate
-            JFieldVar delegateField = delegateInstantiationGenerator.addDelegateInstantiation(definedClass);
+            JFieldVar delegateField = delegateInstantiationGenerator.addDelegateInstantiation(definedClass, injectionNode);
 
             //implements interfaces
             for (ASTType interfaceType : injectionNode.getProxyInterfaces()) {

@@ -1,6 +1,5 @@
 package org.androidrobotics.gen.proxy;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.InjectionNode;
 
@@ -14,16 +13,14 @@ public class DelegateConstructionGeneratorStrategy implements DelegateInstantiat
     private static final String DELEGATE_NAME = "delegate";
 
     private JCodeModel codeModel;
-    private InjectionNode delegateNode;
 
     @Inject
-    public DelegateConstructionGeneratorStrategy(JCodeModel codeModel, @Assisted InjectionNode delegateNode) {
+    public DelegateConstructionGeneratorStrategy(JCodeModel codeModel) {
         this.codeModel = codeModel;
-        this.delegateNode = delegateNode;
     }
 
     @Override
-    public JFieldVar addDelegateInstantiation(JDefinedClass definedClass) {
+    public JFieldVar addDelegateInstantiation(JDefinedClass definedClass, InjectionNode delegateNode) {
         JMethod constructor = definedClass.constructor(JMod.PUBLIC);
 
         JFieldVar delegateField = definedClass.field(JMod.PRIVATE, codeModel.ref(delegateNode.getClassName()), DELEGATE_NAME);

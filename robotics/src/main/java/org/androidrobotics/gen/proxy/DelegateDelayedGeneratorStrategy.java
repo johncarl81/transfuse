@@ -1,6 +1,5 @@
 package org.androidrobotics.gen.proxy;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.model.InjectionNode;
@@ -16,16 +15,14 @@ public class DelegateDelayedGeneratorStrategy implements DelegateInstantiationGe
     protected static final String DELAYED_LOAD_METHOD_NAME = "load";
 
     private JCodeModel codeModel;
-    private InjectionNode delegateNode;
 
     @Inject
-    public DelegateDelayedGeneratorStrategy(JCodeModel codeModel, @Assisted InjectionNode delegateNode) {
+    public DelegateDelayedGeneratorStrategy(JCodeModel codeModel) {
         this.codeModel = codeModel;
-        this.delegateNode = delegateNode;
     }
 
     @Override
-    public JFieldVar addDelegateInstantiation(JDefinedClass definedClass) {
+    public JFieldVar addDelegateInstantiation(JDefinedClass definedClass, InjectionNode delegateNode) {
 
         JClass delegateClass = codeModel.ref(delegateNode.getClassName());
 
@@ -44,10 +41,8 @@ public class DelegateDelayedGeneratorStrategy implements DelegateInstantiationGe
 
     public JExpression initalizeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
 
-
         context.getBlock().add(
                 proxyVariable.invoke(DelegateDelayedGeneratorStrategy.DELAYED_LOAD_METHOD_NAME).arg(variableBuilder));
-
 
         return variableBuilder;
     }

@@ -4,9 +4,6 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
-import org.androidrobotics.gen.proxy.DelegateInstantiationGeneratorStrategyFactory;
-import org.androidrobotics.gen.proxy.ProxyGenerator;
-import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
@@ -20,23 +17,19 @@ import java.util.Map;
  */
 public class InjectionFragmentGenerator {
 
+    private InjectionBuilderContextFactory injectionBuilderContextFactory;
     private InjectionInvocationBuilder injectionInvocationBuilder;
-    private DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory;
-    private ProxyVariableBuilder proxyVariableBuilder;
-    private ProxyGenerator proxyGenerator;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder, DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory, ProxyVariableBuilder proxyVariableBuilder, ProxyGenerator proxyGenerator) {
+    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder, InjectionBuilderContextFactory injectionBuilderContextFactory) {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
-        this.proxyStrategyFactory = proxyStrategyFactory;
-        this.proxyVariableBuilder = proxyVariableBuilder;
-        this.proxyGenerator = proxyGenerator;
+        this.injectionBuilderContextFactory = injectionBuilderContextFactory;
     }
 
     public JExpression buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, VariableBuilderRepository variableBuilderMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
-        InjectionBuilderContext injectionBuilderContext = new InjectionBuilderContext(nodeVariableMap, block, definedClass, variableBuilderMap, proxyStrategyFactory, proxyVariableBuilder, proxyGenerator);
+        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass, variableBuilderMap);
 
         JExpression variable = injectionBuilderContext.buildVariable(injectionNode);
 

@@ -1,10 +1,10 @@
 package org.androidrobotics.gen;
 
+import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidrobotics.gen.proxy.DelegateDelayedGeneratorStrategy;
-import org.androidrobotics.gen.proxy.DelegateInstantiationGeneratorStrategyFactory;
 import org.androidrobotics.gen.proxy.ProxyGenerator;
 import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidrobotics.gen.variableBuilder.VariableBuilder;
@@ -13,6 +13,7 @@ import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
 import org.androidrobotics.model.ProxyDescriptor;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 /**
@@ -25,23 +26,23 @@ public class InjectionBuilderContext {
     private JDefinedClass definedClass;
     private VariableBuilderRepository variableBuilderMap;
     private ProxyGenerator proxyGenerator;
-    private DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory;
+    private DelegateDelayedGeneratorStrategy delayedGeneratorStrategy;
     private ProxyVariableBuilder proxyVariableBuilder;
 
-    public InjectionBuilderContext(Map<InjectionNode, JExpression> variableMap,
-                                   JBlock block,
-                                   JDefinedClass definedClass,
-                                   VariableBuilderRepository variableBuilderMap,
-                                   DelegateInstantiationGeneratorStrategyFactory proxyStrategyFactory,
+    @Inject
+    public InjectionBuilderContext(@Assisted Map<InjectionNode, JExpression> variableMap,
+                                   @Assisted JBlock block,
+                                   @Assisted JDefinedClass definedClass,
+                                   @Assisted VariableBuilderRepository variableBuilderMap,
                                    ProxyVariableBuilder proxyVariableBuilder,
-                                   ProxyGenerator proxyGenerator) {
+                                   ProxyGenerator proxyGenerator, DelegateDelayedGeneratorStrategy delayedGeneratorStrategy) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
         this.variableBuilderMap = variableBuilderMap;
-        this.proxyStrategyFactory = proxyStrategyFactory;
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.proxyGenerator = proxyGenerator;
+        this.delayedGeneratorStrategy = delayedGeneratorStrategy;
     }
 
     public JExpression buildVariable(InjectionNode injectionNode) {
@@ -52,7 +53,6 @@ public class InjectionBuilderContext {
             variable = variableMap.get(injectionNode);
         } else {
             if (injectionNode.isProxyRequired()) {
-                DelegateDelayedGeneratorStrategy delayedGeneratorStrategy = proxyStrategyFactory.buildDelayedStrategy(injectionNode);
                 //proxy
                 ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(injectionNode, delayedGeneratorStrategy);
                 JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, injectionNode, proxyDescriptor);

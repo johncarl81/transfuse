@@ -42,7 +42,9 @@ public class ProxyGeneratorTest {
     @Inject
     private Analyzer analyzer;
     @Inject
-    private DelegateInstantiationGeneratorStrategyFactory delegateInstantiationGeneratorFactory;
+    private DelegateConstructionGeneratorStrategy delegateConstructionGeneratorStrategy;
+    @Inject
+    private DelegateDelayedGeneratorStrategy delegateDelayedGeneratorStrategy;
     @Inject
     private SimpleAnalysisContextFactory contextFactory;
 
@@ -61,7 +63,7 @@ public class ProxyGeneratorTest {
     @Test
     public void testProxyByConstructor() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildConstructorStrategy(delegateInjectionNode));
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateConstructionGeneratorStrategy);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
 
@@ -76,7 +78,7 @@ public class ProxyGeneratorTest {
 
     @Test
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateInstantiationGeneratorFactory.buildDelayedStrategy(delegateInjectionNode));
+        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateDelayedGeneratorStrategy);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
 
