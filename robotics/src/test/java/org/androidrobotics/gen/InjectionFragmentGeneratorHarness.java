@@ -18,7 +18,7 @@ public class InjectionFragmentGeneratorHarness {
     @Inject
     private InjectionFragmentGenerator injectionFragmentGenerator;
 
-    public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass, VariableBuilderRepository variableBuilderRepository) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
         JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, providerPackageClass.getFullyQualifiedName(), ClassType.CLASS);
 
         definedClass._implements(Provider.class);
@@ -26,7 +26,7 @@ public class InjectionFragmentGeneratorHarness {
         JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(injectionNode.getClassName()), "get");
 
         JBlock block = getMethod.body();
-        Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, variableBuilderRepository);
+        Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
 
         block._return(expressionMap.get(injectionNode));
     }

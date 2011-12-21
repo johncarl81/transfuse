@@ -4,7 +4,12 @@ import org.androidrobotics.analysis.adapter.ASTField;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.gen.variableBuilder.VariableBuilder;
+import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidrobotics.model.InjectionNode;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Analysis class for ASTType Injection Analysis
@@ -12,6 +17,9 @@ import org.androidrobotics.model.InjectionNode;
  * @author John Ericksen
  */
 public class Analyzer {
+
+    @Inject
+    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     /**
      * Analyze the given ASTType and produces a corresponding InjectionNode with the contained
@@ -36,6 +44,9 @@ public class Analyzer {
 
         } else {
             injectionNode = new InjectionNode(concreteType);
+            //default variable builder
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
+
             AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
 
             for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {

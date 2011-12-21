@@ -18,6 +18,10 @@ public class ContextVariableBuilder implements VariableBuilder {
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        return new InjectionNode(astType);
+        InjectionNode injectionNode = new InjectionNode(astType);
+
+        injectionNode.addAspect(VariableBuilder.class, this);
+
+        return injectionNode;
     }
 }

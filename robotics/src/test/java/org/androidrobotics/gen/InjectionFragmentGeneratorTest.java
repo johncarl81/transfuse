@@ -59,6 +59,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testConstrictorInjection() throws Exception {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(ConstructorInjectable.class));
+        injectionNode.addAspect(VariableBuilder.class, variableBuilderRepository.get(ConstructorInjectable.class.getName()));
         //setup constructor injection
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         constructorInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
@@ -97,6 +98,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testDelayedProxyInjection() throws Exception {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxyTarget.class));
+        injectionNode.addAspect(VariableBuilder.class, variableBuilderRepository.get(DelayedProxyTarget.class.getName()));
 
         ProxyAspect proxyAspect = new ProxyAspect();
         proxyAspect.setProxyRequired(true);
@@ -107,6 +109,7 @@ public class InjectionFragmentGeneratorTest {
         //setup constructor injection
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
         InjectionNode dependencyInjectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxyDependency.class));
+        dependencyInjectionNode.addAspect(VariableBuilder.class, variableBuilderRepository.get(DelayedProxyTarget.class.getName()));
         constructorInjectionPoint.addInjectionNode(dependencyInjectionNode);
         getInjectionAspect(injectionNode).add(constructorInjectionPoint);
 
@@ -154,6 +157,7 @@ public class InjectionFragmentGeneratorTest {
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
         injectionNode.addAspect(new ProviderAspect(buildInjectionNode(VariableTargetProvider.class)));
+        injectionNode.addAspect(VariableBuilder.class, providerVariableBuilderFactory.buildProviderVariableBuilder(VariableTargetProvider.class));
 
         VariableTarget target = buildInstance(VariableTarget.class, injectionNode);
 
@@ -162,6 +166,7 @@ public class InjectionFragmentGeneratorTest {
 
     private InjectionNode buildInjectionNode(Class<?> instanceClass) {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(instanceClass));
+        injectionNode.addAspect(VariableBuilder.class, variableBuilderRepository.get(instanceClass.getName()));
 
         ConstructorInjectionPoint noArgConstructorInjectionPoint = new ConstructorInjectionPoint();
         getInjectionAspect(injectionNode).add(noArgConstructorInjectionPoint);
@@ -172,7 +177,7 @@ public class InjectionFragmentGeneratorTest {
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
         PackageClass providerPackageClass = new PackageClass(instanceClass).add("Provider");
 
-        fragmentGeneratorHarness.buildProvider(injectionNode, providerPackageClass, variableBuilderRepository);
+        fragmentGeneratorHarness.buildProvider(injectionNode, providerPackageClass);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
         Class<Provider> generatedFactoryClass = (Class<Provider>) classLoader.loadClass(providerPackageClass.getFullyQualifiedName());

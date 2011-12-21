@@ -1,7 +1,5 @@
 package org.androidrobotics.gen;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import com.sun.codemodel.*;
@@ -38,7 +36,7 @@ public class ActivityGenerator {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
     }
 
-    public void generate(ActivityDescriptor descriptor, VariableBuilderRepository variableBuilderRepository) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
+    public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
         JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
@@ -61,9 +59,7 @@ public class ActivityGenerator {
         if (descriptor.getInjectionPoints().size() > 0) {
             FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
 
-            VariableBuilderRepository variableBuilderMap = buildVariableBuilderMap(variableBuilderRepository);
-
-            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode(), variableBuilderMap);
+            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode());
 
             addMethodCallbacks(block, "onCreate", expressionMap);
 
@@ -92,16 +88,5 @@ public class ActivityGenerator {
                 }
             }
         }
-    }
-
-    private VariableBuilderRepository buildVariableBuilderMap(VariableBuilderRepository variableBuilderRepository) {
-
-        VariableBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(variableBuilderRepository);
-
-        subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
-        subRepository.put(Activity.class.getName(), contextVariableBuilderProvider.get());
-
-        return subRepository;
-
     }
 }

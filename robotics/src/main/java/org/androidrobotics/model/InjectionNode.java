@@ -33,6 +33,10 @@ public class InjectionNode {
         aspects.put(object.getClass(), object);
     }
 
+    public <T> void addAspect(Class<T> clazz, T object) {
+        aspects.put(clazz, object);
+    }
+
     public boolean containsAspect(Class<?> clazz) {
         return aspects.containsKey(clazz);
     }

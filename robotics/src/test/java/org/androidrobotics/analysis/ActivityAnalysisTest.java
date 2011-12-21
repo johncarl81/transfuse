@@ -8,12 +8,14 @@ import org.androidrobotics.analysis.targets.MockActivityDelegate;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.VariableBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
+import org.androidrobotics.gen.variableBuilder.ContextVariableBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Provider;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -34,7 +36,9 @@ public class ActivityAnalysisTest {
 
         VariableBuilderRepository variableBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
         AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();
-        ActivityAnalysis activityAnalysis = new ActivityAnalysis(new InjectionPointFactory());
+        Provider<ContextVariableBuilder> contextVariableBuilderProvider = injector.getProvider(ContextVariableBuilder.class);
+        VariableBuilderRepositoryFactory variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
+        ActivityAnalysis activityAnalysis = new ActivityAnalysis(new InjectionPointFactory(), contextVariableBuilderProvider, variableBuilderRepositoryFactory);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
 
         activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, variableBuilderRepository);

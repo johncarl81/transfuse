@@ -12,5 +12,5 @@ import java.util.Map;
  */
 public interface InjectionBuilderContextFactory {
 
-    InjectionBuilderContext buildContext(Map<InjectionNode, JExpression> nodeVariableMap, JBlock block, JDefinedClass definedClass, VariableBuilderRepository variableBuilderMap);
+    InjectionBuilderContext buildContext(Map<InjectionNode, JExpression> nodeVariableMap, JBlock block, JDefinedClass definedClass);
 }

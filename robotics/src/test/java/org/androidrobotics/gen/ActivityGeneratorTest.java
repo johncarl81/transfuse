@@ -56,7 +56,7 @@ public class ActivityGeneratorTest {
         activityDescriptor.setPackageClass(TEST_PACKAGE_FILENAME);
         activityDescriptor.setLayout(TEST_LAYOUT);
 
-        activityGenerator.generate(activityDescriptor, variableBuilderRepositoryFactory.buildRepository());
+        activityGenerator.generate(activityDescriptor);
 
         codeModel.build(stringCodeWriter);
         classLoader.add(TEST_PACKAGE_FILENAME.getFullyQualifiedName(), stringCodeWriter.getValue(TEST_PACKAGE_FILENAME.addDotJava()));

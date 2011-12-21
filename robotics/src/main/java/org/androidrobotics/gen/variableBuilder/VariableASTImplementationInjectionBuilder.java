@@ -36,6 +36,9 @@ public class VariableASTImplementationInjectionBuilder extends VariableInjection
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        return analyzer.analyze(astType, this.astType, context);
+        InjectionNode injectionNode = analyzer.analyze(astType, this.astType, context);
+        injectionNode.addAspect(VariableBuilder.class, this);
+
+        return injectionNode;
     }
 }

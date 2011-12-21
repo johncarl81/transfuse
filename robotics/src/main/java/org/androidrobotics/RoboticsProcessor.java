@@ -1,6 +1,5 @@
 package org.androidrobotics;
 
-import android.app.Activity;
 import android.os.Vibrator;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
@@ -15,7 +14,6 @@ import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.gen.VariableBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
-import org.androidrobotics.gen.variableBuilder.PotentialVariableBuilder;
 import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ActivityDescriptor;
@@ -23,7 +21,6 @@ import org.androidrobotics.provider.VibratorProvider;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Collection;
@@ -47,7 +44,6 @@ public class RoboticsProcessor {
                              JCodeModel codeModel,
                              Logger logger,
                              VariableBuilderRepositoryFactory variableBuilderRepositoryProvider,
-                             Provider<PotentialVariableBuilder> potentialVariableBuilderProvider,
                              ProviderVariableBuilderFactory providerVariableBuilderFactory,
                              VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
@@ -62,8 +58,6 @@ public class RoboticsProcessor {
         variableBuilders = variableBuilderRepositoryProvider.buildRepository();
 
         //temporary
-        variableBuilders.put(android.content.Context.class.getName(), potentialVariableBuilderProvider.get());
-        variableBuilders.put(Activity.class.getName(), potentialVariableBuilderProvider.get());
         variableBuilders.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VibratorProvider.class));
     }
 
@@ -102,7 +96,7 @@ public class RoboticsProcessor {
 
             if (activityDescriptor != null) {
                 try {
-                    activityGenerator.generate(activityDescriptor, variableBuilders);
+                    activityGenerator.generate(activityDescriptor);
                 } catch (IOException e) {
                     logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {

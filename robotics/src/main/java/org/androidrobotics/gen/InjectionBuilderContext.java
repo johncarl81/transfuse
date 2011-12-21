@@ -26,7 +26,6 @@ public class InjectionBuilderContext {
     private Map<InjectionNode, JExpression> variableMap;
     private JBlock block;
     private JDefinedClass definedClass;
-    private VariableBuilderRepository variableBuilderMap;
     private ProxyGenerator proxyGenerator;
     private DelegateDelayedGeneratorStrategy delayedGeneratorStrategy;
     private ProxyVariableBuilder proxyVariableBuilder;
@@ -35,14 +34,12 @@ public class InjectionBuilderContext {
     public InjectionBuilderContext(@Assisted Map<InjectionNode, JExpression> variableMap,
                                    @Assisted JBlock block,
                                    @Assisted JDefinedClass definedClass,
-                                   @Assisted VariableBuilderRepository variableBuilderMap,
                                    ProxyVariableBuilder proxyVariableBuilder,
                                    ProxyGenerator proxyGenerator,
                                    DelegateDelayedGeneratorStrategy delayedGeneratorStrategy) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
-        this.variableBuilderMap = variableBuilderMap;
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.proxyGenerator = proxyGenerator;
         this.delayedGeneratorStrategy = delayedGeneratorStrategy;
@@ -76,7 +73,7 @@ public class InjectionBuilderContext {
     }
 
     private JExpression executeVariableBuilder(InjectionNode injectionNode) {
-        VariableBuilder variableBuilder = variableBuilderMap.get(injectionNode.getClassName());
+        VariableBuilder variableBuilder = injectionNode.getAspect(VariableBuilder.class);
         return variableBuilder.buildVariable(this, injectionNode);
     }
 

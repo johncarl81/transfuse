@@ -54,6 +54,7 @@ public class ProviderVariableBuilder implements VariableBuilder {
         ASTType providerType = astClassFactory.buildASTClassType(providerClass);
 
         injectionNode.addAspect(new ProviderAspect(analyzer.analyze(providerType, providerType, context)));
+        injectionNode.addAspect(VariableBuilder.class, this);
 
         return injectionNode;
     }
