@@ -2,6 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,5 +36,16 @@ public class ASTClassConstructor implements ASTConstructor {
     @Override
     public String getName() {
         return constructor.getName();
+    }
+
+    @Override
+    public List<ASTAnnotation> getAnnotations() {
+        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
+
+        for (Annotation annotation : constructor.getAnnotations()) {
+            annotationList.add(new ASTClassAnnotation(annotation));
+        }
+
+        return annotationList;
     }
 }

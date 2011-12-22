@@ -1,7 +1,9 @@
 package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -53,5 +55,16 @@ public class ASTClassType implements ASTType {
     @Override
     public boolean isConcreteClass() {
         return !clazz.isInterface() && !clazz.isSynthetic();
+    }
+
+    @Override
+    public List<ASTAnnotation> getAnnotations() {
+        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
+
+        for (Annotation annotation : clazz.getAnnotations()) {
+            annotationList.add(new ASTClassAnnotation(annotation));
+        }
+
+        return annotationList;
     }
 }

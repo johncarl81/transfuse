@@ -33,7 +33,6 @@ public class Analyzer {
         InjectionNode injectionNode;
 
         if (context.isDependent(concreteType)) {
-            System.out.println("Concrete: " + concreteType.getName() + " Instance: " + instanceType.getName());
             //if this type is a dependency of itself, we've found a back link.
             //This injection must be performed using a delayed injection proxy
             injectionNode = context.getInjectionNode(concreteType);

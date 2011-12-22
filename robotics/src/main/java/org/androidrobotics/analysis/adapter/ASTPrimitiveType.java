@@ -4,6 +4,7 @@ import javax.lang.model.type.PrimitiveType;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Element specific primitive AST type
@@ -51,5 +52,10 @@ public class ASTPrimitiveType implements ASTType {
     @Override
     public boolean isConcreteClass() {
         return false;
+    }
+
+    @Override
+    public List<ASTAnnotation> getAnnotations() {
+        return Collections.emptyList();
     }
 }

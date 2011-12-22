@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * Base class defining shared Abstract Syntax Tree elements
@@ -16,6 +17,14 @@ public interface ASTBase {
      * @return annotated conditional
      */
     boolean isAnnotated(Class<? extends Annotation> annotation);
+
+
+    /**
+     * Supplies the set of annotations
+     *
+     * @return ast annotation list
+     */
+    List<ASTAnnotation> getAnnotations();
 
     /**
      * Supplies the given annotation instance from the given annotation class key

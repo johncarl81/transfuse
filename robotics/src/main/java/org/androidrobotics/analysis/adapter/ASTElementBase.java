@@ -1,7 +1,10 @@
 package org.androidrobotics.analysis.adapter;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Element specific ASTBase implementation
@@ -26,5 +29,17 @@ public class ASTElementBase implements ASTBase {
 
     public String getName() {
         return element.getSimpleName().toString();
+    }
+
+    @Override
+    public List<ASTAnnotation> getAnnotations() {
+
+        List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
+
+        for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+            annotations.add(new ASTElementAnnotation(annotationMirror));
+        }
+
+        return annotations;
     }
 }

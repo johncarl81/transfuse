@@ -27,23 +27,24 @@ public class InjectionAnalyzer implements ASTAnalysis {
     public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
 
         ASTConstructor noArgConstructor = null;
-        boolean constructorFound = false;
+        ASTConstructor annotatedConstructor = null;
 
         for (ASTConstructor astConstructor : astType.getConstructors()) {
             if (astConstructor.isAnnotated(Inject.class)) {
+                annotatedConstructor = astConstructor;
                 getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));
-                constructorFound = true;
             }
             if (astConstructor.getParameters().size() == 0) {
                 noArgConstructor = astConstructor;
             }
         }
 
-        if (!constructorFound) {
-            if (noArgConstructor == null) {
-                throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
-            }
+        if (annotatedConstructor != null) {
+            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
+        } else if (noArgConstructor != null) {
             getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
+        } else {
+            throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
         }
     }
 

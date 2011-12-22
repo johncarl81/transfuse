@@ -2,6 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,5 +43,16 @@ public class ASTClassMethod implements ASTMethod {
     @Override
     public ASTType getReturnType() {
         return returnType;
+    }
+
+    @Override
+    public List<ASTAnnotation> getAnnotations() {
+        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
+
+        for (Annotation annotation : method.getAnnotations()) {
+            annotationList.add(new ASTClassAnnotation(annotation));
+        }
+
+        return annotationList;
     }
 }
