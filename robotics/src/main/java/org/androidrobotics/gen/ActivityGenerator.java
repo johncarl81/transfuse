@@ -38,12 +38,12 @@ public class ActivityGenerator {
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
-        JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
+        final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
         definedClass._extends(android.app.Activity.class);
 
 
-        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
+        final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
         JVar savedInstanceState = onCreateMethod.param(Bundle.class, "savedInstanceState");
 
         JBlock block = onCreateMethod.body();
@@ -61,32 +61,116 @@ public class ActivityGenerator {
 
             Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode());
 
-            addMethodCallbacks(block, "onCreate", expressionMap);
 
             //ontouch method
+            addMethodCallbacks("onTouch", expressionMap, new MethodGenerator() {
+                JMethod onTouchEventMethod;
 
-            JMethod onTouchEventMethod = definedClass.method(JMod.PUBLIC, codeModel.BOOLEAN, "onTouchEvent");
-            onTouchEventMethod.param(MotionEvent.class, "motionEvent");
-            JBlock onTouchBody = onTouchEventMethod.body();
+                @Override
+                public JMethod buildMethod() {
+                    onTouchEventMethod = definedClass.method(JMod.PUBLIC, codeModel.BOOLEAN, "onTouchEvent");
+                    onTouchEventMethod.param(MotionEvent.class, "motionEvent");
+                    return onTouchEventMethod;
+                }
 
-            addMethodCallbacks(onTouchBody, "onTouch", expressionMap);
-            onTouchBody._return(JExpr.TRUE);
+                @Override
+                public void closeMethod() {
+                    onTouchEventMethod.body()._return(JExpr.TRUE);
+                }
+            });
+
+            // onCreate
+            addMethodCallbacks("onCreate", expressionMap, new AlreadyDefinedMethodGenerator(onCreateMethod));
+            // onDestroy
+            addLifecycleMethod("onDestroy", definedClass, expressionMap);
+            // onPause
+            addLifecycleMethod("onPause", definedClass, expressionMap);
+            // onRestart
+            addLifecycleMethod("onRestart", definedClass, expressionMap);
+            // onResume
+            addLifecycleMethod("onResume", definedClass, expressionMap);
+            // onStart
+            addLifecycleMethod("onStart", definedClass, expressionMap);
+            // onStop
+            addLifecycleMethod("onStop", definedClass, expressionMap);
         }
     }
 
-    private void addMethodCallbacks(JBlock block, String name, Map<InjectionNode, JExpression> expressionMap) {
+    private void addLifecycleMethod(String name, JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap) {
+        addMethodCallbacks(name, expressionMap, new SimpleMethodGenerator(name, definedClass));
+    }
+
+    private void addMethodCallbacks(String name, Map<InjectionNode, JExpression> expressionMap, MethodGenerator lazyMethodGenerator) {
+        JMethod method = null;
         for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-            MethodCallbackAspect methodCallbackToken = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
+            MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
-            if (methodCallbackToken != null) {
-                Set<ASTMethod> astMethods = methodCallbackToken.getMethods(name);
+            if (methodCallbackAspect != null) {
+                Set<ASTMethod> methods = methodCallbackAspect.getMethods(name);
 
-                if (astMethods != null) {
-                    for (ASTMethod astMethod : methodCallbackToken.getMethods(name)) {
-                        block.add(injectionNodeJExpressionEntry.getValue().invoke(astMethod.getName()));
+                if (methods != null) {
+
+                    //define method
+                    if (method == null) {
+                        method = lazyMethodGenerator.buildMethod();
+                    }
+                    JBlock body = method.body();
+
+                    for (ASTMethod astMethod : methodCallbackAspect.getMethods(name)) {
+                        body.add(injectionNodeJExpressionEntry.getValue().invoke(astMethod.getName()));
                     }
                 }
             }
+        }
+        if (method != null) {
+            lazyMethodGenerator.closeMethod();
+        }
+    }
+
+    private interface MethodGenerator {
+        JMethod buildMethod();
+
+        void closeMethod();
+    }
+
+    private class SimpleMethodGenerator implements MethodGenerator {
+        private String name;
+        private JDefinedClass definedClass;
+
+        public SimpleMethodGenerator(String name, JDefinedClass definedClass) {
+            this.name = name;
+            this.definedClass = definedClass;
+        }
+
+        @Override
+        public JMethod buildMethod() {
+            JMethod method = definedClass.method(JMod.PUBLIC, codeModel.VOID, name);
+            JBlock body = method.body();
+            body.add(JExpr._super().invoke(name));
+            return method;
+        }
+
+        @Override
+        public void closeMethod() {
+            //noop
+        }
+    }
+
+    private class AlreadyDefinedMethodGenerator implements MethodGenerator {
+
+        private JMethod method;
+
+        private AlreadyDefinedMethodGenerator(JMethod method) {
+            this.method = method;
+        }
+
+        @Override
+        public JMethod buildMethod() {
+            return method;
+        }
+
+        @Override
+        public void closeMethod() {
         }
     }
 }

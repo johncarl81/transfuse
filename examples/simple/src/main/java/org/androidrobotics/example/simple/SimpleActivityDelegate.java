@@ -16,10 +16,10 @@ public class SimpleActivityDelegate {
 
     @Inject
     private SimpleController controller;
-    private ConstructorValue value;
+    private LifecycleLogger value;
 
     @Inject
-    public SimpleActivityDelegate(ConstructorValue value) {
+    public SimpleActivityDelegate(LifecycleLogger value) {
         this.value = value;
     }
 

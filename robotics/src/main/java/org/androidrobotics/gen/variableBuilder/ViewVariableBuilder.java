@@ -4,9 +4,11 @@ import android.app.Activity;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JType;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.InjectionPointFactory;
+import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
@@ -41,19 +43,25 @@ public class ViewVariableBuilder implements AnnotatedVariableBuilder {
         //InjectionNode activityInjectionNode = analyzer.analyze(activityType, activityType, context);
         FieldInjectionPoint activityInjectionNode = injectionPointFactory.buildInjectionPoint(activityType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, new InnerViewVariableBuilder(annotation, activityInjectionNode.getInjectionNode()));
+        try {
+            injectionNode.addAspect(VariableBuilder.class, new InnerViewVariableBuilder(annotation, activityInjectionNode.getInjectionNode(), codeModel.parseType(astType.getName())));
+        } catch (ClassNotFoundException e) {
+            throw new RoboticsAnalysisException("Unable to parse type " + astType.getName(), e);
+        }
 
         return injectionNode;
     }
 
     public class InnerViewVariableBuilder implements VariableBuilder {
 
+        private JType viewType;
         private ASTAnnotation annotation;
         private InjectionNode activityInjectionNode;
 
-        public InnerViewVariableBuilder(ASTAnnotation annotation, InjectionNode activityInjectionNode) {
+        public InnerViewVariableBuilder(ASTAnnotation annotation, InjectionNode activityInjectionNode, JType viewType) {
             this.annotation = annotation;
             this.activityInjectionNode = activityInjectionNode;
+            this.viewType = viewType;
         }
 
         @Override
@@ -61,7 +69,7 @@ public class ViewVariableBuilder implements AnnotatedVariableBuilder {
             JExpression contextVar = injectionBuilderContext.buildVariable(activityInjectionNode);
 
             //assuming value is non null
-            return contextVar.invoke(FIND_VIEW).arg(JExpr.lit((Integer) ((AnnotationValue) annotation.getProperty("value")).getValue()));
+            return JExpr.cast(viewType, contextVar.invoke(FIND_VIEW).arg(JExpr.lit((Integer) ((AnnotationValue) annotation.getProperty("value")).getValue())));
         }
 
         @Override

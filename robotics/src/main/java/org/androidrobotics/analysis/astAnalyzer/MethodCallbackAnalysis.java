@@ -2,8 +2,7 @@ package org.androidrobotics.analysis.astAnalyzer;
 
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.adapter.ASTMethod;
-import org.androidrobotics.annotations.OnCreate;
-import org.androidrobotics.annotations.OnTouch;
+import org.androidrobotics.annotations.*;
 import org.androidrobotics.model.InjectionNode;
 
 import java.lang.annotation.Annotation;
@@ -20,6 +19,12 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
     public MethodCallbackAnalysis() {
         methodAnnotations.put(OnCreate.class, "onCreate");
         methodAnnotations.put(OnTouch.class, "onTouch");
+        methodAnnotations.put(OnDestroy.class, "onDestroy");
+        methodAnnotations.put(OnPause.class, "onPause");
+        methodAnnotations.put(OnRestart.class, "onRestart");
+        methodAnnotations.put(OnResume.class, "onResume");
+        methodAnnotations.put(OnStart.class, "onStart");
+        methodAnnotations.put(OnStop.class, "onStop");
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,9 +33,17 @@ public class InjectionPointFactory {
     public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {
 
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
-        for (ASTParameter astParameter : astConstructor.getParameters()) {
 
-            constructorInjectionPoint.addInjectionNode(buildInjectionNode(astParameter.getAnnotations(), astParameter.getASTType(), context));
+        List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
+        //bindingAnnotations for single parameter from method level
+        if (astConstructor.getParameters().size() == 1) {
+            methodAnnotations.addAll(astConstructor.getAnnotations());
+        }
+
+        for (ASTParameter astParameter : astConstructor.getParameters()) {
+            List<ASTAnnotation> parameterAnnotations = new ArrayList<ASTAnnotation>(methodAnnotations);
+            parameterAnnotations.addAll(astParameter.getAnnotations());
+            constructorInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astParameter.getASTType(), context));
         }
 
         return constructorInjectionPoint;
@@ -50,8 +59,16 @@ public class InjectionPointFactory {
 
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getName());
 
+        List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
+        //bindingAnnotations for single parameter from method level
+        if (astMethod.getParameters().size() == 1) {
+            methodAnnotations.addAll(astMethod.getAnnotations());
+        }
+
         for (ASTParameter astField : astMethod.getParameters()) {
-            methodInjectionPoint.addInjectionNode(buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+            List<ASTAnnotation> parameterAnnotations = new ArrayList<ASTAnnotation>(methodAnnotations);
+            parameterAnnotations.addAll(astField.getAnnotations());
+            methodInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astField.getASTType(), context));
         }
 
         return methodInjectionPoint;

@@ -22,10 +22,14 @@ public class SimpleController {
     @Inject
     private VibrateOnClickListener vibrateOnClickListener;
     private Vibrator vibrator;
-    @Inject
-    @View(R.id.button)
     private Button button;
     private int value = 0;
+
+    @Inject
+    @View(R.id.button)
+    public void setButton(Button button) {
+        this.button = button;
+    }
 
     @Inject
     public void setVibrator(Vibrator vibrator) {
