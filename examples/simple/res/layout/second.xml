@@ -8,18 +8,8 @@
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hello"
+            android:text="@string/second"
             />
-    <Button
-            android:id="@+id/button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Click Me"/>
-    <Button
-            android:id="@+id/secondActivity"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Second Activity"/>
 
 </LinearLayout>
 
