@@ -6,9 +6,9 @@ import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.targets.MockActivityDelegate;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.VariableBuilderRepository;
+import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
-import org.androidrobotics.gen.variableBuilder.ContextVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -34,15 +34,15 @@ public class ActivityAnalysisTest {
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
 
-        VariableBuilderRepository variableBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
         AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();
-        Provider<ContextVariableBuilder> contextVariableBuilderProvider = injector.getProvider(ContextVariableBuilder.class);
+        Provider<ContextVariableInjectionNodeBuilder> contextVariableInjectionNodeBuilderProviderBuilderProvider = injector.getProvider(ContextVariableInjectionNodeBuilder.class);
         VariableBuilderRepositoryFactory variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
         InjectionPointFactory injectionPointFactory = injector.getInstance(InjectionPointFactory.class);
-        ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory, contextVariableBuilderProvider, variableBuilderRepositoryFactory);
+        ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory, contextVariableInjectionNodeBuilderProviderBuilderProvider, variableBuilderRepositoryFactory);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, variableBuilderRepository);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, injectionNodeBuilderRepository);
     }
 
     @Test

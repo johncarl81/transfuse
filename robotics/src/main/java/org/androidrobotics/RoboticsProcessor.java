@@ -12,7 +12,7 @@ import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Bind;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
-import org.androidrobotics.gen.VariableBuilderRepository;
+import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -36,7 +36,7 @@ public class RoboticsProcessor {
     private Logger logger;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
-    private VariableBuilderRepository variableBuilders;
+    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ActivityAnalysis activityAnalysis;
 
     @Inject
@@ -55,10 +55,10 @@ public class RoboticsProcessor {
         this.analysisRepositoryFactory = analysisRepositoryFactory;
         this.activityAnalysis = activityAnalysis;
 
-        variableBuilders = variableBuilderRepositoryProvider.buildRepository();
+        injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
 
         //temporary
-        variableBuilders.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderVariableBuilder(VibratorProvider.class));
+        injectionNodeBuilders.put(Vibrator.class.getName(), providerVariableBuilderFactory.buildProviderInjectionNodeBuilder(VibratorProvider.class));
     }
 
     public void processModuleElements(Collection<? extends ASTType> astTypes) {
@@ -73,10 +73,8 @@ public class RoboticsProcessor {
                         if (astMethod.getParameters().size() == 1) {
                             ASTType implType = astMethod.getParameters().get(0).getASTType();
 
-                            System.out.println("Associating: " + superType.getName() + " with: " + implType.getName());
-
-                            variableBuilders.put(superType.getName(),
-                                    variableInjectionBuilderFactory.buildVariableInjectionBuilder(implType));
+                            injectionNodeBuilders.put(superType.getName(),
+                                    variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implType));
                         } else {
                             //todo: throw exception
                         }
@@ -92,7 +90,7 @@ public class RoboticsProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, variableBuilders);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders);
 
             if (activityDescriptor != null) {
                 try {

@@ -1,7 +1,7 @@
 package org.androidrobotics.analysis.astAnalyzer;
 
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
-import org.androidrobotics.gen.variableBuilder.AnnotatedVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.InjectionNodeBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public class BindingRepository {
 
-    Map<String, AnnotatedVariableBuilder> variableBuilderMap = new HashMap<String, AnnotatedVariableBuilder>();
+    Map<String, InjectionNodeBuilder> variableBuilderMap = new HashMap<String, InjectionNodeBuilder>();
 
-    public void addVariableBuilder(String annotationName, AnnotatedVariableBuilder variableBuilder) {
+    public void addVariableBuilder(String annotationName, InjectionNodeBuilder variableBuilder) {
         this.variableBuilderMap.put(annotationName, variableBuilder);
     }
 
@@ -21,7 +21,7 @@ public class BindingRepository {
         return variableBuilderMap.containsKey(bindingAnnotation.getName());
     }
 
-    public AnnotatedVariableBuilder getBindingVariableBuilder(ASTAnnotation bindingAnnotation) {
+    public InjectionNodeBuilder getBindingVariableBuilder(ASTAnnotation bindingAnnotation) {
         return variableBuilderMap.get(bindingAnnotation.getName());
     }
 }

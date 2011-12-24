@@ -97,7 +97,7 @@ public class AnalyzerTest {
 
         analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
 
-        analysisContext.getVariableBuilders().put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
+        analysisContext.getInjectionNodeBuilders().put(B.class.getName(), variableInjectionBuilderFactory.buildVariableInjectionBuilder(BImpl.class));
     }
 
     @Test

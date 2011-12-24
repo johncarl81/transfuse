@@ -8,7 +8,7 @@ import org.androidrobotics.model.InjectionNode;
 /**
  * @author John Ericksen
  */
-public interface AnnotatedVariableBuilder {
+public interface InjectionNodeBuilder {
 
     InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation);
 }

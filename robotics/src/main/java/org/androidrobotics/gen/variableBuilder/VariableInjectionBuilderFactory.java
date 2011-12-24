@@ -1,16 +1,17 @@
 package org.androidrobotics.gen.variableBuilder;
 
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.gen.VariableImplementationInjectionBuilder;
 
 /**
  * @author John Ericksen
  */
 public interface VariableInjectionBuilderFactory {
 
-    VariableInjectionBuilder buildVariableInjectionBuilder();
+    VariableInjectionNodeBuilder buildVariableInjectionBuilder();
 
-    VariableImplementationInjectionBuilder buildVariableInjectionBuilder(Class<?> concreteClass);
+    VariableImplementationInjectionNodeBuilder buildVariableInjectionBuilder(Class<?> concreteClass);
+
+    VariableASTImplementationInjectionNodeBuilder buildVariableInjectionNodeBuilder(ASTType astType);
 
     VariableASTImplementationInjectionBuilder buildVariableInjectionBuilder(ASTType astType);
 }

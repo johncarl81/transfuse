@@ -1,26 +1,27 @@
 package org.androidrobotics.gen;
 
-import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidrobotics.gen.variableBuilder.VariableInjectionNodeBuilder;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
 public class VariableBuilderRepositoryFactory {
 
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
 
     @Inject
-    public VariableBuilderRepositoryFactory(VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+    public VariableBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider) {
+        this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
     }
 
-    public VariableBuilderRepository buildRepository() {
-        return new VariableBuilderRepository(variableInjectionBuilderFactory);
+    public InjectionNodeBuilderRepository buildRepository() {
+        return new InjectionNodeBuilderRepository(variableInjectionNodeBuilderProvider);
     }
 
-    public VariableBuilderRepository buildRepository(VariableBuilderRepository parent) {
-        return new VariableBuilderRepository(parent, variableInjectionBuilderFactory);
+    public InjectionNodeBuilderRepository buildRepository(InjectionNodeBuilderRepository parent) {
+        return new InjectionNodeBuilderRepository(parent, variableInjectionNodeBuilderProvider);
     }
 }

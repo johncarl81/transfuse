@@ -7,6 +7,6 @@ import javax.inject.Provider;
  */
 public interface ProviderVariableBuilderFactory {
 
-    ProviderVariableBuilder buildProviderVariableBuilder(Class<? extends Provider<?>> providerClass);
+    ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(Class<? extends Provider<?>> providerClass);
 
 }

@@ -5,13 +5,11 @@ import android.view.MotionEvent;
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
-import org.androidrobotics.gen.variableBuilder.ContextVariableBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Map;
@@ -25,15 +23,11 @@ public class ActivityGenerator {
 
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
-    private Provider<ContextVariableBuilder> contextVariableBuilderProvider;
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Inject
-    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, Provider<ContextVariableBuilder> contextVariableBuilderProvider, VariableBuilderRepositoryFactory variableBuilderRepositoryFactory) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
-        this.contextVariableBuilderProvider = contextVariableBuilderProvider;
-        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
     }
 
     public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
@@ -171,6 +165,7 @@ public class ActivityGenerator {
 
         @Override
         public void closeMethod() {
+            //noop
         }
     }
 }

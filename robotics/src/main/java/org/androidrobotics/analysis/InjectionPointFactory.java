@@ -2,9 +2,8 @@ package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.adapter.*;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
-import org.androidrobotics.gen.VariableBuilderRepository;
-import org.androidrobotics.gen.variableBuilder.AnnotatedVariableBuilder;
-import org.androidrobotics.gen.variableBuilder.VariableBuilder;
+import org.androidrobotics.gen.InjectionNodeBuilderRepository;
+import org.androidrobotics.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -88,11 +87,11 @@ public class InjectionPointFactory {
      * Build a Field InjectionPoint directly from the given ASTType
      *
      * @param astType
-     * @param variableBuilders
+     * @param injectionNodeBuilders
      * @return
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisRepository analysisRepository, VariableBuilderRepository variableBuilders) {
-        return buildInjectionPoint(astType, new AnalysisContext(analysisRepository, variableBuilders));
+    public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders) {
+        return buildInjectionPoint(astType, new AnalysisContext(analysisRepository, injectionNodeBuilders));
     }
 
     public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisContext context) {
@@ -102,13 +101,13 @@ public class InjectionPointFactory {
     private InjectionNode buildInjectionNode(List<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {
 
         int bindingCount = 0;
-        AnnotatedVariableBuilder annotatedVariableBuilder = null;
+        InjectionNodeBuilder injectionNodeBuilder = null;
         ASTAnnotation foundBindingAnnotation = null;
 
         for (ASTAnnotation bindingAnnotation : bindingAnnotations) {
             if (bindingRepository.containsBindingVariableBuilder(bindingAnnotation)) {
                 bindingCount++;
-                annotatedVariableBuilder = bindingRepository.getBindingVariableBuilder(bindingAnnotation);
+                injectionNodeBuilder = bindingRepository.getBindingVariableBuilder(bindingAnnotation);
                 foundBindingAnnotation = bindingAnnotation;
             }
         }
@@ -117,12 +116,12 @@ public class InjectionPointFactory {
             throw new RoboticsAnalysisException("More than one binding annotations is not valid.");
         }
 
-        if (annotatedVariableBuilder != null) {
-            return annotatedVariableBuilder.buildInjectionNode(astType, context, foundBindingAnnotation);
+        if (injectionNodeBuilder != null) {
+            return injectionNodeBuilder.buildInjectionNode(astType, context, foundBindingAnnotation);
         }
 
-        VariableBuilder variableBuilder = context.getVariableBuilders().get(astType.getName());
-        return variableBuilder.buildInjectionNode(astType, context);
+        InjectionNodeBuilder variableBuilder = context.getInjectionNodeBuilders().get(astType.getName());
+        return variableBuilder.buildInjectionNode(astType, context, null);
     }
 
     @Inject
