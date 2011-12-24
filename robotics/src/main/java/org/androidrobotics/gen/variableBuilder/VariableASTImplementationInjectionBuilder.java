@@ -16,20 +16,20 @@ import javax.inject.Inject;
  */
 public class VariableASTImplementationInjectionBuilder extends VariableInjectionBuilderBase {
 
-    private ASTType astType;
+    private ASTType implType;
 
     @Inject
-    public VariableASTImplementationInjectionBuilder(@Assisted ASTType astType,
+    public VariableASTImplementationInjectionBuilder(@Assisted ASTType implType,
                                                      JCodeModel codeModel,
                                                      UniqueVariableNamer variableNamer,
                                                      InjectionInvocationBuilder injectionInvocationBuilder) {
         super(codeModel, variableNamer, injectionInvocationBuilder);
 
-        this.astType = astType;
+        this.implType = implType;
     }
 
     @Override
     public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        return innerBuildVariable(astType.getName(), injectionBuilderContext, injectionNode);
+        return innerBuildVariable(implType.getName(), injectionBuilderContext, injectionNode);
     }
 }

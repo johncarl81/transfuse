@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class SimpleController {
 
     @Inject
-    private AnotherValueImpl anotherValue;
+    private AnotherValue anotherValue;
     @Inject
     private Context activity;
     @Inject

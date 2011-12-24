@@ -15,22 +15,22 @@ import javax.inject.Inject;
 public class VariableASTImplementationInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private Analyzer analyzer;
-    private ASTType astType;
+    private ASTType implType;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType astType,
+    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType,
                                                          Analyzer analyzer,
                                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.analyzer = analyzer;
-        this.astType = astType;
+        this.implType = implType;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        InjectionNode injectionNode = analyzer.analyze(astType, this.astType, context);
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildVariableInjectionBuilder(astType));
+        InjectionNode injectionNode = analyzer.analyze(astType, implType, context);
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildVariableInjectionBuilder(implType));
 
         return injectionNode;
     }
