@@ -21,14 +21,23 @@ public class SimpleController {
     private Context activity;
     @Inject
     private VibrateOnClickListener vibrateOnClickListener;
+    @Inject
+    private NotifyOnClickListener notifyOnClickListener;
     private Vibrator vibrator;
-    private Button button;
+    private Button vibrateButton;
+    private Button notifyButton;
     private int value = 0;
 
     @Inject
-    @View(R.id.button)
-    public void setButton(Button button) {
-        this.button = button;
+    @View(R.id.vibrateButton)
+    public void setVibrateButton(Button vibrateButton) {
+        this.vibrateButton = vibrateButton;
+    }
+
+    @Inject
+    @View(R.id.notifyButton)
+    public void setNotifyButton(Button notifyButton) {
+        this.notifyButton = notifyButton;
     }
 
     @Inject
@@ -38,7 +47,8 @@ public class SimpleController {
 
     @OnCreate
     public void setupButton() {
-        button.setOnClickListener(vibrateOnClickListener);
+        vibrateButton.setOnClickListener(vibrateOnClickListener);
+        notifyButton.setOnClickListener(notifyOnClickListener);
     }
 
     @OnTouch
@@ -48,6 +58,6 @@ public class SimpleController {
     }
 
     public boolean validate() {
-        return anotherValue != null && activity != null && vibrator != null && button != null;
+        return anotherValue != null && activity != null && vibrator != null && vibrateButton != null;
     }
 }

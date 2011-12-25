@@ -9,48 +9,6 @@ package org.androidrobotics.example.simple;
 
 public final class R {
     public static final class attr {
-        /**
-         * <p>Must be one or more (separated by '|') of the following constant values.</p>
-         * <table>
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-         * <tr><td><code>mcc</code></td><td>0x00000001</td><td></td></tr>
-         * <tr><td><code>mnc</code></td><td>0x00000002</td><td></td></tr>
-         * </table>
-         */
-        public static final int configChanges = 0x7f010000;
-        /**
-         * <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         */
-        public static final int text = 0x7f010001;
-        /**
-         * <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
-         * "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         */
-        public static final int textColor = 0x7f010002;
-        /**
-         * <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
-         * Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
-         * in (inches), mm (millimeters).
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         */
-        public static final int textSize = 0x7f010003;
     }
 
     public static final class drawable {
@@ -58,10 +16,10 @@ public final class R {
     }
 
     public static final class id {
-        public static final int button = 0x7f040003;
-        public static final int mcc = 0x7f040000;
-        public static final int mnc = 0x7f040001;
-        public static final int text = 0x7f040002;
+        public static final int notifyButton = 0x7f050002;
+        public static final int secondActivity = 0x7f050003;
+        public static final int text = 0x7f050000;
+        public static final int vibrateButton = 0x7f050001;
     }
 
     public static final class layout {
@@ -70,113 +28,8 @@ public final class R {
     }
 
     public static final class string {
-        public static final int app_name = 0x7f050000;
-        public static final int hello = 0x7f050001;
+        public static final int app_name = 0x7f040000;
+        public static final int hello = 0x7f040001;
+        public static final int second = 0x7f040002;
     }
-
-    public static final class styleable {
-        /**
-         * Attributes that can be used with a LabelView.
-         * <p>Includes the following attributes:</p>
-         * <table>
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <tr><th>Attribute</th><th>Description</th></tr>
-         * <tr><td><code>{@link #LabelView_text org.androidrobotics.example.simple:text}</code></td><td></td></tr>
-         * <tr><td><code>{@link #LabelView_textColor org.androidrobotics.example.simple:textColor}</code></td><td></td></tr>
-         * <tr><td><code>{@link #LabelView_textSize org.androidrobotics.example.simple:textSize}</code></td><td></td></tr>
-         * </table>
-         *
-         * @see #LabelView_text
-         * @see #LabelView_textColor
-         * @see #LabelView_textSize
-         */
-        public static final int[] LabelView = {
-                0x7f010001, 0x7f010002, 0x7f010003
-        };
-        /**
-         * <p>This symbol is the offset where the {@link org.androidrobotics.example.simple.R.attr#text}
-         * attribute's value can be found in the {@link #LabelView} array.
-         * <p/>
-         * <p/>
-         * <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         *
-         * @attr name android:text
-         */
-        public static final int LabelView_text = 0;
-        /**
-         * <p>This symbol is the offset where the {@link org.androidrobotics.example.simple.R.attr#textColor}
-         * attribute's value can be found in the {@link #LabelView} array.
-         * <p/>
-         * <p/>
-         * <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
-         * "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         *
-         * @attr name android:textColor
-         */
-        public static final int LabelView_textColor = 1;
-        /**
-         * <p>This symbol is the offset where the {@link org.androidrobotics.example.simple.R.attr#textSize}
-         * attribute's value can be found in the {@link #LabelView} array.
-         * <p/>
-         * <p/>
-         * <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
-         * Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
-         * in (inches), mm (millimeters).
-         * <p>This may also be a reference to a resource (in the form
-         * "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-         * theme attribute (in the form
-         * "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-         * containing a value of this type.
-         *
-         * @attr name android:textSize
-         */
-        public static final int LabelView_textSize = 2;
-        /**
-         * These are the attributes that we want to retrieve from the theme
-         * in app/PreferencesFromCode.java
-         * <p>Includes the following attributes:</p>
-         * <table>
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <tr><th>Attribute</th><th>Description</th></tr>
-         * <tr><td><code>{@link #TogglePrefAttrs_configChanges org.androidrobotics.example.simple:configChanges}</code></td><td></td></tr>
-         * </table>
-         *
-         * @see #TogglePrefAttrs_configChanges
-         */
-        public static final int[] TogglePrefAttrs = {
-                0x7f010000
-        };
-        /**
-         * <p>This symbol is the offset where the {@link org.androidrobotics.example.simple.R.attr#configChanges}
-         * attribute's value can be found in the {@link #TogglePrefAttrs} array.
-         * <p/>
-         * <p/>
-         * <p>Must be one or more (separated by '|') of the following constant values.</p>
-         * <table>
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <colgroup align="left" />
-         * <tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-         * <tr><td><code>mcc</code></td><td>0x00000001</td><td></td></tr>
-         * <tr><td><code>mnc</code></td><td>0x00000002</td><td></td></tr>
-         * </table>
-         *
-         * @attr name android:configChanges
-         */
-        public static final int TogglePrefAttrs_configChanges = 0;
-    }
-
-    ;
 }

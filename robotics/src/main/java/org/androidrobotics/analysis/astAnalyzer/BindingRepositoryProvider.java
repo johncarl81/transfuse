@@ -1,8 +1,10 @@
 package org.androidrobotics.analysis.astAnalyzer;
 
 import com.google.inject.Provider;
+import org.androidrobotics.annotations.SystemService;
 import org.androidrobotics.annotations.View;
-import org.androidrobotics.gen.variableBuilder.ViewVariableBuilder;
+import org.androidrobotics.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder;
+import org.androidrobotics.gen.variableBuilder.ViewInjectionNodeBuilder;
 
 import javax.inject.Inject;
 
@@ -12,7 +14,9 @@ import javax.inject.Inject;
 public class BindingRepositoryProvider implements Provider<BindingRepository> {
 
     @Inject
-    private ViewVariableBuilder viewVariableBuilder;
+    private ViewInjectionNodeBuilder viewVariableBuilder;
+    @Inject
+    private SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
 
     @Override
     public BindingRepository get() {
@@ -20,6 +24,7 @@ public class BindingRepositoryProvider implements Provider<BindingRepository> {
         BindingRepository bindingRepository = new BindingRepository();
 
         bindingRepository.addVariableBuilder(View.class.getName(), viewVariableBuilder);
+        bindingRepository.addVariableBuilder(SystemService.class.getName(), systemServiceBindingInjectionNodeBuilder);
 
         return bindingRepository;
     }

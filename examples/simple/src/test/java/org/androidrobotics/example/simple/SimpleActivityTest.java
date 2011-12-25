@@ -43,6 +43,11 @@ public class SimpleActivityTest {
     }
 
     @Test
+    public void testSystemServiceInject() {
+        assertTrue(testActivityDelegate.isSystemServiceInjected());
+    }
+
+    @Test
     public void testOnCreateCalled() {
         assertTrue(testActivityDelegate.isOnCreateCalled());
         assertTrue(testActivityDelegate.isSecondOnCreatCalled());

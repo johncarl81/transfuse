@@ -6,7 +6,6 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidrobotics.gen.InjectionBuilderContextFactory;
-import org.androidrobotics.gen.variableBuilder.ProviderVariableBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.util.Logger;
 
@@ -35,8 +34,5 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder
                 .build(VariableInjectionBuilderFactory.class));
-
-        install(factoryModuleBuilder
-                .build(ProviderVariableBuilderFactory.class));
     }
 }

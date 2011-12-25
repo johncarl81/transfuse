@@ -40,7 +40,7 @@ public class InjectionFragmentGeneratorTest {
     @Inject
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     @Inject
-    private ProviderVariableBuilderFactory providerVariableBuilderFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     @Inject
     private ASTClassFactory astClassFactory;
     @Inject
@@ -48,13 +48,13 @@ public class InjectionFragmentGeneratorTest {
     @Inject
     private SimpleAnalysisContextFactory contextFactory;
     private AnalysisContext context;
+    @Inject
+    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
 
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
-
-        VariableBuilderRepositoryFactory variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
 
         variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
 
@@ -155,7 +155,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testProviderBuilder() throws Exception {
 
-        variableBuilderRepository.put(VariableTarget.class.getName(), providerVariableBuilderFactory.buildProviderInjectionNodeBuilder(VariableTargetProvider.class));
+        variableBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(VariableTargetProvider.class));
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
         ASTType providerType = astClassFactory.buildASTClassType(VariableTargetProvider.class);
