@@ -40,7 +40,7 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
         Integer viewId = (Integer) ((AnnotationValue) annotation.getProperty("value")).getValue();
 
         try {
-            injectionNode.addAspect(VariableBuilder.class, new InnerViewVariableBuilder(viewId, activityInjectionNode.getInjectionNode(), codeModel.parseType(astType.getName())));
+            injectionNode.addAspect(VariableBuilder.class, new ViewVariableBuilder(viewId, activityInjectionNode.getInjectionNode(), codeModel.parseType(astType.getName())));
         } catch (ClassNotFoundException e) {
             throw new RoboticsAnalysisException("Unable to parse type " + astType.getName(), e);
         }

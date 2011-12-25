@@ -6,7 +6,7 @@ import com.sun.codemodel.JType;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.model.InjectionNode;
 
-public class InnerViewVariableBuilder implements VariableBuilder {
+public class ViewVariableBuilder implements VariableBuilder {
 
     private static final String FIND_VIEW = "findViewById";
 
@@ -14,7 +14,7 @@ public class InnerViewVariableBuilder implements VariableBuilder {
     private int viewId;
     private InjectionNode activityInjectionNode;
 
-    public InnerViewVariableBuilder(int viewId, InjectionNode activityInjectionNode, JType viewType) {
+    public ViewVariableBuilder(int viewId, InjectionNode activityInjectionNode, JType viewType) {
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;
