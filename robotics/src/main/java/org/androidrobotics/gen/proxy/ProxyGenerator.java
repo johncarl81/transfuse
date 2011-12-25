@@ -48,7 +48,10 @@ public class ProxyGenerator {
                     //implement methods
                     for (ASTMethod method : interfaceType.getMethods()) {
                         // public <type> <method_name> ( <parameters...>)
-                        JClass returnType = codeModel.ref(method.getReturnType().getName());
+                        JClass returnType = null;
+                        if (method.getReturnType() != null) {
+                            returnType = codeModel.ref(method.getReturnType().getName());
+                        }
                         JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
 
                         //define method parameter
@@ -70,11 +73,10 @@ public class ProxyGenerator {
                         }
 
                         //todo: add AOP here?
-
-                        if (!VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
-                            body._return(invocation);
-                        } else {
+                        if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
                             body.add(invocation);
+                        } else {
+                            body._return(invocation);
                         }
                     }
                 }

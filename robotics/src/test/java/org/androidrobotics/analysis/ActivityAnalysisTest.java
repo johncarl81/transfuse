@@ -41,8 +41,9 @@ public class ActivityAnalysisTest {
         InjectionPointFactory injectionPointFactory = injector.getInstance(InjectionPointFactory.class);
         ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory, contextVariableInjectionNodeBuilderProviderBuilderProvider, variableBuilderRepositoryFactory);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
+        InterceptorRepository interceptorRepository = injector.getInstance(InterceptorRepository.class);
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, injectionNodeBuilderRepository);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, injectionNodeBuilderRepository, interceptorRepository);
     }
 
     @Test

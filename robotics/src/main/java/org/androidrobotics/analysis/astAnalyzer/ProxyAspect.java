@@ -1,8 +1,11 @@
 package org.androidrobotics.analysis.astAnalyzer;
 
+import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -10,22 +13,22 @@ import java.util.Set;
  */
 public class ProxyAspect {
 
-    private boolean proxyRequired;
     private Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
-
-    public ProxyAspect() {
-        this.proxyRequired = true;
-    }
+    private Map<ASTMethod, Set<ASTType>> methodInterceptors = new HashMap<ASTMethod, Set<ASTType>>();
 
     public Set<ASTType> getProxyInterfaces() {
         return proxyInterfaces;
     }
 
-    public void setProxyRequired(boolean proxyRequired) {
-        this.proxyRequired = proxyRequired;
+    public boolean isProxyRequired() {
+        return !(proxyInterfaces.isEmpty() && methodInterceptors.isEmpty());
     }
 
-    public boolean isProxyRequired() {
-        return proxyRequired;
+    public synchronized void addInterceptor(ASTMethod astMethod, ASTType interceptorType) {
+        if (!methodInterceptors.containsKey(astMethod)) {
+            methodInterceptors.put(astMethod, new HashSet<ASTType>());
+        }
+
+        methodInterceptors.get(astMethod).add(interceptorType);
     }
 }

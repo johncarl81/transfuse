@@ -2,7 +2,6 @@ package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.adapter.*;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
-import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
@@ -87,13 +86,8 @@ public class InjectionPointFactory {
      * Build a Field InjectionPoint directly from the given ASTType
      *
      * @param astType
-     * @param injectionNodeBuilders
      * @return
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders) {
-        return buildInjectionPoint(astType, new AnalysisContext(analysisRepository, injectionNodeBuilders));
-    }
-
     public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisContext context) {
         return new FieldInjectionPoint(astType.getName(), buildInjectionNode(Collections.EMPTY_LIST, astType, context));
     }

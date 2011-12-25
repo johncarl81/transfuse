@@ -25,9 +25,11 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.ActivityAnalysis;
 import org.androidrobotics.analysis.AnalysisRepository;
 import org.androidrobotics.analysis.AnalysisRepositoryFactory;
+import org.androidrobotics.analysis.InterceptorRepository;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Bind;
+import org.androidrobotics.annotations.BindInterceptor;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.gen.InjectionNodeBuilderRepository;
@@ -37,6 +39,7 @@ import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Collection;
@@ -55,6 +58,7 @@ public class RoboticsProcessor {
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
+    private InterceptorRepository interceptorRepository;
     private ActivityAnalysis activityAnalysis;
 
     @Inject
@@ -64,7 +68,8 @@ public class RoboticsProcessor {
                              VariableBuilderRepositoryFactory variableBuilderRepositoryProvider,
                              VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
-                             ActivityAnalysis activityAnalysis) {
+                             ActivityAnalysis activityAnalysis,
+                             Provider<InterceptorRepository> interceptorRepositoryProvider) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
         this.logger = logger;
@@ -72,6 +77,7 @@ public class RoboticsProcessor {
         this.analysisRepositoryFactory = analysisRepositoryFactory;
         this.activityAnalysis = activityAnalysis;
 
+        interceptorRepository = interceptorRepositoryProvider.get();
         injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
 
         //temporary
@@ -134,6 +140,18 @@ public class RoboticsProcessor {
                             //todo: throw exception
                         }
                     }
+
+                    if (astMethod.isAnnotated(BindInterceptor.class)) {
+                        ASTType interceptor = astMethod.getReturnType();
+
+                        if (astMethod.getParameters().size() == 1) {
+                            ASTType annotationType = astMethod.getParameters().get(0).getASTType();
+
+
+                        } else {
+                            //todo: throw exception
+                        }
+                    }
                 }
             }
         }
@@ -145,7 +163,7 @@ public class RoboticsProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, interceptorRepository);
 
             if (activityDescriptor != null) {
                 try {

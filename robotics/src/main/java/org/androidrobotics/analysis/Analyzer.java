@@ -38,7 +38,6 @@ public class Analyzer {
             injectionNode = context.getInjectionNode(concreteType);
 
             ProxyAspect proxyAspect = getProxyAspect(injectionNode);
-            proxyAspect.setProxyRequired(true);
             proxyAspect.getProxyInterfaces().add(instanceType);
 
         } else {

@@ -107,7 +107,6 @@ public class InjectionFragmentGeneratorTest {
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         ProxyAspect proxyAspect = new ProxyAspect();
-        proxyAspect.setProxyRequired(true);
         proxyAspect.getProxyInterfaces().add(astClassFactory.buildASTClassType(DelayedProxy.class));
 
         injectionNode.addAspect(proxyAspect);

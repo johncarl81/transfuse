@@ -27,4 +27,8 @@ public class AnotherValueImpl implements AnotherValue {
     public void registerSecondActivity() {
         secondActivityButton.setOnClickListener(gotoSecondActivity);
     }
+
+    public Boolean doWork() {
+        return true;
+    }
 }

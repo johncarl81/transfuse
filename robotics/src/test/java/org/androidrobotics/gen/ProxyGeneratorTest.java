@@ -59,7 +59,6 @@ public class ProxyGeneratorTest {
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
         ProxyAspect proxyAspect = new ProxyAspect();
-        proxyAspect.setProxyRequired(true);
         proxyAspect.getProxyInterfaces().add(interfaceAST);
 
         delegateInjectionNode.addAspect(proxyAspect);
