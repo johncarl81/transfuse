@@ -114,8 +114,8 @@ public class InjectionPointFactory {
             return injectionNodeBuilder.buildInjectionNode(astType, context, foundBindingAnnotation);
         }
 
-        InjectionNodeBuilder variableBuilder = context.getInjectionNodeBuilders().get(astType.getName());
-        return variableBuilder.buildInjectionNode(astType, context, null);
+        InjectionNodeBuilder noBindingInjectionNodeBuilder = context.getInjectionNodeBuilders().get(astType.getName());
+        return noBindingInjectionNodeBuilder.buildInjectionNode(astType, context, null);
     }
 
     @Inject
