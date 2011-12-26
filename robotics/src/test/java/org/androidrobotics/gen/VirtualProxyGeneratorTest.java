@@ -10,7 +10,10 @@ import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.proxy.*;
+import org.androidrobotics.gen.proxy.DelayedLoad;
+import org.androidrobotics.gen.proxy.MockDelegate;
+import org.androidrobotics.gen.proxy.MockInterface;
+import org.androidrobotics.gen.proxy.VirtualProxyGenerator;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -19,7 +22,6 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import static junit.framework.Assert.assertEquals;
@@ -28,24 +30,20 @@ import static junit.framework.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
-public class ProxyGeneratorTest {
+public class VirtualProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
     private static final String INPUT_VALUE = "input";
 
     private InjectionNode delegateInjectionNode;
     @Inject
-    private ProxyGenerator proxyGenerator;
+    private VirtualProxyGenerator virtualProxyGenerator;
     @Inject
     public ASTClassFactory astClassFactory;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private Analyzer analyzer;
-    @Inject
-    private DelegateConstructionGeneratorStrategy delegateConstructionGeneratorStrategy;
-    @Inject
-    private DelegateDelayedGeneratorStrategy delegateDelayedGeneratorStrategy;
     @Inject
     private SimpleAnalysisContextFactory contextFactory;
 
@@ -65,24 +63,8 @@ public class ProxyGeneratorTest {
     }
 
     @Test
-    public void testProxyByConstructor() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateConstructionGeneratorStrategy);
-
-        ClassLoader classLoader = codeGenerationUtil.build(false);
-
-        Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
-
-        MockDelegate delegate = new MockDelegate();
-
-        Constructor<?> proxyConstructor = proxyClass.getConstructor(MockDelegate.class);
-
-        runMockDelegateTests((MockInterface) proxyConstructor.newInstance(delegate), delegate);
-    }
-
-    @Test
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(delegateInjectionNode, delegateDelayedGeneratorStrategy);
+        ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
 
         ClassLoader classLoader = codeGenerationUtil.build(false);
 

@@ -1,6 +1,6 @@
 package org.androidrobotics.gen.proxy;
 
-import org.androidrobotics.gen.ProxyGeneratorTest;
+import org.androidrobotics.gen.VirtualProxyGeneratorTest;
 
 public class MockDelegate implements MockInterface {
 
@@ -15,7 +15,7 @@ public class MockDelegate implements MockInterface {
 
     @Override
     public String getValue() {
-        return ProxyGeneratorTest.TEST_VALUE;
+        return VirtualProxyGeneratorTest.TEST_VALUE;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class MockDelegate implements MockInterface {
     @Override
     public String passThroughValue(String input) {
         passThroughValue = input;
-        return ProxyGeneratorTest.TEST_VALUE;
+        return VirtualProxyGeneratorTest.TEST_VALUE;
     }
 
     public boolean validate(String inputOne, String inputTwo) {

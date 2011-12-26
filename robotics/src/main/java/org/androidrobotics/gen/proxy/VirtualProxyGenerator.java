@@ -6,6 +6,7 @@ import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
@@ -17,28 +18,40 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ProxyGenerator {
+public class VirtualProxyGenerator {
 
+    private static final String DELEGATE_NAME = "delegate";
+    private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
+    protected static final String DELAYED_LOAD_METHOD_NAME = "load";
     private static final String VOID_TYPE_NAME = "void";
 
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
 
     @Inject
-    public ProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
     }
 
-    public ProxyDescriptor generateProxy(InjectionNode injectionNode, DelegateInstantiationGeneratorStrategy delegateInstantiationGenerator) {
+    public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
 
         JDefinedClass definedClass;
         try {
 
-            definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Proxy", ClassType.CLASS);
+            definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
 
             //define delegate
-            JFieldVar delegateField = delegateInstantiationGenerator.addDelegateInstantiation(definedClass, injectionNode);
+            JClass delegateClass = codeModel.ref(injectionNode.getClassName());
+
+            JFieldVar delegateField = definedClass.field(JMod.PRIVATE, delegateClass, DELEGATE_NAME);
+
+            JClass providerInterface = codeModel.ref(DelayedLoad.class).narrow(delegateClass);
+            definedClass._implements(providerInterface);
+
+            JMethod delayedLoadMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, DELAYED_LOAD_METHOD_NAME);
+            JVar delegateParam = delayedLoadMethod.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
+            delayedLoadMethod.body().assign(delegateField, delegateParam);
 
             //implements interfaces
             if (injectionNode.containsAspect(ProxyAspect.class)) {
@@ -55,9 +68,9 @@ public class ProxyGenerator {
                         JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
 
                         //define method parameter
-                        Map<ASTParameter, JVar> parmaeterMap = new HashMap<ASTParameter, JVar>();
+                        Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
                         for (ASTParameter parameter : method.getParameters()) {
-                            parmaeterMap.put(parameter,
+                            parameterMap.put(parameter,
                                     methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
                                             variableNamer.generateName(parameter.getASTType().getName())));
                         }
@@ -69,10 +82,10 @@ public class ProxyGenerator {
                         JInvocation invocation = delegateField.invoke(method.getName());
 
                         for (ASTParameter parameter : method.getParameters()) {
-                            invocation.arg(parmaeterMap.get(parameter));
+                            invocation.arg(parameterMap.get(parameter));
                         }
 
-                        //todo: add AOP here?
+                        //todo:fix void and primitive return
                         if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
                             body.add(invocation);
                         } else {
@@ -86,5 +99,13 @@ public class ProxyGenerator {
         }
 
         return new ProxyDescriptor(definedClass);
+    }
+
+    public JExpression initalizeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
+
+        context.getBlock().add(
+                proxyVariable.invoke(DELAYED_LOAD_METHOD_NAME).arg(variableBuilder));
+
+        return variableBuilder;
     }
 }

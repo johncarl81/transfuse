@@ -6,8 +6,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
-import org.androidrobotics.gen.proxy.DelegateDelayedGeneratorStrategy;
-import org.androidrobotics.gen.proxy.ProxyGenerator;
+import org.androidrobotics.gen.proxy.VirtualProxyGenerator;
 import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.model.FieldInjectionPoint;
@@ -26,8 +25,7 @@ public class InjectionBuilderContext {
     private Map<InjectionNode, JExpression> variableMap;
     private JBlock block;
     private JDefinedClass definedClass;
-    private ProxyGenerator proxyGenerator;
-    private DelegateDelayedGeneratorStrategy delayedGeneratorStrategy;
+    private VirtualProxyGenerator virtualProxyGenerator;
     private ProxyVariableBuilder proxyVariableBuilder;
 
     @Inject
@@ -35,14 +33,12 @@ public class InjectionBuilderContext {
                                    @Assisted JBlock block,
                                    @Assisted JDefinedClass definedClass,
                                    ProxyVariableBuilder proxyVariableBuilder,
-                                   ProxyGenerator proxyGenerator,
-                                   DelegateDelayedGeneratorStrategy delayedGeneratorStrategy) {
+                                   VirtualProxyGenerator virtualProxyGenerator) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
         this.proxyVariableBuilder = proxyVariableBuilder;
-        this.proxyGenerator = proxyGenerator;
-        this.delayedGeneratorStrategy = delayedGeneratorStrategy;
+        this.virtualProxyGenerator = virtualProxyGenerator;
     }
 
     public JExpression buildVariable(InjectionNode injectionNode) {
@@ -55,13 +51,13 @@ public class InjectionBuilderContext {
             ProxyAspect proxyAspect = injectionNode.getAspect(ProxyAspect.class);
             if (proxyAspect != null && proxyAspect.isProxyRequired()) {
                 //proxy
-                ProxyDescriptor proxyDescriptor = proxyGenerator.generateProxy(injectionNode, delayedGeneratorStrategy);
+                ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
                 JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, injectionNode, proxyDescriptor);
                 variableMap.put(injectionNode, proxyVariable);
                 //then init dependencies
                 setupInjectionRequirements(injectionNode);
                 //and initialize
-                variable = delayedGeneratorStrategy.initalizeProxy(this, proxyVariable, executeVariableBuilder(injectionNode));
+                variable = virtualProxyGenerator.initalizeProxy(this, proxyVariable, executeVariableBuilder(injectionNode));
                 variableMap.put(injectionNode, variable);
             } else {
                 variable = executeVariableBuilder(injectionNode);
