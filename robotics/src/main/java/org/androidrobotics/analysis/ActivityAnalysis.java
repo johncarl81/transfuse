@@ -31,7 +31,7 @@ public class ActivityAnalysis {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
     }
 
-    public ActivityDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository) {
+    public ActivityDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository, AOPRepository aopRepository) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         Layout layoutAnnotation = input.getAnnotation(Layout.class);
@@ -48,7 +48,7 @@ public class ActivityAnalysis {
             activityDescriptor.setLayout(layoutAnnotation.value());
 
             activityDescriptor.addInjectionPoint(
-                    injectionPointFactory.buildInjectionPoint(input, new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), interceptorRepository))
+                    injectionPointFactory.buildInjectionPoint(input, new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), interceptorRepository, aopRepository))
             );
         }
         return activityDescriptor;

@@ -17,23 +17,25 @@ public class AnalysisContext {
     private AnalysisRepository analysisRepository;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private InterceptorRepository interceptorRepository;
+    private AOPRepository aopRepository;
 
-    public AnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository) {
+    public AnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository, AOPRepository aopRepository) {
         this.dependents = Collections.emptyMap();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.interceptorRepository = interceptorRepository;
+        this.aopRepository = aopRepository;
     }
 
-    private AnalysisContext(ASTType dependent, InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository) {
-        this(analysisRepository, injectionNodeBuilders, interceptorRepository);
+    private AnalysisContext(ASTType dependent, InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, InterceptorRepository interceptorRepository, AOPRepository aopRepository) {
+        this(analysisRepository, injectionNodeBuilders, interceptorRepository, aopRepository);
         this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependents.putAll(previousContext.dependents);
         this.dependents.put(dependent, node);
     }
 
     public AnalysisContext addDependent(ASTType dependent, InjectionNode node) {
-        return new AnalysisContext(dependent, node, this, analysisRepository, injectionNodeBuilders, interceptorRepository);
+        return new AnalysisContext(dependent, node, this, analysisRepository, injectionNodeBuilders, interceptorRepository, aopRepository);
     }
 
     public boolean isDependent(ASTType astType) {

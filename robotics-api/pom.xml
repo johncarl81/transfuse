@@ -21,11 +21,11 @@
             <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!-- TODO: dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency-->
     </dependencies>
 
     <build>

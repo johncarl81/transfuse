@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidrobotics.analysis.Analyzer;
+import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.SimpleAnalysisContextFactory;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
@@ -14,17 +15,17 @@ import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.proxy.AOPProxyGenerator;
 import org.androidrobotics.gen.proxy.MockDelegate;
 import org.androidrobotics.model.InjectionNode;
-import org.androidrobotics.model.ProxyDescriptor;
+import org.androidrobotics.model.PackageClass;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * @author John Ericksen
@@ -34,12 +35,15 @@ public class AOPProxyGeneratorTest {
     public static final String TEST_VALUE = "test";
     private static final String INPUT_VALUE = "input";
     private static final String EXECUTE_METHOD = "execute";
+    private static final String TEST_PACKLAGE = "org.androidrobotics.gen";
+    private static final String TEST_NAME = "MockDelegate_AOPProxy";
+    private static final PackageClass TEST_PACKAGE_FILENAME = new PackageClass(TEST_PACKLAGE, TEST_NAME);
 
     private InjectionNode delegateInjectionNode;
     @Inject
     private AOPProxyGenerator aopProxyGenerator;
     @Inject
-    public ASTClassFactory astClassFactory;
+    private ASTClassFactory astClassFactory;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
@@ -49,7 +53,13 @@ public class AOPProxyGeneratorTest {
     private ASTType delegateAST;
     @Inject
     private MockMethodInterceptor mockMethodInterceptor;
-    private ASTType mockMethdInterceptorAST;
+    private InjectionNode mockMethodInterceptorInjectionNode;
+    @Inject
+    private InjectionFragmentGeneratorHarness fragmentGeneratorHarness;
+    @Inject
+    private InjectionPointFactory injectionPointFactory;
+    @Inject
+    private SimpleAnalysisContextFactory simpleAnalysisContextFactory;
 
     @Before
     public void setup() {
@@ -59,25 +69,29 @@ public class AOPProxyGeneratorTest {
         delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
-        mockMethdInterceptorAST = astClassFactory.buildASTClassType(MockMethodInterceptor.class);
+        ASTType mockMethdInterceptorAST = astClassFactory.buildASTClassType(MockMethodInterceptor.class);
+
+        mockMethodInterceptorInjectionNode = injectionPointFactory.buildInjectionPoint(mockMethdInterceptorAST, simpleAnalysisContextFactory.buildContext()).getInjectionNode();
     }
 
     @Test
     public void testAOPProxy() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         AOPProxyAspect aopProxyAspect = new AOPProxyAspect();
 
-        aopProxyAspect.getMethodInterceptors().put(buildASTClassMethod(delegateAST, EXECUTE_METHOD), mockMethdInterceptorAST);
+        aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, EXECUTE_METHOD), mockMethodInterceptorInjectionNode);
         delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
 
-        ProxyDescriptor proxyDescriptor = aopProxyGenerator.generateProxy(delegateInjectionNode);
+        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
+
+        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
 
         ClassLoader classLoader = codeGenerationUtil.build(true);
+        Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
 
-        Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
+        assertNotNull(generatedFactoryClass);
+        Provider<MockDelegate> provider = generatedFactoryClass.newInstance();
 
-        MockDelegate delayedLoadProxy = (MockDelegate) proxyClass.newInstance();
-
-        runMockDelegateTests(delayedLoadProxy);
+        runMockDelegateTests(provider.get());
     }
 
     private ASTMethod buildASTClassMethod(ASTType delegateAST, String methodName) {

@@ -40,4 +40,8 @@ public class InjectionNode {
     public boolean containsAspect(Class<?> clazz) {
         return aspects.containsKey(clazz);
     }
+
+    public Map<Class<?>, Object> getAspects() {
+        return aspects;
+    }
 }

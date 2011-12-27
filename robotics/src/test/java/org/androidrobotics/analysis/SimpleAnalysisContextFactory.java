@@ -16,12 +16,15 @@ public class SimpleAnalysisContextFactory {
     private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
     @Inject
     private Provider<InterceptorRepository> interceptorRepositoryProvider;
+    @Inject
+    private Provider<AOPRepository> aopRepositoryProvider;
 
     public AnalysisContext buildContext() {
         return new AnalysisContext(
                 analysisRepositoryFactory.buildAnalysisRepository(),
                 variableBuilderRepositoryFactory.buildRepository(),
-                interceptorRepositoryProvider.get()
+                interceptorRepositoryProvider.get(),
+                aopRepositoryProvider.get()
         );
     }
 }

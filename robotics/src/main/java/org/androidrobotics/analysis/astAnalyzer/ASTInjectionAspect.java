@@ -43,4 +43,16 @@ public class ASTInjectionAspect {
     public Set<FieldInjectionPoint> getFieldInjectionPoints() {
         return fieldInjectionPoints;
     }
+
+    public void addAllFieldInjectionPoints(Set<FieldInjectionPoint> fieldInjectionPoints) {
+        this.fieldInjectionPoints.addAll(fieldInjectionPoints);
+    }
+
+    public void addAllMethodInjectionPoints(Set<MethodInjectionPoint> methodInjectionPoints) {
+        this.methodInjectionPoints.addAll(methodInjectionPoints);
+    }
+
+    public void addAllConstructorInjectionPoints(Set<ConstructorInjectionPoint> constructorInjectionPoints) {
+        this.constructorInjectionPoints.addAll(constructorInjectionPoints);
+    }
 }

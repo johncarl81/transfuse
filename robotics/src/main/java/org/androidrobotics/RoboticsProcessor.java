@@ -22,10 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.ActivityAnalysis;
-import org.androidrobotics.analysis.AnalysisRepository;
-import org.androidrobotics.analysis.AnalysisRepositoryFactory;
-import org.androidrobotics.analysis.InterceptorRepository;
+import org.androidrobotics.analysis.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Bind;
@@ -60,6 +57,7 @@ public class RoboticsProcessor {
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private InterceptorRepository interceptorRepository;
     private ActivityAnalysis activityAnalysis;
+    private AOPRepository aopRepository;
 
     @Inject
     public RoboticsProcessor(ActivityGenerator activityGenerator,
@@ -69,7 +67,8 @@ public class RoboticsProcessor {
                              VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
                              ActivityAnalysis activityAnalysis,
-                             Provider<InterceptorRepository> interceptorRepositoryProvider) {
+                             Provider<InterceptorRepository> interceptorRepositoryProvider,
+                             Provider<AOPRepository> aopRepositoryProvider) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
         this.logger = logger;
@@ -77,6 +76,7 @@ public class RoboticsProcessor {
         this.analysisRepositoryFactory = analysisRepositoryFactory;
         this.activityAnalysis = activityAnalysis;
 
+        aopRepository = aopRepositoryProvider.get();
         interceptorRepository = interceptorRepositoryProvider.get();
         injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
 
@@ -147,7 +147,7 @@ public class RoboticsProcessor {
                         if (astMethod.getParameters().size() == 1) {
                             ASTType annotationType = astMethod.getParameters().get(0).getASTType();
 
-
+                            aopRepository.put(annotationType, interceptor);
                         } else {
                             //todo: throw exception
                         }
@@ -163,7 +163,7 @@ public class RoboticsProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, interceptorRepository);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, interceptorRepository, aopRepository);
 
             if (activityDescriptor != null) {
                 try {
