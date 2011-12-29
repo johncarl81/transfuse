@@ -3,7 +3,10 @@ package org.androidrobotics;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.*;
+import org.androidrobotics.analysis.AOPRepository;
+import org.androidrobotics.analysis.ActivityAnalysis;
+import org.androidrobotics.analysis.AnalysisRepository;
+import org.androidrobotics.analysis.AnalysisRepositoryFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Bind;
@@ -34,7 +37,6 @@ public class RoboticsProcessor {
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
-    private InterceptorRepository interceptorRepository;
     private ActivityAnalysis activityAnalysis;
     private AOPRepository aopRepository;
 
@@ -46,7 +48,6 @@ public class RoboticsProcessor {
                              VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
                              ActivityAnalysis activityAnalysis,
-                             Provider<InterceptorRepository> interceptorRepositoryProvider,
                              Provider<AOPRepository> aopRepositoryProvider) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
@@ -56,7 +57,6 @@ public class RoboticsProcessor {
         this.activityAnalysis = activityAnalysis;
 
         aopRepository = aopRepositoryProvider.get();
-        interceptorRepository = interceptorRepositoryProvider.get();
         injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
     }
 
@@ -101,7 +101,7 @@ public class RoboticsProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, interceptorRepository, aopRepository);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, aopRepository);
 
             if (activityDescriptor != null) {
                 try {
