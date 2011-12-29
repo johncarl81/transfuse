@@ -9,10 +9,16 @@ public class InjectionUtil {
 
     public static final String SET_FIELD_METHOD = "setField";
 
-    public static void setField(Object target, String field, Object source) {
+    public static void setField(Object target, String field, Object source, boolean superTarget) {
 
         try {
-            Class targetClass = target.getClass();
+            Class targetClass;
+
+            if (superTarget) {
+                targetClass = target.getClass().getSuperclass();
+            } else {
+                targetClass = target.getClass();
+            }
 
             Field classField = targetClass.getDeclaredField(field);
             boolean accessible = classField.isAccessible();
@@ -23,9 +29,9 @@ public class InjectionUtil {
             classField.setAccessible(accessible);
 
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            throw new RoboticsInjectionException("Exception during field injection: NoSuchFieldException", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RoboticsInjectionException("Exception during field injection: IllegalAccessException", e);
         }
     }
 

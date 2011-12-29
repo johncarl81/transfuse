@@ -1,7 +1,6 @@
 package org.androidrobotics.gen.proxy;
 
 import com.sun.codemodel.*;
-import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
@@ -11,14 +10,17 @@ import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.aop.MethodInvocation;
 import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.ConstructorInjectionPoint;
+import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
 
 /**
  * @author John Ericksen
  */
+@Singleton
 public class AOPProxyGenerator {
 
     private static final String VOID_TYPE_NAME = "void";
@@ -28,17 +30,24 @@ public class AOPProxyGenerator {
 
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
-    private InjectionPointFactory injectionPointFactory;
+    private Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, InjectionPointFactory injectionPointFactory) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
-        this.injectionPointFactory = injectionPointFactory;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
+        if (!aopProxiesGenerated.containsKey(injectionNode.getClassName())) {
+            InjectionNode proxyInjectionNode = innerGenerateProxyCode(injectionNode);
+            aopProxiesGenerated.put(injectionNode.getClassName(), proxyInjectionNode);
+        }
 
+        return aopProxiesGenerated.get(injectionNode.getClassName());
+    }
+
+    public InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         InjectionNode proxyInjectionNode = null;
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass = null;
@@ -98,9 +107,11 @@ public class AOPProxyGenerator {
 
             for (Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry : aopProxyAspect.getMethodInterceptors().entrySet()) {
                 ASTMethod method = methodInterceptorEntry.getKey();
-                JClass returnType = null;
+                JType returnType;
                 if (method.getReturnType() != null) {
                     returnType = codeModel.ref(method.getReturnType().getName());
+                } else {
+                    returnType = codeModel.VOID;
                 }
                 JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
                 JBlock body = methodDeclaration.body();
@@ -145,6 +156,10 @@ public class AOPProxyGenerator {
 
             //alter construction injection
             ASTInjectionAspect proxyInjectionAspect = new ASTInjectionAspect();
+            //flag InjectionUtil that it needs to set the super class' fields
+            for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
+                fieldInjectionPoint.setProxied(true);
+            }
             proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
             proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
             //replace proxy constructor because of optional interceptor construction parameters

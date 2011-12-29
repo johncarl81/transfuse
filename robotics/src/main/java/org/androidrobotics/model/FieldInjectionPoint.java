@@ -7,10 +7,12 @@ public class FieldInjectionPoint {
 
     private InjectionNode injectionNode;
     private String name;
+    private boolean proxied;
 
     public FieldInjectionPoint(String name, InjectionNode injectionNode) {
         this.injectionNode = injectionNode;
         this.name = name;
+        this.proxied = false;
     }
 
     public String getName() {
@@ -19,5 +21,13 @@ public class FieldInjectionPoint {
 
     public InjectionNode getInjectionNode() {
         return injectionNode;
+    }
+
+    public boolean isProxied() {
+        return proxied;
+    }
+
+    public void setProxied(boolean proxied) {
+        this.proxied = proxied;
     }
 }

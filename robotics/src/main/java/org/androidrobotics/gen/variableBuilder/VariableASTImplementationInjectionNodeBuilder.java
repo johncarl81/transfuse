@@ -16,22 +16,15 @@ public class VariableASTImplementationInjectionNodeBuilder implements InjectionN
 
     private Analyzer analyzer;
     private ASTType implType;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType,
-                                                         Analyzer analyzer,
-                                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType, Analyzer analyzer) {
         this.analyzer = analyzer;
         this.implType = implType;
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        InjectionNode injectionNode = analyzer.analyze(astType, implType, context);
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildVariableInjectionBuilder(implType));
-
-        return injectionNode;
+        return analyzer.analyze(astType, implType, context);
     }
 }

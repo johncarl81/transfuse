@@ -17,8 +17,6 @@ public interface VariableInjectionBuilderFactory {
 
     VariableASTImplementationInjectionNodeBuilder buildVariableInjectionNodeBuilder(ASTType astType);
 
-    VariableASTImplementationInjectionBuilder buildVariableInjectionBuilder(ASTType astType);
-
     SystemServiceVariableBuilder buildSystemServiceVariableBuilder(String systemService, JType systemServiceType, InjectionNode contextInjectionNode);
 
     SystemServiceInjectionNodeBuilder buildSystemServiceInjectionNodeBuilder(String systemService, Class<?> systemServiceClass);

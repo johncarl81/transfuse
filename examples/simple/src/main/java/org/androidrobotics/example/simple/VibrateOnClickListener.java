@@ -14,6 +14,7 @@ public class VibrateOnClickListener implements View.OnClickListener {
     private Vibrator vibrator;
 
     @Override
+    @LogInterception
     public void onClick(View view) {
         vibrator.vibrate(1000);
     }

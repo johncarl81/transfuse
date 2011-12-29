@@ -36,10 +36,12 @@ public class InjectionInvocationBuilder {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
-                .arg(variable).arg(fieldInjectionPoint.getName()).arg(nodeMap.get(node));
+                .arg(variable).arg(fieldInjectionPoint.getName())
+                .arg(nodeMap.get(node))
+                .arg(JExpr.lit(fieldInjectionPoint.isProxied()));
     }
 
-    public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException {
         JInvocation constructorInvocation = JExpr._new(type);
 
         for (InjectionNode node : injectionNode.getInjectionNodes()) {

@@ -9,7 +9,6 @@ import org.androidrobotics.annotations.*;
 public class LifecycleLogger {
 
     @OnCreate
-    @LogInterception
     public void onCreate() {
         Log.i("lifecycle", "onCreate Called");
     }

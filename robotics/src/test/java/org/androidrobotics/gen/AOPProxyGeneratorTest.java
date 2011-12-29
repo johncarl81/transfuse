@@ -83,9 +83,7 @@ public class AOPProxyGeneratorTest {
         aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, EXECUTE_METHOD), mockMethodInterceptorInjectionNode);
         delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
 
-        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
-
-        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
+        fragmentGeneratorHarness.buildProvider(delegateInjectionNode, TEST_PACKAGE_FILENAME);
 
         ClassLoader classLoader = codeGenerationUtil.build(true);
         Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
@@ -103,9 +101,7 @@ public class AOPProxyGeneratorTest {
         aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, SETVALUE_METHOD), mockMethodInterceptorInjectionNode);
         delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
 
-        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
-
-        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
+        fragmentGeneratorHarness.buildProvider(delegateInjectionNode, TEST_PACKAGE_FILENAME);
 
         ClassLoader classLoader = codeGenerationUtil.build(true);
         Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
@@ -123,9 +119,7 @@ public class AOPProxyGeneratorTest {
         aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, PASSTHROUGH_METHOD), mockMethodInterceptorInjectionNode);
         delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
 
-        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
-
-        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
+        fragmentGeneratorHarness.buildProvider(delegateInjectionNode, TEST_PACKAGE_FILENAME);
 
         ClassLoader classLoader = codeGenerationUtil.build(true);
         Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());

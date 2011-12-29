@@ -61,9 +61,11 @@ public class VirtualProxyGenerator {
                     //implement methods
                     for (ASTMethod method : interfaceType.getMethods()) {
                         // public <type> <method_name> ( <parameters...>)
-                        JClass returnType = null;
+                        JType returnType = null;
                         if (method.getReturnType() != null) {
                             returnType = codeModel.ref(method.getReturnType().getName());
+                        } else {
+                            returnType = codeModel.VOID;
                         }
                         JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
 
