@@ -42,7 +42,7 @@ public class InjectionFragmentGenerator {
 
                 //field injection
                 for (FieldInjectionPoint fieldInjectionPoint : injectionToken.getFieldInjectionPoints()) {
-                    block.add(injectionInvocationBuilder.buildParameterInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
+                    block.add(injectionInvocationBuilder.buildFieldInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
                 }
 
                 //method injection

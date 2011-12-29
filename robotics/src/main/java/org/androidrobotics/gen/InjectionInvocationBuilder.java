@@ -32,13 +32,20 @@ public class InjectionInvocationBuilder {
         return methodInvocation;
     }
 
-    public JInvocation buildParameterInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JInvocation buildFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+        if (fieldInjectionPoint.isProxied()) {
+            return buildFieldInjection(InjectionUtil.SET_SUPER_METHOD, nodeMap, fieldInjectionPoint, variable);
+        } else {
+            return buildFieldInjection(InjectionUtil.SET_FIELD_METHOD, nodeMap, fieldInjectionPoint, variable);
+        }
+    }
+
+    private JInvocation buildFieldInjection(String staticMethod, Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
-        return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
+        return codeModel.ref(InjectionUtil.class).staticInvoke(staticMethod)
                 .arg(variable).arg(fieldInjectionPoint.getName())
-                .arg(nodeMap.get(node))
-                .arg(JExpr.lit(fieldInjectionPoint.isProxied()));
+                .arg(nodeMap.get(node));
     }
 
     public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException {
@@ -50,5 +57,4 @@ public class InjectionInvocationBuilder {
 
         return constructorInvocation;
     }
-
 }
