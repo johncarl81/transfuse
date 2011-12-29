@@ -2,10 +2,8 @@ package org.androidrobotics.example.simple;
 
 import android.content.Context;
 import android.util.Log;
-import org.androidrobotics.annotations.Activity;
-import org.androidrobotics.annotations.Layout;
-import org.androidrobotics.annotations.OnCreate;
-import org.androidrobotics.annotations.SystemService;
+import android.widget.Button;
+import org.androidrobotics.annotations.*;
 
 import javax.inject.Inject;
 
@@ -22,10 +20,20 @@ public class SimpleActivityDelegate {
     @Inject
     @SystemService(Context.AUDIO_SERVICE)
     private Object systemService;
+    @Inject
+    private LateReturnListener lateReturnListener;
+    @Inject
+    @View(R.id.asynchActivity)
+    private Button button;
 
     @Inject
     public SimpleActivityDelegate(LifecycleLogger value) {
         this.value = value;
+    }
+
+    @OnCreate
+    public void registerLateReturnListener() {
+        button.setOnClickListener(lateReturnListener);
     }
 
     @OnCreate
