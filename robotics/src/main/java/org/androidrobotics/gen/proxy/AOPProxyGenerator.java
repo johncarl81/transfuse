@@ -109,7 +109,7 @@ public class AOPProxyGenerator {
                 Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
                 for (ASTParameter parameter : method.getParameters()) {
                     parameterMap.put(parameter,
-                            methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
+                            methodDeclaration.param(JMod.FINAL, codeModel.ref(parameter.getASTType().getName()),
                                     variableNamer.generateName(parameter.getASTType().getName())));
                 }
 
@@ -128,7 +128,7 @@ public class AOPProxyGenerator {
                 if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
                     tryInterceptorBody.add(invocation);
                 } else {
-                    tryInterceptorBody._return(invocation);
+                    tryInterceptorBody._return(JExpr.cast(codeModel.ref(method.getReturnType().getName()), invocation));
                 }
 
                 JCatchBlock interceptorCatchBlock = tryInterceptorBlock._catch(codeModel.ref(Throwable.class));

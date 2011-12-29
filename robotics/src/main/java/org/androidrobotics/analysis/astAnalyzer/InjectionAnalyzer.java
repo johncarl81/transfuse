@@ -19,6 +19,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
 
+    @Inject
     public InjectionAnalyzer(InjectionPointFactory injectionPointFactory) {
         this.injectionPointFactory = injectionPointFactory;
     }

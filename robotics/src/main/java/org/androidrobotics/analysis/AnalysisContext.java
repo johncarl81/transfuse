@@ -57,4 +57,8 @@ public class AnalysisContext {
     public InterceptorRepository getInterceptorRepository() {
         return interceptorRepository;
     }
+
+    public AOPRepository getAopRepository() {
+        return aopRepository;
+    }
 }

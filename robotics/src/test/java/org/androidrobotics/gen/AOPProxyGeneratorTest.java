@@ -35,6 +35,8 @@ public class AOPProxyGeneratorTest {
     public static final String TEST_VALUE = "test";
     private static final String INPUT_VALUE = "input";
     private static final String EXECUTE_METHOD = "execute";
+    private static final String SETVALUE_METHOD = "setValue";
+    private static final String PASSTHROUGH_METHOD = "passThroughValue";
     private static final String TEST_PACKLAGE = "org.androidrobotics.gen";
     private static final String TEST_NAME = "MockDelegate_AOPProxy";
     private static final PackageClass TEST_PACKAGE_FILENAME = new PackageClass(TEST_PACKLAGE, TEST_NAME);
@@ -79,6 +81,46 @@ public class AOPProxyGeneratorTest {
         AOPProxyAspect aopProxyAspect = new AOPProxyAspect();
 
         aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, EXECUTE_METHOD), mockMethodInterceptorInjectionNode);
+        delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
+
+        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
+
+        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+        Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
+
+        assertNotNull(generatedFactoryClass);
+        Provider<MockDelegate> provider = generatedFactoryClass.newInstance();
+
+        runMockDelegateTests(provider.get());
+    }
+
+    @Test
+    public void testAOPProxyMethodWithParameters() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        AOPProxyAspect aopProxyAspect = new AOPProxyAspect();
+
+        aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, SETVALUE_METHOD), mockMethodInterceptorInjectionNode);
+        delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
+
+        InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
+
+        fragmentGeneratorHarness.buildProvider(proxyInjectionNode, TEST_PACKAGE_FILENAME);
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+        Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
+
+        assertNotNull(generatedFactoryClass);
+        Provider<MockDelegate> provider = generatedFactoryClass.newInstance();
+
+        runMockDelegateTests(provider.get());
+    }
+
+    @Test
+    public void testAOPProxyMethodWithReturn() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        AOPProxyAspect aopProxyAspect = new AOPProxyAspect();
+
+        aopProxyAspect.addInterceptor(buildASTClassMethod(delegateAST, PASSTHROUGH_METHOD), mockMethodInterceptorInjectionNode);
         delegateInjectionNode.addAspect(AOPProxyAspect.class, aopProxyAspect);
 
         InjectionNode proxyInjectionNode = aopProxyGenerator.generateProxy(delegateInjectionNode);
