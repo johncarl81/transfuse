@@ -103,7 +103,8 @@ public class InjectionFragmentGeneratorTest {
 
     @Test
     public void testDelayedProxyInjection() throws Exception {
-        InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxyTarget.class));
+        InjectionNode injectionNode = new InjectionNode(astClassFactory.buildASTClassType(DelayedProxy.class),
+                astClassFactory.buildASTClassType(DelayedProxyTarget.class));
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         ProxyAspect proxyAspect = new ProxyAspect();

@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public class InjectionInvocationBuilder {
 
+    private static final String CLASS_REF = "class";
+
     private JCodeModel codeModel;
 
     @Inject
@@ -22,7 +24,34 @@ public class InjectionInvocationBuilder {
         this.codeModel = codeModel;
     }
 
-    public JInvocation buildMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildPrivateMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+
+        //InjectionUtil.setMethod(Object target, int superLevel, String method, Class[] argClasses,Object[] args)
+        JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_METHOD_METHOD)
+                .arg(variable)
+                .arg(JExpr.lit(0))
+                .arg(methodInjectionPoint.getName());
+
+        //add classes
+        JArray classArray = JExpr.newArray(codeModel.ref(Class.class));
+        for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
+            classArray.add(codeModel.ref(injectionNode.getClassName()).staticRef(CLASS_REF));
+        }
+        methodInvocation.arg(classArray);
+
+        //add args
+        JArray argArray = JExpr.newArray(codeModel.ref(Object.class));
+        for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
+            argArray.add(nodeMap.get(injectionNode));
+        }
+        methodInvocation.arg(argArray);
+
+        return methodInvocation;
+    }
+
+    public JStatement buildMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+        //public case:
+
         JInvocation methodInvocation = variable.invoke(methodInjectionPoint.getName());
 
         for (InjectionNode injectionNode : methodInjectionPoint.getInjectionNodes()) {
@@ -32,28 +61,64 @@ public class InjectionInvocationBuilder {
         return methodInvocation;
     }
 
-    public JInvocation buildFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         if (fieldInjectionPoint.isProxied()) {
-            return buildFieldInjection(InjectionUtil.SET_SUPER_METHOD, nodeMap, fieldInjectionPoint, variable);
+            return buildFieldInjection(1, nodeMap, fieldInjectionPoint, variable);
         } else {
-            return buildFieldInjection(InjectionUtil.SET_FIELD_METHOD, nodeMap, fieldInjectionPoint, variable);
+            return buildFieldInjection(0, nodeMap, fieldInjectionPoint, variable);
         }
     }
 
-    private JInvocation buildFieldInjection(String staticMethod, Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildPublicFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+        //public case:
+        JBlock assignmentBlock = new JBlock();
+
+        assignmentBlock.assign(variable.ref(fieldInjectionPoint.getName()), nodeMap.get(fieldInjectionPoint.getInjectionNode()));
+
+        return assignmentBlock;
+    }
+
+    private JStatement buildFieldInjection(int superLevel, Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
-        return codeModel.ref(InjectionUtil.class).staticInvoke(staticMethod)
-                .arg(variable).arg(fieldInjectionPoint.getName())
+        return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
+                .arg(variable)
+                .arg(JExpr.lit(superLevel))
+                .arg(fieldInjectionPoint.getName())
                 .arg(nodeMap.get(node));
     }
 
-    public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint injectionNode, JType type) throws ClassNotFoundException {
+    public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+        //public clase:
         JInvocation constructorInvocation = JExpr._new(type);
 
-        for (InjectionNode node : injectionNode.getInjectionNodes()) {
+        for (InjectionNode node : constructorInjectionPoint.getInjectionNodes()) {
             constructorInvocation.arg(nodeMap.get(node));
         }
+
+        return constructorInvocation;
+    }
+
+
+    public JInvocation buildPrivateConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+
+        //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
+        JInvocation constructorInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_CONSTRUCTOR_METHOD)
+                .arg(codeModel.ref(type.fullName()).staticRef(CLASS_REF));
+
+        //add classes
+        JArray classArray = JExpr.newArray(codeModel.ref(Class.class));
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
+            classArray.add(codeModel.ref(injectionNode.getUsageType().getName()).staticRef(CLASS_REF));
+        }
+        constructorInvocation.arg(classArray);
+
+        //add args
+        JArray argArray = JExpr.newArray(codeModel.ref(Object.class));
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
+            argArray.add(nodeMap.get(injectionNode));
+        }
+        constructorInvocation.arg(argArray);
 
         return constructorInvocation;
     }

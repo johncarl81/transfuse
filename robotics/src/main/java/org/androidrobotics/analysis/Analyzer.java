@@ -41,7 +41,7 @@ public class Analyzer {
             proxyAspect.getProxyInterfaces().add(instanceType);
 
         } else {
-            injectionNode = new InjectionNode(concreteType);
+            injectionNode = new InjectionNode(instanceType, concreteType);
             //default variable builder
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
