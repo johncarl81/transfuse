@@ -2,6 +2,7 @@ package org.androidrobotics.gen.proxy;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTProxyType;
@@ -59,7 +60,7 @@ public class AOPProxyGenerator {
 
             //copy constructor and add aop interceptors
             JMethod constructor = definedClass.constructor(JMod.PUBLIC);
-            ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint();
+            ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC);
 
             ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
             ConstructorInjectionPoint constructorInjectionPoint = injectionAspect.getConstructorInjectionPoint();

@@ -1,6 +1,7 @@
 package org.androidrobotics.gen;
 
 import com.sun.codemodel.*;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
@@ -22,6 +23,13 @@ public class InjectionInvocationBuilder {
     @Inject
     public InjectionInvocationBuilder(JCodeModel codeModel) {
         this.codeModel = codeModel;
+    }
+
+    public JStatement buildMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+        if (ASTAccessModifier.PUBLIC.equals(methodInjectionPoint.getAccessModifier())) {
+            return buildPublicMethodInjection(nodeMap, methodInjectionPoint, variable);
+        }
+        return buildPrivateMethodInjection(nodeMap, methodInjectionPoint, variable);
     }
 
     public JStatement buildPrivateMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
@@ -49,7 +57,7 @@ public class InjectionInvocationBuilder {
         return methodInvocation;
     }
 
-    public JStatement buildMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildPublicMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         //public case:
 
         JInvocation methodInvocation = variable.invoke(methodInjectionPoint.getName());
@@ -62,6 +70,13 @@ public class InjectionInvocationBuilder {
     }
 
     public JStatement buildFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+        if (ASTAccessModifier.PUBLIC.equals(fieldInjectionPoint.getAccessModifier())) {
+            return buildPublicFieldInjection(nodeMap, fieldInjectionPoint, variable);
+        }
+        return buildPrivateFieldInjection(nodeMap, fieldInjectionPoint, variable);
+    }
+
+    public JStatement buildPrivateFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         if (fieldInjectionPoint.isProxied()) {
             return buildFieldInjection(1, nodeMap, fieldInjectionPoint, variable);
         } else {
@@ -71,7 +86,7 @@ public class InjectionInvocationBuilder {
 
     public JStatement buildPublicFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         //public case:
-        JBlock assignmentBlock = new JBlock();
+        JBlock assignmentBlock = new JBlock(false, false);
 
         assignmentBlock.assign(variable.ref(fieldInjectionPoint.getName()), nodeMap.get(fieldInjectionPoint.getInjectionNode()));
 
@@ -89,6 +104,13 @@ public class InjectionInvocationBuilder {
     }
 
     public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+        if (ASTAccessModifier.PUBLIC.equals(constructorInjectionPoint.getAccessModifier())) {
+            return buildPublicConstructorCall(nodeMap, constructorInjectionPoint, type);
+        }
+        return buildPrivateConstructorCall(nodeMap, constructorInjectionPoint, type);
+    }
+
+    public JInvocation buildPublicConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
         //public clase:
         JInvocation constructorInvocation = JExpr._new(type);
 

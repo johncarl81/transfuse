@@ -2,6 +2,7 @@ package org.androidrobotics.analysis.astAnalyzer;
 
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
@@ -33,7 +34,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
     private InjectionNode getInterceptorInjectionNode(String methodAnnotation, AnalysisContext context) {
         ASTType interceptorType = context.getAopRepository().getInterceptor(methodAnnotation);
 
-        return injectionPointFactory.buildInjectionPoint(interceptorType, context).getInjectionNode();
+        return injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, interceptorType, context).getInjectionNode();
     }
 
     private void addInterceptor(InjectionNode injectionNode, ASTMethod astMethod, InjectionNode interceptor) {

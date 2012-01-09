@@ -13,11 +13,13 @@ public class ASTClassMethod implements ASTMethod {
     private Method method;
     private List<ASTParameter> parameters;
     private ASTType returnType;
+    private ASTAccessModifier modifier;
 
-    public ASTClassMethod(Method method, ASTType returnType, List<ASTParameter> parameters) {
+    public ASTClassMethod(Method method, ASTType returnType, List<ASTParameter> parameters, ASTAccessModifier modifier) {
         this.method = method;
         this.parameters = parameters;
         this.returnType = returnType;
+        this.modifier = modifier;
     }
 
     @Override
@@ -54,5 +56,9 @@ public class ASTClassMethod implements ASTMethod {
         }
 
         return annotationList;
+    }
+
+    public ASTAccessModifier getAccessModifier() {
+        return modifier;
     }
 }

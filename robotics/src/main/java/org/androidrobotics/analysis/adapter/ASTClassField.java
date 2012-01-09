@@ -12,10 +12,12 @@ public class ASTClassField implements ASTField {
 
     private Field field;
     private ASTType astType;
+    private ASTAccessModifier modifier;
 
-    public ASTClassField(Field field, ASTType astType) {
+    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier) {
         this.field = field;
         this.astType = astType;
+        this.modifier = modifier;
     }
 
     @Override
@@ -47,5 +49,9 @@ public class ASTClassField implements ASTField {
         }
 
         return annotationList;
+    }
+
+    public ASTAccessModifier getAccessModifier() {
+        return modifier;
     }
 }

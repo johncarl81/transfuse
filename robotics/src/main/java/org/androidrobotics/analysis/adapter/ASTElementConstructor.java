@@ -11,14 +11,20 @@ import java.util.List;
 public class ASTElementConstructor extends ASTElementBase implements ASTConstructor {
 
     private List<ASTParameter> parameters;
+    private ASTAccessModifier modifier;
 
-    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters) {
+    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier) {
         super(executableElement);
         this.parameters = parameters;
+        this.modifier = modifier;
     }
 
     @Override
     public List<ASTParameter> getParameters() {
         return parameters;
+    }
+
+    public ASTAccessModifier getAccessModifier() {
+        return modifier;
     }
 }

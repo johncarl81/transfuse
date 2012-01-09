@@ -8,49 +8,31 @@ import org.junit.runner.RunWith;
 import java.lang.reflect.Field;
 
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-public class SimpleActivityTest {
+public class SecondActivityTest {
 
-    private SimpleActivity simpleActivity;
-    private SimpleActivityDelegate testActivityDelegate;
+    private SecondActivity simpleActivity;
+    private SecondActivityDelegate secondActivityDelegate;
 
     @Before
     public void setup() throws IllegalAccessException, NoSuchFieldException {
-        simpleActivity = new SimpleActivity();
+        simpleActivity = new SecondActivity();
         simpleActivity.onCreate(null);
 
-        Field delegateField = findDelegateField(SimpleActivity.class, SimpleActivityDelegate.class);
+        Field delegateField = findDelegateField(SecondActivity.class, SecondActivityDelegate.class);
 
         delegateField.setAccessible(true);
-        testActivityDelegate = (SimpleActivityDelegate) delegateField.get(simpleActivity);
+        secondActivityDelegate = (SecondActivityDelegate) delegateField.get(simpleActivity);
         delegateField.setAccessible(false);
     }
 
     @Test
     public void testPrivateInject() {
-        assertNotNull(testActivityDelegate.getController());
-        assertTrue(testActivityDelegate.getController().validate());
-    }
-
-    @Test
-    public void testContructorInject() {
-        assertTrue(testActivityDelegate.isConstructorInjected());
-    }
-
-    @Test
-    public void testSystemServiceInject() {
-        assertTrue(testActivityDelegate.isSystemServiceInjected());
-    }
-
-    @Test
-    public void testOnCreateCalled() {
-        assertTrue(testActivityDelegate.isOnCreateCalled());
-        assertTrue(testActivityDelegate.isSecondOnCreatCalled());
+        assertNotNull(secondActivityDelegate.getTextView());
     }
 
     private Field findDelegateField(Class target, Class type) {

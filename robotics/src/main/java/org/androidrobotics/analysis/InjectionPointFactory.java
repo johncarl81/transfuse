@@ -30,7 +30,7 @@ public class InjectionPointFactory {
      */
     public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {
 
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint();
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astConstructor.getAccessModifier());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
         //bindingAnnotations for single parameter from method level
@@ -55,7 +55,7 @@ public class InjectionPointFactory {
      */
     public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getName());
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getAccessModifier(), astMethod.getName());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
         //bindingAnnotations for single parameter from method level
@@ -79,17 +79,18 @@ public class InjectionPointFactory {
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+        return new FieldInjectionPoint(astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
     }
 
     /**
      * Build a Field InjectionPoint directly from the given ASTType
      *
+     * @param modifier
      * @param astType
      * @return
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType astType, AnalysisContext context) {
-        return new FieldInjectionPoint(astType.getName(), buildInjectionNode(Collections.EMPTY_LIST, astType, context));
+    public FieldInjectionPoint buildInjectionPoint(ASTAccessModifier modifier, ASTType astType, AnalysisContext context) {
+        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(Collections.EMPTY_LIST, astType, context));
     }
 
     private InjectionNode buildInjectionNode(List<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {

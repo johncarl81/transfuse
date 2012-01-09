@@ -14,4 +14,6 @@ public interface ASTField extends ASTBase {
      */
     ASTType getASTType();
 
+    ASTAccessModifier getAccessModifier();
+
 }

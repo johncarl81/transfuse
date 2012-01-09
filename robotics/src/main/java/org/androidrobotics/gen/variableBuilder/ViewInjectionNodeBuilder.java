@@ -5,6 +5,7 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
@@ -35,7 +36,7 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
-        FieldInjectionPoint activityInjectionNode = injectionPointFactory.buildInjectionPoint(activityType, context);
+        FieldInjectionPoint activityInjectionNode = injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, activityType, context);
 
         Integer viewId = (Integer) ((AnnotationValue) annotation.getProperty("value")).getValue();
 

@@ -21,12 +21,16 @@ public class SimpleController {
     private Context activity;
     @Inject
     private VibrateOnClickListener vibrateOnClickListener;
-    @Inject
     private NotifyOnClickListener notifyOnClickListener;
     private Vibrator vibrator;
     private Button vibrateButton;
     private Button notifyButton;
     private int value = 0;
+
+    @Inject
+    private SimpleController(NotifyOnClickListener notifyOnClickListener) {
+        this.notifyOnClickListener = notifyOnClickListener;
+    }
 
     @Inject
     @View(R.id.vibrateButton)

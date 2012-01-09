@@ -15,12 +15,11 @@ public class SimpleActivityDelegate {
     private boolean secondOnCreatCalled = false;
 
     @Inject
-    private SimpleController controller;
+    public SimpleController controller;
     private LifecycleLogger value;
     @Inject
     @SystemService(Context.AUDIO_SERVICE)
     private Object systemService;
-    @Inject
     private LateReturnListener lateReturnListener;
     @Inject
     @View(R.id.asynchActivity)
@@ -46,6 +45,11 @@ public class SimpleActivityDelegate {
     public void anotherCall() {
         Log.i("test", "test");
         secondOnCreatCalled = true;
+    }
+
+    @Inject
+    private void setLateReturnListener(LateReturnListener lateReturnListener) {
+        this.lateReturnListener = lateReturnListener;
     }
 
     public boolean isOnCreateCalled() {

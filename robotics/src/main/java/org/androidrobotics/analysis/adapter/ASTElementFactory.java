@@ -3,10 +3,7 @@ package org.androidrobotics.analysis.adapter;
 import org.androidrobotics.util.CollectionConverterUtil;
 
 import javax.inject.Inject;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.TypeParameterElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +64,26 @@ public class ASTElementFactory {
      * @return ASTElementField
      */
     public ASTElementField buildASTElementVariable(VariableElement variableElement) {
-        return new ASTElementField(variableElement, astTypeBuilderVisitor);
+        ASTAccessModifier modifier = buildAccessModifier(variableElement);
+
+        return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier);
+    }
+
+    private ASTAccessModifier buildAccessModifier(Element element) {
+        ASTAccessModifier modifier;
+
+        for (Modifier elementModifier : element.getModifiers()) {
+            switch (elementModifier) {
+                case PUBLIC:
+                    return ASTAccessModifier.PUBLIC;
+                case PROTECTED:
+                    return ASTAccessModifier.PROTECTED;
+                case PRIVATE:
+                    return ASTAccessModifier.PRIVATE;
+            }
+        }
+
+        return ASTAccessModifier.PACKAGE_PRIVATE;
     }
 
     /**
@@ -79,8 +95,9 @@ public class ASTElementFactory {
     public ASTMethod buildASTElementMethod(ExecutableElement executableElement) {
 
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
+        ASTAccessModifier modifier = buildAccessModifier(executableElement);
 
-        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters);
+        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier);
     }
 
     /**
@@ -127,6 +144,7 @@ public class ASTElementFactory {
      */
     public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
-        return new ASTElementConstructor(executableElement, parameters);
+        ASTAccessModifier modifier = buildAccessModifier(executableElement);
+        return new ASTElementConstructor(executableElement, parameters, modifier);
     }
 }

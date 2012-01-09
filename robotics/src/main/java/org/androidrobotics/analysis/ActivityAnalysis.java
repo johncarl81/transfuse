@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis;
 
 import android.content.Context;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.Layout;
@@ -48,7 +49,7 @@ public class ActivityAnalysis {
             activityDescriptor.setLayout(layoutAnnotation.value());
 
             activityDescriptor.addInjectionPoint(
-                    injectionPointFactory.buildInjectionPoint(input, new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), aopRepository))
+                    injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, input, new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), aopRepository))
             );
         }
         return activityDescriptor;

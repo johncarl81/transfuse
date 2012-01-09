@@ -12,10 +12,12 @@ public class ASTClassConstructor implements ASTConstructor {
 
     private Constructor constructor;
     private List<ASTParameter> parameters;
+    private ASTAccessModifier modifier;
 
-    public ASTClassConstructor(Constructor<?> constructor, List<ASTParameter> parameters) {
+    public ASTClassConstructor(Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
         this.constructor = constructor;
         this.parameters = parameters;
+        this.modifier = modifier;
     }
 
     @Override
@@ -47,5 +49,10 @@ public class ASTClassConstructor implements ASTConstructor {
         }
 
         return annotationList;
+    }
+
+    @Override
+    public ASTAccessModifier getAccessModifier() {
+        return modifier;
     }
 }

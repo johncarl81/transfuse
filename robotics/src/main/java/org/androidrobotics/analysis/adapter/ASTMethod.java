@@ -22,4 +22,6 @@ public interface ASTMethod extends ASTBase {
      * @return return type
      */
     ASTType getReturnType();
+
+    ASTAccessModifier getAccessModifier();
 }

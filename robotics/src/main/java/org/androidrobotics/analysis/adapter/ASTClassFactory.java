@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -64,16 +65,34 @@ public class ASTClassFactory {
     public ASTMethod buildASTClassMethod(Method method) {
 
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
+        ASTAccessModifier modifier = buildASTAccessModifier(method.getModifiers());
 
-        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters);
+        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters, modifier);
+    }
+
+    private ASTAccessModifier buildASTAccessModifier(int modifiers) {
+        switch (modifiers) {
+            case Modifier.PUBLIC:
+                return ASTAccessModifier.PUBLIC;
+            case Modifier.PROTECTED:
+                return ASTAccessModifier.PROTECTED;
+            case Modifier.PRIVATE:
+                return ASTAccessModifier.PRIVATE;
+        }
+
+        return ASTAccessModifier.PACKAGE_PRIVATE;
     }
 
     public ASTField buildASTClassField(Field field) {
-        return new ASTClassField(field, buildASTClassType(field.getType()));
+        ASTAccessModifier modifier = buildASTAccessModifier(field.getModifiers());
+
+        return new ASTClassField(field, buildASTClassType(field.getType()), modifier);
     }
 
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
-        return new ASTClassConstructor(constructor, buildASTTypeParameters(constructor));
+        ASTAccessModifier modifier = buildASTAccessModifier(constructor.getModifiers());
+
+        return new ASTClassConstructor(constructor, buildASTTypeParameters(constructor), modifier);
     }
 
 

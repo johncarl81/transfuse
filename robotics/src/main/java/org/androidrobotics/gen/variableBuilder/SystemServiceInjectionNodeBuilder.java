@@ -6,6 +6,7 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
@@ -47,7 +48,7 @@ public class SystemServiceInjectionNodeBuilder implements InjectionNodeBuilder {
 
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
 
-        FieldInjectionPoint contextInjectionNode = injectionPointFactory.buildInjectionPoint(contextType, context);
+        FieldInjectionPoint contextInjectionNode = injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, contextType, context);
 
         try {
             injectionNode.addAspect(VariableBuilder.class,
