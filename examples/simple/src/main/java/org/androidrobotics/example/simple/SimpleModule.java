@@ -2,6 +2,7 @@ package org.androidrobotics.example.simple;
 
 import org.androidrobotics.annotations.Bind;
 import org.androidrobotics.annotations.BindInterceptor;
+import org.androidrobotics.annotations.BindProvider;
 import org.androidrobotics.annotations.RoboticsModule;
 
 /**
@@ -15,4 +16,7 @@ public interface SimpleModule {
 
     @BindInterceptor
     LoggingInterceptor binding(LogInterception interception);
+
+    @BindProvider(ValueProvider.class)
+    ProvidedValue binding(ValueProvider provider);
 }

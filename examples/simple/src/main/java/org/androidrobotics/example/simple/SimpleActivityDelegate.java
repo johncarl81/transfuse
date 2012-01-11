@@ -15,6 +15,8 @@ public class SimpleActivityDelegate {
     private boolean secondOnCreatCalled = false;
 
     @Inject
+    private ProvidedValue providedValue;
+    @Inject
     public SimpleController controller;
     private LifecycleLogger value;
     @Inject
@@ -70,5 +72,9 @@ public class SimpleActivityDelegate {
 
     public boolean isSystemServiceInjected() {
         return systemService != null;
+    }
+
+    public ProvidedValue getProvidedValue() {
+        return providedValue;
     }
 }

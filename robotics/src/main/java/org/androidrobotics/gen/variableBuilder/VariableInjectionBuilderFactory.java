@@ -4,16 +4,12 @@ import com.sun.codemodel.JType;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.model.InjectionNode;
 
-import javax.inject.Provider;
-
 /**
  * @author John Ericksen
  */
 public interface VariableInjectionBuilderFactory {
 
-    ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(Class<? extends Provider<?>> providerClass);
-
-    VariableImplementationInjectionNodeBuilder buildVariableInjectionBuilder(Class<?> concreteClass);
+    ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(ASTType astType);
 
     VariableASTImplementationInjectionNodeBuilder buildVariableInjectionNodeBuilder(ASTType astType);
 

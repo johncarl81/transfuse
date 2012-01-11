@@ -156,7 +156,8 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testProviderBuilder() throws Exception {
 
-        variableBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(VariableTargetProvider.class));
+        variableBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(
+                astClassFactory.buildASTClassType(VariableTargetProvider.class)));
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
         ASTType providerType = astClassFactory.buildASTClassType(VariableTargetProvider.class);

@@ -7,8 +7,7 @@ import org.junit.runner.RunWith;
 
 import java.lang.reflect.Field;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * @author John Ericksen
@@ -51,6 +50,12 @@ public class SimpleActivityTest {
     public void testOnCreateCalled() {
         assertTrue(testActivityDelegate.isOnCreateCalled());
         assertTrue(testActivityDelegate.isSecondOnCreatCalled());
+    }
+
+    @Test
+    public void testProvider() {
+        assertNotNull(testActivityDelegate.getProvidedValue());
+        assertEquals(ValueProvider.PROVIDED_VALUE, testActivityDelegate.getProvidedValue().getValue());
     }
 
     private Field findDelegateField(Class target, Class type) {

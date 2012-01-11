@@ -96,6 +96,21 @@ public class RoboticsProcessor {
                             //todo: throw exception
                         }
                     }
+
+                    if (astMethod.isAnnotated(BindProvider.class)) {
+                        ASTType providedType = astMethod.getReturnType();
+
+                        if (astMethod.getParameters().size() == 1) {
+                            ASTType annotationType = astMethod.getParameters().get(0).getASTType();
+
+                            injectionNodeBuilders.put(providedType.getName(),
+                                    variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(annotationType));
+
+                            aopRepository.put(annotationType, providedType);
+                        } else {
+                            //todo: throw exception
+                        }
+                    }
                 }
             }
         }
