@@ -19,6 +19,9 @@ public class GotoSecondActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        context.startActivity(new Intent(activity, SecondActivity.class));
+        Intent intent = new Intent(activity, SecondActivity.class);
+
+        intent.putExtra("testExtra", "hello from First Activity");
+        context.startActivity(intent);
     }
 }

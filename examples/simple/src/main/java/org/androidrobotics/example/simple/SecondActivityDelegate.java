@@ -1,10 +1,7 @@
 package org.androidrobotics.example.simple;
 
 import android.widget.TextView;
-import org.androidrobotics.annotations.Activity;
-import org.androidrobotics.annotations.Layout;
-import org.androidrobotics.annotations.OnTouch;
-import org.androidrobotics.annotations.View;
+import org.androidrobotics.annotations.*;
 
 import javax.inject.Inject;
 
@@ -16,6 +13,12 @@ import javax.inject.Inject;
 public class SecondActivityDelegate {
 
     private TextView textView;
+    @Inject
+    @View(R.id.text3)
+    private TextView textView2;
+    @Inject
+    @Extra("testExtra")
+    private String testExtra;
 
     @Inject
     public SecondActivityDelegate(@View(R.id.text2) TextView textView) {
@@ -27,7 +30,16 @@ public class SecondActivityDelegate {
         textView.setText("touched");
     }
 
+    @OnCreate
+    public void onCreate() {
+        textView2.setText(testExtra);
+    }
+
     public TextView getTextView() {
         return textView;
+    }
+
+    public String getTestExtra() {
+        return testExtra;
     }
 }

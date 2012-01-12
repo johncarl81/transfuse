@@ -21,6 +21,7 @@ public final class R {
         public static final int secondActivity = 0x7f050004;
         public static final int text = 0x7f050000;
         public static final int text2 = 0x7f050005;
+        public static final int text3 = 0x7f050006;
         public static final int vibrateButton = 0x7f050001;
     }
 
