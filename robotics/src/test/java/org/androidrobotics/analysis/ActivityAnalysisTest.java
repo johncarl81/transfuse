@@ -10,7 +10,7 @@ import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
-import org.androidrobotics.model.FieldInjectionPoint;
+import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,11 +58,11 @@ public class ActivityAnalysisTest {
 
     @Test
     public void testDelegateInjectionPoint() {
-        List<FieldInjectionPoint> injectionPoints = activityDescriptor.getInjectionPoints();
+        List<InjectionNode> injectionNodes = activityDescriptor.getInjectionNodes();
 
-        assertEquals(1, injectionPoints.size());
-        FieldInjectionPoint injectionPoint = injectionPoints.get(0);
-        assertEquals(MockActivityDelegate.class.getName(), injectionPoint.getName());
+        assertEquals(1, injectionNodes.size());
+        InjectionNode injectionNode = injectionNodes.get(0);
+        assertEquals(MockActivityDelegate.class.getName(), injectionNode.getClassName());
     }
 
 

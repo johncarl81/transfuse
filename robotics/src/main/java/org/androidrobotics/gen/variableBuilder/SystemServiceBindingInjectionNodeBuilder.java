@@ -5,11 +5,9 @@ import com.sun.codemodel.JCodeModel;
 import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
-import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -42,7 +40,7 @@ public class SystemServiceBindingInjectionNodeBuilder implements InjectionNodeBu
 
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
 
-        FieldInjectionPoint contextInjectionNode = injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, contextType, context);
+        InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
 
         String systemService = (String) ((AnnotationValue) annotation.getProperty("value")).getValue();
 
@@ -51,7 +49,7 @@ public class SystemServiceBindingInjectionNodeBuilder implements InjectionNodeBu
                     variableInjectionBuilderFactory.buildSystemServiceVariableBuilder(
                             systemService,
                             codeMode.parseType(astType.getName()),
-                            contextInjectionNode.getInjectionNode()));
+                            contextInjectionNode));
         } catch (ClassNotFoundException e) {
             throw new RoboticsAnalysisException("Unable to parse type " + astType.getName(), e);
         }

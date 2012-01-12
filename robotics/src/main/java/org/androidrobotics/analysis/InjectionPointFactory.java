@@ -90,7 +90,11 @@ public class InjectionPointFactory {
      * @return
      */
     public FieldInjectionPoint buildInjectionPoint(ASTAccessModifier modifier, ASTType astType, AnalysisContext context) {
-        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(Collections.EMPTY_LIST, astType, context));
+        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(astType, context));
+    }
+
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
+        return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
     }
 
     private InjectionNode buildInjectionNode(List<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {

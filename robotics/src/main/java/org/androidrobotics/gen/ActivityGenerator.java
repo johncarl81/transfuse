@@ -6,7 +6,6 @@ import com.sun.codemodel.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidrobotics.model.ActivityDescriptor;
-import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -50,10 +49,10 @@ public class ActivityGenerator {
 
         //injector and injection points
         //todo: more than one?
-        if (descriptor.getInjectionPoints().size() > 0) {
-            FieldInjectionPoint fieldInjectionPoint = descriptor.getInjectionPoints().get(0);
+        if (descriptor.getInjectionNodes().size() > 0) {
+            InjectionNode injectionNode = descriptor.getInjectionNodes().get(0);
 
-            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, fieldInjectionPoint.getInjectionNode());
+            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
 
 
             //ontouch method

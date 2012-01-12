@@ -7,7 +7,6 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.InjectionPointFactory;
 import org.androidrobotics.analysis.SimpleAnalysisContextFactory;
-import org.androidrobotics.analysis.adapter.ASTAccessModifier;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
@@ -74,7 +73,7 @@ public class AOPProxyGeneratorTest {
 
         ASTType mockMethdInterceptorAST = astClassFactory.buildASTClassType(MockMethodInterceptor.class);
 
-        mockMethodInterceptorInjectionNode = injectionPointFactory.buildInjectionPoint(ASTAccessModifier.PUBLIC, mockMethdInterceptorAST, simpleAnalysisContextFactory.buildContext()).getInjectionNode();
+        mockMethodInterceptorInjectionNode = injectionPointFactory.buildInjectionNode(mockMethdInterceptorAST, simpleAnalysisContextFactory.buildContext());
     }
 
     @Test
