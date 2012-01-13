@@ -2,6 +2,7 @@ package org.androidrobotics.gen.variableBuilder;
 
 import com.sun.codemodel.JType;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidrobotics.model.InjectionNode;
 
 /**
@@ -16,4 +17,6 @@ public interface VariableInjectionBuilderFactory {
     SystemServiceVariableBuilder buildSystemServiceVariableBuilder(String systemService, JType systemServiceType, InjectionNode contextInjectionNode);
 
     SystemServiceInjectionNodeBuilder buildSystemServiceInjectionNodeBuilder(String systemService, Class<?> systemServiceClass);
+
+    ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 }

@@ -8,7 +8,9 @@ import org.androidrobotics.analysis.targets.MockActivityDelegate;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
+import org.androidrobotics.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidrobotics.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
+import org.androidrobotics.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -37,9 +39,15 @@ public class ActivityAnalysisTest {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
         AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();
         Provider<ContextVariableInjectionNodeBuilder> contextVariableInjectionNodeBuilderProviderBuilderProvider = injector.getProvider(ContextVariableInjectionNodeBuilder.class);
+        Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider = injector.getProvider(ResourcesInjectionNodeBuilder.class);
         VariableBuilderRepositoryFactory variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
         InjectionPointFactory injectionPointFactory = injector.getInstance(InjectionPointFactory.class);
-        ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory, contextVariableInjectionNodeBuilderProviderBuilderProvider, variableBuilderRepositoryFactory);
+        Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider = injector.getProvider(ApplicationVariableInjectionNodeBuilder.class);
+        ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory,
+                contextVariableInjectionNodeBuilderProviderBuilderProvider,
+                variableBuilderRepositoryFactory,
+                resourcesInjectionNodeBuilderProvider,
+                applicationVariableBuilderProvider);
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
         AOPRepository aopRepository = injector.getProvider(AOPRepository.class).get();
 

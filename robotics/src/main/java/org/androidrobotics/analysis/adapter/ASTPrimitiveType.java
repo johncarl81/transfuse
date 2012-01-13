@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class ASTPrimitiveType implements ASTType {
 
-    private PrimitiveType primitiveType;
+    private String name;
 
     public ASTPrimitiveType(PrimitiveType primitiveType) {
-        this.primitiveType = primitiveType;
+        this.name = primitiveType.getKind().name().toLowerCase();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ASTPrimitiveType implements ASTType {
 
     @Override
     public String getName() {
-        return primitiveType.getKind().name();
+        return name;
     }
 
     @Override

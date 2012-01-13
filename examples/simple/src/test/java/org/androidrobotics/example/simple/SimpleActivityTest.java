@@ -15,12 +15,11 @@ import static junit.framework.Assert.*;
 @RunWith(RobolectricTestRunner.class)
 public class SimpleActivityTest {
 
-    private SimpleActivity simpleActivity;
     private SimpleActivityDelegate testActivityDelegate;
 
     @Before
     public void setup() throws IllegalAccessException, NoSuchFieldException {
-        simpleActivity = new SimpleActivity();
+        SimpleActivity simpleActivity = new SimpleActivity();
         simpleActivity.onCreate(null);
 
         Field delegateField = findDelegateField(SimpleActivity.class, SimpleActivityDelegate.class);
@@ -49,13 +48,23 @@ public class SimpleActivityTest {
     @Test
     public void testOnCreateCalled() {
         assertTrue(testActivityDelegate.isOnCreateCalled());
-        assertTrue(testActivityDelegate.isSecondOnCreatCalled());
+        assertTrue(testActivityDelegate.isSecondOnCreateCalled());
     }
 
     @Test
     public void testProvider() {
         assertNotNull(testActivityDelegate.getProvidedValue());
         assertEquals(ValueProvider.PROVIDED_VALUE, testActivityDelegate.getProvidedValue().getValue());
+    }
+
+    @Test
+    public void testResourceInjection() {
+        assertNotNull(testActivityDelegate.getResources());
+    }
+
+    @Test
+    public void testStringResource() {
+        assertEquals("hello world", testActivityDelegate.getTestHello());
     }
 
     private Field findDelegateField(Class target, Class type) {

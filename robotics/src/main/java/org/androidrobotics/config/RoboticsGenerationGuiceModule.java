@@ -7,6 +7,8 @@ import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidrobotics.gen.InjectionBuilderContextFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
+import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory;
 import org.androidrobotics.util.Logger;
 
 /**
@@ -22,11 +24,6 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(JCodeModel.class).asEagerSingleton();
-
-        bind(Logger.class).toInstance(logger);
-        bind(BindingRepository.class).toProvider(BindingRepositoryProvider.class);
-
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
         install(factoryModuleBuilder
@@ -34,5 +31,16 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder
                 .build(VariableInjectionBuilderFactory.class));
+
+        install(factoryModuleBuilder
+                .build(MethodBasedResourceExpressionBuilderFactory.class));
+
+        install(factoryModuleBuilder
+                .build(MethodBasedResourceExpressionBuilderAdaptorFactory.class));
+
+        bind(JCodeModel.class).asEagerSingleton();
+
+        bind(Logger.class).toInstance(logger);
+        bind(BindingRepository.class).toProvider(BindingRepositoryProvider.class);
     }
 }

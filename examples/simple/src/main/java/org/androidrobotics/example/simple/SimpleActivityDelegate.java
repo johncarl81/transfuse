@@ -1,6 +1,7 @@
 package org.androidrobotics.example.simple;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Button;
 import org.androidrobotics.annotations.*;
@@ -12,10 +13,16 @@ import javax.inject.Inject;
 public class SimpleActivityDelegate {
 
     private boolean onCreateCalled = false;
-    private boolean secondOnCreatCalled = false;
+    private boolean secondOnCreateCalled = false;
 
     @Inject
     private ProvidedValue providedValue;
+    @Inject
+    @Resource(R.integer.testInt)
+    public int testInt;
+    @Inject
+    @Resource(R.string.hello)
+    private String testHello;
     @Inject
     public SimpleController controller;
     private LifecycleLogger value;
@@ -26,6 +33,8 @@ public class SimpleActivityDelegate {
     @Inject
     @View(R.id.asynchActivity)
     private Button button;
+    @Inject
+    private Resources resources;
 
     @Inject
     public SimpleActivityDelegate(LifecycleLogger value) {
@@ -46,7 +55,7 @@ public class SimpleActivityDelegate {
     @OnCreate
     public void anotherCall() {
         Log.i("test", "test");
-        secondOnCreatCalled = true;
+        secondOnCreateCalled = true;
     }
 
     @Inject
@@ -58,8 +67,8 @@ public class SimpleActivityDelegate {
         return onCreateCalled;
     }
 
-    public boolean isSecondOnCreatCalled() {
-        return secondOnCreatCalled;
+    public boolean isSecondOnCreateCalled() {
+        return secondOnCreateCalled;
     }
 
     public SimpleController getController() {
@@ -76,5 +85,13 @@ public class SimpleActivityDelegate {
 
     public ProvidedValue getProvidedValue() {
         return providedValue;
+    }
+
+    public Resources getResources() {
+        return resources;
+    }
+
+    public String getTestHello() {
+        return testHello;
     }
 }
