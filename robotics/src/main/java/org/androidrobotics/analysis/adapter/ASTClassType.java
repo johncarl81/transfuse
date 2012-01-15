@@ -1,9 +1,7 @@
 package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -11,15 +9,21 @@ import java.util.List;
 public class ASTClassType implements ASTType {
 
     private Class<?> clazz;
+    private Collection<ASTAnnotation> annotationList;
     private Collection<ASTMethod> methods;
     private Collection<ASTConstructor> constructors;
     private Collection<ASTField> fields;
+    private ASTType superClass;
+    private Collection<ASTType> interfaces;
 
-    public ASTClassType(Class<?> clazz, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields) {
+    public ASTClassType(Class<?> clazz, Collection<ASTAnnotation> annotationList, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces) {
         this.clazz = clazz;
+        this.annotationList = annotationList;
         this.constructors = constructors;
         this.methods = methods;
         this.fields = fields;
+        this.superClass = superClass;
+        this.interfaces = interfaces;
     }
 
     @Override
@@ -58,13 +62,17 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public List<ASTAnnotation> getAnnotations() {
-        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
-
-        for (Annotation annotation : clazz.getAnnotations()) {
-            annotationList.add(new ASTClassAnnotation(annotation));
-        }
-
+    public Collection<ASTAnnotation> getAnnotations() {
         return annotationList;
+    }
+
+    @Override
+    public ASTType getSuperClass() {
+        return superClass;
+    }
+
+    @Override
+    public Collection<ASTType> getInterfaces() {
+        return interfaces;
     }
 }

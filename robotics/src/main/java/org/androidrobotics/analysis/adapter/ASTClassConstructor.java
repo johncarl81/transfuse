@@ -2,7 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,8 +13,10 @@ public class ASTClassConstructor implements ASTConstructor {
     private Constructor constructor;
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
+    private List<ASTAnnotation> annotations;
 
-    public ASTClassConstructor(Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
+    public ASTClassConstructor(List<ASTAnnotation> annotations, Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
+        this.annotations = annotations;
         this.constructor = constructor;
         this.parameters = parameters;
         this.modifier = modifier;
@@ -41,14 +43,8 @@ public class ASTClassConstructor implements ASTConstructor {
     }
 
     @Override
-    public List<ASTAnnotation> getAnnotations() {
-        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
-
-        for (Annotation annotation : constructor.getAnnotations()) {
-            annotationList.add(new ASTClassAnnotation(annotation));
-        }
-
-        return annotationList;
+    public Collection<ASTAnnotation> getAnnotations() {
+        return annotations;
     }
 
     @Override

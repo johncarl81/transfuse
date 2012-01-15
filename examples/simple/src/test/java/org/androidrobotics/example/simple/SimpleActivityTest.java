@@ -67,11 +67,21 @@ public class SimpleActivityTest {
         assertEquals("hello world", testActivityDelegate.getTestHello());
     }
 
+    @Test
+    public void testSuperClassFieldInjection() {
+        assertNotNull(testActivityDelegate.getVibrateButton());
+    }
+
+    @Test
+    public void testSuperPrivateMethodInjection() {
+        assertNotNull(testActivityDelegate.getContext());
+    }
+
     private Field findDelegateField(Class target, Class type) {
         Field delegateField = null;
 
         for (Field field : target.getDeclaredFields()) {
-            if (field.getType() == type) {
+            if (type.isAssignableFrom(field.getType())) {
                 if (delegateField != null) {
                     throw new RoboticsTestException("Type found more than once");
                 }

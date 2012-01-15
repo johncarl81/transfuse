@@ -47,21 +47,31 @@ public class Analyzer {
 
             AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
 
-            for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {
-
-                analysis.analyzeType(injectionNode, concreteType, nextContext);
-
-                for (ASTMethod astMethod : concreteType.getMethods()) {
-                    analysis.analyzeMethod(injectionNode, astMethod, nextContext);
-                }
-
-                for (ASTField astField : concreteType.getFields()) {
-                    analysis.analyzeField(injectionNode, astField, nextContext);
-                }
-            }
+            //todo: loop over superclasses
+            //loop over classes
+            scanClassHierarchy(concreteType, injectionNode, nextContext);
         }
 
         return injectionNode;
+    }
+
+    private void scanClassHierarchy(ASTType concreteType, InjectionNode injectionNode, AnalysisContext context) {
+        if (concreteType.getSuperClass() != null) {
+            scanClassHierarchy(concreteType.getSuperClass(), injectionNode, context.incrementSuperClassLevel());
+        }
+
+        for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {
+
+            analysis.analyzeType(injectionNode, concreteType, context);
+
+            for (ASTMethod astMethod : concreteType.getMethods()) {
+                analysis.analyzeMethod(injectionNode, astMethod, context);
+            }
+
+            for (ASTField astField : concreteType.getFields()) {
+                analysis.analyzeField(injectionNode, astField, context);
+            }
+        }
     }
 
     private ProxyAspect getProxyAspect(InjectionNode injectionNode) {

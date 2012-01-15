@@ -5,7 +5,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class MockAnalysisClass {
+public class MockAnalysisClass extends MockAnalysisSuperClass {
 
     private MockParameter testParameter;
 

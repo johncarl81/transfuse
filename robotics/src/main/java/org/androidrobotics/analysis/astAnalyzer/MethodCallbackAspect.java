@@ -12,18 +12,42 @@ import java.util.Set;
  */
 public class MethodCallbackAspect {
 
-    private Map<String, Set<ASTMethod>> methodCallbacks = new HashMap<String, Set<ASTMethod>>();
+    private Map<String, Set<MethodCallback>> methodCallbacks = new HashMap<String, Set<MethodCallback>>();
 
-    public void addMethod(String name, ASTMethod method) {
+    public void addMethodCallback(String name, ASTMethod method, int superClassLevel) {
         if (!methodCallbacks.containsKey(name)) {
-            methodCallbacks.put(name, new HashSet<ASTMethod>());
+            methodCallbacks.put(name, new HashSet<MethodCallback>());
         }
-        Set<ASTMethod> methods = methodCallbacks.get(name);
+        Set<MethodCallback> methods = methodCallbacks.get(name);
 
-        methods.add(method);
+        methods.add(new MethodCallback(method, name, superClassLevel));
     }
 
-    public Set<ASTMethod> getMethods(String name) {
+    public Set<MethodCallback> getMethodCallbacks(String name) {
         return methodCallbacks.get(name);
+    }
+
+    public class MethodCallback {
+        private ASTMethod method;
+        private String name;
+        private int superClassLevel;
+
+        public MethodCallback(ASTMethod method, String name, int superClassLevel) {
+            this.method = method;
+            this.name = name;
+            this.superClassLevel = superClassLevel;
+        }
+
+        public ASTMethod getMethod() {
+            return method;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getSuperClassLevel() {
+            return superClassLevel;
+        }
     }
 }

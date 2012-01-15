@@ -17,12 +17,14 @@ public class AnalysisContext {
     private AnalysisRepository analysisRepository;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private AOPRepository aopRepository;
+    private int superClassLevel;
 
     public AnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
         this.dependents = Collections.emptyMap();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.aopRepository = aopRepository;
+        this.superClassLevel = 0;
     }
 
     private AnalysisContext(ASTType dependent, InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
@@ -30,6 +32,16 @@ public class AnalysisContext {
         this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependents.putAll(previousContext.dependents);
         this.dependents.put(dependent, node);
+    }
+
+    private AnalysisContext(Map<ASTType, InjectionNode> dependents, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository, int superClassLevel) {
+        this(analysisRepository, injectionNodeBuilders, aopRepository);
+        this.dependents = dependents;
+        this.superClassLevel = superClassLevel;
+    }
+
+    public AnalysisContext incrementSuperClassLevel() {
+        return new AnalysisContext(this.dependents, analysisRepository, injectionNodeBuilders, aopRepository, superClassLevel + 1);
     }
 
     public AnalysisContext addDependent(ASTType dependent, InjectionNode node) {
@@ -54,5 +66,9 @@ public class AnalysisContext {
 
     public AOPRepository getAopRepository() {
         return aopRepository;
+    }
+
+    public int getSuperClassLevel() {
+        return superClassLevel;
     }
 }

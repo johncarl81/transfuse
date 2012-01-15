@@ -27,25 +27,28 @@ public class InjectionAnalyzer implements ASTAnalysis {
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
 
-        ASTConstructor noArgConstructor = null;
-        ASTConstructor annotatedConstructor = null;
+        if (context.getSuperClassLevel() == 0) {
+            //only analyze the root class for constructor injection
+            ASTConstructor noArgConstructor = null;
+            ASTConstructor annotatedConstructor = null;
 
-        for (ASTConstructor astConstructor : astType.getConstructors()) {
-            if (astConstructor.isAnnotated(Inject.class)) {
-                annotatedConstructor = astConstructor;
-                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));
+            for (ASTConstructor astConstructor : astType.getConstructors()) {
+                if (astConstructor.isAnnotated(Inject.class)) {
+                    annotatedConstructor = astConstructor;
+                    getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));
+                }
+                if (astConstructor.getParameters().size() == 0) {
+                    noArgConstructor = astConstructor;
+                }
             }
-            if (astConstructor.getParameters().size() == 0) {
-                noArgConstructor = astConstructor;
-            }
-        }
 
-        if (annotatedConstructor != null) {
-            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
-        } else if (noArgConstructor != null) {
-            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
-        } else {
-            throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
+            if (annotatedConstructor != null) {
+                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
+            } else if (noArgConstructor != null) {
+                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
+            } else {
+                throw new RoboticsAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
+            }
         }
     }
 

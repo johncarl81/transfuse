@@ -36,4 +36,8 @@ public interface ASTType extends ASTBase {
      * @return concrete class status
      */
     boolean isConcreteClass();
+
+    ASTType getSuperClass();
+
+    Collection<ASTType> getInterfaces();
 }

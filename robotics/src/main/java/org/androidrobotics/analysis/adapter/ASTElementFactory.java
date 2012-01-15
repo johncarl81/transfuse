@@ -4,10 +4,8 @@ import org.androidrobotics.util.CollectionConverterUtil;
 
 import javax.inject.Inject;
 import javax.lang.model.element.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.lang.model.type.TypeMirror;
+import java.util.*;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -40,7 +38,19 @@ public class ASTElementFactory {
             List<ASTField> fields = new ArrayList<ASTField>();
             List<ASTMethod> methods = new ArrayList<ASTMethod>();
 
-            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields));
+            ASTType superClass = null;
+            if (typeElement.getSuperclass() != null) {
+                superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
+            }
+
+            Collection<ASTType> interfaces = new HashSet<ASTType>();
+
+            for (TypeMirror interfaceTypeMirror : typeElement.getInterfaces()) {
+                ASTType interfaceType = interfaceTypeMirror.accept(astTypeBuilderVisitor, null);
+                interfaces.add(interfaceType);
+            }
+
+            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces));
 
             //iterate and build the contained elements within this TypeElement
             constructors.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),

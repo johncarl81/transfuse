@@ -13,6 +13,7 @@ import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.MethodInjectionPoint;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -67,18 +68,18 @@ public class AOPProxyGenerator {
 
             JBlock constructorBody = constructor.body();
 
-            List<String> superArguments = new ArrayList<String>();
+            List<JVar> superArguments = new ArrayList<JVar>();
             for (InjectionNode node : constructorInjectionPoint.getInjectionNodes()) {
                 String paramName = variableNamer.generateName(node.getClassName());
-                superArguments.add(paramName);
-                constructor.param(codeModel.ref(node.getClassName()), paramName);
+                JVar param = constructor.param(codeModel.ref(node.getClassName()), paramName);
+                superArguments.add(param);
                 proxyConstructorInjectionPoint.addInjectionNode(node);
             }
 
             //super construction
             JInvocation constructorInvocation = constructorBody.invoke(SUPER_REF);
-            for (String parmArgument : superArguments) {
-                constructorInvocation.arg(parmArgument);
+            for (JVar paramArgument : superArguments) {
+                constructorInvocation.arg(paramArgument);
             }
 
             //method interceptors
@@ -108,13 +109,18 @@ public class AOPProxyGenerator {
 
             for (Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry : aopProxyAspect.getMethodInterceptors().entrySet()) {
                 ASTMethod method = methodInterceptorEntry.getKey();
+
+                if (method.getAccessModifier() == ASTAccessModifier.PRIVATE) {
+                    throw new RoboticsAnalysisException("Unable to provide AOP on private methods");
+                }
+
                 JType returnType;
                 if (method.getReturnType() != null) {
                     returnType = codeModel.ref(method.getReturnType().getName());
                 } else {
                     returnType = codeModel.VOID;
                 }
-                JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
+                JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
                 JBlock body = methodDeclaration.body();
 
                 //define method parameter
@@ -162,6 +168,9 @@ public class AOPProxyGenerator {
                 fieldInjectionPoint.setProxied(true);
             }
             proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
+            for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
+                methodInjectionPoint.setProxied(true);
+            }
             proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
             //replace proxy constructor because of optional interceptor construction parameters
             proxyInjectionAspect.add(proxyConstructorInjectionPoint);

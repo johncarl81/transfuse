@@ -3,6 +3,7 @@ package org.androidrobotics.analysis.adapter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class ASTClassField implements ASTField {
     }
 
     @Override
-    public List<ASTAnnotation> getAnnotations() {
+    public Collection<ASTAnnotation> getAnnotations() {
         List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
 
         for (Annotation annotation : field.getAnnotations()) {

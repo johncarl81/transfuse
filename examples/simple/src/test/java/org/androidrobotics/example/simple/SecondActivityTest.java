@@ -54,7 +54,7 @@ public class SecondActivityTest {
         Field delegateField = null;
 
         for (Field field : target.getDeclaredFields()) {
-            if (field.getType() == type) {
+            if (type.isAssignableFrom(field.getType())) {
                 if (delegateField != null) {
                     throw new RoboticsTestException("Type found more than once");
                 }

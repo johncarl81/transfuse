@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 @Activity("SimpleActivity")
 @Layout(R.layout.main)
-public class SimpleActivityDelegate {
+public class SimpleActivityDelegate extends SimpleSuperClass {
 
     private boolean onCreateCalled = false;
     private boolean secondOnCreateCalled = false;

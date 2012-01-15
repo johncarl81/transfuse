@@ -10,6 +10,7 @@ import org.androidrobotics.model.MethodInjectionPoint;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class InjectionPointFactory {
      */
     public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getAccessModifier(), astMethod.getName());
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getAccessModifier(), astMethod.getName(), context.getSuperClassLevel());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
         //bindingAnnotations for single parameter from method level
@@ -79,7 +80,7 @@ public class InjectionPointFactory {
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+        return new FieldInjectionPoint(astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context), context.getSuperClassLevel());
     }
 
     /**
@@ -90,14 +91,14 @@ public class InjectionPointFactory {
      * @return
      */
     public FieldInjectionPoint buildInjectionPoint(ASTAccessModifier modifier, ASTType astType, AnalysisContext context) {
-        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(astType, context));
+        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(astType, context), context.getSuperClassLevel());
     }
 
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
     }
 
-    private InjectionNode buildInjectionNode(List<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {
+    private InjectionNode buildInjectionNode(Collection<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {
 
         int bindingCount = 0;
         InjectionNodeBuilder injectionNodeBuilder = null;

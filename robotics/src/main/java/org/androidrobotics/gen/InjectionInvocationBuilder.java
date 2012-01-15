@@ -29,15 +29,15 @@ public class InjectionInvocationBuilder {
         if (ASTAccessModifier.PUBLIC.equals(methodInjectionPoint.getAccessModifier())) {
             return buildPublicMethodInjection(nodeMap, methodInjectionPoint, variable);
         }
-        return buildPrivateMethodInjection(nodeMap, methodInjectionPoint, variable);
+        return buildPrivateMethodInjection(methodInjectionPoint.getSuperClassLevel(), nodeMap, methodInjectionPoint, variable);
     }
 
-    public JStatement buildPrivateMethodInjection(Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildPrivateMethodInjection(int superClassLevel, Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
 
         //InjectionUtil.setMethod(Object target, int superLevel, String method, Class[] argClasses,Object[] args)
         JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_METHOD_METHOD)
                 .arg(variable)
-                .arg(JExpr.lit(0))
+                .arg(JExpr.lit(superClassLevel))
                 .arg(methodInjectionPoint.getName());
 
         //add classes
@@ -76,14 +76,6 @@ public class InjectionInvocationBuilder {
         return buildPrivateFieldInjection(nodeMap, fieldInjectionPoint, variable);
     }
 
-    public JStatement buildPrivateFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
-        if (fieldInjectionPoint.isProxied()) {
-            return buildFieldInjection(1, nodeMap, fieldInjectionPoint, variable);
-        } else {
-            return buildFieldInjection(0, nodeMap, fieldInjectionPoint, variable);
-        }
-    }
-
     public JStatement buildPublicFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         //public case:
         JBlock assignmentBlock = new JBlock(false, false);
@@ -93,12 +85,12 @@ public class InjectionInvocationBuilder {
         return assignmentBlock;
     }
 
-    private JStatement buildFieldInjection(int superLevel, Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildPrivateFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
                 .arg(variable)
-                .arg(JExpr.lit(superLevel))
+                .arg(JExpr.lit(fieldInjectionPoint.getSubclassLevel()))
                 .arg(fieldInjectionPoint.getName())
                 .arg(nodeMap.get(node));
     }

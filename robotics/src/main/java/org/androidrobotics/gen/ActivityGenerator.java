@@ -3,7 +3,6 @@ package org.androidrobotics.gen;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import com.sun.codemodel.*;
-import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.InjectionNode;
@@ -99,7 +98,7 @@ public class ActivityGenerator {
             MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
             if (methodCallbackAspect != null) {
-                Set<ASTMethod> methods = methodCallbackAspect.getMethods(name);
+                Set<MethodCallbackAspect.MethodCallback> methods = methodCallbackAspect.getMethodCallbacks(name);
 
                 if (methods != null) {
 
@@ -109,8 +108,9 @@ public class ActivityGenerator {
                     }
                     JBlock body = method.body();
 
-                    for (ASTMethod astMethod : methodCallbackAspect.getMethods(name)) {
-                        body.add(injectionNodeJExpressionEntry.getValue().invoke(astMethod.getName()));
+                    for (MethodCallbackAspect.MethodCallback methodCallback : methodCallbackAspect.getMethodCallbacks(name)) {
+                        //todo: non-public access
+                        body.add(injectionNodeJExpressionEntry.getValue().invoke(methodCallback.getMethod().getName()));
                     }
                 }
             }

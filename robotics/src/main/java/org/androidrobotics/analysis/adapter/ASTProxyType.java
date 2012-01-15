@@ -2,7 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * @author John Ericksen
@@ -43,7 +43,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public List<ASTAnnotation> getAnnotations() {
+    public Collection<ASTAnnotation> getAnnotations() {
         return proxyASTType.getAnnotations();
     }
 
@@ -55,5 +55,15 @@ public class ASTProxyType implements ASTType {
     @Override
     public Collection<ASTConstructor> getConstructors() {
         return proxyASTType.getConstructors();
+    }
+
+    @Override
+    public ASTType getSuperClass() {
+        return null;
+    }
+
+    @Override
+    public Collection<ASTType> getInterfaces() {
+        return Collections.emptySet();
     }
 }

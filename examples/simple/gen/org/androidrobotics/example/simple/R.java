@@ -26,9 +26,7 @@ public final class R {
     }
 
     public static final class integer {
-        public static final int max_speed = 0x7f040000;
-        public static final int min_speed = 0x7f040001;
-        public static final int testInt = 0x7f040002;
+        public static final int testInt = 0x7f040000;
     }
 
     public static final class layout {

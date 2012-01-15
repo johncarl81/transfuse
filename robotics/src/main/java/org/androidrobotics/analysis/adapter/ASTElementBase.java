@@ -4,6 +4,7 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class ASTElementBase implements ASTBase {
     }
 
     @Override
-    public List<ASTAnnotation> getAnnotations() {
+    public Collection<ASTAnnotation> getAnnotations() {
 
         List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
 

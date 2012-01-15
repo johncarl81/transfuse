@@ -14,28 +14,43 @@ public class ASTClassFactory {
 
     private Map<Class<?>, ASTType> typeCache = new HashMap<Class<?>, ASTType>();
 
-    public ASTType buildASTClassType(Class<?> parameterType) {
-        if (!typeCache.containsKey(parameterType)) {
+    public ASTType buildASTClassType(Class<?> clazz) {
+        if (!typeCache.containsKey(clazz)) {
             Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
             Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
             Collection<ASTField> fields = new ArrayList<ASTField>();
+            ASTType superClass = null;
+            if (clazz.getSuperclass() != null) {
+                superClass = buildASTClassType(clazz.getSuperclass());
+            }
+            Collection<ASTType> interfaces = new HashSet<ASTType>();
 
-            typeCache.put(parameterType, new ASTClassType(parameterType, constructors, methods, fields));
+            for (Class<?> clazzInterface : clazz.getInterfaces()) {
+                interfaces.add(buildASTClassType(clazzInterface));
+            }
+
+            Collection<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
+
+            for (Annotation annotation : clazz.getAnnotations()) {
+                annotationList.add(new ASTClassAnnotation(annotation));
+            }
+
+            typeCache.put(clazz, new ASTClassType(clazz, annotationList, constructors, methods, fields, superClass, interfaces));
 
             //fill in the guts after building the tree
-            for (Constructor constructor : parameterType.getDeclaredConstructors()) {
+            for (Constructor constructor : clazz.getDeclaredConstructors()) {
                 constructors.add(buildASTClassConstructor(constructor));
             }
 
-            for (Method method : parameterType.getDeclaredMethods()) {
+            for (Method method : clazz.getDeclaredMethods()) {
                 methods.add(buildASTClassMethod(method));
             }
 
-            for (Field field : parameterType.getDeclaredFields()) {
+            for (Field field : clazz.getDeclaredFields()) {
                 fields.add(buildASTClassField(field));
             }
         }
-        return typeCache.get(parameterType);
+        return typeCache.get(clazz);
     }
 
     private List<ASTParameter> buildASTTypeParameters(Constructor constructor) {
@@ -92,7 +107,13 @@ public class ASTClassFactory {
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
         ASTAccessModifier modifier = buildASTAccessModifier(constructor.getModifiers());
 
-        return new ASTClassConstructor(constructor, buildASTTypeParameters(constructor), modifier);
+        List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
+
+        for (Annotation annotation : constructor.getAnnotations()) {
+            annotations.add(new ASTClassAnnotation(annotation));
+        }
+
+        return new ASTClassConstructor(annotations, constructor, buildASTTypeParameters(constructor), modifier);
     }
 
 
