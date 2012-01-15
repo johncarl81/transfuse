@@ -3,16 +3,13 @@ package org.androidrobotics;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.AOPRepository;
-import org.androidrobotics.analysis.ActivityAnalysis;
-import org.androidrobotics.analysis.AnalysisRepository;
-import org.androidrobotics.analysis.AnalysisRepositoryFactory;
-import org.androidrobotics.analysis.adapter.ASTClassFactory;
+import org.androidrobotics.analysis.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.annotations.*;
-import org.androidrobotics.aop.AsynchronousMethodInterceptor;
-import org.androidrobotics.aop.UIThreadMethodInterceptor;
+import org.androidrobotics.annotations.Bind;
+import org.androidrobotics.annotations.BindInterceptor;
+import org.androidrobotics.annotations.BindProvider;
+import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
@@ -21,7 +18,6 @@ import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Collection;
@@ -49,8 +45,7 @@ public class RoboticsProcessor {
                              VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
                              ActivityAnalysis activityAnalysis,
-                             Provider<AOPRepository> aopRepositoryProvider,
-                             ASTClassFactory astClassFactory) {
+                             AOPRepositoryProvider aopRepositoryProvider) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
         this.logger = logger;
@@ -60,10 +55,6 @@ public class RoboticsProcessor {
 
         aopRepository = aopRepositoryProvider.get();
         injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
-
-        //todo:move into common generation
-        aopRepository.put(astClassFactory.buildASTClassType(Asynchronous.class), astClassFactory.buildASTClassType(AsynchronousMethodInterceptor.class));
-        aopRepository.put(astClassFactory.buildASTClassType(UIThread.class), astClassFactory.buildASTClassType(UIThreadMethodInterceptor.class));
     }
 
     public void processModuleElements(Collection<? extends ASTType> astTypes) {
@@ -130,9 +121,9 @@ public class RoboticsProcessor {
                 } catch (IOException e) {
                     logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {
-                    logger.error("IOException while generating activity", e);
+                    logger.error("JClassAlreadyExistsException while generating activity", e);
                 } catch (ClassNotFoundException e) {
-                    logger.error("IOException while generating activity", e);
+                    logger.error("ClassNotFoundException while generating activity", e);
                 }
             }
         }

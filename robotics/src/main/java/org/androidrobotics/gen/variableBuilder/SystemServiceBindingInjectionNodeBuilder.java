@@ -39,7 +39,6 @@ public class SystemServiceBindingInjectionNodeBuilder implements InjectionNodeBu
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
-
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
 
         String systemService = (String) ((AnnotationValue) annotation.getProperty("value")).getValue();

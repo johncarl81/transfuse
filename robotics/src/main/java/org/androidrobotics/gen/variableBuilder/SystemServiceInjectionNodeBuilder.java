@@ -45,7 +45,6 @@ public class SystemServiceInjectionNodeBuilder implements InjectionNodeBuilder {
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
-
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
 
         try {
