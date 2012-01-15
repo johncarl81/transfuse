@@ -6,7 +6,7 @@ import com.google.inject.Stage;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ConstructorInjectionPoint;
@@ -159,7 +159,7 @@ public class AnalyzerTest {
     }
 
     private boolean isProxyRequired(InjectionNode injectionNode) {
-        ProxyAspect proxyAspect = injectionNode.getAspect(ProxyAspect.class);
+        VirtualProxyAspect proxyAspect = injectionNode.getAspect(VirtualProxyAspect.class);
 
         return proxyAspect != null && proxyAspect.isProxyRequired();
     }

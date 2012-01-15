@@ -3,7 +3,7 @@ package org.androidrobotics.analysis;
 import org.androidrobotics.analysis.adapter.ASTField;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.gen.variableBuilder.VariableBuilder;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidrobotics.model.InjectionNode;
@@ -37,7 +37,7 @@ public class Analyzer {
             //This injection must be performed using a delayed injection proxy
             injectionNode = context.getInjectionNode(concreteType);
 
-            ProxyAspect proxyAspect = getProxyAspect(injectionNode);
+            VirtualProxyAspect proxyAspect = getProxyAspect(injectionNode);
             proxyAspect.getProxyInterfaces().add(instanceType);
 
         } else {
@@ -47,8 +47,7 @@ public class Analyzer {
 
             AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
 
-            //todo: loop over superclasses
-            //loop over classes
+            //loop over super classes (extension and implements
             scanClassHierarchy(concreteType, injectionNode, nextContext);
         }
 
@@ -74,10 +73,10 @@ public class Analyzer {
         }
     }
 
-    private ProxyAspect getProxyAspect(InjectionNode injectionNode) {
-        if (!injectionNode.containsAspect(ProxyAspect.class)) {
-            injectionNode.addAspect(new ProxyAspect());
+    private VirtualProxyAspect getProxyAspect(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(VirtualProxyAspect.class)) {
+            injectionNode.addAspect(new VirtualProxyAspect());
         }
-        return injectionNode.getAspect(ProxyAspect.class);
+        return injectionNode.getAspect(VirtualProxyAspect.class);
     }
 }

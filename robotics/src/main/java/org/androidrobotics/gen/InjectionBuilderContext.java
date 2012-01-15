@@ -5,7 +5,7 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.gen.proxy.VirtualProxyGenerator;
 import org.androidrobotics.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidrobotics.gen.variableBuilder.VariableBuilder;
@@ -48,7 +48,7 @@ public class InjectionBuilderContext {
         if (variableMap.containsKey(injectionNode)) {
             variable = variableMap.get(injectionNode);
         } else {
-            ProxyAspect proxyAspect = injectionNode.getAspect(ProxyAspect.class);
+            VirtualProxyAspect proxyAspect = injectionNode.getAspect(VirtualProxyAspect.class);
             if (proxyAspect != null && proxyAspect.isProxyRequired()) {
                 //proxy
                 ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);

@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis.astAnalyzer;
 
 import org.androidrobotics.analysis.adapter.ASTMethod;
+import org.androidrobotics.util.MethodSignature;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,11 +32,13 @@ public class MethodCallbackAspect {
         private ASTMethod method;
         private String name;
         private int superClassLevel;
+        private MethodSignature methodSignature;
 
         public MethodCallback(ASTMethod method, String name, int superClassLevel) {
             this.method = method;
             this.name = name;
             this.superClassLevel = superClassLevel;
+            this.methodSignature = new MethodSignature(method);
         }
 
         public ASTMethod getMethod() {
@@ -48,6 +51,23 @@ public class MethodCallbackAspect {
 
         public int getSuperClassLevel() {
             return superClassLevel;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof MethodCallback)) return false;
+
+            MethodCallback that = (MethodCallback) o;
+
+            if (!methodSignature.equals(that.methodSignature)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return methodSignature.hashCode();
         }
     }
 }

@@ -86,6 +86,12 @@ public class AOPProxyGenerator {
             Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields = new HashMap<ASTMethod, Map<InjectionNode, JFieldVar>>();
             for (Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry : aopProxyAspect.getMethodInterceptors().entrySet()) {
 
+                ASTMethod method = methodInterceptorEntry.getKey();
+
+                if (method.getAccessModifier() == ASTAccessModifier.PRIVATE) {
+                    throw new RoboticsAnalysisException("Unable to provide AOP on private methods");
+                }
+
                 if (!interceptorFields.containsKey(methodInterceptorEntry.getKey())) {
                     interceptorFields.put(methodInterceptorEntry.getKey(), new HashMap<InjectionNode, JFieldVar>());
                 }
@@ -104,14 +110,6 @@ public class AOPProxyGenerator {
                     constructorBody.assign(interceptorField, interceptorParam);
 
                     proxyConstructorInjectionPoint.addInjectionNode(interceptorInjectionNode);
-                }
-            }
-
-            for (Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry : aopProxyAspect.getMethodInterceptors().entrySet()) {
-                ASTMethod method = methodInterceptorEntry.getKey();
-
-                if (method.getAccessModifier() == ASTAccessModifier.PRIVATE) {
-                    throw new RoboticsAnalysisException("Unable to provide AOP on private methods");
                 }
 
                 JType returnType;
@@ -132,7 +130,6 @@ public class AOPProxyGenerator {
                 }
 
                 //aop interceptor
-
                 JTryBlock tryInterceptorBlock = body._try();
                 JBlock tryInterceptorBody = tryInterceptorBlock.body();
 

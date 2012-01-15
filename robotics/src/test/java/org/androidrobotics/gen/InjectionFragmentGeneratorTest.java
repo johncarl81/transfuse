@@ -12,7 +12,7 @@ import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.target.*;
 import org.androidrobotics.gen.variableBuilder.*;
@@ -109,7 +109,7 @@ public class InjectionFragmentGeneratorTest {
                 astClassFactory.buildASTClassType(DelayedProxyTarget.class));
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
-        ProxyAspect proxyAspect = new ProxyAspect();
+        VirtualProxyAspect proxyAspect = new VirtualProxyAspect();
         proxyAspect.getProxyInterfaces().add(astClassFactory.buildASTClassType(DelayedProxy.class));
 
         injectionNode.addAspect(proxyAspect);

@@ -75,4 +75,26 @@ public class ASTClassType implements ASTType {
     public Collection<ASTType> getInterfaces() {
         return interfaces;
     }
+
+    @Override
+    public boolean isArray() {
+        return clazz.isArray();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ASTClassType)) return false;
+
+        ASTClassType that = (ASTClassType) o;
+
+        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return clazz != null ? clazz.hashCode() : 0;
+    }
 }

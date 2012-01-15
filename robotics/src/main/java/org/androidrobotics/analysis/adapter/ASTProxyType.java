@@ -66,4 +66,29 @@ public class ASTProxyType implements ASTType {
     public Collection<ASTType> getInterfaces() {
         return Collections.emptySet();
     }
+
+    @Override
+    public boolean isArray() {
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ASTProxyType)) return false;
+
+        ASTProxyType that = (ASTProxyType) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (proxyASTType != null ? !proxyASTType.equals(that.proxyASTType) : that.proxyASTType != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = proxyASTType != null ? proxyASTType.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
 }

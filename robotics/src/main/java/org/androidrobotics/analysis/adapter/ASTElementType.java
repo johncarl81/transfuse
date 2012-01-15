@@ -62,4 +62,26 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     public Collection<ASTType> getInterfaces() {
         return interfaces;
     }
+
+    @Override
+    public boolean isArray() {
+        return false;//todo: support array types
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ASTElementType)) return false;
+
+        ASTElementType that = (ASTElementType) o;
+
+        if (typeElement != null ? !typeElement.equals(that.typeElement) : that.typeElement != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return typeElement != null ? typeElement.hashCode() : 0;
+    }
 }

@@ -40,4 +40,6 @@ public interface ASTType extends ASTBase {
     ASTType getSuperClass();
 
     Collection<ASTType> getInterfaces();
+
+    boolean isArray();
 }

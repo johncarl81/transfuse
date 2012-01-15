@@ -8,7 +8,7 @@ import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.SimpleAnalysisContextFactory;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.proxy.DelayedLoad;
 import org.androidrobotics.gen.proxy.MockDelegate;
@@ -57,7 +57,7 @@ public class VirtualProxyGeneratorTest {
         ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
-        ProxyAspect proxyAspect = new ProxyAspect();
+        VirtualProxyAspect proxyAspect = new VirtualProxyAspect();
         proxyAspect.getProxyInterfaces().add(interfaceAST);
 
         delegateInjectionNode.addAspect(proxyAspect);

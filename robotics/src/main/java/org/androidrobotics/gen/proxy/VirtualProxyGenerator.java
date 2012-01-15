@@ -5,7 +5,7 @@ import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.analysis.astAnalyzer.ProxyAspect;
+import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.model.InjectionNode;
@@ -54,8 +54,8 @@ public class VirtualProxyGenerator {
             delayedLoadMethod.body().assign(delegateField, delegateParam);
 
             //implements interfaces
-            if (injectionNode.containsAspect(ProxyAspect.class)) {
-                for (ASTType interfaceType : injectionNode.getAspect(ProxyAspect.class).getProxyInterfaces()) {
+            if (injectionNode.containsAspect(VirtualProxyAspect.class)) {
+                for (ASTType interfaceType : injectionNode.getAspect(VirtualProxyAspect.class).getProxyInterfaces()) {
                     definedClass._implements(codeModel.ref(interfaceType.getName()));
 
                     //implement methods

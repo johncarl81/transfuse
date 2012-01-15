@@ -58,6 +58,11 @@ public class SimpleActivityDelegate extends SimpleSuperClass {
         secondOnCreateCalled = true;
     }
 
+    @OnTouch
+    @LogInterception
+    protected void touch() {
+    }
+
     @Inject
     private void setLateReturnListener(LateReturnListener lateReturnListener) {
         this.lateReturnListener = lateReturnListener;
