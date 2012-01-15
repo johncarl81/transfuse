@@ -40,7 +40,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
         Logger logger = new MessagerLogger(processingEnv.getMessager());
         super.init(processingEnv);
         try {
-            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(logger));
+            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(logger, processingEnv));
             roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
             collectionConverterUtil = injector.getInstance(CollectionConverterUtil.class);
             astElementConverterFactory = injector.getInstance(ASTElementConverterFactory.class);
@@ -64,8 +64,6 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
                         roundEnvironment.getElementsAnnotatedWith(annotationClass)
                 ));
             }
-
-            roboticsProcessor.verify();
 
             Filer filer = processingEnv.getFiler();
 

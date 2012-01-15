@@ -11,15 +11,19 @@ import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpre
 import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory;
 import org.androidrobotics.util.Logger;
 
+import javax.annotation.processing.ProcessingEnvironment;
+
 /**
  * @author John Ericksen
  */
 public class RoboticsGenerationGuiceModule extends AbstractModule {
 
     private Logger logger;
+    private ProcessingEnvironment processingEnv;
 
-    public RoboticsGenerationGuiceModule(Logger logger) {
+    public RoboticsGenerationGuiceModule(Logger logger, ProcessingEnvironment processingEnv) {
         this.logger = logger;
+        this.processingEnv = processingEnv;
     }
 
     @Override
@@ -42,5 +46,6 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         bind(Logger.class).toInstance(logger);
         bind(BindingRepository.class).toProvider(BindingRepositoryProvider.class);
+        bind(ProcessingEnvironment.class).toInstance(processingEnv);
     }
 }

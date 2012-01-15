@@ -17,6 +17,7 @@ import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.target.*;
 import org.androidrobotics.gen.variableBuilder.*;
 import org.androidrobotics.model.*;
+import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class InjectionFragmentGeneratorTest {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
         injector.injectMembers(this);
 
         variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();

@@ -129,10 +129,6 @@ public class RoboticsProcessor {
         }
     }
 
-    public void verify() {
-
-    }
-
     public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {
 
         try {
