@@ -24,9 +24,9 @@ public class UsesConfiguration {
     @XStreamAlias("android:reqHardKeyboard")
     @XStreamAsAttribute
     private Boolean reqHardKeyboard;
-    @XStreamAlias("android:reqKeybaordType")
+    @XStreamAlias("android:reqKeyboardType")
     @XStreamAsAttribute
-    private ReqKeybaordType reqKeybaordType;
+    private ReqKeyboardType reqKeyboardType;
     @XStreamAlias("android:reqNavigation")
     @XStreamAsAttribute
     private ReqNavigation reqNavigation;
@@ -50,12 +50,12 @@ public class UsesConfiguration {
         this.reqHardKeyboard = reqHardKeyboard;
     }
 
-    public ReqKeybaordType getReqKeybaordType() {
-        return reqKeybaordType;
+    public ReqKeyboardType getReqKeyboardType() {
+        return reqKeyboardType;
     }
 
-    public void setReqKeybaordType(ReqKeybaordType reqKeybaordType) {
-        this.reqKeybaordType = reqKeybaordType;
+    public void setReqKeyboardType(ReqKeyboardType reqKeyboardType) {
+        this.reqKeyboardType = reqKeyboardType;
     }
 
     public ReqNavigation getReqNavigation() {

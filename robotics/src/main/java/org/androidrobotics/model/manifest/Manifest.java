@@ -27,6 +27,7 @@ import java.util.List;
  * <uses-configuration>
  * <uses-permission>
  * <uses-sdk>
+ * <compatible-screens>
  *
  * @author John Ericksen
  */
@@ -35,7 +36,7 @@ public class Manifest {
 
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
-    private static final String NAMESPACE = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
+    private final String NAMESPACE = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
     @XStreamAlias("package")
     @XStreamAsAttribute
     private String applicationPackage;
@@ -65,12 +66,18 @@ public class Manifest {
     private List<PermissionGroup> permissionGroups;
     @XStreamImplicit(itemFieldName = "permission-tree")
     private List<PermissionTree> permissionTrees;
+    @XStreamImplicit(itemFieldName = "supports-screens")
+    private List<SupportsScreens> supportsScreens;
+    @XStreamImplicit(itemFieldName = "uses-feature")
+    private List<UsesFeature> usesFeatures;
     @XStreamImplicit(itemFieldName = "uses-configuration")
     private List<UsesConfiguration> usesConfigurations;
     @XStreamImplicit(itemFieldName = "uses-permission")
     private List<UsesPermission> usesPermissions;
     @XStreamImplicit(itemFieldName = "uses-sdk")
     private List<UsesSDK> usesSDKs;
+    @XStreamImplicit(itemFieldName = "compatible-screens")
+    private List<CompatibleScreens> compatibleScreens;
 
     public String getApplicationPackage() {
         return applicationPackage;
@@ -182,5 +189,21 @@ public class Manifest {
 
     public void setUsesSDKs(List<UsesSDK> usesSDKs) {
         this.usesSDKs = usesSDKs;
+    }
+
+    public List<SupportsScreens> getSupportsScreens() {
+        return supportsScreens;
+    }
+
+    public void setSupportsScreens(List<SupportsScreens> supportsScreens) {
+        this.supportsScreens = supportsScreens;
+    }
+
+    public List<UsesFeature> getUsesFeatures() {
+        return usesFeatures;
+    }
+
+    public void setUsesFeatures(List<UsesFeature> usesFeatures) {
+        this.usesFeatures = usesFeatures;
     }
 }

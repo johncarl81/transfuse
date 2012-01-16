@@ -48,7 +48,7 @@ public class Service {
 
     @XStreamImplicit(itemFieldName = "intent-filter")
     private List<IntentFilter> intentFilters;
-    @XStreamImplicit(itemFieldName = "<meta-data")
+    @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData;
 
     public Boolean getEnabled() {

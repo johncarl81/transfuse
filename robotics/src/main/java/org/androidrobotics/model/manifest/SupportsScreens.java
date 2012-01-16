@@ -22,7 +22,7 @@ public class SupportsScreens {
     @XStreamAlias("android:resizeable")
     @XStreamAsAttribute
     private Boolean resizeable;
-    @XStreamAlias("android:smallScreen")
+    @XStreamAlias("android:smallScreens")
     @XStreamAsAttribute
     private Boolean smallScreen;
     @XStreamAlias("android:normalScreens")
@@ -39,13 +39,13 @@ public class SupportsScreens {
     private Boolean anyDensity;
     @XStreamAlias("android:requiresSmallestWidthDp")
     @XStreamAsAttribute
-    private Integer requiresSmallestWidthDp;
+    private String requiresSmallestWidthDp;
     @XStreamAlias("android:compatibleWidthLimitDp")
     @XStreamAsAttribute
-    private Integer compatibleWidthLimitDp;
+    private String compatibleWidthLimitDp;
     @XStreamAlias("android:largestWidthLimitDp")
     @XStreamAsAttribute
-    private Integer largestWidthLimitDp;
+    private String largestWidthLimitDp;
 
     public Boolean getResizeable() {
         return resizeable;
@@ -95,27 +95,27 @@ public class SupportsScreens {
         this.anyDensity = anyDensity;
     }
 
-    public Integer getRequiresSmallestWidthDp() {
+    public String getRequiresSmallestWidthDp() {
         return requiresSmallestWidthDp;
     }
 
-    public void setRequiresSmallestWidthDp(Integer requiresSmallestWidthDp) {
+    public void setRequiresSmallestWidthDp(String requiresSmallestWidthDp) {
         this.requiresSmallestWidthDp = requiresSmallestWidthDp;
     }
 
-    public Integer getCompatibleWidthLimitDp() {
+    public String getCompatibleWidthLimitDp() {
         return compatibleWidthLimitDp;
     }
 
-    public void setCompatibleWidthLimitDp(Integer compatibleWidthLimitDp) {
+    public void setCompatibleWidthLimitDp(String compatibleWidthLimitDp) {
         this.compatibleWidthLimitDp = compatibleWidthLimitDp;
     }
 
-    public Integer getLargestWidthLimitDp() {
+    public String getLargestWidthLimitDp() {
         return largestWidthLimitDp;
     }
 
-    public void setLargestWidthLimitDp(Integer largestWidthLimitDp) {
+    public void setLargestWidthLimitDp(String largestWidthLimitDp) {
         this.largestWidthLimitDp = largestWidthLimitDp;
     }
 }

@@ -16,12 +16,6 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class Instrumentation {
 
-    @XStreamAlias("android:functionalTest")
-    @XStreamAsAttribute
-    private Boolean functionalTest;
-    @XStreamAlias("android:handleProfiling")
-    @XStreamAsAttribute
-    private Boolean handleProfiling;
     @XStreamAlias("android:icon")
     @XStreamAsAttribute
     private String icon;
@@ -31,6 +25,12 @@ public class Instrumentation {
     @XStreamAlias("android:name")
     @XStreamAsAttribute
     private String name;
+    @XStreamAlias("android:functionalTest")
+    @XStreamAsAttribute
+    private Boolean functionalTest;
+    @XStreamAlias("android:handleProfiling")
+    @XStreamAsAttribute
+    private Boolean handleProfiling;
     @XStreamAlias("android:targetPackage")
     @XStreamAsAttribute
     private String targetPackage;

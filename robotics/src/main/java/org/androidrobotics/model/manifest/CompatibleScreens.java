@@ -13,13 +13,13 @@ import java.util.List;
 public class CompatibleScreens {
 
     @XStreamImplicit(itemFieldName = "screen")
-    private List<ScreenOrientation> screens;
+    private List<Screen> screens;
 
-    public List<ScreenOrientation> getScreens() {
+    public List<Screen> getScreens() {
         return screens;
     }
 
-    public void setScreens(List<ScreenOrientation> screens) {
+    public void setScreens(List<Screen> screens) {
         this.screens = screens;
     }
 }

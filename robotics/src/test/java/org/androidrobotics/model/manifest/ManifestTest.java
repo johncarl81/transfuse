@@ -7,11 +7,12 @@ import com.thoughtworks.xstream.XStream;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.io.InputStream;
+import java.io.*;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -31,11 +32,33 @@ public class ManifestTest {
     }
 
     @Test
-    public void test() {
-        InputStream manifestStream = this.getClass().getClassLoader().getResourceAsStream("AndroidManifest.xml");
-        Manifest manifest = (Manifest) xStream.fromXML(manifestStream);
+    public void testManifestParsingAndWriting() {
+        try {
 
-        assertNotNull(manifest);
-        assertEquals("android.permission.VIBRATE", manifest.getUsesPermissions().get(0).getName());
+            InputStream manifestStream = this.getClass().getClassLoader().getResourceAsStream("AndroidManifest.xml");
+            String manifestString = IOUtils.toString(manifestStream);
+            Manifest manifest = (Manifest) xStream.fromXML(manifestString);
+
+            assertNotNull(manifest);
+            assertEquals("android.permission.VIBRATE", manifest.getUsesPermissions().get(0).getName());
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
+            writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
+
+            xStream.toXML(manifest, writer);
+
+            String output = new String(outputStream.toByteArray());
+
+            assertEquals(formatWhitespace(manifestString), formatWhitespace(output));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String formatWhitespace(String input) {
+        return input.replaceAll("\\s+", " ");
     }
 }

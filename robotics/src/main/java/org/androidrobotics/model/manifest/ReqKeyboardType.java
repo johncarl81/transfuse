@@ -1,6 +1,6 @@
 package org.androidrobotics.model.manifest;
 
-public enum ReqKeybaordType implements LabeledEnum {
+public enum ReqKeyboardType implements LabeledEnum {
     UNDEFINED("undefined"),
     NOKEYS("nokeys"),
     QUERTY("qwerty"),
@@ -8,7 +8,7 @@ public enum ReqKeybaordType implements LabeledEnum {
 
     private String label;
 
-    private ReqKeybaordType(String label) {
+    private ReqKeyboardType(String label) {
         this.label = label;
     }
 
