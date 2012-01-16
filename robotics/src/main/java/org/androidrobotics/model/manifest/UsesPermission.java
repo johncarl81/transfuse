@@ -4,6 +4,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
+ * attributes:
+ * android:name="string"
+ *
  * @author John Ericksen
  */
 public class UsesPermission {
@@ -12,11 +15,11 @@ public class UsesPermission {
     @XStreamAsAttribute
     private String name;
 
-    /*
-    android:name="string"
-     */
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

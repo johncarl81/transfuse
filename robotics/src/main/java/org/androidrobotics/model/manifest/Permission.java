@@ -4,6 +4,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
+ * attributes:
+ * android:description="string resource"
+ * android:icon="drawable resource"
+ * android:label="string resource"
+ * android:name="string"
+ * android:permissionGroup="string"
+ * android:protectionLevel=["normal" | "dangerous" |
+ * "signature" | "signatureOrSystem"]
+ *
  * @author John Ericksen
  */
 public class Permission {
@@ -27,13 +36,51 @@ public class Permission {
     @XStreamAsAttribute
     private ProtectionLevel protectionLevel;
 
-    /*
-    android:description="string resource"
-            android:icon="drawable resource"
-            android:label="string resource"
-            android:name="string"
-            android:permissionGroup="string"
-            android:protectionLevel=["normal" | "dangerous" |
-                                     "signature" | "signatureOrSystem"]
-     */
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPermissionGroup() {
+        return permissionGroup;
+    }
+
+    public void setPermissionGroup(String permissionGroup) {
+        this.permissionGroup = permissionGroup;
+    }
+
+    public ProtectionLevel getProtectionLevel() {
+        return protectionLevel;
+    }
+
+    public void setProtectionLevel(ProtectionLevel protectionLevel) {
+        this.protectionLevel = protectionLevel;
+    }
 }

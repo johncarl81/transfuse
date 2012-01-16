@@ -105,4 +105,222 @@ public class Application {
 
     @XStreamImplicit(itemFieldName = "activity")
     private List<Activity> activities;
+    @XStreamImplicit(itemFieldName = "activity-alias")
+    private List<ActivityAlias> activityAliases;
+    @XStreamImplicit(itemFieldName = "service")
+    private List<Service> services;
+    @XStreamImplicit(itemFieldName = "receiver")
+    private List<Receiver> receivers;
+    @XStreamImplicit(itemFieldName = "provider")
+    private List<Provider> providers;
+    @XStreamImplicit(itemFieldName = "uses-library")
+    private List<UsesLibrary> usesLibraries;
+
+    public Boolean getAllowTaskReparenting() {
+        return allowTaskReparenting;
+    }
+
+    public void setAllowTaskReparenting(Boolean allowTaskReparenting) {
+        this.allowTaskReparenting = allowTaskReparenting;
+    }
+
+    public String getBackupAgent() {
+        return backupAgent;
+    }
+
+    public void setBackupAgent(String backupAgent) {
+        this.backupAgent = backupAgent;
+    }
+
+    public Boolean getDebuggable() {
+        return debuggable;
+    }
+
+    public void setDebuggable(Boolean debuggable) {
+        this.debuggable = debuggable;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getHasCode() {
+        return hasCode;
+    }
+
+    public void setHasCode(Boolean hasCode) {
+        this.hasCode = hasCode;
+    }
+
+    public Boolean getHardwareAccelerated() {
+        return hardwareAccelerated;
+    }
+
+    public void setHardwareAccelerated(Boolean hardwareAccelerated) {
+        this.hardwareAccelerated = hardwareAccelerated;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Boolean getKillAfterRestore() {
+        return killAfterRestore;
+    }
+
+    public void setKillAfterRestore(Boolean killAfterRestore) {
+        this.killAfterRestore = killAfterRestore;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public String getManageSpaceActivity() {
+        return manageSpaceActivity;
+    }
+
+    public void setManageSpaceActivity(String manageSpaceActivity) {
+        this.manageSpaceActivity = manageSpaceActivity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public Boolean getPersistent() {
+        return persistent;
+    }
+
+    public void setPersistent(Boolean persistent) {
+        this.persistent = persistent;
+    }
+
+    public String getProcess() {
+        return process;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
+    public Boolean getRestoreAnyVersion() {
+        return restoreAnyVersion;
+    }
+
+    public void setRestoreAnyVersion(Boolean restoreAnyVersion) {
+        this.restoreAnyVersion = restoreAnyVersion;
+    }
+
+    public String getTaskAffinity() {
+        return taskAffinity;
+    }
+
+    public void setTaskAffinity(String taskAffinity) {
+        this.taskAffinity = taskAffinity;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public UIOptions getUiOptions() {
+        return uiOptions;
+    }
+
+    public void setUiOptions(UIOptions uiOptions) {
+        this.uiOptions = uiOptions;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public List<ActivityAlias> getActivityAliases() {
+        return activityAliases;
+    }
+
+    public void setActivityAliases(List<ActivityAlias> activityAliases) {
+        this.activityAliases = activityAliases;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
+    }
+
+    public List<Receiver> getReceivers() {
+        return receivers;
+    }
+
+    public void setReceivers(List<Receiver> receivers) {
+        this.receivers = receivers;
+    }
+
+    public List<Provider> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(List<Provider> providers) {
+        this.providers = providers;
+    }
+
+    public List<UsesLibrary> getUsesLibraries() {
+        return usesLibraries;
+    }
+
+    public void setUsesLibraries(List<UsesLibrary> usesLibraries) {
+        this.usesLibraries = usesLibraries;
+    }
 }

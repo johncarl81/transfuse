@@ -7,35 +7,35 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.util.List;
 
 /**
+ * attributes:
+ * xmlns:android="http://schemas.android.com/apk/res/android"
+ * package="string"
+ * android:sharedUserId="string"
+ * android:sharedUserLabel="string resource"
+ * android:versionCode="integer"
+ * android:versionName="string"
+ * android:installLocation=["auto" | "internalOnly" | "preferExternal"]
+ * <p/>
+ * must contain:
+ * <application>
+ * <p/>
+ * can contain:
+ * <instrumentation>
+ * <permission>
+ * <permission-group>
+ * <permission-tree>
+ * <uses-configuration>
+ * <uses-permission>
+ * <uses-sdk>
+ *
  * @author John Ericksen
  */
 @XStreamAlias("manifest")
 public class Manifest {
 
-    /*
-       must contain:
-       <application>
-       can contain:
-       <instrumentation>
-       <permission>
-       <permission-group>
-       <permission-tree>
-       <uses-configuration>
-       <uses-permission>
-
-       <uses-sdk>
-    */
-
-    /*
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        package="string"
-        android:sharedUserId="string"
-        android:sharedUserLabel="string resource"
-        android:versionCode="integer"
-        android:versionName="string"
-        android:installLocation=["auto" | "internalOnly" | "preferExternal"]
-     */
-
+    @XStreamAlias("xmlns:android")
+    @XStreamAsAttribute
+    private static final String NAMESPACE = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
     @XStreamAlias("package")
     @XStreamAsAttribute
     private String applicationPackage;
@@ -120,35 +120,67 @@ public class Manifest {
         this.installLocation = installLocation;
     }
 
-    public List<UsesPermission> getUsesPermissions() {
-        return usesPermissions;
-    }
-
     public List<Application> getApplications() {
         return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 
     public List<Instrumentation> getInstrumentations() {
         return instrumentations;
     }
 
+    public void setInstrumentations(List<Instrumentation> instrumentations) {
+        this.instrumentations = instrumentations;
+    }
+
     public List<Permission> getPermissions() {
         return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public List<PermissionGroup> getPermissionGroups() {
         return permissionGroups;
     }
 
+    public void setPermissionGroups(List<PermissionGroup> permissionGroups) {
+        this.permissionGroups = permissionGroups;
+    }
+
     public List<PermissionTree> getPermissionTrees() {
         return permissionTrees;
+    }
+
+    public void setPermissionTrees(List<PermissionTree> permissionTrees) {
+        this.permissionTrees = permissionTrees;
     }
 
     public List<UsesConfiguration> getUsesConfigurations() {
         return usesConfigurations;
     }
 
+    public void setUsesConfigurations(List<UsesConfiguration> usesConfigurations) {
+        this.usesConfigurations = usesConfigurations;
+    }
+
+    public List<UsesPermission> getUsesPermissions() {
+        return usesPermissions;
+    }
+
+    public void setUsesPermissions(List<UsesPermission> usesPermissions) {
+        this.usesPermissions = usesPermissions;
+    }
+
     public List<UsesSDK> getUsesSDKs() {
         return usesSDKs;
+    }
+
+    public void setUsesSDKs(List<UsesSDK> usesSDKs) {
+        this.usesSDKs = usesSDKs;
     }
 }

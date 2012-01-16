@@ -4,6 +4,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 /**
+ * attributes:
+ * android:host="string"
+ * android:mimeType="string"
+ * android:path="string"
+ * android:pathPattern="string"
+ * android:pathPrefix="string"
+ * android:port="string"
+ * android:scheme="string"
+ *
  * @author John Ericksen
  */
 public class Data {
@@ -30,13 +39,59 @@ public class Data {
     @XStreamAsAttribute
     private String scheme;
 
-    /*
-    android:host="string"
-      android:mimeType="string"
-      android:path="string"
-      android:pathPattern="string"
-      android:pathPrefix="string"
-      android:port="string"
-      android:scheme="string"
-     */
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPathPattern() {
+        return pathPattern;
+    }
+
+    public void setPathPattern(String pathPattern) {
+        this.pathPattern = pathPattern;
+    }
+
+    public String getPathPrefix() {
+        return pathPrefix;
+    }
+
+    public void setPathPrefix(String pathPrefix) {
+        this.pathPrefix = pathPrefix;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
 }

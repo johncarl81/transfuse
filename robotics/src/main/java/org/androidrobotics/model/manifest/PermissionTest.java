@@ -1,17 +1,49 @@
 package org.androidrobotics.model.manifest;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+
 /**
+ * attributes:
+ * android:icon="drawable resource"
+ * android:label="string resource" ]
+ * android:name="string"
+ *
  * @author John Ericksen
  */
 public class PermissionTest {
 
+    @XStreamAlias("android:icon")
+    @XStreamAsAttribute
     private String icon;
+    @XStreamAlias("android:label")
+    @XStreamAsAttribute
     private String label;
+    @XStreamAlias("android:name")
+    @XStreamAsAttribute
     private String name;
 
-    /*
-    android:icon="drawable resource"
-                 android:label="string resource" ]
-                 android:name="string"
-     */
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
