@@ -31,7 +31,7 @@ public class SimpleActivityDelegate extends SimpleSuperClass {
     private Object systemService;
     private LateReturnListener lateReturnListener;
     @Inject
-    @View(R.id.asynchActivity)
+    @View(R.id.asyncActivity)
     private Button button;
     @Inject
     private Resources resources;

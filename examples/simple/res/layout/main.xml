@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Notify"/>
     <Button
-            android:id="@+id/asynchActivity"
+            android:id="@+id/asyncActivity"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Asynch Toast"/>

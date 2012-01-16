@@ -16,7 +16,7 @@ public final class R {
     }
 
     public static final class id {
-        public static final int asynchActivity = 0x7f060003;
+        public static final int asyncActivity = 0x7f060003;
         public static final int notifyButton = 0x7f060002;
         public static final int secondActivity = 0x7f060004;
         public static final int text = 0x7f060000;

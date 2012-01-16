@@ -3,6 +3,7 @@ package org.androidrobotics.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
+import com.thoughtworks.xstream.XStream;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidrobotics.gen.InjectionBuilderContextFactory;
@@ -47,5 +48,6 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
         bind(Logger.class).toInstance(logger);
         bind(BindingRepository.class).toProvider(BindingRepositoryProvider.class);
         bind(ProcessingEnvironment.class).toInstance(processingEnv);
+        bind(XStream.class).toProvider(XStreamProvider.class);
     }
 }
