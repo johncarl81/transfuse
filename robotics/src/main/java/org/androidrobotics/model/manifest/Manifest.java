@@ -55,18 +55,22 @@ public class Manifest {
     @XStreamAsAttribute
     private InstallLocation installLocation;
 
+    @XStreamImplicit(itemFieldName = "application")
+    private List<Application> applications;
+    @XStreamImplicit(itemFieldName = "instrumentation")
+    private List<Instrumentation> instrumentations;
+    @XStreamImplicit(itemFieldName = "permission")
+    private List<Permission> permissions;
+    @XStreamImplicit(itemFieldName = "permission-group")
+    private List<PermissionGroup> permissionGroups;
+    @XStreamImplicit(itemFieldName = "permission-tree")
+    private List<PermissionTree> permissionTrees;
+    @XStreamImplicit(itemFieldName = "uses-configuration")
+    private List<UsesConfiguration> usesConfigurations;
     @XStreamImplicit(itemFieldName = "uses-permission")
     private List<UsesPermission> usesPermissions;
-
-    /*
-    private Application application;
-    private List<Instrumentation> instrumentations;
-    private List<Permission> permissions;
-    private List<PermissionGroup> permissionGroups;
-    private List<PermissionTree> permissionTrees;
-    private List<UsesConfiguration> usesConfigurations;
+    @XStreamImplicit(itemFieldName = "uses-sdk")
     private List<UsesSDK> usesSDKs;
-    */
 
     public String getApplicationPackage() {
         return applicationPackage;
@@ -118,5 +122,33 @@ public class Manifest {
 
     public List<UsesPermission> getUsesPermissions() {
         return usesPermissions;
+    }
+
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public List<Instrumentation> getInstrumentations() {
+        return instrumentations;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public List<PermissionGroup> getPermissionGroups() {
+        return permissionGroups;
+    }
+
+    public List<PermissionTree> getPermissionTrees() {
+        return permissionTrees;
+    }
+
+    public List<UsesConfiguration> getUsesConfigurations() {
+        return usesConfigurations;
+    }
+
+    public List<UsesSDK> getUsesSDKs() {
+        return usesSDKs;
     }
 }
