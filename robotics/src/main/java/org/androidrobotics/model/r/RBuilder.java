@@ -10,17 +10,14 @@ import java.util.Collection;
  */
 public class RBuilder {
 
-    public RResourceMapping buildR(ASTType rType, Collection<? extends ASTType> rInnerTypes) {
+    public RResourceMapping buildR(Collection<? extends ASTType> rInnerTypes) {
 
-        RResourceMapping resourceMapping = new RResourceMapping(rType);
+        RResourceMapping resourceMapping = new RResourceMapping();
 
         for (ASTType rInnerType : rInnerTypes) {
 
-            String rInnerTypeFullyQualifiedName = rInnerType.getName();
-            String rInnerTypeName = rInnerTypeFullyQualifiedName.substring(rInnerTypeFullyQualifiedName.lastIndexOf('.') + 1);
-
             for (ASTField idField : rInnerType.getFields()) {
-                resourceMapping.addResource(rInnerTypeName, idField.getName(), (Integer) idField.getConstantValue());
+                resourceMapping.addResource(rInnerType, idField.getName(), (Integer) idField.getConstantValue());
             }
         }
 

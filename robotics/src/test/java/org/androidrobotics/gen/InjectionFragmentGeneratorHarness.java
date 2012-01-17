@@ -3,6 +3,7 @@ package org.androidrobotics.gen;
 import com.sun.codemodel.*;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.PackageClass;
+import org.androidrobotics.util.EmptyRResource;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -26,7 +27,7 @@ public class InjectionFragmentGeneratorHarness {
         JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(injectionNode.getClassName()), "get");
 
         JBlock block = getMethod.body();
-        Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
+        Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, new EmptyRResource());
 
         block._return(expressionMap.get(injectionNode));
     }

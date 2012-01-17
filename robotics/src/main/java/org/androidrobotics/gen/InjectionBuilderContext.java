@@ -13,6 +13,7 @@ import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
 import org.androidrobotics.model.ProxyDescriptor;
+import org.androidrobotics.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -27,11 +28,13 @@ public class InjectionBuilderContext {
     private JDefinedClass definedClass;
     private VirtualProxyGenerator virtualProxyGenerator;
     private ProxyVariableBuilder proxyVariableBuilder;
+    private RResource rResource;
 
     @Inject
     public InjectionBuilderContext(@Assisted Map<InjectionNode, JExpression> variableMap,
                                    @Assisted JBlock block,
                                    @Assisted JDefinedClass definedClass,
+                                   @Assisted RResource rResource,
                                    ProxyVariableBuilder proxyVariableBuilder,
                                    VirtualProxyGenerator virtualProxyGenerator) {
         this.variableMap = variableMap;
@@ -39,6 +42,7 @@ public class InjectionBuilderContext {
         this.definedClass = definedClass;
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.virtualProxyGenerator = virtualProxyGenerator;
+        this.rResource = rResource;
     }
 
     public JExpression buildVariable(InjectionNode injectionNode) {
@@ -103,5 +107,9 @@ public class InjectionBuilderContext {
 
     public JDefinedClass getDefinedClass() {
         return definedClass;
+    }
+
+    public RResource getRResource() {
+        return rResource;
     }
 }

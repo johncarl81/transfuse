@@ -15,7 +15,7 @@ public class SecondActivityDelegate {
     private TextView textView;
     @Inject
     @View(R.id.text3)
-    private TextView textView2;
+    private TextView textView3;
     @Inject
     @Extra("testExtra")
     private String testExtra;
@@ -32,7 +32,7 @@ public class SecondActivityDelegate {
 
     @OnCreate
     public void onCreate() {
-        textView2.setText(testExtra);
+        textView3.setText(testExtra);
     }
 
     public TextView getTextView() {

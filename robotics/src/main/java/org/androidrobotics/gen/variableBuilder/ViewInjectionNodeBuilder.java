@@ -8,6 +8,7 @@ import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.model.IdentifiedInjectionNode;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -31,15 +32,15 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        InjectionNode injectionNode = new InjectionNode(astType);
+        Integer viewId = (Integer) ((AnnotationValue) annotation.getProperty("value")).getValue();
+
+        InjectionNode injectionNode = new IdentifiedInjectionNode(astType, viewId);
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
 
-        Integer viewId = (Integer) ((AnnotationValue) annotation.getProperty("value")).getValue();
-
         try {
-            injectionNode.addAspect(VariableBuilder.class, new ViewVariableBuilder(viewId, activityInjectionNode, codeModel.parseType(astType.getName())));
+            injectionNode.addAspect(VariableBuilder.class, new ViewVariableBuilder(viewId, activityInjectionNode, codeModel.parseType(astType.getName()), codeModel));
         } catch (ClassNotFoundException e) {
             throw new RoboticsAnalysisException("Unable to parse type " + astType.getName(), e);
         }

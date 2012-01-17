@@ -70,11 +70,20 @@ public class SimpleActivityTest {
     @Test
     public void testSuperClassFieldInjection() {
         assertNotNull(testActivityDelegate.getVibrateButton());
+        assertEquals(R.id.vibrateButton, testActivityDelegate.getVibrateButton().getId());
     }
 
     @Test
     public void testSuperPrivateMethodInjection() {
         assertNotNull(testActivityDelegate.getContext());
+    }
+
+    @Test
+    public void testMultipleResourceReferences() {
+        SimpleController controller = testActivityDelegate.getController();
+
+        assertEquals(R.id.vibrateButton, controller.getVibrateButton().getId());
+        assertEquals(R.id.notifyButton, controller.getNotifyButton().getId());
     }
 
     private Field findDelegateField(Class target, Class type) {

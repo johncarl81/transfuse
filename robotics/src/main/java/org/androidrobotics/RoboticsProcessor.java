@@ -121,7 +121,7 @@ public class RoboticsProcessor {
 
             if (activityDescriptor != null) {
                 try {
-                    activityGenerator.generate(activityDescriptor);
+                    activityGenerator.generate(activityDescriptor, rResource);
                 } catch (IOException e) {
                     logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {

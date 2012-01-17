@@ -64,4 +64,12 @@ public class SimpleController {
     public boolean validate() {
         return anotherValue != null && activity != null && vibrator != null && vibrateButton != null;
     }
+
+    public Button getNotifyButton() {
+        return notifyButton;
+    }
+
+    public Button getVibrateButton() {
+        return vibrateButton;
+    }
 }

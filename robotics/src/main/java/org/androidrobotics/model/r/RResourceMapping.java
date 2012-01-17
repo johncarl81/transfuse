@@ -10,15 +10,10 @@ import java.util.Map;
  */
 public class RResourceMapping implements RResource {
 
-    private ASTType rType;
     private Map<Integer, ResourceIdentifier> resourceMap = new HashMap<Integer, ResourceIdentifier>();
 
-    public RResourceMapping(ASTType rType) {
-        this.rType = rType;
-    }
-
-    public void addResource(String innerClass, String name, Integer id) {
-        resourceMap.put(id, new ResourceIdentifier(rType, innerClass, name));
+    public void addResource(ASTType rInnerType, String name, Integer id) {
+        resourceMap.put(id, new ResourceIdentifier(rInnerType, name));
     }
 
     public ResourceIdentifier getResourceIdentifier(Integer id) {

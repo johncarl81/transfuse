@@ -6,6 +6,7 @@ import com.sun.codemodel.*;
 import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.r.RResource;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,7 +29,7 @@ public class ActivityGenerator {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
     }
 
-    public void generate(ActivityDescriptor descriptor) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
+    public void generate(ActivityDescriptor descriptor, RResource rResource) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
 
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
@@ -51,7 +52,7 @@ public class ActivityGenerator {
         if (descriptor.getInjectionNodes().size() > 0) {
             InjectionNode injectionNode = descriptor.getInjectionNodes().get(0);
 
-            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
+            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 
 
             //ontouch method

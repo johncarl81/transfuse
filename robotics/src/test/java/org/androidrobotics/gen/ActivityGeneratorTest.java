@@ -11,6 +11,7 @@ import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.classloader.MemoryClassLoader;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.PackageClass;
+import org.androidrobotics.util.EmptyRResource;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class ActivityGeneratorTest {
         activityDescriptor.setPackageClass(TEST_PACKAGE_FILENAME);
         activityDescriptor.setLayout(TEST_LAYOUT);
 
-        activityGenerator.generate(activityDescriptor);
+        activityGenerator.generate(activityDescriptor, new EmptyRResource());
 
         codeModel.build(stringCodeWriter);
         classLoader.add(TEST_PACKAGE_FILENAME.getFullyQualifiedName(), stringCodeWriter.getValue(TEST_PACKAGE_FILENAME.addDotJava()));

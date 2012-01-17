@@ -7,13 +7,20 @@ import org.androidrobotics.analysis.adapter.ASTType;
  */
 public class ResourceIdentifier {
 
-    private ASTType rType;
-    private String resourceType;
+    private ASTType rInnerType;
     private String name;
 
-    public ResourceIdentifier(ASTType rType, String resourceType, String name) {
-        this.resourceType = resourceType;
+    public ResourceIdentifier(ASTType rInnerType, String name) {
         this.name = name;
+        this.rInnerType = rInnerType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ASTType getRInnerType() {
+        return rInnerType;
     }
 
     @Override
@@ -23,28 +30,16 @@ public class ResourceIdentifier {
 
         ResourceIdentifier that = (ResourceIdentifier) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (resourceType != null ? !resourceType.equals(that.resourceType) : that.resourceType != null) return false;
+        if (!name.equals(that.name)) return false;
+        if (!rInnerType.equals(that.rInnerType)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = resourceType != null ? resourceType.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = rInnerType.hashCode();
+        result = 31 * result + name.hashCode();
         return result;
-    }
-
-    public ASTType getRType() {
-        return rType;
-    }
-
-    public String getResourceType() {
-        return resourceType;
-    }
-
-    public String getName() {
-        return name;
     }
 }

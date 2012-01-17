@@ -2,19 +2,18 @@ package org.androidrobotics.aop;
 
 import android.os.Handler;
 
+import javax.inject.Inject;
+
 /**
  * @author John Ericksen
  */
 public class UIThreadMethodInterceptor implements MethodInterceptor {
 
-    /*todo: Provider injection
     @Inject
-    protected Provider<Handler> handlerProvider;
-    */
+    private Handler handler;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        Handler handler = new Handler();
 
         handler.post(new MethodInvocationRunnable(invocation));
 

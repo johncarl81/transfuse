@@ -1,10 +1,10 @@
 package org.androidrobotics.gen.variableBuilder;
 
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JType;
+import com.sun.codemodel.*;
+import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.r.ResourceIdentifier;
 
 public class ViewVariableBuilder implements VariableBuilder {
 
@@ -13,17 +13,27 @@ public class ViewVariableBuilder implements VariableBuilder {
     private JType viewType;
     private int viewId;
     private InjectionNode activityInjectionNode;
+    private JCodeModel codeModel;
 
-    public ViewVariableBuilder(int viewId, InjectionNode activityInjectionNode, JType viewType) {
+    public ViewVariableBuilder(int viewId, InjectionNode activityInjectionNode, JType viewType, JCodeModel codeModel) {
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;
+        this.codeModel = codeModel;
     }
 
     @Override
     public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         JExpression contextVar = injectionBuilderContext.buildVariable(activityInjectionNode);
 
-        return JExpr.cast(viewType, contextVar.invoke(FIND_VIEW).arg(JExpr.lit(viewId)));
+        ResourceIdentifier viewResourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(viewId);
+
+        ASTType rInnerType = viewResourceIdentifier.getRInnerType();
+
+        JClass rInnerRef = codeModel.ref(rInnerType.getName());
+
+        JFieldRef viewIdRef = rInnerRef.staticRef(viewResourceIdentifier.getName());
+
+        return JExpr.cast(viewType, contextVar.invoke(FIND_VIEW).arg(viewIdRef));
     }
 }

@@ -1,7 +1,6 @@
 package org.androidrobotics.example.simple;
 
-import android.content.Context;
-import android.util.Log;
+import android.app.Application;
 import android.view.View;
 import android.widget.Toast;
 import org.androidrobotics.annotations.Asynchronous;
@@ -15,8 +14,7 @@ import javax.inject.Inject;
 public class LateReturnListener implements View.OnClickListener {
 
     @Inject
-    private Context context;
-
+    private Application context;
 
     @Override
     @Asynchronous
@@ -26,12 +24,12 @@ public class LateReturnListener implements View.OnClickListener {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.i("interceptor", "Asynchonous onClick");
+        notifyUIThread();
     }
 
     @UIThread
     public void notifyUIThread() {
-        Toast toast = Toast.makeText(context, "hello delayed world", 1000);
+        Toast toast = Toast.makeText(context, "delayed hello world", 1000);
         toast.show();
     }
 }

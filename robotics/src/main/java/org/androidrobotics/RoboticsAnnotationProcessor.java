@@ -112,11 +112,9 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
     private RResource buildR(String className) {
         TypeElement rTypeElement = processingEnv.getElementUtils().getTypeElement(className);
-
-        ASTType rASTType = astElementFactory.buildASTElementType(rTypeElement);
-
         Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
-        return rBuilder.buildR(rASTType, rInnerTypes);
+
+        return rBuilder.buildR(rInnerTypes);
     }
 
     private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
