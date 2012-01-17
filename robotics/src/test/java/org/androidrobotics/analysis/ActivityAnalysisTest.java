@@ -13,7 +13,6 @@ import org.androidrobotics.gen.variableBuilder.ContextVariableInjectionNodeBuild
 import org.androidrobotics.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.InjectionNode;
-import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +34,7 @@ public class ActivityAnalysisTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
         AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();

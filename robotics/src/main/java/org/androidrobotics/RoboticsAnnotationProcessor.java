@@ -2,21 +2,28 @@ package org.androidrobotics;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.thoughtworks.xstream.XStream;
 import org.androidrobotics.analysis.adapter.ASTElementConverterFactory;
+import org.androidrobotics.analysis.adapter.ASTElementFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.FilerSourceCodeWriter;
 import org.androidrobotics.gen.ResourceCodeWriter;
-import org.androidrobotics.util.CollectionConverterUtil;
-import org.androidrobotics.util.Logger;
-import org.androidrobotics.util.MessagerLogger;
+import org.androidrobotics.model.manifest.Manifest;
+import org.androidrobotics.model.r.RBuilder;
+import org.androidrobotics.model.r.RResource;
+import org.androidrobotics.model.r.RResourceComposite;
+import org.androidrobotics.util.*;
 
 import javax.annotation.processing.*;
+import javax.inject.Inject;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.ElementFilter;
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,19 +38,29 @@ import java.util.Set;
 public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
     private boolean processorRan = false;
+    @Inject
     private RoboticsProcessor roboticsProcessor;
+    @Inject
     private CollectionConverterUtil collectionConverterUtil;
+    @Inject
     private ASTElementConverterFactory astElementConverterFactory;
+    @Inject
+    private XStream xStream;
+    @Inject
+    private Logger logger;
+    @Inject
+    private ManifestSerializer manifestParser;
+    @Inject
+    private RBuilder rBuilder;
+    @Inject
+    private ASTElementFactory astElementFactory;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
-        Logger logger = new MessagerLogger(processingEnv.getMessager());
         super.init(processingEnv);
         try {
-            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(logger, processingEnv));
-            roboticsProcessor = injector.getInstance(RoboticsProcessor.class);
-            collectionConverterUtil = injector.getInstance(CollectionConverterUtil.class);
-            astElementConverterFactory = injector.getInstance(ASTElementConverterFactory.class);
+            Injector injector = Guice.createInjector(new RoboticsGenerationGuiceModule(new MessagerLogger(processingEnv.getMessager())));
+            injector.injectMembers(this);
         } catch (RuntimeException e) {
             logger.error("Error during init of RoboticsAnnotationProcessor", e);
             throw e;
@@ -59,6 +76,18 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
                     roundEnvironment.getElementsAnnotatedWith(RoboticsModule.class)
             ));
 
+            File manifestFile = new ManifestLocator(processingEnv.getFiler(), logger).findManifest();
+            Manifest manifest = manifestParser.readManifest(manifestFile);
+
+            roboticsProcessor.processManifest(manifest);
+
+            RResourceComposite r = new RResourceComposite(
+                    buildR(manifest.getApplicationPackage() + ".R"),
+                    buildR("android.R")
+            );
+
+            roboticsProcessor.processR(r);
+
             for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
                 roboticsProcessor.processRootElement(wrapASTCollection(
                         roundEnvironment.getElementsAnnotatedWith(annotationClass)
@@ -70,13 +99,27 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
             roboticsProcessor.writeSource(new FilerSourceCodeWriter(filer),
                     new ResourceCodeWriter(filer));
 
+            Manifest updatedManifest = roboticsProcessor.getManifest();
+
+            //write back out, updating from processed classes
+            manifestParser.writeManifest(updatedManifest, manifestFile);
+
             processorRan = true;
             return true;
         }
         return false;
     }
 
-    private Collection<? extends ASTType> wrapASTCollection(Set<? extends Element> elementCollection) {
+    private RResource buildR(String className) {
+        TypeElement rTypeElement = processingEnv.getElementUtils().getTypeElement(className);
+
+        ASTType rASTType = astElementFactory.buildASTElementType(rTypeElement);
+
+        Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
+        return rBuilder.buildR(rASTType, rInnerTypes);
+    }
+
+    private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
         return collectionConverterUtil.wrapCollection(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );

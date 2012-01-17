@@ -16,7 +16,6 @@ import org.androidrobotics.gen.proxy.AOPProxyGenerator;
 import org.androidrobotics.gen.proxy.MockDelegate;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.PackageClass;
-import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +65,7 @@ public class AOPProxyGeneratorTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
 
         delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);

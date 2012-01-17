@@ -15,7 +15,6 @@ import org.androidrobotics.model.ConstructorInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.MethodInjectionPoint;
-import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class InjectionPointFactoryTest {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
         emptyContext = contextFactory.buildContext();
     }

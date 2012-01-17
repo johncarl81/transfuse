@@ -3,16 +3,18 @@ package org.androidrobotics.model.manifest;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.thoughtworks.xstream.XStream;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
+import org.androidrobotics.util.ManifestSerializer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -23,11 +25,11 @@ import static junit.framework.Assert.assertNotNull;
 public class ManifestTest {
 
     @Inject
-    private XStream xStream;
+    private ManifestSerializer manifestSerializer;
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
     }
 
@@ -37,17 +39,14 @@ public class ManifestTest {
 
             InputStream manifestStream = this.getClass().getClassLoader().getResourceAsStream("AndroidManifest.xml");
             String manifestString = IOUtils.toString(manifestStream);
-            Manifest manifest = (Manifest) xStream.fromXML(manifestString);
+            Manifest manifest = manifestSerializer.readManifest(new ByteArrayInputStream(manifestString.getBytes()));
 
             assertNotNull(manifest);
             assertEquals("android.permission.VIBRATE", manifest.getUsesPermissions().get(0).getName());
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-            Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
-            writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-
-            xStream.toXML(manifest, writer);
+            manifestSerializer.writeManifest(manifest, outputStream);
 
             String output = new String(outputStream.toByteArray());
 

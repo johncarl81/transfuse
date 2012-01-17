@@ -16,7 +16,6 @@ import org.androidrobotics.gen.proxy.MockInterface;
 import org.androidrobotics.gen.proxy.VirtualProxyGenerator;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
-import org.androidrobotics.util.EmptyProcessingEnvironment;
 import org.androidrobotics.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +49,7 @@ public class VirtualProxyGeneratorTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this), new EmptyProcessingEnvironment()));
+        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new RoboticsGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
 
         ASTType interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);

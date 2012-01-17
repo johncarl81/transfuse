@@ -15,6 +15,8 @@ import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.manifest.Manifest;
+import org.androidrobotics.model.r.RResource;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
@@ -36,6 +38,8 @@ public class RoboticsProcessor {
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ActivityAnalysis activityAnalysis;
     private AOPRepository aopRepository;
+    private Manifest manifest;
+    private RResource rResource;
 
     @Inject
     public RoboticsProcessor(ActivityGenerator activityGenerator,
@@ -139,5 +143,17 @@ public class RoboticsProcessor {
         } catch (IOException e) {
             logger.error("Error while writing source files", e);
         }
+    }
+
+    public void processManifest(Manifest manifest) {
+        this.manifest = manifest;
+    }
+
+    public void processR(RResource rResource) {
+        this.rResource = rResource;
+    }
+
+    public Manifest getManifest() {
+        return manifest;
     }
 }

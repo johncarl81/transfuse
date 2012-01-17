@@ -12,9 +12,11 @@ public class ASTElementField extends ASTElementBase implements ASTField {
 
     private ASTTypeLazyLoader<Element> astTypeLoader;
     private ASTAccessModifier modifier;
+    private VariableElement variableElement;
 
     public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, ASTAccessModifier modifier) {
         super(variableElement);
+        this.variableElement = variableElement;
         this.modifier = modifier;
         this.astTypeLoader = new ElementASTTypeLazyLoader(variableElement, astTypeBuilderVisitor);
     }
@@ -26,5 +28,10 @@ public class ASTElementField extends ASTElementBase implements ASTField {
 
     public ASTAccessModifier getAccessModifier() {
         return modifier;
+    }
+
+    @Override
+    public Object getConstantValue() {
+        return variableElement.getConstantValue();
     }
 }

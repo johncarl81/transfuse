@@ -16,4 +16,5 @@ public interface ASTField extends ASTBase {
 
     ASTAccessModifier getAccessModifier();
 
+    Object getConstantValue();
 }

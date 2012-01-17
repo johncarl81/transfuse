@@ -55,4 +55,9 @@ public class ASTClassField implements ASTField {
     public ASTAccessModifier getAccessModifier() {
         return modifier;
     }
+
+    @Override
+    public Object getConstantValue() {
+        return null;//todo: field.get(null);
+    }
 }
