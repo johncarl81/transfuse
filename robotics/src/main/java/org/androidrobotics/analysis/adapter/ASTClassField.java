@@ -58,6 +58,17 @@ public class ASTClassField implements ASTField {
 
     @Override
     public Object getConstantValue() {
-        return null;//todo: field.get(null);
+        try {
+            boolean accessible = field.isAccessible();
+            field.setAccessible(true);
+            Object constantValue = field.get(null);
+            field.setAccessible(accessible);
+            return constantValue;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            return null;
+        }
+        return null;
     }
 }
