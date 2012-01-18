@@ -15,6 +15,8 @@ import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.manifest.Activity;
+import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.model.manifest.Manifest;
 import org.androidrobotics.model.r.RResource;
 import org.androidrobotics.util.Logger;
@@ -23,6 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -115,13 +119,25 @@ public class RoboticsProcessor {
 
         AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
 
+        Application application = manifest.getApplications().get(0);
+
+        Set<Activity> activities = application.getActivities();
+
+        Set<Activity> unreferencedActivities = new HashSet<Activity>(activities);
+
         for (ASTType astType : astTypes) {
 
             ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, aopRepository);
 
+
             if (activityDescriptor != null) {
                 try {
                     activityGenerator.generate(activityDescriptor, rResource);
+
+                    Activity activity = new Activity("." + activityDescriptor.getPackageClass().getClassName(), activityDescriptor.getLabel());
+
+                    activities.add(activity);
+                    unreferencedActivities.remove(activity);
                 } catch (IOException e) {
                     logger.error("IOException while generating activity", e);
                 } catch (JClassAlreadyExistsException e) {
@@ -131,6 +147,8 @@ public class RoboticsProcessor {
                 }
             }
         }
+
+        activities.removeAll(unreferencedActivities);
     }
 
     public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {

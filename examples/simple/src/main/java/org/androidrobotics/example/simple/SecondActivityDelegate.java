@@ -8,7 +8,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity("SecondActivity")
+@Activity(name = "SecondActivity")
 @Layout(R.layout.second)
 public class SecondActivityDelegate {
 

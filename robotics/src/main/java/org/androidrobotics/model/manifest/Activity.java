@@ -127,6 +127,11 @@ public class Activity {
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData;
 
+    public Activity(String name, String label) {
+        this.name = name;
+        this.label = label;
+    }
+
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
     }
@@ -325,5 +330,22 @@ public class Activity {
 
     public void setMetaData(List<MetaData> metaData) {
         this.metaData = metaData;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Activity)) return false;
+
+        Activity activity = (Activity) o;
+
+        if (!name.equals(activity.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

@@ -1,6 +1,7 @@
 package org.androidrobotics.gen;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.astAnalyzer.MethodCallbackAspect;
@@ -40,6 +41,10 @@ public class ActivityGenerator {
         JVar savedInstanceState = onCreateMethod.param(Bundle.class, "savedInstanceState");
 
         JBlock block = onCreateMethod.body();
+
+        JInvocation invocation = codeModel.ref(System.class).staticInvoke("currentTimeMillis");
+        JVar timeVar = block.decl(codeModel.LONG, "time");
+        block.assign(timeVar, invocation);
 
         //super call with saved instance state
         block.invoke(JExpr._super(), onCreateMethod).arg(savedInstanceState);
@@ -86,6 +91,12 @@ public class ActivityGenerator {
             addLifecycleMethod("onStart", definedClass, expressionMap);
             // onStop
             addLifecycleMethod("onStop", definedClass, expressionMap);
+
+            block.add(codeModel.ref(Log.class).staticInvoke("i")
+                    .arg("timer")
+                    .arg(
+                            codeModel.ref(Long.class).staticInvoke("toString").arg(
+                                    JOp.minus(codeModel.ref(System.class).staticInvoke("currentTimeMillis"), timeVar))));
         }
     }
 

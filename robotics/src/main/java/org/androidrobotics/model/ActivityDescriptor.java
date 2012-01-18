@@ -11,6 +11,7 @@ public class ActivityDescriptor {
     private PackageClass packageClass;
     private int layout;
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
+    private String label;
 
     public PackageClass getPackageClass() {
         return packageClass;
@@ -34,5 +35,13 @@ public class ActivityDescriptor {
 
     public List<InjectionNode> getInjectionNodes() {
         return injectionNodes;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

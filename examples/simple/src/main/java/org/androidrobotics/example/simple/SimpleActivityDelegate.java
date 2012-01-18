@@ -8,7 +8,7 @@ import org.androidrobotics.annotations.*;
 
 import javax.inject.Inject;
 
-@Activity("SimpleActivity")
+@Activity(name = "SimpleActivity", label = "@string/simpleActivityName")
 @Layout(R.layout.main)
 public class SimpleActivityDelegate extends SimpleSuperClass {
 

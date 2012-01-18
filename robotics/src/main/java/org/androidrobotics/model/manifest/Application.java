@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * attributes
@@ -104,7 +105,7 @@ public class Application {
     private UIOptions uiOptions;
 
     @XStreamImplicit(itemFieldName = "activity")
-    private List<Activity> activities;
+    private Set<Activity> activities;
     @XStreamImplicit(itemFieldName = "activity-alias")
     private List<ActivityAlias> activityAliases;
     @XStreamImplicit(itemFieldName = "service")
@@ -276,11 +277,11 @@ public class Application {
         this.uiOptions = uiOptions;
     }
 
-    public List<Activity> getActivities() {
+    public Set<Activity> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<Activity> activities) {
+    public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
 

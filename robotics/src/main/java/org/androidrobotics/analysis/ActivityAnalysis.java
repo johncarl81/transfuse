@@ -56,7 +56,8 @@ public class ActivityAnalysis {
             String name = input.getName();
             String packageName = name.substring(0, name.lastIndexOf('.'));
 
-            activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.value()));
+            activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
+            activityDescriptor.setLabel(activityAnnotation.label());
             activityDescriptor.setLayout(layoutAnnotation.value());
 
             AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), aopRepository);
