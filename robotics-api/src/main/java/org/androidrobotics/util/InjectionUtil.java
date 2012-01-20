@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * @author John Ericksen
  */
-public class InjectionUtil {
+public final class InjectionUtil {
 
     public static final String SET_FIELD_METHOD = "setField";
     public static final String SET_METHOD_METHOD = "setMethod";
