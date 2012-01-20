@@ -21,7 +21,7 @@ public class UIThreadMethodInterceptor implements MethodInterceptor {
         return null;
     }
 
-    private class MethodInvocationRunnable implements Runnable {
+    private final class MethodInvocationRunnable implements Runnable {
 
         private MethodInvocation methodInvocation;
 

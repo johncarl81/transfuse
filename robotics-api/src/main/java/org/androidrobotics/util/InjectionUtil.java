@@ -14,6 +14,10 @@ public class InjectionUtil {
     public static final String SET_METHOD_METHOD = "setMethod";
     public static final String SET_CONSTRUCTOR_METHOD = "setConstructor";
 
+    private InjectionUtil() {
+        //singleton constructor
+    }
+
     public static void setField(Object target, int superLevel, String field, Object source) {
         try {
             Field classField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
@@ -52,7 +56,7 @@ public class InjectionUtil {
     }
 
     public static <T> T setConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
-        T output = null;
+        T output;
 
         try {
             Constructor classConstructor = targetClass.getDeclaredConstructor(argClasses);
@@ -80,7 +84,7 @@ public class InjectionUtil {
         if (level == 0) {
             return input;
         } else {
-            return getSuperClass(input.getSuperclass(), --level);
+            return getSuperClass(input.getSuperclass(), level - 1);
         }
     }
 }

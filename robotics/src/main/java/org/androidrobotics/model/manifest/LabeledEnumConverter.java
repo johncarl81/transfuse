@@ -23,7 +23,7 @@ public class LabeledEnumConverter<T extends LabeledEnum> extends AbstractSingleV
 
     @Override
     public boolean canConvert(Class type) {
-        return type == labeledEnum;
+        return labeledEnum.isAssignableFrom(type);
     }
 
     @Override

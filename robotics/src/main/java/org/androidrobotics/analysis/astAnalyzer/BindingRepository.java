@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class BindingRepository {
 
-    Map<String, InjectionNodeBuilder> variableBuilderMap = new HashMap<String, InjectionNodeBuilder>();
+    private Map<String, InjectionNodeBuilder> variableBuilderMap = new HashMap<String, InjectionNodeBuilder>();
 
     public void addVariableBuilder(String annotationName, InjectionNodeBuilder variableBuilder) {
         this.variableBuilderMap.put(annotationName, variableBuilder);

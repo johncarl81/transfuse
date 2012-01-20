@@ -1,6 +1,5 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.lang.model.type.PrimitiveType;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,8 +13,8 @@ public class ASTPrimitiveType implements ASTType {
 
     private String name;
 
-    public ASTPrimitiveType(PrimitiveType primitiveType) {
-        this.name = primitiveType.getKind().name().toLowerCase();
+    public ASTPrimitiveType(String name) {
+        this.name = name;
     }
 
     @Override

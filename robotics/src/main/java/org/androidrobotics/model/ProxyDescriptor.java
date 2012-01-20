@@ -7,7 +7,7 @@ import com.sun.codemodel.JDefinedClass;
  */
 public class ProxyDescriptor {
 
-    JDefinedClass definedClass;
+    private JDefinedClass definedClass;
 
     public ProxyDescriptor(JDefinedClass definedClass) {
         this.definedClass = definedClass;

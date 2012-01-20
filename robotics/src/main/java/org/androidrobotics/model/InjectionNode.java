@@ -32,7 +32,7 @@ public class InjectionNode {
         return astType.getName();
     }
 
-    public ASTType getAstType() {
+    public ASTType getASTType() {
         return astType;
     }
 

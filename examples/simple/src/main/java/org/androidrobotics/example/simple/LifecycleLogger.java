@@ -8,38 +8,40 @@ import org.androidrobotics.annotations.*;
  */
 public class LifecycleLogger {
 
+    private static final String TAG = "lifecycle";
+
     @OnCreate
     public void onCreate() {
-        Log.i("lifecycle", "onCreate Called");
+        Log.i(TAG, "onCreate Called");
     }
 
     @OnDestroy
     public void onDestroy() {
-        Log.i("lifecycle", "onDestory Called");
+        Log.i(TAG, "onDestory Called");
     }
 
     @OnStop
     public void onStop() {
-        Log.i("lifecycle", "onStop Called");
+        Log.i(TAG, "onStop Called");
     }
 
     @OnPause
     public void onPause() {
-        Log.i("lifecycle", "onPause Called");
+        Log.i(TAG, "onPause Called");
     }
 
     @OnResume
     public void onResume() {
-        Log.i("lifecycle", "onResume Called");
+        Log.i(TAG, "onResume Called");
     }
 
     @OnStart
     public void onStart() {
-        Log.i("lifecycle", "onStart Called");
+        Log.i(TAG, "onStart Called");
     }
 
     @OnRestart
     public void onRestart() {
-        Log.i("lifecycle", "onRestart Called");
+        Log.i(TAG, "onRestart Called");
     }
 }

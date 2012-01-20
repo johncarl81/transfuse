@@ -5,7 +5,9 @@ import org.androidrobotics.analysis.RoboticsAnalysisException;
 import javax.annotation.processing.Filer;
 import javax.tools.JavaFileObject;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author John Ericksen
@@ -25,8 +27,12 @@ public class ManifestLocator {
     public File findManifest() {
         try {
             return findManifestFileThrowing();
-        } catch (Exception e) {
-            throw new RoboticsAnalysisException(e);
+        } catch (URISyntaxException e) {
+            logger.error("URISyntaxException while trying to load manifest", e);
+            throw new RoboticsAnalysisException("URISyntaxException while trying to load manifest", e);
+        } catch (IOException e) {
+            logger.error("IOException while trying to load manifest", e);
+            throw new RoboticsAnalysisException("IOException while trying to load manifest", e);
         }
     }
 
@@ -37,7 +43,7 @@ public class ManifestLocator {
      * find the AndroidManifest.xml file. Any better solution will be
      * appreciated.
      */
-    private File findManifestFileThrowing() throws Exception {
+    private File findManifestFileThrowing() throws IOException, URISyntaxException {
         JavaFileObject dummySourceFile = filer.createSourceFile("dummy" + System.currentTimeMillis());
         String dummySourceFilePath = dummySourceFile.toUri().toString();
 

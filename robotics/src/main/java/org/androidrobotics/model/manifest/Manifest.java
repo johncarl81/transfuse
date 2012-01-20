@@ -36,7 +36,7 @@ public class Manifest {
 
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
-    private final String NAMESPACE = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
+    private final String namespace = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
     @XStreamAlias("package")
     @XStreamAsAttribute
     private String applicationPackage;
@@ -205,5 +205,17 @@ public class Manifest {
 
     public void setUsesFeatures(List<UsesFeature> usesFeatures) {
         this.usesFeatures = usesFeatures;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public List<CompatibleScreens> getCompatibleScreens() {
+        return compatibleScreens;
+    }
+
+    public void setCompatibleScreens(List<CompatibleScreens> compatibleScreens) {
+        this.compatibleScreens = compatibleScreens;
     }
 }

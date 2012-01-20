@@ -49,6 +49,7 @@ public class AOPProxyGenerator {
         return aopProxiesGenerated.get(injectionNode.getClassName());
     }
 
+    //todo: break up method
     public InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         InjectionNode proxyInjectionNode = null;
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
@@ -154,7 +155,7 @@ public class AOPProxyGenerator {
             }
 
             proxyInjectionNode = new InjectionNode(
-                    new ASTProxyType(injectionNode.getAstType(), proxyClassName));
+                    new ASTProxyType(injectionNode.getASTType(), proxyClassName));
 
             proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
 

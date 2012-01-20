@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  */
 public class ASTClassAnnotation implements ASTAnnotation {
 
-    public Annotation annotation;
+    private Annotation annotation;
 
     public ASTClassAnnotation(Annotation annotation) {
         this.annotation = annotation;

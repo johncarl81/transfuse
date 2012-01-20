@@ -34,45 +34,44 @@ public class VariableBuilderRepositoryFactory {
 
     private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-
-    //temporary
-    private Map<String, Class<?>> systemService = new HashMap<String, Class<?>>() {{
-        put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
-        put(Context.ACCOUNT_SERVICE, AccountManager.class);
-        put(Context.ACTIVITY_SERVICE, ActivityManager.class);
-        put(Context.ALARM_SERVICE, AlarmManager.class);
-        put(Context.AUDIO_SERVICE, AudioManager.class);
-        put(Context.CLIPBOARD_SERVICE, ClipboardManager.class);
-        put(Context.CONNECTIVITY_SERVICE, ConnectivityManager.class);
-        put(Context.DEVICE_POLICY_SERVICE, DevicePolicyManager.class);
-        //put(Context.DOWNLOAD_SERVICE, DownloadManager.class);
-        put(Context.DROPBOX_SERVICE, DropBoxManager.class);
-        put(Context.INPUT_METHOD_SERVICE, InputMethodManager.class);
-        put(Context.NOTIFICATION_SERVICE, NotificationManager.class);
-        put(Context.KEYGUARD_SERVICE, KeyguardManager.class);
-        put(Context.LAYOUT_INFLATER_SERVICE, LayoutInflater.class);
-        put(Context.LOCATION_SERVICE, LocationManager.class);
-        //put(Context.NFC_SERVICE, NfcManager.class);
-        put(Context.NOTIFICATION_SERVICE, NotificationManager.class);
-        put(Context.POWER_SERVICE, PowerManager.class);
-        put(Context.SEARCH_SERVICE, SearchManager.class);
-        put(Context.SENSOR_SERVICE, SensorManager.class);
-        //put(Context.STORAGE_SERVICE, StorageManager.class);
-        put(Context.TELEPHONY_SERVICE, TelephonyManager.class);
-        //put(Context.TEXT_SERVICES_MANAGER_SERVICE, TextServicesManager.class);
-        put(Context.UI_MODE_SERVICE, UiModeManager.class);
-        //put(Context.USB_SERVICE, UsbManager.class);
-        put(Context.VIBRATOR_SERVICE, Vibrator.class);
-        put(Context.WALLPAPER_SERVICE, WallpaperService.class);
-        //put(Context.WIFI_P2P_SERVICE, WifiP2pManager.class);
-        put(Context.WIFI_SERVICE, WifiManager.class);
-        put(Context.WINDOW_SERVICE, WindowManager.class);
-    }};
+    private Map<String, Class<?>> systemService;
 
     @Inject
     public VariableBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider, VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+
+        systemService = new HashMap<String, Class<?>>();
+        systemService.put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
+        systemService.put(Context.ACCOUNT_SERVICE, AccountManager.class);
+        systemService.put(Context.ACTIVITY_SERVICE, ActivityManager.class);
+        systemService.put(Context.ALARM_SERVICE, AlarmManager.class);
+        systemService.put(Context.AUDIO_SERVICE, AudioManager.class);
+        systemService.put(Context.CLIPBOARD_SERVICE, ClipboardManager.class);
+        systemService.put(Context.CONNECTIVITY_SERVICE, ConnectivityManager.class);
+        systemService.put(Context.DEVICE_POLICY_SERVICE, DevicePolicyManager.class);
+        //systemService.put(Context.DOWNLOAD_SERVICE, DownloadManager.class);
+        systemService.put(Context.DROPBOX_SERVICE, DropBoxManager.class);
+        systemService.put(Context.INPUT_METHOD_SERVICE, InputMethodManager.class);
+        systemService.put(Context.NOTIFICATION_SERVICE, NotificationManager.class);
+        systemService.put(Context.KEYGUARD_SERVICE, KeyguardManager.class);
+        systemService.put(Context.LAYOUT_INFLATER_SERVICE, LayoutInflater.class);
+        systemService.put(Context.LOCATION_SERVICE, LocationManager.class);
+        //put(Context.NFC_SERVICE, NfcManager.class);
+        systemService.put(Context.NOTIFICATION_SERVICE, NotificationManager.class);
+        systemService.put(Context.POWER_SERVICE, PowerManager.class);
+        systemService.put(Context.SEARCH_SERVICE, SearchManager.class);
+        systemService.put(Context.SENSOR_SERVICE, SensorManager.class);
+        //put(Context.STORAGE_SERVICE, StorageManager.class);
+        systemService.put(Context.TELEPHONY_SERVICE, TelephonyManager.class);
+        //put(Context.TEXT_SERVICES_MANAGER_SERVICE, TextServicesManager.class);
+        systemService.put(Context.UI_MODE_SERVICE, UiModeManager.class);
+        //put(Context.USB_SERVICE, UsbManager.class);
+        systemService.put(Context.VIBRATOR_SERVICE, Vibrator.class);
+        systemService.put(Context.WALLPAPER_SERVICE, WallpaperService.class);
+        //put(Context.WIFI_P2P_SERVICE, WifiP2pManager.class);
+        systemService.put(Context.WIFI_SERVICE, WifiManager.class);
+        systemService.put(Context.WINDOW_SERVICE, WindowManager.class);
     }
 
     public InjectionNodeBuilderRepository buildRepository() {

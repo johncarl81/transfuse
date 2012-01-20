@@ -80,8 +80,6 @@ public class ASTElementFactory {
     }
 
     private ASTAccessModifier buildAccessModifier(Element element) {
-        ASTAccessModifier modifier;
-
         for (Modifier elementModifier : element.getModifiers()) {
             switch (elementModifier) {
                 case PUBLIC:

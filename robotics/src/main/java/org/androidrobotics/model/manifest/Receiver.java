@@ -50,4 +50,76 @@ public class Receiver {
     private List<IntentFilter> intentFilters;
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData;
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getExported() {
+        return exported;
+    }
+
+    public void setExported(Boolean exported) {
+        this.exported = exported;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getProcess() {
+        return process;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
+    public List<IntentFilter> getIntentFilters() {
+        return intentFilters;
+    }
+
+    public void setIntentFilters(List<IntentFilter> intentFilters) {
+        this.intentFilters = intentFilters;
+    }
+
+    public List<MetaData> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(List<MetaData> metaData) {
+        this.metaData = metaData;
+    }
 }

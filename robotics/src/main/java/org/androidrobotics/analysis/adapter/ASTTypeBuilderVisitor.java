@@ -26,7 +26,8 @@ public class ASTTypeBuilderVisitor implements TypeVisitor<ASTType, Void> {
 
     @Override
     public ASTType visitPrimitive(PrimitiveType primitiveType, Void aVoid) {
-        return new ASTPrimitiveType(primitiveType);
+        String name = primitiveType.getKind().name().toLowerCase();
+        return new ASTPrimitiveType(name);
     }
 
     @Override

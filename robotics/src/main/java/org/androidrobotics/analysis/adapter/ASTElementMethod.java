@@ -17,13 +17,19 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
         super(executableElement);
         this.modifier = modifier;
-        this.astTypeLoader = new ASTTypeLazyLoader<ExecutableElement>(executableElement, astTypeBuilderVisitor) {
-            @Override
-            protected ASTType buildASTType(ExecutableElement element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
-                return element.getReturnType().accept(astTypeBuilderVisitor, null);
-            }
-        };
+        this.astTypeLoader = new ASTMethodTypeLazyLoader(executableElement, astTypeBuilderVisitor);
         this.parameters = parameters;
+    }
+
+    private static final class ASTMethodTypeLazyLoader extends ASTTypeLazyLoader<ExecutableElement> {
+        public ASTMethodTypeLazyLoader(ExecutableElement element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+            super(element, astTypeBuilderVisitor);
+        }
+
+        @Override
+        protected ASTType buildASTType(ExecutableElement element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+            return element.getReturnType().accept(astTypeBuilderVisitor, null);
+        }
     }
 
     @Override

@@ -2,9 +2,7 @@ package org.androidrobotics;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.thoughtworks.xstream.XStream;
 import org.androidrobotics.analysis.adapter.ASTElementConverterFactory;
-import org.androidrobotics.analysis.adapter.ASTElementFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
 import org.androidrobotics.annotations.RoboticsModule;
@@ -45,15 +43,11 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
-    private XStream xStream;
-    @Inject
     private Logger logger;
     @Inject
     private ManifestSerializer manifestParser;
     @Inject
     private RBuilder rBuilder;
-    @Inject
-    private ASTElementFactory astElementFactory;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {

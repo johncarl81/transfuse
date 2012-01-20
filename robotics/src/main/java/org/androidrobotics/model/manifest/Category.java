@@ -14,4 +14,12 @@ public class Category {
     @XStreamAlias("android:name")
     @XStreamAsAttribute
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

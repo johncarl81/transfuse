@@ -5,5 +5,5 @@ package org.androidrobotics.gen.proxy;
  */
 public interface DelayedLoad<T> {
 
-    public void load(T target);
+    void load(T target);
 }

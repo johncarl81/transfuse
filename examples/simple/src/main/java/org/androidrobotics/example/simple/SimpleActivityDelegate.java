@@ -99,4 +99,8 @@ public class SimpleActivityDelegate extends SimpleSuperClass {
     public String getTestHello() {
         return testHello;
     }
+
+    public LateReturnListener getLateReturnListener() {
+        return lateReturnListener;
+    }
 }

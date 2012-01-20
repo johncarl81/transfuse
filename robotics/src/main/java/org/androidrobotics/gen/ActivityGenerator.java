@@ -138,7 +138,7 @@ public class ActivityGenerator {
         void closeMethod();
     }
 
-    private class SimpleMethodGenerator implements MethodGenerator {
+    private final class SimpleMethodGenerator implements MethodGenerator {
         private String name;
         private JDefinedClass definedClass;
 
@@ -161,7 +161,7 @@ public class ActivityGenerator {
         }
     }
 
-    private class AlreadyDefinedMethodGenerator implements MethodGenerator {
+    private final class AlreadyDefinedMethodGenerator implements MethodGenerator {
 
         private JMethod method;
 
