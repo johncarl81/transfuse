@@ -5,6 +5,7 @@ import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTParameter;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.analysis.adapter.ASTVoidType;
 import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.UniqueVariableNamer;
@@ -87,8 +88,7 @@ public class VirtualProxyGenerator {
                             invocation.arg(parameterMap.get(parameter));
                         }
 
-                        //todo:fix void and primitive return
-                        if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
+                        if (method.getReturnType().equals(ASTVoidType.VOID)) {
                             body.add(invocation);
                         } else {
                             body._return(invocation);

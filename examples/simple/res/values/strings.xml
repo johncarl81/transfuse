@@ -4,4 +4,8 @@
     <string name="hello">hello world</string>
     <string name="second">second activity</string>
     <string name="simpleActivityName">Simple</string>
+    <string-array name="simpleStringArray">
+        <item>one</item>
+        <item>two</item>
+    </string-array>
 </resources>

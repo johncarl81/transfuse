@@ -50,6 +50,12 @@ public class SecondActivityTest {
         assertEquals(TEST_EXTRA_VALUE, secondActivityDelegate.getTestExtra());
     }
 
+    @Test
+    public void testStringArray() throws Exception {
+        assertNotNull(secondActivityDelegate.getSimpleStringArray());
+        assertEquals(2, secondActivityDelegate.getSimpleStringArray().length);
+    }
+
     private Field findDelegateField(Class target, Class type) {
         Field delegateField = null;
 

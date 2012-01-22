@@ -65,7 +65,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     @Override
     public boolean isArray() {
-        return false;//todo: support array types
+        return false;
     }
 
     @Override

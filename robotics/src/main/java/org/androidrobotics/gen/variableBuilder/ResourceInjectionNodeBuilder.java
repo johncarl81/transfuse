@@ -38,7 +38,8 @@ public class ResourceInjectionNodeBuilder implements InjectionNodeBuilder {
         try {
             JType resourceType = codeModel.parseType(astType.getName());
 
-            ResourceExpressionBuilder resourceExpressionBuilder = lookupResourceBuilder(resourceType, context);
+            ResourceExpressionBuilder resourceExpressionBuilder =
+                    resourceExpressionBuilderFactory.buildResourceExpressionBuilder(resourceType, context);
 
             injectionNode.addAspect(VariableBuilder.class,
                     variableInjectionBuilderFactory.buildResourceVariableBuilder(resourceId, resourceExpressionBuilder));
@@ -47,10 +48,5 @@ public class ResourceInjectionNodeBuilder implements InjectionNodeBuilder {
         }
 
         return injectionNode;
-    }
-
-    private ResourceExpressionBuilder lookupResourceBuilder(JType resourceType, AnalysisContext context) {
-
-        return resourceExpressionBuilderFactory.buildResourceExpressionBuilder(resourceType, context);
     }
 }

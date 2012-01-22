@@ -19,6 +19,9 @@ public class SecondActivityDelegate {
     @Inject
     @Extra("testExtra")
     private String testExtra;
+    @Inject
+    @Resource(R.array.simpleStringArray)
+    private String[] simpleStringArray;
 
     @Inject
     public SecondActivityDelegate(@View(R.id.text2) TextView textView) {
@@ -28,6 +31,7 @@ public class SecondActivityDelegate {
     @OnTouch
     public void update() {
         textView.setText("touched");
+        textView3.setText(simpleStringArray[0]);
     }
 
     @OnCreate
@@ -41,5 +45,9 @@ public class SecondActivityDelegate {
 
     public String getTestExtra() {
         return testExtra;
+    }
+
+    public String[] getSimpleStringArray() {
+        return simpleStringArray;
     }
 }

@@ -2,12 +2,12 @@ package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.AnnotationValueVisitor;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.SimpleAnnotationValueVisitor6;
 import java.util.List;
 
-public class AnnotationTypeValueConverterVisitor<T> implements AnnotationValueVisitor<T, Void> {
+public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
 
     private Class type;
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -15,16 +15,6 @@ public class AnnotationTypeValueConverterVisitor<T> implements AnnotationValueVi
     public AnnotationTypeValueConverterVisitor(Class type, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         this.type = type;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
-    }
-
-    @Override
-    public T visit(AnnotationValue annotationValue, Void aVoid) {
-        return null;
-    }
-
-    @Override
-    public T visit(AnnotationValue annotationValue) {
-        return null;
     }
 
     @Override

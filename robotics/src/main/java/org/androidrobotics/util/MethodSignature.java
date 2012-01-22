@@ -51,15 +51,10 @@ public class MethodSignature {
     }
 
     private static void makeDesc(StringBuffer buff, ASTType type) {
-        if (type == null) {
-            //todo:need to handle void better
-            buff.append("VOID");
-        } else {
-            if (type.isArray()) {
-                buff.append('[');
-            }
-            makeTypeDesc(buff, type);
+        if (type.isArray()) {
+            buff.append('[');
         }
+        makeTypeDesc(buff, type);
     }
 
     private static void makeTypeDesc(StringBuffer buff, ASTType type) {

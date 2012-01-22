@@ -9,12 +9,23 @@ import java.util.Collections;
  *
  * @author John Ericksen
  */
-public class ASTPrimitiveType implements ASTType {
+public enum ASTPrimitiveType implements ASTType {
 
-    private String name;
+    BOOLEAN("boolean", Boolean.class),
+    BYTE("byte", Byte.class),
+    SHORT("short", Short.class),
+    CHAR("char", Character.class),
+    INT("int", Integer.class),
+    FLOAT("float", Float.class),
+    LONG("long", Long.class),
+    DOUBLE("double", Double.class);
 
-    public ASTPrimitiveType(String name) {
-        this.name = name;
+    private Class clazz;
+    private String label;
+
+    private ASTPrimitiveType(String label, Class clazz) {
+        this.label = label;
+        this.clazz = clazz;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class ASTPrimitiveType implements ASTType {
 
     @Override
     public String getName() {
-        return name;
+        return label;
     }
 
     @Override
@@ -70,28 +81,5 @@ public class ASTPrimitiveType implements ASTType {
     @Override
     public boolean isArray() {
         return false;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ASTPrimitiveType)) {
-            return false;
-        }
-
-        ASTPrimitiveType that = (ASTPrimitiveType) o;
-
-        if (name != null ? !name.equals(that.name) : that.name != null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return name != null ? name.hashCode() : 0;
     }
 }

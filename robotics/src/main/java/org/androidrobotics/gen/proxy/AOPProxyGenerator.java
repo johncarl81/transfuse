@@ -2,10 +2,7 @@ package org.androidrobotics.gen.proxy;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
-import org.androidrobotics.analysis.adapter.ASTAccessModifier;
-import org.androidrobotics.analysis.adapter.ASTMethod;
-import org.androidrobotics.analysis.adapter.ASTParameter;
-import org.androidrobotics.analysis.adapter.ASTProxyType;
+import org.androidrobotics.analysis.adapter.*;
 import org.androidrobotics.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.aop.MethodInvocation;
@@ -26,7 +23,6 @@ import java.util.*;
 @Singleton
 public class AOPProxyGenerator {
 
-    private static final String VOID_TYPE_NAME = "void";
     private static final String INVOKE_METHOD = "invoke";
     private static final String PROCEED_METHOD = "proceed";
     private static final String SUPER_REF = "super";
@@ -52,7 +48,6 @@ public class AOPProxyGenerator {
         return aopProxiesGenerated.get(injectionNode.getClassName());
     }
 
-    //todo: break up method
     public InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
@@ -128,10 +123,10 @@ public class AOPProxyGenerator {
         }
 
         JType returnType;
-        if (method.getReturnType() != null) {
-            returnType = codeModel.ref(method.getReturnType().getName());
-        } else {
+        if (method.getReturnType().equals(ASTVoidType.VOID)) {
             returnType = codeModel.VOID;
+        } else {
+            returnType = codeModel.ref(method.getReturnType().getName());
         }
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
         JBlock body = methodDeclaration.body();
@@ -154,8 +149,7 @@ public class AOPProxyGenerator {
         Map<InjectionNode, JFieldVar> interceptorNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
         JInvocation invocation = buildInterceptorChain(interceptorIterator, interceptorNameMap, parameterMap, method, definedClass, tryInterceptorBody);
 
-        //todo:fix void and primitive return
-        if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
+        if (method.getReturnType().equals(ASTVoidType.VOID)) {
             tryInterceptorBody.add(invocation);
         } else {
             tryInterceptorBody._return(JExpr.cast(codeModel.ref(method.getReturnType().getName()), invocation));
@@ -217,8 +211,7 @@ public class AOPProxyGenerator {
                 superCall.arg(parameterMap.get(parameter));
             }
 
-            //todo:fix void and primitive return
-            if (method.getReturnType() == null || VOID_TYPE_NAME.equals(method.getReturnType().getName())) {
+            if (method.getReturnType().equals(ASTVoidType.VOID)) {
                 body.add(superCall);
                 body._return(JExpr._null());
 

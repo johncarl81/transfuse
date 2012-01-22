@@ -9,10 +9,18 @@ import java.util.*;
  */
 public class ASTClassFactory {
 
-    private Map<Class<?>, ASTType> typeCache = new HashMap<Class<?>, ASTType>();
+    private Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
+
+    public ASTClassFactory() {
+        //seed with primitives and void
+        typeCache.put("void", ASTVoidType.VOID);
+        for (ASTPrimitiveType primitive : ASTPrimitiveType.values()) {
+            typeCache.put(primitive.getName(), primitive);
+        }
+    }
 
     public ASTType buildASTClassType(Class<?> clazz) {
-        if (!typeCache.containsKey(clazz)) {
+        if (!typeCache.containsKey(clazz.getName())) {
             Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
             Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
             Collection<ASTField> fields = new ArrayList<ASTField>();
@@ -26,7 +34,7 @@ public class ASTClassFactory {
                 interfaces.add(buildASTClassType(clazzInterface));
             }
 
-            typeCache.put(clazz, new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
+            typeCache.put(clazz.getName(), new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
 
             //fill in the guts after building the tree
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
@@ -41,7 +49,7 @@ public class ASTClassFactory {
                 fields.add(buildASTClassField(field));
             }
         }
-        return typeCache.get(clazz);
+        return typeCache.get(clazz.getName());
     }
 
     private List<ASTParameter> buildASTTypeParameters(Constructor constructor) {

@@ -1,43 +1,35 @@
 package org.androidrobotics.analysis.adapter;
 
+import org.androidrobotics.analysis.RoboticsAnalysisException;
+
 import javax.inject.Inject;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.*;
+import javax.lang.model.util.SimpleTypeVisitor6;
 
 /**
  * Builder of an ASTType from a TypeMirror input
  *
  * @author John Ericksen
  */
-public class ASTTypeBuilderVisitor implements TypeVisitor<ASTType, Void> {
+public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Inject
     private ASTElementFactory astElementFactory;
 
     @Override
-    public ASTType visit(TypeMirror typeMirror, Void aVoid) {
-        return null;  //todo
-    }
-
-    @Override
-    public ASTType visit(TypeMirror typeMirror) {
-        return null;  //todo
-    }
-
-    @Override
     public ASTType visitPrimitive(PrimitiveType primitiveType, Void aVoid) {
-        String name = primitiveType.getKind().name().toLowerCase();
-        return new ASTPrimitiveType(name);
+        return ASTPrimitiveType.valueOf(primitiveType.getKind().name());
     }
 
     @Override
     public ASTType visitNull(NullType nullType, Void aVoid) {
-        return null;  //todo
+        return null;
     }
 
     @Override
     public ASTType visitArray(ArrayType arrayType, Void aVoid) {
-        return null;  //todo
+        return new ASTArrayType(arrayType.getComponentType().accept(this, null));
     }
 
     @Override
@@ -47,31 +39,36 @@ public class ASTTypeBuilderVisitor implements TypeVisitor<ASTType, Void> {
 
     @Override
     public ASTType visitError(ErrorType errorType, Void aVoid) {
-        return null;  //todo
+        throw new RoboticsAnalysisException("Encountered ErrorType, unable to recover");
     }
 
     @Override
     public ASTType visitTypeVariable(TypeVariable typeVariable, Void aVoid) {
-        return null;  //todo
+        System.out.println("TypeVariable:" + typeVariable.toString());
+        return null;
     }
 
     @Override
     public ASTType visitWildcard(WildcardType wildcardType, Void aVoid) {
-        return null;  //todo
+        throw new RoboticsAnalysisException("Encountered Wildcard Type, unable to represent in graph");
     }
 
     @Override
     public ASTType visitExecutable(ExecutableType executableType, Void aVoid) {
-        return null;  //todo
+        return astElementFactory.buildASTElementType((TypeElement) executableType);
     }
 
     @Override
     public ASTType visitNoType(NoType noType, Void aVoid) {
-        return null;  //todo
+        if (noType.getKind().equals(TypeKind.VOID)) {
+            return ASTVoidType.VOID;
+        }
+        return null;
     }
 
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void aVoid) {
-        return null;  //todo
+        System.out.println("type Mirror:" + typeMirror.toString());
+        return null;
     }
 }
