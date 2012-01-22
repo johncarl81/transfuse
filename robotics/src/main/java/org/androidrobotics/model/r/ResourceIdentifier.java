@@ -25,13 +25,21 @@ public class ResourceIdentifier {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResourceIdentifier)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ResourceIdentifier)) {
+            return false;
+        }
 
         ResourceIdentifier that = (ResourceIdentifier) o;
 
-        if (!name.equals(that.name)) return false;
-        if (!rInnerType.equals(that.rInnerType)) return false;
+        if (!name.equals(that.name)) {
+            return false;
+        }
+        if (!rInnerType.equals(that.rInnerType)) {
+            return false;
+        }
 
         return true;
     }

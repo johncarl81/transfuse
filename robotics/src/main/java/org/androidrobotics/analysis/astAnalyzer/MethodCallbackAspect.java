@@ -55,12 +55,18 @@ public class MethodCallbackAspect {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof MethodCallback)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof MethodCallback)) {
+                return false;
+            }
 
             MethodCallback that = (MethodCallback) o;
 
-            if (!methodSignature.equals(that.methodSignature)) return false;
+            if (!methodSignature.equals(that.methodSignature)) {
+                return false;
+            }
 
             return true;
         }

@@ -74,12 +74,18 @@ public class ASTPrimitiveType implements ASTType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ASTPrimitiveType)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ASTPrimitiveType)) {
+            return false;
+        }
 
         ASTPrimitiveType that = (ASTPrimitiveType) o;
 
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
 
         return true;
     }

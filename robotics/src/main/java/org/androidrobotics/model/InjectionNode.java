@@ -58,12 +58,18 @@ public class InjectionNode {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InjectionNode)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof InjectionNode)) {
+            return false;
+        }
 
         InjectionNode that = (InjectionNode) o;
 
-        if (astType != null ? !astType.equals(that.astType) : that.astType != null) return false;
+        if (astType != null ? !astType.equals(that.astType) : that.astType != null) {
+            return false;
+        }
 
         return true;
     }

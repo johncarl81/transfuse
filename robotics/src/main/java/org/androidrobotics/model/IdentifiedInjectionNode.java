@@ -16,13 +16,21 @@ public class IdentifiedInjectionNode extends InjectionNode {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof IdentifiedInjectionNode)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof IdentifiedInjectionNode)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
 
         IdentifiedInjectionNode that = (IdentifiedInjectionNode) o;
 
-        if (!identifier.equals(that.identifier)) return false;
+        if (!identifier.equals(that.identifier)) {
+            return false;
+        }
 
         return true;
     }

@@ -60,13 +60,21 @@ public class PackageClass {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         PackageClass that = (PackageClass) o;
 
-        if (!fileName.equals(that.fileName)) return false;
-        if (!pkg.equals(that.pkg)) return false;
+        if (!fileName.equals(that.fileName)) {
+            return false;
+        }
+        if (!pkg.equals(that.pkg)) {
+            return false;
+        }
 
         return true;
     }

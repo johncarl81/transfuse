@@ -72,13 +72,18 @@ public class MethodSignature {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MethodSignature)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MethodSignature)) {
+            return false;
+        }
 
         MethodSignature that = (MethodSignature) o;
 
-        if (methodSignature != null ? !methodSignature.equals(that.methodSignature) : that.methodSignature != null)
+        if (methodSignature != null ? !methodSignature.equals(that.methodSignature) : that.methodSignature != null) {
             return false;
+        }
 
         return true;
     }

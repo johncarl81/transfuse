@@ -83,12 +83,18 @@ public class ASTClassType implements ASTType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ASTClassType)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ASTClassType)) {
+            return false;
+        }
 
         ASTClassType that = (ASTClassType) o;
 
-        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) return false;
+        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) {
+            return false;
+        }
 
         return true;
     }
