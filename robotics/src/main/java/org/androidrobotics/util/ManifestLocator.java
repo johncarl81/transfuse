@@ -1,8 +1,10 @@
 package org.androidrobotics.util;
 
+import com.google.inject.assistedinject.Assisted;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
 
 import javax.annotation.processing.Filer;
+import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +21,8 @@ public class ManifestLocator {
     private Filer filer;
     private Logger logger;
 
-    public ManifestLocator(Filer filer, Logger logger) {
+    @Inject
+    public ManifestLocator(@Assisted Filer filer, Logger logger) {
         this.filer = filer;
         this.logger = logger;
     }

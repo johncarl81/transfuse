@@ -12,6 +12,7 @@ import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
 import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory;
 import org.androidrobotics.util.Logger;
+import org.androidrobotics.util.ManifestLocatorFactory;
 
 /**
  * @author John Ericksen
@@ -42,6 +43,9 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder
                 .build(ASTElementAnnotationFactory.class));
+
+        install(factoryModuleBuilder
+                .build(ManifestLocatorFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 

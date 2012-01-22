@@ -48,6 +48,8 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
     private ManifestSerializer manifestParser;
     @Inject
     private RBuilder rBuilder;
+    @Inject
+    private ManifestLocatorFactory manifestLocatorFactory;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -70,7 +72,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
                     roundEnvironment.getElementsAnnotatedWith(RoboticsModule.class)
             ));
 
-            File manifestFile = new ManifestLocator(processingEnv.getFiler(), logger).findManifest();
+            File manifestFile = manifestLocatorFactory.buildManifestLocator(processingEnv.getFiler()).findManifest();
             Manifest manifest = manifestParser.readManifest(manifestFile);
 
             roboticsProcessor.processManifest(manifest);
