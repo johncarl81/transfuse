@@ -28,7 +28,7 @@ public class MethodCallbackAspect {
         return methodCallbacks.get(name);
     }
 
-    public class MethodCallback {
+    public static final class MethodCallback {
         private ASTMethod method;
         private String name;
         private int superClassLevel;

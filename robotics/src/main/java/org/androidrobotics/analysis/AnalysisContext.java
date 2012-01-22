@@ -64,7 +64,7 @@ public class AnalysisContext {
         return injectionNodeBuilders;
     }
 
-    public AOPRepository getAopRepository() {
+    public AOPRepository getAOPRepository() {
         return aopRepository;
     }
 

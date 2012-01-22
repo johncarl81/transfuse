@@ -15,6 +15,8 @@ import javax.inject.Inject;
  */
 public class SimpleController {
 
+    private static final int ONE_SECOND = 1000;
+
     @Inject
     private AnotherValue anotherValue;
     @Inject
@@ -57,7 +59,7 @@ public class SimpleController {
 
     @OnTouch
     public void vibrate() {
-        Toast toast = Toast.makeText(activity, "You clicked the activity" + value++, 1000);
+        Toast toast = Toast.makeText(activity, "You clicked the activity" + value++, ONE_SECOND);
         toast.show();
     }
 

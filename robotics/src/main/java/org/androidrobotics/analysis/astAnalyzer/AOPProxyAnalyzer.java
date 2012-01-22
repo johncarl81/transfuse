@@ -24,14 +24,14 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
         for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
-            if (context.getAopRepository().isInterceptor(methodAnnotation.getName())) {
+            if (context.getAOPRepository().isInterceptor(methodAnnotation.getName())) {
                 addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation.getName(), context));
             }
         }
     }
 
     private InjectionNode getInterceptorInjectionNode(String methodAnnotation, AnalysisContext context) {
-        ASTType interceptorType = context.getAopRepository().getInterceptor(methodAnnotation);
+        ASTType interceptorType = context.getAOPRepository().getInterceptor(methodAnnotation);
 
         return injectionPointFactory.buildInjectionNode(interceptorType, context);
     }

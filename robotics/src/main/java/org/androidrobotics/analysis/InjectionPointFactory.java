@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class InjectionPointFactory {
 
-    private BindingRepository bindingRepository;
+    private BindingRepository bindingRepository = null;
 
     /**
      * Build a Constructor InjectionPoint from the given ASTConstructor

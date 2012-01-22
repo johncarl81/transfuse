@@ -2,7 +2,10 @@ package org.androidrobotics.analysis;
 
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTMethod;
-import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.analysis.module.BindInterceptorProcessor;
+import org.androidrobotics.analysis.module.BindProcessor;
+import org.androidrobotics.analysis.module.BindProviderProcessor;
+import org.androidrobotics.analysis.module.MethodProcessor;
 import org.androidrobotics.annotations.Bind;
 import org.androidrobotics.annotations.BindInterceptor;
 import org.androidrobotics.annotations.BindProvider;
@@ -53,74 +56,5 @@ public class ModuleProcessor {
 
     public AOPRepository getAOPRepository() {
         return aopRepository;
-    }
-
-    private interface MethodProcessor {
-
-        void process(ASTMethod astMethod, ASTAnnotation astAnnotation);
-    }
-
-    private static abstract class ClassBindingMethodProcessorAdaptor implements MethodProcessor {
-
-        @Override
-        public void process(ASTMethod astMethod, ASTAnnotation astAnnotation) {
-            ASTType returnType = astMethod.getReturnType();
-
-            ASTType astType = astAnnotation.getProperty("value", ASTType.class);
-
-            innerProcess(returnType, astType);
-
-        }
-
-        public abstract void innerProcess(ASTType returnType, ASTType annotationValue);
-
-    }
-
-    private static final class BindProcessor extends ClassBindingMethodProcessorAdaptor {
-
-        private InjectionNodeBuilderRepository injectionNodeBuilders;
-        private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-
-        private BindProcessor(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionNodeBuilderRepository injectionNodeBuilders) {
-            this.injectionNodeBuilders = injectionNodeBuilders;
-            this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        }
-
-        @Override
-        public void innerProcess(ASTType returnType, ASTType annotationValue) {
-            injectionNodeBuilders.put(returnType.getName(),
-                    variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(annotationValue));
-        }
-    }
-
-    private static final class BindInterceptorProcessor extends ClassBindingMethodProcessorAdaptor {
-
-        private AOPRepository aopRepository;
-
-        private BindInterceptorProcessor(AOPRepository aopRepository) {
-            this.aopRepository = aopRepository;
-        }
-
-        @Override
-        public void innerProcess(ASTType returnType, ASTType annotationValue) {
-            aopRepository.put(annotationValue, returnType);
-        }
-    }
-
-    private static final class BindProviderProcessor extends ClassBindingMethodProcessorAdaptor {
-
-        private InjectionNodeBuilderRepository injectionNodeBuilders;
-        private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-
-        private BindProviderProcessor(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionNodeBuilderRepository injectionNodeBuilders) {
-            this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-            this.injectionNodeBuilders = injectionNodeBuilders;
-        }
-
-        @Override
-        public void innerProcess(ASTType returnType, ASTType annotationValue) {
-            injectionNodeBuilders.put(returnType.getName(),
-                    variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(annotationValue));
-        }
     }
 }

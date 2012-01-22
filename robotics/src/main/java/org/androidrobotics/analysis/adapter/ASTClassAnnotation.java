@@ -22,32 +22,26 @@ public class ASTClassAnnotation implements ASTAnnotation {
         try {
             Method typeParameters = annotation.annotationType().getMethod(value);
 
-            if (typeParameters != null) {
+            Class convertedType = type;
 
-                Class convertedType = type;
-
-                if (type.equals(ASTType.class)) {
-                    convertedType = Class.class;
-                }
-
-                if (typeParameters.getReturnType().isAssignableFrom(convertedType)) {
-                    throw new RoboticsAnalysisException("Type not expected: " + convertedType);
-                }
-
-
-                return (T) typeParameters.invoke(annotation);
-            } else {
-                throw new RoboticsAnalysisException("Annotation method not present: " + value);
+            if (type.equals(ASTType.class)) {
+                convertedType = Class.class;
             }
 
+            if (typeParameters.getReturnType().isAssignableFrom(convertedType)) {
+                throw new RoboticsAnalysisException("Type not expected: " + convertedType);
+            }
+
+
+            return (T) typeParameters.invoke(annotation);
+
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RoboticsAnalysisException("IllegalAccessException Exception while accessing annotation method: " + value, e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new RoboticsAnalysisException("Annotation method not present: " + value, e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            throw new RoboticsAnalysisException("InvocationTargetException Exception while accessing annotation method: " + value, e);
         }
-        return null;
     }
 
     @Override

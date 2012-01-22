@@ -1,7 +1,12 @@
 package org.androidrobotics.analysis.adapter;
 
+import org.androidrobotics.analysis.RoboticsAnalysisException;
+import org.androidrobotics.util.AccessibleElementPrivilegedAction;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
 import java.util.Collection;
 
 /**
@@ -53,16 +58,26 @@ public class ASTClassField implements ASTField {
     @Override
     public Object getConstantValue() {
         try {
-            boolean accessible = field.isAccessible();
-            field.setAccessible(true);
-            Object constantValue = field.get(null);
-            field.setAccessible(accessible);
-            return constantValue;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return AccessController.doPrivileged(
+                    new PrivateConstantFieldAccessPrivilegedAction(field));
         } catch (NullPointerException e) {
             return null;
+        } catch (PrivilegedActionException e) {
+            throw new RoboticsAnalysisException("PrivilegedActionException when trying to set field: " + field, e);
         }
-        return null;
+    }
+
+    private static class PrivateConstantFieldAccessPrivilegedAction extends AccessibleElementPrivilegedAction<Object, Field> {
+
+        protected PrivateConstantFieldAccessPrivilegedAction(Field accessibleObject) {
+            super(accessibleObject);
+        }
+
+        @Override
+        public Object run(Field classField) throws Exception {
+            return classField.get(null);
+        }
+
+
     }
 }

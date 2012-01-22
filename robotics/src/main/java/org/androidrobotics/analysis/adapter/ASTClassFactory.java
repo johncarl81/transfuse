@@ -1,6 +1,5 @@
 package org.androidrobotics.analysis.adapter;
 
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -11,8 +10,6 @@ import java.util.*;
 public class ASTClassFactory {
 
     private Map<Class<?>, ASTType> typeCache = new HashMap<Class<?>, ASTType>();
-    @Inject
-    private ASTClassFactory astClassFactory;
 
     public ASTType buildASTClassType(Class<?> clazz) {
         if (!typeCache.containsKey(clazz)) {

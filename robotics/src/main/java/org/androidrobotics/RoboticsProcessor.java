@@ -36,9 +36,10 @@ public class RoboticsProcessor {
     private Logger logger;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
     private ActivityAnalysis activityAnalysis;
-    private Manifest manifest;
-    private RResource rResource;
     private ModuleProcessor moduleProcessor;
+
+    private Manifest manifest = null;
+    private RResource rResource = null;
 
     @Inject
     public RoboticsProcessor(ActivityGenerator activityGenerator,

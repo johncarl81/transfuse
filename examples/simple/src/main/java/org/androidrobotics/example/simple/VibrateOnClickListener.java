@@ -10,12 +10,14 @@ import javax.inject.Inject;
  */
 public class VibrateOnClickListener implements View.OnClickListener {
 
+    private static final int ONE_SECOND = 1000;
+
     @Inject
     private Vibrator vibrator;
 
     @Override
     @LogInterception
     public void onClick(View view) {
-        vibrator.vibrate(1000);
+        vibrator.vibrate(ONE_SECOND);
     }
 }

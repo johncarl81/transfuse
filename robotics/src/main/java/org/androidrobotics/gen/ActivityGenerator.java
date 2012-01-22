@@ -62,7 +62,7 @@ public class ActivityGenerator {
 
             //ontouch method
             addMethodCallbacks("onTouch", expressionMap, new MethodGenerator() {
-                JMethod onTouchEventMethod;
+                private JMethod onTouchEventMethod = null;
 
                 @Override
                 public JMethod buildMethod() {
@@ -101,7 +101,7 @@ public class ActivityGenerator {
     }
 
     private void addLifecycleMethod(String name, JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap) {
-        addMethodCallbacks(name, expressionMap, new SimpleMethodGenerator(name, definedClass));
+        addMethodCallbacks(name, expressionMap, new SimpleMethodGenerator(name, definedClass, codeModel));
     }
 
     private void addMethodCallbacks(String name, Map<InjectionNode, JExpression> expressionMap, MethodGenerator lazyMethodGenerator) {
@@ -138,13 +138,15 @@ public class ActivityGenerator {
         void closeMethod();
     }
 
-    private final class SimpleMethodGenerator implements MethodGenerator {
+    private static final class SimpleMethodGenerator implements MethodGenerator {
         private String name;
         private JDefinedClass definedClass;
+        private JCodeModel codeModel;
 
-        public SimpleMethodGenerator(String name, JDefinedClass definedClass) {
+        public SimpleMethodGenerator(String name, JDefinedClass definedClass, JCodeModel codeModel) {
             this.name = name;
             this.definedClass = definedClass;
+            this.codeModel = codeModel;
         }
 
         @Override
@@ -161,7 +163,7 @@ public class ActivityGenerator {
         }
     }
 
-    private final class AlreadyDefinedMethodGenerator implements MethodGenerator {
+    private static final class AlreadyDefinedMethodGenerator implements MethodGenerator {
 
         private JMethod method;
 
