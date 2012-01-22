@@ -29,6 +29,10 @@ public class MockDelegate implements MockInterface {
         return VirtualProxyGeneratorTest.TEST_VALUE;
     }
 
+    public boolean primitiveCall() {
+        return true;
+    }
+
     public boolean validate(String inputOne, String inputTwo) {
         return exectuted && inputOne.equals(valueOne) && inputTwo.equals(passThroughValue);
     }

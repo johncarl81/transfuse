@@ -55,27 +55,4 @@ public class InjectionNode {
     public Map<Class<?>, Object> getAspects() {
         return aspects;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof InjectionNode)) {
-            return false;
-        }
-
-        InjectionNode that = (InjectionNode) o;
-
-        if (astType != null ? !astType.equals(that.astType) : that.astType != null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return astType != null ? astType.hashCode() : 0;
-    }
 }

@@ -23,9 +23,12 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
-        for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
-            if (context.getAOPRepository().isInterceptor(methodAnnotation.getName())) {
-                addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation.getName(), context));
+        //todo:think about the decision to only allow AOP on root elements
+        if (context.getSuperClassLevel() == 0) {
+            for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
+                if (context.getAOPRepository().isInterceptor(methodAnnotation.getName())) {
+                    addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation.getName(), context));
+                }
             }
         }
     }

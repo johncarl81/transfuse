@@ -90,12 +90,14 @@ public class AOPProxyGenerator {
 
         } catch (JClassAlreadyExistsException e) {
             logger.error("JClassAlreadyExistsException while building AOP Proxy", e);
+        } catch (ClassNotFoundException e) {
+            logger.error("ClassNotFoundException while building AOP Proxy", e);
         }
 
         return buildProxyInjectionNode(injectionNode, proxyClassName, injectionAspect, proxyConstructorInjectionPoint);
     }
 
-    private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) {
+    private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
         ASTMethod method = methodInterceptorEntry.getKey();
 
         if (method.getAccessModifier() == ASTAccessModifier.PRIVATE) {
@@ -107,9 +109,9 @@ public class AOPProxyGenerator {
         }
         Map<InjectionNode, JFieldVar> injectionNodeInstanceNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
 
+        //setup interceptor fields
         for (InjectionNode interceptorInjectionNode : methodInterceptorEntry.getValue()) {
             String interceptorInstanceName = variableNamer.generateName(interceptorInjectionNode.getClassName());
-
 
             JFieldVar interceptorField = definedClass.field(JMod.PRIVATE, codeModel.ref(interceptorInjectionNode.getClassName()), interceptorInstanceName);
 
@@ -126,7 +128,7 @@ public class AOPProxyGenerator {
         if (method.getReturnType().equals(ASTVoidType.VOID)) {
             returnType = codeModel.VOID;
         } else {
-            returnType = codeModel.ref(method.getReturnType().getName());
+            returnType = codeModel.parseType(method.getReturnType().getName());
         }
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
         JBlock body = methodDeclaration.body();
@@ -140,26 +142,11 @@ public class AOPProxyGenerator {
         }
 
         //aop interceptor
-        JTryBlock tryInterceptorBlock = body._try();
-        JBlock tryInterceptorBody = tryInterceptorBlock.body();
-
-
         Iterator<InjectionNode> interceptorIterator = methodInterceptorEntry.getValue().iterator();
-
         Map<InjectionNode, JFieldVar> interceptorNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
-        JInvocation invocation = buildInterceptorChain(interceptorIterator, interceptorNameMap, parameterMap, method, definedClass, tryInterceptorBody);
 
-        if (method.getReturnType().equals(ASTVoidType.VOID)) {
-            tryInterceptorBody.add(invocation);
-        } else {
-            tryInterceptorBody._return(JExpr.cast(codeModel.ref(method.getReturnType().getName()), invocation));
-        }
+        body.add(buildInterceptorChain(interceptorIterator, interceptorNameMap, parameterMap, returnType, definedClass, method));
 
-        JCatchBlock interceptorCatchBlock = tryInterceptorBlock._catch(codeModel.ref(Throwable.class));
-        JVar throwableE = interceptorCatchBlock.param("e");
-        JBlock throwableCatchBody = interceptorCatchBlock.body();
-
-        throwableCatchBody._throw(JExpr._new(codeModel.ref(RoboticsAnalysisException.class)).arg(JExpr.lit("exception during method interception")).arg(throwableE));
     }
 
     private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, String proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
@@ -187,23 +174,47 @@ public class AOPProxyGenerator {
         return proxyInjectionNode;
     }
 
-    private JInvocation buildInterceptorChain(Iterator<InjectionNode> interceptorIterator, Map<InjectionNode, JFieldVar> interceptorFieldMap, Map<ASTParameter, JVar> parameterMap, ASTMethod method, JDefinedClass enclosingClass, JBlock body) {
+    private JBlock buildInterceptorChain(Iterator<InjectionNode> interceptorIterator, Map<InjectionNode, JFieldVar> interceptorFieldMap, Map<ASTParameter, JVar> parameterMap, JType returnType, JDefinedClass enclosingClass, ASTMethod method) {
+        JBlock block = new JBlock(false, false);
+
         if (interceptorIterator.hasNext()) {
+            //try {
+            JTryBlock tryInterceptorBlock = block._try();
+            JBlock tryInterceptorBody = tryInterceptorBlock.body();
+
             InjectionNode interceptorInjectionNode = interceptorIterator.next();
 
             JFieldVar interceptorField = interceptorFieldMap.get(interceptorInjectionNode);
 
             JDefinedClass innerMethodInvocation = codeModel.anonymousClass(codeModel.ref(MethodInvocation.class));
 
-            JMethod proceedMethod = innerMethodInvocation.method(JMod.PUBLIC, codeModel.ref(Object.class), PROCEED_METHOD);
+            JClass innerReturnType = codeModel.ref(Object.class);
+            JMethod proceedMethod = innerMethodInvocation.method(JMod.PUBLIC, innerReturnType, PROCEED_METHOD);
 
-            JBlock proceedBody = proceedMethod.body();
+            proceedMethod.body().add(
+                    buildInterceptorChain(interceptorIterator, interceptorFieldMap, parameterMap, innerReturnType, enclosingClass, method));
 
-            buildInterceptorChain(interceptorIterator, interceptorFieldMap, parameterMap, method, enclosingClass, proceedBody);
+            if (returnType.equals(codeModel.VOID)) {
+                tryInterceptorBody.invoke(interceptorField, INVOKE_METHOD).arg(
+                        JExpr._new(innerMethodInvocation));
+            } else {
+                JClass boxedReturnType = returnType.boxify();
+                if (boxedReturnType.isAssignableFrom(innerReturnType)) {
+                    tryInterceptorBody._return(interceptorField.invoke(INVOKE_METHOD).arg(
+                            JExpr._new(innerMethodInvocation)));
+                } else {
+                    tryInterceptorBody._return(JExpr.cast(boxedReturnType, interceptorField.invoke(INVOKE_METHOD).arg(
+                            JExpr._new(innerMethodInvocation))));
+                }
+            }
 
-            return interceptorField.invoke(INVOKE_METHOD).arg(
-                    JExpr._new(innerMethodInvocation)
-            );
+            //} catch(Throwable e)
+            JCatchBlock interceptorCatchBlock = tryInterceptorBlock._catch(codeModel.ref(Throwable.class));
+
+            JVar throwableE = interceptorCatchBlock.param("e");
+            JBlock throwableCatchBody = interceptorCatchBlock.body();
+
+            throwableCatchBody._throw(JExpr._new(codeModel.ref(RoboticsAnalysisException.class)).arg(JExpr.lit("exception during method interception")).arg(throwableE));
         } else {
             JInvocation superCall = enclosingClass.staticRef(SUPER_REF).invoke(method.getName());
 
@@ -211,15 +222,18 @@ public class AOPProxyGenerator {
                 superCall.arg(parameterMap.get(parameter));
             }
 
-            if (method.getReturnType().equals(ASTVoidType.VOID)) {
-                body.add(superCall);
-                body._return(JExpr._null());
-
+            if (returnType.equals(codeModel.VOID)) {
+                block.add(superCall);
             } else {
-                body._return(superCall);
+                if (method.getReturnType().equals(ASTVoidType.VOID)) {
+                    block.add(superCall);
+                    block._return(JExpr._null());
+                } else {
+                    block._return(superCall);
+                }
             }
-
-            return null;
         }
+
+        return block;
     }
 }

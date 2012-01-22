@@ -19,8 +19,7 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -155,6 +154,10 @@ public class AnalyzerTest {
         InjectionNode bBackLinkInjectionNode = bBackLinkInjectionPoint.getInjectionNodes().get(0);
         assertEquals(BImpl.class.getName(), bBackLinkInjectionNode.getClassName());
         assertTrue(isProxyRequired(bBackLinkInjectionNode));
+
+        //B -> F and E -> F difference
+        assertNotSame(fInjectionNode, fInjectionNode2);
+        assertFalse(fInjectionNode.equals(fInjectionNode2));
     }
 
     private boolean isProxyRequired(InjectionNode injectionNode) {

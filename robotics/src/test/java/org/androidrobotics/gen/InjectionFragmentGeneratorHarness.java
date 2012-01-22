@@ -24,7 +24,7 @@ public class InjectionFragmentGeneratorHarness {
 
         definedClass._implements(Provider.class);
 
-        JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(injectionNode.getClassName()), "get");
+        JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.parseType(injectionNode.getClassName()), "get");
 
         JBlock block = getMethod.body();
         Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, new EmptyRResource());

@@ -8,7 +8,6 @@ import org.androidrobotics.analysis.RoboticsAnalysisException;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.model.IdentifiedInjectionNode;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -33,7 +32,7 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         String extraId = annotation.getProperty("value", String.class);
 
-        InjectionNode injectionNode = new IdentifiedInjectionNode(astType, extraId);
+        InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);

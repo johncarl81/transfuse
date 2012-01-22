@@ -8,7 +8,6 @@ import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidrobotics.gen.variableBuilder.resource.ResourceExpressionBuilderFactory;
-import org.androidrobotics.model.IdentifiedInjectionNode;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -33,7 +32,7 @@ public class ResourceInjectionNodeBuilder implements InjectionNodeBuilder {
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         Integer resourceId = annotation.getProperty("value", Integer.class);
 
-        InjectionNode injectionNode = new IdentifiedInjectionNode(astType, resourceId);
+        InjectionNode injectionNode = new InjectionNode(astType);
 
         try {
             JType resourceType = codeModel.parseType(astType.getName());
