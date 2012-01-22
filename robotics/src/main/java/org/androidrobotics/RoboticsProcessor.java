@@ -3,17 +3,14 @@ package org.androidrobotics;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.*;
+import org.androidrobotics.analysis.ActivityAnalysis;
+import org.androidrobotics.analysis.AnalysisRepository;
+import org.androidrobotics.analysis.AnalysisRepositoryFactory;
+import org.androidrobotics.analysis.ModuleProcessor;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
-import org.androidrobotics.annotations.Bind;
-import org.androidrobotics.annotations.BindInterceptor;
-import org.androidrobotics.annotations.BindProvider;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
-import org.androidrobotics.gen.InjectionNodeBuilderRepository;
-import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
-import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.manifest.Activity;
 import org.androidrobotics.model.manifest.Application;
@@ -37,85 +34,40 @@ public class RoboticsProcessor {
     private ActivityGenerator activityGenerator;
     private JCodeModel codeModel;
     private Logger logger;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ActivityAnalysis activityAnalysis;
-    private AOPRepository aopRepository;
     private Manifest manifest;
     private RResource rResource;
+    private ModuleProcessor moduleProcessor;
 
     @Inject
     public RoboticsProcessor(ActivityGenerator activityGenerator,
                              JCodeModel codeModel,
                              Logger logger,
-                             VariableBuilderRepositoryFactory variableBuilderRepositoryProvider,
-                             VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
                              ActivityAnalysis activityAnalysis,
-                             AOPRepositoryProvider aopRepositoryProvider) {
+                             ModuleProcessor moduleProcessor) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
         this.logger = logger;
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analysisRepositoryFactory = analysisRepositoryFactory;
         this.activityAnalysis = activityAnalysis;
-
-        aopRepository = aopRepositoryProvider.get();
-        injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
+        this.moduleProcessor = moduleProcessor;
     }
 
-    public void processModuleElements(Collection<? extends ASTType> astTypes) {
+    public void processModule(Collection<? extends ASTType> astTypes) {
 
         for (ASTType astType : astTypes) {
             if (astType.isAnnotated(RoboticsModule.class)) {
 
                 for (ASTMethod astMethod : astType.getMethods()) {
-                    if (astMethod.isAnnotated(Bind.class)) {
-                        ASTType superType = astMethod.getReturnType();
-
-                        if (astMethod.getParameters().size() == 1) {
-                            ASTType implType = astMethod.getParameters().get(0).getASTType();
-
-                            injectionNodeBuilders.put(superType.getName(),
-                                    variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implType));
-                        } else {
-                            //todo: throw exception
-                        }
-                    }
-
-                    if (astMethod.isAnnotated(BindInterceptor.class)) {
-                        ASTType interceptor = astMethod.getReturnType();
-
-                        if (astMethod.getParameters().size() == 1) {
-                            ASTType annotationType = astMethod.getParameters().get(0).getASTType();
-
-                            aopRepository.put(annotationType, interceptor);
-                        } else {
-                            //todo: throw exception
-                        }
-                    }
-
-                    if (astMethod.isAnnotated(BindProvider.class)) {
-                        ASTType providedType = astMethod.getReturnType();
-
-                        if (astMethod.getParameters().size() == 1) {
-                            ASTType annotationType = astMethod.getParameters().get(0).getASTType();
-
-                            injectionNodeBuilders.put(providedType.getName(),
-                                    variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(annotationType));
-
-                            aopRepository.put(annotationType, providedType);
-                        } else {
-                            //todo: throw exception
-                        }
-                    }
+                    moduleProcessor.processMethod(astMethod);
                 }
             }
         }
     }
 
-    public void processRootElement(Collection<? extends ASTType> astTypes) {
+    public void processComponent(Collection<? extends ASTType> astTypes) {
 
         AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
 
@@ -127,7 +79,7 @@ public class RoboticsProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, injectionNodeBuilders, aopRepository);
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
 
 
             if (activityDescriptor != null) {

@@ -2,9 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -14,11 +12,13 @@ public class ASTClassField implements ASTField {
     private Field field;
     private ASTType astType;
     private ASTAccessModifier modifier;
+    private Collection<ASTAnnotation> annotations;
 
-    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier) {
+    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
         this.field = field;
         this.astType = astType;
         this.modifier = modifier;
+        this.annotations = annotations;
     }
 
     @Override
@@ -43,13 +43,7 @@ public class ASTClassField implements ASTField {
 
     @Override
     public Collection<ASTAnnotation> getAnnotations() {
-        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
-
-        for (Annotation annotation : field.getAnnotations()) {
-            annotationList.add(new ASTClassAnnotation(annotation));
-        }
-
-        return annotationList;
+        return annotations;
     }
 
     public ASTAccessModifier getAccessModifier() {

@@ -66,7 +66,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
         if (!processorRan) {
 
-            roboticsProcessor.processModuleElements(wrapASTCollection(
+            roboticsProcessor.processModule(wrapASTCollection(
                     roundEnvironment.getElementsAnnotatedWith(RoboticsModule.class)
             ));
 
@@ -83,7 +83,7 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
             roboticsProcessor.processR(r);
 
             for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
-                roboticsProcessor.processRootElement(wrapASTCollection(
+                roboticsProcessor.processComponent(wrapASTCollection(
                         roundEnvironment.getElementsAnnotatedWith(annotationClass)
                 ));
             }

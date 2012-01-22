@@ -12,11 +12,11 @@ import org.androidrobotics.annotations.RoboticsModule;
 public interface SimpleModule {
 
     @Bind(AnotherValueImpl.class)
-    AnotherValue binding(AnotherValueImpl temp);
+    AnotherValue bindAnotherValue();
 
-    @BindInterceptor
-    LoggingInterceptor binding(LogInterception interception);
+    @BindInterceptor(LogInterception.class)
+    LoggingInterceptor bindInterceptor();
 
     @BindProvider(ValueProvider.class)
-    ProvidedValue binding(ValueProvider provider);
+    ProvidedValue bindValueProvider();
 }

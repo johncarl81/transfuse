@@ -5,7 +5,7 @@ package org.androidrobotics.analysis.adapter;
  */
 public interface ASTAnnotation {
 
-    Object getProperty(String value);
+    <T> T getProperty(String value, Class<T> type);
 
     String getName();
 }

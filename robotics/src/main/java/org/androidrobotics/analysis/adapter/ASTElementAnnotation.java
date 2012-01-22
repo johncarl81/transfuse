@@ -11,16 +11,18 @@ import java.util.Map;
 public class ASTElementAnnotation implements ASTAnnotation {
 
     private AnnotationMirror annotationMirror;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
-    public ASTElementAnnotation(AnnotationMirror annotationMirror) {
+    public ASTElementAnnotation(AnnotationMirror annotationMirror, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         this.annotationMirror = annotationMirror;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     @Override
-    public Object getProperty(String value) {
+    public <T> T getProperty(String value, Class<T> type) {
         for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             if (value.equals(entry.getKey().getSimpleName().toString())) {
-                return entry.getValue();
+                return entry.getValue().accept(new AnnotationTypeValueConverterVisitor<T>(type, astTypeBuilderVisitor), null);
             }
         }
         return null;

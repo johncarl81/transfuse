@@ -1,7 +1,9 @@
 package org.androidrobotics.analysis.adapter;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -10,8 +12,10 @@ public class ASTClassParameter implements ASTParameter {
 
     private ASTType astType;
     private Map<Class<?>, Annotation> annotationMap = new HashMap<Class<?>, Annotation>();
+    private Collection<ASTAnnotation> annotations;
 
-    public ASTClassParameter(Annotation[] annotations, ASTType astType) {
+    public ASTClassParameter(Annotation[] annotations, ASTType astType, Collection<ASTAnnotation> astAnnotations) {
+        this.annotations = astAnnotations;
         this.astType = astType;
 
         for (Annotation annotation : annotations) {
@@ -39,12 +43,6 @@ public class ASTClassParameter implements ASTParameter {
 
     @Override
     public Collection<ASTAnnotation> getAnnotations() {
-        List<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
-
-        for (Annotation annotation : annotationMap.values()) {
-            annotationList.add(new ASTClassAnnotation(annotation));
-        }
-
-        return annotationList;
+        return annotations;
     }
 }

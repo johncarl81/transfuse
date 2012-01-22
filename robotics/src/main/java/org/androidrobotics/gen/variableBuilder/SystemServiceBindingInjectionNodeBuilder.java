@@ -12,7 +12,6 @@ import org.androidrobotics.model.IdentifiedInjectionNode;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
-import javax.lang.model.element.AnnotationValue;
 
 /**
  * @author John Ericksen
@@ -37,7 +36,7 @@ public class SystemServiceBindingInjectionNodeBuilder implements InjectionNodeBu
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        String systemService = (String) ((AnnotationValue) annotation.getProperty("value")).getValue();
+        String systemService = annotation.getProperty("value", String.class);
 
         InjectionNode injectionNode = new IdentifiedInjectionNode(astType, systemService);
 

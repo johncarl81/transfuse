@@ -12,7 +12,6 @@ import org.androidrobotics.model.IdentifiedInjectionNode;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
-import javax.lang.model.element.AnnotationValue;
 
 /**
  * @author John Ericksen
@@ -32,7 +31,7 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        String extraId = (String) ((AnnotationValue) annotation.getProperty("value")).getValue();
+        String extraId = annotation.getProperty("value", String.class);
 
         InjectionNode injectionNode = new IdentifiedInjectionNode(astType, extraId);
 

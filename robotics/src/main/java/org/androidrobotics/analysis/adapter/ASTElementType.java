@@ -17,8 +17,8 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     private Collection<ASTType> interfaces;
     private ASTType superClass;
 
-    public ASTElementType(TypeElement typeElement, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces) {
-        super(typeElement);
+    public ASTElementType(TypeElement typeElement, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces, Collection<ASTAnnotation> annotations) {
+        super(typeElement, annotations);
         this.typeElement = typeElement;
         this.constructors = constructors;
         this.methods = methods;

@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.ExecutableElement;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,8 +14,8 @@ public class ASTElementConstructor extends ASTElementBase implements ASTConstruc
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
 
-    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier) {
-        super(executableElement);
+    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+        super(executableElement, annotations);
         this.parameters = parameters;
         this.modifier = modifier;
     }

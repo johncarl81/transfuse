@@ -50,7 +50,7 @@ public class ASTElementFactory {
                 interfaces.add(interfaceType);
             }
 
-            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces));
+            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, buildAnnotations(typeElement)));
 
             //iterate and build the contained elements within this TypeElement
             constructors.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
@@ -76,7 +76,7 @@ public class ASTElementFactory {
     public ASTElementField buildASTElementVariable(VariableElement variableElement) {
         ASTAccessModifier modifier = buildAccessModifier(variableElement);
 
-        return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier);
+        return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier, buildAnnotations(variableElement));
     }
 
     private ASTAccessModifier buildAccessModifier(Element element) {
@@ -105,7 +105,7 @@ public class ASTElementFactory {
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
 
-        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier);
+        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, buildAnnotations(executableElement));
     }
 
     /**
@@ -131,7 +131,7 @@ public class ASTElementFactory {
      * @return ASTParameter
      */
     private ASTParameter buildASTElementParameter(VariableElement variableElement) {
-        return new ASTElementParameter(variableElement, astTypeBuilderVisitor);
+        return new ASTElementParameter(variableElement, astTypeBuilderVisitor, buildAnnotations(variableElement));
     }
 
     /**
@@ -141,7 +141,7 @@ public class ASTElementFactory {
      * @return ASTParameter
      */
     public ASTParameter buildASTElementParameter(TypeParameterElement typeParameterElement) {
-        return new ASTElementParameter(typeParameterElement, astTypeBuilderVisitor);
+        return new ASTElementParameter(typeParameterElement, astTypeBuilderVisitor, buildAnnotations(typeParameterElement));
     }
 
     /**
@@ -153,6 +153,16 @@ public class ASTElementFactory {
     public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        return new ASTElementConstructor(executableElement, parameters, modifier);
+        return new ASTElementConstructor(executableElement, parameters, modifier, buildAnnotations(executableElement));
+    }
+
+    private Collection<ASTAnnotation> buildAnnotations(Element element) {
+        List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
+
+        for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+            annotations.add(new ASTElementAnnotation(annotationMirror, astTypeBuilderVisitor));
+        }
+
+        return annotations;
     }
 }

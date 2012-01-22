@@ -1,10 +1,8 @@
 package org.androidrobotics.analysis.adapter;
 
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -13,6 +11,8 @@ import java.util.*;
 public class ASTClassFactory {
 
     private Map<Class<?>, ASTType> typeCache = new HashMap<Class<?>, ASTType>();
+    @Inject
+    private ASTClassFactory astClassFactory;
 
     public ASTType buildASTClassType(Class<?> clazz) {
         if (!typeCache.containsKey(clazz)) {
@@ -29,13 +29,7 @@ public class ASTClassFactory {
                 interfaces.add(buildASTClassType(clazzInterface));
             }
 
-            Collection<ASTAnnotation> annotationList = new ArrayList<ASTAnnotation>();
-
-            for (Annotation annotation : clazz.getAnnotations()) {
-                annotationList.add(new ASTClassAnnotation(annotation));
-            }
-
-            typeCache.put(clazz, new ASTClassType(clazz, annotationList, constructors, methods, fields, superClass, interfaces));
+            typeCache.put(clazz, new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
 
             //fill in the guts after building the tree
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
@@ -74,7 +68,7 @@ public class ASTClassFactory {
     }
 
     public ASTParameter buildASTClassParameter(Class<?> parameterType, Annotation[] annotations) {
-        return new ASTClassParameter(annotations, buildASTClassType(parameterType));
+        return new ASTClassParameter(annotations, buildASTClassType(parameterType), buildAnnotations(annotations));
     }
 
     public ASTMethod buildASTClassMethod(Method method) {
@@ -82,7 +76,7 @@ public class ASTClassFactory {
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
         ASTAccessModifier modifier = buildASTAccessModifier(method.getModifiers());
 
-        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters, modifier);
+        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters, modifier, buildAnnotations(method));
     }
 
     private ASTAccessModifier buildASTAccessModifier(int modifiers) {
@@ -101,20 +95,28 @@ public class ASTClassFactory {
     public ASTField buildASTClassField(Field field) {
         ASTAccessModifier modifier = buildASTAccessModifier(field.getModifiers());
 
-        return new ASTClassField(field, buildASTClassType(field.getType()), modifier);
+        return new ASTClassField(field, buildASTClassType(field.getType()), modifier, buildAnnotations(field));
     }
 
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
         ASTAccessModifier modifier = buildASTAccessModifier(constructor.getModifiers());
 
-        List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
-
-        for (Annotation annotation : constructor.getAnnotations()) {
-            annotations.add(new ASTClassAnnotation(annotation));
-        }
-
-        return new ASTClassConstructor(annotations, constructor, buildASTTypeParameters(constructor), modifier);
+        return new ASTClassConstructor(buildAnnotations(constructor), constructor, buildASTTypeParameters(constructor), modifier);
     }
 
+    private List<ASTAnnotation> buildAnnotations(AnnotatedElement element) {
+        return buildAnnotations(element.getAnnotations());
+    }
+
+    private List<ASTAnnotation> buildAnnotations(Annotation[] annotations) {
+
+        List<ASTAnnotation> astAnnotations = new ArrayList<ASTAnnotation>();
+
+        for (Annotation annotation : annotations) {
+            astAnnotations.add(new ASTClassAnnotation(annotation));
+        }
+
+        return astAnnotations;
+    }
 
 }

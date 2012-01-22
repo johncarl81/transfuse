@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.ExecutableElement;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
 
-    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
-        super(executableElement);
+    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+        super(executableElement, annotations);
         this.modifier = modifier;
         this.astTypeLoader = new ASTMethodTypeLazyLoader(executableElement, astTypeBuilderVisitor);
         this.parameters = parameters;

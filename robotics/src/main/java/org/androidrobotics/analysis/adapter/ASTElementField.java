@@ -2,6 +2,7 @@ package org.androidrobotics.analysis.adapter;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
+import java.util.Collection;
 
 /**
  * Element specific implementation of the AST Field
@@ -14,8 +15,8 @@ public class ASTElementField extends ASTElementBase implements ASTField {
     private ASTAccessModifier modifier;
     private VariableElement variableElement;
 
-    public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, ASTAccessModifier modifier) {
-        super(variableElement);
+    public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+        super(variableElement, annotations);
         this.variableElement = variableElement;
         this.modifier = modifier;
         this.astTypeLoader = new ElementASTTypeLazyLoader(variableElement, astTypeBuilderVisitor);
