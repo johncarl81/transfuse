@@ -1,5 +1,8 @@
 package org.androidrobotics.analysis.adapter;
 
+import com.google.inject.assistedinject.Assisted;
+
+import javax.inject.Inject;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
@@ -11,18 +14,20 @@ import java.util.Map;
 public class ASTElementAnnotation implements ASTAnnotation {
 
     private AnnotationMirror annotationMirror;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private ElementConverterFactory elementConverterFactory;
 
-    public ASTElementAnnotation(AnnotationMirror annotationMirror, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+    @Inject
+    public ASTElementAnnotation(@Assisted AnnotationMirror annotationMirror,
+                                ElementConverterFactory elementConverterFactory) {
         this.annotationMirror = annotationMirror;
-        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.elementConverterFactory = elementConverterFactory;
     }
 
     @Override
     public <T> T getProperty(String value, Class<T> type) {
         for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             if (value.equals(entry.getKey().getSimpleName().toString())) {
-                return entry.getValue().accept(new AnnotationTypeValueConverterVisitor<T>(type, astTypeBuilderVisitor), null);
+                return entry.getValue().accept(elementConverterFactory.buildAnnotationValueConverter(type), null);
             }
         }
         return null;

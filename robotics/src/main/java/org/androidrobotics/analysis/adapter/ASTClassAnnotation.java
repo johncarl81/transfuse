@@ -28,10 +28,9 @@ public class ASTClassAnnotation implements ASTAnnotation {
                 convertedType = Class.class;
             }
 
-            if (typeParameters.getReturnType().isAssignableFrom(convertedType)) {
+            if (!typeParameters.getReturnType().isAssignableFrom(convertedType)) {
                 throw new RoboticsAnalysisException("Type not expected: " + convertedType);
             }
-
 
             return (T) typeParameters.invoke(annotation);
 

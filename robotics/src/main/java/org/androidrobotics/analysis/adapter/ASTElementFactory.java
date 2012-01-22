@@ -22,6 +22,8 @@ public class ASTElementFactory {
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    @Inject
+    private ASTElementAnnotationFactory astElementAnnotationFactory;
 
     /**
      * Build a ASTType from the provided TypeElement.
@@ -160,7 +162,7 @@ public class ASTElementFactory {
         List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            annotations.add(new ASTElementAnnotation(annotationMirror, astTypeBuilderVisitor));
+            annotations.add(astElementAnnotationFactory.buildASTElementAnnotation(annotationMirror));
         }
 
         return annotations;

@@ -14,8 +14,10 @@ public class ASTElementConverterFactory {
 
     @Inject
     private ASTElementFactory astElementFactory;
+    @Inject
+    private ElementConverterFactory elementConverterFactory;
 
     public <T> CollectionConverter<? super Element, T> buildASTElementConverter(Class<T> astTypeClass) {
-        return new ASTElementConverter<T>(astTypeClass, astElementFactory);
+        return new ASTElementConverter<T>(astTypeClass, elementConverterFactory);
     }
 }

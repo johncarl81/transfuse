@@ -5,16 +5,21 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.SimpleAnnotationValueVisitor6;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
 
-    private Class type;
+    private Class<T> type;
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private ElementConverterFactory astTypeElementConverterFactory;
 
-    public AnnotationTypeValueConverterVisitor(Class type, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+    public AnnotationTypeValueConverterVisitor(Class<T> type,
+                                               ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                                               ElementConverterFactory astTypeElementConverterFactory) {
         this.type = type;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.astTypeElementConverterFactory = astTypeElementConverterFactory;
     }
 
     @Override
@@ -72,7 +77,7 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
-        return null;//todo:finish
+        return (T) variableElement.accept(astTypeElementConverterFactory.buildTypeConverter(type), null);
     }
 
     @Override
@@ -82,7 +87,13 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
     @Override
     public T visitArray(List<? extends AnnotationValue> annotationValues, Void aVoid) {
-        return null;
+        List<Object> annotationASTTypes = new ArrayList<Object>();
+
+        for (AnnotationValue annotationValue : annotationValues) {
+            annotationASTTypes.add(annotationValue.accept(this, null));
+        }
+
+        return (T) annotationASTTypes;
     }
 
     @Override

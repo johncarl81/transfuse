@@ -1,21 +1,12 @@
 package org.androidrobotics.util;
 
 import javax.lang.model.element.*;
+import javax.lang.model.util.SimpleElementVisitor6;
 
 /**
  * @author John Ericksen
  */
-public class ElementVisitorAdaptor<T, R> implements ElementVisitor<T, R> {
-
-    @Override
-    public T visit(Element element, R r) {
-        return null;
-    }
-
-    @Override
-    public T visit(Element element) {
-        return null;
-    }
+public class ElementVisitorAdaptor<T, R> extends SimpleElementVisitor6<T, R> {
 
     @Override
     public T visitPackage(PackageElement packageElement, R r) {

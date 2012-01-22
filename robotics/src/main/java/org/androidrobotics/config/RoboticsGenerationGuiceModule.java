@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
+import org.androidrobotics.analysis.adapter.ASTElementAnnotationFactory;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepository;
 import org.androidrobotics.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidrobotics.gen.InjectionBuilderContextFactory;
@@ -38,6 +39,9 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder
                 .build(MethodBasedResourceExpressionBuilderAdaptorFactory.class));
+
+        install(factoryModuleBuilder
+                .build(ASTElementAnnotationFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 
