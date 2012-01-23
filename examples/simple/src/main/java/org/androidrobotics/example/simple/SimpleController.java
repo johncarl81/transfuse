@@ -22,12 +22,16 @@ public class SimpleController {
     @Inject
     private Context activity;
     @Inject
+    private ProvidedValue providedValue;
+    @Inject
     private VibrateOnClickListener vibrateOnClickListener;
     private NotifyOnClickListener notifyOnClickListener;
     private Vibrator vibrator;
     private Button vibrateButton;
     private Button notifyButton;
     private int value = 0;
+    @Inject
+    private SingletonTarget singletonTarget;
 
     @Inject
     private SimpleController(NotifyOnClickListener notifyOnClickListener) {
@@ -73,5 +77,9 @@ public class SimpleController {
 
     public Button getVibrateButton() {
         return vibrateButton;
+    }
+
+    public SingletonTarget getSingletonTarget() {
+        return singletonTarget;
     }
 }

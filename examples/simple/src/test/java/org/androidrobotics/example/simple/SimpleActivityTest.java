@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-
 import static junit.framework.Assert.*;
 
 /**
@@ -22,11 +20,7 @@ public class SimpleActivityTest {
         SimpleActivity simpleActivity = new SimpleActivity();
         simpleActivity.onCreate(null);
 
-        Field delegateField = findDelegateField(SimpleActivity.class, SimpleActivityDelegate.class);
-
-        delegateField.setAccessible(true);
-        testActivityDelegate = (SimpleActivityDelegate) delegateField.get(simpleActivity);
-        delegateField.setAccessible(false);
+        testActivityDelegate = DelegateUtil.getDelegate(simpleActivity, SimpleActivityDelegate.class);
     }
 
     @Test
@@ -86,18 +80,10 @@ public class SimpleActivityTest {
         assertEquals(R.id.notifyButton, controller.getNotifyButton().getId());
     }
 
-    private Field findDelegateField(Class target, Class type) {
-        Field delegateField = null;
-
-        for (Field field : target.getDeclaredFields()) {
-            if (type.isAssignableFrom(field.getType())) {
-                if (delegateField != null) {
-                    throw new RoboticsTestException("Type found more than once");
-                }
-                delegateField = field;
-            }
-        }
-
-        return delegateField;
+    @Test
+    public void testSingletonScope() {
+        SingletonTarget singletonTargetOne = testActivityDelegate.getController().getSingletonTarget();
+        SingletonTarget singletonTargetTwo = testActivityDelegate.getLateReturnListener().getSingletonTarget();
+        assertEquals(singletonTargetOne, singletonTargetTwo);
     }
 }

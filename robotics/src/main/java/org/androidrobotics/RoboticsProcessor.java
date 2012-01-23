@@ -3,15 +3,14 @@ package org.androidrobotics;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
-import org.androidrobotics.analysis.ActivityAnalysis;
-import org.androidrobotics.analysis.AnalysisRepository;
-import org.androidrobotics.analysis.AnalysisRepositoryFactory;
-import org.androidrobotics.analysis.ModuleProcessor;
+import org.androidrobotics.analysis.*;
 import org.androidrobotics.analysis.adapter.ASTMethod;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.gen.ActivityGenerator;
+import org.androidrobotics.gen.ApplicationGenerator;
 import org.androidrobotics.model.ActivityDescriptor;
+import org.androidrobotics.model.ApplicationDescriptor;
 import org.androidrobotics.model.manifest.Activity;
 import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.model.manifest.Manifest;
@@ -36,7 +35,9 @@ public class RoboticsProcessor {
     private Logger logger;
     private AnalysisRepositoryFactory analysisRepositoryFactory;
     private ActivityAnalysis activityAnalysis;
+    private ApplicationAnalysis applicationAnalyis;
     private ModuleProcessor moduleProcessor;
+    private ApplicationGenerator applicationGenerator;
 
     private Manifest manifest = null;
     private RResource rResource = null;
@@ -47,13 +48,16 @@ public class RoboticsProcessor {
                              Logger logger,
                              AnalysisRepositoryFactory analysisRepositoryFactory,
                              ActivityAnalysis activityAnalysis,
-                             ModuleProcessor moduleProcessor) {
+                             ModuleProcessor moduleProcessor,
+                             ApplicationAnalysis applicationAnalyis, ApplicationGenerator applicationGenerator) {
         this.activityGenerator = activityGenerator;
         this.codeModel = codeModel;
         this.logger = logger;
         this.analysisRepositoryFactory = analysisRepositoryFactory;
         this.activityAnalysis = activityAnalysis;
         this.moduleProcessor = moduleProcessor;
+        this.applicationAnalyis = applicationAnalyis;
+        this.applicationGenerator = applicationGenerator;
     }
 
     public void processModule(Collection<? extends ASTType> astTypes) {
@@ -66,6 +70,31 @@ public class RoboticsProcessor {
                 }
             }
         }
+    }
+
+    public void processApplication(Collection<? extends ASTType> astTypes) {
+        AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
+
+        Application application = manifest.getApplications().get(0);
+
+        for (ASTType astType : astTypes) {
+
+            ApplicationDescriptor applicationDescriptor = applicationAnalyis.analyzeApplication(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
+
+            if (applicationDescriptor != null) {
+                try {
+                    applicationGenerator.generate(applicationDescriptor, rResource);
+                } catch (IOException e) {
+                    logger.error("IOException while generating activity", e);
+                } catch (JClassAlreadyExistsException e) {
+                    logger.error("JClassAlreadyExistsException while generating activity", e);
+                } catch (ClassNotFoundException e) {
+                    logger.error("ClassNotFoundException while generating activity", e);
+                }
+            }
+        }
+
+        //activities.removeAll(unreferencedActivities);
     }
 
     public void processComponent(Collection<? extends ASTType> astTypes) {
@@ -81,7 +110,6 @@ public class RoboticsProcessor {
         for (ASTType astType : astTypes) {
 
             ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
-
 
             if (activityDescriptor != null) {
                 try {
@@ -101,7 +129,7 @@ public class RoboticsProcessor {
             }
         }
 
-        activities.removeAll(unreferencedActivities);
+        //activities.removeAll(unreferencedActivities);
     }
 
     public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {

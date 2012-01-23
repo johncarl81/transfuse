@@ -25,6 +25,9 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
         methodAnnotations.put(OnResume.class, "onResume");
         methodAnnotations.put(OnStart.class, "onStart");
         methodAnnotations.put(OnStop.class, "onStop");
+        methodAnnotations.put(OnLowMemory.class, "onLowMemory");
+        //application
+        methodAnnotations.put(OnTerminate.class, "onTerminate");
     }
 
     @Override

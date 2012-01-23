@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import org.androidrobotics.analysis.adapter.ASTElementConverterFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
+import org.androidrobotics.annotations.Application;
 import org.androidrobotics.annotations.RoboticsModule;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
 import org.androidrobotics.gen.FilerSourceCodeWriter;
@@ -31,6 +32,7 @@ import java.util.Set;
  * @author John Ericksen
  */
 @SupportedAnnotationTypes({"org.androidrobotics.annotations.Activity",
+        "org.androidrobotics.annotations.Application",
         "org.androidrobotics.annotations.RoboticsModule"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class RoboticsAnnotationProcessor extends AbstractProcessor {
@@ -83,6 +85,10 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
             );
 
             roboticsProcessor.processR(r);
+
+            roboticsProcessor.processApplication(wrapASTCollection(
+                    roundEnvironment.getElementsAnnotatedWith(Application.class)
+            ));
 
             for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
                 roboticsProcessor.processComponent(wrapASTCollection(

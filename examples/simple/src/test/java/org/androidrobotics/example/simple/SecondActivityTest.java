@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -28,16 +26,10 @@ public class SecondActivityTest {
         callingIntent.putExtra(TEST_EXTRA_ID, TEST_EXTRA_VALUE);
 
         simpleActivity = new SecondActivity();
-
         simpleActivity.setIntent(callingIntent);
-
         simpleActivity.onCreate(null);
 
-        Field delegateField = findDelegateField(SecondActivity.class, SecondActivityDelegate.class);
-
-        delegateField.setAccessible(true);
-        secondActivityDelegate = (SecondActivityDelegate) delegateField.get(simpleActivity);
-        delegateField.setAccessible(false);
+        secondActivityDelegate = DelegateUtil.getDelegate(simpleActivity, SecondActivityDelegate.class);
     }
 
     @Test
@@ -54,20 +46,5 @@ public class SecondActivityTest {
     public void testStringArray() throws Exception {
         assertNotNull(secondActivityDelegate.getSimpleStringArray());
         assertEquals(2, secondActivityDelegate.getSimpleStringArray().length);
-    }
-
-    private Field findDelegateField(Class target, Class type) {
-        Field delegateField = null;
-
-        for (Field field : target.getDeclaredFields()) {
-            if (type.isAssignableFrom(field.getType())) {
-                if (delegateField != null) {
-                    throw new RoboticsTestException("Type found more than once");
-                }
-                delegateField = field;
-            }
-        }
-
-        return delegateField;
     }
 }

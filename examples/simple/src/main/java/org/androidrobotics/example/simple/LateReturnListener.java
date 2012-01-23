@@ -19,6 +19,8 @@ public class LateReturnListener implements View.OnClickListener {
 
     @Inject
     private Application context;
+    @Inject
+    private SingletonTarget singletonTarget;
 
     @Override
     @Asynchronous
@@ -35,5 +37,9 @@ public class LateReturnListener implements View.OnClickListener {
     public void notifyUIThread() {
         Toast toast = Toast.makeText(context, "delayed hello world", ONE_SECOND);
         toast.show();
+    }
+
+    public SingletonTarget getSingletonTarget() {
+        return singletonTarget;
     }
 }

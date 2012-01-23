@@ -1,6 +1,7 @@
 package org.androidrobotics.analysis.astAnalyzer;
 
 import org.androidrobotics.model.ConstructorInjectionPoint;
+import org.androidrobotics.model.DependencyInjectionPoint;
 import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.MethodInjectionPoint;
 
@@ -15,6 +16,7 @@ public class ASTInjectionAspect {
     private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
     private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
     private Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
+    private Set<DependencyInjectionPoint> dependencyInjectionPoints = new HashSet<DependencyInjectionPoint>();
 
     public void add(ConstructorInjectionPoint constructorInjectionPoint) {
         constructorInjectionPoints.add(constructorInjectionPoint);
@@ -54,5 +56,13 @@ public class ASTInjectionAspect {
 
     public void addAllConstructorInjectionPoints(Set<ConstructorInjectionPoint> constructorInjectionPoints) {
         this.constructorInjectionPoints.addAll(constructorInjectionPoints);
+    }
+
+    public void add(DependencyInjectionPoint dependencyInjectionPoint) {
+        this.dependencyInjectionPoints.add(dependencyInjectionPoint);
+    }
+
+    public Set<DependencyInjectionPoint> getDependencyInjectionPoints() {
+        return dependencyInjectionPoints;
     }
 }

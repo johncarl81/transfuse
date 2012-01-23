@@ -5,6 +5,8 @@ import org.androidrobotics.analysis.AnalysisContext;
 import org.androidrobotics.analysis.Analyzer;
 import org.androidrobotics.analysis.adapter.ASTAnnotation;
 import org.androidrobotics.analysis.adapter.ASTType;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
+import org.androidrobotics.model.DependencyInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -28,7 +30,13 @@ public class ProviderInjectionNodeBuilder implements InjectionNodeBuilder {
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        injectionNode.addAspect(VariableBuilder.class, new ProviderVariableBuilder(analyzer.analyze(providerType, providerType, context)));
+        InjectionNode providerInjectionNode = analyzer.analyze(providerType, providerType, context);
+
+        injectionNode.addAspect(VariableBuilder.class, new ProviderVariableBuilder(providerInjectionNode));
+
+        ASTInjectionAspect providerInjectionAspect = new ASTInjectionAspect();
+        providerInjectionAspect.add(new DependencyInjectionPoint(providerInjectionNode));
+        injectionNode.addAspect(providerInjectionAspect);
 
         return injectionNode;
     }

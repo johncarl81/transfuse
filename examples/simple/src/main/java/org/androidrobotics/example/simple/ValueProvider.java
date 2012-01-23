@@ -1,5 +1,8 @@
 package org.androidrobotics.example.simple;
 
+import android.app.Application;
+
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 /**
@@ -8,6 +11,9 @@ import javax.inject.Provider;
 public class ValueProvider implements Provider<ProvidedValue> {
 
     public static final String PROVIDED_VALUE = "Hello";
+
+    @Inject
+    private Application application;
 
     @Override
     public ProvidedValue get() {
