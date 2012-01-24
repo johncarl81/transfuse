@@ -8,7 +8,9 @@ import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.InjectionInvocationBuilder;
 import org.androidrobotics.gen.UniqueVariableNamer;
 import org.androidrobotics.gen.proxy.AOPProxyGenerator;
+import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.MethodInjectionPoint;
 
 import javax.inject.Inject;
 
@@ -52,17 +54,38 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode.getClassName()));
 
-            //assuming that constructor exists
             ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
+            JBlock block = injectionBuilderContext.getBlock();
+
             //constructor injection
-            injectionBuilderContext.getBlock().assign(variableRef,
+            block.assign(variableRef,
                     injectionInvocationBuilder.buildConstructorCall(
                             injectionBuilderContext.getVariableMap(),
                             injectionAspect.getConstructorInjectionPoint(),
-                            nodeType
-                    ));
+                            nodeType));
+
+            //field injection
+            for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
+                block.add(
+                        injectionInvocationBuilder.buildFieldInjection(
+                                injectionBuilderContext.getVariableMap(),
+                                fieldInjectionPoint,
+                                variableRef));
+            }
+
+            //method injection
+            for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
+                block.add(
+                        injectionInvocationBuilder.buildMethodInjection(
+                                injectionBuilderContext.getVariableMap(),
+                                methodInjectionPoint,
+                                variableRef));
+            }
+
         } catch (ClassNotFoundException e) {
             throw new RoboticsAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);
+        } catch (JClassAlreadyExistsException e) {
+            throw new RoboticsAnalysisException("JClassAlreadyExistsException while generating injection: " + injectionNode.getClassName(), e);
         }
 
         return variableRef;
