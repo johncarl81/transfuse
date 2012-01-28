@@ -71,6 +71,8 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 injectionBuilderContext.getVariableMap(),
                                 fieldInjectionPoint,
                                 variableRef));
+
+                fieldInjectionPoint.setInjected(true);
             }
 
             //method injection
@@ -80,6 +82,8 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 injectionBuilderContext.getVariableMap(),
                                 methodInjectionPoint,
                                 variableRef));
+
+                methodInjectionPoint.setInjected(true);
             }
 
         } catch (ClassNotFoundException e) {

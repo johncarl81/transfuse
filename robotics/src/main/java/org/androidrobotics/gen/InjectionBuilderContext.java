@@ -60,8 +60,9 @@ public class InjectionBuilderContext {
                 variableMap.put(injectionNode, proxyVariable);
                 //then init dependencies
                 setupInjectionRequirements(injectionNode);
-                //and initialize
+                //and initialize delegate
                 variable = virtualProxyGenerator.initalizeProxy(this, proxyVariable, executeVariableBuilder(injectionNode));
+
                 variableMap.put(injectionNode, variable);
             } else {
                 variable = executeVariableBuilder(injectionNode);

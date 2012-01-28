@@ -22,4 +22,7 @@ public interface SimpleModule {
 
     @BindProvider(SingletonProvider.class)
     SingletonTarget bindSingletonTarget();
+
+    @BindProvider(ProviderTest.class)
+    ProviderTestValue bindProviderTest();
 }

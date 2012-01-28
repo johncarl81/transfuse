@@ -4,7 +4,10 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
+import org.androidrobotics.model.FieldInjectionPoint;
 import org.androidrobotics.model.InjectionNode;
+import org.androidrobotics.model.MethodInjectionPoint;
 import org.androidrobotics.model.r.RResource;
 
 import javax.inject.Inject;
@@ -17,9 +20,11 @@ import java.util.Map;
 public class InjectionFragmentGenerator {
 
     private InjectionBuilderContextFactory injectionBuilderContextFactory;
+    private InjectionInvocationBuilder injectionInvocationBuilder;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory) {
+    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder, InjectionBuilderContextFactory injectionBuilderContextFactory) {
+        this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.injectionBuilderContextFactory = injectionBuilderContextFactory;
     }
 
@@ -29,6 +34,28 @@ public class InjectionFragmentGenerator {
         InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass, rResource);
 
         injectionBuilderContext.buildVariable(injectionNode);
+
+        for (Map.Entry<InjectionNode, JExpression> nodeEntry : nodeVariableMap.entrySet()) {
+
+            if (nodeEntry.getKey().containsAspect(ASTInjectionAspect.class)) {
+
+                ASTInjectionAspect injectionToken = nodeEntry.getKey().getAspect(ASTInjectionAspect.class);
+
+                //field injection
+                for (FieldInjectionPoint fieldInjectionPoint : injectionToken.getFieldInjectionPoints()) {
+                    if (!fieldInjectionPoint.isInjected()) {
+                        block.add(injectionInvocationBuilder.buildFieldInjection(nodeVariableMap, fieldInjectionPoint, nodeEntry.getValue()));
+                    }
+                }
+
+                //method injection
+                for (MethodInjectionPoint methodInjectionPoint : injectionToken.getMethodInjectionPoints()) {
+                    if (!methodInjectionPoint.isInjected()) {
+                        block.add(injectionInvocationBuilder.buildMethodInjection(nodeVariableMap, methodInjectionPoint, nodeEntry.getValue()));
+                    }
+                }
+            }
+        }
 
         return nodeVariableMap;
     }

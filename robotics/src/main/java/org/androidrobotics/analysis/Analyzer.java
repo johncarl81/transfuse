@@ -34,7 +34,7 @@ public class Analyzer {
 
         if (context.isDependent(concreteType)) {
             //if this type is a dependency of itself, we've found a back link.
-            //This injection must be performed using a delayed injection proxy
+            //This injection must be performed using a virtual proxy
             injectionNode = context.getInjectionNode(concreteType);
 
             VirtualProxyAspect proxyAspect = getProxyAspect(injectionNode);
