@@ -24,4 +24,8 @@ public class ProviderVariableBuilder implements VariableBuilder {
 
         return providerVar.invoke(PROVIDER_METHOD);
     }
+
+    public InjectionNode getProviderInjectionNode() {
+        return providerInjectionNode;
+    }
 }

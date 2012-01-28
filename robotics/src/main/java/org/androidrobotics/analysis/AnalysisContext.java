@@ -7,6 +7,7 @@ import org.androidrobotics.model.InjectionNode;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * @author John Ericksen
@@ -14,6 +15,7 @@ import java.util.Map;
 public class AnalysisContext {
 
     private Map<ASTType, InjectionNode> dependents;
+    private Stack<InjectionNode> dependencyHistory;
     private AnalysisRepository analysisRepository;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private AOPRepository aopRepository;
@@ -21,17 +23,20 @@ public class AnalysisContext {
 
     public AnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
         this.dependents = Collections.emptyMap();
+        this.dependencyHistory = new Stack<InjectionNode>();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.aopRepository = aopRepository;
         this.superClassLevel = 0;
     }
 
-    private AnalysisContext(ASTType dependent, InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
+    private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
         this(analysisRepository, injectionNodeBuilders, aopRepository);
         this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependents.putAll(previousContext.dependents);
-        this.dependents.put(dependent, node);
+        this.dependents.put(node.getASTType(), node);
+        this.dependencyHistory.addAll(previousContext.dependencyHistory);
+        this.dependencyHistory.push(node);
     }
 
     private AnalysisContext(Map<ASTType, InjectionNode> dependents, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository, int superClassLevel) {
@@ -44,8 +49,8 @@ public class AnalysisContext {
         return new AnalysisContext(this.dependents, analysisRepository, injectionNodeBuilders, aopRepository, superClassLevel + 1);
     }
 
-    public AnalysisContext addDependent(ASTType dependent, InjectionNode node) {
-        return new AnalysisContext(dependent, node, this, analysisRepository, injectionNodeBuilders, aopRepository);
+    public AnalysisContext addDependent(InjectionNode node) {
+        return new AnalysisContext(node, this, analysisRepository, injectionNodeBuilders, aopRepository);
     }
 
     public boolean isDependent(ASTType astType) {
@@ -70,5 +75,13 @@ public class AnalysisContext {
 
     public int getSuperClassLevel() {
         return superClassLevel;
+    }
+
+    public Stack<InjectionNode> getDependencyHistory() {
+        Stack<InjectionNode> dependencyHistoryCopy = new Stack<InjectionNode>();
+
+        dependencyHistoryCopy.addAll(dependencyHistory);
+
+        return dependencyHistoryCopy;
     }
 }

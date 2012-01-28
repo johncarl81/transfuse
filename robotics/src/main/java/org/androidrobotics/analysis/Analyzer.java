@@ -10,6 +10,7 @@ import org.androidrobotics.model.InjectionNode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Stack;
 
 /**
  * Analysis class for ASTType Injection Analysis
@@ -34,24 +35,46 @@ public class Analyzer {
 
         if (context.isDependent(concreteType)) {
             //if this type is a dependency of itself, we've found a back link.
-            //This injection must be performed using a virtual proxy
+            //This dependency loop must be broken using a virtual proxy
             injectionNode = context.getInjectionNode(concreteType);
 
-            VirtualProxyAspect proxyAspect = getProxyAspect(injectionNode);
-            proxyAspect.getProxyInterfaces().add(instanceType);
+            Stack<InjectionNode> loopedDependencies = context.getDependencyHistory();
+
+            InjectionNode proxyDependency = findProxyableDependency(injectionNode, loopedDependencies);
+
+            if (proxyDependency == null) {
+                throw new RoboticsAnalysisException("Unable to find a depenency to proxy");
+            }
+
+            VirtualProxyAspect proxyAspect = getProxyAspect(proxyDependency);
+            proxyAspect.getProxyInterfaces().add(proxyDependency.getUsageType());
 
         } else {
             injectionNode = new InjectionNode(instanceType, concreteType);
             //default variable builder
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
-            AnalysisContext nextContext = context.addDependent(concreteType, injectionNode);
+            AnalysisContext nextContext = context.addDependent(injectionNode);
 
-            //loop over super classes (extension and implements
+            //loop over super classes (extension and implements)
             scanClassHierarchy(concreteType, injectionNode, nextContext);
         }
 
         return injectionNode;
+    }
+
+    private InjectionNode findProxyableDependency(InjectionNode duplicateDepedency, Stack<InjectionNode> loopedDependencies) {
+        if (!duplicateDepedency.getUsageType().isConcreteClass()) {
+            return duplicateDepedency;
+        }
+        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && loopInjectionNode != duplicateDepedency; loopInjectionNode = loopedDependencies.pop()) {
+            if (!loopInjectionNode.getUsageType().isConcreteClass()) {
+                //found interface
+                return loopInjectionNode;
+            }
+        }
+
+        return null;
     }
 
     private void scanClassHierarchy(ASTType concreteType, InjectionNode injectionNode, AnalysisContext context) {

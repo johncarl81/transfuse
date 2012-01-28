@@ -77,6 +77,7 @@ public class InjectionPointFactory {
      * Build a Field InjectionPoint from the given ASTField
      *
      * @param astField required ASTField
+     * @param context
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
@@ -84,16 +85,12 @@ public class InjectionPointFactory {
     }
 
     /**
-     * Build a Field InjectionPoint directly from the given ASTType
+     * Build a InjectionPoint directly from the given ASTType
      *
-     * @param modifier
      * @param astType
-     * @return
+     * @param context
+     * @return Injection Node
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTAccessModifier modifier, ASTType astType, AnalysisContext context) {
-        return new FieldInjectionPoint(modifier, astType.getName(), buildInjectionNode(astType, context), context.getSuperClassLevel());
-    }
-
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
     }

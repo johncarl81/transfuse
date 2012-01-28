@@ -57,19 +57,19 @@ public class VariableBuilderRepositoryFactory {
         systemService.put(Context.KEYGUARD_SERVICE, KeyguardManager.class);
         systemService.put(Context.LAYOUT_INFLATER_SERVICE, LayoutInflater.class);
         systemService.put(Context.LOCATION_SERVICE, LocationManager.class);
-        //put(Context.NFC_SERVICE, NfcManager.class);
+        //systemService.put(Context.NFC_SERVICE, NfcManager.class);
         systemService.put(Context.NOTIFICATION_SERVICE, NotificationManager.class);
         systemService.put(Context.POWER_SERVICE, PowerManager.class);
         systemService.put(Context.SEARCH_SERVICE, SearchManager.class);
         systemService.put(Context.SENSOR_SERVICE, SensorManager.class);
-        //put(Context.STORAGE_SERVICE, StorageManager.class);
+        //systemService.put(Context.STORAGE_SERVICE, StorageManager.class);
         systemService.put(Context.TELEPHONY_SERVICE, TelephonyManager.class);
-        //put(Context.TEXT_SERVICES_MANAGER_SERVICE, TextServicesManager.class);
+        //systemService.put(Context.TEXT_SERVICES_MANAGER_SERVICE, TextServicesManager.class);
         systemService.put(Context.UI_MODE_SERVICE, UiModeManager.class);
-        //put(Context.USB_SERVICE, UsbManager.class);
+        //systemService.put(Context.USB_SERVICE, UsbManager.class);
         systemService.put(Context.VIBRATOR_SERVICE, Vibrator.class);
         systemService.put(Context.WALLPAPER_SERVICE, WallpaperService.class);
-        //put(Context.WIFI_P2P_SERVICE, WifiP2pManager.class);
+        //systemService.put(Context.WIFI_P2P_SERVICE, WifiP2pManager.class);
         systemService.put(Context.WIFI_SERVICE, WifiManager.class);
         systemService.put(Context.WINDOW_SERVICE, WindowManager.class);
     }
