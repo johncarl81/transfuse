@@ -12,7 +12,6 @@ public class FieldInjectionPoint {
     private ASTAccessModifier modifier;
     private boolean proxied;
     private int subclassLevel;
-    private boolean injected;
 
     public FieldInjectionPoint(ASTAccessModifier modifier, String name, InjectionNode injectionNode, int subclassLevel) {
         this.modifier = modifier;
@@ -40,13 +39,5 @@ public class FieldInjectionPoint {
 
     public int getSubclassLevel() {
         return proxied ? subclassLevel + 1 : subclassLevel;
-    }
-
-    public boolean isInjected() {
-        return injected;
-    }
-
-    public void setInjected(boolean injected) {
-        this.injected = injected;
     }
 }

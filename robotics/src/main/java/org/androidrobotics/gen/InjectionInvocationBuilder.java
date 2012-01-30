@@ -95,14 +95,14 @@ public class InjectionInvocationBuilder {
                 .arg(nodeMap.get(node));
     }
 
-    public JInvocation buildConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+    public JInvocation buildConstructorInjection(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
         if (ASTAccessModifier.PUBLIC.equals(constructorInjectionPoint.getAccessModifier())) {
-            return buildPublicConstructorCall(nodeMap, constructorInjectionPoint, type);
+            return buildPublicConstructorInjection(nodeMap, constructorInjectionPoint, type);
         }
-        return buildPrivateConstructorCall(nodeMap, constructorInjectionPoint, type);
+        return buildPrivateConstructorInjection(nodeMap, constructorInjectionPoint, type);
     }
 
-    public JInvocation buildPublicConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+    public JInvocation buildPublicConstructorInjection(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
         //public clase:
         JInvocation constructorInvocation = JExpr._new(type);
 
@@ -114,7 +114,7 @@ public class InjectionInvocationBuilder {
     }
 
 
-    public JInvocation buildPrivateConstructorCall(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+    public JInvocation buildPrivateConstructorInjection(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
         JInvocation constructorInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_CONSTRUCTOR_METHOD)

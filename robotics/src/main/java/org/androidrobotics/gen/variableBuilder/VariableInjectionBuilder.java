@@ -2,7 +2,6 @@ package org.androidrobotics.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidrobotics.analysis.RoboticsAnalysisException;
-import org.androidrobotics.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidrobotics.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidrobotics.gen.InjectionBuilderContext;
 import org.androidrobotics.gen.InjectionInvocationBuilder;
@@ -40,15 +39,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
         JVar variableRef;
         try {
 
-            InjectionNode proxyableInjectionNode = injectionNode;
-
-            //AOP proxy (if applicable)
-            if (injectionNode.containsAspect(AOPProxyAspect.class)) {
-                proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
-            }
+            //AOP proxy (if applicable).  This method will return the injectionNode (without proxying) if no AOPProxyAspect exists
+            InjectionNode proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
 
             injectionBuilderContext.setupInjectionRequirements(proxyableInjectionNode);
-
 
             JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
 
@@ -59,7 +53,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             //constructor injection
             block.assign(variableRef,
-                    injectionInvocationBuilder.buildConstructorCall(
+                    injectionInvocationBuilder.buildConstructorInjection(
                             injectionBuilderContext.getVariableMap(),
                             injectionAspect.getConstructorInjectionPoint(),
                             nodeType));
@@ -71,8 +65,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 injectionBuilderContext.getVariableMap(),
                                 fieldInjectionPoint,
                                 variableRef));
-
-                fieldInjectionPoint.setInjected(true);
             }
 
             //method injection
@@ -82,8 +74,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 injectionBuilderContext.getVariableMap(),
                                 methodInjectionPoint,
                                 variableRef));
-
-                methodInjectionPoint.setInjected(true);
             }
 
         } catch (ClassNotFoundException e) {

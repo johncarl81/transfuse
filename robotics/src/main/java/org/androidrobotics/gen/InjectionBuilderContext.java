@@ -58,12 +58,13 @@ public class InjectionBuilderContext {
                 ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
                 JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(this, injectionNode, proxyDescriptor);
                 variableMap.put(injectionNode, proxyVariable);
-                //then init dependencies
+                //init dependencies
                 setupInjectionRequirements(injectionNode);
                 //and initialize delegate
-                variable = virtualProxyGenerator.initalizeProxy(this, proxyVariable, executeVariableBuilder(injectionNode));
+                JExpression delegateVariable = executeVariableBuilder(injectionNode);
+                variable = virtualProxyGenerator.initalizeProxy(this, proxyVariable, delegateVariable);
 
-                variableMap.put(injectionNode, variable);
+                variableMap.put(injectionNode, delegateVariable);
             } else {
                 variable = executeVariableBuilder(injectionNode);
                 variableMap.put(injectionNode, variable);

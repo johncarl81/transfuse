@@ -11,7 +11,6 @@ public class MethodInjectionPoint extends InjectionPointBase {
     private ASTAccessModifier accessModifier;
     private int superClassLevel;
     private boolean proxied;
-    private boolean injected;
 
     public MethodInjectionPoint(ASTAccessModifier accessModifier, String name, int superClassLevel) {
         this.name = name;
@@ -33,13 +32,5 @@ public class MethodInjectionPoint extends InjectionPointBase {
 
     public void setProxied(boolean proxied) {
         this.proxied = proxied;
-    }
-
-    public boolean isInjected() {
-        return injected;
-    }
-
-    public void setInjected(boolean injected) {
-        this.injected = injected;
     }
 }

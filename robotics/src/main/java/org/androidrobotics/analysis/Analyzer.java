@@ -64,6 +64,7 @@ public class Analyzer {
     }
 
     private InjectionNode findProxyableDependency(InjectionNode duplicateDepedency, Stack<InjectionNode> loopedDependencies) {
+        //there may be better ways to identify the proxyable injection node.
         if (!duplicateDepedency.getUsageType().isConcreteClass()) {
             return duplicateDepedency;
         }

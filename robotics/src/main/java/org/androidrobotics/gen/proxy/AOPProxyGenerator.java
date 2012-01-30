@@ -40,6 +40,9 @@ public class AOPProxyGenerator {
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(AOPProxyAspect.class)) {
+            return injectionNode;
+        }
         if (!aopProxiesGenerated.containsKey(injectionNode.getClassName())) {
             InjectionNode proxyInjectionNode = innerGenerateProxyCode(injectionNode);
             aopProxiesGenerated.put(injectionNode.getClassName(), proxyInjectionNode);
