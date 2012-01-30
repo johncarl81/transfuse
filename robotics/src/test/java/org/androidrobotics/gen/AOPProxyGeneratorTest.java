@@ -40,6 +40,7 @@ public class AOPProxyGeneratorTest {
     private static final String TEST_PACKLAGE = "org.androidrobotics.gen";
     private static final String TEST_NAME = "MockDelegate_AOPProxy";
     private static final String PRIMITIVE_METHOD = "primitiveCall";
+    private static final int SECOND_VALUE = 42;
     private static final PackageClass TEST_PACKAGE_FILENAME = new PackageClass(TEST_PACKLAGE, TEST_NAME);
 
     private InjectionNode delegateInjectionNode;
@@ -152,8 +153,9 @@ public class AOPProxyGeneratorTest {
         proxy.setValue(INPUT_VALUE);
         assertEquals(TEST_VALUE, proxy.passThroughValue(INPUT_VALUE));
         assertTrue(proxy.primitiveCall());
+        proxy.setValue(SECOND_VALUE);
 
-        assertTrue(proxy.validate(INPUT_VALUE, INPUT_VALUE));
+        assertTrue(proxy.validate(INPUT_VALUE, INPUT_VALUE, SECOND_VALUE));
     }
 
 }

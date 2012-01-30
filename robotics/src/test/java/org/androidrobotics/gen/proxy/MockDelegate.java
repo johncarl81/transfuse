@@ -2,11 +2,12 @@ package org.androidrobotics.gen.proxy;
 
 import org.androidrobotics.gen.VirtualProxyGeneratorTest;
 
-public class MockDelegate implements MockInterface {
+public class MockDelegate implements MockInterface, SecondMockInteface {
 
     private boolean exectuted = false;
     private String valueOne;
     private String passThroughValue;
+    private int secondValue = 0;
 
     @Override
     public void execute() {
@@ -24,6 +25,11 @@ public class MockDelegate implements MockInterface {
     }
 
     @Override
+    public void setValue(int value) {
+        this.secondValue = value;
+    }
+
+    @Override
     public String passThroughValue(String input) {
         passThroughValue = input;
         return VirtualProxyGeneratorTest.TEST_VALUE;
@@ -33,7 +39,7 @@ public class MockDelegate implements MockInterface {
         return true;
     }
 
-    public boolean validate(String inputOne, String inputTwo) {
-        return exectuted && inputOne.equals(valueOne) && inputTwo.equals(passThroughValue);
+    public boolean validate(String inputOne, String inputTwo, int secondValue) {
+        return exectuted && inputOne.equals(valueOne) && inputTwo.equals(passThroughValue) && this.secondValue == secondValue;
     }
 }

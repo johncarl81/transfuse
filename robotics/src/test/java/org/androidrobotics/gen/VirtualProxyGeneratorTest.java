@@ -10,10 +10,7 @@ import org.androidrobotics.analysis.adapter.ASTClassFactory;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidrobotics.config.RoboticsGenerationGuiceModule;
-import org.androidrobotics.gen.proxy.DelayedLoad;
-import org.androidrobotics.gen.proxy.MockDelegate;
-import org.androidrobotics.gen.proxy.MockInterface;
-import org.androidrobotics.gen.proxy.VirtualProxyGenerator;
+import org.androidrobotics.gen.proxy.*;
 import org.androidrobotics.model.InjectionNode;
 import org.androidrobotics.model.ProxyDescriptor;
 import org.androidrobotics.util.JavaUtilLogger;
@@ -34,6 +31,7 @@ public class VirtualProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
     private static final String INPUT_VALUE = "input";
+    private static final int SECOND_VALUE = 42;
 
     private InjectionNode delegateInjectionNode;
     @Inject
@@ -53,11 +51,13 @@ public class VirtualProxyGeneratorTest {
         injector.injectMembers(this);
 
         ASTType interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
+        ASTType secondInterfaceAST = astClassFactory.buildASTClassType(SecondMockInteface.class);
         ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
         VirtualProxyAspect proxyAspect = new VirtualProxyAspect();
         proxyAspect.getProxyInterfaces().add(interfaceAST);
+        proxyAspect.getProxyInterfaces().add(secondInterfaceAST);
 
         delegateInjectionNode.addAspect(proxyAspect);
     }
@@ -84,8 +84,9 @@ public class VirtualProxyGeneratorTest {
         assertEquals(TEST_VALUE, proxy.getValue());
         proxy.setValue(INPUT_VALUE);
         assertEquals(TEST_VALUE, proxy.passThroughValue(INPUT_VALUE));
+        ((SecondMockInteface) proxy).setValue(SECOND_VALUE);
 
-        assertTrue(delegate.validate(INPUT_VALUE, INPUT_VALUE));
+        assertTrue(delegate.validate(INPUT_VALUE, INPUT_VALUE, SECOND_VALUE));
     }
 
 }
