@@ -58,6 +58,10 @@ public enum ASTPrimitiveType implements ASTType {
         return label;
     }
 
+    public Class getObjectClass() {
+        return clazz;
+    }
+
     @Override
     public boolean isConcreteClass() {
         return false;
