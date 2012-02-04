@@ -11,6 +11,7 @@ import org.androidrobotics.gen.InjectionBuilderContextFactory;
 import org.androidrobotics.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
 import org.androidrobotics.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory;
+import org.androidrobotics.processor.ProcessorFactory;
 import org.androidrobotics.util.Logger;
 import org.androidrobotics.util.ManifestLocatorFactory;
 
@@ -29,23 +30,13 @@ public class RoboticsGenerationGuiceModule extends AbstractModule {
     protected void configure() {
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
-        install(factoryModuleBuilder
-                .build(InjectionBuilderContextFactory.class));
-
-        install(factoryModuleBuilder
-                .build(VariableInjectionBuilderFactory.class));
-
-        install(factoryModuleBuilder
-                .build(MethodBasedResourceExpressionBuilderFactory.class));
-
-        install(factoryModuleBuilder
-                .build(MethodBasedResourceExpressionBuilderAdaptorFactory.class));
-
-        install(factoryModuleBuilder
-                .build(ASTElementAnnotationFactory.class));
-
-        install(factoryModuleBuilder
-                .build(ManifestLocatorFactory.class));
+        install(factoryModuleBuilder.build(InjectionBuilderContextFactory.class));
+        install(factoryModuleBuilder.build(VariableInjectionBuilderFactory.class));
+        install(factoryModuleBuilder.build(MethodBasedResourceExpressionBuilderFactory.class));
+        install(factoryModuleBuilder.build(MethodBasedResourceExpressionBuilderAdaptorFactory.class));
+        install(factoryModuleBuilder.build(ASTElementAnnotationFactory.class));
+        install(factoryModuleBuilder.build(ManifestLocatorFactory.class));
+        install(factoryModuleBuilder.build(ProcessorFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 

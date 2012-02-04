@@ -14,6 +14,9 @@ import org.androidrobotics.model.manifest.Manifest;
 import org.androidrobotics.model.r.RBuilder;
 import org.androidrobotics.model.r.RResource;
 import org.androidrobotics.model.r.RResourceComposite;
+import org.androidrobotics.processor.ApplicationProcessor;
+import org.androidrobotics.processor.ComponentProcessor;
+import org.androidrobotics.processor.RoboticsAssembler;
 import org.androidrobotics.util.*;
 
 import javax.annotation.processing.*;
@@ -86,22 +89,26 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
             roboticsProcessor.processR(r);
 
-            roboticsProcessor.processApplication(wrapASTCollection(
+            ApplicationProcessor applicationProcessor = roboticsProcessor.getApplicationProcessor();
+
+            ComponentProcessor componentProcessor = applicationProcessor.processApplication(wrapASTCollection(
                     roundEnvironment.getElementsAnnotatedWith(Application.class)
             ));
 
             for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
-                roboticsProcessor.processComponent(wrapASTCollection(
+                componentProcessor.processComponent(wrapASTCollection(
                         roundEnvironment.getElementsAnnotatedWith(annotationClass)
                 ));
             }
 
+            RoboticsAssembler roboticsAssembler = componentProcessor.getRoboticsAssembler();
+
             Filer filer = processingEnv.getFiler();
 
-            roboticsProcessor.writeSource(new FilerSourceCodeWriter(filer),
+            roboticsAssembler.writeSource(new FilerSourceCodeWriter(filer),
                     new ResourceCodeWriter(filer));
 
-            Manifest updatedManifest = roboticsProcessor.getManifest();
+            Manifest updatedManifest = roboticsAssembler.getManifest();
 
             //write back out, updating from processed classes
             manifestParser.writeManifest(updatedManifest, manifestFile);
