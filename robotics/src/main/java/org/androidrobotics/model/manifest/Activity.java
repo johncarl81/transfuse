@@ -3,6 +3,8 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidrobotics.processor.Mergable;
+import org.androidrobotics.processor.Merge;
 
 import java.util.List;
 
@@ -50,7 +52,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Activity {
+public class Activity implements Mergable<String> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -84,6 +86,7 @@ public class Activity {
     private String icon;
     @XStreamAlias("android:label")
     @XStreamAsAttribute
+    @Merge
     private String label;
     @XStreamAlias("android:launchMode")
     @XStreamAsAttribute
@@ -121,6 +124,9 @@ public class Activity {
     @XStreamAlias("android:windowSoftInputMode")
     @XStreamAsAttribute
     private WindowSoftInputMode windowSoftInputMode;
+    @XStreamAlias("transfuse")
+    @XStreamAsAttribute
+    private String tag;
 
     @XStreamImplicit(itemFieldName = "intent-filter")
     private List<IntentFilter> intentFilters;
@@ -347,5 +353,20 @@ public class Activity {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
+    }
+
+    @Override
+    public void setMergeTag(String tag) {
+        this.tag = tag;
+    }
+
+    @Override
+    public String getMergeTag() {
+        return tag;
     }
 }

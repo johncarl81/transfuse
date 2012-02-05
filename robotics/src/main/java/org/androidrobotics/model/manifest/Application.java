@@ -3,6 +3,8 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidrobotics.processor.Mergable;
+import org.androidrobotics.processor.MergeCollection;
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +43,7 @@ import java.util.Set;
  * @author John Ericksen
  */
 @XStreamAlias("application")
-public class Application {
+public class Application implements Mergable<String> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -103,8 +105,12 @@ public class Application {
     @XStreamAlias("android:uiOptions")
     @XStreamAsAttribute
     private UIOptions uiOptions;
+    @XStreamAlias("transfuse")
+    @XStreamAsAttribute
+    private String tag;
 
     @XStreamImplicit(itemFieldName = "activity")
+    @MergeCollection
     private Set<Activity> activities;
     @XStreamImplicit(itemFieldName = "activity-alias")
     private List<ActivityAlias> activityAliases;
@@ -323,5 +329,20 @@ public class Application {
 
     public void setUsesLibraries(List<UsesLibrary> usesLibraries) {
         this.usesLibraries = usesLibraries;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
+    }
+
+    @Override
+    public void setMergeTag(String tag) {
+        this.tag = tag;
+    }
+
+    @Override
+    public String getMergeTag() {
+        return tag;
     }
 }

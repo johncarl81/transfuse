@@ -9,11 +9,12 @@ import org.androidrobotics.analysis.ModuleProcessor;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.ApplicationGenerator;
 import org.androidrobotics.model.ApplicationDescriptor;
+import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * @author John Ericksen
@@ -42,28 +43,38 @@ public class ApplicationProcessor {
         this.analysisRepositoryFactory = analysisRepositoryFactory;
     }
 
-    public ComponentProcessor processApplication(Collection<? extends ASTType> astTypes) {
+    public ComponentProcessor processApplication(ASTType astType) {
         AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
 
         ModuleProcessor moduleProcessor = context.getModuleProcessor();
 
-        for (ASTType astType : astTypes) {
+        ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
 
-            ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
+        if (applicationDescriptor != null) {
 
-            if (applicationDescriptor != null) {
-                try {
-                    applicationGenerator.generate(applicationDescriptor, context.getRResource());
-                } catch (IOException e) {
-                    logger.error("IOException while generating activity", e);
-                } catch (JClassAlreadyExistsException e) {
-                    logger.error("JClassAlreadyExistsException while generating activity", e);
-                } catch (ClassNotFoundException e) {
-                    logger.error("ClassNotFoundException while generating activity", e);
-                }
+            if (context.getSourceManifest().getApplications() == null) {
+                context.getSourceManifest().setApplications(new ArrayList<Application>());
             }
+
+            context.getSourceManifest().getApplications().add(applicationDescriptor.getManifestApplication());
+
+            try {
+                applicationGenerator.generate(applicationDescriptor, context.getRResource());
+            } catch (IOException e) {
+                logger.error("IOException while generating activity", e);
+            } catch (JClassAlreadyExistsException e) {
+                logger.error("JClassAlreadyExistsException while generating activity", e);
+            } catch (ClassNotFoundException e) {
+                logger.error("ClassNotFoundException while generating activity", e);
+            }
+
+            return processorFactory.buildComponentProcessor(context, applicationDescriptor.getManifestApplication());
         }
 
-        return processorFactory.buildComponentProcessor(context);
+        return null; //todo: throw exception?
+    }
+
+    public RoboticsAssembler getRoboticsAssembler() {
+        return processorFactory.buildAssembler(context);
     }
 }

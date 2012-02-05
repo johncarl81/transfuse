@@ -1,5 +1,7 @@
 package org.androidrobotics.model;
 
+import org.androidrobotics.model.manifest.Application;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class ApplicationDescriptor {
     private PackageClass packageClass;
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
     private String label;
+    private Application manifestApplication;
 
     public PackageClass getPackageClass() {
         return packageClass;
@@ -34,5 +37,13 @@ public class ApplicationDescriptor {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public void setManifestApplication(Application manifestApplication) {
+        this.manifestApplication = manifestApplication;
+    }
+
+    public Application getManifestApplication() {
+        return manifestApplication;
     }
 }

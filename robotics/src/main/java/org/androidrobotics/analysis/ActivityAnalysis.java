@@ -64,6 +64,11 @@ public class ActivityAnalysis {
 
             activityDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(input, context));
+
+            org.androidrobotics.model.manifest.Activity manifestActivity = new org.androidrobotics.model.manifest.Activity("." + activityAnnotation.name(), activityAnnotation.label());
+            manifestActivity.setMergeTag("yes");//todo: common tagger?
+
+            activityDescriptor.setManifestActivity(manifestActivity);
         }
         return activityDescriptor;
     }

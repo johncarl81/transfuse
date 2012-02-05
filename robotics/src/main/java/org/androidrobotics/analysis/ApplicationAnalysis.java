@@ -54,6 +54,14 @@ public class ApplicationAnalysis {
 
             applicationDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(astType, context));
+
+
+            org.androidrobotics.model.manifest.Application manifestApplication = new org.androidrobotics.model.manifest.Application();
+
+            manifestApplication.setName("." + activityAnnotation.name());
+            manifestApplication.setMergeTag("yes");//todo: common tagger?
+
+            applicationDescriptor.setManifestApplication(manifestApplication);
         }
 
         return applicationDescriptor;

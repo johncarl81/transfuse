@@ -91,24 +91,26 @@ public class RoboticsAnnotationProcessor extends AbstractProcessor {
 
             ApplicationProcessor applicationProcessor = roboticsProcessor.getApplicationProcessor();
 
-            ComponentProcessor componentProcessor = applicationProcessor.processApplication(wrapASTCollection(
-                    roundEnvironment.getElementsAnnotatedWith(Application.class)
-            ));
+            for (ASTType applicationType : wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class))) {
 
-            for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
-                componentProcessor.processComponent(wrapASTCollection(
-                        roundEnvironment.getElementsAnnotatedWith(annotationClass)
-                ));
+                //todo: application affinity?
+                ComponentProcessor componentProcessor = applicationProcessor.processApplication(applicationType);
+
+                for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
+                    componentProcessor.processComponent(wrapASTCollection(
+                            roundEnvironment.getElementsAnnotatedWith(annotationClass)
+                    ));
+                }
             }
 
-            RoboticsAssembler roboticsAssembler = componentProcessor.getRoboticsAssembler();
+            RoboticsAssembler roboticsAssembler = applicationProcessor.getRoboticsAssembler();
 
             Filer filer = processingEnv.getFiler();
 
             roboticsAssembler.writeSource(new FilerSourceCodeWriter(filer),
                     new ResourceCodeWriter(filer));
 
-            Manifest updatedManifest = roboticsAssembler.getManifest();
+            Manifest updatedManifest = roboticsAssembler.buildManifest();
 
             //write back out, updating from processed classes
             manifestParser.writeManifest(updatedManifest, manifestFile);

@@ -3,6 +3,8 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidrobotics.processor.Mergable;
+import org.androidrobotics.processor.MergeCollection;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @XStreamAlias("manifest")
-public class Manifest {
+public class Manifest implements Mergable<String> {
 
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
@@ -57,6 +59,7 @@ public class Manifest {
     private InstallLocation installLocation;
 
     @XStreamImplicit(itemFieldName = "application")
+    @MergeCollection
     private List<Application> applications;
     @XStreamImplicit(itemFieldName = "instrumentation")
     private List<Instrumentation> instrumentations;
@@ -217,5 +220,20 @@ public class Manifest {
 
     public void setCompatibleScreens(List<CompatibleScreens> compatibleScreens) {
         this.compatibleScreens = compatibleScreens;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "Manifest";
+    }
+
+    @Override
+    public void setMergeTag(String tag) {
+        //noop
+    }
+
+    @Override
+    public String getMergeTag() {
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package org.androidrobotics.model;
 
+import org.androidrobotics.model.manifest.Activity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class ActivityDescriptor {
     private int layout;
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
     private String label;
+    private Activity manifestActivity;
 
     public PackageClass getPackageClass() {
         return packageClass;
@@ -43,5 +46,13 @@ public class ActivityDescriptor {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Activity getManifestActivity() {
+        return manifestActivity;
+    }
+
+    public void setManifestActivity(Activity manifestActivity) {
+        this.manifestActivity = manifestActivity;
     }
 }

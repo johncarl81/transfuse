@@ -8,6 +8,7 @@ import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.security.PrivilegedActionException;
 
 /**
  * @author John Ericksen
@@ -17,12 +18,14 @@ public class RoboticsAssembler {
     private JCodeModel codeModel;
     private Logger logger;
     private ProcessorContext context;
+    private Merger merger;
 
     @Inject
-    public RoboticsAssembler(@Assisted ProcessorContext context, JCodeModel codeModel, Logger logger) {
+    public RoboticsAssembler(@Assisted ProcessorContext context, JCodeModel codeModel, Logger logger, Merger merger) {
         this.codeModel = codeModel;
         this.logger = logger;
         this.context = context;
+        this.merger = merger;
     }
 
     public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {
@@ -37,7 +40,19 @@ public class RoboticsAssembler {
         }
     }
 
-    public Manifest getManifest() {
+    public Manifest buildManifest() {
+
+        try {
+            System.out.println("Size of source; " + context.getSourceManifest().getApplications().size());
+            return merger.merge(context.getManifest(), context.getSourceManifest());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            logger.error("Error while merging manifest", e);
+        } catch (PrivilegedActionException e) {
+            e.printStackTrace();
+            logger.error("Error while merging manifest", e);
+        }
+
         return context.getManifest();
     }
 }

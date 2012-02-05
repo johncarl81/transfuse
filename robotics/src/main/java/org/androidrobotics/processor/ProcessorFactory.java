@@ -1,6 +1,7 @@
 package org.androidrobotics.processor;
 
 import org.androidrobotics.analysis.ModuleProcessor;
+import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.model.manifest.Manifest;
 import org.androidrobotics.model.r.RResource;
 
@@ -10,7 +11,7 @@ import org.androidrobotics.model.r.RResource;
 public interface ProcessorFactory {
     ApplicationProcessor buildApplicationProcessor(ProcessorContext context);
 
-    ComponentProcessor buildComponentProcessor(ProcessorContext context);
+    ComponentProcessor buildComponentProcessor(ProcessorContext context, Application application);
 
     RoboticsAssembler buildAssembler(ProcessorContext context);
 

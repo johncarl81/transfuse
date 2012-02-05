@@ -13,6 +13,7 @@ import javax.inject.Inject;
 public class ProcessorContext {
 
     private Manifest manifest;
+    private Manifest sourceManifest = new Manifest();
     private RResource rResource;
     private ModuleProcessor moduleProcessor;
 
@@ -33,5 +34,9 @@ public class ProcessorContext {
 
     public ModuleProcessor getModuleProcessor() {
         return moduleProcessor;
+    }
+
+    public Manifest getSourceManifest() {
+        return sourceManifest;
     }
 }
