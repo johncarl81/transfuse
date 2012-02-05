@@ -3,11 +3,11 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.androidrobotics.processor.Mergable;
 import org.androidrobotics.processor.MergeCollection;
+import org.androidrobotics.processor.Mergeable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * attributes
@@ -43,7 +43,7 @@ import java.util.Set;
  * @author John Ericksen
  */
 @XStreamAlias("application")
-public class Application implements Mergable<String> {
+public class Application extends Mergeable<String> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -105,23 +105,20 @@ public class Application implements Mergable<String> {
     @XStreamAlias("android:uiOptions")
     @XStreamAsAttribute
     private UIOptions uiOptions;
-    @XStreamAlias("transfuse")
-    @XStreamAsAttribute
-    private String tag;
 
     @XStreamImplicit(itemFieldName = "activity")
     @MergeCollection
-    private Set<Activity> activities;
+    private List<Activity> activities = new ArrayList<Activity>();
     @XStreamImplicit(itemFieldName = "activity-alias")
-    private List<ActivityAlias> activityAliases;
+    private List<ActivityAlias> activityAliases = new ArrayList<ActivityAlias>();
     @XStreamImplicit(itemFieldName = "service")
-    private List<Service> services;
+    private List<Service> services = new ArrayList<Service>();
     @XStreamImplicit(itemFieldName = "receiver")
-    private List<Receiver> receivers;
+    private List<Receiver> receivers = new ArrayList<Receiver>();
     @XStreamImplicit(itemFieldName = "provider")
-    private List<Provider> providers;
+    private List<Provider> providers = new ArrayList<Provider>();
     @XStreamImplicit(itemFieldName = "uses-library")
-    private List<UsesLibrary> usesLibraries;
+    private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
 
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
@@ -283,11 +280,11 @@ public class Application implements Mergable<String> {
         this.uiOptions = uiOptions;
     }
 
-    public Set<Activity> getActivities() {
+    public List<Activity> getActivities() {
         return activities;
     }
 
-    public void setActivities(Set<Activity> activities) {
+    public void setActivities(List<Activity> activities) {
         this.activities = activities;
     }
 
@@ -334,15 +331,5 @@ public class Application implements Mergable<String> {
     @Override
     public String getIdentifier() {
         return name;
-    }
-
-    @Override
-    public void setMergeTag(String tag) {
-        this.tag = tag;
-    }
-
-    @Override
-    public String getMergeTag() {
-        return tag;
     }
 }

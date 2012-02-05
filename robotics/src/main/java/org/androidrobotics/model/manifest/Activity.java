@@ -3,9 +3,11 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.androidrobotics.processor.Mergable;
 import org.androidrobotics.processor.Merge;
+import org.androidrobotics.processor.MergeCollection;
+import org.androidrobotics.processor.Mergeable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Activity implements Mergable<String> {
+public class Activity extends Mergeable<String> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -124,14 +126,12 @@ public class Activity implements Mergable<String> {
     @XStreamAlias("android:windowSoftInputMode")
     @XStreamAsAttribute
     private WindowSoftInputMode windowSoftInputMode;
-    @XStreamAlias("transfuse")
-    @XStreamAsAttribute
-    private String tag;
 
     @XStreamImplicit(itemFieldName = "intent-filter")
-    private List<IntentFilter> intentFilters;
+    @MergeCollection
+    private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
     @XStreamImplicit(itemFieldName = "meta-data")
-    private List<MetaData> metaData;
+    private List<MetaData> metaData = new ArrayList<MetaData>();
 
     public Activity(String name, String label) {
         this.name = name;
@@ -358,15 +358,5 @@ public class Activity implements Mergable<String> {
     @Override
     public String getIdentifier() {
         return name;
-    }
-
-    @Override
-    public void setMergeTag(String tag) {
-        this.tag = tag;
-    }
-
-    @Override
-    public String getMergeTag() {
-        return tag;
     }
 }

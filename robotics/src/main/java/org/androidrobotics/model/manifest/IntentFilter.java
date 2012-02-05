@@ -3,7 +3,10 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidrobotics.processor.MergeCollection;
+import org.androidrobotics.processor.Mergeable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +24,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class IntentFilter {
+public class IntentFilter extends Mergeable<String> {
 
     @XStreamAlias("android:icon")
     @XStreamAsAttribute
@@ -33,11 +36,13 @@ public class IntentFilter {
     @XStreamAsAttribute
     private Integer priority;
     @XStreamImplicit(itemFieldName = "action")
-    private List<Action> actions;
+    @MergeCollection
+    private List<Action> actions = new ArrayList<Action>();
     @XStreamImplicit(itemFieldName = "category")
-    private List<Category> categories;
+    @MergeCollection
+    private List<Category> categories = new ArrayList<Category>();
     @XStreamImplicit(itemFieldName = "data")
-    private List<Data> data;
+    private List<Data> data = new ArrayList<Data>();
 
     public String getIcon() {
         return icon;
@@ -85,5 +90,10 @@ public class IntentFilter {
 
     public void setData(List<Data> data) {
         this.data = data;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "IntentFilter";
     }
 }

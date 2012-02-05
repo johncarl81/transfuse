@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,9 +48,9 @@ public class Receiver {
     private String process;
 
     @XStreamImplicit(itemFieldName = "intent-filter")
-    private List<IntentFilter> intentFilters;
+    private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
     @XStreamImplicit(itemFieldName = "meta-data")
-    private List<MetaData> metaData;
+    private List<MetaData> metaData = new ArrayList<MetaData>();
 
     public Boolean getEnabled() {
         return enabled;

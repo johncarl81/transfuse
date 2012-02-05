@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.security.PrivilegedActionException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
@@ -17,24 +17,23 @@ public class MergerTest {
 
     private Merger merger;
 
-    public static class MergeableRoot implements Mergable<String> {
+    public static class MergeableRoot extends Mergeable<String> {
         String id;
-        String mergeTag;
         String dontMerge;
         @Merge
         String stringValue;
         @Merge
         int intValue;
         @MergeCollection
-        Set<SubMergable> subMergables = new HashSet<SubMergable>();
+        List<SubMergable> subMergables = new ArrayList<SubMergable>();
 
-        public MergeableRoot(String id, String dontMerge, String stringValue, int intValue, Set<SubMergable> subMergables, String tag) {
+        public MergeableRoot(String id, String dontMerge, String stringValue, int intValue, List<SubMergable> subMergables, String tag) {
+            super(tag);
             this.dontMerge = dontMerge;
             this.stringValue = stringValue;
             this.intValue = intValue;
             this.subMergables = subMergables;
             this.id = id;
-            this.mergeTag = tag;
         }
 
         public String getDontMerge() {
@@ -49,7 +48,7 @@ public class MergerTest {
             return intValue;
         }
 
-        public Set<SubMergable> getSubMergables() {
+        public List<SubMergable> getSubMergables() {
             return subMergables;
         }
 
@@ -57,19 +56,9 @@ public class MergerTest {
         public String getIdentifier() {
             return id;
         }
-
-        @Override
-        public void setMergeTag(String tag) {
-            this.mergeTag = tag;
-        }
-
-        @Override
-        public String getMergeTag() {
-            return mergeTag;
-        }
     }
 
-    public static class SubMergable implements Mergable<String> {
+    public static class SubMergable extends Mergeable<String> {
         @Merge
         String value;
 
@@ -79,10 +68,10 @@ public class MergerTest {
         String id;
 
         public SubMergable(String id, String value, String dontMergeValue, String tag) {
+            super(tag);
             this.value = value;
             this.dontMergeValue = dontMergeValue;
             this.id = id;
-            this.mergeTag = tag;
         }
 
         public String getValue() {
@@ -97,16 +86,6 @@ public class MergerTest {
         public String getIdentifier() {
             return id;
         }
-
-        @Override
-        public void setMergeTag(String tag) {
-            this.mergeTag = tag;
-        }
-
-        @Override
-        public String getMergeTag() {
-            return mergeTag;
-        }
     }
 
     @Before
@@ -116,8 +95,8 @@ public class MergerTest {
 
     @Test
     public void testMerge() throws IllegalAccessException, PrivilegedActionException {
-        Set<SubMergable> subMergablesOne = new HashSet<SubMergable>();
-        Set<SubMergable> subMergablesTwo = new HashSet<SubMergable>();
+        List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
+        List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
         subMergablesOne.add(new SubMergable("1", "five", "six", "tag"));
         subMergablesTwo.add(new SubMergable("1", "seven", "eight", "tag"));
@@ -138,8 +117,8 @@ public class MergerTest {
 
     @Test
     public void testNonMatchingMerge() throws IllegalAccessException, PrivilegedActionException {
-        Set<SubMergable> subMergablesOne = new HashSet<SubMergable>();
-        Set<SubMergable> subMergablesTwo = new HashSet<SubMergable>();
+        List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
+        List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
         subMergablesOne.add(new SubMergable("1", "five", "six", "tag"));
         subMergablesTwo.add(new SubMergable("2", "seven", "eight", "tag"));
@@ -160,8 +139,8 @@ public class MergerTest {
 
     @Test
     public void testNullMerge() throws IllegalAccessException, PrivilegedActionException {
-        Set<SubMergable> subMergablesOne = new HashSet<SubMergable>();
-        Set<SubMergable> subMergablesTwo = new HashSet<SubMergable>();
+        List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
+        List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
         subMergablesOne.add(new SubMergable("1", null, null, "tag"));
         subMergablesTwo.add(new SubMergable("1", "seven", "eight", "tag"));
@@ -178,6 +157,26 @@ public class MergerTest {
         SubMergable subMergable = merged.getSubMergables().iterator().next();
         assertEquals("seven", subMergable.getValue());
         assertNull(subMergable.getDontMergeValue());
+    }
+
+    @Test
+    public void testNullCollection() throws PrivilegedActionException, IllegalAccessException {
+        List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
+
+        subMergablesTwo.add(new SubMergable("1", "seven", "eight", "tag"));
+
+        MergeableRoot one = new MergeableRoot("3", "one", "two", 5, null, "tag");
+        MergeableRoot two = new MergeableRoot("3", null, null, 6, subMergablesTwo, "tag");
+
+        MergeableRoot merged = merger.merge(one, two);
+
+        assertEquals("one", merged.getDontMerge());
+        assertNull(merged.getStringValue());
+        assertEquals(6, merged.getIntValue());
+        assertEquals(1, merged.getSubMergables().size());
+        SubMergable subMergable = merged.getSubMergables().iterator().next();
+        assertEquals("seven", subMergable.getValue());
+        assertEquals("eight", subMergable.getDontMergeValue());
     }
 
 }

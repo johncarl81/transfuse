@@ -3,9 +3,10 @@ package org.androidrobotics.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.androidrobotics.processor.Mergable;
 import org.androidrobotics.processor.MergeCollection;
+import org.androidrobotics.processor.Mergeable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @XStreamAlias("manifest")
-public class Manifest implements Mergable<String> {
+public class Manifest extends Mergeable<String> {
 
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
@@ -60,27 +61,27 @@ public class Manifest implements Mergable<String> {
 
     @XStreamImplicit(itemFieldName = "application")
     @MergeCollection
-    private List<Application> applications;
+    private List<Application> applications = new ArrayList<Application>();
     @XStreamImplicit(itemFieldName = "instrumentation")
-    private List<Instrumentation> instrumentations;
+    private List<Instrumentation> instrumentations = new ArrayList<Instrumentation>();
     @XStreamImplicit(itemFieldName = "permission")
-    private List<Permission> permissions;
+    private List<Permission> permissions = new ArrayList<Permission>();
     @XStreamImplicit(itemFieldName = "permission-group")
-    private List<PermissionGroup> permissionGroups;
+    private List<PermissionGroup> permissionGroups = new ArrayList<PermissionGroup>();
     @XStreamImplicit(itemFieldName = "permission-tree")
-    private List<PermissionTree> permissionTrees;
+    private List<PermissionTree> permissionTrees = new ArrayList<PermissionTree>();
     @XStreamImplicit(itemFieldName = "supports-screens")
-    private List<SupportsScreens> supportsScreens;
+    private List<SupportsScreens> supportsScreens = new ArrayList<SupportsScreens>();
     @XStreamImplicit(itemFieldName = "uses-feature")
-    private List<UsesFeature> usesFeatures;
+    private List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
     @XStreamImplicit(itemFieldName = "uses-configuration")
-    private List<UsesConfiguration> usesConfigurations;
+    private List<UsesConfiguration> usesConfigurations = new ArrayList<UsesConfiguration>();
     @XStreamImplicit(itemFieldName = "uses-permission")
-    private List<UsesPermission> usesPermissions;
+    private List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
     @XStreamImplicit(itemFieldName = "uses-sdk")
-    private List<UsesSDK> usesSDKs;
+    private List<UsesSDK> usesSDKs = new ArrayList<UsesSDK>();
     @XStreamImplicit(itemFieldName = "compatible-screens")
-    private List<CompatibleScreens> compatibleScreens;
+    private List<CompatibleScreens> compatibleScreens = new ArrayList<CompatibleScreens>();
 
     public String getApplicationPackage() {
         return applicationPackage;
@@ -225,15 +226,5 @@ public class Manifest implements Mergable<String> {
     @Override
     public String getIdentifier() {
         return "Manifest";
-    }
-
-    @Override
-    public void setMergeTag(String tag) {
-        //noop
-    }
-
-    @Override
-    public String getMergeTag() {
-        return null;
     }
 }

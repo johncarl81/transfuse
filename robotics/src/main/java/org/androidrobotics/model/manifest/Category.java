@@ -2,6 +2,7 @@ package org.androidrobotics.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidrobotics.processor.Mergeable;
 
 /**
  * attributes
@@ -9,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class Category {
+public class Category extends Mergeable<String> {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute
@@ -21,5 +22,10 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
     }
 }

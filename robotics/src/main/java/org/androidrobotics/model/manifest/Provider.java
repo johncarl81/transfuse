@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,11 +77,11 @@ public class Provider {
     private String writePermission;
 
     @XStreamImplicit(itemFieldName = "meta-data")
-    private List<MetaData> metaData;
+    private List<MetaData> metaData = new ArrayList<MetaData>();
     @XStreamImplicit(itemFieldName = "grant-uri-permission")
-    private List<GrantUriPermission> grantUriPermissionList;
+    private List<GrantUriPermission> grantUriPermissionList = new ArrayList<GrantUriPermission>();
     @XStreamImplicit(itemFieldName = "path-permission")
-    private List<PathPermission> pathPermissions;
+    private List<PathPermission> pathPermissions = new ArrayList<PathPermission>();
 
     public String getAuthorities() {
         return authorities;

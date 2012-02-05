@@ -9,14 +9,12 @@ import org.androidrobotics.analysis.ModuleProcessor;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.ActivityGenerator;
 import org.androidrobotics.model.ActivityDescriptor;
-import org.androidrobotics.model.manifest.Activity;
 import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * @author John Ericksen
@@ -52,10 +50,6 @@ public class ComponentProcessor {
         ModuleProcessor moduleProcessor = context.getModuleProcessor();
 
         for (ASTType astType : astTypes) {
-
-            if (application.getActivities() == null) {
-                application.setActivities(new HashSet<Activity>());
-            }
 
             ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
 

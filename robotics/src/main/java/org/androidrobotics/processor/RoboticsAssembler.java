@@ -43,13 +43,10 @@ public class RoboticsAssembler {
     public Manifest buildManifest() {
 
         try {
-            System.out.println("Size of source; " + context.getSourceManifest().getApplications().size());
             return merger.merge(context.getManifest(), context.getSourceManifest());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
             logger.error("Error while merging manifest", e);
         } catch (PrivilegedActionException e) {
-            e.printStackTrace();
             logger.error("Error while merging manifest", e);
         }
 

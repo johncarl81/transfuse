@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.annotations.Activity;
+import org.androidrobotics.annotations.Intent;
+import org.androidrobotics.annotations.IntentFilters;
 import org.androidrobotics.annotations.Layout;
 import org.androidrobotics.gen.InjectionNodeBuilderRepository;
 import org.androidrobotics.gen.VariableBuilderRepositoryFactory;
@@ -13,9 +15,14 @@ import org.androidrobotics.gen.variableBuilder.ContextVariableInjectionNodeBuild
 import org.androidrobotics.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidrobotics.model.ActivityDescriptor;
 import org.androidrobotics.model.PackageClass;
+import org.androidrobotics.model.manifest.Action;
+import org.androidrobotics.model.manifest.Category;
+import org.androidrobotics.model.manifest.IntentFilter;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity related Analysis
@@ -47,6 +54,7 @@ public class ActivityAnalysis {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         Layout layoutAnnotation = input.getAnnotation(Layout.class);
+        IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
 
         ActivityDescriptor activityDescriptor = null;
 
@@ -67,10 +75,41 @@ public class ActivityAnalysis {
 
             org.androidrobotics.model.manifest.Activity manifestActivity = new org.androidrobotics.model.manifest.Activity("." + activityAnnotation.name(), activityAnnotation.label());
             manifestActivity.setMergeTag("yes");//todo: common tagger?
+            manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
 
             activityDescriptor.setManifestActivity(manifestActivity);
         }
         return activityDescriptor;
+    }
+
+    private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters) {
+        List<IntentFilter> convertedIntentFilters = new ArrayList<IntentFilter>();
+
+        if (intentFilters != null) {
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.setMergeTag("yes"); //todo: common tagger?
+            convertedIntentFilters.add(intentFilter);
+
+            for (Intent intentAnnotation : intentFilters.value()) {
+                switch (intentAnnotation.type()) {
+                    case ACTION:
+                        Action action = new Action();
+                        action.setMergeTag("yes");
+                        action.setName(intentAnnotation.name());
+                        intentFilter.getActions().add(action);
+                        break;
+                    case CATEGORY:
+                        Category category = new Category();
+                        category.setMergeTag("yes");
+                        category.setName(intentAnnotation.name());
+                        intentFilter.getCategories().add(category);
+                        break;
+                }
+            }
+        }
+
+        return convertedIntentFilters;
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(InjectionNodeBuilderRepository injectionNodeBuilderRepository) {

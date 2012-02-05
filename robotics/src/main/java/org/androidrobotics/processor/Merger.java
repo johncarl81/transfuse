@@ -23,13 +23,13 @@ public class Merger {
 
         Class targetClass = target.getClass();
 
-        if (!Mergable.class.isAssignableFrom(targetClass)) {
+        if (!Mergeable.class.isAssignableFrom(targetClass)) {
             return source;
         }
 
         for (Field field : targetClass.getDeclaredFields()) {
-            if (field.isAnnotationPresent(MergeCollection.class) && Collection.class.isAssignableFrom(field.getType())) {
-                updateField(field, target, mergeCollection((Collection) getField(field, target), (Collection) getField(field, source)));
+            if (field.isAnnotationPresent(MergeCollection.class) && List.class.isAssignableFrom(field.getType())) {
+                updateField(field, target, mergeCollection(field, (List) getField(field, target), (List) getField(field, source)));
             }
             if (field.isAnnotationPresent(Merge.class)) {
                 updateField(field, target, merge(getField(field, target), getField(field, source)));
@@ -60,19 +60,19 @@ public class Merger {
         });
     }
 
-    private Collection mergeCollection(Collection target, Collection source) throws IllegalAccessException, PrivilegedActionException {
+    private Collection mergeCollection(Field field, List target, List source) throws IllegalAccessException, PrivilegedActionException {
 
-        Map<Object, Mergable> targetMap = convertToMergable(target);
-        Map<Object, Mergable> sourceMap = convertToMergable(source);
+        Map<Object, Mergeable> targetMap = convertToMergable(target);
+        Map<Object, Mergeable> sourceMap = convertToMergable(source);
         Set<Object> originalTargetKeys = new HashSet<Object>(targetMap.keySet());
 
-        for (Map.Entry<Object, Mergable> mergableSourceEntry : sourceMap.entrySet()) {
+        for (Map.Entry<Object, Mergeable> mergableSourceEntry : sourceMap.entrySet()) {
 
             Object sourceKey = mergableSourceEntry.getKey();
 
             if (targetMap.containsKey(sourceKey)) {
                 //replace
-                Mergable targetValue = targetMap.get(sourceKey);
+                Mergeable targetValue = targetMap.get(sourceKey);
                 if (targetValue.getMergeTag() != null) {
                     targetMap.put(sourceKey, merge(targetValue, mergableSourceEntry.getValue()));
                 }
@@ -83,11 +83,16 @@ public class Merger {
         }
 
         for (Object targetKey : originalTargetKeys) {
-            Mergable mergable = targetMap.get(targetKey);
+            Mergeable mergable = targetMap.get(targetKey);
 
             if (mergable.getMergeTag() != null) {
                 targetMap.remove(targetKey);
             }
+        }
+
+        //merger only supports Lists for collections
+        if (target == null) {
+            target = new ArrayList();
         }
 
         target.clear();
@@ -95,16 +100,16 @@ public class Merger {
         return target;
     }
 
-    private Map<Object, Mergable> convertToMergable(Collection input) {
-        Map<Object, Mergable> mergeable = new HashMap<Object, Mergable>();
+    private Map<Object, Mergeable> convertToMergable(Collection input) {
+        Map<Object, Mergeable> mergeable = new HashMap<Object, Mergeable>();
 
         if (input != null) {
             for (Object o : input) {
                 //validate all instance are of type Mergeable
-                if (!(o instanceof Mergable)) {
+                if (!(o instanceof Mergeable)) {
                     throw new RoboticsAnalysisException("Merge collection failed on collection");
                 }
-                Mergable t = (Mergable) o;
+                Mergeable t = (Mergeable) o;
                 mergeable.put(t.getIdentifier(), t);
 
             }

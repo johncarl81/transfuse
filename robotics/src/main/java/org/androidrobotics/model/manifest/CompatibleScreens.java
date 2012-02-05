@@ -2,6 +2,7 @@ package org.androidrobotics.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 public class CompatibleScreens {
 
     @XStreamImplicit(itemFieldName = "screen")
-    private List<Screen> screens;
+    private List<Screen> screens = new ArrayList<Screen>();
 
     public List<Screen> getScreens() {
         return screens;

@@ -9,12 +9,10 @@ import org.androidrobotics.analysis.ModuleProcessor;
 import org.androidrobotics.analysis.adapter.ASTType;
 import org.androidrobotics.gen.ApplicationGenerator;
 import org.androidrobotics.model.ApplicationDescriptor;
-import org.androidrobotics.model.manifest.Application;
 import org.androidrobotics.util.Logger;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * @author John Ericksen
@@ -51,10 +49,6 @@ public class ApplicationProcessor {
         ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
 
         if (applicationDescriptor != null) {
-
-            if (context.getSourceManifest().getApplications() == null) {
-                context.getSourceManifest().setApplications(new ArrayList<Application>());
-            }
 
             context.getSourceManifest().getApplications().add(applicationDescriptor.getManifestApplication());
 

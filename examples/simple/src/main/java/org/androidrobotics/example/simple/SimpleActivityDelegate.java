@@ -10,6 +10,10 @@ import javax.inject.Inject;
 
 @Activity(name = "SimpleActivity", label = "@string/simpleActivityName")
 @Layout(R.layout.main)
+@IntentFilters({
+        @Intent(type = IntentType.ACTION, name = "android.intent.action.MAIN"),
+        @Intent(type = IntentType.CATEGORY, name = "android.intent.category.LAUNCHER")
+})
 public class SimpleActivityDelegate extends SimpleSuperClass {
 
     private boolean onCreateCalled = false;
