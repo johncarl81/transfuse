@@ -1,0 +1,28 @@
+package org.androidtransfuse.analysis.astAnalyzer;
+
+import org.androidtransfuse.analysis.ASTAnalysis;
+import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.adapter.ASTField;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.model.InjectionNode;
+
+/**
+ * @author John Ericksen
+ */
+public class ASTAnalysisAdaptor implements ASTAnalysis {
+    @Override
+    public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
+        //emtpy
+    }
+
+    @Override
+    public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
+        //empty
+    }
+
+    @Override
+    public void analyzeField(InjectionNode injectionNode, ASTField astField, AnalysisContext context) {
+        //empty
+    }
+}
