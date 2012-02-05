@@ -29,7 +29,7 @@ public class Merger {
 
         for (Field field : targetClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(MergeCollection.class) && List.class.isAssignableFrom(field.getType())) {
-                updateField(field, target, mergeCollection(field, (List) getField(field, target), (List) getField(field, source)));
+                updateField(field, target, mergeCollection((List) getField(field, target), (List) getField(field, source)));
             }
             if (field.isAnnotationPresent(Merge.class)) {
                 updateField(field, target, merge(getField(field, target), getField(field, source)));
@@ -40,27 +40,47 @@ public class Merger {
     }
 
     private Object getField(Field field, final Object source) throws PrivilegedActionException {
-        return AccessController.doPrivileged(new AccessibleElementPrivilegedAction<Object, Field>(field) {
+        return AccessController.doPrivileged(new FieldGetPriviledgedAction(field, source));
+    }
 
-            @Override
-            public Object run(Field field) throws Exception {
-                return field.get(source);
-            }
-        });
+    private static class FieldGetPriviledgedAction extends AccessibleElementPrivilegedAction<Object, Field> {
+
+        private Object source;
+
+        protected FieldGetPriviledgedAction(Field field, Object source) {
+            super(field);
+            this.source = source;
+        }
+
+        @Override
+        public Object run(Field field) throws Exception {
+            return field.get(source);
+        }
     }
 
     private <T> void updateField(Field field, final T target, final Object value) throws PrivilegedActionException {
-        AccessController.doPrivileged(new AccessibleElementPrivilegedAction<Void, Field>(field) {
-
-            @Override
-            public Void run(Field field) throws Exception {
-                field.set(target, value);
-                return null;
-            }
-        });
+        AccessController.doPrivileged(new FieldSetPriviledgedAction(field, target, value));
     }
 
-    private Collection mergeCollection(Field field, List target, List source) throws IllegalAccessException, PrivilegedActionException {
+    private static class FieldSetPriviledgedAction extends AccessibleElementPrivilegedAction<Void, Field> {
+
+        private Object target;
+        private Object value;
+
+        protected FieldSetPriviledgedAction(Field field, Object target, Object value) {
+            super(field);
+            this.target = target;
+            this.value = value;
+        }
+
+        @Override
+        public Void run(Field field) throws Exception {
+            field.set(target, value);
+            return null;
+        }
+    }
+
+    private Collection mergeCollection(List target, List source) throws IllegalAccessException, PrivilegedActionException {
 
         Map<Object, Mergeable> targetMap = convertToMergable(target);
         Map<Object, Mergeable> sourceMap = convertToMergable(source);
@@ -90,14 +110,15 @@ public class Merger {
             }
         }
 
+        List targetResult = target;
         //merger only supports Lists for collections
-        if (target == null) {
-            target = new ArrayList();
+        if (targetResult == null) {
+            targetResult = new ArrayList();
         }
 
-        target.clear();
-        target.addAll(targetMap.values());
-        return target;
+        targetResult.clear();
+        targetResult.addAll(targetMap.values());
+        return targetResult;
     }
 
     private Map<Object, Mergeable> convertToMergable(Collection input) {

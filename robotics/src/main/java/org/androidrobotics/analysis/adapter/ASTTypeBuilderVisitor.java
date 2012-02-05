@@ -44,7 +44,6 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitTypeVariable(TypeVariable typeVariable, Void aVoid) {
-        System.out.println("TypeVariable:" + typeVariable.toString());
         return null;
     }
 
@@ -68,7 +67,6 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void aVoid) {
-        System.out.println("type Mirror:" + typeMirror.toString());
         return null;
     }
 }

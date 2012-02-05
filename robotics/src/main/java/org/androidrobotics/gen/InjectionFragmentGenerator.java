@@ -17,11 +17,9 @@ import java.util.Map;
 public class InjectionFragmentGenerator {
 
     private InjectionBuilderContextFactory injectionBuilderContextFactory;
-    private InjectionInvocationBuilder injectionInvocationBuilder;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionInvocationBuilder injectionInvocationBuilder, InjectionBuilderContextFactory injectionBuilderContextFactory) {
-        this.injectionInvocationBuilder = injectionInvocationBuilder;
+    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory) {
         this.injectionBuilderContextFactory = injectionBuilderContextFactory;
     }
 

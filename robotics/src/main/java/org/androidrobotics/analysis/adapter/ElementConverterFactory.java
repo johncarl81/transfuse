@@ -8,11 +8,11 @@ import javax.inject.Inject;
 public class ElementConverterFactory {
 
     @Inject
-    ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     @Inject
-    ElementConverterFactory astTypeElementConverterFactory;
+    private ElementConverterFactory astTypeElementConverterFactory;
     @Inject
-    ASTElementFactory astElementFactory;
+    private ASTElementFactory astElementFactory;
 
     public <T> ASTTypeElementConverter<T> buildTypeConverter(Class<T> clazz) {
         return new ASTTypeElementConverter<T>(clazz, astElementFactory);

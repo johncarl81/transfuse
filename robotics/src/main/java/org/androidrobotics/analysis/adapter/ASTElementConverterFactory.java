@@ -13,8 +13,6 @@ import javax.lang.model.element.Element;
 public class ASTElementConverterFactory {
 
     @Inject
-    private ASTElementFactory astElementFactory;
-    @Inject
     private ElementConverterFactory elementConverterFactory;
 
     public <T> CollectionConverter<? super Element, T> buildASTElementConverter(Class<T> astTypeClass) {

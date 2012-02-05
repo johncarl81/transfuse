@@ -105,6 +105,9 @@ public class ActivityAnalysis {
                         category.setName(intentAnnotation.name());
                         intentFilter.getCategories().add(category);
                         break;
+                    default:
+                        //noop
+                        break;
                 }
             }
         }

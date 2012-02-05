@@ -5,19 +5,19 @@ import java.security.PrivilegedExceptionAction;
 
 public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleObject> implements PrivilegedExceptionAction<T> {
 
-    private E accessibleObject;
+    private E accessible;
 
-    protected AccessibleElementPrivilegedAction(E accessibleObject) {
-        this.accessibleObject = accessibleObject;
+    protected AccessibleElementPrivilegedAction(E accessible) {
+        this.accessible = accessible;
     }
 
     public T run() throws Exception {
-        boolean accessible = accessibleObject.isAccessible();
-        accessibleObject.setAccessible(true);
+        boolean accessible = this.accessible.isAccessible();
+        this.accessible.setAccessible(true);
 
-        T output = run(accessibleObject);
+        T output = run(this.accessible);
 
-        accessibleObject.setAccessible(accessible);
+        this.accessible.setAccessible(accessible);
 
         return output;
     }
