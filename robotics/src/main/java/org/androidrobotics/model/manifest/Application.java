@@ -107,7 +107,7 @@ public class Application extends Mergeable<String> {
     private UIOptions uiOptions;
 
     @XStreamImplicit(itemFieldName = "activity")
-    @MergeCollection
+    @MergeCollection(targetType = ArrayList.class)
     private List<Activity> activities = new ArrayList<Activity>();
     @XStreamImplicit(itemFieldName = "activity-alias")
     private List<ActivityAlias> activityAliases = new ArrayList<ActivityAlias>();

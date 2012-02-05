@@ -128,7 +128,7 @@ public class Activity extends Mergeable<String> {
     private WindowSoftInputMode windowSoftInputMode;
 
     @XStreamImplicit(itemFieldName = "intent-filter")
-    @MergeCollection
+    @MergeCollection(targetType = ArrayList.class)
     private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();

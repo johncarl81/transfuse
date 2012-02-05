@@ -36,7 +36,7 @@ public class RoboticsAssembler {
                     resourceWriter);
 
         } catch (IOException e) {
-            logger.error("Error while writing source files", e);
+            logger.error("IOException while writing source files", e);
         }
     }
 
@@ -45,9 +45,11 @@ public class RoboticsAssembler {
         try {
             return merger.merge(context.getManifest(), context.getSourceManifest());
         } catch (IllegalAccessException e) {
-            logger.error("Error while merging manifest", e);
+            logger.error("IllegalAccessException while merging manifest", e);
         } catch (PrivilegedActionException e) {
-            logger.error("Error while merging manifest", e);
+            logger.error("PrivilegedActionException while merging manifest", e);
+        } catch (InstantiationException e) {
+            logger.error("InstantiationException while merging manifest", e);
         }
 
         return context.getManifest();

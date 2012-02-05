@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class Merger {
 
-    public <T> T merge(T target, T source) throws IllegalAccessException, PrivilegedActionException {
+    public <T> T merge(T target, T source) throws IllegalAccessException, PrivilegedActionException, InstantiationException {
 
         if (target == null) {
             return source;
@@ -28,8 +28,8 @@ public class Merger {
         }
 
         for (Field field : targetClass.getDeclaredFields()) {
-            if (field.isAnnotationPresent(MergeCollection.class) && List.class.isAssignableFrom(field.getType())) {
-                updateField(field, target, mergeCollection((List) getField(field, target), (List) getField(field, source)));
+            if (field.isAnnotationPresent(MergeCollection.class) && Collection.class.isAssignableFrom(field.getType())) {
+                updateField(field, target, mergeCollection(field, (Collection) getField(field, target), (Collection) getField(field, source)));
             }
             if (field.isAnnotationPresent(Merge.class)) {
                 updateField(field, target, merge(getField(field, target), getField(field, source)));
@@ -80,7 +80,7 @@ public class Merger {
         }
     }
 
-    private Collection mergeCollection(List target, List source) throws IllegalAccessException, PrivilegedActionException {
+    private Collection mergeCollection(Field field, Collection target, Collection source) throws IllegalAccessException, PrivilegedActionException, InstantiationException {
 
         Map<Object, Mergeable> targetMap = convertToMergable(target);
         Map<Object, Mergeable> sourceMap = convertToMergable(source);
@@ -110,10 +110,17 @@ public class Merger {
             }
         }
 
-        List targetResult = target;
+        Collection targetResult = target;
         //merger only supports Lists for collections
         if (targetResult == null) {
-            targetResult = new ArrayList();
+            //first look for specific impl in annotation
+            MergeCollection mergeCollectionAnnotation = field.getAnnotation(MergeCollection.class);
+            if (mergeCollectionAnnotation.targetType() != Collection.class) {
+                targetResult = mergeCollectionAnnotation.targetType().newInstance();
+            } else {
+                //try to instantiate field type
+                targetResult = (Collection) field.getType().newInstance();
+            }
         }
 
         targetResult.clear();

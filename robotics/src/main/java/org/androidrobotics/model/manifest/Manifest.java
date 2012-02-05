@@ -60,7 +60,7 @@ public class Manifest extends Mergeable<String> {
     private InstallLocation installLocation;
 
     @XStreamImplicit(itemFieldName = "application")
-    @MergeCollection
+    @MergeCollection(targetType = ArrayList.class)
     private List<Application> applications = new ArrayList<Application>();
     @XStreamImplicit(itemFieldName = "instrumentation")
     private List<Instrumentation> instrumentations = new ArrayList<Instrumentation>();

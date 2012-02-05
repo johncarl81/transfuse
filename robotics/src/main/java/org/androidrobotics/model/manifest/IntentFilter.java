@@ -36,10 +36,10 @@ public class IntentFilter extends Mergeable<String> {
     @XStreamAsAttribute
     private Integer priority;
     @XStreamImplicit(itemFieldName = "action")
-    @MergeCollection
+    @MergeCollection(targetType = ArrayList.class)
     private List<Action> actions = new ArrayList<Action>();
     @XStreamImplicit(itemFieldName = "category")
-    @MergeCollection
+    @MergeCollection(targetType = ArrayList.class)
     private List<Category> categories = new ArrayList<Category>();
     @XStreamImplicit(itemFieldName = "data")
     private List<Data> data = new ArrayList<Data>();

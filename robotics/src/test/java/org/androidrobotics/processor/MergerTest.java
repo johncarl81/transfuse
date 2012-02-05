@@ -24,7 +24,7 @@ public class MergerTest {
         String stringValue;
         @Merge
         int intValue;
-        @MergeCollection
+        @MergeCollection(targetType = ArrayList.class)
         List<SubMergable> subMergables = new ArrayList<SubMergable>();
 
         public MergeableRoot(String id, String dontMerge, String stringValue, int intValue, List<SubMergable> subMergables, String tag) {
@@ -94,7 +94,7 @@ public class MergerTest {
     }
 
     @Test
-    public void testMerge() throws IllegalAccessException, PrivilegedActionException {
+    public void testMerge() throws IllegalAccessException, PrivilegedActionException, InstantiationException {
         List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
         List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
@@ -116,7 +116,7 @@ public class MergerTest {
     }
 
     @Test
-    public void testNonMatchingMerge() throws IllegalAccessException, PrivilegedActionException {
+    public void testNonMatchingMerge() throws IllegalAccessException, PrivilegedActionException, InstantiationException {
         List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
         List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
@@ -138,7 +138,7 @@ public class MergerTest {
     }
 
     @Test
-    public void testNullMerge() throws IllegalAccessException, PrivilegedActionException {
+    public void testNullMerge() throws IllegalAccessException, PrivilegedActionException, InstantiationException {
         List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
         List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
@@ -160,7 +160,7 @@ public class MergerTest {
     }
 
     @Test
-    public void testNullCollection() throws PrivilegedActionException, IllegalAccessException {
+    public void testNullCollection() throws PrivilegedActionException, IllegalAccessException, InstantiationException {
         List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
 
         subMergablesTwo.add(new SubMergable("1", "seven", "eight", "tag"));
