@@ -7,6 +7,14 @@ Transfuse
 
 
 {% highlight java %}
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author John Ericksen
+ */
 public class ModuleProcessor {
 
     private AOPRepository aopRepository;
@@ -26,7 +34,7 @@ public class ModuleProcessor {
     }
 
     public void processMethod(ASTMethod astMethod) {
-
+        //loop over annotations
         for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
 
             if (methodProcessorMap.containsKey(astAnnotation.getName())) {
