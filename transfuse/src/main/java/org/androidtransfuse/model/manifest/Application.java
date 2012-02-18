@@ -2,12 +2,11 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.androidtransfuse.processor.MergeCollection;
-import org.androidtransfuse.processor.Mergeable;
+import org.androidtransfuse.processor.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * attributes
@@ -107,7 +106,6 @@ public class Application extends Mergeable<String> {
     private UIOptions uiOptions;
 
     @XStreamImplicit(itemFieldName = "activity")
-    @MergeCollection(targetType = ArrayList.class)
     private List<Activity> activities = new ArrayList<Activity>();
     @XStreamImplicit(itemFieldName = "activity-alias")
     private List<ActivityAlias> activityAliases = new ArrayList<ActivityAlias>();
@@ -192,6 +190,7 @@ public class Application extends Mergeable<String> {
         this.killAfterRestore = killAfterRestore;
     }
 
+    @Merge(value = "l")
     public String getLabel() {
         return label;
     }
@@ -216,6 +215,7 @@ public class Application extends Mergeable<String> {
         this.manageSpaceActivity = manageSpaceActivity;
     }
 
+    @Merge(value = "n")
     public String getName() {
         return name;
     }
@@ -280,6 +280,7 @@ public class Application extends Mergeable<String> {
         this.uiOptions = uiOptions;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type=Activity.class)
     public List<Activity> getActivities() {
         return activities;
     }

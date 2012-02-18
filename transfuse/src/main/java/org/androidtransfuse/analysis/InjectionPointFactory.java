@@ -110,7 +110,7 @@ public class InjectionPointFactory {
         }
 
         if (bindingCount > 1) {
-            throw new TransfuseAnalysisException("More than one binding annotations is not valid.");
+            throw new TransfuseAnalysisException("More than one binding annotation is not valid.");
         }
 
         if (injectionNodeBuilder != null) {

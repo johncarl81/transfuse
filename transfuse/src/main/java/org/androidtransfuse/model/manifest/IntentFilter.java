@@ -5,9 +5,11 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.processor.MergeCollection;
 import org.androidtransfuse.processor.Mergeable;
+import org.androidtransfuse.processor.MergeableTags;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * attributes:
@@ -36,10 +38,8 @@ public class IntentFilter extends Mergeable<String> {
     @XStreamAsAttribute
     private Integer priority;
     @XStreamImplicit(itemFieldName = "action")
-    @MergeCollection(targetType = ArrayList.class)
     private List<Action> actions = new ArrayList<Action>();
     @XStreamImplicit(itemFieldName = "category")
-    @MergeCollection(targetType = ArrayList.class)
     private List<Category> categories = new ArrayList<Category>();
     @XStreamImplicit(itemFieldName = "data")
     private List<Data> data = new ArrayList<Data>();
@@ -68,6 +68,7 @@ public class IntentFilter extends Mergeable<String> {
         this.priority = priority;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Action.class)
     public List<Action> getActions() {
         return actions;
     }
@@ -76,6 +77,7 @@ public class IntentFilter extends Mergeable<String> {
         this.actions = actions;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Category.class)
     public List<Category> getCategories() {
         return categories;
     }

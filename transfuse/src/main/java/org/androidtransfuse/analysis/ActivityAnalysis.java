@@ -36,18 +36,30 @@ public class ActivityAnalysis {
     private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
+    private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
+    private Provider<IntentFilter> intentFilterProvider;
+    private Provider<Action> actionProvider;
+    private Provider<Category> categoryProvider;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
                             Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
                             VariableBuilderRepositoryFactory variableBuilderRepositoryFactory,
                             Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
-                            Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider) {
+                            Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider,
+                            Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
+                            Provider<Category> categoryProvider,
+                            Provider<Action> actionProvider,
+                            Provider<IntentFilter> intentFilterProvider) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
+        this.manifestActivityProvider = manifestActivityProvider;
+        this.categoryProvider = categoryProvider;
+        this.actionProvider = actionProvider;
+        this.intentFilterProvider = intentFilterProvider;
     }
 
     public ActivityDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
@@ -73,8 +85,10 @@ public class ActivityAnalysis {
             activityDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(input, context));
 
-            org.androidtransfuse.model.manifest.Activity manifestActivity = new org.androidtransfuse.model.manifest.Activity("." + activityAnnotation.name(), activityAnnotation.label());
-            manifestActivity.setMergeTag("yes");//todo: common tagger?
+            org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
+
+            manifestActivity.setName("." + activityAnnotation.name());
+            manifestActivity.setLabel(activityAnnotation.label());
             manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
 
             activityDescriptor.setManifestActivity(manifestActivity);
@@ -87,21 +101,18 @@ public class ActivityAnalysis {
 
         if (intentFilters != null) {
 
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.setMergeTag("yes"); //todo: common tagger?
+            IntentFilter intentFilter = intentFilterProvider.get();
             convertedIntentFilters.add(intentFilter);
 
             for (Intent intentAnnotation : intentFilters.value()) {
                 switch (intentAnnotation.type()) {
                     case ACTION:
-                        Action action = new Action();
-                        action.setMergeTag("yes");
+                        Action action = actionProvider.get();
                         action.setName(intentAnnotation.name());
                         intentFilter.getActions().add(action);
                         break;
                     case CATEGORY:
-                        Category category = new Category();
-                        category.setMergeTag("yes");
+                        Category category = categoryProvider.get();
                         category.setName(intentAnnotation.name());
                         intentFilter.getCategories().add(category);
                         break;

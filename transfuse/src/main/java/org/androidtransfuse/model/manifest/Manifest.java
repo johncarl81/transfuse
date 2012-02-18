@@ -5,9 +5,11 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.processor.MergeCollection;
 import org.androidtransfuse.processor.Mergeable;
+import org.androidtransfuse.processor.MergeableTags;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * attributes:
@@ -60,7 +62,6 @@ public class Manifest extends Mergeable<String> {
     private InstallLocation installLocation;
 
     @XStreamImplicit(itemFieldName = "application")
-    @MergeCollection(targetType = ArrayList.class)
     private List<Application> applications = new ArrayList<Application>();
     @XStreamImplicit(itemFieldName = "instrumentation")
     private List<Instrumentation> instrumentations = new ArrayList<Instrumentation>();
@@ -131,6 +132,7 @@ public class Manifest extends Mergeable<String> {
         this.installLocation = installLocation;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Application.class)
     public List<Application> getApplications() {
         return applications;
     }

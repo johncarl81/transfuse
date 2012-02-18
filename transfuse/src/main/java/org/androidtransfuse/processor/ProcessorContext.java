@@ -6,6 +6,7 @@ import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
@@ -13,15 +14,16 @@ import javax.inject.Inject;
 public class ProcessorContext {
 
     private Manifest manifest;
-    private Manifest sourceManifest = new Manifest();
+    private Manifest sourceManifest;
     private RResource rResource;
     private ModuleProcessor moduleProcessor;
 
     @Inject
-    public ProcessorContext(@Assisted RResource rResource, @Assisted Manifest manifest, @Assisted ModuleProcessor moduleProcessor) {
+    public ProcessorContext(@Assisted RResource rResource, @Assisted Manifest manifest, @Assisted ModuleProcessor moduleProcessor, Provider<Manifest> manifestProvider) {
         this.manifest = manifest;
         this.rResource = rResource;
         this.moduleProcessor = moduleProcessor;
+        sourceManifest = manifestProvider.get();
     }
 
     public Manifest getManifest() {

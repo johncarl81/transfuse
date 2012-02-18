@@ -13,6 +13,7 @@ import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuil
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.manifest.Activity;
 import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,16 +39,9 @@ public class ActivityAnalysisTest {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
         AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();
-        Provider<ContextVariableInjectionNodeBuilder> contextVariableInjectionNodeBuilderProviderBuilderProvider = injector.getProvider(ContextVariableInjectionNodeBuilder.class);
-        Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider = injector.getProvider(ResourcesInjectionNodeBuilder.class);
-        VariableBuilderRepositoryFactory variableBuilderRepositoryFactory = injector.getInstance(VariableBuilderRepositoryFactory.class);
-        InjectionPointFactory injectionPointFactory = injector.getInstance(InjectionPointFactory.class);
-        Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider = injector.getProvider(ApplicationVariableInjectionNodeBuilder.class);
-        ActivityAnalysis activityAnalysis = new ActivityAnalysis(injectionPointFactory,
-                contextVariableInjectionNodeBuilderProviderBuilderProvider,
-                variableBuilderRepositoryFactory,
-                resourcesInjectionNodeBuilderProvider,
-                applicationVariableBuilderProvider);
+
+        ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
+
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
         AOPRepository aopRepository = injector.getProvider(AOPRepository.class).get();
 

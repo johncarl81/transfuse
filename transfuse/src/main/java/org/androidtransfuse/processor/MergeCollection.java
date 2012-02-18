@@ -6,8 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
 
-@Target({ElementType.FIELD})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MergeCollection {
-    Class<? extends Collection> targetType() default Collection.class;
+    Class<? extends Collection> collectionType();
+    Class<? extends Mergeable> type();
 }

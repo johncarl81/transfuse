@@ -88,7 +88,6 @@ public class Activity extends Mergeable<String> {
     private String icon;
     @XStreamAlias("android:label")
     @XStreamAsAttribute
-    @Merge
     private String label;
     @XStreamAlias("android:launchMode")
     @XStreamAsAttribute
@@ -128,15 +127,9 @@ public class Activity extends Mergeable<String> {
     private WindowSoftInputMode windowSoftInputMode;
 
     @XStreamImplicit(itemFieldName = "intent-filter")
-    @MergeCollection(targetType = ArrayList.class)
     private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
-
-    public Activity(String name, String label) {
-        this.name = name;
-        this.label = label;
-    }
 
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
@@ -222,6 +215,7 @@ public class Activity extends Mergeable<String> {
         return label;
     }
 
+    @Merge(value = "l")
     public void setLabel(String label) {
         this.label = label;
     }
@@ -242,6 +236,7 @@ public class Activity extends Mergeable<String> {
         this.multiprocess = multiprocess;
     }
 
+    @Merge(value = "n")
     public String getName() {
         return name;
     }
@@ -322,6 +317,7 @@ public class Activity extends Mergeable<String> {
         this.windowSoftInputMode = windowSoftInputMode;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = IntentFilter.class)
     public List<IntentFilter> getIntentFilters() {
         return intentFilters;
     }

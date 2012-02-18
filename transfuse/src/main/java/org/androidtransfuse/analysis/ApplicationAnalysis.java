@@ -23,16 +23,18 @@ public class ApplicationAnalysis {
     private Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider;
     private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
+    private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
                                Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
                                VariableBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                               Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider) {
+                               Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider, Provider<org.androidtransfuse.model.manifest.Application> applicationProvider) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
+        this.applicationProvider = applicationProvider;
     }
 
     public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
@@ -56,10 +58,9 @@ public class ApplicationAnalysis {
                     injectionPointFactory.buildInjectionNode(astType, context));
 
 
-            org.androidtransfuse.model.manifest.Application manifestApplication = new org.androidtransfuse.model.manifest.Application();
+            org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
             manifestApplication.setName("." + activityAnnotation.name());
-            manifestApplication.setMergeTag("yes");//todo: common tagger?
 
             applicationDescriptor.setManifestApplication(manifestApplication);
         }

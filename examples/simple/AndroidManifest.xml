@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.example.simple" android:versionCode="1" android:versionName="1.0">
-  <application transfuse="yes" android:icon="@drawable/icon" android:label="@string/app_name" android:name=".SimpleApp">
-    <activity transfuse="yes" android:label="@string/app_name" android:name=".SecondActivity"/>
-    <activity transfuse="yes" android:label="@string/simpleActivityName" android:name=".SimpleActivity">
-      <intent-filter transfuse="yes">
-        <action transfuse="yes" android:name="android.intent.action.MAIN"/>
-        <category transfuse="yes" android:name="android.intent.category.LAUNCHER"/>
+  <application t="n,l" android:name=".SimpleApp">
+    <activity t="n,l" android:label="@string/app_name" android:name=".SecondActivity"/>
+    <activity t="n,l" android:label="@string/simpleActivityName" android:name=".SimpleActivity">
+      <intent-filter>
+        <action t="n" android:name="android.intent.action.MAIN"/>
+        <category t="n" android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
   </application>

@@ -2,6 +2,7 @@ package org.androidtransfuse.config;
 
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.model.manifest.*;
+import org.androidtransfuse.processor.MergeableTagConverter;
 
 import javax.inject.Provider;
 
@@ -27,6 +28,7 @@ public class XStreamProvider implements Provider<XStream> {
         xStream.registerConverter(new LabeledEnumConverter<ScreenSize>(ScreenSize.class, ScreenSize.values()));
         xStream.registerConverter(new LabeledEnumConverter<UIOptions>(UIOptions.class, UIOptions.values()));
         xStream.registerConverter(new LabeledEnumConverter<WindowSoftInputMode>(WindowSoftInputMode.class, WindowSoftInputMode.values()));
+        xStream.registerConverter(new MergeableTagConverter());
 
         return xStream;
     }

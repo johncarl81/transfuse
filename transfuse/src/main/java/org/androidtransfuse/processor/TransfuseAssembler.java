@@ -7,7 +7,9 @@ import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
+import java.beans.IntrospectionException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.PrivilegedActionException;
 
 /**
@@ -43,12 +45,8 @@ public class TransfuseAssembler {
     public Manifest buildManifest() {
 
         try {
-            return merger.merge(context.getManifest(), context.getSourceManifest());
-        } catch (IllegalAccessException e) {
-            logger.error("IllegalAccessException while merging manifest", e);
-        } catch (PrivilegedActionException e) {
-            logger.error("PrivilegedActionException while merging manifest", e);
-        } catch (InstantiationException e) {
+            return merger.merge(Manifest.class, context.getManifest(), context.getSourceManifest());
+        } catch (MergerException e) {
             logger.error("InstantiationException while merging manifest", e);
         }
 

@@ -2,31 +2,32 @@ package org.androidtransfuse.processor;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author John Ericksen
  */
+
 public abstract class Mergeable<T> {
 
-    @XStreamAlias("transfuse")
+    @XStreamAlias("t")
     @XStreamAsAttribute
-    private String tag;
-
-    protected Mergeable() {
-    }
-
-    protected Mergeable(String tag) {
-        this.tag = tag;
-    }
+    private MergeableTags tags = new MergeableTags();
 
     public abstract T getIdentifier();
-
-    public void setMergeTag(String tag) {
-        this.tag = tag;
+    
+    public void addMergeTag(String tag){
+        tags.getTags().add(tag);
     }
 
-    public String getMergeTag() {
-        return tag;
+    public Set<String> getMergeTags(){
+        if(tags == null){
+            return Collections.emptySet();
+        }
+        return tags.getTags();
     }
 
 }
