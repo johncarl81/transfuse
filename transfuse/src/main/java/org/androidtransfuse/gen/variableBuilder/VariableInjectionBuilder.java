@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionInvocationBuilder;
+import org.androidtransfuse.gen.InjectionVariableBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -22,16 +23,19 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private UniqueVariableNamer variableNamer;
     private InjectionInvocationBuilder injectionInvocationBuilder;
     private AOPProxyGenerator aopProxyGenerator;
+    private InjectionVariableBuilder injectionVariableBuilder;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
                                     UniqueVariableNamer variableNamer,
                                     InjectionInvocationBuilder injectionInvocationBuilder,
-                                    AOPProxyGenerator aopProxyGenerator) {
+                                    AOPProxyGenerator aopProxyGenerator,
+                                    InjectionVariableBuilder injectionVariableBuilder) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.aopProxyGenerator = aopProxyGenerator;
+        this.injectionVariableBuilder = injectionVariableBuilder;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
             //AOP proxy (if applicable).  This method will return the injectionNode (without proxying) if no AOPProxyAspect exists
             InjectionNode proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
 
-            injectionBuilderContext.setupInjectionRequirements(proxyableInjectionNode);
+            injectionVariableBuilder.setupInjectionRequirements(injectionBuilderContext, proxyableInjectionNode);
 
             JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
 

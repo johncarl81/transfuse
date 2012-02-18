@@ -6,6 +6,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.gen.InjectionVariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -17,11 +18,13 @@ public class ApplicationVariableInjectionNodeBuilder implements InjectionNodeBui
 
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ApplicationVariableInjectionNodeBuilder(ASTClassFactory astClassFactory, InjectionPointFactory injectionPointFactory) {
+    public ApplicationVariableInjectionNodeBuilder(ASTClassFactory astClassFactory, InjectionPointFactory injectionPointFactory, VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class ApplicationVariableInjectionNodeBuilder implements InjectionNodeBui
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, new ApplicationVariableBuilder(contextInjectionNode));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildApplicationVariableBuilder(contextInjectionNode));
 
         return injectionNode;
     }

@@ -8,17 +8,12 @@ import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.VariableBuilderRepositoryFactory;
-import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.manifest.Activity;
 import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.inject.Provider;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;

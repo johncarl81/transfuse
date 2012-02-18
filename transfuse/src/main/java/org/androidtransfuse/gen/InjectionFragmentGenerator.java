@@ -17,10 +17,12 @@ import java.util.Map;
 public class InjectionFragmentGenerator {
 
     private InjectionBuilderContextFactory injectionBuilderContextFactory;
+    private InjectionVariableBuilder injectionVariableBuilder;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory) {
+    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory, InjectionVariableBuilder injectionVariableBuilder) {
         this.injectionBuilderContextFactory = injectionBuilderContextFactory;
+        this.injectionVariableBuilder = injectionVariableBuilder;
     }
 
     public Map<InjectionNode, JExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, RResource rResource) throws ClassNotFoundException, JClassAlreadyExistsException {
@@ -28,7 +30,7 @@ public class InjectionFragmentGenerator {
         Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
         InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass, rResource);
 
-        injectionBuilderContext.buildVariable(injectionNode);
+        injectionVariableBuilder.buildVariable(injectionBuilderContext, injectionNode);
 
         return nodeVariableMap;
     }

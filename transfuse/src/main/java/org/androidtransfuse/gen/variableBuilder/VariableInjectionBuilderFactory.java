@@ -1,5 +1,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
+import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
@@ -19,4 +20,14 @@ public interface VariableInjectionBuilderFactory {
     SystemServiceInjectionNodeBuilder buildSystemServiceInjectionNodeBuilder(String systemService, Class<?> systemServiceClass);
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
+
+    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, JType type);
+
+    ApplicationVariableBuilder buildApplicationVariableBuilder(InjectionNode contextInjectionNode);
+
+    ResourcesVariableBuilder buildResourcesVariableBuilder(InjectionNode applicationInjectionNode);
+
+    ProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerInjectionNode);
+
+    ViewVariableBuilder buildViewVariableBuilder(Integer viewId, InjectionNode activityInjectionNode, JType jType);
 }

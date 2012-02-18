@@ -20,12 +20,17 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
     private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ViewInjectionNodeBuilder(JCodeModel codeModel, ASTClassFactory astClassFactory, InjectionPointFactory injectionPointFactory) {
+    public ViewInjectionNodeBuilder(JCodeModel codeModel,
+                                    ASTClassFactory astClassFactory,
+                                    InjectionPointFactory injectionPointFactory,
+                                    VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
@@ -38,7 +43,7 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
 
         try {
-            injectionNode.addAspect(VariableBuilder.class, new ViewVariableBuilder(viewId, activityInjectionNode, codeModel.parseType(astType.getName()), codeModel));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, activityInjectionNode, codeModel.parseType(astType.getName())));
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
         }

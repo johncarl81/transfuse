@@ -17,11 +17,15 @@ public class ResourcesInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ResourcesInjectionNodeBuilder(ASTClassFactory astClassFactory, InjectionPointFactory injectionPointFactory) {
+    public ResourcesInjectionNodeBuilder(ASTClassFactory astClassFactory,
+                                         InjectionPointFactory injectionPointFactory,
+                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class ResourcesInjectionNodeBuilder implements InjectionNodeBuilder {
         ASTType applicationType = astClassFactory.buildASTClassType(Application.class);
         InjectionNode applicationInjectionNode = injectionPointFactory.buildInjectionNode(applicationType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, new ResourcesVariableBuilder(applicationInjectionNode));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildResourcesVariableBuilder(applicationInjectionNode));
 
         return injectionNode;
     }

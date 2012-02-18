@@ -16,12 +16,15 @@ public class ProviderInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private ASTType providerType;
     private Analyzer analyzer;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public ProviderInjectionNodeBuilder(@Assisted ASTType providerType,
-                                        Analyzer analyzer) {
+                                        Analyzer analyzer,
+                                        VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.providerType = providerType;
         this.analyzer = analyzer;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class ProviderInjectionNodeBuilder implements InjectionNodeBuilder {
 
         InjectionNode providerInjectionNode = analyzer.analyze(providerType, providerType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, new ProviderVariableBuilder(providerInjectionNode));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode));
 
         return injectionNode;
     }
