@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=./maps.jar -DgroupId=com.google.android.maps -DartifactId=maps -Dversion=3_r3 -Dpackaging=jar -DgeneratePom=true
