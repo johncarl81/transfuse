@@ -5,11 +5,9 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.processor.MergeCollection;
 import org.androidtransfuse.processor.Mergeable;
-import org.androidtransfuse.processor.MergeableTags;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * attributes:

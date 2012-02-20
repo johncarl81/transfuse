@@ -4,15 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
-import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
-import org.androidtransfuse.gen.variableBuilder.ProxyVariableBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
-import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
-import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;

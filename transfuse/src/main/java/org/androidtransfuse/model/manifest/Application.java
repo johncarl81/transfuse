@@ -2,11 +2,13 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.androidtransfuse.processor.*;
+import org.androidtransfuse.processor.Merge;
+import org.androidtransfuse.processor.MergeCollection;
+import org.androidtransfuse.processor.Mergeable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * attributes
@@ -280,7 +282,7 @@ public class Application extends Mergeable<String> {
         this.uiOptions = uiOptions;
     }
 
-    @MergeCollection(collectionType = ArrayList.class, type=Activity.class)
+    @MergeCollection(collectionType = ArrayList.class, type = Activity.class)
     public List<Activity> getActivities() {
         return activities;
     }

@@ -2,7 +2,10 @@ package org.androidtransfuse.processor;
 
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -18,12 +21,12 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
 
     @Override
     public String toString(Object obj) {
-        if(obj == null){
+        if (obj == null) {
             return null;
         }
-        Set<String> stringCollection = ((MergeableTags)obj).getTags();
+        Set<String> stringCollection = ((MergeableTags) obj).getTags();
 
-        if(stringCollection.isEmpty()){
+        if (stringCollection.isEmpty()) {
             return null;
         }
 
@@ -32,10 +35,9 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
         boolean first = true;
 
         for (String s : stringCollection) {
-            if(first){
+            if (first) {
                 first = false;
-            }
-            else{
+            } else {
                 builder.append(SPLIT);
             }
             builder.append(s);
@@ -49,7 +51,7 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
 
         String[] splitInput = input.split(SPLIT);
 
-        if(splitInput.length == 0){
+        if (splitInput.length == 0) {
             return Collections.emptySet();
         }
 

@@ -1,13 +1,10 @@
 package org.androidtransfuse.processor;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.google.inject.matcher.Matchers;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.util.JavaUtilLogger;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,9 +15,11 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
@@ -62,12 +61,12 @@ public class MergerTest {
             this.dontMerge = dontMerge;
         }
 
-        @Merge(value="v")
+        @Merge(value = "v")
         public void setStringValue(String stringValue) {
             this.stringValue = stringValue;
         }
 
-        @Merge(value="i")
+        @Merge(value = "i")
         public void setIntValue(int intValue) {
             this.intValue = intValue;
         }
@@ -104,7 +103,7 @@ public class MergerTest {
             return id;
         }
 
-        @Merge(value="v")
+        @Merge(value = "v")
         public void setValue(String value) {
             this.value = value;
         }
@@ -121,7 +120,7 @@ public class MergerTest {
             return id;
         }
     }
-    
+
     @Inject
     private Provider<SubMergable> subMergableProvider;
     @Inject
@@ -252,7 +251,7 @@ public class MergerTest {
         for (SubMergable subMergable : subMergables) {
             subMergableMap.put(subMergable.getIdentifier(), subMergable);
         }
-        
+
         return subMergableMap;
     }
 
@@ -267,10 +266,10 @@ public class MergerTest {
         mergeableRoot.setIntValue(intValue);
         mergeableRoot.setSubMergables(subMergables);
 
-        if(generateTag){
+        if (generateTag) {
             updateMergeTags(MergeableRoot.class, mergeableRoot);
         }
-        
+
 
         return mergeableRoot;
     }
@@ -283,15 +282,15 @@ public class MergerTest {
         subMergable.setValue(value);
         subMergable.setDontMergeValue(dontMergeValue);
 
-        if(generateTag){
+        if (generateTag) {
             updateMergeTags(SubMergable.class, subMergable);
         }
 
         return subMergable;
     }
-    
+
     private <T extends Mergeable> void updateMergeTags(Class<T> clazz, T mergeable) throws MergerException {
-        try{
+        try {
             BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
 
             for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
@@ -301,7 +300,7 @@ public class MergerTest {
                 Merge mergeAnnotation = findAnnotation(Merge.class, writeMethod, readMethod);
                 //Object property = PropertyUtils.getProperty(mergeable, propertyDescriptor.getName());
 
-                if(mergeAnnotation != null){
+                if (mergeAnnotation != null) {
                     mergeable.addMergeTag(mergeAnnotation.value());
                 }
             }
@@ -312,9 +311,9 @@ public class MergerTest {
 
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Method... methods) {
         T annotation = null;
-        if(methods != null){
-            for(Method method : methods){
-                if(annotation == null && method != null && method.isAnnotationPresent(annotationClass)){
+        if (methods != null) {
+            for (Method method : methods) {
+                if (annotation == null && method != null && method.isAnnotationPresent(annotationClass)) {
                     annotation = method.getAnnotation(annotationClass);
                 }
             }
