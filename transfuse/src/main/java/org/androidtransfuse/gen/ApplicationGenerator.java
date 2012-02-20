@@ -6,8 +6,11 @@ import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.ApplicationDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.SingletonScope;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +34,7 @@ public class ApplicationGenerator {
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
         definedClass._extends(Application.class);
+        definedClass._implements(Scope.class);
 
         if (!descriptor.getInjectionNodes().isEmpty()) {
 
@@ -50,20 +54,30 @@ public class ApplicationGenerator {
                 addLifecycleMethod("onTerminate", definedClass, expressionMap);
             }
 
-            //temp
-            JType singletonType = codeModel.parseType("org.androidtransfuse.example.simple.SingletonTarget");
-            JMethod getSingletonTargetMethod = definedClass.method(JMod.SYNCHRONIZED & JMod.PUBLIC, singletonType, "getSingletonTarget");
+            JClass singletonScopeClassRef = codeModel.ref(SingletonScope.class);
+            JFieldVar singletonScopeField = definedClass.field(JMod.PRIVATE, singletonScopeClassRef, "singletonScope");
+            singletonScopeField.init(JExpr._new(singletonScopeClassRef));
 
-            JBlock getSingletonTargetBody = getSingletonTargetMethod.body();
+            //<T> T getScopedObject(Class<T> clazz, Provider<T> provider);
+            JType genericT = codeModel.ref(Object.class);
+            JClass clazzRef = codeModel.ref(Class.class);
+            JClass providerRef = codeModel.ref(Provider.class);
 
-            JFieldVar singletonField = definedClass.field(JMod.PRIVATE, singletonType, "singleton");
+            JMethod getScopedObjectMethod = definedClass.method(JMod.PUBLIC, genericT, "getScopedObject");
+            JVar clazzParam = getScopedObjectMethod.param(clazzRef, "clazz");
+            JVar providerParam = getScopedObjectMethod.param(providerRef, "provider");
 
-            JBlock conditionBlock = getSingletonTargetBody._if(singletonField.eq(JExpr._null()))._then();
+            JBlock scopedObjectBody = getScopedObjectMethod.body();
 
-            conditionBlock.assign(singletonField, JExpr._new(singletonType));
+            scopedObjectBody._return(singletonScopeField.invoke("getScopedObject").arg(clazzParam).arg(providerParam));
+        }
+    }
 
-            getSingletonTargetBody._return(singletonField);
-
+    JType naiveType(String name) {
+        try {
+            return codeModel.parseType(name);
+        } catch (ClassNotFoundException e) {
+            return codeModel.directClass(name);
         }
     }
 

@@ -4,7 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionVariableBuilder;
+import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 
@@ -18,24 +18,24 @@ public class ViewVariableBuilder implements VariableBuilder {
     private int viewId;
     private InjectionNode activityInjectionNode;
     private JCodeModel codeModel;
-    private InjectionVariableBuilder injectionVariableBuilder;
+    private InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
     public ViewVariableBuilder(@Assisted int viewId,
                                @Assisted InjectionNode activityInjectionNode,
                                @Assisted JType viewType,
                                JCodeModel codeModel,
-                               InjectionVariableBuilder injectionVariableBuilder) {
+                               InjectionExpressionBuilder injectionExpressionBuilder) {
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;
         this.codeModel = codeModel;
-        this.injectionVariableBuilder = injectionVariableBuilder;
+        this.injectionExpressionBuilder = injectionExpressionBuilder;
     }
 
     @Override
     public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        JExpression contextVar = injectionVariableBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
+        JExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
         ResourceIdentifier viewResourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(viewId);
 

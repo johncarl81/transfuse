@@ -20,9 +20,6 @@ public interface SimpleModule {
     @BindProvider(ValueProvider.class)
     ProvidedValue bindValueProvider();
 
-    @BindProvider(SingletonProvider.class)
-    SingletonTarget bindSingletonTarget();
-
     @BindProvider(ProviderTest.class)
     ProviderTestValue bindProviderTest();
 }

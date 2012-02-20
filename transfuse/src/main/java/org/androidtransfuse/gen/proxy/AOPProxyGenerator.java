@@ -51,7 +51,7 @@ public class AOPProxyGenerator {
         return aopProxiesGenerated.get(injectionNode.getClassName());
     }
 
-    public InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
+    private InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
         String proxyClassName = injectionNode.getClassName() + "_AOPProxy";

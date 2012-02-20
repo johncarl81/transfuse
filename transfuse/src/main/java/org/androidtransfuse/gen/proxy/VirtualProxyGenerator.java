@@ -41,10 +41,9 @@ public class VirtualProxyGenerator {
 
     public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
 
-        JDefinedClass definedClass;
         try {
 
-            definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
+            JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());
@@ -112,14 +111,14 @@ public class VirtualProxyGenerator {
                     }
                 }
             }
+
+            return new ProxyDescriptor(definedClass);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Error while trying to build new class", e);
         }
-
-        return new ProxyDescriptor(definedClass);
     }
 
-    public JExpression initalizeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
+    public JExpression initializeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
 
         context.getBlock().add(
                 proxyVariable.invoke(DELAYED_LOAD_METHOD_NAME).arg(variableBuilder));

@@ -12,7 +12,7 @@ public class InjectionNode {
 
     private ASTType usageType;
     private ASTType astType;
-    private Map<Class<?>, Object> aspects = new HashMap<Class<?>, Object>();
+    private Map<Class, Object> aspects = new HashMap<Class, Object>();
 
     public InjectionNode(ASTType astType) {
         this.usageType = astType;
@@ -52,7 +52,7 @@ public class InjectionNode {
         return aspects.containsKey(clazz);
     }
 
-    public Map<Class<?>, Object> getAspects() {
+    public Map<Class, Object> getAspects() {
         return aspects;
     }
 }
