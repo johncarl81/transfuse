@@ -22,6 +22,8 @@ public class SecondActivityDelegate {
     @Inject
     @Resource(R.array.simpleStringArray)
     private String[] simpleStringArray;
+    @Inject
+    private SingletonTarget singletonTarget;
 
     @Inject
     public SecondActivityDelegate(@View(R.id.text2) TextView textView) {
@@ -49,5 +51,9 @@ public class SecondActivityDelegate {
 
     public String[] getSimpleStringArray() {
         return simpleStringArray;
+    }
+
+    public SingletonTarget getSingletonTarget() {
+        return singletonTarget;
     }
 }

@@ -7,25 +7,30 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-public class SecondActivityTest {
+public class SingletonTest {
 
     private static final String TEST_EXTRA_ID = "testExtra";
     private static final String TEST_EXTRA_VALUE = "hello";
-    private SecondActivity secondActivity;
+
+    private SimpleActivityDelegate testActivityDelegate;
     private SecondActivityDelegate secondActivityDelegate;
 
     @Before
     public void setup() throws IllegalAccessException, NoSuchFieldException {
+        SimpleActivity simpleActivity = new SimpleActivity();
+        simpleActivity.onCreate(null);
+
+        testActivityDelegate = DelegateUtil.getDelegate(simpleActivity, SimpleActivityDelegate.class);
+
         Intent callingIntent = new Intent("test");
         callingIntent.putExtra(TEST_EXTRA_ID, TEST_EXTRA_VALUE);
 
-        secondActivity = new SecondActivity();
+        SecondActivity secondActivity = new SecondActivity();
         secondActivity.setIntent(callingIntent);
         secondActivity.onCreate(null);
 
@@ -33,18 +38,11 @@ public class SecondActivityTest {
     }
 
     @Test
-    public void testPrivateInject() {
-        assertNotNull(secondActivityDelegate.getTextView());
-    }
-
-    @Test
-    public void testExtraInjection() {
-        assertEquals(TEST_EXTRA_VALUE, secondActivityDelegate.getTestExtra());
-    }
-
-    @Test
-    public void testStringArray() throws Exception {
-        assertNotNull(secondActivityDelegate.getSimpleStringArray());
-        assertEquals(2, secondActivityDelegate.getSimpleStringArray().length);
+    public void testSingletonAcrossActivities() {
+        SingletonTarget singletonTargetOne = testActivityDelegate.getController().getSingletonTarget();
+        SingletonTarget singletonTargetTwo = testActivityDelegate.getLateReturnListener().getSingletonTarget();
+        SingletonTarget singletonTargetThree = secondActivityDelegate.getSingletonTarget();
+        assertEquals(singletonTargetOne, singletonTargetTwo);
+        assertEquals(singletonTargetTwo, singletonTargetThree);
     }
 }
