@@ -95,17 +95,15 @@ public class InjectionPointFactory {
         return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
     }
 
-    private InjectionNode buildInjectionNode(Collection<ASTAnnotation> bindingAnnotations, ASTType astType, AnalysisContext context) {
+    private InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
         int bindingCount = 0;
         InjectionNodeBuilder injectionNodeBuilder = null;
-        ASTAnnotation foundBindingAnnotation = null;
 
-        for (ASTAnnotation bindingAnnotation : bindingAnnotations) {
+        for (ASTAnnotation bindingAnnotation : annotations) {
             if (bindingRepository.containsBindingVariableBuilder(bindingAnnotation)) {
                 bindingCount++;
                 injectionNodeBuilder = bindingRepository.getBindingVariableBuilder(bindingAnnotation);
-                foundBindingAnnotation = bindingAnnotation;
             }
         }
 
@@ -114,7 +112,7 @@ public class InjectionPointFactory {
         }
 
         if (injectionNodeBuilder != null) {
-            return injectionNodeBuilder.buildInjectionNode(astType, context, foundBindingAnnotation);
+            return injectionNodeBuilder.buildInjectionNode(astType, context, annotations);
         }
 
         InjectionNodeBuilder noBindingInjectionNodeBuilder = context.getInjectionNodeBuilders().get(astType.getName());

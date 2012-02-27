@@ -20,7 +20,7 @@ public interface VariableInjectionBuilderFactory {
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
-    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, JType type);
+    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, JType type, boolean nullable);
 
     ApplicationVariableBuilder buildApplicationVariableBuilder(InjectionNode contextInjectionNode);
 

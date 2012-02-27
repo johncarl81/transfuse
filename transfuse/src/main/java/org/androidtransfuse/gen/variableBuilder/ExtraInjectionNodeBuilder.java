@@ -8,9 +8,13 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.annotations.Extra;
+import org.androidtransfuse.annotations.Nullable;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+import java.util.Collection;
 
 /**
  * @author John Ericksen
@@ -34,8 +38,13 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
-        String extraId = annotation.getProperty("value", String.class);
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
+        ASTAnnotation extraAnnotation = getAnnotation(Extra.class, annotations);
+        if (extraAnnotation == null) {
+            throw new TransfuseAnalysisException("Unable to find annotation of type: " + Extra.class.getName());
+        }
+        String extraId = extraAnnotation.getProperty("value", String.class);
+        boolean nullable = getAnnotation(Nullable.class, annotations) != null;
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
@@ -43,11 +52,23 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
 
         try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, codeModel.parseType(astType.getName())));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, codeModel.parseType(astType.getName()), nullable));
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
         }
 
         return injectionNode;
+    }
+
+    private ASTAnnotation getAnnotation(Class<? extends Annotation> clazz, Collection<ASTAnnotation> annotations) {
+        ASTAnnotation annotation = null;
+
+        for (ASTAnnotation astAnnotation : annotations) {
+            if (astAnnotation.getName().equals(clazz.getName())) {
+                annotation = astAnnotation;
+            }
+        }
+
+        return annotation;
     }
 }

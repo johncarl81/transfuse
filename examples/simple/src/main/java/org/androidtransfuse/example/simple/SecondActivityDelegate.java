@@ -18,6 +18,7 @@ public class SecondActivityDelegate {
     private TextView textView3;
     @Inject
     @Extra("testExtra")
+    @Nullable
     private String testExtra;
     @Inject
     @Resource(R.array.simpleStringArray)

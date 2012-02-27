@@ -3,7 +3,6 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -12,7 +11,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ProviderInjectionNodeBuilder implements InjectionNodeBuilder {
+public class ProviderInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
     private ASTType providerType;
     private Analyzer analyzer;
@@ -28,7 +27,7 @@ public class ProviderInjectionNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         InjectionNode injectionNode = new InjectionNode(astType);
 
         InjectionNode providerInjectionNode = analyzer.analyze(providerType, providerType, context);

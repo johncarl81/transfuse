@@ -3,7 +3,6 @@ package org.androidtransfuse.gen.variableBuilder;
 import android.app.Application;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
@@ -13,7 +12,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ResourcesInjectionNodeBuilder implements InjectionNodeBuilder {
+public class ResourcesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
@@ -29,7 +28,7 @@ public class ResourcesInjectionNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType applicationType = astClassFactory.buildASTClassType(Application.class);

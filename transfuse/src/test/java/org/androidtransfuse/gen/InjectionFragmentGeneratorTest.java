@@ -8,14 +8,13 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.target.*;
-import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -143,10 +142,10 @@ public class InjectionFragmentGeneratorTest {
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(ASTAccessModifier.PRIVATE, "target", buildInjectionNode(VariableTarget.class), 0);
         getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
-        variableBuilderRepository.put(VariableTarget.class.getName(), new InjectionNodeBuilder() {
+        variableBuilderRepository.put(VariableTarget.class.getName(), new InjectionNodeBuilderNoAnnotationAdapter() {
 
             @Override
-            public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+            public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
                 return analyzer.analyze(astType, astType, context);
             }
         });

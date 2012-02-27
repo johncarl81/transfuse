@@ -6,7 +6,6 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
@@ -16,7 +15,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class SystemServiceInjectionNodeBuilder implements InjectionNodeBuilder {
+public class SystemServiceInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
@@ -41,7 +40,7 @@ public class SystemServiceInjectionNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);

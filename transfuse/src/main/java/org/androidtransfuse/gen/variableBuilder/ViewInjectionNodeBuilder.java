@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.annotations.View;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
+public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<View> {
 
     private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
@@ -27,6 +28,7 @@ public class ViewInjectionNodeBuilder implements InjectionNodeBuilder {
                                     ASTClassFactory astClassFactory,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+        super(View.class);
         this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
