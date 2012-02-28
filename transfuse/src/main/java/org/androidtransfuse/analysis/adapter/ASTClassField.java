@@ -10,6 +10,8 @@ import java.security.PrivilegedActionException;
 import java.util.Collection;
 
 /**
+ * Class specific AST Field
+ *
  * @author John Ericksen
  */
 public class ASTClassField implements ASTField {
@@ -58,6 +60,8 @@ public class ASTClassField implements ASTField {
     @Override
     public Object getConstantValue() {
         try {
+            //tricky code to access constant value from the current field
+            //see PrivateConstantFieldAccessPrivilegedAction below for behaviour
             return AccessController.doPrivileged(
                     new PrivateConstantFieldAccessPrivilegedAction(field));
         } catch (NullPointerException e) {
@@ -67,7 +71,7 @@ public class ASTClassField implements ASTField {
         }
     }
 
-    private static class PrivateConstantFieldAccessPrivilegedAction extends AccessibleElementPrivilegedAction<Object, Field> {
+    private static final class PrivateConstantFieldAccessPrivilegedAction extends AccessibleElementPrivilegedAction<Object, Field> {
 
         protected PrivateConstantFieldAccessPrivilegedAction(Field accessibleObject) {
             super(accessibleObject);

@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
+ * Class specific AST Type
+ *
  * @author John Ericksen
  */
 public class ASTClassType implements ASTType {

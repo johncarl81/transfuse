@@ -37,9 +37,24 @@ public interface ASTType extends ASTBase {
      */
     boolean isConcreteClass();
 
+    /**
+     * Supplies the super class (by extension) of this type
+     *
+     * @return supertype
+     */
     ASTType getSuperClass();
 
+    /**
+     * Supplies the list of implemented interfaces
+     *
+     * @return interfaces implemented
+     */
     Collection<ASTType> getInterfaces();
 
+    /**
+     * Determines if this type is an array type
+     *
+     * @return array type
+     */
     boolean isArray();
 }

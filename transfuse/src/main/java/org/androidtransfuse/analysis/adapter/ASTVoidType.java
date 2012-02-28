@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * Globally represents the VOID type
+ *
  * @author John Ericksen
  */
 public enum ASTVoidType implements ASTType {

@@ -3,6 +3,8 @@ package org.androidtransfuse.analysis.adapter;
 import javax.lang.model.element.Element;
 
 /**
+ * AST Type loader, lazily loading the getASTType() return value from the abstract buildASTType() method
+ *
  * @author John Ericksen
  */
 public abstract class ASTTypeLazyLoader<T extends Element> {

@@ -4,7 +4,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.Collection;
 
 /**
- * Element specific Type of an AST object
+ * Element specific AST Type
  *
  * @author John Ericksen
  */

@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Class specific AST Method
+ *
  * @author John Ericksen
  */
 public class ASTClassMethod implements ASTMethod {

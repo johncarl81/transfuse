@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ * Class specific AST Annotation
+ *
  * @author John Ericksen
  */
 public class ASTClassAnnotation implements ASTAnnotation {

@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
+ * Replaces the given AST Type with a proxy type.  This is used during AOP and Virtual proxy of the given
+ * ASTType.  Simply replaces the name of the class with the proxy name.
+ *
  * @author John Ericksen
  */
 public class ASTProxyType implements ASTType {
@@ -24,6 +27,7 @@ public class ASTProxyType implements ASTType {
 
     @Override
     public String getName() {
+        //proxy name
         return name;
     }
 
@@ -69,7 +73,7 @@ public class ASTProxyType implements ASTType {
 
     @Override
     public boolean isArray() {
-        return false;
+        return proxyASTType.isArray();
     }
 
     @Override

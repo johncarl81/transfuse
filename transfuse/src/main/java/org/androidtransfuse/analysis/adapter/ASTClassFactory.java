@@ -1,10 +1,15 @@
 package org.androidtransfuse.analysis.adapter;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * Factory building AST objects from the relevant class attributes
+ *
  * @author John Ericksen
  */
 public class ASTClassFactory {
@@ -19,11 +24,20 @@ public class ASTClassFactory {
         }
     }
 
+    /**
+     * Build an ASTType from the given class
+     *
+     * @param clazz input Class
+     * @return ASTType representing input class
+     */
     public ASTType buildASTClassType(Class<?> clazz) {
         if (!typeCache.containsKey(clazz.getName())) {
+            //adds a new ASTType to the cache if one does not exist yet
+
             Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
             Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
             Collection<ASTField> fields = new ArrayList<ASTField>();
+
             ASTType superClass = null;
             if (clazz.getSuperclass() != null) {
                 superClass = buildASTClassType(clazz.getSuperclass());
@@ -36,7 +50,9 @@ public class ASTClassFactory {
 
             typeCache.put(clazz.getName(), new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
 
-            //fill in the guts after building the tree
+            //fill in the guts after building the class tree
+            //building after the class types have been defined avoids an infinite loop between
+            //defining classes and their attributes
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
                 constructors.add(buildASTClassConstructor(constructor));
             }
@@ -52,67 +68,89 @@ public class ASTClassFactory {
         return typeCache.get(clazz.getName());
     }
 
-    private List<ASTParameter> buildASTTypeParameters(Constructor constructor) {
-        return buildASTTypeParameters(constructor.getParameterTypes(), constructor.getParameterAnnotations());
-    }
-
+    /**
+     * Builds the parameters for a given method
+     *
+     * @param method
+     * @return AST parameters
+     */
     public List<ASTParameter> buildASTTypeParameters(Method method) {
 
         return buildASTTypeParameters(method.getParameterTypes(), method.getParameterAnnotations());
     }
 
+    /**
+     * Builds the parameters for a set of parallel arrays: type and annotations
+     *
+     * @param parameterTypes
+     * @param parameterAnnotations
+     * @return AST Parameters
+     */
     public List<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Annotation[][] parameterAnnotations) {
 
         List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
 
         for (int i = 0; i < parameterTypes.length; i++) {
-            astParameters.add(buildASTClassParameter(parameterTypes[i], parameterAnnotations[i]));
+            astParameters.add(
+                    new ASTClassParameter(
+                            parameterAnnotations[i],
+                            buildASTClassType(parameterTypes[i]),
+                            buildAnnotations(parameterAnnotations[i])));
         }
 
         return astParameters;
     }
 
-    public ASTParameter buildASTClassParameter(Class<?> parameterType, Annotation[] annotations) {
-        return new ASTClassParameter(annotations, buildASTClassType(parameterType), buildAnnotations(annotations));
-    }
-
+    /**
+     * Builds an AST Method fromm the given input method.
+     *
+     * @param method
+     * @return AST Method
+     */
     public ASTMethod buildASTClassMethod(Method method) {
 
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
-        ASTAccessModifier modifier = buildASTAccessModifier(method.getModifiers());
+        ASTAccessModifier modifier = ASTAccessModifier.getModifier(method.getModifiers());
 
         return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters, modifier, buildAnnotations(method));
     }
 
-    private ASTAccessModifier buildASTAccessModifier(int modifiers) {
-        switch (modifiers) {
-            case Modifier.PUBLIC:
-                return ASTAccessModifier.PUBLIC;
-            case Modifier.PROTECTED:
-                return ASTAccessModifier.PROTECTED;
-            case Modifier.PRIVATE:
-                return ASTAccessModifier.PRIVATE;
-        }
-
-        return ASTAccessModifier.PACKAGE_PRIVATE;
-    }
-
+    /**
+     * Builds an AST Field from the given field
+     *
+     * @param field
+     * @return AST Field
+     */
     public ASTField buildASTClassField(Field field) {
-        ASTAccessModifier modifier = buildASTAccessModifier(field.getModifiers());
+        ASTAccessModifier modifier = ASTAccessModifier.getModifier(field.getModifiers());
 
         return new ASTClassField(field, buildASTClassType(field.getType()), modifier, buildAnnotations(field));
     }
 
+    /**
+     * Build an AST Constructor from the given constructor
+     *
+     * @param constructor
+     * @return AST Constructor
+     */
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
-        ASTAccessModifier modifier = buildASTAccessModifier(constructor.getModifiers());
+        ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
-        return new ASTClassConstructor(buildAnnotations(constructor), constructor, buildASTTypeParameters(constructor), modifier);
+        List<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getParameterAnnotations());
+
+        return new ASTClassConstructor(buildAnnotations(constructor), constructor, constructorParameters, modifier);
     }
 
     private List<ASTAnnotation> buildAnnotations(AnnotatedElement element) {
         return buildAnnotations(element.getAnnotations());
     }
 
+    /**
+     * Build the AST Annotations from the given input annotation array.
+     *
+     * @param annotations
+     * @return List of AST Annotations
+     */
     private List<ASTAnnotation> buildAnnotations(Annotation[] annotations) {
 
         List<ASTAnnotation> astAnnotations = new ArrayList<ASTAnnotation>();

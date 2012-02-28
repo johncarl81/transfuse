@@ -8,6 +8,12 @@ import javax.lang.model.util.SimpleAnnotationValueVisitor6;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Visitor to convert between the given annotation field and the given type T
+ *
+ * @param <T>
+ * @author John Ericksen
+ */
 public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
 
     private Class<T> type;

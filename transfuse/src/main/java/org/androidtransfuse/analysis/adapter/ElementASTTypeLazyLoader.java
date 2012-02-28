@@ -3,6 +3,8 @@ package org.androidtransfuse.analysis.adapter;
 import javax.lang.model.element.Element;
 
 /**
+ * Adapter class to load the element type on demand.
+ *
  * @author John Ericksen
  */
 public class ElementASTTypeLazyLoader extends ASTTypeLazyLoader<Element> {

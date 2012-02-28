@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Class specific AST Parameter
+ *
  * @author John Ericksen
  */
 public class ASTClassParameter implements ASTParameter {

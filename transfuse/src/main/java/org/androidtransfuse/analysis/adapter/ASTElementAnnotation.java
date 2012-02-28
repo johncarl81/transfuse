@@ -9,6 +9,8 @@ import javax.lang.model.element.ExecutableElement;
 import java.util.Map;
 
 /**
+ * Element specific AST Annotation
+ *
  * @author John Ericksen
  */
 public class ASTElementAnnotation implements ASTAnnotation {

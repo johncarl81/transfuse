@@ -14,7 +14,19 @@ public interface ASTField extends ASTBase {
      */
     ASTType getASTType();
 
+    /**
+     * Supplies the access modifier for this field
+     *
+     * @return field access modifier
+     */
     ASTAccessModifier getAccessModifier();
 
+    /**
+     * Supplies the constant value for this field (if one exists)
+     * <p/>
+     * IE: static String value = "constant"
+     *
+     * @return constant field values
+     */
     Object getConstantValue();
 }

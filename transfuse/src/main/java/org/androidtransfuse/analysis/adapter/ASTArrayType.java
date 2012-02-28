@@ -4,6 +4,10 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 /**
+ * Specific AST Array Type.
+ * <p/>
+ * This ASTType wraps a delegate ASTType, decorating it with array attributes.
+ *
  * @author John Ericksen
  */
 public class ASTArrayType implements ASTType {

@@ -7,6 +7,11 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 
+/**
+ * Builds
+ *
+ * @param <T>
+ */
 public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     private static final String CONSTRUCTOR_IDENTIFIER = "<init>";

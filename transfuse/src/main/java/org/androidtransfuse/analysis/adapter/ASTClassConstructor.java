@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * Class specific AST Constructor
+ *
  * @author John Ericksen
  */
 public class ASTClassConstructor implements ASTConstructor {

@@ -3,6 +3,8 @@ package org.androidtransfuse.analysis.adapter;
 import javax.inject.Inject;
 
 /**
+ * Factory to create Element Converters
+ *
  * @author John Ericksen
  */
 public class ElementConverterFactory {

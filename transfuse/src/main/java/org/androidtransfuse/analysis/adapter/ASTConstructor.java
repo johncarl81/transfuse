@@ -16,5 +16,10 @@ public interface ASTConstructor extends ASTBase {
      */
     List<ASTParameter> getParameters();
 
+    /**
+     * Access modifier for the constructor
+     *
+     * @return
+     */
     ASTAccessModifier getAccessModifier();
 }
