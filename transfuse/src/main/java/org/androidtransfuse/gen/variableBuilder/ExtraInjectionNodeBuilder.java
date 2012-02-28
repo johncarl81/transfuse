@@ -9,7 +9,6 @@ import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Extra;
-import org.androidtransfuse.annotations.Nullable;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ import java.util.Collection;
 /**
  * @author John Ericksen
  */
-public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
+public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Extra> {
 
     private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
@@ -31,6 +30,7 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
                                      ASTClassFactory astClassFactory,
                                      InjectionPointFactory injectionPointFactory,
                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+        super(Extra.class);
         this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
@@ -38,13 +38,9 @@ public class ExtraInjectionNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
-        ASTAnnotation extraAnnotation = getAnnotation(Extra.class, annotations);
-        if (extraAnnotation == null) {
-            throw new TransfuseAnalysisException("Unable to find annotation of type: " + Extra.class.getName());
-        }
-        String extraId = extraAnnotation.getProperty("value", String.class);
-        boolean nullable = getAnnotation(Nullable.class, annotations) != null;
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+        String extraId = annotation.getProperty("value", String.class);
+        boolean nullable = annotation.getProperty("optional", Boolean.class);
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
