@@ -52,6 +52,7 @@ public class InjectionPointFactory {
      * Build a Method Injection Point from the given ASTMethod
      *
      * @param astMethod required ASTMEthod
+     * @param context   analysis context
      * @return MethodInjectionPoint
      */
     public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
@@ -77,7 +78,7 @@ public class InjectionPointFactory {
      * Build a Field InjectionPoint from the given ASTField
      *
      * @param astField required ASTField
-     * @param context
+     * @param context  analysis context
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
@@ -87,8 +88,8 @@ public class InjectionPointFactory {
     /**
      * Build a InjectionPoint directly from the given ASTType
      *
-     * @param astType
-     * @param context
+     * @param astType required type
+     * @param context analysis context
      * @return Injection Node
      */
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
@@ -100,6 +101,7 @@ public class InjectionPointFactory {
         int bindingCount = 0;
         InjectionNodeBuilder injectionNodeBuilder = null;
 
+        //specific binding annotation lookup
         for (ASTAnnotation bindingAnnotation : annotations) {
             if (bindingRepository.containsBindingVariableBuilder(bindingAnnotation)) {
                 bindingCount++;

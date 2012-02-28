@@ -3,18 +3,22 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Repository holding the variety of InjectionNodeBuilders assocaited with specific binding annotations:
+ * (ie: @Extra -> ExtraInjectionNodeBuilder, @SystemService -> SystemServiceInjectionNodeBuilder),
+ *
  * @author John Ericksen
  */
 public class BindingRepository {
 
     private Map<String, InjectionNodeBuilder> variableBuilderMap = new HashMap<String, InjectionNodeBuilder>();
 
-    public void addVariableBuilder(String annotationName, InjectionNodeBuilder variableBuilder) {
-        this.variableBuilderMap.put(annotationName, variableBuilder);
+    public void addVariableBuilder(Class<? extends Annotation> annotation, InjectionNodeBuilder variableBuilder) {
+        this.variableBuilderMap.put(annotation.getName(), variableBuilder);
     }
 
     public boolean containsBindingVariableBuilder(ASTAnnotation bindingAnnotation) {

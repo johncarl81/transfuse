@@ -10,6 +10,9 @@ import org.androidtransfuse.model.InjectionNode;
 import javax.inject.Inject;
 
 /**
+ * Analyzer to add Aspect Oriented Programming method interceptors from the AOP Repository to the appropriately
+ * annotated methods.
+ *
  * @author John Ericksen
  */
 public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {

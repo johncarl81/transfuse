@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * InjectionNode aspect containing the relationship injection points for constructors, methods and fields.  These
+ * are used during injection code generation, specifying what to inject into the associated InjectionNode.
+ *
  * @author John Ericksen
  */
 public class ASTInjectionAspect {

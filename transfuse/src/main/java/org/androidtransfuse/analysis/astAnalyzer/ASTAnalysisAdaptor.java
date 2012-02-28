@@ -8,6 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
+ * Adaptor to allow subclasses to not be required to implement all analysis methods
+ *
  * @author John Ericksen
  */
 public class ASTAnalysisAdaptor implements ASTAnalysis {

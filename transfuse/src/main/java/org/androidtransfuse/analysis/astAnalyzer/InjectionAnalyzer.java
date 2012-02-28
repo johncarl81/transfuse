@@ -13,6 +13,8 @@ import org.androidtransfuse.model.InjectionNode;
 import javax.inject.Inject;
 
 /**
+ * Analyzer to setup InjectionPoints for all @Inject annotated elements
+ *
  * @author John Ericksen
  */
 public class InjectionAnalyzer implements ASTAnalysis {
@@ -42,6 +44,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
                 }
             }
 
+            //only allow zero or one annotated constructors.
             if (annotatedConstructor != null) {
                 getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
             } else if (noArgConstructor != null) {

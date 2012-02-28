@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Represents the AOP proxy Method Interceptors.  This aspect is applied to the InjectionNode and used during the
+ * object instantiation generation.
+ *
  * @author John Ericksen
  */
 public class AOPProxyAspect {

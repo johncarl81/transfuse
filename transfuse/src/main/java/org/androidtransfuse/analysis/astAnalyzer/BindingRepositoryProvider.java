@@ -13,6 +13,8 @@ import org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder;
 import javax.inject.Inject;
 
 /**
+ * Factory to create the Binding Repository
+ *
  * @author John Ericksen
  */
 public class BindingRepositoryProvider implements Provider<BindingRepository> {
@@ -31,10 +33,10 @@ public class BindingRepositoryProvider implements Provider<BindingRepository> {
 
         BindingRepository bindingRepository = new BindingRepository();
 
-        bindingRepository.addVariableBuilder(View.class.getName(), viewVariableBuilder);
-        bindingRepository.addVariableBuilder(Extra.class.getName(), extraInjectionNodeBuilder);
-        bindingRepository.addVariableBuilder(Resource.class.getName(), resourceInjectionNodeBuilder);
-        bindingRepository.addVariableBuilder(SystemService.class.getName(), systemServiceBindingInjectionNodeBuilder);
+        bindingRepository.addVariableBuilder(View.class, viewVariableBuilder);
+        bindingRepository.addVariableBuilder(Extra.class, extraInjectionNodeBuilder);
+        bindingRepository.addVariableBuilder(Resource.class, resourceInjectionNodeBuilder);
+        bindingRepository.addVariableBuilder(SystemService.class, systemServiceBindingInjectionNodeBuilder);
 
         return bindingRepository;
     }
