@@ -7,11 +7,13 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.classloader.MemoryClassLoader;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.util.EmptyRResource;
+import org.androidtransfuse.model.r.RBuilder;
+import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.junit.Test;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -31,7 +34,10 @@ public class ActivityGeneratorTest {
     private static final String TEST_PACKLAGE = "org.androidtransfuse.gen";
     private static final String TEST_NAME = "MockActivity";
     private static final PackageClass TEST_PACKAGE_FILENAME = new PackageClass(TEST_PACKLAGE, TEST_NAME);
-    private static final int TEST_LAYOUT = 1234;
+
+    public static final class Layout {
+        public static int value = 1234;
+    }
 
     @Inject
     private ActivityGenerator activityGenerator;
@@ -42,12 +48,17 @@ public class ActivityGeneratorTest {
     @Inject
     private StringCodeWriter stringCodeWriter;
     @Inject
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private ASTClassFactory astClassFactory;
+    @Inject
+    private RBuilder rBuilder;
+    private RResource rResource;
 
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
+
+        rResource = rBuilder.buildR(Collections.singleton(astClassFactory.buildASTClassType(Layout.class)));
     }
 
     @Test
@@ -55,9 +66,9 @@ public class ActivityGeneratorTest {
 
         ActivityDescriptor activityDescriptor = new ActivityDescriptor();
         activityDescriptor.setPackageClass(TEST_PACKAGE_FILENAME);
-        activityDescriptor.setLayout(TEST_LAYOUT);
+        activityDescriptor.setLayout(Layout.value);
 
-        activityGenerator.generate(activityDescriptor, new EmptyRResource());
+        activityGenerator.generate(activityDescriptor, rResource);
 
         codeModel.build(stringCodeWriter);
         classLoader.add(TEST_PACKAGE_FILENAME.getFullyQualifiedName(), stringCodeWriter.getValue(TEST_PACKAGE_FILENAME.addDotJava()));

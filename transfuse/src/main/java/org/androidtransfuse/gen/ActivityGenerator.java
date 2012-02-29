@@ -8,6 +8,8 @@ import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.model.r.RResourceReferenceBuilder;
+import org.androidtransfuse.model.r.ResourceIdentifier;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,11 +25,13 @@ public class ActivityGenerator {
 
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
+    private RResourceReferenceBuilder rResourceReferenceBuilder;
 
     @Inject
-    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
+    public ActivityGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, RResourceReferenceBuilder rResourceReferenceBuilder) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.rResourceReferenceBuilder = rResourceReferenceBuilder;
     }
 
     public void generate(ActivityDescriptor descriptor, RResource rResource) throws IOException, JClassAlreadyExistsException, ClassNotFoundException {
@@ -50,7 +54,8 @@ public class ActivityGenerator {
         block.invoke(JExpr._super(), onCreateMethod).arg(savedInstanceState);
 
         //layout setting
-        block.invoke("setContentView").arg(JExpr.lit(descriptor.getLayout()));
+        ResourceIdentifier layoutIdentifier = rResource.getResourceIdentifier(descriptor.getLayout());
+        block.invoke("setContentView").arg(rResourceReferenceBuilder.buildReference(layoutIdentifier));
 
         //injector and injection points
         //todo: more than one?

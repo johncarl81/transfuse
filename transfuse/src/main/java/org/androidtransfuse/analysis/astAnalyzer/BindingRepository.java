@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Repository holding the variety of InjectionNodeBuilders assocaited with specific binding annotations:
+ * Repository holding the variety of InjectionNodeBuilders associated with specific binding annotations:
  * (ie: @Extra -> ExtraInjectionNodeBuilder, @SystemService -> SystemServiceInjectionNodeBuilder),
  *
  * @author John Ericksen
