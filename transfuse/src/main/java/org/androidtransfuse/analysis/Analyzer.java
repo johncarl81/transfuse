@@ -43,7 +43,7 @@ public class Analyzer {
             InjectionNode proxyDependency = findProxyableDependency(injectionNode, loopedDependencies);
 
             if (proxyDependency == null) {
-                throw new TransfuseAnalysisException("Unable to find a depenency to proxy");
+                throw new TransfuseAnalysisException("Unable to find a dependency to proxy");
             }
 
             VirtualProxyAspect proxyAspect = getProxyAspect(proxyDependency);
