@@ -1,7 +1,7 @@
 package org.androidtransfuse.aop;
 
 /**
- * todo; reimplement using org.aopalliance.intercept.MethodInterceptor
+ * todo: reimplement using org.aopalliance.intercept.MethodInterceptor
  *
  * @author John Ericksen
  */

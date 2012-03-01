@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest">
     <application t="n,l" android:name=".IntegrationApp">
         <activity t="n,l" android:label="" android:name=".InjectionActivity"/>
+        <activity t="n,l" android:label="" android:name=".ActivityLifecycleActivity"/>
         <activity t="n,l" android:label="" android:name=".IntegrationMain"/>
     </application>
 </manifest>
