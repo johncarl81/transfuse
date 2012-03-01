@@ -4,5 +4,6 @@
         <activity t="n,l" android:label="" android:name=".InjectionActivity"/>
         <activity t="n,l" android:label="" android:name=".ActivityLifecycleActivity"/>
         <activity t="n,l" android:label="" android:name=".IntegrationMain"/>
+        <activity t="n,l" android:label="" android:name=".AOPActivity"/>
     </application>
 </manifest>
