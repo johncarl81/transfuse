@@ -21,4 +21,8 @@ public class AOP {
     public String interceptMeWithReturn() {
         return INTERCEPT_VALUE;
     }
+
+    @DependencyInterceptor
+    public void interceptorWithDependency() {
+    }
 }

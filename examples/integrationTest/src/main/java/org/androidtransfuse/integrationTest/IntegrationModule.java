@@ -4,6 +4,8 @@ import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.TransfuseModule;
 import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
+import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
+import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
 import org.androidtransfuse.integrationTest.aop.InterceptorRecorder;
 import org.androidtransfuse.integrationTest.inject.LoopThree;
 import org.androidtransfuse.integrationTest.inject.LoopThreeImpl;
@@ -19,4 +21,7 @@ public interface IntegrationModule {
 
     @BindInterceptor(AOPInterceptor.class)
     InterceptorRecorder getInterceptor();
+
+    @BindInterceptor(DependencyInterceptor.class)
+    InjectedInterceptor getDependencyInterceptor();
 }

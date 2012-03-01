@@ -15,6 +15,7 @@ import static junit.framework.Assert.*;
 public class AOPTest {
 
     private AOP aop;
+    private InjectedInterceptor injectedInterceptor;
 
     @Before
     public void setup() throws IllegalAccessException {
@@ -23,6 +24,7 @@ public class AOPTest {
         aopActivity.onCreate(null);
 
         aop = DelegateUtil.getDelegate(aopActivity, AOP.class);
+        injectedInterceptor = DelegateUtil.getDelegate(aopActivity, InjectedInterceptor.class);
     }
 
     @Test
@@ -41,5 +43,10 @@ public class AOPTest {
         aop.interceptMeWithReturn();
         assertTrue(InterceptorRecorder.isCalled());
         assertEquals(AOP.INTERCEPT_VALUE, InterceptorRecorder.getRetValue());
+    }
+
+    @Test
+    public void testInterceptionDependency() {
+        assertNotNull(injectedInterceptor.getDependency());
     }
 }
