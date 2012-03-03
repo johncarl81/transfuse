@@ -23,7 +23,7 @@ public class ASTElementFactory {
     @Inject
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     @Inject
-    private ASTElementAnnotationFactory astElementAnnotationFactory;
+    private ASTFactory astElementAnnotationFactory;
 
     /**
      * Build a ASTType from the provided TypeElement.

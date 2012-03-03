@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Globally represents the VOID type
@@ -61,6 +62,11 @@ public enum ASTVoidType implements ASTType {
     @Override
     public boolean isArray() {
         return false;
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return Collections.emptyList();
     }
 
     @Override

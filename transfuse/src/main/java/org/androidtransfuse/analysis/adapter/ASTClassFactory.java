@@ -1,10 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -15,8 +13,11 @@ import java.util.*;
 public class ASTClassFactory {
 
     private Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
+    private ASTFactory astFactory;
 
-    public ASTClassFactory() {
+    @Inject
+    public ASTClassFactory(ASTFactory astFactory) {
+        this.astFactory = astFactory;
         //seed with primitives and void
         typeCache.put("void", ASTVoidType.VOID);
         for (ASTPrimitiveType primitive : ASTPrimitiveType.values()) {
@@ -31,6 +32,10 @@ public class ASTClassFactory {
      * @return ASTType representing input class
      */
     public ASTType buildASTClassType(Class<?> clazz) {
+        return buildASTClassType(clazz, null);
+    }
+
+    private ASTType buildASTClassType(Class<?> clazz, Type genericType) {
         if (!typeCache.containsKey(clazz.getName())) {
             //adds a new ASTType to the cache if one does not exist yet
 
@@ -40,15 +45,19 @@ public class ASTClassFactory {
 
             ASTType superClass = null;
             if (clazz.getSuperclass() != null) {
-                superClass = buildASTClassType(clazz.getSuperclass());
+                superClass = buildASTClassType(clazz.getSuperclass(), clazz.getGenericSuperclass());
             }
+
             Collection<ASTType> interfaces = new HashSet<ASTType>();
 
-            for (Class<?> clazzInterface : clazz.getInterfaces()) {
-                interfaces.add(buildASTClassType(clazzInterface));
-            }
-
             typeCache.put(clazz.getName(), new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
+
+            Class<?>[] classInterfaces = clazz.getInterfaces();
+            Type[] classGenericInterfaces = clazz.getGenericInterfaces();
+
+            for (int i = 0; i < classInterfaces.length; i++) {
+                interfaces.add(buildASTClassType(classInterfaces[i], classGenericInterfaces[i]));
+            }
 
             //fill in the guts after building the class tree
             //building after the class types have been defined avoids an infinite loop between
@@ -65,7 +74,14 @@ public class ASTClassFactory {
                 fields.add(buildASTClassField(field));
             }
         }
-        return typeCache.get(clazz.getName());
+
+        ASTType astType = typeCache.get(clazz.getName());
+
+        if (genericType instanceof ParameterizedType) {
+            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.builderParameterBuilder((ParameterizedType) genericType));
+        }
+
+        return astType;
     }
 
     /**
@@ -76,17 +92,17 @@ public class ASTClassFactory {
      */
     public List<ASTParameter> buildASTTypeParameters(Method method) {
 
-        return buildASTTypeParameters(method.getParameterTypes(), method.getParameterAnnotations());
+        return buildASTTypeParameters(method.getParameterTypes(), method.getGenericParameterTypes(), method.getParameterAnnotations());
     }
 
     /**
      * Builds the parameters for a set of parallel arrays: type and annotations
      *
      * @param parameterTypes
-     * @param parameterAnnotations
-     * @return AST Parameters
+     * @param genericParameterTypes
+     * @param parameterAnnotations  @return AST Parameters
      */
-    public List<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Annotation[][] parameterAnnotations) {
+    public List<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Type[] genericParameterTypes, Annotation[][] parameterAnnotations) {
 
         List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
 
@@ -94,11 +110,18 @@ public class ASTClassFactory {
             astParameters.add(
                     new ASTClassParameter(
                             parameterAnnotations[i],
-                            buildASTClassType(parameterTypes[i]),
+                            buildASTClassType(parameterTypes[i], nullSafeAccess(genericParameterTypes, i)),
                             buildAnnotations(parameterAnnotations[i])));
         }
 
         return astParameters;
+    }
+
+    private Type nullSafeAccess(Type[] typeArray, int i) {
+        if (typeArray.length > i) {
+            return typeArray[i];
+        }
+        return null;
     }
 
     /**
@@ -112,7 +135,7 @@ public class ASTClassFactory {
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(method.getModifiers());
 
-        return new ASTClassMethod(method, buildASTClassType(method.getReturnType()), astParameters, modifier, buildAnnotations(method));
+        return new ASTClassMethod(method, buildASTClassType(method.getReturnType(), method.getGenericReturnType()), astParameters, modifier, buildAnnotations(method));
     }
 
     /**
@@ -124,7 +147,7 @@ public class ASTClassFactory {
     public ASTField buildASTClassField(Field field) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(field.getModifiers());
 
-        return new ASTClassField(field, buildASTClassType(field.getType()), modifier, buildAnnotations(field));
+        return new ASTClassField(field, buildASTClassType(field.getType(), field.getGenericType()), modifier, buildAnnotations(field));
     }
 
     /**
@@ -136,7 +159,7 @@ public class ASTClassFactory {
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
-        List<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getParameterAnnotations());
+        List<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
 
         return new ASTClassConstructor(buildAnnotations(constructor), constructor, constructorParameters, modifier);
     }

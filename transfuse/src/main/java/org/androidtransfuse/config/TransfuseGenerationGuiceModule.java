@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
-import org.androidtransfuse.analysis.adapter.ASTElementAnnotationFactory;
+import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepository;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository;
@@ -42,7 +42,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(VariableInjectionBuilderFactory.class));
         install(factoryModuleBuilder.build(MethodBasedResourceExpressionBuilderFactory.class));
         install(factoryModuleBuilder.build(MethodBasedResourceExpressionBuilderAdaptorFactory.class));
-        install(factoryModuleBuilder.build(ASTElementAnnotationFactory.class));
+        install(factoryModuleBuilder.build(ASTFactory.class));
         install(factoryModuleBuilder.build(ManifestLocatorFactory.class));
         install(factoryModuleBuilder.build(ProcessorFactory.class));
         install(factoryModuleBuilder.build(VariableExpressionBuilderFactory.class));

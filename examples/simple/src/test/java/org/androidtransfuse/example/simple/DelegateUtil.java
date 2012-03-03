@@ -1,7 +1,5 @@
 package org.androidtransfuse.example.simple;
 
-import org.androidtransfuse.example.simple.TransfuseTestException;
-
 import java.lang.reflect.Field;
 
 /**
@@ -10,7 +8,7 @@ import java.lang.reflect.Field;
 public class DelegateUtil {
 
     public static <T> T getDelegate(Object root, Class<T> delegateClass) {
-        try{
+        try {
             Field delegateField = findDelegateField(root.getClass(), delegateClass);
 
             delegateField.setAccessible(true);
@@ -18,8 +16,7 @@ public class DelegateUtil {
             delegateField.setAccessible(false);
 
             return delegate;
-        }
-        catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             throw new TransfuseTestException("Illegal access to field", e);
         }
     }

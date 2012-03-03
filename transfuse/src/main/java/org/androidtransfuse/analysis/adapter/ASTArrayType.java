@@ -2,6 +2,8 @@ package org.androidtransfuse.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Specific AST Array Type.
@@ -71,5 +73,10 @@ public class ASTArrayType implements ASTType {
     @Override
     public Collection<ASTType> getInterfaces() {
         return delegate.getInterfaces();
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return Collections.emptyList();
     }
 }

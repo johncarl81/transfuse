@@ -5,6 +5,7 @@ import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
@@ -28,6 +29,8 @@ public class Injection {
     private LoopOne dependencyLoopOne;
     @Inject
     private ProvidedInjectTarget providedInjectTarget;
+    @Inject
+    private Provider<InjectTarget> generatedProvider;
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -74,5 +77,9 @@ public class Injection {
 
     public ProvidedInjectTarget getProvidedInjectTarget() {
         return providedInjectTarget;
+    }
+
+    public Provider<InjectTarget> getGeneratedProvider() {
+        return generatedProvider;
     }
 }

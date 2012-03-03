@@ -2,6 +2,8 @@ package org.androidtransfuse.analysis.adapter;
 
 import javax.lang.model.element.TypeElement;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Element specific AST Type
@@ -89,5 +91,10 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public int hashCode() {
         return typeElement != null ? typeElement.hashCode() : 0;
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return Collections.emptyList();
     }
 }

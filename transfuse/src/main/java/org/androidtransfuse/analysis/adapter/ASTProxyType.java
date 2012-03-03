@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Replaces the given AST Type with a proxy type.  This is used during AOP and Virtual proxy of the given
@@ -102,5 +103,10 @@ public class ASTProxyType implements ASTType {
         int result = proxyASTType != null ? proxyASTType.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return proxyASTType.getGenericParameters();
     }
 }

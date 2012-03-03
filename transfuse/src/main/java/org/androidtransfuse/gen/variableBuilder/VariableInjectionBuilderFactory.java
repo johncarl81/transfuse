@@ -29,4 +29,6 @@ public interface VariableInjectionBuilderFactory {
     ProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerInjectionNode);
 
     ViewVariableBuilder buildViewVariableBuilder(Integer viewId, InjectionNode activityInjectionNode, JType jType);
+
+    GeneratedProviderVariableBuilder buildGeneratedProviderVariableBuilder(InjectionNode providerTypeInjectionNode);
 }

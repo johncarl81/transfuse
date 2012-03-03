@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * @author John Ericksen
@@ -31,5 +32,7 @@ public class ScopeTest {
     @Test
     public void testSingleton() {
         assertEquals(one.getSingleton(), two.getSingleton());
+        assertNotNull(one.getSingleton().getSingletonDependency());
+        assertNotNull(one.getSingleton().getSingletonDependency());
     }
 }

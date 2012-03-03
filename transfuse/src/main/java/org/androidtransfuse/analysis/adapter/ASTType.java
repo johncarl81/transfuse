@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Abstract Syntax Tree Type node
@@ -57,4 +58,11 @@ public interface ASTType extends ASTBase {
      * @return array type
      */
     boolean isArray();
+
+    /**
+     * returns a list of the generic type parameters, if they are appropriate for the type and exist.
+     *
+     * @return generic parameters
+     */
+    List<ASTType> getGenericParameters();
 }

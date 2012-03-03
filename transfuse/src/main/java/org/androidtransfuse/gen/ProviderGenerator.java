@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen;
 
-import android.app.Application;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.InjectionNode;
@@ -48,13 +47,13 @@ public class ProviderGenerator {
             JDefinedClass providerClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Provider", ClassType.CLASS);
             providerClass._implements(Provider.class).narrow(injectionNodeClassRef);
 
-            JFieldVar applicationField = providerClass.field(JMod.PRIVATE, Application.class, "application");
+            //JFieldVar applicationField = providerClass.field(JMod.PRIVATE, Application.class, "application");
 
             JMethod constructor = providerClass.constructor(JMod.PUBLIC);
 
-            JVar applicationParameter = constructor.param(codeModel.ref(Application.class), "application");
+            //JVar applicationParameter = constructor.param(codeModel.ref(Application.class), "application");
 
-            constructor.body().assign(JExpr._this().ref(applicationField), applicationParameter);
+            //constructor.body().assign(JExpr._this().ref(applicationField), applicationParameter);
 
             //get() method
             JMethod getMethod = providerClass.method(JMod.PUBLIC, injectionNodeClassRef, GET_METHOD);

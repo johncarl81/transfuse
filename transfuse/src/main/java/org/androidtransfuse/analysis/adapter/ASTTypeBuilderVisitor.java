@@ -16,6 +16,8 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Inject
     private ASTElementFactory astElementFactory;
+    @Inject
+    private ASTFactory astFactory;
 
     @Override
     public ASTType visitPrimitive(PrimitiveType primitiveType, Void aVoid) {
@@ -34,7 +36,13 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitDeclared(DeclaredType declaredType, Void aVoid) {
-        return astElementFactory.buildASTElementType((TypeElement) declaredType.asElement());
+
+        ASTType astType = astElementFactory.buildASTElementType((TypeElement) declaredType.asElement());
+
+        if (declaredType.getTypeArguments().size() > 0) {
+            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder(declaredType));
+        }
+        return astType;
     }
 
     @Override

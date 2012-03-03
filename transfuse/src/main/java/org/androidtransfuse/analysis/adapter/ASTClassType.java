@@ -2,6 +2,8 @@ package org.androidtransfuse.analysis.adapter;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Class specific AST Type
@@ -104,5 +106,10 @@ public class ASTClassType implements ASTType {
     @Override
     public int hashCode() {
         return clazz != null ? clazz.hashCode() : 0;
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return Collections.emptyList();
     }
 }

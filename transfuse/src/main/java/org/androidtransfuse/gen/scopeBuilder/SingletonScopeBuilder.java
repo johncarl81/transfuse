@@ -52,6 +52,7 @@ public class SingletonScopeBuilder implements VariableBuilder {
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
         JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).staticRef(CLASS_REF);
         JExpression scopeVar = JExpr.cast(codeModel._ref(Scope.class), applicationVar);
+
         return scopeVar.invoke(GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
     }
 
@@ -67,6 +68,6 @@ public class SingletonScopeBuilder implements VariableBuilder {
 
         JDefinedClass providerClass = providerGenerator.generateProvider(nonScopedInjectionNode, rResource);
 
-        return JExpr._new(providerClass).arg(applicationVar);
+        return JExpr._new(providerClass);//.arg(applicationVar);
     }
 }

@@ -1,6 +1,5 @@
 package org.androidtransfuse.integrationTest.inject;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
@@ -28,17 +27,17 @@ public class SystemInjectionTest {
     }
 
     @Test
-    public void testLocationManagerInjection(){
+    public void testLocationManagerInjection() {
         assertNotNull(systemInjection.getLocationManager());
     }
 
     @Test
-    public void testVibratorInjection(){
+    public void testVibratorInjection() {
         assertNotNull(systemInjection.getVibrator());
     }
-    
+
     @Test
-    public void testNotificationServiceInjection(){
+    public void testNotificationServiceInjection() {
         assertNotNull(systemInjection.getNotificationService());
         assertEquals(NotificationManager.class, systemInjection.getNotificationService().getClass());
     }

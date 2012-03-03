@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
+import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 
@@ -35,11 +36,15 @@ public class VariableBuilderRepositoryFactory {
     private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Map<String, Class<?>> systemService;
+    private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
 
     @Inject
-    public VariableBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider, VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+    public VariableBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider,
+                                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                            Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
         this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
 
         systemService = new HashMap<String, Class<?>>();
         systemService.put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
@@ -77,12 +82,16 @@ public class VariableBuilderRepositoryFactory {
     public InjectionNodeBuilderRepository buildRepository() {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = new InjectionNodeBuilderRepository(variableInjectionNodeBuilderProvider);
 
+        //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
             injectionNodeBuilderRepository.put(systemServiceEntry.getValue().getName(),
                     variableInjectionBuilderFactory.buildSystemServiceInjectionNodeBuilder(
                             systemServiceEntry.getKey(),
                             systemServiceEntry.getValue()));
         }
+
+        //provider type
+        injectionNodeBuilderRepository.put(Provider.class.getName(), generatedProviderInjectionNodeBuilderProvider.get());
 
         return injectionNodeBuilderRepository;
     }

@@ -51,7 +51,7 @@ public class InjectionPointFactory {
     /**
      * Build a Method Injection Point from the given ASTMethod
      *
-     * @param astMethod required ASTMEthod
+     * @param astMethod required ASTMethod
      * @param context   analysis context
      * @return MethodInjectionPoint
      */

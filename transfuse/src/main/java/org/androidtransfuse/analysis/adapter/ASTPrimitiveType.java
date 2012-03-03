@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Element specific primitive AST type
@@ -85,5 +86,10 @@ public enum ASTPrimitiveType implements ASTType {
     @Override
     public boolean isArray() {
         return false;
+    }
+
+    @Override
+    public List<ASTType> getGenericParameters() {
+        return Collections.emptyList();
     }
 }
