@@ -4,6 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
+import org.androidtransfuse.analysis.AOPRepository;
+import org.androidtransfuse.analysis.AOPRepositoryProvider;
 import org.androidtransfuse.analysis.AnalysisRepository;
 import org.androidtransfuse.analysis.AnalysisRepositoryFactory;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
@@ -56,6 +58,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         bind(XStream.class).toProvider(XStreamProvider.class);
         bind(InjectionNodeBuilderRepository.class).toProvider(InjectionNodeBuilderRepositoryFactory.class).asEagerSingleton();
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
+        bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
 
         bind(InjectionExpressionBuilder.class).to(InjectionExpressionBuilderImpl.class);
 
