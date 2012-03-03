@@ -26,6 +26,8 @@ public class Injection {
     private InjectTarget methodInjectionTwo;
     @Inject
     private LoopOne dependencyLoopOne;
+    @Inject
+    private ProvidedInjectTarget providedInjectTarget;
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -68,5 +70,9 @@ public class Injection {
 
     public LoopOne getDependencyLoopOne() {
         return dependencyLoopOne;
+    }
+
+    public ProvidedInjectTarget getProvidedInjectTarget() {
+        return providedInjectTarget;
     }
 }

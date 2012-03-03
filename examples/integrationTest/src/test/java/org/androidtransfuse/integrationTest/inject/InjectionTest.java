@@ -54,4 +54,11 @@ public class InjectionTest {
         LoopOne oneLoop = three.getOne();
         assertNotNull(oneLoop);
     }
+    
+    @Test
+    public void testProviderInjection(){
+        ProvidedInjectTarget providedInjectTarget = injection.getProvidedInjectTarget();
+        assertNotNull(providedInjectTarget);
+        assertNotNull(providedInjectTarget.getInjectTarget());
+    }
 }
