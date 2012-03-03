@@ -19,7 +19,7 @@ public class ActivityLifecycleTest {
     private ActivityLifecycleActivity lifecycleActivity;
 
     @Before
-    public void setup() throws IllegalAccessException {
+    public void setup() {
         lifecycleActivity = new ActivityLifecycleActivity();
         lifecycleActivity.onCreate(null);
 

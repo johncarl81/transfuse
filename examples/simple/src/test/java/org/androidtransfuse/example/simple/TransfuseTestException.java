@@ -7,4 +7,8 @@ public class TransfuseTestException extends RuntimeException {
     public TransfuseTestException(String s) {
         super(s);
     }
+
+    public TransfuseTestException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

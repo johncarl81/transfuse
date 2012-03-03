@@ -18,7 +18,7 @@ public class AOPTest {
     private InjectedInterceptor injectedInterceptor;
 
     @Before
-    public void setup() throws IllegalAccessException {
+    public void setup() {
         InterceptorRecorder.reset();
         AOPActivity aopActivity = new AOPActivity();
         aopActivity.onCreate(null);

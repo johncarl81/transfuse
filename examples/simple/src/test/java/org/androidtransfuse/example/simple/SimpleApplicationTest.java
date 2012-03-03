@@ -19,7 +19,7 @@ public class SimpleApplicationTest {
     private SimpleApp simpleApp;
 
     @Before
-    public void setup() throws IllegalAccessException {
+    public void setup() {
 
         simpleApp = new SimpleApp();
         simpleApp.onCreate();

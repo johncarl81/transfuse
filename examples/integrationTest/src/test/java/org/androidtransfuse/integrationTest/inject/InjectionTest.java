@@ -17,7 +17,7 @@ public class InjectionTest {
     private Injection injection;
 
     @Before
-    public void setup() throws IllegalAccessException {
+    public void setup() {
         InjectionActivity injectionActivity = new InjectionActivity();
         injectionActivity.onCreate(null);
 

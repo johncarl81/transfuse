@@ -17,15 +17,14 @@ public class SecondActivityTest {
 
     private static final String TEST_EXTRA_ID = "testExtra";
     private static final String TEST_EXTRA_VALUE = "hello";
-    private SecondActivity secondActivity;
     private SecondActivityDelegate secondActivityDelegate;
 
     @Before
-    public void setup() throws IllegalAccessException, NoSuchFieldException {
+    public void setup() {
         Intent callingIntent = new Intent("test");
         callingIntent.putExtra(TEST_EXTRA_ID, TEST_EXTRA_VALUE);
 
-        secondActivity = new SecondActivity();
+        SecondActivity secondActivity = new SecondActivity();
         secondActivity.setIntent(callingIntent);
         secondActivity.onCreate(null);
 

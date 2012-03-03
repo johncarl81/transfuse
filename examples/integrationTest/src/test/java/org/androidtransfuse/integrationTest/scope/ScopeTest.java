@@ -18,7 +18,7 @@ public class ScopeTest {
     private ScopeTwo two;
 
     @Before
-    public void setup() throws IllegalAccessException {
+    public void setup() {
         ScopeOneActivity scopeOneActivity = new ScopeOneActivity();
         scopeOneActivity.onCreate(null);
         ScopeTwoActivity scopeTwoActivity = new ScopeTwoActivity();

@@ -21,7 +21,7 @@ public class SingletonTest {
     private SecondActivityDelegate secondActivityDelegate;
 
     @Before
-    public void setup() throws IllegalAccessException, NoSuchFieldException {
+    public void setup() {
         SimpleActivity simpleActivity = new SimpleActivity();
         simpleActivity.onCreate(null);
 
