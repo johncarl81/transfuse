@@ -9,7 +9,7 @@ import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.VariableBuilderRepositoryFactory;
+import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
@@ -33,24 +33,28 @@ public class ActivityAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
     private Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider;
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
     private Provider<IntentFilter> intentFilterProvider;
     private Provider<Action> actionProvider;
     private Provider<Category> categoryProvider;
+    private InjectionNodeBuilderRepository injectionNodeBuilders;
+    private AOPRepository aopRepository;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
                             Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
-                            VariableBuilderRepositoryFactory variableBuilderRepositoryFactory,
+                            InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                             Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                             Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider,
                             Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
                             Provider<Category> categoryProvider,
                             Provider<Action> actionProvider,
-                            Provider<IntentFilter> intentFilterProvider) {
+                            Provider<IntentFilter> intentFilterProvider,
+                            AOPRepository aopRepository,
+                            InjectionNodeBuilderRepository injectionNodeBuilders) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -60,9 +64,11 @@ public class ActivityAnalysis {
         this.categoryProvider = categoryProvider;
         this.actionProvider = actionProvider;
         this.intentFilterProvider = intentFilterProvider;
+        this.aopRepository = aopRepository;
+        this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
-    public ActivityDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
+    public ActivityDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         Layout layoutAnnotation = input.getAnnotation(Layout.class);
@@ -80,7 +86,7 @@ public class ActivityAnalysis {
             activityDescriptor.setLabel(activityAnnotation.label());
             activityDescriptor.setLayout(layoutAnnotation.value());
 
-            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), aopRepository);
+            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
 
             activityDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(input, context));
@@ -126,9 +132,9 @@ public class ActivityAnalysis {
         return convertedIntentFilters;
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(InjectionNodeBuilderRepository injectionNodeBuilderRepository) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
 
-        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilderRepository);
+        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
         subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
         subRepository.put(Application.class.getName(), applicationVariableBuilderProvider.get());

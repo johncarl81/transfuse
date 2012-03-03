@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.VariableBuilderRepositoryFactory;
+import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.ApplicationDescriptor;
@@ -21,23 +21,30 @@ public class ApplicationAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
     private Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider;
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
+    private InjectionNodeBuilderRepository injectionNodeBuilders;
+    private AOPRepository aopRepository;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
                                Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
-                               VariableBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                               Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider, Provider<org.androidtransfuse.model.manifest.Application> applicationProvider) {
+                               InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
+                               Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
+                               Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
+                               AOPRepository aopRepository,
+                               InjectionNodeBuilderRepository injectionNodeBuilders) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationProvider = applicationProvider;
+        this.aopRepository = aopRepository;
+        this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
-    public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
+    public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository) {
         ApplicationDescriptor applicationDescriptor = null;
 
         Application activityAnnotation = astType.getAnnotation(Application.class);
@@ -52,7 +59,7 @@ public class ApplicationAnalysis {
 
             applicationDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
 
-            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(injectionNodeBuilders), aopRepository);
+            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
 
             applicationDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(astType, context));
@@ -68,9 +75,9 @@ public class ApplicationAnalysis {
         return applicationDescriptor;
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(InjectionNodeBuilderRepository injectionNodeBuilderRepository) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
 
-        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilderRepository);
+        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
         subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
         subRepository.put(android.app.Application.class.getName(), contextVariableBuilderProvider.get());

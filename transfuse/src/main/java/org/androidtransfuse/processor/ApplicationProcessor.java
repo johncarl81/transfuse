@@ -3,9 +3,7 @@ package org.androidtransfuse.processor;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.AnalysisRepository;
-import org.androidtransfuse.analysis.AnalysisRepositoryFactory;
 import org.androidtransfuse.analysis.ApplicationAnalysis;
-import org.androidtransfuse.analysis.ModuleProcessor;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.model.ApplicationDescriptor;
@@ -19,7 +17,7 @@ import java.io.IOException;
  */
 public class ApplicationProcessor {
 
-    private AnalysisRepositoryFactory analysisRepositoryFactory;
+    private AnalysisRepository analysisRepository;
     private ApplicationAnalysis applicationAnalysis;
     private ApplicationGenerator applicationGenerator;
     private Logger logger;
@@ -32,21 +30,18 @@ public class ApplicationProcessor {
                                 ApplicationGenerator applicationGenerator,
                                 Logger logger,
                                 ProcessorFactory processorFactory,
-                                AnalysisRepositoryFactory analysisRepositoryFactory) {
+                                AnalysisRepository analysisRepository) {
         this.applicationAnalysis = applicationAnalysis;
         this.applicationGenerator = applicationGenerator;
         this.logger = logger;
         this.processorFactory = processorFactory;
         this.context = context;
-        this.analysisRepositoryFactory = analysisRepositoryFactory;
+        this.analysisRepository = analysisRepository;
     }
 
     public ComponentProcessor processApplication(ASTType astType) {
-        AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
 
-        ModuleProcessor moduleProcessor = context.getModuleProcessor();
-
-        ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
+        ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository);
 
         if (applicationDescriptor != null) {
 

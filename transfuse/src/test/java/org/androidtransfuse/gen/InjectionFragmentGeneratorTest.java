@@ -39,7 +39,6 @@ public class InjectionFragmentGeneratorTest {
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private JCodeModel codeModel;
-    private InjectionNodeBuilderRepository variableBuilderRepository;
     @Inject
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     @Inject
@@ -52,14 +51,12 @@ public class InjectionFragmentGeneratorTest {
     private SimpleAnalysisContextFactory contextFactory;
     private AnalysisContext context;
     @Inject
-    private VariableBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
 
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
-
-        variableBuilderRepository = variableBuilderRepositoryFactory.buildRepository();
 
         context = contextFactory.buildContext();
 
@@ -142,7 +139,7 @@ public class InjectionFragmentGeneratorTest {
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(ASTAccessModifier.PRIVATE, "target", buildInjectionNode(VariableTarget.class), 0);
         getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
-        variableBuilderRepository.put(VariableTarget.class.getName(), new InjectionNodeBuilderNoAnnotationAdapter() {
+        injectionNodeBuilderRepository.put(VariableTarget.class.getName(), new InjectionNodeBuilderNoAnnotationAdapter() {
 
             @Override
             public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
@@ -158,7 +155,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testProviderBuilder() throws Exception {
 
-        variableBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(
+        injectionNodeBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(
                 astClassFactory.buildASTClassType(VariableTargetProvider.class)));
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);

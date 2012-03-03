@@ -11,7 +11,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class AnalysisRepositoryFactory {
+public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
 
     private Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider;
     private Provider<InjectionAnalyzer> injectionAnalyzerProvider;
@@ -26,7 +26,7 @@ public class AnalysisRepositoryFactory {
         this.scopeAnalysisProvider = scopeAnalysisProvider;
     }
 
-    public AnalysisRepository buildAnalysisRepository() {
+    public AnalysisRepository get() {
         AnalysisRepository analysisRepository = new AnalysisRepository();
 
         analysisRepository.addAnalysis(aopProxyAnalyzerProvider.get());

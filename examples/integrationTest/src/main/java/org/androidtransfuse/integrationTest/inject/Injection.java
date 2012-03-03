@@ -30,6 +30,8 @@ public class Injection {
     @Inject
     private ProvidedInjectTarget providedInjectTarget;
     @Inject
+    private Provider<ProvidedInjectTarget> providedInjectTargetProvider;
+    @Inject
     private Provider<InjectTarget> generatedProvider;
 
     @Inject
@@ -81,5 +83,9 @@ public class Injection {
 
     public Provider<InjectTarget> getGeneratedProvider() {
         return generatedProvider;
+    }
+
+    public Provider<ProvidedInjectTarget> getProvidedInjectTargetProvider() {
+        return providedInjectTargetProvider;
     }
 }

@@ -10,10 +10,9 @@ import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.VariableBuilderRepositoryFactory;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,20 +21,13 @@ import java.util.Map;
  */
 public class ModuleProcessor {
 
-    private AOPRepository aopRepository;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private Map<String, MethodProcessor> methodProcessorMap = new HashMap<String, MethodProcessor>();
 
     @Inject
-    public ModuleProcessor(AOPRepositoryProvider aopRepositoryProvider,
-                           VariableBuilderRepositoryFactory variableBuilderRepositoryProvider,
-                           VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
-        aopRepository = aopRepositoryProvider.get();
-        injectionNodeBuilders = variableBuilderRepositoryProvider.buildRepository();
-
-        methodProcessorMap.put(Bind.class.getName(), new BindProcessor(variableInjectionBuilderFactory, injectionNodeBuilders));
-        methodProcessorMap.put(BindInterceptor.class.getName(), new BindInterceptorProcessor(aopRepository));
-        methodProcessorMap.put(BindProvider.class.getName(), new BindProviderProcessor(variableInjectionBuilderFactory, injectionNodeBuilders));
+    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider, AOPRepository aopRepository, InjectionNodeBuilderRepository injectionNodeBuilders, Provider<BindProviderProcessor> bindProviderProcessorProvider, Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider) {
+        methodProcessorMap.put(Bind.class.getName(), bindProcessorProvider.get());
+        methodProcessorMap.put(BindInterceptor.class.getName(), bindInterceptorProcessorProvider.get());
+        methodProcessorMap.put(BindProvider.class.getName(), bindProviderProcessorProvider.get());
     }
 
     public void processMethod(ASTMethod astMethod) {
@@ -48,13 +40,5 @@ public class ModuleProcessor {
                 methodProcessor.process(astMethod, astAnnotation);
             }
         }
-    }
-
-    public InjectionNodeBuilderRepository getInjectionNodeBuilders() {
-        return injectionNodeBuilders;
-    }
-
-    public AOPRepository getAOPRepository() {
-        return aopRepository;
     }
 }

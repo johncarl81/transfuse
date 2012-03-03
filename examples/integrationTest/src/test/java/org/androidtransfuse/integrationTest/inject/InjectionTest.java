@@ -8,8 +8,7 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Provider;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.*;
 
 /**
  * @author John Ericksen
@@ -63,6 +62,13 @@ public class InjectionTest {
         ProvidedInjectTarget providedInjectTarget = injection.getProvidedInjectTarget();
         assertNotNull(providedInjectTarget);
         assertNotNull(providedInjectTarget.getInjectTarget());
+    }
+
+    @Test
+    public void testDeclaredProviderInjection() {
+        Provider<ProvidedInjectTarget> providedInjectTargetProvider = injection.getProvidedInjectTargetProvider();
+        assertNotNull(providedInjectTargetProvider);
+        assertEquals(InjectTargetProvider.class, providedInjectTargetProvider.getClass());
     }
 
     @Test

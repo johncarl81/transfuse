@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class VariableBuilderRepositoryFactory {
+public class InjectionNodeBuilderRepositoryFactory implements Provider<InjectionNodeBuilderRepository> {
 
     private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
@@ -39,9 +39,9 @@ public class VariableBuilderRepositoryFactory {
     private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
 
     @Inject
-    public VariableBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider,
-                                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                            Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
+    public InjectionNodeBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider,
+                                                 VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
         this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
@@ -79,7 +79,7 @@ public class VariableBuilderRepositoryFactory {
         systemService.put(Context.WINDOW_SERVICE, WindowManager.class);
     }
 
-    public InjectionNodeBuilderRepository buildRepository() {
+    public InjectionNodeBuilderRepository get() {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = new InjectionNodeBuilderRepository(variableInjectionNodeBuilderProvider);
 
         //system services

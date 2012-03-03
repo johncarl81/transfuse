@@ -6,8 +6,6 @@ import com.google.inject.Stage;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.VariableBuilderRepositoryFactory;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.JavaUtilLogger;
@@ -32,15 +30,13 @@ public class ActivityAnalysisTest {
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
 
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injector.getInstance(VariableBuilderRepositoryFactory.class).buildRepository();
-        AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).buildAnalysisRepository();
+        AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).get();
 
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
 
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
-        AOPRepository aopRepository = injector.getProvider(AOPRepository.class).get();
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, injectionNodeBuilderRepository, aopRepository);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository);
     }
 
     @Test

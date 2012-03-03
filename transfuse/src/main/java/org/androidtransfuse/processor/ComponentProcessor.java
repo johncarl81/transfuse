@@ -4,8 +4,6 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.ActivityAnalysis;
 import org.androidtransfuse.analysis.AnalysisRepository;
-import org.androidtransfuse.analysis.AnalysisRepositoryFactory;
-import org.androidtransfuse.analysis.ModuleProcessor;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.ActivityGenerator;
 import org.androidtransfuse.model.ActivityDescriptor;
@@ -22,7 +20,7 @@ import java.util.Collection;
 public class ComponentProcessor {
 
     private Logger logger;
-    private AnalysisRepositoryFactory analysisRepositoryFactory;
+    private AnalysisRepository analysisRepository;
     private ActivityAnalysis activityAnalysis;
     private ActivityGenerator activityGenerator;
     private ProcessorContext context;
@@ -32,11 +30,11 @@ public class ComponentProcessor {
     public ComponentProcessor(@Assisted ProcessorContext context,
                               @Assisted Application application,
                               Logger logger,
-                              AnalysisRepositoryFactory analysisRepositoryFactory,
+                              AnalysisRepository analysisRepository,
                               ActivityAnalysis activityAnalysis,
                               ActivityGenerator activityGenerator) {
         this.logger = logger;
-        this.analysisRepositoryFactory = analysisRepositoryFactory;
+        this.analysisRepository = analysisRepository;
         this.activityAnalysis = activityAnalysis;
         this.activityGenerator = activityGenerator;
         this.context = context;
@@ -45,13 +43,9 @@ public class ComponentProcessor {
 
     public void processComponent(Collection<? extends ASTType> astTypes) {
 
-        AnalysisRepository analysisRepository = analysisRepositoryFactory.buildAnalysisRepository();
-
-        ModuleProcessor moduleProcessor = context.getModuleProcessor();
-
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, moduleProcessor.getInjectionNodeBuilders(), moduleProcessor.getAOPRepository());
+            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository);
 
             if (activityDescriptor != null) {
 

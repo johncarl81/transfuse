@@ -4,11 +4,14 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
+import javax.inject.Inject;
+
 public class BindProcessor extends ClassBindingMethodProcessorAdaptor {
 
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
+    @Inject
     public BindProcessor(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionNodeBuilderRepository injectionNodeBuilders) {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
