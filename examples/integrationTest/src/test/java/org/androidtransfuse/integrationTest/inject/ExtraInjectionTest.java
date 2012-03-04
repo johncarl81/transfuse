@@ -40,7 +40,7 @@ public class ExtraInjectionTest {
 
     @Test(expected = TransfuseInjectionException.class)
     public void testNonOptionalExtra() {
-        ExtraInjection extraInjection = setupExtraInjection(null, EXTRA_TWO_VALUE, EXTRA_THREE_VALUE);
+        setupExtraInjection(null, EXTRA_TWO_VALUE, EXTRA_THREE_VALUE);
     }
 
     private ExtraInjection setupExtraInjection(String extraOneValue, Long extraTwoValue, String extraThreeValue) {

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity(name = "ExtraInjectionActivity")
+@Activity
 @Layout(R.layout.main)
 public class ExtraInjection {
 

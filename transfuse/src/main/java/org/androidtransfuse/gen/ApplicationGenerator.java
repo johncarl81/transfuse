@@ -53,24 +53,24 @@ public class ApplicationGenerator {
                 // onTerminate
                 addLifecycleMethod("onTerminate", definedClass, expressionMap);
             }
-
-            JClass singletonScopeClassRef = codeModel.ref(SingletonScope.class);
-            JFieldVar singletonScopeField = definedClass.field(JMod.PRIVATE, singletonScopeClassRef, "singletonScope");
-            singletonScopeField.init(JExpr._new(singletonScopeClassRef));
-
-            //<T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-            JType genericT = codeModel.ref(Object.class);
-            JClass clazzRef = codeModel.ref(Class.class);
-            JClass providerRef = codeModel.ref(Provider.class);
-
-            JMethod getScopedObjectMethod = definedClass.method(JMod.PUBLIC, genericT, "getScopedObject");
-            JVar clazzParam = getScopedObjectMethod.param(clazzRef, "clazz");
-            JVar providerParam = getScopedObjectMethod.param(providerRef, "provider");
-
-            JBlock scopedObjectBody = getScopedObjectMethod.body();
-
-            scopedObjectBody._return(singletonScopeField.invoke("getScopedObject").arg(clazzParam).arg(providerParam));
         }
+
+        JClass singletonScopeClassRef = codeModel.ref(SingletonScope.class);
+        JFieldVar singletonScopeField = definedClass.field(JMod.PRIVATE, singletonScopeClassRef, "singletonScope");
+        singletonScopeField.init(JExpr._new(singletonScopeClassRef));
+
+        //<T> T getScopedObject(Class<T> clazz, Provider<T> provider);
+        JType genericT = codeModel.ref(Object.class);
+        JClass clazzRef = codeModel.ref(Class.class);
+        JClass providerRef = codeModel.ref(Provider.class);
+
+        JMethod getScopedObjectMethod = definedClass.method(JMod.PUBLIC, genericT, "getScopedObject");
+        JVar clazzParam = getScopedObjectMethod.param(clazzRef, "clazz");
+        JVar providerParam = getScopedObjectMethod.param(providerRef, "provider");
+
+        JBlock scopedObjectBody = getScopedObjectMethod.body();
+
+        scopedObjectBody._return(singletonScopeField.invoke("getScopedObject").arg(clazzParam).arg(providerParam));
     }
 
     JType naiveType(String name) {

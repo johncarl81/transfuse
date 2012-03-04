@@ -44,6 +44,22 @@ public class ApplicationAnalysis {
         this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
+    public ApplicationDescriptor emptyApplication(String packageName) {
+        ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+
+        applicationDescriptor.setLabel("Android Application");
+
+        applicationDescriptor.setPackageClass(new PackageClass(packageName, "TransfuseApplication"));
+
+        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
+
+        manifestApplication.setName(".TransfuseApplication");
+
+        applicationDescriptor.setManifestApplication(manifestApplication);
+
+        return applicationDescriptor;
+    }
+
     public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository) {
         ApplicationDescriptor applicationDescriptor = null;
 

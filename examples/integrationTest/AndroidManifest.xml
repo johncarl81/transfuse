@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest">
-    <application t="n,l" android:name=".IntegrationApp">
-        <activity t="n,l" android:label="" android:name=".ExtraInjectionActivity"/>
+    <application t="n,l" android:name=".TransfuseApplication">
         <activity t="n,l" android:label="" android:name=".InjectionActivity"/>
         <activity t="n,l" android:label="" android:name=".SystemInjectionActivity"/>
         <activity t="n,l" android:label="" android:name=".ScopeTwoActivity"/>
@@ -10,5 +9,6 @@
         <activity t="n,l" android:label="" android:name=".IntegrationMain"/>
         <activity t="n,l" android:label="" android:name=".AOPActivity"/>
         <activity t="n,l" android:label="" android:name=".ScopeOneActivity"/>
+        <activity t="n,l" android:label="" android:name="."/>
     </application>
 </manifest>

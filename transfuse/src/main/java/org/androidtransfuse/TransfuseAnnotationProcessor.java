@@ -91,16 +91,23 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             ApplicationProcessor applicationProcessor = transfuseProcessor.getApplicationProcessor();
 
-            for (ASTType applicationType : wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class))) {
+            Collection<? extends ASTType> applicationTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class));
 
-                //todo: application affinity?
-                ComponentProcessor componentProcessor = applicationProcessor.processApplication(applicationType);
+            if (applicationTypes.size() > 1) {
+                //todo: throw exception
+            }
 
-                for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
-                    componentProcessor.processComponent(wrapASTCollection(
-                            roundEnvironment.getElementsAnnotatedWith(annotationClass)
-                    ));
-                }
+            ComponentProcessor componentProcessor;
+            if (applicationTypes.isEmpty()) {
+                componentProcessor = applicationProcessor.createComponentProcessor();
+            } else {
+                componentProcessor = applicationProcessor.processApplication(applicationTypes.iterator().next());
+            }
+
+            for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
+                componentProcessor.processComponent(wrapASTCollection(
+                        roundEnvironment.getElementsAnnotatedWith(annotationClass)
+                ));
             }
 
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();

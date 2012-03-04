@@ -18,6 +18,7 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
 import org.androidtransfuse.model.manifest.IntentFilter;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -81,8 +82,14 @@ public class ActivityAnalysis {
 
             String name = input.getName();
             String packageName = name.substring(0, name.lastIndexOf('.'));
+            String deleagateName = name.substring(name.lastIndexOf('.') + 1);
 
-            activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
+            if (StringUtils.isBlank(activityAnnotation.name())) {
+                activityDescriptor.setPackageClass(new PackageClass(packageName, deleagateName + "Activity"));
+            } else {
+                activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
+            }
+
             activityDescriptor.setLabel(activityAnnotation.label());
             activityDescriptor.setLayout(layoutAnnotation.value());
 

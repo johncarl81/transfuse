@@ -39,10 +39,19 @@ public class ApplicationProcessor {
         this.analysisRepository = analysisRepository;
     }
 
-    public ComponentProcessor processApplication(ASTType astType) {
+    public ComponentProcessor createComponentProcessor() {
+        ApplicationDescriptor applicationDescriptor = applicationAnalysis.emptyApplication(context.getManifest().getApplicationPackage());
 
+        return innerProcessApplication(applicationDescriptor);
+    }
+
+    public ComponentProcessor processApplication(ASTType astType) {
         ApplicationDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType, analysisRepository);
 
+        return innerProcessApplication(applicationDescriptor);
+    }
+
+    private ComponentProcessor innerProcessApplication(ApplicationDescriptor applicationDescriptor) {
         if (applicationDescriptor != null) {
 
             context.getSourceManifest().getApplications().add(applicationDescriptor.getManifestApplication());
