@@ -41,4 +41,14 @@ public class SystemInjectionTest {
         assertNotNull(systemInjection.getNotificationService());
         assertEquals(NotificationManager.class, systemInjection.getNotificationService().getClass());
     }
+
+    @Test
+    public void testContextInjection() {
+        assertNotNull(systemInjection.getContext());
+    }
+
+    @Test
+    public void testApplicationInjection() {
+        assertNotNull(systemInjection.getApplication());
+    }
 }

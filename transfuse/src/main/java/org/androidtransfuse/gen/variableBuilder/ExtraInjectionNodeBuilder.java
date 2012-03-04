@@ -40,7 +40,11 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         String extraId = annotation.getProperty("value", String.class);
-        boolean nullable = annotation.getProperty("optional", Boolean.class);
+        Boolean optional = annotation.getProperty("optional", Boolean.class);
+
+        if (optional == null) {
+            optional = false;
+        }
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
@@ -48,7 +52,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
 
         try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, codeModel.parseType(astType.getName()), nullable));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, codeModel.parseType(astType.getName()), optional));
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
         }

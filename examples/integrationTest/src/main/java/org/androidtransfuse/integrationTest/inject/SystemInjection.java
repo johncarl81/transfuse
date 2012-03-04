@@ -1,5 +1,6 @@
 package org.androidtransfuse.integrationTest.inject;
 
+import android.app.Application;
 import android.content.Context;
 import android.location.LocationManager;
 import android.os.Vibrator;
@@ -27,6 +28,12 @@ public class SystemInjection {
     @SystemService(Context.NOTIFICATION_SERVICE)
     private Object notificationService;
 
+    @Inject
+    private Context context;
+
+    @Inject
+    private Application application;
+
     public Vibrator getVibrator() {
         return vibrator;
     }
@@ -37,5 +44,13 @@ public class SystemInjection {
 
     public Object getNotificationService() {
         return notificationService;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public Application getApplication() {
+        return application;
     }
 }
