@@ -17,8 +17,6 @@ public class AnotherValueImpl implements AnotherValue {
     private Button secondActivityButton;
     @Inject
     private GotoSecondActivity gotoSecondActivity;
-    @Inject
-    private ProviderTestValue providerTestValue;
 
     @Inject
     public AnotherValueImpl(SubComponent subComponent) {

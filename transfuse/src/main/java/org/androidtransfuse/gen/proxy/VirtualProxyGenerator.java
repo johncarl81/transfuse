@@ -1,6 +1,7 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
@@ -14,11 +15,10 @@ import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.util.MethodSignature;
 import org.androidtransfuse.util.VirtualProxyException;
 
+import javax.annotation.Generated;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -44,6 +44,10 @@ public class VirtualProxyGenerator {
         try {
 
             JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
+
+            definedClass.annotate(Generated.class)
+                    .param("value", TransfuseAnnotationProcessor.class.getName())
+                    .param("date", DateFormat.getInstance().format(new Date()));
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());

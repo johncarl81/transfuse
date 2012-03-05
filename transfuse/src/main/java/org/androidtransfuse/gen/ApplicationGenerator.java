@@ -2,6 +2,7 @@ package org.androidtransfuse.gen;
 
 import android.app.Application;
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.ApplicationDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -9,9 +10,12 @@ import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.SingletonScope;
 
+import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +36,10 @@ public class ApplicationGenerator {
     public void generate(ApplicationDescriptor descriptor, RResource rResource) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
 
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
+
+        definedClass.annotate(Generated.class)
+                .param("value", TransfuseAnnotationProcessor.class.getName())
+                .param("date", DateFormat.getInstance().format(new Date()));
 
         definedClass._extends(Application.class);
         definedClass._implements(Scope.class);

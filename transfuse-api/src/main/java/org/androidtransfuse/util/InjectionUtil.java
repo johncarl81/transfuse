@@ -27,7 +27,8 @@ public final class InjectionUtil {
                     new SetFieldPrivilegedAction(classField, target, source));
 
         } catch (NoSuchFieldException e) {
-            throw new TransfuseInjectionException("NoSuchFieldException Exception during field injection", e);
+            throw new TransfuseInjectionException(
+                    "NoSuchFieldException Exception during field injection: " + field + " in " + target.getClass(), e);
         } catch (PrivilegedActionException e) {
             throw new TransfuseInjectionException("PrivilegedActionException Exception during field injection", e);
         } catch (Exception e) {

@@ -100,7 +100,7 @@ public class ActivityAnalysis {
 
             org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
-            manifestActivity.setName("." + activityAnnotation.name());
+            manifestActivity.setName("." + activityDescriptor.getPackageClass().getClassName());
             manifestActivity.setLabel(activityAnnotation.label());
             manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
 

@@ -1,13 +1,17 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
+import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +49,11 @@ public class ProviderGenerator {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
             JDefinedClass providerClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Provider", ClassType.CLASS);
+
+            providerClass.annotate(Generated.class)
+                    .param("value", TransfuseAnnotationProcessor.class.getName())
+                    .param("date", DateFormat.getInstance().format(new Date()));
+
             providerClass._implements(Provider.class).narrow(injectionNodeClassRef);
 
             //JFieldVar applicationField = providerClass.field(JMod.PRIVATE, Application.class, "application");

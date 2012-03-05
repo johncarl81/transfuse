@@ -22,8 +22,6 @@ public class SimpleController {
     @Inject
     private Context activity;
     @Inject
-    private ProvidedValue providedValue;
-    @Inject
     private VibrateOnClickListener vibrateOnClickListener;
     private NotifyOnClickListener notifyOnClickListener;
     private Vibrator vibrator;

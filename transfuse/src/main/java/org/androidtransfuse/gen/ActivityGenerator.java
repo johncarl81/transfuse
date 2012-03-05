@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.ActivityDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -11,9 +12,12 @@ import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 
+import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +42,9 @@ public class ActivityGenerator {
 
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
+        definedClass.annotate(Generated.class)
+                .param("value", TransfuseAnnotationProcessor.class.getName())
+                .param("date", DateFormat.getInstance().format(new Date()));
         definedClass._extends(android.app.Activity.class);
 
 
