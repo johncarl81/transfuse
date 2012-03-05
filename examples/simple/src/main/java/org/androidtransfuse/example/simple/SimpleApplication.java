@@ -9,7 +9,7 @@ import org.androidtransfuse.annotations.OnTerminate;
 /**
  * @author John Ericksen
  */
-@Application(name = "SimpleApp")
+@Application(name = "SimpleApp", label = "Simple")
 public class SimpleApplication {
 
     private boolean onCreateCalled = false;

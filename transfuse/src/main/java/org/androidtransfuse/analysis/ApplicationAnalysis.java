@@ -63,17 +63,17 @@ public class ApplicationAnalysis {
     public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository) {
         ApplicationDescriptor applicationDescriptor = null;
 
-        Application activityAnnotation = astType.getAnnotation(Application.class);
+        Application applicationAnnotation = astType.getAnnotation(Application.class);
 
-        if (activityAnnotation != null) {
+        if (applicationAnnotation != null) {
             applicationDescriptor = new ApplicationDescriptor();
 
-            applicationDescriptor.setLabel(activityAnnotation.name());
+            applicationDescriptor.setLabel(applicationAnnotation.label());
 
             String name = astType.getName();
             String packageName = name.substring(0, name.lastIndexOf('.'));
 
-            applicationDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
+            applicationDescriptor.setPackageClass(new PackageClass(packageName, applicationAnnotation.name()));
 
             AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
 
@@ -83,7 +83,8 @@ public class ApplicationAnalysis {
 
             org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
-            manifestApplication.setName("." + activityAnnotation.name());
+            manifestApplication.setName("." + applicationAnnotation.name());
+            manifestApplication.setLabel(applicationAnnotation.label());
 
             applicationDescriptor.setManifestApplication(manifestApplication);
         }
