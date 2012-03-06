@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +81,19 @@ public class ActivityAnalysis {
 
         if (activityAnnotation != null) {
             activityDescriptor = new ActivityDescriptor();
+
+            //http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
+            TypeMirror type = null;
+            try {
+                activityAnnotation.type();
+            } catch (MirroredTypeException mte) {
+                type = mte.getTypeMirror();
+                System.out.println("Found type in exception: " + type.toString());
+            }
+
+            if (type != null) {
+                activityDescriptor.setType(type.toString());
+            }
 
             String name = input.getName();
             String packageName = name.substring(0, name.lastIndexOf('.'));

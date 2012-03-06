@@ -14,4 +14,6 @@ public @interface Activity {
     String name() default "";
 
     String label() default "";
+
+    Class<? extends android.app.Activity> type() default android.app.Activity.class;
 }

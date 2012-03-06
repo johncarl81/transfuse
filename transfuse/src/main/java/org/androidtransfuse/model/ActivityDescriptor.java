@@ -15,6 +15,7 @@ public class ActivityDescriptor {
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
     private String label;
     private Activity manifestActivity;
+    private String type;
 
     public PackageClass getPackageClass() {
         return packageClass;
@@ -54,5 +55,13 @@ public class ActivityDescriptor {
 
     public void setManifestActivity(Activity manifestActivity) {
         this.manifestActivity = manifestActivity;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 }

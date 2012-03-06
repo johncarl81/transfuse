@@ -1,5 +1,6 @@
 package org.androidtransfuse.gen;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -45,7 +46,12 @@ public class ActivityGenerator {
         definedClass.annotate(Generated.class)
                 .param("value", TransfuseAnnotationProcessor.class.getName())
                 .param("date", DateFormat.getInstance().format(new Date()));
-        definedClass._extends(android.app.Activity.class);
+
+        if (descriptor.getType() == null) {
+            definedClass._extends(Activity.class);
+        } else {
+            definedClass._extends(codeModel.ref(descriptor.getType()));
+        }
 
 
         final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
