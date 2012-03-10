@@ -10,6 +10,7 @@ import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuil
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.ApplicationDescriptor;
 import org.androidtransfuse.model.PackageClass;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -72,8 +73,13 @@ public class ApplicationAnalysis {
 
             String name = astType.getName();
             String packageName = name.substring(0, name.lastIndexOf('.'));
+            String deleagateName = name.substring(name.lastIndexOf('.') + 1);
 
-            applicationDescriptor.setPackageClass(new PackageClass(packageName, applicationAnnotation.name()));
+            if (StringUtils.isBlank(applicationAnnotation.name())) {
+                applicationDescriptor.setPackageClass(new PackageClass(packageName, deleagateName + "Application"));
+            } else {
+                applicationDescriptor.setPackageClass(new PackageClass(packageName, applicationAnnotation.name()));
+            }
 
             AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
 
@@ -83,7 +89,7 @@ public class ApplicationAnalysis {
 
             org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
-            manifestApplication.setName("." + applicationAnnotation.name());
+            manifestApplication.setName(applicationDescriptor.getPackageClass().getFullyQualifiedName());
             manifestApplication.setLabel(applicationAnnotation.label());
 
             applicationDescriptor.setManifestApplication(manifestApplication);

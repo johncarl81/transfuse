@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="First Category">
+        <CheckBoxPreference
+                android:key="Main_Option"
+                android:title="Main Option"
+                android:defaultValue="true"
+                android:summary="SUMMARY_Main_Option"/>
+
+
+        <ListPreference
+                android:title="List Preference"
+                android:summary="This preference allows to select an item in an array"
+                android:dependency="Main_Option"
+                android:key="listPref"
+                android:defaultValue="1"
+                android:entries="@array/colors"
+                android:entryValues="@array/colors_values"/>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Second Category">
+
+        <PreferenceScreen android:title="Advanced Options">
+
+            <CheckBoxPreference
+                    android:key="Advanced_Option"
+                    android:title="Advanced Option"
+                    android:defaultValue="true"
+                    android:summary="SUMMARY_Advanced_Option"/>
+
+        </PreferenceScreen>
+
+        <EditTextPreference android:dialogTitle="EditTextTitle"
+                            android:dialogMessage="EditTextMessage"
+                            android:dependency="Main_Option"
+                            android:key="pref_dialog"
+                            android:title="SomeTitle"
+                            android:summary="Summary"
+                            android:defaultValue="test"/>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -88,7 +88,6 @@ public class ActivityAnalysis {
                 activityAnnotation.type();
             } catch (MirroredTypeException mte) {
                 type = mte.getTypeMirror();
-                System.out.println("Found type in exception: " + type.toString());
             }
 
             if (type != null) {
@@ -106,16 +105,19 @@ public class ActivityAnalysis {
             }
 
             activityDescriptor.setLabel(activityAnnotation.label());
-            activityDescriptor.setLayout(layoutAnnotation.value());
+            if (layoutAnnotation != null) {
+                activityDescriptor.setLayout(layoutAnnotation.value());
+            }
 
-            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
+            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(type), aopRepository);
 
             activityDescriptor.addInjectionNode(
                     injectionPointFactory.buildInjectionNode(input, context));
 
             org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
-            manifestActivity.setName("." + activityDescriptor.getPackageClass().getClassName());
+
+            manifestActivity.setName(activityDescriptor.getPackageClass().getFullyQualifiedName());
             manifestActivity.setLabel(activityAnnotation.label());
             manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
 
@@ -154,7 +156,7 @@ public class ActivityAnalysis {
         return convertedIntentFilters;
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
 
         InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
@@ -162,6 +164,11 @@ public class ActivityAnalysis {
         subRepository.put(Application.class.getName(), applicationVariableBuilderProvider.get());
         subRepository.put(android.app.Activity.class.getName(), contextVariableBuilderProvider.get());
         subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
+
+        //todo: map inheritance of activity type?
+        if (activityType != null) {
+            subRepository.put(activityType.toString(), contextVariableBuilderProvider.get());
+        }
 
         return subRepository;
 

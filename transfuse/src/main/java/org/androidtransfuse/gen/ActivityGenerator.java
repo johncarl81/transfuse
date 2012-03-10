@@ -68,7 +68,9 @@ public class ActivityGenerator {
 
         //layout setting
         ResourceIdentifier layoutIdentifier = rResource.getResourceIdentifier(descriptor.getLayout());
-        block.invoke("setContentView").arg(rResourceReferenceBuilder.buildReference(layoutIdentifier));
+        if (layoutIdentifier != null) {
+            block.invoke("setContentView").arg(rResourceReferenceBuilder.buildReference(layoutIdentifier));
+        }
 
         //injector and injection points
         //todo: more than one?
