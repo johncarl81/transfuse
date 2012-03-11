@@ -6,13 +6,14 @@ import com.google.inject.Stage;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.model.ActivityDescriptor;
-import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.gen.AndroidComponentDescriptor;
+import org.androidtransfuse.gen.ComponentBuilder;
+import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -24,7 +25,7 @@ public class ActivityAnalysisTest {
     public static final String TEST_NAME = "ActivityTestTarget";
     public static final int TEST_LAYOUT_ID = 123456;
 
-    private ActivityDescriptor activityDescriptor;
+    private AndroidComponentDescriptor activityDescriptor;
 
     @Before
     public void setup() {
@@ -36,7 +37,9 @@ public class ActivityAnalysisTest {
 
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository);
+        Application manifestApplication = new Application();
+
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, manifestApplication);
     }
 
     @Test
@@ -45,17 +48,12 @@ public class ActivityAnalysisTest {
     }
 
     @Test
-    public void testLayoutAnnotation() {
-        assertEquals(TEST_LAYOUT_ID, activityDescriptor.getLayout());
-    }
-
-    @Test
     public void testDelegateInjectionPoint() {
-        List<InjectionNode> injectionNodes = activityDescriptor.getInjectionNodes();
+        Set<ComponentBuilder> componentBuilders = activityDescriptor.getComponentBuilders();
 
-        assertEquals(1, injectionNodes.size());
-        InjectionNode injectionNode = injectionNodes.get(0);
-        assertEquals(MockActivityDelegate.class.getName(), injectionNode.getClassName());
+        assertEquals(1, componentBuilders.size());
+        //ComponentBuilder componentBuilder = componentBuilders.iterator().next();
+        //assertEquals(MockActivityDelegate.class.getName(), ((OnCreateComponentBuilder)componentBuilder).
     }
 
 

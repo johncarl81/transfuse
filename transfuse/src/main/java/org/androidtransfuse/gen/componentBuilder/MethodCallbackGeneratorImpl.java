@@ -1,7 +1,10 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JMethod;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -15,17 +18,18 @@ public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
 
     private String name;
     private List<Class<?>> methodParameterTypes;
-    private JCodeModel codeModel;
+    private MethodGenerator methodGenerator;
 
     @Inject
-    public MethodCallbackGeneratorImpl(@Assisted String name, JCodeModel codeModel, @Assisted Class<?>... methodParameterTypes) {
+    public MethodCallbackGeneratorImpl(@Assisted String name, @Assisted MethodGenerator methodGenerator, @Assisted Class<?>... methodParameterTypes) {
         this.name = name;
-        this.codeModel = codeModel;
         this.methodParameterTypes = new ArrayList<Class<?>>();
 
         if (methodParameterTypes != null) {
             this.methodParameterTypes.addAll(Arrays.asList(methodParameterTypes));
         }
+
+        this.methodGenerator = methodGenerator;
     }
 
     @Override
@@ -39,9 +43,7 @@ public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
 
                 //define method
                 if (method == null) {
-                    method = definedClass.method(JMod.PUBLIC, codeModel.VOID, name);
-                    JBlock body = method.body();
-                    body.add(JExpr._super().invoke(name));
+                    method = methodGenerator.buildMethod(definedClass);
                 }
                 JBlock body = method.body();
 
@@ -51,5 +53,7 @@ public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
                 }
             }
         }
+
+        methodGenerator.closeMethod(method);
     }
 }

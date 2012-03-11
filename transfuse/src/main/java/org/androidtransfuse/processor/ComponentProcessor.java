@@ -5,13 +5,12 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.ActivityAnalysis;
 import org.androidtransfuse.analysis.AnalysisRepository;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.ActivityGenerator;
-import org.androidtransfuse.model.ActivityDescriptor;
+import org.androidtransfuse.gen.AndroidComponentDescriptor;
+import org.androidtransfuse.gen.AndroidGenerator;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -22,7 +21,7 @@ public class ComponentProcessor {
     private Logger logger;
     private AnalysisRepository analysisRepository;
     private ActivityAnalysis activityAnalysis;
-    private ActivityGenerator activityGenerator;
+    private AndroidGenerator generator;
     private ProcessorContext context;
     private Application application;
 
@@ -32,11 +31,11 @@ public class ComponentProcessor {
                               Logger logger,
                               AnalysisRepository analysisRepository,
                               ActivityAnalysis activityAnalysis,
-                              ActivityGenerator activityGenerator) {
+                              AndroidGenerator generator) {
         this.logger = logger;
         this.analysisRepository = analysisRepository;
         this.activityAnalysis = activityAnalysis;
-        this.activityGenerator = activityGenerator;
+        this.generator = generator;
         this.context = context;
         this.application = application;
     }
@@ -45,20 +44,14 @@ public class ComponentProcessor {
 
         for (ASTType astType : astTypes) {
 
-            ActivityDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository);
+            AndroidComponentDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, application);
 
             if (activityDescriptor != null) {
 
-                application.getActivities().add(activityDescriptor.getManifestActivity());
-
                 try {
-                    activityGenerator.generate(activityDescriptor, context.getRResource());
-                } catch (IOException e) {
-                    logger.error("IOException while generating activity", e);
+                    generator.generate(activityDescriptor, context.getRResource());
                 } catch (JClassAlreadyExistsException e) {
                     logger.error("JClassAlreadyExistsException while generating activity", e);
-                } catch (ClassNotFoundException e) {
-                    logger.error("ClassNotFoundException while generating activity", e);
                 }
             }
         }

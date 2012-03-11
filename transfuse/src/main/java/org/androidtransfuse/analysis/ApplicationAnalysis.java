@@ -8,6 +8,7 @@ import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.ScopingComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
@@ -44,7 +45,6 @@ public class ApplicationAnalysis {
                                AOPRepository aopRepository,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
-                               Provider<OnCreateComponentBuilder> onCreateComponentBuilderProvider,
                                ComponentBuilderFactory componentBuilderFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
@@ -64,6 +64,9 @@ public class ApplicationAnalysis {
         PackageClass applicationClassName = new PackageClass(packageName, "TransfuseApplication");
 
         AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+
+        //application generation profile
+        setupApplicationProfile(applicationDescriptor, null);
 
         setupManifest(context, ".TransfuseApplication", null);
 
@@ -102,11 +105,13 @@ public class ApplicationAnalysis {
     private void setupApplicationProfile(AndroidComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
 
         //onCreate
-        OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode);
+        OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder());
         //onLowMemory
-        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onLowMemory"));
+        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onLowMemory",
+                componentBuilderFactory.buildSimpleMethodGenerator("onLowMemory")));
         //onTerminate
-        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onTerminate"));
+        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onTerminate",
+                componentBuilderFactory.buildSimpleMethodGenerator("onTerminate")));
         //onConfigurationChanged
         //todo:onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged", Configuration.class));
 

@@ -4,15 +4,15 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
+import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -23,24 +23,48 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
     private Set<MethodCallbackGenerator> methodCallbackGenerators = new HashSet<MethodCallbackGenerator>();
+    private List<Class> methodArguments;
+    private UniqueVariableNamer uniqueVariableNamer;
+    private LayoutBuilder layoutBuilder;
 
     @Inject
-    public OnCreateComponentBuilder(@Assisted InjectionNode injectionNode, InjectionFragmentGenerator injectionFragmentGenerator, JCodeModel codeModel) {
+    public OnCreateComponentBuilder(@Assisted @Nullable InjectionNode injectionNode, @Assisted LayoutBuilder layoutBuilder, InjectionFragmentGenerator injectionFragmentGenerator, JCodeModel codeModel, UniqueVariableNamer uniqueVariableNamer, @Assisted @Nullable Class<?>... methodArguments) {
         this.injectionNode = injectionNode;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.codeModel = codeModel;
+        this.methodArguments = new ArrayList<Class>();
+
+        if (methodArguments != null) {
+            this.methodArguments.addAll(Arrays.asList(methodArguments));
+        }
+
+        this.uniqueVariableNamer = uniqueVariableNamer;
+        this.layoutBuilder = layoutBuilder;
     }
 
     @Override
     public void build(JDefinedClass definedClass, RResource rResource) {
-
-
         try {
             if (injectionNode != null) {
 
                 final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
+
+                List<JVar> parameters = new ArrayList<JVar>();
+
+                for (Class methodArgument : methodArguments) {
+                    parameters.add(onCreateMethod.param(methodArgument, uniqueVariableNamer.generateName(methodArgument)));
+                }
+
+                //super.onCreate()
                 JBlock block = onCreateMethod.body();
-                block.invoke(JExpr._super(), onCreateMethod);
+                JInvocation invocation = block.invoke(JExpr._super(), onCreateMethod);
+
+                for (JVar parameter : parameters) {
+                    invocation.arg(parameter);
+                }
+
+                //layout
+                layoutBuilder.buildLayoutCall(block, rResource);
 
                 Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 

@@ -3,7 +3,6 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.model.r.RResource;
-import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 
 import javax.annotation.Generated;
 import javax.inject.Inject;
@@ -16,14 +15,10 @@ import java.util.Date;
 public class AndroidGenerator {
 
     private JCodeModel codeModel;
-    private InjectionFragmentGenerator injectionFragmentGenerator;
-    private RResourceReferenceBuilder rResourceReferenceBuilder;
 
     @Inject
-    public AndroidGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, RResourceReferenceBuilder rResourceReferenceBuilder) {
+    public AndroidGenerator(JCodeModel codeModel) {
         this.codeModel = codeModel;
-        this.injectionFragmentGenerator = injectionFragmentGenerator;
-        this.rResourceReferenceBuilder = rResourceReferenceBuilder;
     }
 
     public void generate(AndroidComponentDescriptor descriptor, RResource rResource) throws JClassAlreadyExistsException {
@@ -35,6 +30,8 @@ public class AndroidGenerator {
                 .param("date", DateFormat.getInstance().format(new Date()));
 
         codeModel.ref(descriptor.getType());
+
+        definedClass._extends(codeModel.ref(descriptor.getType()));
 
         for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
             componentBuilder.build(definedClass, rResource);
