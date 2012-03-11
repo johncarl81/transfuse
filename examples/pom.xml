@@ -12,7 +12,6 @@
 
     <modules>
         <module>integrationTest</module>
-        <module>helloAndroid</module>
     </modules>
 
 </project>
