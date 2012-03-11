@@ -1,11 +1,17 @@
 package org.androidtransfuse.analysis;
 
 import android.app.Application;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ListView;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Intent;
@@ -52,6 +58,7 @@ public class ActivityAnalysis {
     private AOPRepository aopRepository;
     private ComponentBuilderFactory componentBuilderFactory;
     private JCodeModel codeModel;
+    private ASTClassFactory astClassFactory;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -65,7 +72,7 @@ public class ActivityAnalysis {
                             Provider<IntentFilter> intentFilterProvider,
                             AOPRepository aopRepository,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
-                            ComponentBuilderFactory componentBuilderFactory, JCodeModel codeModel) {
+                            ComponentBuilderFactory componentBuilderFactory, JCodeModel codeModel, ASTClassFactory astClassFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -79,6 +86,7 @@ public class ActivityAnalysis {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.componentBuilderFactory = componentBuilderFactory;
         this.codeModel = codeModel;
+        this.astClassFactory = astClassFactory;
     }
 
     public AndroidComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application) {
@@ -165,16 +173,42 @@ public class ActivityAnalysis {
         // onStop
         onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStop"));
         //ontouch method
-        onCreateComponentBuilder.addMethodCallbackBuilder(
-                componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
-                        componentBuilderFactory.buildReturningMethodGenerator("onTouchEvent", codeModel.BOOLEAN, JExpr.TRUE)));
+        try {
+            ASTMethod onTouchMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onTouchEvent", MotionEvent.class));
+            onCreateComponentBuilder.addMethodCallbackBuilder(
+                    componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
+                            componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+        }
+
+        try {
+            //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
+            ASTMethod onListItemClickMethod = astClassFactory.buildASTClassMethod(ListActivity.class.getDeclaredMethod("onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE));
+            onCreateComponentBuilder.addMethodCallbackBuilder(
+                    componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
+                            componentBuilderFactory.buildSimpleMethodGenerator(onListItemClickMethod, false)));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+        }
 
         activityDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
     }
 
     private MethodCallbackGenerator buildEventMethod(String name) {
-        return componentBuilderFactory.buildMethodCallbackGenerator(name,
-                componentBuilderFactory.buildSimpleMethodGenerator(name));
+        return buildEventMethod(name, name);
+    }
+
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
+
+        try {
+            ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod(methodName));
+
+            return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+                    componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+        }
     }
 
     private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters) {

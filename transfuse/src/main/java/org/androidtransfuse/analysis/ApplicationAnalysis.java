@@ -2,15 +2,14 @@ package org.androidtransfuse.analysis;
 
 import android.content.Context;
 import android.content.res.Resources;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
-import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
-import org.androidtransfuse.gen.componentBuilder.ScopingComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -35,6 +34,7 @@ public class ApplicationAnalysis {
     private AOPRepository aopRepository;
     private Provider<ScopingComponentBuilder> scopingComponentBuilderProvider;
     private ComponentBuilderFactory componentBuilderFactory;
+    private ASTClassFactory astClassFactory;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
@@ -45,7 +45,7 @@ public class ApplicationAnalysis {
                                AOPRepository aopRepository,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
-                               ComponentBuilderFactory componentBuilderFactory) {
+                               ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -55,6 +55,7 @@ public class ApplicationAnalysis {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.scopingComponentBuilderProvider = scopingComponentBuilderProvider;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.astClassFactory = astClassFactory;
     }
 
     public AndroidComponentDescriptor emptyApplication(ProcessorContext context) {
@@ -107,11 +108,9 @@ public class ApplicationAnalysis {
         //onCreate
         OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder());
         //onLowMemory
-        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onLowMemory",
-                componentBuilderFactory.buildSimpleMethodGenerator("onLowMemory")));
+        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
         //onTerminate
-        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onTerminate",
-                componentBuilderFactory.buildSimpleMethodGenerator("onTerminate")));
+        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onTerminate"));
         //onConfigurationChanged
         //todo:onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged", Configuration.class));
 
@@ -119,6 +118,22 @@ public class ApplicationAnalysis {
         applicationDescriptor.getComponentBuilders().add(scopingComponentBuilderProvider.get());
 
         applicationDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
+    }
+
+    private MethodCallbackGenerator buildEventMethod(String name) {
+        return buildEventMethod(name, name);
+    }
+
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
+
+        try {
+            ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Application.class.getMethod(methodName));
+
+            return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+                    componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {

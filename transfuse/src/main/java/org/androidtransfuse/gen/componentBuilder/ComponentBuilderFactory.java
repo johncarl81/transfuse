@@ -1,7 +1,7 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JType;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
@@ -15,7 +15,7 @@ public interface ComponentBuilderFactory {
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 
-    SimpleMethodGenerator buildSimpleMethodGenerator(String methodName);
+    SimpleMethodGenerator buildSimpleMethodGenerator(ASTMethod method, boolean superCall);
 
-    ReturningMethodGenerator buildReturningMethodGenerator(String methodName, JType primitiveType, JExpression expression);
+    ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
 }

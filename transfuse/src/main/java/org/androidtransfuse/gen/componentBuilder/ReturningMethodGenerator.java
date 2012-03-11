@@ -1,37 +1,33 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import android.view.MotionEvent;
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JExpression;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 
 import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-public class ReturningMethodGenerator implements MethodGenerator {
-    private String methodName;
-    private JType primitiveType;
+public class ReturningMethodGenerator extends SimpleMethodGenerator {
+
+    private ASTMethod overrideMethod;
+    private boolean superCall;
+    private JCodeModel codeModel;
     private JExpression expression;
 
     @Inject
-    public ReturningMethodGenerator(@Assisted String methodName, @Assisted JType primitiveType, @Assisted JExpression expression) {
-        this.methodName = methodName;
-        this.primitiveType = primitiveType;
+    public ReturningMethodGenerator(@Assisted ASTMethod overrideMethod, @Assisted boolean superCall, @Assisted JExpression expression, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+        super(overrideMethod, superCall, codeModel, variableNamer);
         this.expression = expression;
     }
 
     @Override
-    public JMethod buildMethod(JDefinedClass definedClass) {
-        JMethod method = definedClass.method(JMod.PUBLIC, primitiveType, methodName);
-        method.param(MotionEvent.class, "motionEvent");
-        return method;
-    }
-
-    @Override
-    public void closeMethod(JMethod method) {
-        if (method != null) {
-            method.body()._return(expression);
+    public void closeMethod(MethodDescriptor methodDescriptor) {
+        if (methodDescriptor != null) {
+            methodDescriptor.getMethod().body()._return(expression);
         }
     }
 }

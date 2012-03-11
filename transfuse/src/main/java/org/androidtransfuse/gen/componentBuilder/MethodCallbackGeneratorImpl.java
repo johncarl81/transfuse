@@ -1,10 +1,9 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JMethod;
+import com.sun.codemodel.*;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -34,7 +33,7 @@ public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
 
     @Override
     public void addLifecycleMethod(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap) {
-        JMethod method = null;
+        MethodDescriptor methodDescriptor = null;
         for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
             MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
@@ -42,18 +41,49 @@ public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
                 Set<MethodCallbackAspect.MethodCallback> methods = methodCallbackAspect.getMethodCallbacks(name);
 
                 //define method
-                if (method == null) {
-                    method = methodGenerator.buildMethod(definedClass);
+                if (methodDescriptor == null) {
+                    methodDescriptor = methodGenerator.buildMethod(definedClass);
                 }
-                JBlock body = method.body();
+                JBlock body = methodDescriptor.getMethod().body();
+
 
                 for (MethodCallbackAspect.MethodCallback methodCallback : methods) {
+                    List<JExpression> arguments = matchMethodArguments(methodDescriptor, methodCallback.getMethod());
                     //todo: non-public access
-                    body.add(injectionNodeJExpressionEntry.getValue().invoke(methodCallback.getMethod().getName()));
+                    JInvocation methodInvocation = injectionNodeJExpressionEntry.getValue().invoke(methodCallback.getMethod().getName());
+
+                    for (JExpression argument : arguments) {
+                        methodInvocation.arg(argument);
+                    }
+                    body.add(methodInvocation);
                 }
             }
         }
 
-        methodGenerator.closeMethod(method);
+        methodGenerator.closeMethod(methodDescriptor);
+    }
+
+    private List<JExpression> matchMethodArguments(MethodDescriptor overrideMethodDescriptor, ASTMethod callMethod) {
+        List<JExpression> arguments = new ArrayList<JExpression>();
+
+        List<ASTParameter> overrideParameters = new ArrayList<ASTParameter>();
+        overrideParameters.addAll(overrideMethodDescriptor.getASTMethod().getParameters());
+
+        for (ASTParameter callParameter : callMethod.getParameters()) {
+            Iterator<ASTParameter> overrideParameterIterator = overrideParameters.iterator();
+            JExpression parameter = JExpr._null();
+            while (overrideParameterIterator.hasNext()) {
+                ASTParameter overrideParameter = overrideParameterIterator.next();
+                if (overrideParameter.getASTType().equals(callParameter.getASTType())) {
+                    parameter = overrideMethodDescriptor.getParameter(overrideParameter);
+                    overrideParameterIterator.remove();
+                    break;
+                }
+            }
+
+            arguments.add(parameter);
+        }
+
+        return arguments;
     }
 }

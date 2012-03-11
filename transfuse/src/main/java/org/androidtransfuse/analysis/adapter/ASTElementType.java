@@ -75,13 +75,13 @@ public class ASTElementType extends ASTElementBase implements ASTType {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ASTElementType)) {
+        if (!(o instanceof ASTType)) {
             return false;
         }
 
-        ASTElementType that = (ASTElementType) o;
+        ASTType that = (ASTType) o;
 
-        if (typeElement != null ? !typeElement.equals(that.typeElement) : that.typeElement != null) {
+        if (typeElement != null ? !getName().equals(that.getName()) : that.getName() != null) {
             return false;
         }
 
@@ -90,7 +90,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     @Override
     public int hashCode() {
-        return typeElement != null ? typeElement.hashCode() : 0;
+        return typeElement != null ? getName().hashCode() : 0;
     }
 
     @Override

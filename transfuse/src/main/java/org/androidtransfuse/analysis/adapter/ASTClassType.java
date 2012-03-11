@@ -90,13 +90,13 @@ public class ASTClassType implements ASTType {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ASTClassType)) {
+        if (!(o instanceof ASTType)) {
             return false;
         }
 
-        ASTClassType that = (ASTClassType) o;
+        ASTType that = (ASTType) o;
 
-        if (clazz != null ? !clazz.equals(that.clazz) : that.clazz != null) {
+        if (clazz != null ? !getName().equals(that.getName()) : that.getName() != null) {
             return false;
         }
 
@@ -105,7 +105,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public int hashCode() {
-        return clazz != null ? clazz.hashCode() : 0;
+        return clazz != null ? clazz.getName().hashCode() : 0;
     }
 
     @Override
