@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Application;
+import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.ScopingComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
-import org.androidtransfuse.model.ApplicationDescriptor;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.processor.ProcessorContext;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -27,6 +32,8 @@ public class ApplicationAnalysis {
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private AOPRepository aopRepository;
+    private Provider<ScopingComponentBuilder> scopingComponentBuilderProvider;
+    private ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
@@ -35,7 +42,10 @@ public class ApplicationAnalysis {
                                Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
                                AOPRepository aopRepository,
-                               InjectionNodeBuilderRepository injectionNodeBuilders) {
+                               InjectionNodeBuilderRepository injectionNodeBuilders,
+                               Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
+                               Provider<OnCreateComponentBuilder> onCreateComponentBuilderProvider,
+                               ComponentBuilderFactory componentBuilderFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -43,59 +53,67 @@ public class ApplicationAnalysis {
         this.applicationProvider = applicationProvider;
         this.aopRepository = aopRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
+        this.scopingComponentBuilderProvider = scopingComponentBuilderProvider;
+        this.componentBuilderFactory = componentBuilderFactory;
     }
 
-    public ApplicationDescriptor emptyApplication(String packageName) {
-        ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+    public AndroidComponentDescriptor emptyApplication(ProcessorContext context) {
 
-        applicationDescriptor.setLabel("Android Application");
+        String packageName = context.getManifest().getApplicationPackage();
 
-        applicationDescriptor.setPackageClass(new PackageClass(packageName, "TransfuseApplication"));
+        PackageClass applicationClassName = new PackageClass(packageName, "TransfuseApplication");
 
-        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
+        AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
 
-        manifestApplication.setName(".TransfuseApplication");
-
-        applicationDescriptor.setManifestApplication(manifestApplication);
+        setupManifest(context, ".TransfuseApplication", null);
 
         return applicationDescriptor;
     }
 
-    public ApplicationDescriptor analyzeApplication(ASTType astType, AnalysisRepository analysisRepository) {
-        ApplicationDescriptor applicationDescriptor = null;
-
+    public AndroidComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType, AnalysisRepository analysisRepository) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
-        if (applicationAnnotation != null) {
-            applicationDescriptor = new ApplicationDescriptor();
+        String name = astType.getName();
+        String packageName = name.substring(0, name.lastIndexOf('.'));
+        String deleagateName = name.substring(name.lastIndexOf('.') + 1);
+        PackageClass applicationClassName;
 
-            applicationDescriptor.setLabel(applicationAnnotation.label());
-
-            String name = astType.getName();
-            String packageName = name.substring(0, name.lastIndexOf('.'));
-            String deleagateName = name.substring(name.lastIndexOf('.') + 1);
-
-            if (StringUtils.isBlank(applicationAnnotation.name())) {
-                applicationDescriptor.setPackageClass(new PackageClass(packageName, deleagateName + "Application"));
-            } else {
-                applicationDescriptor.setPackageClass(new PackageClass(packageName, applicationAnnotation.name()));
-            }
-
-            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
-
-            applicationDescriptor.addInjectionNode(
-                    injectionPointFactory.buildInjectionNode(astType, context));
-
-
-            org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
-
-            manifestApplication.setName(applicationDescriptor.getPackageClass().getFullyQualifiedName());
-            manifestApplication.setLabel(applicationAnnotation.label());
-
-            applicationDescriptor.setManifestApplication(manifestApplication);
+        if (StringUtils.isBlank(applicationAnnotation.name())) {
+            applicationClassName = new PackageClass(packageName, deleagateName + "Application");
+        } else {
+            applicationClassName = new PackageClass(packageName, applicationAnnotation.name());
         }
 
+        AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+
+        //analyze delegate
+        AnalysisContext analysisContext = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
+        InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
+
+        //application generation profile
+        setupApplicationProfile(applicationDescriptor, injectionNode);
+
+        //add manifest elements
+        setupManifest(context, applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
+
         return applicationDescriptor;
+    }
+
+    private void setupApplicationProfile(AndroidComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
+
+        //onCreate
+        OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode);
+        //onLowMemory
+        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onLowMemory"));
+        //onTerminate
+        onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onTerminate"));
+        //onConfigurationChanged
+        //todo:onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged", Configuration.class));
+
+        //scoping
+        applicationDescriptor.getComponentBuilders().add(scopingComponentBuilderProvider.get());
+
+        applicationDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
@@ -108,5 +126,15 @@ public class ApplicationAnalysis {
 
         return subRepository;
 
+    }
+
+    private void setupManifest(ProcessorContext context, String name, String label) {
+
+        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
+
+        manifestApplication.setName(name);
+        manifestApplication.setLabel(label);
+
+        context.getSourceManifest().getApplications().add(manifestApplication);
     }
 }

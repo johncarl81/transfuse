@@ -14,6 +14,7 @@ import org.androidtransfuse.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider;
 import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.scopeBuilder.ScopeBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
@@ -49,6 +50,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(ProcessorFactory.class));
         install(factoryModuleBuilder.build(VariableExpressionBuilderFactory.class));
         install(factoryModuleBuilder.build(ScopeBuilderFactory.class));
+        install(factoryModuleBuilder.build(ComponentBuilderFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 

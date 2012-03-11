@@ -28,6 +28,10 @@ public class MethodCallbackAspect {
         return methodCallbacks.get(name);
     }
 
+    public boolean contains(String name) {
+        return methodCallbacks.containsKey(name);
+    }
+
     public static final class MethodCallback {
         private ASTMethod method;
         private String name;

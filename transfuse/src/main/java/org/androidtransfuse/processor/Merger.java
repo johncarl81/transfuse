@@ -31,26 +31,26 @@ public class Merger {
 
         return (T) mergeMergeable((Class<? extends Mergeable>) targetClass, (Mergeable) target, (Mergeable) source);
     }
-    
+
     private <T extends Mergeable> T mergeMergeable(Class<? extends T> targetClass, T target, T source) throws MergerException {
 
-        try{
+        try {
 
             BeanInfo beanInfo = Introspector.getBeanInfo(targetClass);
 
             PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 
-            for(PropertyDescriptor propertyDescriptor : propertyDescriptors){
+            for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
                 Method getter = propertyDescriptor.getReadMethod();
                 Method setter = propertyDescriptor.getWriteMethod();
 
                 String propertyName = propertyDescriptor.getDisplayName();
 
-                if(PropertyUtils.isWriteable(target, propertyName)){
+                if (PropertyUtils.isWriteable(target, propertyName)) {
 
                     //check for mergeCollection
                     MergeCollection mergeCollection = findAnnotation(MergeCollection.class, getter, setter);
-                    if(Collection.class.isAssignableFrom(propertyDescriptor.getPropertyType())){
+                    if (Collection.class.isAssignableFrom(propertyDescriptor.getPropertyType())) {
                         PropertyUtils.setProperty(target, propertyName, mergeCollections(mergeCollection, propertyName, target, source));
                     }
 
@@ -74,9 +74,9 @@ public class Merger {
 
     private <T extends Annotation> T findAnnotation(Class<T> annotationClass, Method... methods) {
         T annotation = null;
-        if(methods != null){
-            for(Method method : methods){
-                if(annotation == null && method != null && method.isAnnotationPresent(annotationClass)){
+        if (methods != null) {
+            for (Method method : methods) {
+                if (annotation == null && method != null && method.isAnnotationPresent(annotationClass)) {
                     annotation = method.getAnnotation(annotationClass);
                 }
             }
@@ -86,23 +86,22 @@ public class Merger {
 
     private <T extends Mergeable> Object mergeProperties(Merge mergeAnnotation, String propertyName, T target, T source) throws MergerException {
 
-        try{
+        try {
 
             String tag = null;
-            if(mergeAnnotation != null){
+            if (mergeAnnotation != null) {
                 tag = mergeAnnotation.value();
             }
-            
+
             Object targetProperty = PropertyUtils.getProperty(target, propertyName);
             Object sourceProperty = PropertyUtils.getProperty(source, propertyName);
             Class propertyType = PropertyUtils.getPropertyType(target, propertyName);
 
-            if(tag != null && target.getMergeTags().contains(tag)){
+            if (tag != null && target.getMergeTags().contains(tag)) {
                 //merge away
                 return merge(propertyType, null, sourceProperty);
-            }
-            else{
-                if(tag != null){
+            } else {
+                if (tag != null) {
                     target.addMergeTag(tag);
                 }
                 return merge(propertyType, targetProperty, sourceProperty);
@@ -119,17 +118,13 @@ public class Merger {
 
     private <T extends Mergeable> Collection mergeCollections(MergeCollection mergeCollectionAnnotation, String propertyName, T target, T source) throws MergerException {
 
-        try{
+        try {
 
             Collection targetCollection = (Collection) PropertyUtils.getProperty(target, propertyName);
             Collection sourceCollection = (Collection) PropertyUtils.getProperty(source, propertyName);
 
-            Class collectionType = null;
-            if(mergeCollectionAnnotation == null){
+            if (mergeCollectionAnnotation == null) {
                 return (Collection) merge(PropertyUtils.getPropertyType(target, propertyName), targetCollection, sourceCollection);
-            }
-            if(mergeCollectionAnnotation != null){
-                collectionType = mergeCollectionAnnotation.type();
             }
 
             Map<Object, Mergeable> targetMap = convertToMergable(targetCollection);

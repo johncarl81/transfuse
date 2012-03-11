@@ -245,6 +245,24 @@ public class MergerTest {
         assertEquals("six", subMergable.getDontMergeValue());
     }
 
+    @Test
+    public void testEmptyCollection() throws MergerException {
+        List<SubMergable> subMergablesOne = new ArrayList<SubMergable>();
+        List<SubMergable> subMergablesTwo = new ArrayList<SubMergable>();
+
+        subMergablesOne.add(buildSubMergable("1", "five", "six", true));
+
+        MergeableRoot one = buildMergeableRoot("2", "one", "two", 5, subMergablesOne, true);
+        MergeableRoot two = buildMergeableRoot("2", "three", "four", 6, subMergablesTwo, true);
+
+        MergeableRoot merged = merger.merge(MergeableRoot.class, one, two);
+
+        assertEquals("one", merged.getDontMerge());
+        assertEquals("four", merged.getStringValue());
+        assertEquals(6, merged.getIntValue());
+        assertEquals(0, merged.getSubMergables().size());
+    }
+
     private Map<String, SubMergable> buildSubMergableMap(List<SubMergable> subMergables) {
 
         Map<String, SubMergable> subMergableMap = new HashMap<String, SubMergable>();

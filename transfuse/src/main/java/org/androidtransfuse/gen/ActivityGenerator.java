@@ -2,7 +2,6 @@ package org.androidtransfuse.gen;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnnotationProcessor;
@@ -59,10 +58,6 @@ public class ActivityGenerator {
 
         JBlock block = onCreateMethod.body();
 
-        JInvocation invocation = codeModel.ref(System.class).staticInvoke("currentTimeMillis");
-        JVar timeVar = block.decl(codeModel.LONG, "time");
-        block.assign(timeVar, invocation);
-
         //super call with saved instance state
         block.invoke(JExpr._super(), onCreateMethod).arg(savedInstanceState);
 
@@ -111,12 +106,6 @@ public class ActivityGenerator {
             addLifecycleMethod("onStart", definedClass, expressionMap);
             // onStop
             addLifecycleMethod("onStop", definedClass, expressionMap);
-
-            block.add(codeModel.ref(Log.class).staticInvoke("i")
-                    .arg("timer")
-                    .arg(
-                            codeModel.ref(Long.class).staticInvoke("toString").arg(
-                                    JOp.minus(codeModel.ref(System.class).staticInvoke("currentTimeMillis"), timeVar))));
         }
     }
 

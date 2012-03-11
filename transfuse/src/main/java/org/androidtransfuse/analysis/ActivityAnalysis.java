@@ -77,52 +77,49 @@ public class ActivityAnalysis {
         Layout layoutAnnotation = input.getAnnotation(Layout.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
 
-        ActivityDescriptor activityDescriptor = null;
+        ActivityDescriptor activityDescriptor = new ActivityDescriptor();
 
-        if (activityAnnotation != null) {
-            activityDescriptor = new ActivityDescriptor();
-
-            //http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
-            TypeMirror type = null;
-            try {
-                activityAnnotation.type();
-            } catch (MirroredTypeException mte) {
-                type = mte.getTypeMirror();
-            }
-
-            if (type != null) {
-                activityDescriptor.setType(type.toString());
-            }
-
-            String name = input.getName();
-            String packageName = name.substring(0, name.lastIndexOf('.'));
-            String deleagateName = name.substring(name.lastIndexOf('.') + 1);
-
-            if (StringUtils.isBlank(activityAnnotation.name())) {
-                activityDescriptor.setPackageClass(new PackageClass(packageName, deleagateName + "Activity"));
-            } else {
-                activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
-            }
-
-            activityDescriptor.setLabel(activityAnnotation.label());
-            if (layoutAnnotation != null) {
-                activityDescriptor.setLayout(layoutAnnotation.value());
-            }
-
-            AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(type), aopRepository);
-
-            activityDescriptor.addInjectionNode(
-                    injectionPointFactory.buildInjectionNode(input, context));
-
-            org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
-
-
-            manifestActivity.setName(activityDescriptor.getPackageClass().getFullyQualifiedName());
-            manifestActivity.setLabel(activityAnnotation.label());
-            manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
-
-            activityDescriptor.setManifestActivity(manifestActivity);
+        //http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
+        TypeMirror type = null;
+        try {
+            activityAnnotation.type();
+        } catch (MirroredTypeException mte) {
+            type = mte.getTypeMirror();
         }
+
+        if (type != null) {
+            activityDescriptor.setType(type.toString());
+        }
+
+        String name = input.getName();
+        String packageName = name.substring(0, name.lastIndexOf('.'));
+        String deleagateName = name.substring(name.lastIndexOf('.') + 1);
+
+        if (StringUtils.isBlank(activityAnnotation.name())) {
+            activityDescriptor.setPackageClass(new PackageClass(packageName, deleagateName + "Activity"));
+        } else {
+            activityDescriptor.setPackageClass(new PackageClass(packageName, activityAnnotation.name()));
+        }
+
+        activityDescriptor.setLabel(activityAnnotation.label());
+        if (layoutAnnotation != null) {
+            activityDescriptor.setLayout(layoutAnnotation.value());
+        }
+
+        AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(type), aopRepository);
+
+        activityDescriptor.addInjectionNode(
+                injectionPointFactory.buildInjectionNode(input, context));
+
+        org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
+
+
+        manifestActivity.setName(activityDescriptor.getPackageClass().getFullyQualifiedName());
+        manifestActivity.setLabel(activityAnnotation.label());
+        manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
+
+        activityDescriptor.setManifestActivity(manifestActivity);
+
         return activityDescriptor;
     }
 
