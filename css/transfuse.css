@@ -5,3 +5,8 @@ body {
 code {
   font-family: monospace;
 }
+
+nav ul li a, nav ul li a:visited, nav ul li a:active {
+  font-size: 14px;
+  text-decoration: none;
+}
