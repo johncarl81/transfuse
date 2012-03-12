@@ -12,6 +12,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -27,11 +28,13 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
 
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
+    private Logger log;
 
     @Inject
-    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory) {
+    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, Logger log) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.log = log;
     }
 
     @Override
