@@ -11,7 +11,7 @@ public interface ComponentBuilderFactory {
 
     OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNode injectionNode, LayoutBuilder layoutBuilder, Class<?>... methodParameters);
 
-    MethodCallbackGeneratorImpl buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator, Class<?>... parameterTypes);
+    MethodCallbackGeneratorImpl buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 

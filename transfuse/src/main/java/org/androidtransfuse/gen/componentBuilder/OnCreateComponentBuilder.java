@@ -94,6 +94,10 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     }
 
     public void addMethodCallbackBuilder(MethodCallbackGenerator methodCallbackGenerator) {
-        methodCallbackGenerators.add(methodCallbackGenerator);
+        this.methodCallbackGenerators.add(methodCallbackGenerator);
+    }
+
+    public void addMethodCallbackBuilders(Set<MethodCallbackGenerator> generators) {
+        this.methodCallbackGenerators.addAll(generators);
     }
 }

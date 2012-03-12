@@ -2,7 +2,7 @@ package org.androidtransfuse.integrationTest;
 
 import android.content.Intent;
 
-public class ActivityListItem {
+public class ActivityListItem implements Comparable<ActivityListItem> {
 
     private Intent intent;
     private String name;
@@ -22,5 +22,10 @@ public class ActivityListItem {
 
     public String toString() {
         return getName();
+    }
+
+    @Override
+    public int compareTo(ActivityListItem activityListItem) {
+        return getName().compareTo(activityListItem.getName());
     }
 }

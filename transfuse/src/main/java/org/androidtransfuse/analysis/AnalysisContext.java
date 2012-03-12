@@ -1,9 +1,11 @@
 package org.androidtransfuse.analysis;
 
+import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +23,8 @@ public class AnalysisContext {
     private AOPRepository aopRepository;
     private int superClassLevel;
 
-    public AnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
+    @Inject
+    public AnalysisContext(@Assisted AnalysisRepository analysisRepository, @Assisted InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
         this.dependents = Collections.emptyMap();
         this.dependencyHistory = new Stack<InjectionNode>();
         this.analysisRepository = analysisRepository;

@@ -31,10 +31,10 @@ public class ApplicationAnalysis {
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
-    private AOPRepository aopRepository;
     private Provider<ScopingComponentBuilder> scopingComponentBuilderProvider;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
+    private AnalysisContextFactory analysisContextFactory;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
@@ -45,17 +45,17 @@ public class ApplicationAnalysis {
                                AOPRepository aopRepository,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
-                               ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory) {
+                               ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory, AnalysisContextFactory analysisContextFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationProvider = applicationProvider;
-        this.aopRepository = aopRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.scopingComponentBuilderProvider = scopingComponentBuilderProvider;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
+        this.analysisContextFactory = analysisContextFactory;
     }
 
     public AndroidComponentDescriptor emptyApplication(ProcessorContext context) {
@@ -91,7 +91,7 @@ public class ApplicationAnalysis {
         AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
 
         //analyze delegate
-        AnalysisContext analysisContext = new AnalysisContext(analysisRepository, buildVariableBuilderMap(), aopRepository);
+        AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap());
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
 
         //application generation profile

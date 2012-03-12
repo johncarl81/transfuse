@@ -16,18 +16,11 @@ import java.util.*;
 public class MethodCallbackGeneratorImpl implements MethodCallbackGenerator {
 
     private String name;
-    private List<Class<?>> methodParameterTypes;
     private MethodGenerator methodGenerator;
 
     @Inject
-    public MethodCallbackGeneratorImpl(@Assisted String name, @Assisted MethodGenerator methodGenerator, @Assisted Class<?>... methodParameterTypes) {
+    public MethodCallbackGeneratorImpl(@Assisted String name, @Assisted MethodGenerator methodGenerator) {
         this.name = name;
-        this.methodParameterTypes = new ArrayList<Class<?>>();
-
-        if (methodParameterTypes != null) {
-            this.methodParameterTypes.addAll(Arrays.asList(methodParameterTypes));
-        }
-
         this.methodGenerator = methodGenerator;
     }
 

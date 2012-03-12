@@ -4,10 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
-import org.androidtransfuse.analysis.AOPRepository;
-import org.androidtransfuse.analysis.AOPRepositoryProvider;
-import org.androidtransfuse.analysis.AnalysisRepository;
-import org.androidtransfuse.analysis.AnalysisRepositoryFactory;
+import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepository;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepositoryProvider;
@@ -51,6 +48,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(VariableExpressionBuilderFactory.class));
         install(factoryModuleBuilder.build(ScopeBuilderFactory.class));
         install(factoryModuleBuilder.build(ComponentBuilderFactory.class));
+        install(factoryModuleBuilder.build(AnalysisContextFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 
@@ -61,6 +59,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         bind(InjectionNodeBuilderRepository.class).toProvider(InjectionNodeBuilderRepositoryFactory.class).asEagerSingleton();
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
         bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
+        bind(ActivityComponentBuilderRepository.class).toProvider(ActivityComponentBuilderRepositoryProvider.class).asEagerSingleton();
 
         bind(InjectionExpressionBuilder.class).to(InjectionExpressionBuilderImpl.class);
 

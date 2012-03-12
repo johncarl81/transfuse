@@ -1,16 +1,8 @@
 package org.androidtransfuse.analysis;
 
 import android.app.Application;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ListView;
-import com.sun.codemodel.JExpr;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Intent;
@@ -19,7 +11,6 @@ import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
@@ -54,9 +45,8 @@ public class ActivityAnalysis {
     private Provider<Action> actionProvider;
     private Provider<Category> categoryProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
-    private AOPRepository aopRepository;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private ASTClassFactory astClassFactory;
+    private ActivityComponentBuilderRepository activityComponentBuilderRepository;
+    private AnalysisContextFactory analysisContextFactory;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -68,10 +58,8 @@ public class ActivityAnalysis {
                             Provider<Category> categoryProvider,
                             Provider<Action> actionProvider,
                             Provider<IntentFilter> intentFilterProvider,
-                            AOPRepository aopRepository,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
-                            ComponentBuilderFactory componentBuilderFactory,
-                            ASTClassFactory astClassFactory) {
+                            ActivityComponentBuilderRepository activityComponentBuilderRepository, AnalysisContextFactory analysisContextFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -81,10 +69,9 @@ public class ActivityAnalysis {
         this.categoryProvider = categoryProvider;
         this.actionProvider = actionProvider;
         this.intentFilterProvider = intentFilterProvider;
-        this.aopRepository = aopRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
-        this.componentBuilderFactory = componentBuilderFactory;
-        this.astClassFactory = astClassFactory;
+        this.activityComponentBuilderRepository = activityComponentBuilderRepository;
+        this.analysisContextFactory = analysisContextFactory;
     }
 
     public AndroidComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application) {
@@ -127,11 +114,11 @@ public class ActivityAnalysis {
 
         AndroidComponentDescriptor activityDescriptor = new AndroidComponentDescriptor(activityType, activityClassName);
 
-        AnalysisContext context = new AnalysisContext(analysisRepository, buildVariableBuilderMap(type), aopRepository);
+        AnalysisContext context = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap(type));
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
         //application generation profile
-        setupActivityProfile(activityDescriptor, injectionNode, layout);
+        setupActivityProfile(activityType, activityDescriptor, injectionNode, layout);
 
         //add manifest elements
         setupManifest(context, activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
@@ -153,64 +140,8 @@ public class ActivityAnalysis {
         application.getActivities().add(manifestActivity);
     }
 
-    private void setupActivityProfile(AndroidComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout) {
-        //onCreate
-        LayoutBuilder rLayoutBuilder;
-        if (layout == null) {
-            rLayoutBuilder = new NoOpLayoutBuilder();
-        } else {
-            rLayoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
-        }
-        OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, rLayoutBuilder, Bundle.class);
-        // onDestroy
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onDestroy"));
-        // onPause
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onPause"));
-        // onRestart
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onRestart"));
-        // onResume
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onResume"));
-        // onStart
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStart"));
-        // onStop
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStop"));
-        //ontouch method
-        try {
-            ASTMethod onTouchMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onTouchEvent", MotionEvent.class));
-            onCreateComponentBuilder.addMethodCallbackBuilder(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
-                            componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
-        }
-
-        try {
-            //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
-            ASTMethod onListItemClickMethod = astClassFactory.buildASTClassMethod(ListActivity.class.getDeclaredMethod("onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE));
-            onCreateComponentBuilder.addMethodCallbackBuilder(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
-                            componentBuilderFactory.buildSimpleMethodGenerator(onListItemClickMethod, false)));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
-        }
-
-        activityDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String name) {
-        return buildEventMethod(name, name);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
-
-        try {
-            ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod(methodName));
-
-            return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
-                    componentBuilderFactory.buildSimpleMethodGenerator(method, true));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
-        }
+    private void setupActivityProfile(String activityType, AndroidComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout) {
+        activityDescriptor.getComponentBuilders().add(activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout));
     }
 
     private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters) {
