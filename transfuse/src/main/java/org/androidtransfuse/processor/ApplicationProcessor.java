@@ -59,7 +59,7 @@ public class ApplicationProcessor {
                 logger.error("JClassAlreadyExistsException while generating activity", e);
             }
 
-            return processorFactory.buildComponentProcessor(context, context.getManifest().getApplications().get(0));
+            return processorFactory.buildComponentProcessor(context, context.getSourceManifest().getApplications().get(0));
         }
 
         return null; //todo: throw exception?

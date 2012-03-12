@@ -1,12 +1,67 @@
 package org.androidtransfuse.integrationTest;
 
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
+import android.app.ListActivity;
+import android.widget.ArrayAdapter;
+import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
+import org.androidtransfuse.integrationTest.aop.AOPActivity;
+import org.androidtransfuse.integrationTest.inject.*;
+import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
+import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
+import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
+
+import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-@Activity(name = "IntegrationMain")
-@Layout(R.layout.main)
+@Activity(label = "@string/app_name", type = ListActivity.class)
+@IntentFilters({
+        @Intent(type = IntentType.ACTION, name = "android.intent.action.MAIN"),
+        @Intent(type = IntentType.CATEGORY, name = "android.intent.category.LAUNCHER")
+})
 public class Main {
+
+    ActivityListItem[] values;
+
+    private ListActivity listActivity;
+
+    @Inject
+    public Main(ListActivity listActivity) {
+
+        this.listActivity = listActivity;
+
+        values = new ActivityListItem[]{
+                createLI(PreferencesActivity.class, "Preferences"),
+                createLI(AOPActivity.class, "AOP"),
+                createExtraLI(ExtraInjectionActivity.class, "Extras"),
+                createLI(InjectionActivity.class, "Injection"),
+                createLI(ResourceInjectionActivity.class, "Resources"),
+                createLI(SystemInjectionActivity.class, "System Servicces"),
+                createLI(ActivityLifecycleActivity.class, "Lifecycle"),
+                createLI(ScopeOneActivity.class, "Scope One"),
+                createLI(ScopeTwoActivity.class, "Scope Two")
+        };
+
+        ArrayAdapter<ActivityListItem> adapter = new ArrayAdapter<ActivityListItem>(listActivity, android.R.layout.simple_list_item_1, values);
+        listActivity.setListAdapter(adapter);
+    }
+
+    @OnListItemClick
+    public void onListItemClick(int position) {
+        listActivity.startActivity(values[position].getIntent());
+    }
+
+    private ActivityListItem createLI(Class<? extends android.app.Activity> clazz, String name) {
+        android.content.Intent intent = new android.content.Intent(listActivity, clazz);
+        return new ActivityListItem(intent, name);
+    }
+
+    private ActivityListItem createExtraLI(Class<ExtraInjectionActivity> clazz, String name) {
+        android.content.Intent intent = new android.content.Intent(listActivity, clazz);
+
+        intent.putExtra(ExtraInjection.EXTRA_ONE, "one");
+        intent.putExtra(ExtraInjection.EXTRA_TWO, 42L);
+        return new ActivityListItem(intent, name);
+    }
 }

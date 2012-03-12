@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
@@ -57,7 +56,6 @@ public class ActivityAnalysis {
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private AOPRepository aopRepository;
     private ComponentBuilderFactory componentBuilderFactory;
-    private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
 
     @Inject
@@ -72,7 +70,8 @@ public class ActivityAnalysis {
                             Provider<IntentFilter> intentFilterProvider,
                             AOPRepository aopRepository,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
-                            ComponentBuilderFactory componentBuilderFactory, JCodeModel codeModel, ASTClassFactory astClassFactory) {
+                            ComponentBuilderFactory componentBuilderFactory,
+                            ASTClassFactory astClassFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -85,7 +84,6 @@ public class ActivityAnalysis {
         this.aopRepository = aopRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
     }
 
@@ -147,6 +145,10 @@ public class ActivityAnalysis {
         manifestActivity.setName(name);
         manifestActivity.setLabel(label);
         manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
+
+        if (application.getActivities() == null) {
+            application.setActivities(new ArrayList<org.androidtransfuse.model.manifest.Activity>());
+        }
 
         application.getActivities().add(manifestActivity);
     }

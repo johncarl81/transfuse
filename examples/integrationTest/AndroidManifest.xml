@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest" android:versionCode="1" android:versionName="1.0">
-  <application t="n,l" android:name=".TransfuseApplication">
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.scope.ScopeTwoActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.inject.ResourceInjectionActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.aop.AOPActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.inject.ExtraInjectionActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.IntegrationMain"/>
-    <activity t="n,l" android:label="@string/app_name" android:name="org.androidtransfuse.integrationTest.activity.PreferencesActivity">
-      <intent-filter>
-        <action t="n" android:name="android.intent.action.MAIN"/>
-        <category t="n" android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.inject.InjectionActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.inject.SystemInjectionActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity"/>
-    <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.scope.ScopeOneActivity"/>
-  </application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest"
+          android:versionCode="1" android:versionName="1.0">
+    <application t="n,l" android:name=".TransfuseApplication">
+        <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.scope.ScopeTwoActivity"/>
+        <activity t="n,l" android:label="@string/app_name"
+                  android:name="org.androidtransfuse.integrationTest.MainActivity">
+            <intent-filter>
+                <action t="n" android:name="android.intent.action.MAIN"/>
+                <category t="n" android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.aop.AOPActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.inject.ResourceInjectionActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.inject.ExtraInjectionActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.activity.PreferencesActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.inject.InjectionActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.inject.SystemInjectionActivity"/>
+        <activity t="n,l" android:label=""
+                  android:name="org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity"/>
+        <activity t="n,l" android:label="" android:name="org.androidtransfuse.integrationTest.scope.ScopeOneActivity"/>
+    </application>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 </manifest>

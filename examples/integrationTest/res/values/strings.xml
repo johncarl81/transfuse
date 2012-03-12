@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">integrationTest</string>
+    <string name="app_name">Integration Test</string>
     <bool name="bool">true</bool>
     <string-array name="colors">
         <item>red</item>
