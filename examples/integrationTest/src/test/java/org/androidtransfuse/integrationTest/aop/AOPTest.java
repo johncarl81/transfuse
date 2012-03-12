@@ -24,7 +24,7 @@ public class AOPTest {
         aopActivity.onCreate(null);
 
         aop = DelegateUtil.getDelegate(aopActivity, AOP.class);
-        injectedInterceptor = DelegateUtil.getDelegate(aopActivity, InjectedInterceptor.class);
+        injectedInterceptor = DelegateUtil.getDelegate(aop, InjectedInterceptor.class);
     }
 
     @Test

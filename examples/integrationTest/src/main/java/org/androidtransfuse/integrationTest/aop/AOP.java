@@ -2,6 +2,7 @@ package org.androidtransfuse.integrationTest.aop;
 
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
 
 /**
@@ -24,5 +25,9 @@ public class AOP {
 
     @DependencyInterceptor
     public void interceptorWithDependency() {
+    }
+
+    @OnPause
+    public void keepInActivity() {
     }
 }

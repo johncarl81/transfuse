@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.inject;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
@@ -29,6 +30,10 @@ public class ExtraInjection {
     @Inject
     @Extra(value = EXTRA_THREE, optional = true)
     private String extraThree;
+
+    @OnPause
+    public void keepInActivity() {
+    }
 
     public String getExtraOne() {
         return extraOne;

@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import android.os.Vibrator;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.SystemService;
 import org.androidtransfuse.integrationTest.R;
 
@@ -36,6 +37,10 @@ public class SystemInjection {
 
     public Vibrator getVibrator() {
         return vibrator;
+    }
+
+    @OnPause
+    public void keepInActivity() {
     }
 
     public LocationManager getLocationManager() {

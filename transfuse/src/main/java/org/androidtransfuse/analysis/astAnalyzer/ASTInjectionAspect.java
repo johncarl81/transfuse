@@ -15,9 +15,15 @@ import java.util.Set;
  */
 public class ASTInjectionAspect {
 
+    public enum InjectionAssignmentType {
+        FIELD,
+        LOCAL
+    }
+
     private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
     private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
     private Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
+    private InjectionAssignmentType assignmentType = InjectionAssignmentType.LOCAL;
 
     public void add(ConstructorInjectionPoint constructorInjectionPoint) {
         constructorInjectionPoints.add(constructorInjectionPoint);
@@ -57,5 +63,13 @@ public class ASTInjectionAspect {
 
     public void addAllConstructorInjectionPoints(Set<ConstructorInjectionPoint> constructorInjectionPoints) {
         this.constructorInjectionPoints.addAll(constructorInjectionPoints);
+    }
+
+    public InjectionAssignmentType getAssignmentType() {
+        return assignmentType;
+    }
+
+    public void setAssignmentType(InjectionAssignmentType assignmentType) {
+        this.assignmentType = assignmentType;
     }
 }

@@ -10,7 +10,7 @@ import javax.inject.Inject;
  */
 public class InjectedInterceptor implements MethodInterceptor {
     @Inject
-    private IntercetorDepenency dependency;
+    private InterceptorDependency dependency;
 
 
     @Override
@@ -18,7 +18,7 @@ public class InjectedInterceptor implements MethodInterceptor {
         return invocation.proceed();
     }
 
-    public IntercetorDepenency getDependency() {
+    public InterceptorDependency getDependency() {
         return dependency;
     }
 }

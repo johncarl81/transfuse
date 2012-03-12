@@ -50,9 +50,12 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
 
-            variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode.getClassName()));
-
             ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
+            if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
+                variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode.getClassName()));
+            } else {
+                variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode.getClassName()));
+            }
             JBlock block = injectionBuilderContext.getBlock();
 
             //constructor injection

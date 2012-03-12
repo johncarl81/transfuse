@@ -50,5 +50,17 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
 
         methodCallbackToken.addMethodCallback(methodAnnotations.get(annotation), astMethod, context.getSuperClassLevel());
 
+        if (!annotation.equals(OnCreate.class)) {
+            ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
+
+            if (injectionAspect == null) {
+                injectionAspect = new ASTInjectionAspect();
+                injectionNode.addAspect(ASTInjectionAspect.class, injectionAspect);
+            }
+
+            //injection node is now required outside of the local scope
+            injectionAspect.setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
+        }
+
     }
 }

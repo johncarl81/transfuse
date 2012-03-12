@@ -2,6 +2,7 @@ package org.androidtransfuse.integrationTest.inject;
 
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.Resource;
 import org.androidtransfuse.integrationTest.R;
 
@@ -20,5 +21,9 @@ public class ResourceInjection {
 
     public String getAppName() {
         return appName;
+    }
+
+    @OnPause
+    public void keepInActivity() {
     }
 }

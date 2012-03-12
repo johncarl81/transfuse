@@ -3,5 +3,5 @@ package org.androidtransfuse.integrationTest.aop;
 /**
  * @author John Ericksen
  */
-public class IntercetorDepenency {
+public class InterceptorDependency {
 }

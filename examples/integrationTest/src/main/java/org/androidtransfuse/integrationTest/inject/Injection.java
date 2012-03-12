@@ -2,6 +2,7 @@ package org.androidtransfuse.integrationTest.inject;
 
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
@@ -43,6 +44,10 @@ public class Injection {
     public void setMethodInjection(InjectTarget methodInjectionOne, InjectTarget methodInjectionTwo) {
         this.methodInjectionOne = methodInjectionOne;
         this.methodInjectionTwo = methodInjectionTwo;
+    }
+
+    @OnPause
+    public void keepInActivity() {
     }
 
     public InjectTarget getPrivateInjection() {

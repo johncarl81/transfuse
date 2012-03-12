@@ -1,7 +1,10 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JVar;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -33,7 +36,7 @@ public class GeneratedProviderVariableBuilder implements VariableBuilder {
 
         JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode, injectionBuilderContext.getRResource());
 
-        JFieldVar providerField = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, providerClass, variableNamer.generateName(providerClass.fullName()));
+        JVar providerField = injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass.fullName()));
 
         injectionBuilderContext.getBlock().assign(providerField, JExpr._new(providerClass));
 

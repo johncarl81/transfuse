@@ -180,6 +180,8 @@ public class AOPProxyGenerator {
         //replace proxy constructor because of optional interceptor construction parameters
         proxyInjectionAspect.add(proxyConstructorInjectionPoint);
 
+        proxyInjectionAspect.setAssignmentType(injectionAspect.getAssignmentType());
+
         proxyInjectionNode.addAspect(proxyInjectionAspect);
 
         return proxyInjectionNode;
