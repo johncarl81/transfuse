@@ -1,17 +1,13 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
-import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,11 +22,13 @@ public class ProviderGenerator {
     private static Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
+    private GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
+    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, GeneratedClassAnnotator generatedClassAnnotator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode, RResource rResource) {
@@ -50,9 +48,7 @@ public class ProviderGenerator {
 
             JDefinedClass providerClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Provider", ClassType.CLASS);
 
-            providerClass.annotate(Generated.class)
-                    .param("value", TransfuseAnnotationProcessor.class.getName())
-                    .param("date", DateFormat.getInstance().format(new Date()));
+            generatedClassAnnotator.annotateClass(providerClass);
 
             providerClass._implements(Provider.class).narrow(injectionNodeClassRef);
 

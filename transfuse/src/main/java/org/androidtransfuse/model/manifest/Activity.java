@@ -54,7 +54,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Activity extends Mergeable<String> {
+public class Activity extends Mergeable<String> implements Comparable<Activity> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -354,5 +354,10 @@ public class Activity extends Mergeable<String> {
     @Override
     public String getIdentifier() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Activity activity) {
+        return getName().compareTo(activity.getName());
     }
 }

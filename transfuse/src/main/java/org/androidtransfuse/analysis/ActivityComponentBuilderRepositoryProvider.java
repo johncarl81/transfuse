@@ -48,7 +48,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
         methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ActivityGroup.class.getName(), activityMethodGenerators);
 
-        return new ActivityComponentBuilderRepository(componentBuilderFactory, methodCallbackGenerators, log);
+        return new ActivityComponentBuilderRepository(componentBuilderFactory, methodCallbackGenerators, log, astClassFactory);
     }
 
     private Set<MethodCallbackGenerator> buildListActivityMethodCallbackGenerators(Set<MethodCallbackGenerator> activityMethodGenerators) {

@@ -1,11 +1,13 @@
 package org.androidtransfuse.integrationTest.lifecycle;
 
+import android.os.Bundle;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -17,18 +19,20 @@ public class ActivityLifecycleTest {
 
     private ActivityLifecycle activityLifecycle;
     private ActivityLifecycleActivity lifecycleActivity;
+    private Bundle bundle;
 
     @Before
     public void setup() {
+        bundle = new Bundle();
         lifecycleActivity = new ActivityLifecycleActivity();
-        lifecycleActivity.onCreate(null);
+        lifecycleActivity.onCreate(bundle);
 
         activityLifecycle = DelegateUtil.getDelegate(lifecycleActivity, ActivityLifecycle.class);
     }
 
     @Test
     public void onCreate() {
-        assertTrue(activityLifecycle.isOnCreate());
+        assertEquals(bundle, activityLifecycle.getOnCreateBundle());
     }
 
     @Test

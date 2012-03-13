@@ -130,7 +130,7 @@ public class ActivityAnalysis {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
-        manifestActivity.setLabel(label);
+        manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
         manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
 
         if (application.getActivities() == null) {

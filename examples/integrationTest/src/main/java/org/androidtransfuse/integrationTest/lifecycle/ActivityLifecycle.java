@@ -1,5 +1,6 @@
 package org.androidtransfuse.integrationTest.lifecycle;
 
+import android.os.Bundle;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
 
@@ -10,7 +11,7 @@ import org.androidtransfuse.integrationTest.R;
 @Layout(R.layout.main)
 public class ActivityLifecycle {
 
-    private boolean onCreate;
+    private Bundle onCreateBundle;
     private boolean onDestroy;
     private boolean onStop;
     private boolean onPause;
@@ -19,8 +20,8 @@ public class ActivityLifecycle {
     private boolean onRestart;
 
     @OnCreate
-    public void onCreate() {
-        onCreate = true;
+    public void onCreate(Bundle bundle) {
+        onCreateBundle = bundle;
     }
 
     @OnDestroy
@@ -53,8 +54,8 @@ public class ActivityLifecycle {
         onRestart = true;
     }
 
-    public boolean isOnCreate() {
-        return onCreate;
+    public Bundle getOnCreateBundle() {
+        return onCreateBundle;
     }
 
     public boolean isOnDestroy() {

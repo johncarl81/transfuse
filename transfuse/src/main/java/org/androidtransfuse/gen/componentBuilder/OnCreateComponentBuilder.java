@@ -3,7 +3,9 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
@@ -23,21 +25,25 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
     private Set<MethodCallbackGenerator> methodCallbackGenerators = new HashSet<MethodCallbackGenerator>();
-    private List<Class> methodArguments;
     private UniqueVariableNamer uniqueVariableNamer;
     private LayoutBuilder layoutBuilder;
+    private ComponentBuilderFactory componentBuilderFactory;
+    private ASTMethod onCreateASTMethod;
 
     @Inject
-    public OnCreateComponentBuilder(@Assisted @Nullable InjectionNode injectionNode, @Assisted LayoutBuilder layoutBuilder, InjectionFragmentGenerator injectionFragmentGenerator, JCodeModel codeModel, UniqueVariableNamer uniqueVariableNamer, @Assisted @Nullable Class<?>... methodArguments) {
+    public OnCreateComponentBuilder(@Assisted @Nullable InjectionNode injectionNode,
+                                    @Assisted LayoutBuilder layoutBuilder,
+                                    @Assisted ASTMethod onCreateASTMethod,
+                                    InjectionFragmentGenerator injectionFragmentGenerator,
+                                    JCodeModel codeModel,
+                                    UniqueVariableNamer uniqueVariableNamer,
+                                    ComponentBuilderFactory componentBuilderFactory,
+                                    ASTClassFactory astClassFactory) {
         this.injectionNode = injectionNode;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.codeModel = codeModel;
-        this.methodArguments = new ArrayList<Class>();
-
-        if (methodArguments != null) {
-            this.methodArguments.addAll(Arrays.asList(methodArguments));
-        }
-
+        this.componentBuilderFactory = componentBuilderFactory;
+        this.onCreateASTMethod = onCreateASTMethod;
         this.uniqueVariableNamer = uniqueVariableNamer;
         this.layoutBuilder = layoutBuilder;
     }
@@ -48,11 +54,14 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
             if (injectionNode != null) {
 
                 final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
+                MethodDescriptor onCreateMethodDescriptor = new MethodDescriptor(onCreateMethod, onCreateASTMethod);
 
                 List<JVar> parameters = new ArrayList<JVar>();
 
-                for (Class methodArgument : methodArguments) {
-                    parameters.add(onCreateMethod.param(methodArgument, uniqueVariableNamer.generateName(methodArgument)));
+                for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
+                    JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument.getName()));
+                    parameters.add(param);
+                    onCreateMethodDescriptor.putParameter(methodArgument, param);
                 }
 
                 //super.onCreate()
@@ -68,18 +77,10 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
 
                 Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 
-                for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-                    MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
+                MethodGenerator onCreateMethodGenerator = new ExistingMethodGenerator(onCreateMethodDescriptor);
+                MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);
 
-                    if (methodCallbackAspect != null && methodCallbackAspect.contains("onCreate")) {
-                        Set<MethodCallbackAspect.MethodCallback> methods = methodCallbackAspect.getMethodCallbacks("onCreate");
-
-                        for (MethodCallbackAspect.MethodCallback methodCallback : methods) {
-                            //todo: non-public access
-                            block.add(injectionNodeJExpressionEntry.getValue().invoke(methodCallback.getMethod().getName()));
-                        }
-                    }
-                }
+                onCreateCallbackGenerator.addLifecycleMethod(definedClass, expressionMap);
 
                 for (MethodCallbackGenerator methodCallbackGenerator : methodCallbackGenerators) {
                     methodCallbackGenerator.addLifecycleMethod(definedClass, expressionMap);

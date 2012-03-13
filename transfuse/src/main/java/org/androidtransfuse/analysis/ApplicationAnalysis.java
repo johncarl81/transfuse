@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
@@ -105,35 +106,38 @@ public class ApplicationAnalysis {
 
     private void setupApplicationProfile(AndroidComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
 
-        //onCreate
-        OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder());
-        //onLowMemory
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
-        //onTerminate
-        onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onTerminate"));
-        //onConfigurationChanged
-        //todo:onCreateComponentBuilder.addMethodCallbackBuilder(componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged", Configuration.class));
-
-        //scoping
-        applicationDescriptor.getComponentBuilders().add(scopingComponentBuilderProvider.get());
-
-        applicationDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String name) {
-        return buildEventMethod(name, name);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
-
         try {
-            ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Application.class.getMethod(methodName));
+            ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
+            //onCreate
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod);
+            //onLowMemory
+            onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
+            //onTerminate
+            onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onTerminate"));
+            //onConfigurationChanged
+            ASTMethod onConfigurationChangedASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onConfigurationChanged", Configuration.class));
+            onCreateComponentBuilder.addMethodCallbackBuilder(
+                    componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
+                            componentBuilderFactory.buildSimpleMethodGenerator(onConfigurationChangedASTMethod, true)));
 
-            return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
-                    componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+            //scoping
+            applicationDescriptor.getComponentBuilders().add(scopingComponentBuilderProvider.get());
+
+            applicationDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
         }
+    }
+
+    private MethodCallbackGenerator buildEventMethod(String name) throws NoSuchMethodException {
+        return buildEventMethod(name, name);
+    }
+
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) throws NoSuchMethodException {
+        ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Application.class.getMethod(methodName));
+
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+                componentBuilderFactory.buildSimpleMethodGenerator(method, true));
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
@@ -153,7 +157,7 @@ public class ApplicationAnalysis {
         org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
         manifestApplication.setName(name);
-        manifestApplication.setLabel(label);
+        manifestApplication.setLabel(StringUtils.isBlank(label) ? null : label);
 
         context.getSourceManifest().getApplications().add(manifestApplication);
     }

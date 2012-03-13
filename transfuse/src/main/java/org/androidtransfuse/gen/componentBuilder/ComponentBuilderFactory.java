@@ -9,9 +9,9 @@ import org.androidtransfuse.model.InjectionNode;
  */
 public interface ComponentBuilderFactory {
 
-    OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNode injectionNode, LayoutBuilder layoutBuilder, Class<?>... methodParameters);
+    OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNode injectionNode, LayoutBuilder layoutBuilder, ASTMethod onCreateMethod);
 
-    MethodCallbackGeneratorImpl buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
+    MethodCallbackGenerator buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 

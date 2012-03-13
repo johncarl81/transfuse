@@ -1,13 +1,13 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
@@ -15,10 +15,11 @@ import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.util.MethodSignature;
 import org.androidtransfuse.util.VirtualProxyException;
 
-import javax.annotation.Generated;
 import javax.inject.Inject;
-import java.text.DateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -32,11 +33,13 @@ public class VirtualProxyGenerator {
 
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
+    private GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
+        this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
     public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
@@ -45,9 +48,7 @@ public class VirtualProxyGenerator {
 
             JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
 
-            definedClass.annotate(Generated.class)
-                    .param("value", TransfuseAnnotationProcessor.class.getName())
-                    .param("date", DateFormat.getInstance().format(new Date()));
+            generatedClassAnnotator.annotateClass(definedClass);
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());

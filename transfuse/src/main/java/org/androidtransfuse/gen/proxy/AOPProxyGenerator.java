@@ -1,12 +1,12 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInvocation;
+import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -14,10 +14,8 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.util.Logger;
 
-import javax.annotation.Generated;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.text.DateFormat;
 import java.util.*;
 
 /**
@@ -34,12 +32,14 @@ public class AOPProxyGenerator {
     private UniqueVariableNamer variableNamer;
     private Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
     private Logger logger;
+    private GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, Logger logger) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, Logger logger, GeneratedClassAnnotator generatedClassAnnotator) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.logger = logger;
+        this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
@@ -66,9 +66,7 @@ public class AOPProxyGenerator {
 
             definedClass = codeModel._class(JMod.PUBLIC, proxyClassName, ClassType.CLASS);
 
-            definedClass.annotate(Generated.class)
-                    .param("value", TransfuseAnnotationProcessor.class.getName())
-                    .param("date", DateFormat.getInstance().format(new Date()));
+            generatedClassAnnotator.annotateClass(definedClass);
 
             //extending injectionNode
             definedClass._extends(codeModel.ref(injectionNode.getClassName()));

@@ -28,6 +28,7 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
         methodAnnotations.put(OnLowMemory.class, "onLowMemory");
         //application
         methodAnnotations.put(OnTerminate.class, "onTerminate");
+        methodAnnotations.put(OnConfigurationChanged.class, "onConfigurationChanged");
         //List Activity
         methodAnnotations.put(OnListItemClick.class, "onListItemClick");
     }
