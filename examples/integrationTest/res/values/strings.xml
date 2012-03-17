@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Integration Test</string>
+    <string name="custom_string">Custom View String</string>
     <bool name="bool">true</bool>
     <string-array name="colors">
         <item>red</item>

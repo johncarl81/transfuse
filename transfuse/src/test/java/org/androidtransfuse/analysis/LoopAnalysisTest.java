@@ -10,6 +10,7 @@ import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -32,6 +33,7 @@ public class LoopAnalysisTest {
     private Analyzer analyzer;
     private ASTClassFactory astClassFactory;
     private AnalysisContext analysisContext;
+    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     //A -> B (BImpl) -> C -> A
     public static class A {
@@ -121,6 +123,8 @@ public class LoopAnalysisTest {
 
         analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
 
+        variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
+
         analysisContext.getInjectionNodeBuilders().put(B.class.getName(),
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
 
@@ -136,6 +140,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.buildASTClassType(D.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         //D -> E
         ConstructorInjectionPoint deConstructorInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
@@ -162,6 +167,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         //A -> B
         ConstructorInjectionPoint abConstructorInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();

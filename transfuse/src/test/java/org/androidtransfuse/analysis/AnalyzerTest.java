@@ -8,6 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
+import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -18,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
@@ -82,6 +85,7 @@ public class AnalyzerTest {
     }
 
     private Analyzer analyzer;
+    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     private ASTClassFactory astClassFactory;
     private AnalysisContext analysisContext;
 
@@ -96,6 +100,8 @@ public class AnalyzerTest {
 
         analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
 
+        variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
+
         analysisContext.getInjectionNodeBuilders().put(B.class.getName(),
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
     }
@@ -105,6 +111,7 @@ public class AnalyzerTest {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         //A -> B && A -> E
         assertEquals(1, injectionNode.getAspect(ASTInjectionAspect.class).getMethodInjectionPoints().size());

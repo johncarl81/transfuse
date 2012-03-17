@@ -161,6 +161,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);
         ASTType providerType = astClassFactory.buildASTClassType(VariableTargetProvider.class);
         InjectionNode providerInjectionNode = analyzer.analyze(providerType, providerType, context);
+        providerInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode));
 
         VariableTarget target = buildInstance(VariableTarget.class, injectionNode);

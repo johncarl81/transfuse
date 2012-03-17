@@ -63,12 +63,12 @@ public class Analyzer {
         return injectionNode;
     }
 
-    private InjectionNode findProxyableDependency(InjectionNode duplicateDepedency, Stack<InjectionNode> loopedDependencies) {
+    private InjectionNode findProxyableDependency(InjectionNode duplicateDependency, Stack<InjectionNode> loopedDependencies) {
         //there may be better ways to identify the proxyable injection node.
-        if (!duplicateDepedency.getUsageType().isConcreteClass()) {
-            return duplicateDepedency;
+        if (!duplicateDependency.getUsageType().isConcreteClass()) {
+            return duplicateDependency;
         }
-        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && loopInjectionNode != duplicateDepedency; loopInjectionNode = loopedDependencies.pop()) {
+        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && loopInjectionNode != duplicateDependency; loopInjectionNode = loopedDependencies.pop()) {
             if (!loopInjectionNode.getUsageType().isConcreteClass()) {
                 //found interface
                 return loopInjectionNode;

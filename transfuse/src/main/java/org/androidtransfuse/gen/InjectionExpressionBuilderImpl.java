@@ -3,6 +3,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
+import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
@@ -25,8 +26,10 @@ public class InjectionExpressionBuilderImpl implements InjectionExpressionBuilde
         ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
         if (injectionAspect != null) {
             //constructor injection
-            for (InjectionNode constructorNode : injectionAspect.getConstructorInjectionPoint().getInjectionNodes()) {
-                buildVariable(injectionBuilderContext, constructorNode);
+            for (ConstructorInjectionPoint constructorInjectionPoint : injectionAspect.getConstructorInjectionPoints()) {
+                for (InjectionNode constructorNode : constructorInjectionPoint.getInjectionNodes()) {
+                    buildVariable(injectionBuilderContext, constructorNode);
+                }
             }
             //field injection
             for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {

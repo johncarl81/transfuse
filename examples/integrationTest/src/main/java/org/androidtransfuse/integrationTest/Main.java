@@ -6,10 +6,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
-import org.androidtransfuse.integrationTest.inject.ExtraInjectionActivityStrategy;
-import org.androidtransfuse.integrationTest.inject.InjectionActivity;
-import org.androidtransfuse.integrationTest.inject.ResourceInjectionActivity;
-import org.androidtransfuse.integrationTest.inject.SystemInjectionActivity;
+import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
@@ -51,7 +48,8 @@ public class Main {
                 createLI(ActivityLifecycleActivity.class, "Lifecycle"),
                 createLI(ScopeOneActivity.class, "Scope One"),
                 createLI(ScopeTwoActivity.class, "Scope Two"),
-                createLI(NotManagedActivity.class, "Not Managed")
+                createLI(NotManagedActivity.class, "Not Managed"),
+                createLI(CustomViewActivity.class, "Custom View")
         }));
 
         Collections.sort(values);

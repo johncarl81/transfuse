@@ -58,6 +58,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
             }
             JBlock block = injectionBuilderContext.getBlock();
 
+            if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
+                throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
+            }
+
             //constructor injection
             block.assign(variableRef,
                     injectionInvocationBuilder.buildConstructorInjection(

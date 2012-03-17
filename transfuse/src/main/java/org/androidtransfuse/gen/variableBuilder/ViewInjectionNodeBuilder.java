@@ -3,6 +3,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import android.app.Activity;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
@@ -22,24 +23,27 @@ public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotati
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private Analyzer analyzer;
 
     @Inject
     public ViewInjectionNodeBuilder(JCodeModel codeModel,
                                     ASTClassFactory astClassFactory,
                                     InjectionPointFactory injectionPointFactory,
-                                    VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+                                    VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                    Analyzer analyzer) {
         super(View.class);
         this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         Integer viewId = annotation.getProperty("value", Integer.class);
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);

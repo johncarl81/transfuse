@@ -14,6 +14,8 @@ import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.gen.proxy.MockDelegate;
+import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.JavaUtilLogger;
@@ -66,6 +68,8 @@ public class AOPProxyGeneratorTest {
     private ASTType mockMethdInterceptorAST;
     @Inject
     private AOPProxyAspect aopProxyAspect;
+    @Inject
+    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     @Before
     public void setup() {
@@ -74,6 +78,7 @@ public class AOPProxyGeneratorTest {
 
         delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
+        delegateInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         mockMethdInterceptorAST = astClassFactory.buildASTClassType(MockMethodInterceptor.class);
     }

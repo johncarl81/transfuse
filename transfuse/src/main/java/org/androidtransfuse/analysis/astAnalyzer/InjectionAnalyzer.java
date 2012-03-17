@@ -3,7 +3,6 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.analysis.ASTAnalysis;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTConstructor;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
@@ -49,8 +48,6 @@ public class InjectionAnalyzer implements ASTAnalysis {
                 getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
             } else if (noArgConstructor != null) {
                 getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
-            } else {
-                throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
         }
     }

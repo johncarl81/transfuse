@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRep
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Collection;
 
 /**
@@ -18,13 +19,15 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
     private Analyzer analyzer;
+    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     @Inject
     public GeneratedProviderInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                                 Analyzer analyzer, ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository) {
+                                                 Analyzer analyzer, ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository, Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
         this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
+        this.variableInjectionBuilderProvider = variableInjectionBuilderProvider;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
 
         InjectionNode injectionNode = new InjectionNode(astType);
         InjectionNode providerInjectionNode = analyzer.analyze(providerGenericType, providerGenericType, context);
+        providerInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildGeneratedProviderVariableBuilder(providerInjectionNode));
 
