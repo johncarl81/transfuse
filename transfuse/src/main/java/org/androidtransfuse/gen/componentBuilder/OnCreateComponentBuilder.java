@@ -7,6 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
+import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -24,7 +25,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     private InjectionNode injectionNode;
     private JCodeModel codeModel;
     private InjectionFragmentGenerator injectionFragmentGenerator;
-    private Set<MethodCallbackGenerator> methodCallbackGenerators = new HashSet<MethodCallbackGenerator>();
+    private Set<ExpressionVariableDependentGenerator> methodCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
     private UniqueVariableNamer uniqueVariableNamer;
     private LayoutBuilder layoutBuilder;
     private ComponentBuilderFactory componentBuilderFactory;
@@ -49,7 +50,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     }
 
     @Override
-    public void build(JDefinedClass definedClass, RResource rResource) {
+    public void build(JDefinedClass definedClass, AndroidComponentDescriptor descriptor, RResource rResource) {
         try {
             if (injectionNode != null) {
 
@@ -80,10 +81,10 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 MethodGenerator onCreateMethodGenerator = new ExistingMethodGenerator(onCreateMethodDescriptor);
                 MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);
 
-                onCreateCallbackGenerator.addLifecycleMethod(definedClass, expressionMap);
+                onCreateCallbackGenerator.generate(definedClass, expressionMap, descriptor, rResource);
 
-                for (MethodCallbackGenerator methodCallbackGenerator : methodCallbackGenerators) {
-                    methodCallbackGenerator.addLifecycleMethod(definedClass, expressionMap);
+                for (ExpressionVariableDependentGenerator methodCallbackGenerator : methodCallbackGenerators) {
+                    methodCallbackGenerator.generate(definedClass, expressionMap, descriptor, rResource);
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -94,11 +95,11 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
 
     }
 
-    public void addMethodCallbackBuilder(MethodCallbackGenerator methodCallbackGenerator) {
+    public void addMethodCallbackBuilder(ExpressionVariableDependentGenerator methodCallbackGenerator) {
         this.methodCallbackGenerators.add(methodCallbackGenerator);
     }
 
-    public void addMethodCallbackBuilders(Set<MethodCallbackGenerator> generators) {
+    public void addMethodCallbackBuilders(Set<ExpressionVariableDependentGenerator> generators) {
         this.methodCallbackGenerators.addAll(generators);
     }
 }

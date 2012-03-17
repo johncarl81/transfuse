@@ -9,6 +9,7 @@ import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.AndroidComponentDescriptor;
+import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
@@ -59,7 +60,8 @@ public class ActivityAnalysis {
                             Provider<Action> actionProvider,
                             Provider<IntentFilter> intentFilterProvider,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
-                            ActivityComponentBuilderRepository activityComponentBuilderRepository, AnalysisContextFactory analysisContextFactory) {
+                            ActivityComponentBuilderRepository activityComponentBuilderRepository,
+                            AnalysisContextFactory analysisContextFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -98,11 +100,11 @@ public class ActivityAnalysis {
 
         String name = input.getName();
         String packageName = name.substring(0, name.lastIndexOf('.'));
-        String deleagateName = name.substring(name.lastIndexOf('.') + 1);
+        String delegateName = name.substring(name.lastIndexOf('.') + 1);
 
         PackageClass activityClassName;
         if (StringUtils.isBlank(activityAnnotation.name())) {
-            activityClassName = new PackageClass(packageName, deleagateName + "Activity");
+            activityClassName = new PackageClass(packageName, delegateName + "Activity");
         } else {
             activityClassName = new PackageClass(packageName, activityAnnotation.name());
         }
@@ -121,12 +123,12 @@ public class ActivityAnalysis {
         setupActivityProfile(activityType, activityDescriptor, injectionNode, layout);
 
         //add manifest elements
-        setupManifest(context, activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
+        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
 
         return activityDescriptor;
     }
 
-    private void setupManifest(AnalysisContext context, String name, String label, IntentFilters intentFilters, org.androidtransfuse.model.manifest.Application application) {
+    private void setupManifest(String name, String label, IntentFilters intentFilters, org.androidtransfuse.model.manifest.Application application) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
@@ -141,7 +143,9 @@ public class ActivityAnalysis {
     }
 
     private void setupActivityProfile(String activityType, AndroidComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout) {
-        activityDescriptor.getComponentBuilders().add(activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout));
+        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout);
+
+        activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
     }
 
     private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters) {

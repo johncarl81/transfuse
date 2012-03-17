@@ -7,6 +7,7 @@ import org.androidtransfuse.analysis.AnalysisRepository;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.AndroidGenerator;
+import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.util.Logger;
 
@@ -24,6 +25,7 @@ public class ComponentProcessor {
     private AndroidGenerator generator;
     private ProcessorContext context;
     private Application application;
+    private IntentFactoryStrategyGenerator injectionFactoryStrategyGenerator;
 
     @Inject
     public ComponentProcessor(@Assisted ProcessorContext context,
@@ -31,13 +33,15 @@ public class ComponentProcessor {
                               Logger logger,
                               AnalysisRepository analysisRepository,
                               ActivityAnalysis activityAnalysis,
-                              AndroidGenerator generator) {
+                              AndroidGenerator generator,
+                              IntentFactoryStrategyGenerator injectionFactoryStrategyGenerator) {
         this.logger = logger;
         this.analysisRepository = analysisRepository;
         this.activityAnalysis = activityAnalysis;
         this.generator = generator;
         this.context = context;
         this.application = application;
+        this.injectionFactoryStrategyGenerator = injectionFactoryStrategyGenerator;
     }
 
     public void processComponent(Collection<? extends ASTType> astTypes) {

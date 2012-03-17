@@ -18,11 +18,11 @@ import java.util.Set;
 public class ActivityComponentBuilderRepository {
 
     private ComponentBuilderFactory componentBuilderFactory;
-    private Map<String, Set<MethodCallbackGenerator>> activityGenerators;
+    private Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators;
     private Logger log;
     private ASTClassFactory astClassFactory;
 
-    public ActivityComponentBuilderRepository(ComponentBuilderFactory componentBuilderFactory, Map<String, Set<MethodCallbackGenerator>> activityGenerators, Logger log, ASTClassFactory astClassFactory) {
+    public ActivityComponentBuilderRepository(ComponentBuilderFactory componentBuilderFactory, Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators, Logger log, ASTClassFactory astClassFactory) {
         this.componentBuilderFactory = componentBuilderFactory;
         this.activityGenerators = activityGenerators;
         this.log = log;

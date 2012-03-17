@@ -30,7 +30,7 @@ public class AndroidGenerator {
         definedClass._extends(codeModel.ref(descriptor.getType()));
 
         for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
-            componentBuilder.build(definedClass, rResource);
+            componentBuilder.build(definedClass, descriptor, rResource);
         }
 
     }

@@ -8,5 +8,5 @@ import org.androidtransfuse.model.r.RResource;
  */
 public interface ComponentBuilder {
 
-    void build(JDefinedClass definedClass, RResource rResource);
+    void build(JDefinedClass definedClass, AndroidComponentDescriptor descriptor, RResource rResource);
 }

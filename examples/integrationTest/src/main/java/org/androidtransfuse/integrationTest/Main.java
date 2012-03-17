@@ -6,10 +6,14 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
-import org.androidtransfuse.integrationTest.inject.*;
+import org.androidtransfuse.integrationTest.inject.ExtraInjectionActivityStrategy;
+import org.androidtransfuse.integrationTest.inject.InjectionActivity;
+import org.androidtransfuse.integrationTest.inject.ResourceInjectionActivity;
+import org.androidtransfuse.integrationTest.inject.SystemInjectionActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
+import org.androidtransfuse.intentFactory.IntentFactory;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -29,16 +33,18 @@ public class Main {
 
     private List<ActivityListItem> values;
     private ListActivity listActivity;
+    private IntentFactory intentFactory;
 
     @Inject
-    public Main(ListActivity listActivity) {
+    public Main(ListActivity listActivity, IntentFactory intentFactory) {
 
+        this.intentFactory = intentFactory;
         this.listActivity = listActivity;
 
         values = new ArrayList<ActivityListItem>(Arrays.asList(new ActivityListItem[]{
                 createLI(PreferencesActivity.class, "Preferences"),
                 createLI(AOPActivity.class, "AOP"),
-                createExtraLI(ExtraInjectionActivity.class, "Extras"),
+                createExtraLI(),
                 createLI(InjectionActivity.class, "Injection"),
                 createLI(ResourceInjectionActivity.class, "Resources"),
                 createLI(SystemInjectionActivity.class, "System Services"),
@@ -64,11 +70,8 @@ public class Main {
         return new ActivityListItem(intent, name);
     }
 
-    private ActivityListItem createExtraLI(Class<ExtraInjectionActivity> clazz, String name) {
-        android.content.Intent intent = new android.content.Intent(listActivity, clazz);
-
-        intent.putExtra(ExtraInjection.EXTRA_ONE, "one");
-        intent.putExtra(ExtraInjection.EXTRA_TWO, 42L);
-        return new ActivityListItem(intent, name);
+    private ActivityListItem createExtraLI() {
+        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy("one", 42L));
+        return new ActivityListItem(intent, "Extras");
     }
 }

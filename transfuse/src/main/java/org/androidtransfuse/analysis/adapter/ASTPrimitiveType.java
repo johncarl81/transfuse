@@ -1,9 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Element specific primitive AST type
@@ -23,6 +21,13 @@ public enum ASTPrimitiveType implements ASTType {
 
     private Class clazz;
     private String label;
+    private static final Map<String, ASTPrimitiveType> autoboxTypeMap = new HashMap<String, ASTPrimitiveType>();
+
+    static {
+        for (ASTPrimitiveType astPrimitive : ASTPrimitiveType.values()) {
+            autoboxTypeMap.put(astPrimitive.getObjectClass().getName(), astPrimitive);
+        }
+    }
 
     private ASTPrimitiveType(String label, Class clazz) {
         this.label = label;
@@ -91,5 +96,9 @@ public enum ASTPrimitiveType implements ASTType {
     @Override
     public List<ASTType> getGenericParameters() {
         return Collections.emptyList();
+    }
+
+    public static ASTPrimitiveType getAutoboxType(String name) {
+        return autoboxTypeMap.get(name);
     }
 }

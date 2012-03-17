@@ -5,7 +5,9 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
+import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -13,7 +15,7 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
-public class MethodCallbackGenerator {
+public class MethodCallbackGenerator implements ExpressionVariableDependentGenerator {
 
     private String name;
     private MethodGenerator methodGenerator;
@@ -24,7 +26,7 @@ public class MethodCallbackGenerator {
         this.methodGenerator = methodGenerator;
     }
 
-    public void addLifecycleMethod(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap) {
+    public void generate(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap, AndroidComponentDescriptor descriptor, RResource rResource) {
         MethodDescriptor methodDescriptor = null;
         for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
             MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
