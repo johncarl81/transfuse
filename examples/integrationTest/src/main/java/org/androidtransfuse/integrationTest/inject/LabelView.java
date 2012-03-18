@@ -32,11 +32,11 @@ import javax.inject.Inject;
  * Example LabelView derived from the Android APIDemo project
  */
 public class LabelView extends View {
-    private Paint mTextPaint;
-    private int mAscent;
+    private Paint textPaint;
+    private int ascent;
     @Inject
     @Resource(R.string.custom_string)
-    private String custom;
+    private String text;
 
     public LabelView(Context context) {
         super(context);
@@ -49,9 +49,9 @@ public class LabelView extends View {
     }
 
     private void initLabelView() {
-        mTextPaint = new Paint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(Color.WHITE);
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+        textPaint.setColor(Color.WHITE);
     }
 
     /**
@@ -79,7 +79,7 @@ public class LabelView extends View {
             result = specSize;
         } else {
             // Measure the text
-            result = (int) mTextPaint.measureText("hello") + getPaddingLeft()
+            result = (int) textPaint.measureText("hello") + getPaddingLeft()
                     + getPaddingRight();
             if (specMode == MeasureSpec.AT_MOST) {
                 // Respect AT_MOST value if that was what is called for by measureSpec
@@ -101,13 +101,13 @@ public class LabelView extends View {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
-        mAscent = (int) mTextPaint.ascent();
+        ascent = (int) textPaint.ascent();
         if (specMode == MeasureSpec.EXACTLY) {
             // We were told how big to be
             result = specSize;
         } else {
             // Measure the text (beware: ascent is a negative number)
-            result = (int) (-mAscent + mTextPaint.descent()) + getPaddingTop()
+            result = (int) (-ascent + textPaint.descent()) + getPaddingTop()
                     + getPaddingBottom();
             if (specMode == MeasureSpec.AT_MOST) {
                 // Respect AT_MOST value if that was what is called for by measureSpec
@@ -125,6 +125,10 @@ public class LabelView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawText(custom, getPaddingLeft(), getPaddingTop() - mAscent, mTextPaint);
+        canvas.drawText(text, getPaddingLeft(), getPaddingTop() - ascent, textPaint);
+    }
+
+    public String getText() {
+        return text;
     }
 }
