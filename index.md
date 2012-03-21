@@ -5,15 +5,15 @@ title: Transfuse
 
 
 ### About
-Transfuse is a powerful and lightweight open source integration framework for Google Android.  Transfuse brings together AOP, Manifest Management, and a focus on Composition over Extension on top of a full featured [[JSR-330](http://www.jcp.org/en/jsr/detail?id=330)] compliant dependency injection framework.  The motivation behind Transfuse is to bring to the Android platform a more modern and productive Java experience found in both J2SE and JEE environments with similar frameworks.
+Transfuse is an open-source integration framework for Google Android.  Transfuse extends the Android API, to create a more natural, flexible and maintainable mobile platform. 
 
-Interested?  Read more about the features in the [[Documentation](/documentation.html)] and [[Motivation](/motivation.html)] sections and give Transfuse a spin for yourself.
+Interested?  Read more about the features in the [[Documentation](documentation.html)] and [[Motivation](motivation.html)] sections and give Transfuse a spin for yourself.
 
 ### Getting Started
 
 ##### Download Transfuse
 
-You may either download the latest release of Transfuse here or as a maven dependency as follows:
+You may either download the latest release of Transfuse [[here](download.html)] or as a maven dependency as follows:
 
 {% highlight xml %}
 
