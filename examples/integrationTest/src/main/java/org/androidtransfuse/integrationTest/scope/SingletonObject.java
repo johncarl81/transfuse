@@ -11,6 +11,16 @@ public class SingletonObject {
 
     @Inject
     private SingletonDependency singletonDependency;
+    
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     public SingletonDependency getSingletonDependency() {
         return singletonDependency;

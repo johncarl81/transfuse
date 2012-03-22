@@ -1,8 +1,7 @@
 package org.androidtransfuse.integrationTest.scope;
 
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnPause;
+import android.widget.EditText;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
@@ -11,11 +10,14 @@ import javax.inject.Inject;
  * @author John Ericksen
  */
 @Activity(name = "ScopeOneActivity")
-@Layout(R.layout.main)
+@Layout(R.layout.scoped)
 public class ScopeOne {
 
     @Inject
     private SingletonObject singleton;
+
+    @Inject
+    private ScopeManager scopeManager;
 
     public SingletonObject getSingleton() {
         return singleton;
