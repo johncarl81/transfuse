@@ -7,8 +7,8 @@ import javax.inject.Inject;
 
 @Activity(label = "@string/app_name")
 @IntentFilters({
-        @Intent(type = IntentType.ACTION, name = "android.intent.action.MAIN"),
-        @Intent(type = IntentType.CATEGORY, name = "android.intent.category.LAUNCHER")
+        @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
+        @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })
 @Layout(R.layout.main)
 public class HelloAndroid {
