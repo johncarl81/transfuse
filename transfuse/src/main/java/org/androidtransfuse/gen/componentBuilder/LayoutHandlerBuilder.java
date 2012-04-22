@@ -44,8 +44,5 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
         } catch (JClassAlreadyExistsException e) {
             e.printStackTrace();
         }
-
-        //todo:implement
-        System.out.println("HELLO !!! ");
     }
 }
