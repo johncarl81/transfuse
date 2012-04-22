@@ -2,7 +2,6 @@ package org.androidtransfuse.integrationTest.layout;
 
 import android.os.Bundle;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
-import junit.framework.Assert;
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +21,6 @@ public class VariableLayoutTest {
 
     @Before
     public void setup() {
-        Assert.assertFalse(variableLayoutHandler.isGetLayoutCalled());
-
         Bundle bundle = new Bundle();
         variableLayoutActivity = new VariableLayoutActivity();
         variableLayoutActivity.onCreate(bundle);
