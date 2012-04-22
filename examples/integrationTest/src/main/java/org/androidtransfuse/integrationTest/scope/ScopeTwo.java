@@ -11,11 +11,14 @@ import javax.inject.Inject;
  * @author John Ericksen
  */
 @Activity(name = "ScopeTwoActivity")
-@Layout(R.layout.main)
+@Layout(R.layout.scoped)
 public class ScopeTwo {
 
     @Inject
     private SingletonObject singleton;
+
+    @Inject
+    private ScopeManager scopeManager;
 
     public SingletonObject getSingleton() {
         return singleton;

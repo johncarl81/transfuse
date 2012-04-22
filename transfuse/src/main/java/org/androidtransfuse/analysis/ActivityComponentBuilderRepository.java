@@ -29,19 +29,23 @@ public class ActivityComponentBuilderRepository {
         this.astClassFactory = astClassFactory;
     }
 
-    public ComponentBuilder buildComponentBuilder(String activityType, InjectionNode injectionNode, Integer layout) {
+    public ComponentBuilder buildComponentBuilder(String activityType, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
         //onCreate
-        LayoutBuilder rLayoutBuilder;
+        LayoutBuilder layoutBuilder;
         if (layout == null) {
-            rLayoutBuilder = new NoOpLayoutBuilder();
+            if (layoutHandlerInjectionNode == null) {
+                layoutBuilder = new NoOpLayoutBuilder();
+            } else {
+                layoutBuilder = componentBuilderFactory.buildLayoutHandlerBuilder(layoutHandlerInjectionNode);
+            }
         } else {
-            rLayoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
+            layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
         }
         try {
 
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(Activity.class.getDeclaredMethod("onCreate", Bundle.class));
 
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, rLayoutBuilder, onCreateASTMethod);
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, layoutBuilder, onCreateASTMethod);
 
             if (activityGenerators.containsKey(activityType)) {
                 onCreateComponentBuilder.addMethodCallbackBuilders(activityGenerators.get(activityType));

@@ -18,4 +18,6 @@ public interface ComponentBuilderFactory {
     SimpleMethodGenerator buildSimpleMethodGenerator(ASTMethod method, boolean superCall);
 
     ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
+
+    LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 }
