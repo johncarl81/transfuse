@@ -2,6 +2,7 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
@@ -23,7 +24,7 @@ public class RLayoutBuilder implements LayoutBuilder {
     }
 
     @Override
-    public void buildLayoutCall(JBlock block, RResource rResource) {
+    public void buildLayoutCall(JDefinedClass definedClass, JBlock block, RResource rResource) {
         //layout setting
         ResourceIdentifier layoutIdentifier = rResource.getResourceIdentifier(layout);
         if (layoutIdentifier != null) {

@@ -7,6 +7,7 @@ import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
 import org.androidtransfuse.integrationTest.inject.*;
+import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
@@ -49,7 +50,8 @@ public class Main {
                 createLI(ScopeOneActivity.class, "Scope One"),
                 createLI(ScopeTwoActivity.class, "Scope Two"),
                 createLI(NotManagedActivity.class, "Not Managed"),
-                createLI(CustomViewActivity.class, "Custom View")
+                createLI(CustomViewActivity.class, "Custom View"),
+                createLI(VariableLayoutActivity.class, "Variable Layout")
         }));
 
         Collections.sort(values);

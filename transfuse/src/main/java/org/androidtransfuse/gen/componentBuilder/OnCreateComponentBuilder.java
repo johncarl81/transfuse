@@ -74,7 +74,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 }
 
                 //layout
-                layoutBuilder.buildLayoutCall(block, rResource);
+                layoutBuilder.buildLayoutCall(definedClass, block, rResource);
 
                 Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 
