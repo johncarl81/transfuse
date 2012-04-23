@@ -1,5 +1,6 @@
 package org.androidtransfuse.integrationTest.layout;
 
+import android.app.Activity;
 import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
@@ -13,6 +14,8 @@ public class VariableLayoutHandler implements LayoutHandlerDelegate {
 
     @Inject
     private VariableLayoutDependency dependency;
+    @Inject
+    private Activity activity;
     private boolean getLayoutCalled = false;
 
     @Override
@@ -31,5 +34,9 @@ public class VariableLayoutHandler implements LayoutHandlerDelegate {
 
     public boolean isGetLayoutCalled() {
         return getLayoutCalled;
+    }
+
+    public Activity getActivity() {
+        return activity;
     }
 }

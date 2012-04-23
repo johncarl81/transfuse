@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -21,9 +22,8 @@ public class VariableLayoutTest {
 
     @Before
     public void setup() {
-        Bundle bundle = new Bundle();
         variableLayoutActivity = new VariableLayoutActivity();
-        variableLayoutActivity.onCreate(bundle);
+        variableLayoutActivity.onCreate(new Bundle());
 
         variableLayoutHandler = DelegateUtil.getDelegate(variableLayoutActivity, VariableLayoutHandler.class);
     }
@@ -31,6 +31,11 @@ public class VariableLayoutTest {
     @Test
     public void testHandlerDependencyInjection() {
         assertNotNull(variableLayoutHandler.getDependency());
+    }
+
+    @Test
+    public void testActivityInjection() {
+        assertSame(variableLayoutActivity, variableLayoutHandler.getActivity());
     }
 
     @Test
