@@ -44,9 +44,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
             }
 
             //only allow zero or one annotated constructors.
-            if (annotatedConstructor != null) {
-                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(annotatedConstructor, context));
-            } else if (noArgConstructor != null) {
+            if (annotatedConstructor == null && noArgConstructor != null) {
                 getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
             }
         }
