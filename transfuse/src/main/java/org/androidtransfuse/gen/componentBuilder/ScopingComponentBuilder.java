@@ -31,13 +31,15 @@ public class ScopingComponentBuilder implements ComponentBuilder {
         singletonScopeField.init(JExpr._new(singletonScopeClassRef));
 
         //<T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        JType genericT = codeModel.ref(Object.class);
         JClass clazzRef = codeModel.ref(Class.class);
         JClass providerRef = codeModel.ref(Provider.class);
 
-        JMethod getScopedObjectMethod = definedClass.method(JMod.PUBLIC, genericT, "getScopedObject");
-        JVar clazzParam = getScopedObjectMethod.param(clazzRef, "clazz");
-        JVar providerParam = getScopedObjectMethod.param(providerRef, "provider");
+        JMethod getScopedObjectMethod = definedClass.method(JMod.PUBLIC, Object.class, "getScopedObject");
+        JTypeVar t = getScopedObjectMethod.generify("T");
+        JVar clazzParam = getScopedObjectMethod.param(clazzRef.narrow(t), "clazz");
+        JVar providerParam = getScopedObjectMethod.param(providerRef.narrow(t), "provider");
+
+        getScopedObjectMethod.type(t);
 
         JBlock scopedObjectBody = getScopedObjectMethod.body();
 

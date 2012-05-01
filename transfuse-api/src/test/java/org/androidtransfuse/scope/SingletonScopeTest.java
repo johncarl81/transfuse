@@ -35,9 +35,9 @@ public class SingletonScopeTest {
 
         EasyMock.replay(builder);
 
-        ScopeTarget resultTarget = (ScopeTarget) singletonScope.getScopedObject(ScopeTarget.class, builder);
+        ScopeTarget resultTarget = singletonScope.getScopedObject(ScopeTarget.class, builder);
         assertEquals(scopeTarget, resultTarget);
-        ScopeTarget secondResultTarget = (ScopeTarget) singletonScope.getScopedObject(ScopeTarget.class, builder);
+        ScopeTarget secondResultTarget = singletonScope.getScopedObject(ScopeTarget.class, builder);
         assertEquals(scopeTarget, secondResultTarget);
 
         EasyMock.verify(builder);

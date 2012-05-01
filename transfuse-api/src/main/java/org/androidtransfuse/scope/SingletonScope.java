@@ -12,7 +12,7 @@ public class SingletonScope implements Scope {
     private Map<Class, Object> singletonMap = new HashMap<Class, Object>();
 
     @Override
-    public Object getScopedObject(Class clazz, Provider provider) {
+    public <T> T getScopedObject(Class<T> clazz, Provider<T> provider) {
         Object result = singletonMap.get(clazz);
         if (result == null) {
             synchronized (this) {
@@ -24,6 +24,6 @@ public class SingletonScope implements Scope {
             }
         }
 
-        return result;
+        return (T) result;
     }
 }

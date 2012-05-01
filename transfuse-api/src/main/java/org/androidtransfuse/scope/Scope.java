@@ -7,5 +7,5 @@ import javax.inject.Provider;
  */
 public interface Scope {
 
-    Object getScopedObject(Class clazz, Provider provider);
+    <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
 }
