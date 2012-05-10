@@ -26,6 +26,9 @@ public class MethodSignature {
 
     /**
      * Makes a descriptor for a given method.
+     *
+     * @param method
+     * @return descriptor
      */
     public static String makeDescriptor(ASTMethod method) {
         List<ASTParameter> params = method.getParameters();
@@ -39,29 +42,29 @@ public class MethodSignature {
      * @param retType return type.
      */
     public static String makeDescriptor(List<ASTParameter> params, ASTType retType) {
-        StringBuffer buff = new StringBuffer();
-        buff.append('(');
+        StringBuilder builder = new StringBuilder();
+        builder.append('(');
         for (ASTParameter param : params) {
-            makeDesc(buff, param.getASTType());
+            makeDesc(builder, param.getASTType());
         }
 
-        buff.append(')');
-        makeDesc(buff, retType);
-        return buff.toString();
+        builder.append(')');
+        makeDesc(builder, retType);
+        return builder.toString();
     }
 
-    private static void makeDesc(StringBuffer buff, ASTType type) {
+    private static void makeDesc(StringBuilder builder, ASTType type) {
         if (type.isArray()) {
-            buff.append('[');
+            builder.append('[');
         }
-        makeTypeDesc(buff, type);
+        makeTypeDesc(builder, type);
     }
 
-    private static void makeTypeDesc(StringBuffer buff, ASTType type) {
+    private static void makeTypeDesc(StringBuilder builder, ASTType type) {
         if (type instanceof ASTPrimitiveType) {
-            buff.append(type.getName());
+            builder.append(type.getName());
         } else {
-            buff.append('L').append(type.getName().replace('.', '/')).append(';');
+            builder.append('L').append(type.getName().replace('.', '/')).append(';');
         }
     }
 
