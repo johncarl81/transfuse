@@ -1,9 +1,8 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.ComponentBuilder;
-import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.SingletonScope;
 
@@ -23,7 +22,7 @@ public class ScopingComponentBuilder implements ComponentBuilder {
     }
 
     @Override
-    public void build(JDefinedClass definedClass, AndroidComponentDescriptor descriptor, RResource rResource) {
+    public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
         definedClass._implements(Scope.class);
 
         JClass singletonScopeClassRef = codeModel.ref(SingletonScope.class);

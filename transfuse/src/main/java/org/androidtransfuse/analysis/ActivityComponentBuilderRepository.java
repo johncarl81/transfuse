@@ -7,6 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.processor.ProcessorContext;
 import org.androidtransfuse.util.Logger;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public class ActivityComponentBuilderRepository {
         this.astClassFactory = astClassFactory;
     }
 
-    public ComponentBuilder buildComponentBuilder(String activityType, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
+    public ComponentBuilder buildComponentBuilder(String activityType, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode, ProcessorContext processorContext) {
         //onCreate
         LayoutBuilder layoutBuilder;
         if (layout == null) {
@@ -45,7 +46,7 @@ public class ActivityComponentBuilderRepository {
 
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(Activity.class.getDeclaredMethod("onCreate", Bundle.class));
 
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, layoutBuilder, onCreateASTMethod);
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, layoutBuilder, onCreateASTMethod, processorContext.getRResource());
 
             if (activityGenerators.containsKey(activityType)) {
                 onCreateComponentBuilder.addMethodCallbackBuilders(activityGenerators.get(activityType));

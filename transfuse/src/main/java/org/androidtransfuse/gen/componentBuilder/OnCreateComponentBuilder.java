@@ -7,8 +7,8 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.ComponentBuilder;
+import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
@@ -30,11 +30,13 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     private LayoutBuilder layoutBuilder;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTMethod onCreateASTMethod;
+    private RResource rResource;
 
     @Inject
     public OnCreateComponentBuilder(@Assisted @Nullable InjectionNode injectionNode,
                                     @Assisted LayoutBuilder layoutBuilder,
                                     @Assisted ASTMethod onCreateASTMethod,
+                                    @Assisted RResource rResource,
                                     InjectionFragmentGenerator injectionFragmentGenerator,
                                     JCodeModel codeModel,
                                     UniqueVariableNamer uniqueVariableNamer,
@@ -47,10 +49,11 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
         this.onCreateASTMethod = onCreateASTMethod;
         this.uniqueVariableNamer = uniqueVariableNamer;
         this.layoutBuilder = layoutBuilder;
+        this.rResource = rResource;
     }
 
     @Override
-    public void build(JDefinedClass definedClass, AndroidComponentDescriptor descriptor, RResource rResource) {
+    public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
         try {
             if (injectionNode != null) {
 

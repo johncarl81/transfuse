@@ -7,7 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Application;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
+import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
@@ -59,23 +59,23 @@ public class ApplicationAnalysis {
         this.analysisContextFactory = analysisContextFactory;
     }
 
-    public AndroidComponentDescriptor emptyApplication(ProcessorContext context) {
+    public ComponentDescriptor emptyApplication(ProcessorContext context) {
 
         String packageName = context.getManifest().getApplicationPackage();
 
         PackageClass applicationClassName = new PackageClass(packageName, "TransfuseApplication");
 
-        AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+        ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
 
         //application generation profile
-        setupApplicationProfile(applicationDescriptor, null);
+        setupApplicationProfile(applicationDescriptor, null, context);
 
         setupManifest(context, ".TransfuseApplication", null);
 
         return applicationDescriptor;
     }
 
-    public AndroidComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType, AnalysisRepository analysisRepository) {
+    public ComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType, AnalysisRepository analysisRepository) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
         String name = astType.getName();
@@ -89,14 +89,14 @@ public class ApplicationAnalysis {
             applicationClassName = new PackageClass(packageName, applicationAnnotation.name());
         }
 
-        AndroidComponentDescriptor applicationDescriptor = new AndroidComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+        ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
 
         //analyze delegate
         AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap());
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
 
         //application generation profile
-        setupApplicationProfile(applicationDescriptor, injectionNode);
+        setupApplicationProfile(applicationDescriptor, injectionNode, context);
 
         //add manifest elements
         setupManifest(context, applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
@@ -104,12 +104,12 @@ public class ApplicationAnalysis {
         return applicationDescriptor;
     }
 
-    private void setupApplicationProfile(AndroidComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
+    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, InjectionNode injectionNode, ProcessorContext context) {
 
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
             //onCreate
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod);
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod, context.getRResource());
             //onLowMemory
             onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
             //onTerminate

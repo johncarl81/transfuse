@@ -27,6 +27,7 @@ public class InjectionPointFactory {
      * Build a Constructor InjectionPoint from the given ASTConstructor
      *
      * @param astConstructor required ASTConstructor
+     * @param context        required AnalysisContext
      * @return ConstructorInjectionPoint
      */
     public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {

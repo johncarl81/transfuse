@@ -5,8 +5,8 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.AnalysisRepository;
 import org.androidtransfuse.analysis.ApplicationAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
-import org.androidtransfuse.gen.AndroidGenerator;
+import org.androidtransfuse.gen.ComponentDescriptor;
+import org.androidtransfuse.gen.ComponentGenerator;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ public class ApplicationProcessor {
 
     private AnalysisRepository analysisRepository;
     private ApplicationAnalysis applicationAnalysis;
-    private AndroidGenerator generator;
+    private ComponentGenerator generator;
     private Logger logger;
     private ProcessorFactory processorFactory;
     private ProcessorContext context;
@@ -26,7 +26,7 @@ public class ApplicationProcessor {
     @Inject
     public ApplicationProcessor(@Assisted ProcessorContext context,
                                 ApplicationAnalysis applicationAnalysis,
-                                AndroidGenerator generator,
+                                ComponentGenerator generator,
                                 Logger logger,
                                 ProcessorFactory processorFactory,
                                 AnalysisRepository analysisRepository) {
@@ -39,22 +39,22 @@ public class ApplicationProcessor {
     }
 
     public ComponentProcessor createComponentProcessor() {
-        AndroidComponentDescriptor applicationDescriptor = applicationAnalysis.emptyApplication(context);
+        ComponentDescriptor applicationDescriptor = applicationAnalysis.emptyApplication(context);
 
         return innerProcessApplication(applicationDescriptor);
     }
 
     public ComponentProcessor processApplication(ASTType astType) {
-        AndroidComponentDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(context, astType, analysisRepository);
+        ComponentDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(context, astType, analysisRepository);
 
         return innerProcessApplication(applicationDescriptor);
     }
 
-    private ComponentProcessor innerProcessApplication(AndroidComponentDescriptor applicationDescriptor) {
+    private ComponentProcessor innerProcessApplication(ComponentDescriptor applicationDescriptor) {
         if (applicationDescriptor != null) {
 
             try {
-                generator.generate(applicationDescriptor, context.getRResource());
+                generator.generate(applicationDescriptor);
             } catch (JClassAlreadyExistsException e) {
                 logger.error("JClassAlreadyExistsException while generating activity", e);
             }

@@ -1,25 +1,24 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-public class AndroidGenerator {
+public class ComponentGenerator {
 
     private JCodeModel codeModel;
     private GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public AndroidGenerator(JCodeModel codeModel, GeneratedClassAnnotator generatedClassAnnotator) {
+    public ComponentGenerator(JCodeModel codeModel, GeneratedClassAnnotator generatedClassAnnotator) {
         this.codeModel = codeModel;
         this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
-    public void generate(AndroidComponentDescriptor descriptor, RResource rResource) throws JClassAlreadyExistsException {
+    public void generate(ComponentDescriptor descriptor) throws JClassAlreadyExistsException {
 
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
@@ -30,7 +29,7 @@ public class AndroidGenerator {
         definedClass._extends(codeModel.ref(descriptor.getType()));
 
         for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
-            componentBuilder.build(definedClass, descriptor, rResource);
+            componentBuilder.build(definedClass, descriptor);
         }
 
     }

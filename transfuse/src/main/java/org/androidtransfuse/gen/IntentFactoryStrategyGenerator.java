@@ -32,7 +32,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap, AndroidComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
 
         try {
             JDefinedClass strategyClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName() + "Strategy", ClassType.CLASS);

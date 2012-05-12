@@ -5,7 +5,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
+import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
@@ -26,7 +26,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         this.methodGenerator = methodGenerator;
     }
 
-    public void generate(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap, AndroidComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, Map<InjectionNode, JExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
         MethodDescriptor methodDescriptor = null;
         for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
             MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);

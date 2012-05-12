@@ -8,13 +8,13 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-public class AndroidComponentDescriptor {
+public class ComponentDescriptor {
 
     private PackageClass packageClass;
     private String type;
     private Set<ComponentBuilder> componentBuilders = new HashSet<ComponentBuilder>();
 
-    public AndroidComponentDescriptor(String type, PackageClass packageClass) {
+    public ComponentDescriptor(String type, PackageClass packageClass) {
         this.type = type;
         this.packageClass = packageClass;
     }

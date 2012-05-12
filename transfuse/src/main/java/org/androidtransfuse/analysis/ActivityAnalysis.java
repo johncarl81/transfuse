@@ -6,8 +6,8 @@ import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.AndroidComponentDescriptor;
 import org.androidtransfuse.gen.ComponentBuilder;
+import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
@@ -18,6 +18,7 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
 import org.androidtransfuse.model.manifest.IntentFilter;
+import org.androidtransfuse.processor.ProcessorContext;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -77,7 +78,7 @@ public class ActivityAnalysis {
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
     }
 
-    public AndroidComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application) {
+    public ComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         Layout layoutAnnotation = input.getAnnotation(Layout.class);
@@ -95,11 +96,11 @@ public class ActivityAnalysis {
 
         InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
 
-        AndroidComponentDescriptor activityDescriptor = new AndroidComponentDescriptor(activityType, activityClassName);
+        ComponentDescriptor activityDescriptor = new ComponentDescriptor(activityType, activityClassName);
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
         //application generation profile
-        setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode);
+        setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
 
         //add manifest elements
         setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
@@ -165,8 +166,8 @@ public class ActivityAnalysis {
         application.getActivities().add(manifestActivity);
     }
 
-    private void setupActivityProfile(String activityType, AndroidComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
-        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode);
+    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode, ProcessorContext processorContext) {
+        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
 
         activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
     }
