@@ -61,7 +61,8 @@ public class ActivityAnalysis {
                             Provider<IntentFilter> intentFilterProvider,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
-                            AnalysisContextFactory analysisContextFactory, Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider, Provider<ASTTypeBuilderVisitor> typeBuilderVisitorProvider) {
+                            AnalysisContextFactory analysisContextFactory,
+                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -75,7 +76,6 @@ public class ActivityAnalysis {
         this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
-        this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
     }
 
     public ComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
@@ -85,7 +85,7 @@ public class ActivityAnalysis {
         LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
 
-        TypeMirror type = TypeMirrorUtil.getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
+        TypeMirror type = TypeMirrorUtil.getInstance().getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
 
         String activityType = buildActivityType(type);
         PackageClass activityClassName = buildPackageClass(input, activityAnnotation);
@@ -117,11 +117,7 @@ public class ActivityAnalysis {
 
     private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
         if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = TypeMirrorUtil.getTypeMirror(new Runnable() {
-                public void run() {
-                    layoutHandlerAnnotation.value();
-                }
-            });
+            TypeMirror layoutHandlerType = TypeMirrorUtil.getInstance().getTypeMirror(new LayoutHandlerTypeRunnable(layoutHandlerAnnotation));
 
             if (layoutHandlerType != null) {
                 ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
@@ -231,6 +227,20 @@ public class ActivityAnalysis {
         public void run() {
             //accessing this throws an exception, caught in TypeMiirrorUtil
             activityAnnotation.type();
+        }
+    }
+
+    private static final class LayoutHandlerTypeRunnable implements Runnable {
+
+        private LayoutHandler layoutHandler;
+
+        private LayoutHandlerTypeRunnable(LayoutHandler layoutHandler) {
+            this.layoutHandler = layoutHandler;
+        }
+
+        public void run() {
+            //accessing this throws an exception, caught in TypeMiirrorUtil
+            layoutHandler.value();
         }
     }
 }

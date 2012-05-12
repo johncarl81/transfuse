@@ -8,7 +8,10 @@ import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
 import org.androidtransfuse.integrationTest.aop.InterceptorRecorder;
-import org.androidtransfuse.integrationTest.inject.*;
+import org.androidtransfuse.integrationTest.inject.InjectTargetProvider;
+import org.androidtransfuse.integrationTest.inject.LoopThree;
+import org.androidtransfuse.integrationTest.inject.LoopThreeImpl;
+import org.androidtransfuse.integrationTest.inject.ProvidedInjectTarget;
 
 /**
  * @author John Ericksen

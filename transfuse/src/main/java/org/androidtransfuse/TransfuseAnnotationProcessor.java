@@ -95,9 +95,9 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             Collection<? extends ASTType> applicationTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class));
 
-            if (applicationTypes.size() > 1) {
-                //todo: throw exception
-            }
+            //if (applicationTypes.size() > 1) {
+            //todo: throw exception
+            //}
 
             ComponentProcessor componentProcessor;
             if (applicationTypes.isEmpty()) {

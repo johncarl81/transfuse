@@ -47,7 +47,7 @@ public class ExtraValuableBuilder implements VariableBuilder {
         JExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
         return JExpr.cast(extraType, codeModel.ref(ExtraUtil.class)
-                .staticInvoke(ExtraUtil.GET_EXTRA)
+                .staticInvoke(ExtraUtil.GET_INSTANCE).invoke(ExtraUtil.GET_EXTRA)
                 .arg(contextVar.invoke(GET_INTENT).invoke(GET_EXTRAS))
                 .arg(JExpr.lit(extraId))
                 .arg(JExpr.lit(nullable)));

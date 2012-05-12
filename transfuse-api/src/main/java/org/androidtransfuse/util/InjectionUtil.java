@@ -11,15 +11,22 @@ import java.security.PrivilegedActionException;
  */
 public final class InjectionUtil {
 
+    private static final InjectionUtil INSTANCE = new InjectionUtil();
+
+    public static final String GET_INSTANCE_METHOD = "getInstance";
     public static final String SET_FIELD_METHOD = "setField";
     public static final String SET_METHOD_METHOD = "setMethod";
     public static final String SET_CONSTRUCTOR_METHOD = "setConstructor";
+
+    public static InjectionUtil getInstance() {
+        return INSTANCE;
+    }
 
     private InjectionUtil() {
         //singleton constructor
     }
 
-    public static void setField(Object target, int superLevel, String field, Object source) {
+    public void setField(Object target, int superLevel, String field, Object source) {
         try {
             Field classField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
 
@@ -55,7 +62,7 @@ public final class InjectionUtil {
         }
     }
 
-    public static void setMethod(Object target, int superLevel, String method, Class[] argClasses, Object[] args) {
+    public void setMethod(Object target, int superLevel, String method, Class[] argClasses, Object[] args) {
         try {
             Method classMethod = getSuperClass(target.getClass(), superLevel).getDeclaredMethod(method, argClasses);
 
@@ -89,7 +96,7 @@ public final class InjectionUtil {
     }
 
 
-    public static <T> T setConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
+    public <T> T setConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
         T output;
 
         try {

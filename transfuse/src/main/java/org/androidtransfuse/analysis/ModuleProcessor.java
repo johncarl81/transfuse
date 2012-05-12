@@ -9,7 +9,6 @@ import org.androidtransfuse.analysis.module.MethodProcessor;
 import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -24,7 +23,7 @@ public class ModuleProcessor {
     private Map<String, MethodProcessor> methodProcessorMap = new HashMap<String, MethodProcessor>();
 
     @Inject
-    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider, AOPRepository aopRepository, InjectionNodeBuilderRepository injectionNodeBuilders, Provider<BindProviderProcessor> bindProviderProcessorProvider, Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider) {
+    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider, Provider<BindProviderProcessor> bindProviderProcessorProvider, Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider) {
         methodProcessorMap.put(Bind.class.getName(), bindProcessorProvider.get());
         methodProcessorMap.put(BindInterceptor.class.getName(), bindInterceptorProcessorProvider.get());
         methodProcessorMap.put(BindProvider.class.getName(), bindProviderProcessorProvider.get());

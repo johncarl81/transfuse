@@ -5,5 +5,5 @@ package org.androidtransfuse.layout;
  */
 public interface LayoutHandlerDelegate {
 
-    public int getLayout();
+    int getLayout();
 }

@@ -60,13 +60,13 @@ public class Merger {
                 }
             }
         } catch (NoSuchMethodException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("NoSuchMethodException while trying to merge", e);
         } catch (IntrospectionException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("IntrospectionException while trying to merge", e);
         } catch (IllegalAccessException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InvocationTargetException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("InvocationTargetException while trying to merge", e);
         }
 
         return target;
@@ -108,11 +108,11 @@ public class Merger {
             }
 
         } catch (NoSuchMethodException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("NoSuchMethodException while trying to merge", e);
         } catch (IllegalAccessException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InvocationTargetException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("InvocationTargetException while trying to merge", e);
         }
     }
 
@@ -175,13 +175,13 @@ public class Merger {
             return targetResult;
 
         } catch (NoSuchMethodException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("NoSuchMethodException while trying to merge", e);
         } catch (IllegalAccessException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InstantiationException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("InstantiationException while trying to merge", e);
         } catch (InvocationTargetException e) {
-            throw new MergerException("Error while trying to merge", e);
+            throw new MergerException("InvocationTargetException while trying to merge", e);
         }
     }
 

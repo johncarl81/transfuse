@@ -8,6 +8,7 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -19,12 +20,15 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
     private InjectionFragmentGenerator injectionFragmentGenerator;
     private InjectionNode layoutHandlerInjectionNode;
+    private Logger logger;
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
-                                @Assisted InjectionNode layoutHandlerInjectionNode) {
+                                @Assisted InjectionNode layoutHandlerInjectionNode,
+                                Logger logger) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;
+        this.logger = logger;
     }
 
     @Override
@@ -40,9 +44,9 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
 
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("ClassNotFoundExcetion while trying to generate LayoutHandler", e);
         } catch (JClassAlreadyExistsException e) {
-            e.printStackTrace();
+            logger.error("JClassAlreadyExistsException while trying to generate LayoutHandler", e);
         }
     }
 }

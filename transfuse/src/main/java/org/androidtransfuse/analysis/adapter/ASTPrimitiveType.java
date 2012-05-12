@@ -19,13 +19,14 @@ public enum ASTPrimitiveType implements ASTType {
     LONG("long", Long.class),
     DOUBLE("double", Double.class);
 
+    private static final Map<String, ASTPrimitiveType> AUTOBOX_TYPE_MAP = new HashMap<String, ASTPrimitiveType>();
+
     private Class clazz;
     private String label;
-    private static final Map<String, ASTPrimitiveType> autoboxTypeMap = new HashMap<String, ASTPrimitiveType>();
 
     static {
         for (ASTPrimitiveType astPrimitive : ASTPrimitiveType.values()) {
-            autoboxTypeMap.put(astPrimitive.getObjectClass().getName(), astPrimitive);
+            AUTOBOX_TYPE_MAP.put(astPrimitive.getObjectClass().getName(), astPrimitive);
         }
     }
 
@@ -99,6 +100,6 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     public static ASTPrimitiveType getAutoboxType(String name) {
-        return autoboxTypeMap.get(name);
+        return AUTOBOX_TYPE_MAP.get(name);
     }
 }

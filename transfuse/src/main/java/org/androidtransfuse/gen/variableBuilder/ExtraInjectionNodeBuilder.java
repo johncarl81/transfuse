@@ -13,8 +13,6 @@ import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
-import java.util.Collection;
 
 /**
  * @author John Ericksen
@@ -61,17 +59,5 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
         }
 
         return injectionNode;
-    }
-
-    private ASTAnnotation getAnnotation(Class<? extends Annotation> clazz, Collection<ASTAnnotation> annotations) {
-        ASTAnnotation annotation = null;
-
-        for (ASTAnnotation astAnnotation : annotations) {
-            if (astAnnotation.getName().equals(clazz.getName())) {
-                annotation = astAnnotation;
-            }
-        }
-
-        return annotation;
     }
 }

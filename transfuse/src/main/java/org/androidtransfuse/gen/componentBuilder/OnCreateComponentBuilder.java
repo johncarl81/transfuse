@@ -3,7 +3,6 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
@@ -40,8 +39,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                                     InjectionFragmentGenerator injectionFragmentGenerator,
                                     JCodeModel codeModel,
                                     UniqueVariableNamer uniqueVariableNamer,
-                                    ComponentBuilderFactory componentBuilderFactory,
-                                    ASTClassFactory astClassFactory) {
+                                    ComponentBuilderFactory componentBuilderFactory) {
         this.injectionNode = injectionNode;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.codeModel = codeModel;

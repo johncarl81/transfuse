@@ -68,7 +68,7 @@ public class Analyzer {
         if (!duplicateDependency.getUsageType().isConcreteClass()) {
             return duplicateDependency;
         }
-        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && loopInjectionNode != duplicateDependency; loopInjectionNode = loopedDependencies.pop()) {
+        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && !loopInjectionNode.equals(duplicateDependency); loopInjectionNode = loopedDependencies.pop()) {
             if (!loopInjectionNode.getUsageType().isConcreteClass()) {
                 //found interface
                 return loopInjectionNode;

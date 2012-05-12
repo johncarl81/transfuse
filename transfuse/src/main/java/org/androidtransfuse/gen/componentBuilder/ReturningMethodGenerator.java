@@ -13,9 +13,6 @@ import javax.inject.Inject;
  */
 public class ReturningMethodGenerator extends SimpleMethodGenerator {
 
-    private ASTMethod overrideMethod;
-    private boolean superCall;
-    private JCodeModel codeModel;
     private JExpression expression;
 
     @Inject

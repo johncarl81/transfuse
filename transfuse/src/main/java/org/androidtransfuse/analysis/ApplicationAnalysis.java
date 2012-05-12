@@ -43,7 +43,6 @@ public class ApplicationAnalysis {
                                InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
-                               AOPRepository aopRepository,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
                                ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory, AnalysisContextFactory analysisContextFactory) {

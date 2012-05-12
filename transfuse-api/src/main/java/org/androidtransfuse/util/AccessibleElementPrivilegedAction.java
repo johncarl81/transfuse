@@ -3,6 +3,11 @@ package org.androidtransfuse.util;
 import java.lang.reflect.AccessibleObject;
 import java.security.PrivilegedExceptionAction;
 
+/**
+ * Accessibility modifying Privileged Action
+ *
+ * @author John Ericksen
+ */
 public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleObject> implements PrivilegedExceptionAction<T> {
 
     private E accessible;
@@ -12,12 +17,12 @@ public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleO
     }
 
     public T run() throws Exception {
-        boolean accessible = this.accessible.isAccessible();
-        this.accessible.setAccessible(true);
+        boolean previous = this.accessible.isAccessible();
+        accessible.setAccessible(true);
 
-        T output = run(this.accessible);
+        T output = run(accessible);
 
-        this.accessible.setAccessible(accessible);
+        accessible.setAccessible(previous);
 
         return output;
     }

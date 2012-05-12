@@ -1,5 +1,6 @@
 package org.androidtransfuse.util;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -11,6 +12,12 @@ import static junit.framework.Assert.assertNull;
 public class InjectionUtilTest {
 
     private static final String TEST_VALUE = "hello";
+    private InjectionUtil injectionUtil;
+
+    @Before
+    public void setup() {
+        injectionUtil = InjectionUtil.getInstance();
+    }
 
     @Test
     public void testPrivateMethodInjection() {
@@ -18,7 +25,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        InjectionUtil.setMethod(target, 0, "setValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.setMethod(target, 0, "setValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -29,14 +36,14 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        InjectionUtil.setMethod(target, 1, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.setMethod(target, 1, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
 
     @Test
     public void testPrivateConstructorInjection() {
-        Target target = InjectionUtil.setConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
+        Target target = injectionUtil.setConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(target.getValue(), TEST_VALUE);
     }
@@ -47,7 +54,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        InjectionUtil.setField(target, 0, "value", TEST_VALUE);
+        injectionUtil.setField(target, 0, "value", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -58,7 +65,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        InjectionUtil.setField(target, 1, "superValue", TEST_VALUE);
+        injectionUtil.setField(target, 1, "superValue", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }

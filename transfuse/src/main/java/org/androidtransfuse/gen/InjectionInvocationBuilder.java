@@ -34,8 +34,8 @@ public class InjectionInvocationBuilder {
 
     public JStatement buildPrivateMethodInjection(int superClassLevel, Map<InjectionNode, JExpression> nodeMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        //InjectionUtil.setMethod(Object target, int superLevel, String method, Class[] argClasses,Object[] args)
-        JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_METHOD_METHOD)
+        //InjectionUtil.getInstance().setMethod(Object target, int superLevel, String method, Class[] argClasses,Object[] args)
+        JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_METHOD_METHOD)
                 .arg(variable)
                 .arg(JExpr.lit(superClassLevel))
                 .arg(methodInjectionPoint.getName());
@@ -88,7 +88,7 @@ public class InjectionInvocationBuilder {
     public JStatement buildPrivateFieldInjection(Map<InjectionNode, JExpression> nodeMap, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         InjectionNode node = fieldInjectionPoint.getInjectionNode();
 
-        return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
+        return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_FIELD_METHOD)
                 .arg(variable)
                 .arg(JExpr.lit(fieldInjectionPoint.getSubclassLevel()))
                 .arg(fieldInjectionPoint.getName())
@@ -117,7 +117,7 @@ public class InjectionInvocationBuilder {
     public JInvocation buildPrivateConstructorInjection(Map<InjectionNode, JExpression> nodeMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
-        JInvocation constructorInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_CONSTRUCTOR_METHOD)
+        JInvocation constructorInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_CONSTRUCTOR_METHOD)
                 .arg(codeModel.ref(type.fullName()).staticRef(CLASS_REF));
 
         //add classes

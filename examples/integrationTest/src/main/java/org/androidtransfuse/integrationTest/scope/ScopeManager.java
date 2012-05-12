@@ -1,6 +1,5 @@
 package org.androidtransfuse.integrationTest.scope;
 
-import android.util.Log;
 import android.widget.EditText;
 import org.androidtransfuse.annotations.OnCreate;
 import org.androidtransfuse.annotations.OnPause;
@@ -26,7 +25,7 @@ public class ScopeManager {
     }
 
     @OnCreate
-    public void readSingleton(){
+    public void readSingleton() {
         scopedText.setText(singleton.getValue());
     }
 

@@ -28,4 +28,21 @@ public class ActivityListItem implements Comparable<ActivityListItem> {
     public int compareTo(ActivityListItem activityListItem) {
         return getName().compareTo(activityListItem.getName());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActivityListItem)) return false;
+
+        ActivityListItem that = (ActivityListItem) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
 }

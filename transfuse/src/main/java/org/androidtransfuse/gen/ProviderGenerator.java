@@ -54,7 +54,7 @@ public class ProviderGenerator {
 
             //JFieldVar applicationField = providerClass.field(JMod.PRIVATE, Application.class, "application");
 
-            JMethod constructor = providerClass.constructor(JMod.PUBLIC);
+            //JMethod constructor = providerClass.constructor(JMod.PUBLIC);
 
             //JVar applicationParameter = constructor.param(codeModel.ref(Application.class), "application");
 
