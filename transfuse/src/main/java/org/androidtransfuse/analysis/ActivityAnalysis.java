@@ -79,56 +79,21 @@ public class ActivityAnalysis {
 
     public AndroidComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application) {
 
-        final Activity activityAnnotation = input.getAnnotation(Activity.class);
-        final Layout layoutAnnotation = input.getAnnotation(Layout.class);
-        final LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
-        final IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
+        Activity activityAnnotation = input.getAnnotation(Activity.class);
+        Layout layoutAnnotation = input.getAnnotation(Layout.class);
+        LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
+        IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
 
-        TypeMirror type = TypeMirrorUtil.getTypeMirror(new Runnable() {
-            public void run() {
-                activityAnnotation.type();
-            }
-        });
+        TypeMirror type = TypeMirrorUtil.getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
 
-        String activityType;
+        String activityType = buildActivityType(type);
+        PackageClass activityClassName = buildPackageClass(input, activityAnnotation);
 
-        if (type != null) {
-            activityType = type.toString();
-        } else {
-            activityType = android.app.Activity.class.getName();
-        }
-
-        String name = input.getName();
-        String packageName = name.substring(0, name.lastIndexOf('.'));
-        String delegateName = name.substring(name.lastIndexOf('.') + 1);
-
-        PackageClass activityClassName;
-        if (StringUtils.isBlank(activityAnnotation.name())) {
-            activityClassName = new PackageClass(packageName, delegateName + "Activity");
-        } else {
-            activityClassName = new PackageClass(packageName, activityAnnotation.name());
-        }
-
-        Integer layout = null;
-        if (layoutAnnotation != null) {
-            layout = layoutAnnotation.value();
-        }
+        Integer layout = buildLayout(layoutAnnotation);
 
         AnalysisContext context = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap(type));
 
-        InjectionNode layoutHandlerInjectionNode = null;
-        if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = TypeMirrorUtil.getTypeMirror(new Runnable() {
-                public void run() {
-                    layoutHandlerAnnotation.value();
-                }
-            });
-
-            if (layoutHandlerType != null) {
-                ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
-                layoutHandlerInjectionNode = injectionPointFactory.buildInjectionNode(layoutHandlerASTType, context);
-            }
-        }
+        InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
 
         AndroidComponentDescriptor activityDescriptor = new AndroidComponentDescriptor(activityType, activityClassName);
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
@@ -140,6 +105,50 @@ public class ActivityAnalysis {
         setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
 
         return activityDescriptor;
+    }
+
+    private Integer buildLayout(Layout layoutAnnotation) {
+        if (layoutAnnotation != null) {
+            return layoutAnnotation.value();
+        }
+        return null;
+    }
+
+    private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
+        if (layoutHandlerAnnotation != null) {
+            TypeMirror layoutHandlerType = TypeMirrorUtil.getTypeMirror(new Runnable() {
+                public void run() {
+                    layoutHandlerAnnotation.value();
+                }
+            });
+
+            if (layoutHandlerType != null) {
+                ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
+                return injectionPointFactory.buildInjectionNode(layoutHandlerASTType, context);
+            }
+        }
+        return null;
+    }
+
+    private String buildActivityType(TypeMirror type) {
+        if (type != null) {
+            return type.toString();
+        } else {
+            return android.app.Activity.class.getName();
+        }
+    }
+
+    private PackageClass buildPackageClass(ASTType input, Activity activityAnnotation) {
+
+        String name = input.getName();
+        String packageName = name.substring(0, name.lastIndexOf('.'));
+        String delegateName = name.substring(name.lastIndexOf('.') + 1);
+
+        if (StringUtils.isBlank(activityAnnotation.name())) {
+            return new PackageClass(packageName, delegateName + "Activity");
+        } else {
+            return new PackageClass(packageName, activityAnnotation.name());
+        }
     }
 
     private void setupManifest(String name, String label, IntentFilters intentFilters, org.androidtransfuse.model.manifest.Application application) {
@@ -208,5 +217,19 @@ public class ActivityAnalysis {
 
         return subRepository;
 
+    }
+
+    private static final class ActivityTypeRunnable implements Runnable {
+
+        private Activity activityAnnotation;
+
+        private ActivityTypeRunnable(Activity activityAnnotation) {
+            this.activityAnnotation = activityAnnotation;
+        }
+
+        public void run() {
+            //accessing this throws an exception, caught in TypeMiirrorUtil
+            activityAnnotation.type();
+        }
     }
 }

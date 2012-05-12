@@ -73,6 +73,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
         if (!processorRan) {
 
+            //setup
             transfuseProcessor.processModule(wrapASTCollection(
                     roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class)
             ));
@@ -89,6 +90,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             transfuseProcessor.processR(r);
 
+            //processing
             ApplicationProcessor applicationProcessor = transfuseProcessor.getApplicationProcessor();
 
             Collection<? extends ASTType> applicationTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class));
@@ -110,6 +112,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                 ));
             }
 
+            //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
 
             Filer filer = processingEnv.getFiler();
