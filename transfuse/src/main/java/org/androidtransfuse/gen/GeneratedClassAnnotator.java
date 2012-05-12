@@ -2,8 +2,8 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseAnnotationProcessor;
+import org.androidtransfuse.util.Generated;
 
-import javax.annotation.Generated;
 import java.text.DateFormat;
 import java.util.Date;
 
