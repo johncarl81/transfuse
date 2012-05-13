@@ -110,10 +110,13 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                     constructorBody.add(getExtrasMethod.invoke(getBundleMethod(extra.getType())).arg(extra.getName()).arg(extraParam));
                 } else {
                     //setter for non-required extra
-                    JMethod setterMethod = strategyClass.method(JMod.PUBLIC, codeModel.VOID, "set" + upperFirst(extra.getName()));
+                    JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
                     JVar extraParam = setterMethod.param(codeModel.ref(extra.getType().getName()), namer.generateName(extra.getType().getName()));
 
-                    setterMethod.body().add(getExtrasMethod.invoke(getBundleMethod(extra.getType())).arg(extra.getName()).arg(extraParam));
+                    JBlock setterBody = setterMethod.body();
+                    setterBody.add(getExtrasMethod.invoke(getBundleMethod(extra.getType())).arg(extra.getName()).arg(extraParam));
+
+                    setterBody._return(JExpr._this());
 
                 }
             }
