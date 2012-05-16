@@ -78,6 +78,7 @@ public class ApplicationAnalysis {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
         String name = astType.getName();
+        //todo:generalize package/name separation
         String packageName = name.substring(0, name.lastIndexOf('.'));
         String deleagateName = name.substring(name.lastIndexOf('.') + 1);
         PackageClass applicationClassName;

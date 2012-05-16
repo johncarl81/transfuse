@@ -102,7 +102,7 @@ public class AnalyzerTest {
 
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
-        analysisContext.getInjectionNodeBuilders().put(B.class.getName(),
+        analysisContext.getInjectionNodeBuilders().put(B.class.getCanonicalName(),
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
     }
 
@@ -121,26 +121,26 @@ public class AnalyzerTest {
         //A -> B
         InjectionNode bInjectionNode = bInjectionPoint.getInjectionNodes().get(0);
         assertTrue(isProxyRequired(bInjectionNode));
-        assertEquals(BImpl.class.getName(), bInjectionNode.getClassName());
+        assertEquals(BImpl.class.getCanonicalName(), bInjectionNode.getClassName());
 
         //A -> E
         InjectionNode eInjectionNode = bInjectionPoint.getInjectionNodes().get(1);
         assertFalse(isProxyRequired(eInjectionNode));
-        assertEquals(E.class.getName(), eInjectionNode.getClassName());
+        assertEquals(E.class.getCanonicalName(), eInjectionNode.getClassName());
 
         //B -> C
         assertEquals(1, bInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().size());
         FieldInjectionPoint cInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().iterator().next();
         InjectionNode cInjectionNode = cInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(cInjectionNode));
-        assertEquals(C.class.getName(), cInjectionNode.getClassName());
+        assertEquals(C.class.getCanonicalName(), cInjectionNode.getClassName());
 
         //B -> F
         ConstructorInjectionPoint fNonBackLinkInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
         assertEquals(1, fNonBackLinkInjectionPoint.getInjectionNodes().size());
         InjectionNode fInjectionNode = fNonBackLinkInjectionPoint.getInjectionNodes().get(0);
         assertFalse(isProxyRequired(fInjectionNode));
-        assertEquals(F.class.getName(), fInjectionNode.getClassName());
+        assertEquals(F.class.getCanonicalName(), fInjectionNode.getClassName());
 
         //E -> F
         ConstructorInjectionPoint fNonBackLinkInjectionPoint2 = eInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
@@ -153,13 +153,13 @@ public class AnalyzerTest {
         FieldInjectionPoint dInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().iterator().next();
         InjectionNode dInjectionNode = dInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(dInjectionNode));
-        assertEquals(D.class.getName(), dInjectionNode.getClassName());
+        assertEquals(D.class.getCanonicalName(), dInjectionNode.getClassName());
 
         //D -> B back link
         ConstructorInjectionPoint bBackLinkInjectionPoint = dInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
         assertEquals(1, bBackLinkInjectionPoint.getInjectionNodes().size());
         InjectionNode bBackLinkInjectionNode = bBackLinkInjectionPoint.getInjectionNodes().get(0);
-        assertEquals(BImpl.class.getName(), bBackLinkInjectionNode.getClassName());
+        assertEquals(BImpl.class.getCanonicalName(), bBackLinkInjectionNode.getClassName());
         assertTrue(isProxyRequired(bBackLinkInjectionNode));
 
         //B -> F and E -> F difference

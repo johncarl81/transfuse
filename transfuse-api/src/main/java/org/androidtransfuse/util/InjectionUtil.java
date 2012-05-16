@@ -17,6 +17,7 @@ public final class InjectionUtil {
     public static final String SET_FIELD_METHOD = "setField";
     public static final String SET_METHOD_METHOD = "setMethod";
     public static final String SET_CONSTRUCTOR_METHOD = "setConstructor";
+    public static final String GET_FIELD_METHOD = "getField";
 
     public static InjectionUtil getInstance() {
         return INSTANCE;
@@ -24,6 +25,38 @@ public final class InjectionUtil {
 
     private InjectionUtil() {
         //singleton constructor
+    }
+
+    public <T> T getField(Object target, int superLevel, String field, Class<T> sourceClass) {
+        try {
+            Field declaredField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
+
+            return AccessController.doPrivileged(
+                    new GetFieldPrivilegedAction<T>(declaredField, target));
+
+        } catch (NoSuchFieldException e) {
+            throw new TransfuseInjectionException(
+                    "NoSuchFieldException Exception during field injection: " + field + " in " + target.getClass(), e);
+        } catch (PrivilegedActionException e) {
+            throw new TransfuseInjectionException("PrivilegedActionException Exception during field injection", e);
+        } catch (Exception e) {
+            throw new TransfuseInjectionException("Exception during field injection", e);
+        }
+    }
+
+    private static final class GetFieldPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Field> {
+
+        private Object target;
+
+        private GetFieldPrivilegedAction(Field classField, Object target) {
+            super(classField);
+            this.target = target;
+        }
+
+        @Override
+        public T run(Field classField) throws java.lang.Exception {
+            return (T) classField.get(target);
+        }
     }
 
     public void setField(Object target, int superLevel, String field, Object source) {

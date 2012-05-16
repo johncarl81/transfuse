@@ -57,7 +57,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public String getName() {
-        return clazz.getName();
+        return clazz.getCanonicalName();
     }
 
     @Override

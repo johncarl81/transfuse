@@ -125,13 +125,13 @@ public class LoopAnalysisTest {
 
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
-        analysisContext.getInjectionNodeBuilders().put(B.class.getName(),
+        analysisContext.getInjectionNodeBuilders().put(B.class.getCanonicalName(),
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
 
-        analysisContext.getInjectionNodeBuilders().put(F.class.getName(),
+        analysisContext.getInjectionNodeBuilders().put(F.class.getCanonicalName(),
                 variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(astClassFactory.buildASTClassType(FProvider.class)));
 
-        analysisContext.getInjectionNodeBuilders().put(E.class.getName(),
+        analysisContext.getInjectionNodeBuilders().put(E.class.getCanonicalName(),
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(EImpl.class)));
     }
 
@@ -147,19 +147,19 @@ public class LoopAnalysisTest {
         assertEquals(1, deConstructorInjectionPoint.getInjectionNodes().size());
         InjectionNode eInjectionNode = deConstructorInjectionPoint.getInjectionNodes().get(0);
         assertTrue(isProxyRequired(eInjectionNode));
-        assertEquals(EImpl.class.getName(), eInjectionNode.getClassName());
+        assertEquals(EImpl.class.getCanonicalName(), eInjectionNode.getClassName());
 
         //E -> F
         ConstructorInjectionPoint efConstructorInjectionPoint = eInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
         assertEquals(1, efConstructorInjectionPoint.getInjectionNodes().size());
         InjectionNode fInjectionNode = efConstructorInjectionPoint.getInjectionNodes().get(0);
         assertFalse(isProxyRequired(fInjectionNode));
-        assertEquals(F.class.getName(), fInjectionNode.getClassName());
+        assertEquals(F.class.getCanonicalName(), fInjectionNode.getClassName());
 
         //F -> D
         InjectionNode fProviderInjectionNode = ((ProviderVariableBuilder) fInjectionNode.getAspect(VariableBuilder.class)).getProviderInjectionNode();
         assertFalse(isProxyRequired(fProviderInjectionNode));
-        assertEquals(FProvider.class.getName(), fProviderInjectionNode.getClassName());
+        assertEquals(FProvider.class.getCanonicalName(), fProviderInjectionNode.getClassName());
     }
 
     @Test
@@ -174,21 +174,21 @@ public class LoopAnalysisTest {
         assertEquals(1, abConstructorInjectionPoint.getInjectionNodes().size());
         InjectionNode bInjectionNode = abConstructorInjectionPoint.getInjectionNodes().get(0);
         assertTrue(isProxyRequired(bInjectionNode));
-        assertEquals(BImpl.class.getName(), bInjectionNode.getClassName());
+        assertEquals(BImpl.class.getCanonicalName(), bInjectionNode.getClassName());
 
         //B -> C
         ConstructorInjectionPoint bcConstructorInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
         assertEquals(1, bcConstructorInjectionPoint.getInjectionNodes().size());
         InjectionNode cInjectionNode = bcConstructorInjectionPoint.getInjectionNodes().get(0);
         assertFalse(isProxyRequired(cInjectionNode));
-        assertEquals(C.class.getName(), cInjectionNode.getClassName());
+        assertEquals(C.class.getCanonicalName(), cInjectionNode.getClassName());
 
         //C -> A
         ConstructorInjectionPoint caConstructorInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
         assertEquals(1, caConstructorInjectionPoint.getInjectionNodes().size());
         InjectionNode aInjectionNode = caConstructorInjectionPoint.getInjectionNodes().get(0);
         assertFalse(isProxyRequired(aInjectionNode));
-        assertEquals(A.class.getName(), aInjectionNode.getClassName());
+        assertEquals(A.class.getCanonicalName(), aInjectionNode.getClassName());
     }
 
     private boolean isProxyRequired(InjectionNode injectionNode) {

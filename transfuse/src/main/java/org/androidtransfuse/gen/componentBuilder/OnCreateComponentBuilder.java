@@ -5,6 +5,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.ComponentDescriptor;
@@ -12,6 +13,7 @@ import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -81,6 +83,26 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
 
                 MethodGenerator onCreateMethodGenerator = new ExistingMethodGenerator(onCreateMethodDescriptor);
                 MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);
+
+                //add listener registration
+                for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
+                    if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
+                        RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
+
+                        Map<InjectionNode, JExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, registrationAspect.getViewInjectionNode(), rResource);
+
+                        JExpression viewExpression = viewExpressionMap.get(registrationAspect.getViewInjectionNode());
+
+                        for (String listenerMethod : registrationAspect.getMethods()) {
+                            block.invoke(viewExpression, listenerMethod).arg(codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD)
+                                    .invoke(InjectionUtil.GET_FIELD_METHOD)
+                                    .arg(injectionNodeJExpressionEntry.getValue())
+                                    .arg(JExpr.lit(0))
+                                    .arg(registrationAspect.getField().getName())
+                                    .arg(codeModel.ref(registrationAspect.getField().getASTType().getName()).staticRef("class")));
+                        }
+                    }
+                }
 
                 onCreateCallbackGenerator.generate(definedClass, expressionMap, descriptor, rResource);
 
