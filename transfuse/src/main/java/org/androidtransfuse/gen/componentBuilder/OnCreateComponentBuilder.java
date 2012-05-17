@@ -5,6 +5,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ComponentBuilder;
@@ -89,17 +90,21 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                     if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
                         RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
-                        Map<InjectionNode, JExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, registrationAspect.getViewInjectionNode(), rResource);
+                        for (ListenerRegistration listenerRegistration : registrationAspect.getRegistrations()) {
 
-                        JExpression viewExpression = viewExpressionMap.get(registrationAspect.getViewInjectionNode());
+                            Map<InjectionNode, JExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, listenerRegistration.getViewInjectionNode(), rResource);
 
-                        for (String listenerMethod : registrationAspect.getMethods()) {
-                            block.invoke(viewExpression, listenerMethod).arg(codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD)
-                                    .invoke(InjectionUtil.GET_FIELD_METHOD)
-                                    .arg(injectionNodeJExpressionEntry.getValue())
-                                    .arg(JExpr.lit(0))
-                                    .arg(registrationAspect.getField().getName())
-                                    .arg(codeModel.ref(registrationAspect.getField().getASTType().getName()).staticRef("class")));
+                            JExpression viewExpression = viewExpressionMap.get(listenerRegistration.getViewInjectionNode());
+
+                            for (String listenerMethod : listenerRegistration.getMethods()) {
+                                System.out.println("HELLO::: " + listenerMethod);
+                                block.invoke(viewExpression, listenerMethod).arg(codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD)
+                                        .invoke(InjectionUtil.GET_FIELD_METHOD)
+                                        .arg(injectionNodeJExpressionEntry.getValue())
+                                        .arg(JExpr.lit(0))
+                                        .arg(listenerRegistration.getField().getName())
+                                        .arg(codeModel.ref(listenerRegistration.getField().getASTType().getName()).staticRef("class")));
+                            }
                         }
                     }
                 }

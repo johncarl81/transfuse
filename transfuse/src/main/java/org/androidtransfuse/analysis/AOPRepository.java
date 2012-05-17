@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis;
 
+import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class AOPRepository {
         return interceptorAnnotationMap.get(annotation);
     }
 
-    public boolean isInterceptor(String annotation) {
-        return interceptorAnnotationMap.containsKey(annotation);
+    public boolean isInterceptor(ASTAnnotation annotation) {
+        return interceptorAnnotationMap.containsKey(annotation.getName());
     }
 }

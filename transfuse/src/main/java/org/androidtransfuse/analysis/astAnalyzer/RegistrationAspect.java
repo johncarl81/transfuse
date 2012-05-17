@@ -1,34 +1,21 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.model.InjectionNode;
-
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author John Ericksen
  */
 public class RegistrationAspect {
 
-    private InjectionNode viewInjectionNode;
-    private List<String> methods;
-    private ASTField field;
+    private Set<ListenerRegistration> registrations = new HashSet<ListenerRegistration>();
 
-    public RegistrationAspect(InjectionNode viewInjectionNode, ASTField astField, List<String> methods) {
-        this.viewInjectionNode = viewInjectionNode;
-        this.methods = methods;
-        this.field = astField;
+
+    public void addRegistration(ListenerRegistration registration) {
+        registrations.add(registration);
     }
 
-    public InjectionNode getViewInjectionNode() {
-        return viewInjectionNode;
-    }
-
-    public List<String> getMethods() {
-        return methods;
-    }
-
-    public ASTField getField() {
-        return field;
+    public Set<ListenerRegistration> getRegistrations() {
+        return registrations;
     }
 }

@@ -40,7 +40,7 @@ public class RegistrationAnalyzer extends ASTAnalysisAdaptor {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
         listenerMethods.put(astClassFactory.buildASTClassType(View.OnClickListener.class), "setOnClickListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnClickListener.class), "setOnLongClickListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnLongClickListener.class), "setOnLongClickListener");
     }
 
     @Override
@@ -71,7 +71,9 @@ public class RegistrationAnalyzer extends ASTAnalysisAdaptor {
                 }
 
                 if (!methods.isEmpty()) {
-                    injectionNode.addAspect(new RegistrationAspect(viewInjectionNode, astField, methods));
+                    RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
+
+                    registrationAspect.addRegistration(new ListenerRegistration(viewInjectionNode, methods, astField));
                 }
 
             } catch (ClassNotFoundException e) {
@@ -79,6 +81,13 @@ public class RegistrationAnalyzer extends ASTAnalysisAdaptor {
             }
 
         }
+    }
+
+    private RegistrationAspect getRegistrationAspect(InjectionNode injectionNode) {
+        if (!injectionNode.containsAspect(RegistrationAspect.class)) {
+            injectionNode.addAspect(new RegistrationAspect());
+        }
+        return injectionNode.getAspect(RegistrationAspect.class);
     }
 
     private boolean inheritsFrom(ASTType astType, ASTType inheritable) {

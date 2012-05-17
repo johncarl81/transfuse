@@ -29,7 +29,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
         //todo:think about the decision to only allow AOP on root elements
         if (context.getSuperClassLevel() == 0) {
             for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
-                if (context.getAOPRepository().isInterceptor(methodAnnotation.getName())) {
+                if (context.getAOPRepository().isInterceptor(methodAnnotation)) {
                     addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation.getName(), context));
                 }
             }
