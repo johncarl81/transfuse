@@ -41,6 +41,10 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         this.elementConverterFactory = elementConverterFactory;
         listenerMethods.put(astClassFactory.buildASTClassType(View.OnClickListener.class), "setOnClickListener");
         listenerMethods.put(astClassFactory.buildASTClassType(View.OnLongClickListener.class), "setOnLongClickListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnCreateContextMenuListener.class), "setOnCreateContextMenuListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnKeyListener.class), "setOnKeyListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnTouchListener.class), "setOnTouchListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnFocusChangeListener.class), "setOnFocusChangeListener");
     }
 
     @Override
