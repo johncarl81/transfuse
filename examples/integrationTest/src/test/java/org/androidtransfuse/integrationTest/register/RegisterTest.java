@@ -1,0 +1,101 @@
+package org.androidtransfuse.integrationTest.register;
+
+import android.widget.Button;
+import com.xtremelabs.robolectric.RobolectricTestRunner;
+import org.androidtransfuse.integrationTest.DelegateUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+
+/**
+ * @author John Ericksen
+ */
+@RunWith(RobolectricTestRunner.class)
+public class RegisterTest {
+
+    private Register register;
+    private Button button1;
+    private Button button2;
+    private Button button3;
+    private Button button4;
+    private Button button5;
+
+
+    @Before
+    public void setup() {
+        RegisterActivity registerActivity = new RegisterActivity();
+        registerActivity.onCreate(null);
+
+        register = DelegateUtil.getDelegate(registerActivity, Register.class);
+
+        button1 = (Button) registerActivity.findViewById(org.androidtransfuse.integrationTest.R.id.button1);
+        button2 = (Button) registerActivity.findViewById(org.androidtransfuse.integrationTest.R.id.button2);
+        button3 = (Button) registerActivity.findViewById(org.androidtransfuse.integrationTest.R.id.button3);
+        button4 = (Button) registerActivity.findViewById(org.androidtransfuse.integrationTest.R.id.button4);
+        button5 = (Button) registerActivity.findViewById(org.androidtransfuse.integrationTest.R.id.button5);
+    }
+
+    @Test
+    public void testOnClickListener1() {
+        assertFalse(register.getListener1().isClicked());
+        assertFalse(register.getListener1().isLongClicked());
+
+        button1.performClick();
+
+        assertTrue(register.getListener1().isClicked());
+        assertFalse(register.getListener1().isLongClicked());
+
+        button1.performLongClick();
+
+        assertTrue(register.getListener1().isClicked());
+        assertFalse(register.getListener1().isLongClicked());
+    }
+
+    @Test
+    public void testOnClickListener2() {
+        assertFalse(register.getListener2().isClicked());
+        assertFalse(register.getListener2().isLongClicked());
+
+        button2.performClick();
+
+        assertTrue(register.getListener2().isClicked());
+        assertFalse(register.getListener2().isLongClicked());
+
+        button2.performLongClick();
+
+        assertTrue(register.getListener2().isClicked());
+        assertFalse(register.getListener2().isLongClicked());
+    }
+
+    @Test
+    public void testOnClickListener3() {
+        assertFalse(register.getListener3().isClicked());
+
+        button3.performClick();
+
+        assertTrue(register.getListener3().isClicked());
+    }
+
+    @Test
+    public void testOnClickListener4() {
+        assertFalse(register.getListener4().isClicked());
+
+        button4.performClick();
+
+        assertTrue(register.getListener4().isClicked());
+    }
+
+    @Test
+    public void testOnClickListener5() {
+        assertFalse(register.isListener5Clicked());
+
+        button5.performClick();
+
+        assertTrue(register.isListener5Clicked());
+    }
+
+
+}

@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.register;
 import android.view.View;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.integrationTest.R;
 
@@ -15,9 +16,11 @@ import javax.inject.Inject;
 @Layout(R.layout.button)
 public class Register {
 
+    private boolean listener5Clicked = false;
+
     @Inject
     @RegisterListener(value = R.id.button1, interfaces = View.OnClickListener.class)
-    private RegisterOnClickListener listener;
+    private RegisterOnClickListener listener1;
 
     @Inject
     @RegisterListener(value = R.id.button2)
@@ -29,8 +32,37 @@ public class Register {
     @Inject
     private TypeRegisterOnClickListener listener4;
 
+    @RegisterListener(value = R.id.button5)
+    private View.OnClickListener listener5 = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            listener5Clicked = true;
+        }
+    };
+
+    public RegisterOnClickListener getListener1() {
+        return listener1;
+    }
+
+    public RegisterOnClickListener getListener2() {
+        return listener2;
+    }
+
     @RegisterListener(value = R.id.button3)
-    public MethodOnClickListener getListener() {
+    public MethodOnClickListener getListener3() {
         return listener3;
+    }
+
+    public TypeRegisterOnClickListener getListener4() {
+        return listener4;
+    }
+
+    public boolean isListener5Clicked() {
+        return listener5Clicked;
+    }
+
+    @OnPause
+    public void keepInActivity() {
     }
 }

@@ -14,8 +14,13 @@ public class RegisterOnClickListener implements View.OnClickListener, View.OnLon
     @Inject
     private Context context;
 
+    private boolean clicked = false;
+    private boolean longClicked = false;
+
     @Override
     public boolean onLongClick(View v) {
+
+        longClicked = true;
 
         Toast toast = Toast.makeText(context, "Long Click", 1000);
         toast.show();
@@ -25,7 +30,18 @@ public class RegisterOnClickListener implements View.OnClickListener, View.OnLon
 
     @Override
     public void onClick(View v) {
+
+        clicked = true;
+
         Toast toast = Toast.makeText(context, "Click", 1000);
         toast.show();
+    }
+
+    public boolean isLongClicked() {
+        return longClicked;
+    }
+
+    public boolean isClicked() {
+        return clicked;
     }
 }

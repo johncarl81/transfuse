@@ -14,9 +14,18 @@ public class MethodOnClickListener implements View.OnClickListener {
     @Inject
     private Context context;
 
+    private boolean clicked = false;
+
     @Override
     public void onClick(View v) {
+
+        clicked = true;
+
         Toast toast = Toast.makeText(context, "Method Registration", 1000);
         toast.show();
+    }
+
+    public boolean isClicked() {
+        return clicked;
     }
 }

@@ -17,9 +17,18 @@ public class TypeRegisterOnClickListener implements View.OnClickListener {
     @Inject
     private Context context;
 
+    private boolean clicked = false;
+
     @Override
     public void onClick(View v) {
+
+        clicked = true;
+
         Toast toast = Toast.makeText(context, "Type Registration", 1000);
         toast.show();
+    }
+
+    public boolean isClicked() {
+        return clicked;
     }
 }
