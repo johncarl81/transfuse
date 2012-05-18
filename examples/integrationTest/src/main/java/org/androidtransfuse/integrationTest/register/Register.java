@@ -1,5 +1,6 @@
 package org.androidtransfuse.integrationTest.register;
 
+import android.view.View;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.RegisterListener;
@@ -15,10 +16,21 @@ import javax.inject.Inject;
 public class Register {
 
     @Inject
-    @RegisterListener(value = R.id.button1)
-    public RegisterOnClickListener listener;
+    @RegisterListener(value = R.id.button1, interfaces = View.OnClickListener.class)
+    private RegisterOnClickListener listener;
 
     @Inject
     @RegisterListener(value = R.id.button2)
-    public RegisterOnClickListener listener2;
+    private RegisterOnClickListener listener2;
+
+    @Inject
+    private MethodOnClickListener listener3;
+
+    @Inject
+    private TypeRegisterOnClickListener listener4;
+
+    @RegisterListener(value = R.id.button3)
+    public MethodOnClickListener getListener() {
+        return listener3;
+    }
 }

@@ -1,6 +1,6 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTField;
+import org.androidtransfuse.analysis.adapter.ASTBase;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.util.List;
@@ -8,16 +8,16 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-public class ListenerRegistration {
+public class ListenerRegistration<T extends ASTBase> {
 
     private InjectionNode viewInjectionNode;
     private List<String> methods;
-    private ASTField field;
+    private T astBase;
 
-    public ListenerRegistration(InjectionNode viewInjectionNode, List<String> methods, ASTField field) {
+    public ListenerRegistration(InjectionNode viewInjectionNode, List<String> methods, T astBase) {
         this.viewInjectionNode = viewInjectionNode;
         this.methods = methods;
-        this.field = field;
+        this.astBase = astBase;
     }
 
     public InjectionNode getViewInjectionNode() {
@@ -28,7 +28,7 @@ public class ListenerRegistration {
         return methods;
     }
 
-    public ASTField getField() {
-        return field;
+    public T getASTBase() {
+        return astBase;
     }
 }

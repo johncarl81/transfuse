@@ -15,4 +15,14 @@
             android:layout_height="wrap_content"
             android:text="Button 2"
             android:id="@+id/button2"/>
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Button 3"
+            android:id="@+id/button3"/>
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Button 4"
+            android:id="@+id/button4"/>
 </LinearLayout>

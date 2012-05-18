@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author John Ericksen
  */
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegisterListener {
     int value();

@@ -22,19 +22,13 @@ public class ASTClassAnnotation implements ASTAnnotation {
     @Override
     public <T> T getProperty(String value, Class<T> type) {
         try {
-            Method typeParameters = annotation.annotationType().getMethod(value);
+            Method annotationParameter = annotation.annotationType().getMethod(value);
 
-            Class convertedType = type;
-
-            if (type.equals(ASTType.class)) {
-                convertedType = Class.class;
+            if (!annotationParameter.getReturnType().isAssignableFrom(type)) {
+                throw new TransfuseAnalysisException("Type not expected: " + type);
             }
 
-            if (!typeParameters.getReturnType().isAssignableFrom(convertedType)) {
-                throw new TransfuseAnalysisException("Type not expected: " + convertedType);
-            }
-
-            return (T) typeParameters.invoke(annotation);
+            return (T) annotationParameter.invoke(annotation);
 
         } catch (IllegalAccessException e) {
             throw new TransfuseAnalysisException("IllegalAccessException Exception while accessing annotation method: " + value, e);

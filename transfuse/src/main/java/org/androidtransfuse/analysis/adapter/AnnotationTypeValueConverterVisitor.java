@@ -96,7 +96,9 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
         List<Object> annotationASTTypes = new ArrayList<Object>();
 
         for (AnnotationValue annotationValue : annotationValues) {
-            annotationASTTypes.add(annotationValue.accept(this, null));
+            annotationASTTypes.add(annotationValue.accept(
+                    new AnnotationTypeValueConverterVisitor<Object>(Object.class, astTypeBuilderVisitor, astTypeElementConverterFactory),
+                    null));
         }
 
         return (T) annotationASTTypes;

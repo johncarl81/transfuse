@@ -13,6 +13,7 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.util.Logger;
 
@@ -32,13 +33,15 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
     private ASTClassFactory astClassFactory;
     private Logger log;
     private IntentFactoryStrategyGenerator intentFactoryStrategyGenerator;
+    private ListenerRegistrationGenerator listenerRegistrationGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, Logger log, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator) {
+    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, Logger log, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.log = log;
         this.intentFactoryStrategyGenerator = intentFactoryStrategyGenerator;
+        this.listenerRegistrationGenerator = listenerRegistrationGenerator;
     }
 
     @Override
@@ -96,6 +99,10 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
 
             //extra intent factory
             activityCallbackGenerators.add(intentFactoryStrategyGenerator);
+
+            //listener registration
+            activityCallbackGenerators.add(listenerRegistrationGenerator);
+
 
             return activityCallbackGenerators;
         } catch (NoSuchMethodException e) {
