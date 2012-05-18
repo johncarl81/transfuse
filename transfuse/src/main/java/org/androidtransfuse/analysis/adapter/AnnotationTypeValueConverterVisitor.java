@@ -1,10 +1,10 @@
 package org.androidtransfuse.analysis.adapter;
 
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.SimpleAnnotationValueVisitor6;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,30 +83,20 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
-        return (T) variableElement.accept(astTypeElementConverterFactory.buildTypeConverter(type), null);
-    }
-
-    @Override
-    public T visitAnnotation(AnnotationMirror annotationMirror, Void aVoid) {
-        return null;
+        return variableElement.accept(astTypeElementConverterFactory.buildTypeConverter(type), null);
     }
 
     @Override
     public T visitArray(List<? extends AnnotationValue> annotationValues, Void aVoid) {
-        List<Object> annotationASTTypes = new ArrayList<Object>();
+        List annotationASTTypes = new ArrayList();
 
         for (AnnotationValue annotationValue : annotationValues) {
             annotationASTTypes.add(annotationValue.accept(
-                    new AnnotationTypeValueConverterVisitor<Object>(Object.class, astTypeBuilderVisitor, astTypeElementConverterFactory),
+                    new AnnotationTypeValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory),
                     null));
         }
 
-        return (T) annotationASTTypes;
-    }
-
-    @Override
-    public T visitUnknown(AnnotationValue annotationValue, Void aVoid) {
-        return null;
+        return (T) annotationASTTypes.toArray((Object[]) Array.newInstance(type.getComponentType(), 0));
     }
 
     private <P> T visitSimple(Class<P> clazz, P value) {

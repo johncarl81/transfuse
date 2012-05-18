@@ -25,96 +25,95 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     private JCodeModel codeModel;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionPointFactory injectionPointFactory;
+    private ElementConverterFactory elementConverterFactory;
 
     @Inject
     public RegistrationAnalyzer(Analyzer analyzer,
                                 ASTClassFactory astClassFactory,
                                 JCodeModel codeModel,
                                 VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                InjectionPointFactory injectionPointFactory) {
+                                InjectionPointFactory injectionPointFactory, ElementConverterFactory elementConverterFactory) {
         this.analyzer = analyzer;
         this.astClassFactory = astClassFactory;
         this.codeModel = codeModel;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
+        this.elementConverterFactory = elementConverterFactory;
         listenerMethods.put(astClassFactory.buildASTClassType(View.OnClickListener.class), "setOnClickListener");
-        //listenerMethods.put(astClassFactory.buildASTClassType(View.OnLongClickListener.class), "setOnLongClickListener");
+        listenerMethods.put(astClassFactory.buildASTClassType(View.OnLongClickListener.class), "setOnLongClickListener");
     }
 
     @Override
-    public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
-        if (astType.isAnnotated(RegisterListener.class)) {
-
-            ASTAnnotation registerAnnotation = getAnnotation(RegisterListener.class, astType.getAnnotations());
-
-            Integer viewId = registerAnnotation.getProperty("value", Integer.class);
-            //todo:take && between injectionNode's listener interfaces and aspects
-            //Class[] interfaces = registerAnnotation.getProperty("interfaces", Class[].class);
-
-            InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, context);
-
-            List<String> methods = buildListenerMethods(astType, astType.getAnnotations(), new ArrayList<ASTType>());
-
-
-            if (!methods.isEmpty()) {
-                RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
+    public void analyzeType(InjectionNode injectionNode, final ASTType astType, AnalysisContext context) {
+        analyze(astType, astType, injectionNode, context, new ListenerRegistrationFactory<Object>() {
+            @Override
+            public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods) {
 
                 registrationAspect.addTypeRegistration(new ListenerRegistration<ASTType>(viewInjectionNode, methods, astType));
             }
-        }
+        });
     }
 
     @Override
-    public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
-        if (astMethod.isAnnotated(RegisterListener.class)) {
-            ASTAnnotation registerAnnotation = getAnnotation(RegisterListener.class, astMethod.getAnnotations());
-
-            Integer viewId = registerAnnotation.getProperty("value", Integer.class);
-            //todo:take && between injectionNode's listener interfaces and aspects
-            //Class[] interfaces = registerAnnotation.getProperty("interfaces", Class[].class);
-
-            InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, context);
-
-            List<String> methods = buildListenerMethods(astMethod.getReturnType(), astMethod.getAnnotations(), new ArrayList<ASTType>());
-
-
-            if (!methods.isEmpty()) {
-                RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
+    public void analyzeMethod(InjectionNode injectionNode, final ASTMethod astMethod, AnalysisContext context) {
+        analyze(astMethod, astMethod.getReturnType(), injectionNode, context, new ListenerRegistrationFactory<Object>() {
+            @Override
+            public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods) {
 
                 registrationAspect.addMethodRegistration(new ListenerRegistration<ASTMethod>(viewInjectionNode, methods, astMethod));
             }
-        }
+        });
     }
 
     @Override
-    public void analyzeField(InjectionNode injectionNode, ASTField astField, AnalysisContext context) {
-        if (astField.isAnnotated(RegisterListener.class)) {
-            ASTAnnotation registerAnnotation = getAnnotation(RegisterListener.class, astField.getAnnotations());
+    public void analyzeField(InjectionNode injectionNode, final ASTField astField, AnalysisContext context) {
+        analyze(astField, astField.getASTType(), injectionNode, context, new ListenerRegistrationFactory<Object>() {
+            @Override
+            public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods) {
+
+                registrationAspect.addFieldRegistration(new ListenerRegistration<ASTField>(viewInjectionNode, methods, astField));
+            }
+        });
+    }
+
+    private <T> void analyze(ASTBase astBase, ASTType astType, InjectionNode injectionNode, AnalysisContext context, ListenerRegistrationFactory<T> factory) {
+        if (astBase.isAnnotated(RegisterListener.class)) {
+            ASTAnnotation registerAnnotation = getAnnotation(RegisterListener.class, astBase.getAnnotations());
 
             Integer viewId = registerAnnotation.getProperty("value", Integer.class);
-            //todo:take && between injectionNode's listener interfaces and aspects
-            //Class[] interfaces = registerAnnotation.getProperty("interfaces", Class[].class);
+            ASTType[] interfaces = registerAnnotation.getProperty("interfaces", ASTType[].class);
+
+            List<ASTType> interfaceList = new ArrayList<ASTType>();
+            if (interfaces != null) {
+                interfaceList.addAll(Arrays.asList(interfaces));
+            }
 
             InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, context);
 
-            List<String> methods = buildListenerMethods(astField.getASTType(), astField.getAnnotations(), new ArrayList<ASTType>());
+            List<String> methods = buildListenerMethods(astType, interfaceList);
 
 
             if (!methods.isEmpty()) {
                 RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
 
-                registrationAspect.addFieldRegistration(new ListenerRegistration<ASTField>(viewInjectionNode, methods, astField));
+                factory.assignRegistration(registrationAspect, viewInjectionNode, methods);
             }
         }
     }
 
-    private List<String> buildListenerMethods(ASTType astType, Collection<ASTAnnotation> annotations, List<ASTType> interfaceList) {
+    private static interface ListenerRegistrationFactory<T> {
+
+        void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods);
+    }
+
+    private List<String> buildListenerMethods(ASTType astType, List<ASTType> interfaceList) {
 
         List<String> methods = new ArrayList<String>();
 
 
         for (Map.Entry<ASTType, String> classStringEntry : listenerMethods.entrySet()) {
-            if (inheritsFrom(astType, classStringEntry.getKey()) && (interfaceList.isEmpty() || interfaceList.contains(astType))) {
+            if ((interfaceList.isEmpty() || interfaceList.contains(classStringEntry.getKey()))
+                    && inheritsFrom(astType, classStringEntry.getKey())) {
                 methods.add(classStringEntry.getValue());
             }
         }

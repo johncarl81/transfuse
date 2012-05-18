@@ -20,9 +20,9 @@ public class ASTClassAnnotation implements ASTAnnotation {
     }
 
     @Override
-    public <T> T getProperty(String value, Class<T> type) {
+    public <T> T getProperty(String name, Class<T> type) {
         try {
-            Method annotationParameter = annotation.annotationType().getMethod(value);
+            Method annotationParameter = annotation.annotationType().getMethod(name);
 
             if (!annotationParameter.getReturnType().isAssignableFrom(type)) {
                 throw new TransfuseAnalysisException("Type not expected: " + type);
@@ -31,11 +31,11 @@ public class ASTClassAnnotation implements ASTAnnotation {
             return (T) annotationParameter.invoke(annotation);
 
         } catch (IllegalAccessException e) {
-            throw new TransfuseAnalysisException("IllegalAccessException Exception while accessing annotation method: " + value, e);
+            throw new TransfuseAnalysisException("IllegalAccessException Exception while accessing annotation method: " + name, e);
         } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("Annotation method not present: " + value, e);
+            throw new TransfuseAnalysisException("Annotation method not present: " + name, e);
         } catch (InvocationTargetException e) {
-            throw new TransfuseAnalysisException("InvocationTargetException Exception while accessing annotation method: " + value, e);
+            throw new TransfuseAnalysisException("InvocationTargetException Exception while accessing annotation method: " + name, e);
         }
     }
 
