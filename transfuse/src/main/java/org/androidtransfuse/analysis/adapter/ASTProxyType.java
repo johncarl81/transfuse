@@ -109,4 +109,19 @@ public class ASTProxyType implements ASTType {
     public List<ASTType> getGenericParameters() {
         return proxyASTType.getGenericParameters();
     }
+
+    @Override
+    public boolean inheritsFrom(ASTType type) {
+        return proxyASTType.inheritsFrom(type);
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return proxyASTType.extendsFrom(type);
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return proxyASTType.implementsFrom(type);
+    }
 }

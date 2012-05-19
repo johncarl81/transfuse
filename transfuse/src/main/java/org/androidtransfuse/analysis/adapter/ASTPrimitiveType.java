@@ -102,4 +102,19 @@ public enum ASTPrimitiveType implements ASTType {
     public static ASTPrimitiveType getAutoboxType(String name) {
         return AUTOBOX_TYPE_MAP.get(name);
     }
+
+    @Override
+    public boolean inheritsFrom(ASTType type) {
+        return false;
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return false;
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return false;
+    }
 }

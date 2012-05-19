@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.annotations.*;
@@ -48,6 +49,7 @@ public class ActivityAnalysis {
     private ActivityComponentBuilderRepository activityComponentBuilderRepository;
     private AnalysisContextFactory analysisContextFactory;
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
+    private ASTClassFactory astClassFactory;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -62,7 +64,7 @@ public class ActivityAnalysis {
                             InjectionNodeBuilderRepository injectionNodeBuilders,
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
-                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider) {
+                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider, ASTClassFactory astClassFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -76,31 +78,43 @@ public class ActivityAnalysis {
         this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
+        this.astClassFactory = astClassFactory;
     }
 
     public ComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
-        Layout layoutAnnotation = input.getAnnotation(Layout.class);
-        LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
+        PackageClass activityClassName;
+        ComponentDescriptor activityDescriptor = null;
 
-        TypeMirror type = TypeMirrorUtil.getInstance().getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
+        if (input.extendsFrom(astClassFactory.buildASTClassType(android.app.Activity.class))) {
+            //vanilla Android activity
+            PackageClass activityPackageClass = new PackageClass(input.getName());
+            activityClassName = buildPackageClass(input, activityPackageClass.getClassName());
+        } else {
+            //generated Android activity
+            activityClassName = buildPackageClass(input, activityAnnotation.name());
 
-        String activityType = buildActivityType(type);
-        PackageClass activityClassName = buildPackageClass(input, activityAnnotation);
+            Layout layoutAnnotation = input.getAnnotation(Layout.class);
+            LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
 
-        Integer layout = buildLayout(layoutAnnotation);
+            TypeMirror type = TypeMirrorUtil.getInstance().getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
 
-        AnalysisContext context = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap(type));
+            String activityType = buildActivityType(type);
 
-        InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
+            Integer layout = buildLayout(layoutAnnotation);
 
-        ComponentDescriptor activityDescriptor = new ComponentDescriptor(activityType, activityClassName);
-        InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap(type));
 
-        //application generation profile
-        setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
+            InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
+
+            activityDescriptor = new ComponentDescriptor(activityType, activityClassName);
+            InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
+
+            //application generation profile
+            setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
+        }
 
         //add manifest elements
         setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
@@ -135,16 +149,14 @@ public class ActivityAnalysis {
         }
     }
 
-    private PackageClass buildPackageClass(ASTType input, Activity activityAnnotation) {
+    private PackageClass buildPackageClass(ASTType input, String activityName) {
 
-        String name = input.getName();
-        String packageName = name.substring(0, name.lastIndexOf('.'));
-        String delegateName = name.substring(name.lastIndexOf('.') + 1);
+        PackageClass inputPackageClass = new PackageClass(input.getName());
 
-        if (StringUtils.isBlank(activityAnnotation.name())) {
-            return new PackageClass(packageName, delegateName + "Activity");
+        if (StringUtils.isBlank(activityName)) {
+            return inputPackageClass.add("Activity");
         } else {
-            return new PackageClass(packageName, activityAnnotation.name());
+            return inputPackageClass.replaceName(activityName);
         }
     }
 

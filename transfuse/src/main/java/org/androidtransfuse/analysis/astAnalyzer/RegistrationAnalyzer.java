@@ -117,7 +117,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         for (Map.Entry<ASTType, String> classStringEntry : listenerMethods.entrySet()) {
             if ((interfaceList.isEmpty() || interfaceList.contains(classStringEntry.getKey()))
-                    && inheritsFrom(astType, classStringEntry.getKey())) {
+                    && astType.inheritsFrom(classStringEntry.getKey())) {
                 methods.add(classStringEntry.getValue());
             }
         }
@@ -148,21 +148,6 @@ public class RegistrationAnalyzer implements ASTAnalysis {
             injectionNode.addAspect(new RegistrationAspect());
         }
         return injectionNode.getAspect(RegistrationAspect.class);
-    }
-
-    private boolean inheritsFrom(ASTType astType, ASTType inheritable) {
-        if (astType == null) {
-            return false;
-        }
-        if (astType.equals(inheritable)) {
-            return true;
-        }
-        for (ASTType typeInterfaces : astType.getInterfaces()) {
-            if (inheritsFrom(typeInterfaces, inheritable)) {
-                return true;
-            }
-        }
-        return inheritsFrom(astType.getSuperClass(), inheritable);
     }
 
     //todo:move this (and duplicate) to shared utility class or method on ASTBase?

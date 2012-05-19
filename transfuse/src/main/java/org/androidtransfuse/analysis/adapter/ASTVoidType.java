@@ -70,6 +70,21 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
+    public boolean inheritsFrom(ASTType type) {
+        return false;
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return false;
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return false;
+    }
+
+    @Override
     public boolean isAnnotated(Class<? extends Annotation> annotation) {
         return false;
     }

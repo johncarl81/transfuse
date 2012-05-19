@@ -11,6 +11,16 @@ public class PackageClass {
     private String fileName;
     private boolean dotJava;
 
+    public PackageClass(String fullyQualifiedName) {
+        int dotIndex = fullyQualifiedName.lastIndexOf('.');
+        if (dotIndex == -1) {
+            fileName = fullyQualifiedName;
+        } else {
+            pkg = fullyQualifiedName.substring(0, dotIndex);
+            fileName = fullyQualifiedName.substring(dotIndex + 1);
+        }
+    }
+
     public PackageClass(String pkg, String fileName) {
         this(pkg, fileName, false);
     }
@@ -84,5 +94,9 @@ public class PackageClass {
         int result = pkg.hashCode();
         result = 31 * result + fileName.hashCode();
         return result;
+    }
+
+    public PackageClass replaceName(String replacement) {
+        return new PackageClass(pkg, replacement, false);
     }
 }

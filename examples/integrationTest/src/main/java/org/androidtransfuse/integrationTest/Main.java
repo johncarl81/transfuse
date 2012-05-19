@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest;
 import android.app.ListActivity;
 import android.widget.ArrayAdapter;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.integrationTest.activity.ManifestManagedActivity;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
@@ -53,7 +54,8 @@ public class Main {
                 createLI(NotManagedActivity.class, "Not Managed"),
                 createLI(CustomViewActivity.class, "Custom View"),
                 createLI(VariableLayoutActivity.class, "Variable Layout"),
-                createLI(RegisterActivity.class, "Listener Registration")
+                createLI(RegisterActivity.class, "Listener Registration"),
+                createLI(ManifestManagedActivity.class, "Manifest Managed Activity")
         }));
 
         Collections.sort(values);

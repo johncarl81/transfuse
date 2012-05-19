@@ -79,4 +79,19 @@ public class ASTArrayType implements ASTType {
     public List<ASTType> getGenericParameters() {
         return Collections.emptyList();
     }
+
+    @Override
+    public boolean inheritsFrom(ASTType type) {
+        return delegate.inheritsFrom(type);
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return delegate.extendsFrom(type);
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return delegate.implementsFrom(type);
+    }
 }

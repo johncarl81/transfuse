@@ -47,7 +47,9 @@ public class ComponentProcessor {
             try {
                 ComponentDescriptor activityDescriptor = activityAnalysis.analyzeElement(astType, analysisRepository, application, context);
 
-                generator.generate(activityDescriptor);
+                if (activityDescriptor != null) {
+                    generator.generate(activityDescriptor);
+                }
 
             } catch (JClassAlreadyExistsException e) {
                 logger.error("JClassAlreadyExistsException while generating activity", e);

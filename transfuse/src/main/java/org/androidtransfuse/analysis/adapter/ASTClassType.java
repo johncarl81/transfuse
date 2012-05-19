@@ -112,4 +112,36 @@ public class ASTClassType implements ASTType {
     public List<ASTType> getGenericParameters() {
         return Collections.emptyList();
     }
+
+    @Override
+    public boolean inheritsFrom(ASTType type) {
+        return inherits(this, type, true, true);
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return inherits(this, type, false, true);
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return inherits(this, type, true, false);
+    }
+
+    private boolean inherits(ASTType astType, ASTType inheritable, boolean implement, boolean extend) {
+        if (astType == null) {
+            return false;
+        }
+        if (astType.equals(inheritable)) {
+            return true;
+        }
+        if (implement) {
+            for (ASTType typeInterfaces : astType.getInterfaces()) {
+                if (inherits(typeInterfaces, inheritable, implement, extend)) {
+                    return true;
+                }
+            }
+        }
+        return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
+    }
 }

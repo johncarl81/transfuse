@@ -21,6 +21,7 @@
         <activity t="n,l" android:name="org.androidtransfuse.integrationTest.inject.InjectionActivity"/>
         <activity t="n,l" android:name="org.androidtransfuse.integrationTest.inject.SystemInjectionActivity"/>
         <activity t="n,l" android:name="org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity"/>
+        <activity t="n,l" android:name="org.androidtransfuse.integrationTest.activity.ManifestManagedActivity"/>
         <activity t="n,l" android:name="org.androidtransfuse.integrationTest.scope.ScopeOneActivity"/>
     </application>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>

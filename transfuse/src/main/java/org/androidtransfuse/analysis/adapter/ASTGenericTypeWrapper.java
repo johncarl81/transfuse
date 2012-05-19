@@ -69,4 +69,19 @@ public class ASTGenericTypeWrapper implements ASTType {
     public String getName() {
         return astType.getName();
     }
+
+    @Override
+    public boolean inheritsFrom(ASTType type) {
+        return astType.inheritsFrom(type);
+    }
+
+    @Override
+    public boolean extendsFrom(ASTType type) {
+        return astType.extendsFrom(type);
+    }
+
+    @Override
+    public boolean implementsFrom(ASTType type) {
+        return astType.implementsFrom(type);
+    }
 }

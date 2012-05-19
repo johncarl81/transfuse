@@ -65,4 +65,10 @@ public interface ASTType extends ASTBase {
      * @return generic parameters
      */
     List<ASTType> getGenericParameters();
+
+    boolean inheritsFrom(ASTType type);
+
+    boolean extendsFrom(ASTType type);
+
+    boolean implementsFrom(ASTType type);
 }
