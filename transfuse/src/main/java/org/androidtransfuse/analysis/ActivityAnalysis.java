@@ -85,6 +85,7 @@ public class ActivityAnalysis {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
+        Intent intent = input.getAnnotation(Intent.class);
         PackageClass activityClassName;
         ComponentDescriptor activityDescriptor = null;
 
@@ -117,7 +118,7 @@ public class ActivityAnalysis {
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, application);
+        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, intent, application);
 
         return activityDescriptor;
     }
@@ -160,12 +161,16 @@ public class ActivityAnalysis {
         }
     }
 
-    private void setupManifest(String name, String label, IntentFilters intentFilters, org.androidtransfuse.model.manifest.Application application) {
+    private void setupManifest(String name, String label, IntentFilters intentFilters, Intent intent, org.androidtransfuse.model.manifest.Application application) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
         manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
-        manifestActivity.setIntentFilters(buildIntentFilters(intentFilters));
+        manifestActivity.setIntentFilters(buildIntentFilters(intentFilters, intent));
+
+        if (manifestActivity.getIntentFilters().size() > 0) {
+            System.out.println("Intents for: " + name + " size: " + manifestActivity.getIntentFilters().get(0).getCategories().size());
+        }
 
         if (application.getActivities() == null) {
             application.setActivities(new ArrayList<org.androidtransfuse.model.manifest.Activity>());
@@ -180,34 +185,49 @@ public class ActivityAnalysis {
         activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
     }
 
-    private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters) {
+    private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters, Intent intent) {
         List<IntentFilter> convertedIntentFilters = new ArrayList<IntentFilter>();
 
+        IntentFilter intentFilter = null;
         if (intentFilters != null) {
+            System.out.println("Runnning intentFilters");
 
-            IntentFilter intentFilter = intentFilterProvider.get();
+            intentFilter = intentFilterProvider.get();
             convertedIntentFilters.add(intentFilter);
 
             for (Intent intentAnnotation : intentFilters.value()) {
-                switch (intentAnnotation.type()) {
-                    case ACTION:
-                        Action action = actionProvider.get();
-                        action.setName(intentAnnotation.name());
-                        intentFilter.getActions().add(action);
-                        break;
-                    case CATEGORY:
-                        Category category = categoryProvider.get();
-                        category.setName(intentAnnotation.name());
-                        intentFilter.getCategories().add(category);
-                        break;
-                    default:
-                        //noop
-                        break;
-                }
+                addIntent(intentAnnotation, intentFilter);
             }
+        }
+        if (intent != null) {
+            System.out.println("Running intents");
+            if (intentFilter == null) {
+                intentFilter = intentFilterProvider.get();
+                convertedIntentFilters.add(intentFilter);
+            }
+
+            addIntent(intent, intentFilter);
         }
 
         return convertedIntentFilters;
+    }
+
+    private void addIntent(Intent intentAnnotation, IntentFilter intentFilter) {
+        switch (intentAnnotation.type()) {
+            case ACTION:
+                Action action = actionProvider.get();
+                action.setName(intentAnnotation.name());
+                intentFilter.getActions().add(action);
+                break;
+            case CATEGORY:
+                Category category = categoryProvider.get();
+                category.setName(intentAnnotation.name());
+                intentFilter.getCategories().add(category);
+                break;
+            default:
+                //noop
+                break;
+        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
