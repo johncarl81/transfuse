@@ -1,4 +1,4 @@
-package org.androidtransfuse.integrationTest.inject;
+package org.androidtransfuse.integrationTest;
 
 import java.io.Serializable;
 

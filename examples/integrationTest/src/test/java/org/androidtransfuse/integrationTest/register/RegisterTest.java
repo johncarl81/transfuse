@@ -67,7 +67,7 @@ public class RegisterTest {
         button2.performLongClick();
 
         assertTrue(register.getListener2().isClicked());
-        assertFalse(register.getListener2().isLongClicked());
+        assertTrue(register.getListener2().isLongClicked());
     }
 
     @Test

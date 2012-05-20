@@ -3,6 +3,8 @@ package org.androidtransfuse.integrationTest.inject;
 import android.content.Intent;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
+import org.androidtransfuse.integrationTest.SerializableValue;
+import org.androidtransfuse.intentFactory.IntentFactory;
 import org.androidtransfuse.util.TransfuseInjectionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,14 +48,14 @@ public class ExtraInjectionTest {
         setupExtraInjection(null, EXTRA_TWO_VALUE, EXTRA_THREE_VALUE, new SerializableValue(EXTRA_FOUR_VALUE));
     }
 
-    private ExtraInjection setupExtraInjection(String extraOneValue, Long extraTwoValue, String extraThreeValue, SerializableValue seriazableValue) {
-        Intent callingIntent = new Intent("test");
-        callingIntent.putExtra(ExtraInjection.EXTRA_ONE, extraOneValue);
-        callingIntent.putExtra(ExtraInjection.EXTRA_TWO, extraTwoValue);
-        callingIntent.putExtra(ExtraInjection.EXTRA_THREE, extraThreeValue);
-        callingIntent.putExtra(ExtraInjection.EXTRA_FOUR, seriazableValue);
+    private ExtraInjection setupExtraInjection(String extraOneValue, Long extraTwoValue, String extraThreeValue, SerializableValue serializableValue) {
 
         ExtraInjectionActivity extraInjectionActivity = new ExtraInjectionActivity();
+
+        IntentFactory intentFactory = new IntentFactory(extraInjectionActivity);
+        Intent callingIntent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(serializableValue, extraOneValue, extraTwoValue)
+                .setExtraThree(extraThreeValue));
+
         extraInjectionActivity.setIntent(callingIntent);
         extraInjectionActivity.onCreate(null);
 

@@ -5,6 +5,7 @@ import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.integrationTest.SerializableValue;
 
 import javax.inject.Inject;
 
