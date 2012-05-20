@@ -12,7 +12,7 @@ import java.util.Set;
 
 public abstract class Mergeable<T> {
 
-    @XStreamAlias("t")
+    @XStreamAlias("transfuse:tag")
     @XStreamAsAttribute
     private MergeableTags tags = new MergeableTags();
 
