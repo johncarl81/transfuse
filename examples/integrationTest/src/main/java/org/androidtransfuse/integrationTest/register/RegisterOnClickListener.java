@@ -11,6 +11,8 @@ import javax.inject.Inject;
  */
 public class RegisterOnClickListener implements View.OnClickListener, View.OnLongClickListener {
 
+    private static final int ONE_SECOND = 1000;
+
     @Inject
     private Context context;
 
@@ -22,7 +24,7 @@ public class RegisterOnClickListener implements View.OnClickListener, View.OnLon
 
         longClicked = true;
 
-        Toast toast = Toast.makeText(context, "Long Click", 1000);
+        Toast toast = Toast.makeText(context, "Long Click", ONE_SECOND);
         toast.show();
 
         return true;
@@ -33,7 +35,7 @@ public class RegisterOnClickListener implements View.OnClickListener, View.OnLon
 
         clicked = true;
 
-        Toast toast = Toast.makeText(context, "Click", 1000);
+        Toast toast = Toast.makeText(context, "Click", ONE_SECOND);
         toast.show();
     }
 

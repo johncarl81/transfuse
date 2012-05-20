@@ -31,6 +31,8 @@ import java.util.List;
 })
 public class Main {
 
+    private static final long THE_ANSWER = 42;
+
     private List<ActivityListItem> values;
     private ListActivity listActivity;
     private IntentFactory intentFactory;
@@ -75,7 +77,7 @@ public class Main {
     }
 
     private ActivityListItem createExtraLI() {
-        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy("one", 42L));
+        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue("test"), "one", THE_ANSWER));
         return new ActivityListItem(intent, "Extras");
     }
 }

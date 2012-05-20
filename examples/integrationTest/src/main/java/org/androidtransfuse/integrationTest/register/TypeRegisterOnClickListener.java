@@ -14,6 +14,8 @@ import javax.inject.Inject;
 @RegisterListener(R.id.button4)
 public class TypeRegisterOnClickListener implements View.OnClickListener {
 
+    private static final int ONE_SECOND = 1000;
+
     @Inject
     private Context context;
 
@@ -24,7 +26,7 @@ public class TypeRegisterOnClickListener implements View.OnClickListener {
 
         clicked = true;
 
-        Toast toast = Toast.makeText(context, "Type Registration", 1000);
+        Toast toast = Toast.makeText(context, "Type Registration", ONE_SECOND);
         toast.show();
     }
 

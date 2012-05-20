@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 import org.androidtransfuse.processor.Mergeable;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -335,15 +336,17 @@ public class Activity extends Mergeable<String> implements Comparable<Activity> 
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Activity)) return false;
-
-        Activity activity = (Activity) o;
-
-        if (!name.equals(activity.name)) return false;
-
-        return true;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Activity)) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        Activity rhs = (Activity) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .isEquals();
     }
 
     @Override

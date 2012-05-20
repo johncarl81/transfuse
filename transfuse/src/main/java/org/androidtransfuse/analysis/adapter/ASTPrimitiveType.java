@@ -117,4 +117,9 @@ public enum ASTPrimitiveType implements ASTType {
     public boolean implementsFrom(ASTType type) {
         return false;
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
 }

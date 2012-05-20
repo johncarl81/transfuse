@@ -47,4 +47,9 @@ public class ASTClassParameter implements ASTParameter {
     public Collection<ASTAnnotation> getAnnotations() {
         return annotations;
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
 }

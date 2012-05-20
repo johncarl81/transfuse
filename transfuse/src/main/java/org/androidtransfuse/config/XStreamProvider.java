@@ -16,12 +16,7 @@ import java.io.Writer;
 public class XStreamProvider implements Provider<XStream> {
     @Override
     public XStream get() {
-        XStream xStream = new XStream(new XppDriver() {
-            @Override
-            public HierarchicalStreamWriter createWriter(Writer out) {
-                return new PrettyPrintWriter(out, PrettyPrintWriter.XML_QUIRKS, "    ".toCharArray(), getNameCoder());
-            }
-        });
+        XStream xStream = new XStream(new FourSpaceTabXppDriver());
 
         xStream.processAnnotations(Manifest.class);
 
@@ -40,5 +35,13 @@ public class XStreamProvider implements Provider<XStream> {
         xStream.registerConverter(new MergeableTagConverter());
 
         return xStream;
+    }
+
+    private static final class FourSpaceTabXppDriver extends XppDriver {
+
+        @Override
+        public HierarchicalStreamWriter createWriter(Writer out) {
+            return new PrettyPrintWriter(out, PrettyPrintWriter.XML_QUIRKS, "    ".toCharArray(), super.getNameCoder());
+        }
     }
 }

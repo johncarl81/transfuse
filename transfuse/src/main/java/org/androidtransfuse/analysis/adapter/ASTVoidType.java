@@ -103,4 +103,9 @@ public enum ASTVoidType implements ASTType {
     public String getName() {
         return label;
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
 }

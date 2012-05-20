@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * @author John Ericksen
@@ -31,15 +32,17 @@ public class IntentFactoryExtra implements Comparable<IntentFactoryExtra> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof IntentFactoryExtra)) return false;
-
-        IntentFactoryExtra that = (IntentFactoryExtra) o;
-
-        if (!name.equals(that.name)) return false;
-
-        return true;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IntentFactoryExtra)) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        IntentFactoryExtra rhs = (IntentFactoryExtra) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .isEquals();
     }
 
     @Override

@@ -62,6 +62,10 @@ public class Register {
         return listener5Clicked;
     }
 
+    public View.OnClickListener getListener5() {
+        return listener5;
+    }
+
     @OnPause
     public void keepInActivity() {
     }

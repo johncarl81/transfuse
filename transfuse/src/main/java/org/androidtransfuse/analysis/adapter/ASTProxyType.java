@@ -1,5 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -78,31 +81,23 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ASTProxyType)) {
+            return false;
+        }
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof ASTProxyType)) {
-            return false;
-        }
-
-        ASTProxyType that = (ASTProxyType) o;
-
-        if (name != null ? !name.equals(that.name) : that.name != null) {
-            return false;
-        }
-        if (proxyASTType != null ? !proxyASTType.equals(that.proxyASTType) : that.proxyASTType != null) {
-            return false;
-        }
-
-        return true;
+        ASTProxyType rhs = (ASTProxyType) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .append(proxyASTType, rhs.proxyASTType)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = proxyASTType != null ? proxyASTType.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder().append(name).append(proxyASTType).hashCode();
     }
 
     @Override
@@ -123,5 +118,10 @@ public class ASTProxyType implements ASTType {
     @Override
     public boolean implementsFrom(ASTType type) {
         return proxyASTType.implementsFrom(type);
+    }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return proxyASTType.getASTAnnotation(annotation);
     }
 }

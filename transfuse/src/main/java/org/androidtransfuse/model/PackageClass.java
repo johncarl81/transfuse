@@ -1,5 +1,8 @@
 package org.androidtransfuse.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * @author John Ericksen
  */
@@ -69,31 +72,23 @@ public class PackageClass {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof PackageClass)) {
+            return false;
+        }
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        PackageClass that = (PackageClass) o;
-
-        if (!fileName.equals(that.fileName)) {
-            return false;
-        }
-        if (!pkg.equals(that.pkg)) {
-            return false;
-        }
-
-        return true;
+        PackageClass rhs = (PackageClass) obj;
+        return new EqualsBuilder()
+                .append(fileName, rhs.fileName)
+                .append(pkg, rhs.pkg)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = pkg.hashCode();
-        result = 31 * result + fileName.hashCode();
-        return result;
+        return new HashCodeBuilder().append(fileName).append(fileName).hashCode();
     }
 
     public PackageClass replaceName(String replacement) {

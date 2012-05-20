@@ -18,6 +18,7 @@ public class ExtraInjection {
     public static final String EXTRA_ONE = "extraOne";
     public static final String EXTRA_TWO = "extraTwo";
     public static final String EXTRA_THREE = "extraThree";
+    public static final String EXTRA_FOUR = "extraFour";
 
     @Inject
     @Extra(EXTRA_ONE)
@@ -30,6 +31,10 @@ public class ExtraInjection {
     @Inject
     @Extra(value = EXTRA_THREE, optional = true)
     private String extraThree;
+
+    @Inject
+    @Extra(value = EXTRA_FOUR)
+    private SerializableValue extraFour;
 
     @OnPause
     public void keepInActivity() {
@@ -45,5 +50,9 @@ public class ExtraInjection {
 
     public String getExtraThree() {
         return extraThree;
+    }
+
+    public SerializableValue getExtraFour() {
+        return extraFour;
     }
 }

@@ -3,7 +3,7 @@ package org.androidtransfuse.gen;
 import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTElementType;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
@@ -13,6 +13,7 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -23,6 +24,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
     private GeneratedClassAnnotator generatedClassAnnotator;
+    private ASTClassFactory astClassFactory;
 
     private enum PrimitiveExtraMethod {
         PUTBOOLEAN(ASTPrimitiveType.BOOLEAN, "putBoolean"),
@@ -73,10 +75,11 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     @Inject
-    public IntentFactoryStrategyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, GeneratedClassAnnotator generatedClassAnnotator) {
+    public IntentFactoryStrategyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, GeneratedClassAnnotator generatedClassAnnotator, ASTClassFactory astClassFactory) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.generatedClassAnnotator = generatedClassAnnotator;
+        this.astClassFactory = astClassFactory;
     }
 
     @Override
@@ -142,18 +145,10 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
         if (primitiveType != null) {
             methodName = PrimitiveExtraMethod.get(primitiveType).getMethodName();
-        }
-
-        if (type instanceof ASTElementType) {
-
-
-            if (type.getName().equals(String.class.getName())) {
-                methodName = "putString";
-            }
-
-            /*else if(((ASTElementType)type).implmenets(Serializable.class.getName())){
-                methodName = "putSerializable";
-            }*/
+        } else if (type.getName().equals(String.class.getName())) {
+            methodName = "putString";
+        } else if (type.implementsFrom(astClassFactory.buildASTClassType(Serializable.class))) {
+            methodName = "putSerializable";
         }
 
         return methodName;

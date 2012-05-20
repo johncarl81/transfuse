@@ -59,4 +59,9 @@ public class ASTClassMethod implements ASTMethod {
     public ASTAccessModifier getAccessModifier() {
         return modifier;
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
 }

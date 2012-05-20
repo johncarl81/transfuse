@@ -48,7 +48,7 @@ public class ManifestTest {
 
             manifestSerializer.writeManifest(manifest, outputStream);
 
-            String output = new String(outputStream.toByteArray());
+            String output = IOUtils.toString(new ByteArrayInputStream(outputStream.toByteArray()));
 
             assertEquals(formatWhitespace(manifestString), formatWhitespace(output));
 

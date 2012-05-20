@@ -58,6 +58,11 @@ public class ASTClassField implements ASTField {
     }
 
     @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
+
+    @Override
     public Object getConstantValue() {
         try {
             //tricky code to access constant value from the current field

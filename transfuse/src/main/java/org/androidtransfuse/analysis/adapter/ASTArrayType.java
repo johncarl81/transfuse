@@ -94,4 +94,9 @@ public class ASTArrayType implements ASTType {
     public boolean implementsFrom(ASTType type) {
         return delegate.implementsFrom(type);
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return delegate.getASTAnnotation(annotation);
+    }
 }

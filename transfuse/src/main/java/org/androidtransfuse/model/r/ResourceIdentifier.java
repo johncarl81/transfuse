@@ -1,6 +1,8 @@
 package org.androidtransfuse.model.r;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * @author John Ericksen
@@ -24,30 +26,22 @@ public class ResourceIdentifier {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ResourceIdentifier)) {
+            return false;
+        }
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof ResourceIdentifier)) {
-            return false;
-        }
-
-        ResourceIdentifier that = (ResourceIdentifier) o;
-
-        if (!name.equals(that.name)) {
-            return false;
-        }
-        if (!rInnerType.equals(that.rInnerType)) {
-            return false;
-        }
-
-        return true;
+        ResourceIdentifier rhs = (ResourceIdentifier) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .append(rInnerType, rhs.rInnerType)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = rInnerType.hashCode();
-        result = 31 * result + name.hashCode();
-        return result;
+        return new HashCodeBuilder().append(name).append(rInnerType).hashCode();
     }
 }

@@ -84,4 +84,9 @@ public class ASTGenericTypeWrapper implements ASTType {
     public boolean implementsFrom(ASTType type) {
         return astType.implementsFrom(type);
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return astType.getASTAnnotation(annotation);
+    }
 }

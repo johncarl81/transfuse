@@ -35,6 +35,9 @@ public interface ASTBase {
      */
     <A extends Annotation> A getAnnotation(Class<A> annotation);
 
+
+    ASTAnnotation getASTAnnotation(Class annotation);
+
     /**
      * Supplies the name of the current tree node
      *

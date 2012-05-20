@@ -1,6 +1,8 @@
 package org.androidtransfuse.integrationTest;
 
 import android.content.Intent;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class ActivityListItem implements Comparable<ActivityListItem> {
 
@@ -30,19 +32,21 @@ public class ActivityListItem implements Comparable<ActivityListItem> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ActivityListItem)) return false;
-
-        ActivityListItem that = (ActivityListItem) o;
-
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-
-        return true;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ActivityListItem)) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        ActivityListItem rhs = (ActivityListItem) obj;
+        return new EqualsBuilder()
+                .append(name, rhs.name)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        return new HashCodeBuilder().append(name).hashCode();
     }
 }

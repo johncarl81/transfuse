@@ -11,6 +11,8 @@ import javax.inject.Inject;
  */
 public class MethodOnClickListener implements View.OnClickListener {
 
+    private static final int ONE_SECOND = 1000;
+
     @Inject
     private Context context;
 
@@ -21,7 +23,7 @@ public class MethodOnClickListener implements View.OnClickListener {
 
         clicked = true;
 
-        Toast toast = Toast.makeText(context, "Method Registration", 1000);
+        Toast toast = Toast.makeText(context, "Method Registration", ONE_SECOND);
         toast.show();
     }
 

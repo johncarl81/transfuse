@@ -53,4 +53,9 @@ public class ASTClassConstructor implements ASTConstructor {
     public ASTAccessModifier getAccessModifier() {
         return modifier;
     }
+
+    @Override
+    public ASTAnnotation getASTAnnotation(Class annotation) {
+        return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
 }
