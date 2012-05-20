@@ -1,10 +1,14 @@
 package org.androidtransfuse.config;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import org.androidtransfuse.model.manifest.*;
 import org.androidtransfuse.processor.MergeableTagConverter;
 
 import javax.inject.Provider;
+import java.io.Writer;
 
 /**
  * @author John Ericksen
@@ -12,7 +16,12 @@ import javax.inject.Provider;
 public class XStreamProvider implements Provider<XStream> {
     @Override
     public XStream get() {
-        XStream xStream = new XStream();
+        XStream xStream = new XStream(new XppDriver() {
+            @Override
+            public HierarchicalStreamWriter createWriter(Writer out) {
+                return new PrettyPrintWriter(out, PrettyPrintWriter.XML_QUIRKS, "    ".toCharArray(), getNameCoder());
+            }
+        });
 
         xStream.processAnnotations(Manifest.class);
 

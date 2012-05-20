@@ -17,7 +17,11 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
     private Provider<RegistrationAnalyzer> registrationAnalysisProvider;
 
     @Inject
-    public AnalysisRepositoryFactory(Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider, Provider<InjectionAnalyzer> injectionAnalyzerProvider, Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider, Provider<ScopeAnalysis> scopeAnalysisProvider, Provider<RegistrationAnalyzer> registrationAnalysisProvider) {
+    public AnalysisRepositoryFactory(Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider,
+                                     Provider<InjectionAnalyzer> injectionAnalyzerProvider,
+                                     Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider,
+                                     Provider<ScopeAnalysis> scopeAnalysisProvider,
+                                     Provider<RegistrationAnalyzer> registrationAnalysisProvider) {
         this.aopProxyAnalyzerProvider = aopProxyAnalyzerProvider;
         this.injectionAnalyzerProvider = injectionAnalyzerProvider;
         this.methodCallbackAnalysisProvider = methodCallbackAnalysisProvider;
