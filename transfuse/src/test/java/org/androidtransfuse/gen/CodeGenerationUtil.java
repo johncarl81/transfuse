@@ -12,12 +12,20 @@ import java.util.Map;
  */
 public class CodeGenerationUtil {
 
-    @Inject
     private JCodeModel codeModel;
-    @Inject
     private StringCodeWriter stringCodeWriter;
-    @Inject
     private MemoryClassLoader classLoader;
+
+    @Inject
+    public CodeGenerationUtil(JCodeModel codeModel, StringCodeWriter stringCodeWriter, MemoryClassLoader classLoader) {
+        this.codeModel = codeModel;
+        this.stringCodeWriter = stringCodeWriter;
+        this.classLoader = classLoader;
+    }
+
+    public ClassLoader build() throws IOException {
+        return build(false);
+    }
 
     public ClassLoader build(boolean print) throws IOException {
         codeModel.build(stringCodeWriter);

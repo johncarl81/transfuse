@@ -1,6 +1,9 @@
 package org.androidtransfuse.aop;
 
 import android.os.Handler;
+import org.androidtransfuse.util.TransfuseInjectionException;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 
 import javax.inject.Inject;
 
@@ -31,7 +34,11 @@ public class UIThreadMethodInterceptor implements MethodInterceptor {
 
         @Override
         public void run() {
-            methodInvocation.proceed();
+            try {
+                methodInvocation.proceed();
+            } catch (Throwable e) {
+                throw new TransfuseInjectionException("Exception while invoking method on UI thread", e);
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.aop.MethodInvocation;
+import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
@@ -16,6 +16,7 @@ import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -106,6 +107,33 @@ public class AOPProxyGenerator {
         return buildProxyInjectionNode(injectionNode, proxyClassName, injectionAspect, proxyConstructorInjectionPoint);
     }
 
+    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, String proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
+        InjectionNode proxyInjectionNode = new InjectionNode(
+                new ASTProxyType(injectionNode.getASTType(), proxyClassName));
+
+        proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
+
+        //alter construction injection
+        ASTInjectionAspect proxyInjectionAspect = new ASTInjectionAspect();
+        //flag InjectionUtil that it needs to set the super class' fields
+        for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
+            fieldInjectionPoint.setProxied(true);
+        }
+        proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
+        for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
+            methodInjectionPoint.setProxied(true);
+        }
+        proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
+        //replace proxy constructor because of optional interceptor construction parameters
+        proxyInjectionAspect.add(proxyConstructorInjectionPoint);
+
+        proxyInjectionAspect.setAssignmentType(injectionAspect.getAssignmentType());
+
+        proxyInjectionNode.addAspect(proxyInjectionAspect);
+
+        return proxyInjectionNode;
+    }
+
     private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
         ASTMethod method = methodInterceptorEntry.getKey();
 
@@ -151,100 +179,77 @@ public class AOPProxyGenerator {
         }
 
         //aop interceptor
-        Iterator<InjectionNode> interceptorIterator = methodInterceptorEntry.getValue().iterator();
         Map<InjectionNode, JFieldVar> interceptorNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
 
-        body.add(buildInterceptorChain(interceptorIterator, interceptorNameMap, parameterMap, returnType, definedClass, method));
+        JTryBlock tryBlock = body._try();
 
-    }
+        JArray paramArray = JExpr.newArray(codeModel.ref(Object.class));
 
-    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, String proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
-        InjectionNode proxyInjectionNode = new InjectionNode(
-                new ASTProxyType(injectionNode.getASTType(), proxyClassName));
-
-        proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
-
-        //alter construction injection
-        ASTInjectionAspect proxyInjectionAspect = new ASTInjectionAspect();
-        //flag InjectionUtil that it needs to set the super class' fields
-        for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-            fieldInjectionPoint.setProxied(true);
+        for (ASTParameter astParameter : method.getParameters()) {
+            paramArray.add(parameterMap.get(astParameter));
         }
-        proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
-        for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-            methodInjectionPoint.setProxied(true);
-        }
-        proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
-        //replace proxy constructor because of optional interceptor construction parameters
-        proxyInjectionAspect.add(proxyConstructorInjectionPoint);
 
-        proxyInjectionAspect.setAssignmentType(injectionAspect.getAssignmentType());
+        JInvocation interceptorInvocation = buildInterceptorChain(definedClass, method, parameterMap, methodInterceptorEntry.getValue(), interceptorNameMap).invoke("invoke");
+        interceptorInvocation.arg(paramArray);
 
-        proxyInjectionNode.addAspect(proxyInjectionAspect);
-
-        return proxyInjectionNode;
-    }
-
-    private JBlock buildInterceptorChain(Iterator<InjectionNode> interceptorIterator, Map<InjectionNode, JFieldVar> interceptorFieldMap, Map<ASTParameter, JVar> parameterMap, JType returnType, JDefinedClass enclosingClass, ASTMethod method) {
-        JBlock block = new JBlock(false, false);
-
-        if (interceptorIterator.hasNext()) {
-            //try {
-            JTryBlock tryInterceptorBlock = block._try();
-            JBlock tryInterceptorBody = tryInterceptorBlock.body();
-
-            InjectionNode interceptorInjectionNode = interceptorIterator.next();
-
-            JFieldVar interceptorField = interceptorFieldMap.get(interceptorInjectionNode);
-
-            JDefinedClass innerMethodInvocation = codeModel.anonymousClass(codeModel.ref(MethodInvocation.class));
-
-            JClass innerReturnType = codeModel.ref(Object.class);
-            JMethod proceedMethod = innerMethodInvocation.method(JMod.PUBLIC, innerReturnType, PROCEED_METHOD);
-
-            proceedMethod.body().add(
-                    buildInterceptorChain(interceptorIterator, interceptorFieldMap, parameterMap, innerReturnType, enclosingClass, method));
-
-            if (returnType.equals(codeModel.VOID)) {
-                tryInterceptorBody.invoke(interceptorField, INVOKE_METHOD).arg(
-                        JExpr._new(innerMethodInvocation));
-            } else {
-                JClass boxedReturnType = returnType.boxify();
-                if (boxedReturnType.isAssignableFrom(innerReturnType)) {
-                    tryInterceptorBody._return(interceptorField.invoke(INVOKE_METHOD).arg(
-                            JExpr._new(innerMethodInvocation)));
-                } else {
-                    tryInterceptorBody._return(JExpr.cast(boxedReturnType, interceptorField.invoke(INVOKE_METHOD).arg(
-                            JExpr._new(innerMethodInvocation))));
-                }
-            }
-
-            //} catch(Throwable e)
-            JCatchBlock interceptorCatchBlock = tryInterceptorBlock._catch(codeModel.ref(Throwable.class));
-
-            JVar throwableE = interceptorCatchBlock.param("e");
-            JBlock throwableCatchBody = interceptorCatchBlock.body();
-
-            throwableCatchBody._throw(JExpr._new(codeModel.ref(TransfuseAnalysisException.class)).arg(JExpr.lit("exception during method interception")).arg(throwableE));
+        if (method.getReturnType().equals(ASTVoidType.VOID)) {
+            tryBlock.body().add(interceptorInvocation);
         } else {
-            JInvocation superCall = enclosingClass.staticRef(SUPER_REF).invoke(method.getName());
-
-            for (ASTParameter parameter : method.getParameters()) {
-                superCall.arg(parameterMap.get(parameter));
-            }
-
-            if (returnType.equals(codeModel.VOID)) {
-                block.add(superCall);
-            } else {
-                if (method.getReturnType().equals(ASTVoidType.VOID)) {
-                    block.add(superCall);
-                    block._return(JExpr._null());
-                } else {
-                    block._return(superCall);
-                }
-            }
+            tryBlock.body()._return(JExpr.cast(returnType.boxify(), interceptorInvocation));
         }
 
-        return block;
+
+        JCatchBlock catchBlock = tryBlock._catch(codeModel.ref(TransfuseAnalysisException.class));
+        JVar e = catchBlock.param("e");
+
+        catchBlock.body()._throw(JExpr._new(codeModel.ref(TransfuseAnalysisException.class)).arg(JExpr.lit("Error invoking method interceptor")).arg(e));
+
+    }
+
+    private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
+
+        JDefinedClass methodExecutionClass = codeModel.anonymousClass(MethodInterceptorChain.MethodExecution.class);
+
+        //getMethod()
+        JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, "getMethod");
+
+        JInvocation getMethodInvocation = definedClass.dotclass().invoke("getMethod").arg(method.getName());
+        JTryBlock methodTryBlock = getMethod.body()._try();
+
+        methodTryBlock.body()._return(getMethodInvocation);
+
+        methodTryBlock._catch(codeModel.ref(NoSuchMethodException.class))
+                .body()._throw(JExpr._new(codeModel.ref(TransfuseAnalysisException.class))
+                .arg(JExpr.lit("Error while calling getMethod")));
+
+        for (ASTParameter astParameter : method.getParameters()) {
+            getMethodInvocation.arg(codeModel.ref(astParameter.getASTType().getName()).dotclass());
+        }
+
+        //invoke()
+        JMethod invokeMethod = methodExecutionClass.method(JMod.PUBLIC, Object.class, INVOKE_METHOD);
+
+        JInvocation superCall = definedClass.staticRef(SUPER_REF).invoke(method.getName());
+
+        for (ASTParameter parameter : method.getParameters()) {
+            superCall.arg(parameterMap.get(parameter));
+        }
+
+        if (method.getReturnType() == ASTVoidType.VOID) {
+            invokeMethod.body().add(superCall);
+            invokeMethod.body()._return(JExpr._null());
+        } else {
+            invokeMethod.body()._return(superCall);
+        }
+
+        JInvocation newInterceptorInvocation = JExpr._new(codeModel.ref(MethodInterceptorChain.class))
+                .arg(JExpr._new(methodExecutionClass))
+                .arg(JExpr._this());
+
+        for (InjectionNode interceptor : interceptors) {
+            newInterceptorInvocation.arg(interceptorNameMap.get(interceptor));
+        }
+
+        return newInterceptorInvocation;
     }
 }

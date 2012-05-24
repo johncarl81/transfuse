@@ -66,7 +66,7 @@ public class VirtualProxyGeneratorTest {
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
 
-        ClassLoader classLoader = codeGenerationUtil.build(false);
+        ClassLoader classLoader = codeGenerationUtil.build();
 
         Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
 

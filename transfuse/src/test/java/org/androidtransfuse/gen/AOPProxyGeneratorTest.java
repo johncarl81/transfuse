@@ -12,7 +12,6 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.gen.proxy.MockDelegate;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
@@ -47,8 +46,6 @@ public class AOPProxyGeneratorTest {
 
     private InjectionNode delegateInjectionNode;
     @Inject
-    private AOPProxyGenerator aopProxyGenerator;
-    @Inject
     private ASTClassFactory astClassFactory;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
@@ -57,8 +54,6 @@ public class AOPProxyGeneratorTest {
     @Inject
     private SimpleAnalysisContextFactory contextFactory;
     private ASTType delegateAST;
-    @Inject
-    private MockMethodInterceptor mockMethodInterceptor;
     @Inject
     private InjectionFragmentGeneratorHarness fragmentGeneratorHarness;
     @Inject
@@ -133,7 +128,7 @@ public class AOPProxyGeneratorTest {
     private void buildAndTest(InjectionNode delegateInjectionNode) throws ClassNotFoundException, JClassAlreadyExistsException, IOException, IllegalAccessException, InstantiationException {
         fragmentGeneratorHarness.buildProvider(delegateInjectionNode, TEST_PACKAGE_FILENAME);
 
-        ClassLoader classLoader = codeGenerationUtil.build(false);
+        ClassLoader classLoader = codeGenerationUtil.build();
         Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
 
         assertNotNull(generatedFactoryClass);

@@ -1,6 +1,9 @@
 package org.androidtransfuse.aop;
 
 import android.os.AsyncTask;
+import org.androidtransfuse.util.TransfuseInjectionException;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author John Ericksen
@@ -26,7 +29,11 @@ public class AsynchronousMethodInterceptor implements MethodInterceptor {
 
         @Override
         protected Object doInBackground(Object... objects) {
-            return invocation.proceed();
+            try {
+                return invocation.proceed();
+            } catch (Throwable e) {
+                throw new TransfuseInjectionException("Exception while invoking background method", e);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 package org.androidtransfuse.example.simple;
 
 import android.util.Log;
-import org.androidtransfuse.aop.MethodInterceptor;
-import org.androidtransfuse.aop.MethodInvocation;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author John Ericksen
