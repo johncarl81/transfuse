@@ -10,7 +10,7 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public class AsynchronousMethodInterceptor implements MethodInterceptor {
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(MethodInvocation invocation) {
         AsyncTask task = new MethodInterceptorAsyncTask(invocation);
 
         task.execute();

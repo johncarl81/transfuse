@@ -28,7 +28,7 @@ public class ManifestTest {
     private ManifestSerializer manifestSerializer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
     }

@@ -16,7 +16,7 @@ public class UIThreadMethodInterceptor implements MethodInterceptor {
     private Handler handler;
 
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(MethodInvocation invocation) {
 
         handler.post(new MethodInvocationRunnable(invocation));
 

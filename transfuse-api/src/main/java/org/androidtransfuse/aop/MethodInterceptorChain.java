@@ -39,7 +39,11 @@ public class MethodInterceptorChain {
 
         @Override
         public Method getMethod() {
-            return methodExecution.getMethod();
+            try {
+                return methodExecution.getMethod();
+            } catch (Exception e) {
+                throw new TransfuseInjectionException("Error while calling getMethod", e);
+            }
         }
 
         @Override
@@ -74,7 +78,7 @@ public class MethodInterceptorChain {
 
     public interface MethodExecution {
 
-        Method getMethod();
+        Method getMethod() throws Exception;
 
         Object invoke();
     }

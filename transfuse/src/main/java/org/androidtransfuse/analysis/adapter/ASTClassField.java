@@ -83,7 +83,7 @@ public class ASTClassField implements ASTField {
         }
 
         @Override
-        public Object run(Field classField) throws Exception {
+        public Object run(Field classField) throws IllegalAccessException {
             return classField.get(null);
         }
 

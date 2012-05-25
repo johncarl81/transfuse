@@ -42,7 +42,7 @@ public class SecondActivityTest {
     }
 
     @Test
-    public void testStringArray() throws Exception {
+    public void testStringArray() {
         assertNotNull(secondActivityDelegate.getSimpleStringArray());
         assertEquals(2, secondActivityDelegate.getSimpleStringArray().length);
     }

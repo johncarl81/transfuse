@@ -161,12 +161,8 @@ public class AOPProxyGenerator {
             proxyConstructorInjectionPoint.addInjectionNode(interceptorInjectionNode);
         }
 
-        JType returnType;
-        if (method.getReturnType().equals(ASTVoidType.VOID)) {
-            returnType = codeModel.VOID;
-        } else {
-            returnType = codeModel.parseType(method.getReturnType().getName());
-        }
+        JType returnType = codeModel.parseType(method.getReturnType().getName());
+
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
         JBlock body = methodDeclaration.body();
 
@@ -181,8 +177,6 @@ public class AOPProxyGenerator {
         //aop interceptor
         Map<InjectionNode, JFieldVar> interceptorNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
 
-        JTryBlock tryBlock = body._try();
-
         JArray paramArray = JExpr.newArray(codeModel.ref(Object.class));
 
         for (ASTParameter astParameter : method.getParameters()) {
@@ -193,17 +187,10 @@ public class AOPProxyGenerator {
         interceptorInvocation.arg(paramArray);
 
         if (method.getReturnType().equals(ASTVoidType.VOID)) {
-            tryBlock.body().add(interceptorInvocation);
+            body.add(interceptorInvocation);
         } else {
-            tryBlock.body()._return(JExpr.cast(returnType.boxify(), interceptorInvocation));
+            body._return(JExpr.cast(returnType.boxify(), interceptorInvocation));
         }
-
-
-        JCatchBlock catchBlock = tryBlock._catch(codeModel.ref(TransfuseAnalysisException.class));
-        JVar e = catchBlock.param("e");
-
-        catchBlock.body()._throw(JExpr._new(codeModel.ref(TransfuseAnalysisException.class)).arg(JExpr.lit("Error invoking method interceptor")).arg(e));
-
     }
 
     private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
@@ -214,13 +201,8 @@ public class AOPProxyGenerator {
         JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, "getMethod");
 
         JInvocation getMethodInvocation = definedClass.dotclass().invoke("getMethod").arg(method.getName());
-        JTryBlock methodTryBlock = getMethod.body()._try();
-
-        methodTryBlock.body()._return(getMethodInvocation);
-
-        methodTryBlock._catch(codeModel.ref(NoSuchMethodException.class))
-                .body()._throw(JExpr._new(codeModel.ref(TransfuseAnalysisException.class))
-                .arg(JExpr.lit("Error while calling getMethod")));
+        getMethod.body()._return(getMethodInvocation);
+        getMethod._throws(NoSuchMethodException.class);
 
         for (ASTParameter astParameter : method.getParameters()) {
             getMethodInvocation.arg(codeModel.ref(astParameter.getASTType().getName()).dotclass());

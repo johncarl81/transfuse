@@ -2,6 +2,7 @@ package org.androidtransfuse.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
@@ -54,7 +55,7 @@ public final class InjectionUtil {
         }
 
         @Override
-        public T run(Field classField) throws java.lang.Exception {
+        public T run(Field classField) throws IllegalAccessException {
             return (T) classField.get(target);
         }
     }
@@ -88,7 +89,7 @@ public final class InjectionUtil {
         }
 
         @Override
-        public Void run(Field classField) throws java.lang.Exception {
+        public Void run(Field classField) throws IllegalAccessException {
             classField.set(target, source);
 
             return null;
@@ -122,7 +123,7 @@ public final class InjectionUtil {
             this.args = args;
         }
 
-        public Void run(Method classMethod) throws Exception {
+        public Void run(Method classMethod) throws InvocationTargetException, IllegalAccessException {
             classMethod.invoke(target, args);
             return null;
         }
@@ -157,7 +158,7 @@ public final class InjectionUtil {
         }
 
         @Override
-        public T run(Constructor classConstructor) throws Exception {
+        public T run(Constructor classConstructor) throws InvocationTargetException, InstantiationException, IllegalAccessException {
             return (T) classConstructor.newInstance(args);
         }
     }

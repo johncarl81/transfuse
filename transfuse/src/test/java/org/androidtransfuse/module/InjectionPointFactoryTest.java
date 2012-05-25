@@ -42,7 +42,7 @@ public class InjectionPointFactoryTest {
     private InjectionPointFactory injectionPointFactory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
         emptyContext = contextFactory.buildContext();
