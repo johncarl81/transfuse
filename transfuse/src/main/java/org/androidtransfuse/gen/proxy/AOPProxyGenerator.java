@@ -26,8 +26,8 @@ import java.util.*;
 public class AOPProxyGenerator {
 
     private static final String INVOKE_METHOD = "invoke";
-    private static final String PROCEED_METHOD = "proceed";
     private static final String SUPER_REF = "super";
+    private static final String GET_METHOD = "getMethod";
 
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
@@ -198,9 +198,9 @@ public class AOPProxyGenerator {
         JDefinedClass methodExecutionClass = codeModel.anonymousClass(MethodInterceptorChain.MethodExecution.class);
 
         //getMethod()
-        JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, "getMethod");
+        JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, GET_METHOD);
 
-        JInvocation getMethodInvocation = definedClass.dotclass().invoke("getMethod").arg(method.getName());
+        JInvocation getMethodInvocation = definedClass.dotclass().invoke(GET_METHOD).arg(method.getName());
         getMethod.body()._return(getMethodInvocation);
         getMethod._throws(NoSuchMethodException.class);
 

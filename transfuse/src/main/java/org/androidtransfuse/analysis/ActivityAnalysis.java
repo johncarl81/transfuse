@@ -168,10 +168,6 @@ public class ActivityAnalysis {
         manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
         manifestActivity.setIntentFilters(buildIntentFilters(intentFilters, intent));
 
-        if (manifestActivity.getIntentFilters().size() > 0) {
-            System.out.println("Intents for: " + name + " size: " + manifestActivity.getIntentFilters().get(0).getCategories().size());
-        }
-
         if (application.getActivities() == null) {
             application.setActivities(new ArrayList<org.androidtransfuse.model.manifest.Activity>());
         }
@@ -190,8 +186,6 @@ public class ActivityAnalysis {
 
         IntentFilter intentFilter = null;
         if (intentFilters != null) {
-            System.out.println("Runnning intentFilters");
-
             intentFilter = intentFilterProvider.get();
             convertedIntentFilters.add(intentFilter);
 
@@ -200,7 +194,6 @@ public class ActivityAnalysis {
             }
         }
         if (intent != null) {
-            System.out.println("Running intents");
             if (intentFilter == null) {
                 intentFilter = intentFilterProvider.get();
                 convertedIntentFilters.add(intentFilter);

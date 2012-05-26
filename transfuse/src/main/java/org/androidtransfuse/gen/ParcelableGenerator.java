@@ -1,15 +1,21 @@
 package org.androidtransfuse.gen;
 
+import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.SparseBooleanArray;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTArrayType;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.util.ParcelableWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +37,54 @@ public class ParcelableGenerator {
     private UniqueVariableNamer namer;
     private ASTClassFactory astClassFactory;
     private Map<ASTType, JDefinedClass> parceableMap = new HashMap<ASTType, JDefinedClass>();
+    private Map<ASTType, ReadWritePair> parceableModifier = new HashMap<ASTType, ReadWritePair>();
 
     @Inject
     public ParcelableGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ASTClassFactory astClassFactory) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.astClassFactory = astClassFactory;
+
+        addPrimitivePair(ASTPrimitiveType.BYTE, "readByte", "writeByte");
+        addPrimitivePair(ASTPrimitiveType.DOUBLE, "readDouble", "writeDouble");
+        addPrimitivePair(ASTPrimitiveType.FLOAT, "readFloat", "writeFloat");
+        addPrimitivePair(ASTPrimitiveType.INT, "readInt", "writeInt");
+        addPrimitivePair(ASTPrimitiveType.LONG, "readLong", "writeLong");
+        /*addPrimitiveArrayPair(ASTPrimitiveType.BYTE, "readByteArray", "writeByteArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.CHAR, "readCharArray", "writeCharArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.BOOLEAN, "readIntArray", "writeBooleanArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.INT, "readByteArray", "writeIntArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.LONG, "readLongArray", "writeLongArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.FLOAT, "readFloatArray", "writeFloatArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.DOUBLE, "readDoubleArray", "writeDoubleArray");*/
+        //addPair(String[].class, "readStringArray", "writeStringArray");
+        addPair(String.class, "readString", "writeString");
+        addPair(IBinder.class, "readStrongBinder", "writeStrongBinder");
+        addPair(Bundle.class, "readBundle", "writeBundle");
+        //addPair(Object[].class, "readArray", "writeArray");
+        //addPair(SparseArray.class, "readSparseArray", "writeSparseArray");
+        addPair(SparseBooleanArray.class, "readSparseBooleanArray", "writeSparseBooleanArray");
+        //addPair(Parcelable.class, "readParcelable", "writeParcelable");
+        addPair(Serializable.class, "readSerializable", "writeSerializable");
+        addPair(Exception.class, "readException", "writeException");
+    }
+
+    private void addPair(Class clazz, String readMethod, String writeMethod) {
+        addPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
+    }
+
+    private void addPrimitiveArrayPair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
+        addPair(new ASTArrayType(primitiveType), readMethod, writeMethod);
+        addPair(new ASTArrayType(astClassFactory.buildASTClassType(primitiveType.getObjectClass())), readMethod, writeMethod);
+    }
+
+    private void addPrimitivePair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
+        addPair(primitiveType, readMethod, writeMethod);
+        addPair(astClassFactory.buildASTClassType(primitiveType.getObjectClass()), readMethod, writeMethod);
+    }
+
+    private void addPair(ASTType astType, String readMethod, String writeMethod) {
+        parceableModifier.put(astType, new ReadWritePair(readMethod, writeMethod));
     }
 
     public void generateParcelable(ASTType type, List<GetterSetterMethodPair> propertyMutators) {
@@ -68,7 +116,7 @@ public class ParcelableGenerator {
             //read from parcel
             for (GetterSetterMethodPair propertyMutator : propertyMutators) {
                 parcelConstructorBody.invoke(wrapped, propertyMutator.getSetter().getName()).arg(
-                        parcelParam.invoke(getMethodForType(propertyMutator.getGetter().getReturnType())));
+                        parcelParam.invoke(getGetter(propertyMutator.getGetter().getReturnType())));
             }
 
             //@Parcel input
@@ -79,7 +127,7 @@ public class ParcelableGenerator {
             //writeToParcel(android.os.Parcel,int)
             JMethod writeToParcelMethod = parcelableClass.method(JMod.PUBLIC, codeModel.VOID, WRITE_TO_PARCEL);
             JVar wtParcelParam = writeToParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
-            JVar flagsParam = writeToParcelMethod.param(codeModel.INT, "flags");
+            writeToParcelMethod.param(codeModel.INT, "flags");
 
             for (GetterSetterMethodPair propertyMutator : propertyMutators) {
 
@@ -136,23 +184,17 @@ public class ParcelableGenerator {
     }
 
     private String getSetter(ASTType returnType) {
-        if (returnType.equals(astClassFactory.buildASTClassType(String.class))) {
-            return "writeString";
+        if (parceableModifier.containsKey(returnType)) {
+            return parceableModifier.get(returnType).getWriteMethod();
         }
-        if (returnType.equals(astClassFactory.buildASTClassType(Double.class))) {
-            return "writeDouble";
-        }
-        return null;
+        throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to write " + returnType.getName());
     }
 
-    private String getMethodForType(ASTType returnType) {
-        if (returnType.equals(astClassFactory.buildASTClassType(String.class))) {
-            return "readString";
+    private String getGetter(ASTType returnType) {
+        if (parceableModifier.containsKey(returnType)) {
+            return parceableModifier.get(returnType).getReadMethod();
         }
-        if (returnType.equals(astClassFactory.buildASTClassType(Double.class))) {
-            return "readDouble";
-        }
-        return null;
+        throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to read " + returnType.getName());
     }
 
 
@@ -162,5 +204,23 @@ public class ParcelableGenerator {
         }
         //todo: throw exception?
         return null;
+    }
+
+    public class ReadWritePair {
+        String readMethod;
+        String writeMethod;
+
+        public ReadWritePair(String readMethod, String writeMethod) {
+            this.readMethod = readMethod;
+            this.writeMethod = writeMethod;
+        }
+
+        public String getReadMethod() {
+            return readMethod;
+        }
+
+        public String getWriteMethod() {
+            return writeMethod;
+        }
     }
 }

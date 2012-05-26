@@ -5,8 +5,8 @@ import android.os.Parcelable;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.util.JavaUtilLogger;
@@ -20,8 +20,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -40,6 +38,8 @@ public class ParcelableGeneratorTest {
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private ParcelableGenerator parcelableGenerator;
+    @Inject
+    private ParcelableAnalysis parcelableAnalysis;
 
     private ASTType mockParcelASTType;
     private ParcelTarget parcelTarget;
@@ -72,12 +72,7 @@ public class ParcelableGeneratorTest {
 
         PowerMock.replay(mockParcel);
 
-        Collection<ASTMethod> methods = mockParcelASTType.getMethods();
-
-        List<GetterSetterMethodPair> methodPair = new ArrayList<GetterSetterMethodPair>();
-
-        methodPair.add(new GetterSetterMethodPair(getMethod("getStringValue", methods), getMethod("setStringValue", methods)));
-        methodPair.add(new GetterSetterMethodPair(getMethod("getDoubleValue", methods), getMethod("setDoubleValue", methods)));
+        List<GetterSetterMethodPair> methodPair = parcelableAnalysis.analyze(mockParcelASTType);
 
         parcelableGenerator.generateParcelable(mockParcelASTType, methodPair);
 
@@ -95,14 +90,5 @@ public class ParcelableGeneratorTest {
         assertEquals(parcelTarget, wrapped);
 
         PowerMock.verify(mockParcel);
-    }
-
-    private ASTMethod getMethod(String methodName, Collection<ASTMethod> methods) {
-        for (ASTMethod method : methods) {
-            if (method.getName().equals(methodName)) {
-                return method;
-            }
-        }
-        return null;
     }
 }
