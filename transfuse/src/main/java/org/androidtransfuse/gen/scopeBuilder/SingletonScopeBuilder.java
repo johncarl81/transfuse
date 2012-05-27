@@ -23,7 +23,6 @@ import java.util.Map;
 public class SingletonScopeBuilder implements VariableBuilder {
 
     private static final String GET_SCOPED_OBJECT = "getScopedObject";
-    private static final String CLASS_REF = "class";
 
     private ProviderGenerator providerGenerator;
     private InjectionNode applicationInjectionNode;
@@ -50,7 +49,7 @@ public class SingletonScopeBuilder implements VariableBuilder {
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).staticRef(CLASS_REF);
+        JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
         JExpression scopeVar = JExpr.cast(codeModel._ref(Scope.class), applicationVar);
 
         return scopeVar.invoke(GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);

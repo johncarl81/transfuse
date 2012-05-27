@@ -38,4 +38,8 @@ public class MethodDescriptor {
     public ASTMethod getASTMethod() {
         return astMethod;
     }
+
+    public Map<ASTParameter, JExpression> getParameters() {
+        return parameterMap;
+    }
 }

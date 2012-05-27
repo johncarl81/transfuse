@@ -77,16 +77,13 @@ public class ApplicationAnalysis {
     public ComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType, AnalysisRepository analysisRepository) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
-        String name = astType.getName();
-        //todo:generalize package/name separation
-        String packageName = name.substring(0, name.lastIndexOf('.'));
-        String deleagateName = name.substring(name.lastIndexOf('.') + 1);
+        PackageClass inputType = new PackageClass(astType.getName());
         PackageClass applicationClassName;
 
         if (StringUtils.isBlank(applicationAnnotation.name())) {
-            applicationClassName = new PackageClass(packageName, deleagateName + "Application");
+            applicationClassName = inputType.appendName("Application");
         } else {
-            applicationClassName = new PackageClass(packageName, applicationAnnotation.name());
+            applicationClassName = inputType.replaceName(applicationAnnotation.name());
         }
 
         ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);

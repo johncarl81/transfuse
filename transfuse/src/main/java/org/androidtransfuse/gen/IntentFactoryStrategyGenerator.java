@@ -102,7 +102,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             JBlock constructorBody = constructor.body();
 
             constructorBody.add(JExpr.invoke("super")
-                    .arg(codeModel.ref(descriptor.getPackageClass().getFullyQualifiedName()).staticRef("class"))
+                    .arg(codeModel.ref(descriptor.getPackageClass().getFullyQualifiedName()).dotclass())
                     .arg(JExpr._new(codeModel._ref(Bundle.class)))
             );
 

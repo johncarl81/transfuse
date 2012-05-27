@@ -6,7 +6,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.InjectionInvocationBuilder;
+import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -27,7 +27,7 @@ public class ViewVariableBuilder implements VariableBuilder {
     private RResourceReferenceBuilder rResourceReferenceBuilder;
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
-    private InjectionInvocationBuilder injectionInvocationBuilder;
+    private InvocationBuilder injectionInvocationBuilder;
 
     @Inject
     public ViewVariableBuilder(@Assisted int viewId,
@@ -36,7 +36,7 @@ public class ViewVariableBuilder implements VariableBuilder {
                                InjectionExpressionBuilder injectionExpressionBuilder,
                                RResourceReferenceBuilder rResourceReferenceBuilder,
                                JCodeModel codeModel,
-                               InjectionInvocationBuilder injectionInvocationBuilder,
+                               InvocationBuilder injectionInvocationBuilder,
                                UniqueVariableNamer variableNamer) {
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
@@ -80,7 +80,7 @@ public class ViewVariableBuilder implements VariableBuilder {
                 //field injection
                 for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
                     block.add(
-                            injectionInvocationBuilder.buildFieldInjection(
+                            injectionInvocationBuilder.buildFieldSet(
                                     injectionBuilderContext.getVariableMap(),
                                     fieldInjectionPoint,
                                     variableRef));
@@ -89,7 +89,7 @@ public class ViewVariableBuilder implements VariableBuilder {
                 //method injection
                 for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
                     block.add(
-                            injectionInvocationBuilder.buildMethodInjection(
+                            injectionInvocationBuilder.buildMethodCall(
                                     injectionBuilderContext.getVariableMap(),
                                     methodInjectionPoint,
                                     variableRef));

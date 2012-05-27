@@ -92,6 +92,10 @@ public class PackageClass {
     }
 
     public PackageClass replaceName(String replacement) {
-        return new PackageClass(pkg, replacement, false);
+        return new PackageClass(pkg, replacement);
+    }
+
+    public PackageClass appendName(String append) {
+        return new PackageClass(pkg, fileName + append);
     }
 }

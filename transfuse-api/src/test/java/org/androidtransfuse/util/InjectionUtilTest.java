@@ -25,7 +25,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setMethod(target, 0, "setValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.callMethod(Void.class, target, 0, "setValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -36,14 +36,14 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setMethod(target, 1, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.callMethod(Void.class, target, 1, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
 
     @Test
     public void testPrivateConstructorInjection() {
-        Target target = injectionUtil.setConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
+        Target target = injectionUtil.callConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(target.getValue(), TEST_VALUE);
     }

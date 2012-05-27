@@ -25,17 +25,17 @@ public class ActivityLifecycle {
     }
 
     @OnDestroy
-    public void onDestroy() {
+    protected void onDestroy() {
         onDestroy = true;
     }
 
     @OnStop
-    public void onStop() {
+    private void onStop() {
         onStop = true;
     }
 
     @OnPause
-    public void onPause() {
+    void onPause() {
         onPause = true;
     }
 

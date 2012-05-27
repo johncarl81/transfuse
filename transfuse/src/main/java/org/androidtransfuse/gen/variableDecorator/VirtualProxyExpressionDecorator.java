@@ -38,9 +38,7 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
         Map<InjectionNode, JExpression> variableMap = injectionBuilderContext.getVariableMap();
         JExpression variable;
 
-        boolean proxyable = proxyAspect != null && proxyAspect.isProxyRequired();
-
-        if (proxyable) {
+        if (proxyAspect != null && proxyAspect.isProxyRequired()) {
             //proxy
             ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
             JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(injectionBuilderContext, injectionNode, proxyDescriptor);

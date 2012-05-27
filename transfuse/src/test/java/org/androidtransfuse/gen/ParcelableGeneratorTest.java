@@ -76,7 +76,7 @@ public class ParcelableGeneratorTest {
 
         parcelableGenerator.generateParcelable(mockParcelASTType, methodPair);
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build();
         Class<Parcelable> parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType));
 
         Parcelable outputParcelable = parcelableClass.getConstructor(ParcelTarget.class).newInstance(parcelTarget);

@@ -15,10 +15,10 @@ public final class InjectionUtil {
     private static final InjectionUtil INSTANCE = new InjectionUtil();
 
     public static final String GET_INSTANCE_METHOD = "getInstance";
-    public static final String SET_FIELD_METHOD = "setField";
-    public static final String SET_METHOD_METHOD = "setMethod";
-    public static final String SET_CONSTRUCTOR_METHOD = "setConstructor";
     public static final String GET_FIELD_METHOD = "getField";
+    public static final String SET_FIELD_METHOD = "setField";
+    public static final String CALL_METHOD_METHOD = "callMethod";
+    public static final String CALL_CONSTRUCTOR_METHOD = "callConstructor";
 
     public static InjectionUtil getInstance() {
         return INSTANCE;
@@ -96,12 +96,12 @@ public final class InjectionUtil {
         }
     }
 
-    public void setMethod(Object target, int superLevel, String method, Class[] argClasses, Object[] args) {
+    public <T> T callMethod(Class<T> retClass, Object target, int superLevel, String method, Class[] argClasses, Object[] args) {
         try {
             Method classMethod = getSuperClass(target.getClass(), superLevel).getDeclaredMethod(method, argClasses);
 
-            AccessController.doPrivileged(
-                    new SetMethodPrivilegedAction(classMethod, target, args));
+            return AccessController.doPrivileged(
+                    new SetMethodPrivilegedAction<T>(classMethod, target, args));
 
         } catch (NoSuchMethodException e) {
             throw new TransfuseInjectionException("Exception during method injection: NoSuchFieldException", e);
@@ -112,7 +112,7 @@ public final class InjectionUtil {
         }
     }
 
-    private static final class SetMethodPrivilegedAction extends AccessibleElementPrivilegedAction<Void, Method> {
+    private static final class SetMethodPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Method> {
 
         private Object target;
         private Object[] args;
@@ -123,14 +123,13 @@ public final class InjectionUtil {
             this.args = args;
         }
 
-        public Void run(Method classMethod) throws InvocationTargetException, IllegalAccessException {
-            classMethod.invoke(target, args);
-            return null;
+        public T run(Method classMethod) throws InvocationTargetException, IllegalAccessException {
+            return (T) classMethod.invoke(target, args);
         }
     }
 
 
-    public <T> T setConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
+    public <T> T callConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
         T output;
 
         try {

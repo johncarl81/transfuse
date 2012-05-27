@@ -93,7 +93,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
                         .arg(variableExpression)
                         .arg(JExpr.lit(0))
                         .arg(listenerRegistration.getASTBase().getName())
-                        .arg(codeModel.ref(listenerRegistration.getASTBase().getASTType().getName()).staticRef("class")));
+                        .arg(codeModel.ref(listenerRegistration.getASTBase().getASTType().getName()).dotclass()));
             }
         }
     }
