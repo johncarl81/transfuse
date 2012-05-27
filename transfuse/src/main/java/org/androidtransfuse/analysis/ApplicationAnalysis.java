@@ -10,7 +10,10 @@ import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
+import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -32,7 +35,6 @@ public class ApplicationAnalysis {
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
-    private Provider<ScopingComponentBuilder> scopingComponentBuilderProvider;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
     private AnalysisContextFactory analysisContextFactory;
@@ -44,7 +46,6 @@ public class ApplicationAnalysis {
                                Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
-                               Provider<ScopingComponentBuilder> scopingComponentBuilderProvider,
                                ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory, AnalysisContextFactory analysisContextFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.contextVariableBuilderProvider = contextVariableBuilderProvider;
@@ -52,7 +53,6 @@ public class ApplicationAnalysis {
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationProvider = applicationProvider;
         this.injectionNodeBuilders = injectionNodeBuilders;
-        this.scopingComponentBuilderProvider = scopingComponentBuilderProvider;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -116,9 +116,6 @@ public class ApplicationAnalysis {
             onCreateComponentBuilder.addMethodCallbackBuilder(
                     componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
                             componentBuilderFactory.buildSimpleMethodGenerator(onConfigurationChangedASTMethod, true)));
-
-            //scoping
-            applicationDescriptor.getComponentBuilders().add(scopingComponentBuilderProvider.get());
 
             applicationDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
         } catch (NoSuchMethodException e) {

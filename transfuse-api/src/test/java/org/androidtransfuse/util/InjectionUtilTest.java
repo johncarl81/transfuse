@@ -3,8 +3,9 @@ package org.androidtransfuse.util;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import java.lang.reflect.Method;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author John Ericksen
@@ -78,5 +79,20 @@ public class InjectionUtilTest {
         injectionUtil.setField(target, 1, "superValue", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getSuperValue());
+    }
+
+    @Test
+    public void verifyMethodNames() throws NoSuchMethodException {
+
+        Method getInstanceMethod = InjectionUtil.class.getMethod(InjectionUtil.GET_INSTANCE_METHOD);
+        assertNotNull(getInstanceMethod);
+        Method callConstructorMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_CONSTRUCTOR_METHOD, Class.class, Class[].class, Object[].class);
+        assertNotNull(callConstructorMethod);
+        Method callMethodMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_METHOD_METHOD, Class.class, Object.class, int.class, String.class, Class[].class, Object[].class);
+        assertNotNull(callMethodMethod);
+        Method getFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.GET_FIELD_METHOD, Class.class, Object.class, int.class, String.class);
+        assertNotNull(getFieldMethod);
+        Method setFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.SET_FIELD_METHOD, Object.class, int.class, String.class, Object.class);
+        assertNotNull(setFieldMethod);
     }
 }
