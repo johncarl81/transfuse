@@ -12,8 +12,16 @@ public class Target extends TargetSuper {
         this.value = value;
     }
 
-    private void setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
+    }
+
+    private void setPrivateValue(String value) {
+        this.value = value;
+    }
+
+    private String getPrivateValue() {
+        return value;
     }
 
     public String getValue() {

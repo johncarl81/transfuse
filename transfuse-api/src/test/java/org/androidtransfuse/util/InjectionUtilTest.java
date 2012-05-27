@@ -25,9 +25,19 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.callMethod(Void.class, target, 0, "setValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.callMethod(Void.class, target, 0, "setPrivateValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getValue());
+    }
+
+    @Test
+    public void testPrivateMethodGet() {
+        Target target = new Target();
+
+        assertNull(target.getValue());
+        target.setValue(TEST_VALUE);
+
+        assertEquals(TEST_VALUE, injectionUtil.callMethod(String.class, target, 0, "getPrivateValue", new Class[]{}, new Object[]{}));
     }
 
     @Test

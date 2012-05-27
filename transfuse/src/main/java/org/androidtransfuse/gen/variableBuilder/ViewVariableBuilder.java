@@ -90,6 +90,7 @@ public class ViewVariableBuilder implements VariableBuilder {
                 for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
                     block.add(
                             injectionInvocationBuilder.buildMethodCall(
+                                    Object.class.getName(),
                                     injectionBuilderContext.getVariableMap(),
                                     methodInjectionPoint,
                                     variableRef));

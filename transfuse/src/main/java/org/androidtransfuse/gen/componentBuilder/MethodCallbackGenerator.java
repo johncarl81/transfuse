@@ -48,6 +48,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                     for (MethodCallbackAspect.MethodCallback methodCallback : methods) {
 
                         JStatement methodCall = invocationBuilder.buildMethodCall(
+                                Object.class.getName(),
                                 methodDescriptor.getASTMethod().getParameters(),
                                 methodDescriptor.getParameters(),
                                 injectionNodeJExpressionEntry.getValue(),

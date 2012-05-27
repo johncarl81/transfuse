@@ -1,6 +1,9 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
@@ -9,11 +12,12 @@ import org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
-import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,12 +27,12 @@ import java.util.Set;
 public class ListenerRegistrationGenerator implements ExpressionVariableDependentGenerator {
 
     private InjectionFragmentGenerator injectionFragmentGenerator;
-    private JCodeModel codeModel;
+    private InvocationBuilder invocationBuilder;
 
     @Inject
-    public ListenerRegistrationGenerator(InjectionFragmentGenerator injectionFragmentGenerator, JCodeModel codeModel) {
+    public ListenerRegistrationGenerator(InjectionFragmentGenerator injectionFragmentGenerator, InvocationBuilder invocationBuilder) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
-        this.codeModel = codeModel;
+        this.invocationBuilder = invocationBuilder;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
 
             for (String listenerMethod : methodRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod)
-                        .arg(variableExpression.invoke(methodRegistration.getASTBase().getName()));
+                        .arg(invocationBuilder.buildMethodCall(methodRegistration.getASTBase().getReturnType().getName(), Collections.EMPTY_LIST, Collections.EMPTY_MAP, variableExpression, methodRegistration.getASTBase()));
             }
         }
     }
@@ -88,12 +92,8 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
             JExpression viewExpression = viewExpressionMap.get(listenerRegistration.getViewInjectionNode());
 
             for (String listenerMethod : listenerRegistration.getMethods()) {
-                block.invoke(viewExpression, listenerMethod).arg(codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD)
-                        .invoke(InjectionUtil.GET_FIELD_METHOD)
-                        .arg(variableExpression)
-                        .arg(JExpr.lit(0))
-                        .arg(listenerRegistration.getASTBase().getName())
-                        .arg(codeModel.ref(listenerRegistration.getASTBase().getASTType().getName()).dotclass()));
+                block.invoke(viewExpression, listenerMethod)
+                        .arg(invocationBuilder.buildFieldGet(listenerRegistration.getASTBase().getASTType().getName(), variableExpression, listenerRegistration.getASTBase().getName(), listenerRegistration.getASTBase().getAccessModifier(), 0));
             }
         }
     }

@@ -28,7 +28,7 @@ public final class InjectionUtil {
         //singleton constructor
     }
 
-    public <T> T getField(Object target, int superLevel, String field, Class<T> sourceClass) {
+    public <T> T getField(Class<T> returnType, Object target, int superLevel, String field) {
         try {
             Field declaredField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
 
