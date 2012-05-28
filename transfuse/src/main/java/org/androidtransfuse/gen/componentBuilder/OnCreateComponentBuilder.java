@@ -6,10 +6,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
-import org.androidtransfuse.gen.ComponentBuilder;
-import org.androidtransfuse.gen.ComponentDescriptor;
-import org.androidtransfuse.gen.InjectionFragmentGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
@@ -63,7 +60,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
                     JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument.getName()));
                     parameters.add(param);
-                    onCreateMethodDescriptor.putParameter(methodArgument, param);
+                    onCreateMethodDescriptor.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
                 }
 
                 //super.onCreate()
@@ -77,7 +74,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 //layout
                 layoutBuilder.buildLayoutCall(definedClass, block, rResource);
 
-                Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
+                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 
                 MethodGenerator onCreateMethodGenerator = new ExistingMethodGenerator(onCreateMethodDescriptor);
                 MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);

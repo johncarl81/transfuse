@@ -5,8 +5,10 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.gen.variableBuilder.ProxyVariableBuilder;
+import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
 
@@ -20,33 +22,38 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
 
     private VirtualProxyGenerator virtualProxyGenerator;
     private ProxyVariableBuilder proxyVariableBuilder;
-    @Inject
     private InjectionExpressionBuilder injectionExpressionBuilder;
+    private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public VirtualProxyExpressionDecorator(@Assisted VariableExpressionBuilder decorated,
                                            ProxyVariableBuilder proxyVariableBuilder,
-                                           VirtualProxyGenerator virtualProxyGenerator) {
+                                           VirtualProxyGenerator virtualProxyGenerator,
+                                           InjectionExpressionBuilder injectionExpressionBuilder,
+                                           TypedExpressionFactory typedExpressionFactory) {
         super(decorated);
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.virtualProxyGenerator = virtualProxyGenerator;
+        this.injectionExpressionBuilder = injectionExpressionBuilder;
+        this.typedExpressionFactory = typedExpressionFactory;
     }
 
     @Override
-    public JExpression buildVariableExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariableExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         VirtualProxyAspect proxyAspect = injectionNode.getAspect(VirtualProxyAspect.class);
-        Map<InjectionNode, JExpression> variableMap = injectionBuilderContext.getVariableMap();
-        JExpression variable;
+        Map<InjectionNode, TypedExpression> variableMap = injectionBuilderContext.getVariableMap();
+        TypedExpression variable;
 
         if (proxyAspect != null && proxyAspect.isProxyRequired()) {
             //proxy
             ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
-            JExpression proxyVariable = proxyVariableBuilder.buildProxyInstance(injectionBuilderContext, injectionNode, proxyDescriptor);
+            JExpression proxyExpression = proxyVariableBuilder.buildProxyInstance(injectionBuilderContext, injectionNode, proxyDescriptor);
+            TypedExpression proxyVariable = typedExpressionFactory.build(injectionNode.getASTType(), proxyExpression);
             variableMap.put(injectionNode, proxyVariable);
             //init dependencies
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, injectionNode);
             //and initialize delegate
-            JExpression delegateVariable = getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);
+            TypedExpression delegateVariable = getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);
             variable = virtualProxyGenerator.initializeProxy(injectionBuilderContext, proxyVariable, delegateVariable);
         } else {
             variable = getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);

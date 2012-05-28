@@ -83,7 +83,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, JExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
 
         try {
             JDefinedClass strategyClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName() + "Strategy", ClassType.CLASS);
@@ -154,7 +154,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         return methodName;
     }
 
-    private List<IntentFactoryExtra> getExtras(Map<InjectionNode, JExpression> expressionMap) {
+    private List<IntentFactoryExtra> getExtras(Map<InjectionNode, TypedExpression> expressionMap) {
         Set<IntentFactoryExtra> uniqueExtras = new HashSet<IntentFactoryExtra>();
         List<IntentFactoryExtra> extras = new ArrayList<IntentFactoryExtra>();
         for (InjectionNode injectionNode : expressionMap.keySet()) {

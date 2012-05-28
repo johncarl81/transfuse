@@ -7,6 +7,8 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
+import org.androidtransfuse.gen.TypedExpression;
+import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
@@ -23,15 +25,17 @@ public class SingletonScopeBuilder implements VariableBuilder {
 
     private ProviderGenerator providerGenerator;
     private JCodeModel codeModel;
+    private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public SingletonScopeBuilder(JCodeModel codeModel,
-                                 ProviderGenerator providerGenerator) {
+                                 ProviderGenerator providerGenerator, TypedExpressionFactory typedExpressionFactory) {
         this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
+        this.typedExpressionFactory = typedExpressionFactory;
     }
 
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
         //build provider
         JExpression provider = buildProvider(injectionNode, injectionBuilderContext.getRResource());
@@ -41,7 +45,9 @@ public class SingletonScopeBuilder implements VariableBuilder {
         JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
         JExpression scopeVar = codeModel.ref(SingletonScope.class).staticInvoke(SingletonScope.GET_INSTANCE);
 
-        return scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
+        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
+
+        return typedExpressionFactory.build(injectionNode.getASTType(), expression);
     }
 
     private JExpression buildProvider(InjectionNode injectionNode, RResource rResource) {

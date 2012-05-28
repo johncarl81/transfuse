@@ -1,10 +1,9 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JVar;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.gen.TypedExpression;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class MethodDescriptor {
 
     private JMethod method;
-    private Map<ASTParameter, JExpression> parameterMap = new HashMap<ASTParameter, JExpression>();
+    private Map<ASTParameter, TypedExpression> parameterMap = new HashMap<ASTParameter, TypedExpression>();
     private ASTMethod astMethod;
 
     public MethodDescriptor(JMethod method, ASTMethod astMethod) {
@@ -27,19 +26,19 @@ public class MethodDescriptor {
         return method;
     }
 
-    public JExpression getParameter(ASTParameter astParameter) {
+    public TypedExpression getParameter(ASTParameter astParameter) {
         return parameterMap.get(astParameter);
     }
 
-    public void putParameter(ASTParameter astParameter, JVar param) {
-        parameterMap.put(astParameter, param);
+    public void putParameter(ASTParameter astParameter, TypedExpression expression) {
+        parameterMap.put(astParameter, expression);
     }
 
     public ASTMethod getASTMethod() {
         return astMethod;
     }
 
-    public Map<ASTParameter, JExpression> getParameters() {
+    public Map<ASTParameter, TypedExpression> getParameters() {
         return parameterMap;
     }
 }

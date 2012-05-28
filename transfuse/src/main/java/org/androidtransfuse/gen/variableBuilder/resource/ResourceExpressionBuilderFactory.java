@@ -30,28 +30,36 @@ public class ResourceExpressionBuilderFactory {
 
     private JCodeModel codeModel;
     private Map<JType, ResourceExpressionBuilderAdaptor> resourceExpressionBuilderMap = new HashMap<JType, ResourceExpressionBuilderAdaptor>();
+    private MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory;
 
     @Inject
     public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, JCodeModel codeModel) {
         this.codeModel = codeModel;
-        addResourceBuilder(String.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_STRING));
-        addResourceBuilder(Boolean.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_BOOLEAN));
-        addResourceBuilder(boolean.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_BOOLEAN));
-        addResourceBuilder(ColorStateList.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_COLORSTATELIST));
-        addResourceBuilder(Integer.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_INTEGER));
-        addResourceBuilder(int.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_INTEGER));
-        addResourceBuilder(Drawable.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_DRAWABLE));
-        addResourceBuilder(String[].class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_STRINGARRAY));
-        addResourceBuilder(Integer[].class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_INTARRAY));
-        addResourceBuilder(int[].class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_INTARRAY));
-        addResourceBuilder(Movie.class, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(GET_MOVIE));
-        addResourceBuilder(Animation.class, adaptorFactory.buildAnimationResourceExpressionBuilderAdaptor());
+        this.adaptorFactory = adaptorFactory;
+
+        addMethodBasedResourceBuider(String.class, GET_STRING);
+        addMethodBasedResourceBuider(String.class, GET_STRING);
+        addMethodBasedResourceBuider(Boolean.class, GET_BOOLEAN);
+        addMethodBasedResourceBuider(boolean.class, GET_BOOLEAN);
+        addMethodBasedResourceBuider(ColorStateList.class, GET_COLORSTATELIST);
+        addMethodBasedResourceBuider(Integer.class, GET_INTEGER);
+        addMethodBasedResourceBuider(int.class, GET_INTEGER);
+        addMethodBasedResourceBuider(Drawable.class, GET_DRAWABLE);
+        addMethodBasedResourceBuider(String[].class, GET_STRINGARRAY);
+        addMethodBasedResourceBuider(Integer[].class, GET_INTARRAY);
+        addMethodBasedResourceBuider(int[].class, GET_INTARRAY);
+        addMethodBasedResourceBuider(Movie.class, GET_MOVIE);
+        addAnimationResourceBuilder(Animation.class);
     }
 
-    private void addResourceBuilder(Class clazz, ResourceExpressionBuilderAdaptor resourceExpressionBuilderAdaptor) {
+    private void addMethodBasedResourceBuider(Class clazz, String method) {
         JType refClass = codeModel._ref(clazz);
+        resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(clazz, method));
+    }
 
-        resourceExpressionBuilderMap.put(refClass, resourceExpressionBuilderAdaptor);
+    private void addAnimationResourceBuilder(Class clazz) {
+        JType refClass = codeModel._ref(clazz);
+        resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildAnimationResourceExpressionBuilderAdaptor());
     }
 
     public ResourceExpressionBuilder buildResourceExpressionBuilder(JType resourceType, AnalysisContext context) {

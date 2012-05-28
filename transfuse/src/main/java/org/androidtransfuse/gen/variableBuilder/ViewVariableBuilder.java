@@ -1,13 +1,11 @@
 package org.androidtransfuse.gen.variableBuilder;
 
+import android.view.View;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
@@ -16,7 +14,7 @@ import org.androidtransfuse.model.r.ResourceIdentifier;
 
 import javax.inject.Inject;
 
-public class ViewVariableBuilder implements VariableBuilder {
+public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private static final String FIND_VIEW = "findViewById";
 
@@ -38,6 +36,7 @@ public class ViewVariableBuilder implements VariableBuilder {
                                JCodeModel codeModel,
                                InvocationBuilder injectionInvocationBuilder,
                                UniqueVariableNamer variableNamer) {
+        super(View.class);
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;
@@ -49,19 +48,19 @@ public class ViewVariableBuilder implements VariableBuilder {
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         JVar variableRef;
         try {
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, injectionNode);
 
             JType nodeType = codeModel.parseType(injectionNode.getClassName());
 
-            JExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
+            TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
             ResourceIdentifier viewResourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(viewId);
             JExpression viewIdRef = rResourceReferenceBuilder.buildReference(viewResourceIdentifier);
 
-            JExpression viewExpression = JExpr.cast(viewType, contextVar.invoke(FIND_VIEW).arg(viewIdRef));
+            JExpression viewExpression = contextVar.getExpression().invoke(FIND_VIEW).arg(viewIdRef);
 
             ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
             if (injectionAspect == null) {
@@ -75,13 +74,13 @@ public class ViewVariableBuilder implements VariableBuilder {
                 JBlock block = injectionBuilderContext.getBlock();
 
 
-                block.assign(variableRef, viewExpression);
+                block.assign(variableRef, JExpr.cast(viewType, viewExpression));
 
                 //field injection
                 for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
                     block.add(
                             injectionInvocationBuilder.buildFieldSet(
-                                    injectionBuilderContext.getVariableMap(),
+                                    injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                                     fieldInjectionPoint,
                                     variableRef));
                 }

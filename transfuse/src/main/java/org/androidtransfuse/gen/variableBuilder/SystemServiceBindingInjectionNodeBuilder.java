@@ -1,10 +1,8 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import android.content.Context;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -20,18 +18,15 @@ public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuild
 
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
-    private JCodeModel codeMode;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public SystemServiceBindingInjectionNodeBuilder(ASTClassFactory astClassFactory,
                                                     InjectionPointFactory injectionPointFactory,
-                                                    JCodeModel codeMode,
                                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         super(SystemService.class);
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
-        this.codeMode = codeMode;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
@@ -44,15 +39,10 @@ public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuild
         ASTType contextType = astClassFactory.buildASTClassType(Context.class);
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
 
-        try {
-            injectionNode.addAspect(VariableBuilder.class,
-                    variableInjectionBuilderFactory.buildSystemServiceVariableBuilder(
-                            systemService,
-                            codeMode.parseType(astType.getName()),
-                            contextInjectionNode));
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
-        }
+        injectionNode.addAspect(VariableBuilder.class,
+                variableInjectionBuilderFactory.buildSystemServiceVariableBuilder(
+                        systemService,
+                        contextInjectionNode));
 
         return injectionNode;
     }

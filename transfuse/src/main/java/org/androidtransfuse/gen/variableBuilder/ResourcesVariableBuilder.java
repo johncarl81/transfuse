@@ -1,14 +1,16 @@
 package org.androidtransfuse.gen.variableBuilder;
 
+import android.content.res.Resources;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
 
-public class ResourcesVariableBuilder implements VariableBuilder {
+public class ResourcesVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private static final String GET_RESOURCES = "getResources";
     private InjectionNode applicationInjectionNode;
@@ -17,14 +19,15 @@ public class ResourcesVariableBuilder implements VariableBuilder {
     @Inject
     public ResourcesVariableBuilder(@Assisted InjectionNode applicationInjectionNode,
                                     InjectionExpressionBuilder injectionExpressionBuilder) {
+        super(Resources.class);
         this.applicationInjectionNode = applicationInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        JExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, applicationInjectionNode);
+    public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+        TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, applicationInjectionNode);
 
-        return contextVar.invoke(GET_RESOURCES);
+        return contextVar.getExpression().invoke(GET_RESOURCES);
     }
 }

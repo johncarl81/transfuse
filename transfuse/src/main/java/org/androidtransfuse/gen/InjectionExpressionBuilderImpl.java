@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
@@ -18,7 +17,7 @@ public class InjectionExpressionBuilderImpl implements InjectionExpressionBuilde
     @Inject
     private VariableExpressionBuilder expressionDecorator;
 
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         return expressionDecorator.buildVariableExpression(injectionBuilderContext, injectionNode);
     }
 

@@ -12,8 +12,8 @@ import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Action;
@@ -37,7 +37,7 @@ import java.util.List;
 public class ActivityAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
-    private Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
@@ -53,7 +53,7 @@ public class ActivityAnalysis {
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
-                            Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
+                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                             InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                             Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                             Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider,
@@ -64,9 +64,10 @@ public class ActivityAnalysis {
                             InjectionNodeBuilderRepository injectionNodeBuilders,
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
-                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider, ASTClassFactory astClassFactory) {
+                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
+                            ASTClassFactory astClassFactory) {
         this.injectionPointFactory = injectionPointFactory;
-        this.contextVariableBuilderProvider = contextVariableBuilderProvider;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
@@ -227,14 +228,14 @@ public class ActivityAnalysis {
 
         InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
-        subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
+        subRepository.put(Context.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
         subRepository.put(Application.class.getName(), applicationVariableBuilderProvider.get());
-        subRepository.put(android.app.Activity.class.getName(), contextVariableBuilderProvider.get());
+        subRepository.put(android.app.Activity.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
         subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
 
         //todo: map inheritance of activity type?
         if (activityType != null) {
-            subRepository.put(activityType.toString(), contextVariableBuilderProvider.get());
+            subRepository.put(activityType.toString(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
         }
 
         return subRepository;

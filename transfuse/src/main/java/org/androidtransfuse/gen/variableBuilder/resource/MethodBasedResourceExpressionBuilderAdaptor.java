@@ -15,17 +15,20 @@ import javax.inject.Inject;
  */
 public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpressionBuilderAdaptor {
 
+    private Class returnType;
     private String accessMethod;
     private MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
     private InjectionPointFactory injectionPointFactory;
     private ASTClassFactory astClassFactory;
 
     @Inject
-    public MethodBasedResourceExpressionBuilderAdaptor(@Assisted String accessMethod,
+    public MethodBasedResourceExpressionBuilderAdaptor(@Assisted Class returnType,
+                                                       @Assisted String accessMethod,
                                                        MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory,
                                                        InjectionPointFactory injectionPointFactory,
                                                        ASTClassFactory astClassFactory) {
         this.accessMethod = accessMethod;
+        this.returnType = returnType;
         this.methodBasedResourceExpressionBuilderFactory = methodBasedResourceExpressionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.astClassFactory = astClassFactory;
@@ -36,6 +39,6 @@ public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpr
         ASTType resourceAstType = astClassFactory.buildASTClassType(Resources.class);
         InjectionNode resourceInjectionNode = injectionPointFactory.buildInjectionNode(resourceAstType, context);
 
-        return methodBasedResourceExpressionBuilderFactory.buildMethodBasedResourceExpressionBuilder(accessMethod, resourceInjectionNode);
+        return methodBasedResourceExpressionBuilderFactory.buildMethodBasedResourceExpressionBuilder(returnType, accessMethod, resourceInjectionNode);
     }
 }

@@ -5,7 +5,7 @@ package org.androidtransfuse.gen.variableBuilder.resource;
  */
 public interface MethodBasedResourceExpressionBuilderAdaptorFactory {
 
-    MethodBasedResourceExpressionBuilderAdaptor buildMethodBasedResourceExpressionBuilderAdaptor(String accessMethod);
+    MethodBasedResourceExpressionBuilderAdaptor buildMethodBasedResourceExpressionBuilderAdaptor(Class clazz, String accessMethod);
 
     AnimationResourceExpressionBuilderAdaptor buildAnimationResourceExpressionBuilderAdaptor();
 }

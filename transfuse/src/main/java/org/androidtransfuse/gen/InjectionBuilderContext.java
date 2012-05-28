@@ -3,7 +3,6 @@ package org.androidtransfuse.gen;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
@@ -15,13 +14,13 @@ import java.util.Map;
  */
 public class InjectionBuilderContext {
 
-    private Map<InjectionNode, JExpression> variableMap;
+    private Map<InjectionNode, TypedExpression> variableMap;
     private JBlock block;
     private JDefinedClass definedClass;
     private RResource rResource;
 
     @Inject
-    public InjectionBuilderContext(@Assisted Map<InjectionNode, JExpression> variableMap,
+    public InjectionBuilderContext(@Assisted Map<InjectionNode, TypedExpression> variableMap,
                                    @Assisted JBlock block,
                                    @Assisted JDefinedClass definedClass,
                                    @Assisted RResource rResource) {
@@ -31,7 +30,7 @@ public class InjectionBuilderContext {
         this.rResource = rResource;
     }
 
-    public Map<InjectionNode, JExpression> getVariableMap() {
+    public Map<InjectionNode, TypedExpression> getVariableMap() {
         return variableMap;
     }
 

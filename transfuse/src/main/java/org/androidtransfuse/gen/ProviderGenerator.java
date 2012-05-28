@@ -52,22 +52,15 @@ public class ProviderGenerator {
 
             providerClass._implements(Provider.class).narrow(injectionNodeClassRef);
 
-            //JFieldVar applicationField = providerClass.field(JMod.PRIVATE, Application.class, "application");
-
-            //JMethod constructor = providerClass.constructor(JMod.PUBLIC);
-
-            //JVar applicationParameter = constructor.param(codeModel.ref(Application.class), "application");
-
-            //constructor.body().assign(JExpr._this().ref(applicationField), applicationParameter);
-
+            //todo:possible context variable injections?
             //get() method
             JMethod getMethod = providerClass.method(JMod.PUBLIC, injectionNodeClassRef, GET_METHOD);
 
             JBlock getMethodBody = getMethod.body();
 
-            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody, providerClass, injectionNode, rResource);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody, providerClass, injectionNode, rResource);
 
-            getMethodBody._return(expressionMap.get(injectionNode));
+            getMethodBody._return(expressionMap.get(injectionNode).getExpression());
 
             return providerClass;
 

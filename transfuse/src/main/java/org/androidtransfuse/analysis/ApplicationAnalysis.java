@@ -14,8 +14,8 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
-import org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ProcessorContext;
@@ -30,7 +30,7 @@ import javax.inject.Provider;
 public class ApplicationAnalysis {
 
     private InjectionPointFactory injectionPointFactory;
-    private Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
@@ -41,14 +41,16 @@ public class ApplicationAnalysis {
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
-                               Provider<ContextVariableInjectionNodeBuilder> contextVariableBuilderProvider,
+                               VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
                                InjectionNodeBuilderRepository injectionNodeBuilders,
-                               ComponentBuilderFactory componentBuilderFactory, ASTClassFactory astClassFactory, AnalysisContextFactory analysisContextFactory) {
+                               ComponentBuilderFactory componentBuilderFactory,
+                               ASTClassFactory astClassFactory,
+                               AnalysisContextFactory analysisContextFactory) {
         this.injectionPointFactory = injectionPointFactory;
-        this.contextVariableBuilderProvider = contextVariableBuilderProvider;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationProvider = applicationProvider;
@@ -138,8 +140,8 @@ public class ApplicationAnalysis {
 
         InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
-        subRepository.put(Context.class.getName(), contextVariableBuilderProvider.get());
-        subRepository.put(android.app.Application.class.getName(), contextVariableBuilderProvider.get());
+        subRepository.put(Context.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
+        subRepository.put(android.app.Application.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
         subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
 
         return subRepository;

@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ public class SimpleMethodGenerator implements MethodGenerator {
         //parameters
         for (ASTParameter astParameter : overrideMethod.getParameters()) {
             JVar param = method.param(codeModel.ref(astParameter.getASTType().getName()), variableNamer.generateName(astParameter.getName()));
-            methodDescriptor.putParameter(astParameter, param);
+            methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
         }
 
         if (superCall) {
@@ -40,7 +41,7 @@ public class SimpleMethodGenerator implements MethodGenerator {
             body.add(superInvocation);
 
             for (ASTParameter astParameter : overrideMethod.getParameters()) {
-                superInvocation.arg(methodDescriptor.getParameter(astParameter));
+                superInvocation.arg(methodDescriptor.getParameter(astParameter).getExpression());
             }
         }
         return methodDescriptor;

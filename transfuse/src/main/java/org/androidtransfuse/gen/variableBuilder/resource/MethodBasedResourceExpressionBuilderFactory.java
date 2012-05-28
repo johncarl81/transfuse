@@ -7,7 +7,7 @@ import org.androidtransfuse.model.InjectionNode;
  */
 public interface MethodBasedResourceExpressionBuilderFactory {
 
-    MethodBasedResourceExpressionBuilder buildMethodBasedResourceExpressionBuilder(String accessMethod, InjectionNode resourcesNode);
+    MethodBasedResourceExpressionBuilder buildMethodBasedResourceExpressionBuilder(Class returnType, String accessMethod, InjectionNode resourcesNode);
 
     AnimationResourceExpressionBuilder buildAnimationResourceExpressionBuilder(InjectionNode applicationNode);
 }

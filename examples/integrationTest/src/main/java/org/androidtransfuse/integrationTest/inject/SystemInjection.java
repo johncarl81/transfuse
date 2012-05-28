@@ -19,7 +19,6 @@ import javax.inject.Inject;
 @Layout(R.layout.main)
 public class SystemInjection {
 
-    @Inject
     private Vibrator vibrator;
 
     @Inject
@@ -41,6 +40,11 @@ public class SystemInjection {
 
     @OnPause
     public void keepInActivity() {
+    }
+
+    @Inject
+    public void setVibrator(Vibrator vibrator) {
+        this.vibrator = vibrator;
     }
 
     public LocationManager getLocationManager() {

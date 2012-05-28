@@ -1,8 +1,8 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
@@ -26,9 +26,9 @@ public class ResourceVariableBuilder implements VariableBuilder {
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        ResourceIdentifier viewResourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(resourceId);
+    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+        ResourceIdentifier resourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(resourceId);
 
-        return resourceExpressionBuilder.buildExpression(injectionBuilderContext, rResourceReferenceBuilder.buildReference(viewResourceIdentifier));
+        return resourceExpressionBuilder.buildExpression(injectionBuilderContext, rResourceReferenceBuilder.buildReference(resourceIdentifier));
     }
 }

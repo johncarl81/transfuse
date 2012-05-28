@@ -6,6 +6,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.Logger;
@@ -35,10 +36,10 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     public void buildLayoutCall(JDefinedClass definedClass, JBlock block, RResource rResource) {
 
         try {
-            Map<InjectionNode, JExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, rResource);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, rResource);
 
             //LayoutHandlerDelegate.getlayout()
-            JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode);
+            JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();
 
             block.invoke("setContentView").arg(layoutHandlerDelegate.invoke("getLayout"));
 

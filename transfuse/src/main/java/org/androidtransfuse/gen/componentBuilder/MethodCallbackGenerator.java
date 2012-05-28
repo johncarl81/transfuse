@@ -1,11 +1,15 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JStatement;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InvocationBuilder;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
@@ -29,10 +33,10 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         this.invocationBuilder = invocationBuilder;
     }
 
-    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, JExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
         try {
             MethodDescriptor methodDescriptor = null;
-            for (Map.Entry<InjectionNode, JExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
+            for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
                 MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
                 if (methodCallbackAspect != null && methodCallbackAspect.contains(name)) {
@@ -51,7 +55,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                                 Object.class.getName(),
                                 methodDescriptor.getASTMethod().getParameters(),
                                 methodDescriptor.getParameters(),
-                                injectionNodeJExpressionEntry.getValue(),
+                                injectionNodeJExpressionEntry.getValue().getExpression(),
                                 methodCallback.getMethod());
 
                         body.add(methodCall);

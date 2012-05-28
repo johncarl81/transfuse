@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
@@ -37,14 +38,17 @@ public class InjectionNodeBuilderRepositoryFactory implements Provider<Injection
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Map<String, Class<?>> systemService;
     private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
+    private ASTClassFactory astClassFactory;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider,
                                                  VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
+                                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
+                                                 ASTClassFactory astClassFactory) {
         this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
+        this.astClassFactory = astClassFactory;
 
         systemService = new HashMap<String, Class<?>>();
         systemService.put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
@@ -87,7 +91,7 @@ public class InjectionNodeBuilderRepositoryFactory implements Provider<Injection
             injectionNodeBuilderRepository.put(systemServiceEntry.getValue().getName(),
                     variableInjectionBuilderFactory.buildSystemServiceInjectionNodeBuilder(
                             systemServiceEntry.getKey(),
-                            systemServiceEntry.getValue()));
+                            astClassFactory.buildASTClassType(systemServiceEntry.getValue())));
         }
 
         //provider type

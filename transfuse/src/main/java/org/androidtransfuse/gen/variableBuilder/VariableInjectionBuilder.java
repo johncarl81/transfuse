@@ -3,10 +3,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -24,22 +21,25 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private InvocationBuilder injectionInvocationBuilder;
     private AOPProxyGenerator aopProxyGenerator;
     private InjectionExpressionBuilder injectionExpressionBuilder;
+    private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
                                     UniqueVariableNamer variableNamer,
                                     InvocationBuilder injectionInvocationBuilder,
                                     AOPProxyGenerator aopProxyGenerator,
-                                    InjectionExpressionBuilder injectionExpressionBuilder) {
+                                    InjectionExpressionBuilder injectionExpressionBuilder,
+                                    TypedExpressionFactory typedExpressionFactory) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.aopProxyGenerator = aopProxyGenerator;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
+        this.typedExpressionFactory = typedExpressionFactory;
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         JVar variableRef;
         try {
 
@@ -73,7 +73,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
             for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
                 block.add(
                         injectionInvocationBuilder.buildFieldSet(
-                                injectionBuilderContext.getVariableMap(),
+                                injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                                 fieldInjectionPoint,
                                 variableRef));
             }
@@ -94,6 +94,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
             throw new TransfuseAnalysisException("JClassAlreadyExistsException while generating injection: " + injectionNode.getClassName(), e);
         }
 
-        return variableRef;
+        return typedExpressionFactory.build(injectionNode.getASTType(), variableRef);
     }
 }

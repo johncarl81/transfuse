@@ -1,10 +1,8 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import android.app.Activity;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -19,18 +17,15 @@ import javax.inject.Inject;
  */
 public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Extra> {
 
-    private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ExtraInjectionNodeBuilder(JCodeModel codeModel,
-                                     ASTClassFactory astClassFactory,
+    public ExtraInjectionNodeBuilder(ASTClassFactory astClassFactory,
                                      InjectionPointFactory injectionPointFactory,
                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         super(Extra.class);
-        this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
@@ -52,11 +47,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
         injectionNode.addAspect(IntentFactoryExtra.class, new IntentFactoryExtra(!optional, extraId, astType));
 
-        try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, codeModel.parseType(astType.getName()), optional));
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
-        }
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional));
 
         return injectionNode;
     }

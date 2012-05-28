@@ -3,7 +3,6 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
@@ -25,9 +24,9 @@ public class InjectionFragmentGenerator {
         this.injectionExpressionBuilder = injectionExpressionBuilder;
     }
 
-    public Map<InjectionNode, JExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, RResource rResource) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, RResource rResource) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        Map<InjectionNode, JExpression> nodeVariableMap = new HashMap<InjectionNode, JExpression>();
+        Map<InjectionNode, TypedExpression> nodeVariableMap = new HashMap<InjectionNode, TypedExpression>();
         InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass, rResource);
 
         injectionExpressionBuilder.buildVariable(injectionBuilderContext, injectionNode);

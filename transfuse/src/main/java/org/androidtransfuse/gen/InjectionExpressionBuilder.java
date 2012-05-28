@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JExpression;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
@@ -8,7 +7,7 @@ import org.androidtransfuse.model.InjectionNode;
  */
 public interface InjectionExpressionBuilder {
 
-    JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode);
+    TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode);
 
     void setupInjectionRequirements(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode);
 }

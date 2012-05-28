@@ -12,11 +12,12 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
-public class GeneratedProviderVariableBuilder implements VariableBuilder {
+public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private ProviderGenerator providerGenerator;
     private UniqueVariableNamer variableNamer;
@@ -26,13 +27,14 @@ public class GeneratedProviderVariableBuilder implements VariableBuilder {
     public GeneratedProviderVariableBuilder(@Assisted InjectionNode providerTypeInjectionNode,
                                             ProviderGenerator providerGenerator,
                                             UniqueVariableNamer variableNamer) {
+        super(Provider.class);
         this.providerGenerator = providerGenerator;
         this.variableNamer = variableNamer;
         this.providerTypeInjectionNode = providerTypeInjectionNode;
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
         JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode, injectionBuilderContext.getRResource());
 

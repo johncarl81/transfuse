@@ -9,6 +9,7 @@ import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
@@ -123,10 +124,10 @@ public class VirtualProxyGenerator {
         }
     }
 
-    public JExpression initializeProxy(InjectionBuilderContext context, JExpression proxyVariable, JExpression variableBuilder) {
+    public TypedExpression initializeProxy(InjectionBuilderContext context, TypedExpression proxyVariable, TypedExpression variableBuilder) {
 
         context.getBlock().add(
-                proxyVariable.invoke(DELAYED_LOAD_METHOD_NAME).arg(variableBuilder));
+                proxyVariable.getExpression().invoke(DELAYED_LOAD_METHOD_NAME).arg(variableBuilder.getExpression()));
 
         return variableBuilder;
     }

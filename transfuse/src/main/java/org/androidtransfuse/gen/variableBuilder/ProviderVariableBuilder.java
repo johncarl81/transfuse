@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -17,20 +18,24 @@ public class ProviderVariableBuilder implements VariableBuilder {
 
     private InjectionNode providerInjectionNode;
     private InjectionExpressionBuilder injectionExpressionBuilder;
+    private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public ProviderVariableBuilder(@Assisted InjectionNode providerInjectionNode,
-                                   InjectionExpressionBuilder injectionExpressionBuilder) {
+                                   InjectionExpressionBuilder injectionExpressionBuilder, TypedExpressionFactory typedExpressionFactory) {
         this.providerInjectionNode = providerInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
+        this.typedExpressionFactory = typedExpressionFactory;
     }
 
     @Override
-    public JExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
-        JExpression providerVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, providerInjectionNode);
+        TypedExpression providerVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, providerInjectionNode);
 
-        return providerVar.invoke(PROVIDER_METHOD);
+        JExpression expression = providerVar.getExpression().invoke(PROVIDER_METHOD);
+
+        return typedExpressionFactory.build(injectionNode.getASTType(), expression);
     }
 
     public InjectionNode getProviderInjectionNode() {
