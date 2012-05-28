@@ -53,15 +53,11 @@ public class MethodInterceptorChain {
 
         @Override
         public Object proceed() throws Throwable {
-            try {
-                i++;
-                if (i == methodInterceptors.length) {
-                    return methodExecution.invoke();
-                } else {
-                    return methodInterceptors[i].invoke(this);
-                }
-            } finally {
-                i--;
+            i++;
+            if (i == methodInterceptors.length) {
+                return methodExecution.invoke();
+            } else {
+                return methodInterceptors[i].invoke(this);
             }
         }
 
