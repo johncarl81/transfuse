@@ -100,6 +100,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             //constructor, with required extras
             JMethod constructor = strategyClass.constructor(JMod.PUBLIC);
             JBlock constructorBody = constructor.body();
+            JDocComment javadocComments = constructor.javadoc();
+            javadocComments.append("Strategy Class for generating Intent for " + descriptor.getPackageClass().getClassName());
 
             constructorBody.add(JExpr.invoke("super")
                     .arg(codeModel.ref(descriptor.getPackageClass().getFullyQualifiedName()).dotclass())
@@ -111,13 +113,17 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                     JVar extraParam = constructor.param(codeModel.ref(extra.getType().getName()), extra.getName());
 
                     constructorBody.add(getExtrasMethod.invoke(getBundleMethod(extra.getType())).arg(extra.getName()).arg(extraParam));
+
+                    javadocComments.addParam(extraParam);
                 } else {
                     //setter for non-required extra
                     JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
-                    JVar extraParam = setterMethod.param(codeModel.ref(extra.getType().getName()), namer.generateName(extra.getType().getName()));
+                    JVar extraParam = setterMethod.param(codeModel.ref(extra.getType().getName()), extra.getName());
 
                     JBlock setterBody = setterMethod.body();
                     setterBody.add(getExtrasMethod.invoke(getBundleMethod(extra.getType())).arg(extra.getName()).arg(extraParam));
+                    setterMethod.javadoc().append("Optional Extra parameter");
+                    setterMethod.javadoc().addParam(extraParam);
 
                     setterBody._return(JExpr._this());
 
