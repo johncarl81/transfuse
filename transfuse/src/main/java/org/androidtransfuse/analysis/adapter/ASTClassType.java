@@ -1,5 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -96,16 +99,12 @@ public class ASTClassType implements ASTType {
 
         ASTType that = (ASTType) o;
 
-        if (clazz != null ? !getName().equals(that.getName()) : that.getName() != null) {
-            return false;
-        }
-
-        return true;
+        return new EqualsBuilder().append(getName(), that.getName()).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return clazz != null ? clazz.getName().hashCode() : 0;
+        return new HashCodeBuilder().append(getName()).hashCode();
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.util.MethodSignature;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,11 +69,7 @@ public class MethodCallbackAspect {
 
             MethodCallback that = (MethodCallback) o;
 
-            if (!methodSignature.equals(that.methodSignature)) {
-                return false;
-            }
-
-            return true;
+            return new EqualsBuilder().append(methodSignature, that.methodSignature).isEquals();
         }
 
         @Override

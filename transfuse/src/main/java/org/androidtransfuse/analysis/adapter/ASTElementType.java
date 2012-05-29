@@ -1,5 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.lang.model.element.TypeElement;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,16 +84,12 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
         ASTType that = (ASTType) o;
 
-        if (typeElement != null ? !getName().equals(that.getName()) : that.getName() != null) {
-            return false;
-        }
-
-        return true;
+        return new EqualsBuilder().append(getName(), that.getName()).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return typeElement != null ? getName().hashCode() : 0;
+        return new HashCodeBuilder().append(getName()).hashCode();
     }
 
     @Override
