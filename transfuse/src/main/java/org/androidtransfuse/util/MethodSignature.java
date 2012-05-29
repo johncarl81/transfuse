@@ -4,6 +4,8 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class MethodSignature {
      * @param method
      * @return descriptor
      */
-    public static String makeDescriptor(ASTMethod method) {
+    private String makeDescriptor(ASTMethod method) {
         List<ASTParameter> params = method.getParameters();
         return method.getName() + ':' + makeDescriptor(params, method.getReturnType());
     }
@@ -40,8 +42,9 @@ public class MethodSignature {
      *
      * @param params  parameter types.
      * @param retType return type.
+     * @return method descriptor
      */
-    public static String makeDescriptor(List<ASTParameter> params, ASTType retType) {
+    private String makeDescriptor(List<ASTParameter> params, ASTType retType) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
         for (ASTParameter param : params) {
@@ -53,14 +56,14 @@ public class MethodSignature {
         return builder.toString();
     }
 
-    private static void makeDesc(StringBuilder builder, ASTType type) {
+    private void makeDesc(StringBuilder builder, ASTType type) {
         if (type.isArray()) {
             builder.append('[');
         }
         makeTypeDesc(builder, type);
     }
 
-    private static void makeTypeDesc(StringBuilder builder, ASTType type) {
+    private void makeTypeDesc(StringBuilder builder, ASTType type) {
         if (type instanceof ASTPrimitiveType) {
             builder.append(type.getName());
         } else {
@@ -70,24 +73,11 @@ public class MethodSignature {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof MethodSignature)) {
-            return false;
-        }
-
-        MethodSignature that = (MethodSignature) o;
-
-        if (methodSignature != null ? !methodSignature.equals(that.methodSignature) : that.methodSignature != null) {
-            return false;
-        }
-
-        return true;
+        return EqualsBuilder.reflectionEquals(this, o, new String[]{"method"});
     }
 
     @Override
     public int hashCode() {
-        return methodSignature != null ? methodSignature.hashCode() : 0;
+        return HashCodeBuilder.reflectionHashCode(this, new String[]{"method"});
     }
 }
