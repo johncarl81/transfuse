@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class MethodSignature {
 
-    @SuppressWarnings("UnusedDeclaration")
     private String methodSignature;
     private ASTMethod method;
 
@@ -74,11 +73,20 @@ public class MethodSignature {
 
     @Override
     public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o, new String[]{"method"});
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MethodSignature)) {
+            return false;
+        }
+
+        MethodSignature that = (MethodSignature) o;
+
+        return new EqualsBuilder().append(methodSignature, that.methodSignature).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this, new String[]{"method"});
+        return new HashCodeBuilder().append(methodSignature).hashCode();
     }
 }

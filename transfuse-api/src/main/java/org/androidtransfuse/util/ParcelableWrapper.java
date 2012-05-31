@@ -5,7 +5,7 @@ package org.androidtransfuse.util;
  */
 public interface ParcelableWrapper<T> {
 
-    final String GET_WRAPPED = "getWrapped";
+    String GET_WRAPPED = "getWrapped";
 
     T getWrapped();
 }

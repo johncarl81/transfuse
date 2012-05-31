@@ -62,7 +62,7 @@ public class InvocationBuilder {
 
         for (ASTParameter callParameter : methodToCall.getParameters()) {
             Iterator<ASTParameter> overrideParameterIterator = overrideParameters.iterator();
-            JExpression parameter = null;
+
             while (overrideParameterIterator.hasNext()) {
                 ASTParameter overrideParameter = overrideParameterIterator.next();
                 if (overrideParameter.getASTType().equals(callParameter.getASTType())) {
