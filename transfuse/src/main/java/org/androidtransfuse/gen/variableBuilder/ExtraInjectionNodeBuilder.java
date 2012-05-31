@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
 import org.androidtransfuse.annotations.Extra;
+import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -40,6 +41,8 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
             optional = false;
         }
 
+        boolean wrapped = astType.isAnnotated(Parcel.class);
+
         InjectionNode injectionNode = new InjectionNode(astType);
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
@@ -47,7 +50,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
         injectionNode.addAspect(IntentFactoryExtra.class, new IntentFactoryExtra(!optional, extraId, astType));
 
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, wrapped));
 
         return injectionNode;
     }

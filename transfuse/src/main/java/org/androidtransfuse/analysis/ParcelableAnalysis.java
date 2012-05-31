@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTVoidType;
+import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.annotations.Transient;
 import org.androidtransfuse.gen.GetterSetterMethodPair;
 
@@ -16,7 +17,31 @@ import java.util.Map;
  */
 public class ParcelableAnalysis {
 
+    private Map<ASTType, List<GetterSetterMethodPair>> parcelableCache = new HashMap<ASTType, List<GetterSetterMethodPair>>();
+    private List<GetterSetterMethodPair> getterSetterMethodPairs;
+
     public List<GetterSetterMethodPair> analyze(ASTType astType) {
+        if (!parcelableCache.containsKey(astType)) {
+            List<GetterSetterMethodPair> propertyPairs = innerAnalyze(astType);
+            parcelableCache.put(astType, propertyPairs);
+
+            //this needs to occur after adding to the cache to avoid infinite loops
+            analyzeDepedencies(propertyPairs);
+        }
+        return parcelableCache.get(astType);
+    }
+
+    private void analyzeDepedencies(List<GetterSetterMethodPair> propertyPairs) {
+        for (GetterSetterMethodPair propertyPair : propertyPairs) {
+            ASTType type = propertyPair.getGetter().getReturnType();
+
+            if (type.isAnnotated(Parcel.class)) {
+                analyze(type);
+            }
+        }
+    }
+
+    public List<GetterSetterMethodPair> innerAnalyze(ASTType astType) {
         List<GetterSetterMethodPair> methodPairs = new ArrayList<GetterSetterMethodPair>();
 
         Map<String, ASTMethod> methodNameMap = new HashMap<String, ASTMethod>();

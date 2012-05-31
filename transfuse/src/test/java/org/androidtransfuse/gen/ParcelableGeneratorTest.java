@@ -41,43 +41,56 @@ public class ParcelableGeneratorTest {
     @Inject
     private ParcelableAnalysis parcelableAnalysis;
 
-    private ASTType mockParcelASTType;
     private ParcelTarget parcelTarget;
     private Parcel mockParcel;
+    private Parcelable mockSecondParcel;
+    private Class<Parcelable> parcelableClass;
+    private Class parcelableTwoClass;
+    private ParcelSecondTarget parcelSecondTarget;
 
     @Before
-    public void setup() {
+    public void setup() throws ClassNotFoundException, IOException {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
         injector.injectMembers(this);
 
-        mockParcelASTType = astClassFactory.buildASTClassType(ParcelTarget.class);
-
-        parcelTarget = new ParcelTarget();
-
-        parcelTarget.setDoubleValue(Math.PI);
-        parcelTarget.setStringValue(TEST_VALUE);
-
-        mockParcel = PowerMock.createMock(Parcel.class);
-    }
-
-    @Test
-    public void test() throws ClassNotFoundException, IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        PowerMock.reset(mockParcel);
-
-        mockParcel.writeString(TEST_VALUE);
-        mockParcel.writeDouble(Math.PI);
-
-        EasyMock.expect(mockParcel.readString()).andReturn(TEST_VALUE);
-        EasyMock.expect(mockParcel.readDouble()).andReturn(Math.PI);
-
-        PowerMock.replay(mockParcel);
+        ASTType mockParcelASTType = astClassFactory.buildASTClassType(ParcelTarget.class);
+        ASTType mockParcelTwoASTType = astClassFactory.buildASTClassType(ParcelSecondTarget.class);
 
         List<GetterSetterMethodPair> methodPair = parcelableAnalysis.analyze(mockParcelASTType);
 
         parcelableGenerator.generateParcelable(mockParcelASTType, methodPair);
 
         ClassLoader classLoader = codeGenerationUtil.build();
-        Class<Parcelable> parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType));
+        parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType).fullName());
+        parcelableTwoClass = classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelTwoASTType).fullName());
+
+        parcelTarget = new ParcelTarget();
+        parcelSecondTarget = new ParcelSecondTarget();
+
+        parcelTarget.setDoubleValue(Math.PI);
+        parcelTarget.setStringValue(TEST_VALUE);
+        parcelTarget.setSecondTarget(parcelSecondTarget);
+
+        parcelSecondTarget.setValue(TEST_VALUE);
+
+        mockParcel = PowerMock.createMock(Parcel.class);
+        mockSecondParcel = (Parcelable) PowerMock.createMock(parcelableTwoClass);
+    }
+
+    @Test
+    public void test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        PowerMock.reset(mockParcel, mockSecondParcel);
+
+        mockParcel.writeString(TEST_VALUE);
+        mockParcel.writeDouble(Math.PI);
+        mockParcel.writeParcelable(EasyMock.anyObject(Parcelable.class), EasyMock.eq(0));
+
+        EasyMock.expect(mockParcel.readString()).andReturn(TEST_VALUE);
+        EasyMock.expect(mockParcel.readDouble()).andReturn(Math.PI);
+        EasyMock.expect(mockParcel.readParcelable(null)).andReturn(mockSecondParcel);
+        EasyMock.expect(((ParcelableWrapper) mockSecondParcel).getWrapped()).andReturn(parcelSecondTarget);
+
+        PowerMock.replay(mockParcel, mockSecondParcel);
 
         Parcelable outputParcelable = parcelableClass.getConstructor(ParcelTarget.class).newInstance(parcelTarget);
 
@@ -89,6 +102,6 @@ public class ParcelableGeneratorTest {
 
         assertEquals(parcelTarget, wrapped);
 
-        PowerMock.verify(mockParcel);
+        PowerMock.verify(mockParcel, mockSecondParcel);
     }
 }

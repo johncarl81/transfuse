@@ -1,5 +1,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
+import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
@@ -20,7 +21,7 @@ public interface VariableInjectionBuilderFactory {
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
-    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, boolean nullable);
+    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, @Assisted("nullable") boolean nullable, @Assisted("wrapped") boolean wrapped);
 
     ApplicationVariableBuilder buildApplicationVariableBuilder(InjectionNode contextInjectionNode);
 

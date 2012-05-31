@@ -11,6 +11,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class ParcelTarget {
     private String stringValue;
     private Double doubleValue;
+    private ParcelSecondTarget secondTarget;
 
     public String getStringValue() {
         return stringValue;
@@ -26,6 +27,14 @@ public class ParcelTarget {
 
     public void setDoubleValue(Double doubleValue) {
         this.doubleValue = doubleValue;
+    }
+
+    public ParcelSecondTarget getSecondTarget() {
+        return secondTarget;
+    }
+
+    public void setSecondTarget(ParcelSecondTarget secondTarget) {
+        this.secondTarget = secondTarget;
     }
 
     @Override

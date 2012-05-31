@@ -20,14 +20,13 @@ public class ExtraInjection {
     public static final String EXTRA_TWO = "extraTwo";
     public static final String EXTRA_THREE = "extraThree";
     public static final String EXTRA_FOUR = "extraFour";
+    public static final String EXTRA_PARCELABLE = "extraParcelable";
 
     @Inject
     @Extra(EXTRA_ONE)
     private String extraOne;
 
-    @Inject
-    @Extra(EXTRA_TWO)
-    private Long extraTwo;
+    private long extraTwo;
 
     @Inject
     @Extra(value = EXTRA_THREE, optional = true)
@@ -37,15 +36,27 @@ public class ExtraInjection {
     @Extra(value = EXTRA_FOUR)
     private SerializableValue extraFour;
 
+    @Inject
+    @Extra(value = EXTRA_PARCELABLE)
+    private ParcelExample parcelExample;
+
+
     @OnPause
     public void keepInActivity() {
+    }
+
+    @Inject
+
+    @Extra(EXTRA_TWO)
+    public void setExtraTwo(long extraTwo) {
+        this.extraTwo = extraTwo;
     }
 
     public String getExtraOne() {
         return extraOne;
     }
 
-    public Long getExtraTwo() {
+    public long getExtraTwo() {
         return extraTwo;
     }
 
@@ -55,5 +66,9 @@ public class ExtraInjection {
 
     public SerializableValue getExtraFour() {
         return extraFour;
+    }
+
+    public ParcelExample getParcelExample() {
+        return parcelExample;
     }
 }

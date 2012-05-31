@@ -32,6 +32,7 @@ import java.util.List;
 public class Main {
 
     private static final long THE_ANSWER = 42;
+    private static final String TEST_VALUE = "test value";
 
     private List<ActivityListItem> values;
     private ListActivity listActivity;
@@ -77,7 +78,14 @@ public class Main {
     }
 
     private ActivityListItem createExtraLI() {
-        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue("test"), "one", THE_ANSWER));
+        ParcelExample parcelExample = new ParcelExample();
+
+        parcelExample.setInnerParcel(new ParcelTwo(TEST_VALUE));
+        parcelExample.setName(TEST_VALUE);
+        parcelExample.setValue(THE_ANSWER);
+        parcelExample.setSerializableValue(new SerializableValue(TEST_VALUE));
+
+        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, new ParcelExample(), THE_ANSWER));
         return new ActivityListItem(intent, "Extras");
     }
 }
