@@ -236,9 +236,9 @@ public class ParcelableGenerator {
         throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to write " + type.getName());
     }
 
-    public class ReadWritePair {
-        String readMethod;
-        String writeMethod;
+    public static final class ReadWritePair {
+        private String readMethod;
+        private String writeMethod;
 
         public ReadWritePair(String readMethod, String writeMethod) {
             this.readMethod = readMethod;

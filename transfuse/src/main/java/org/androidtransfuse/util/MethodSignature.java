@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class MethodSignature {
 
+    @SuppressWarnings("UnusedDeclaration")
     private String methodSignature;
     private ASTMethod method;
 

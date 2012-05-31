@@ -18,7 +18,6 @@ import java.util.Map;
 public class ParcelableAnalysis {
 
     private Map<ASTType, List<GetterSetterMethodPair>> parcelableCache = new HashMap<ASTType, List<GetterSetterMethodPair>>();
-    private List<GetterSetterMethodPair> getterSetterMethodPairs;
 
     public List<GetterSetterMethodPair> analyze(ASTType astType) {
         if (!parcelableCache.containsKey(astType)) {

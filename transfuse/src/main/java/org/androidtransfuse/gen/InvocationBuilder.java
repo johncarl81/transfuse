@@ -172,7 +172,7 @@ public class InvocationBuilder {
 
     public JExpression buildFieldGet(String returnType, JExpression variable, String name, ASTAccessModifier accessModifier, int subclassLevel) {
         if (accessModifier.equals(ASTAccessModifier.PUBLIC)) {
-            return buildPublicFieldGet(variable, name, subclassLevel);
+            return buildPublicFieldGet(variable, name);
         }
         return buildPrivateFieldGet(returnType, variable, name, subclassLevel);
     }
@@ -185,7 +185,7 @@ public class InvocationBuilder {
                 .arg(name);
     }
 
-    private JExpression buildPublicFieldGet(JExpression variable, String name, int subclassLevel) {
+    private JExpression buildPublicFieldGet(JExpression variable, String name) {
         return variable.ref(name);
     }
 

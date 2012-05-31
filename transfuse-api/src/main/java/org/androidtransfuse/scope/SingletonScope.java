@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author John Ericksen
  */
-public class SingletonScope implements Scope {
+public final class SingletonScope implements Scope {
 
     public static final String GET_INSTANCE = "getInstance";
 

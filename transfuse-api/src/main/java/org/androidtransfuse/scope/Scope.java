@@ -7,7 +7,7 @@ import javax.inject.Provider;
  */
 public interface Scope {
 
-    static final String GET_SCOPED_OBJECT = "getScopedObject";
+    final String GET_SCOPED_OBJECT = "getScopedObject";
 
     <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
 }

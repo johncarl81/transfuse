@@ -28,7 +28,7 @@ public class MethodInterceptorChain {
         }
     }
 
-    private class MethodInterceptorIterator implements MethodInvocation {
+    private final class MethodInterceptorIterator implements MethodInvocation {
 
         private int i = -1;
         private Object[] arguments;
