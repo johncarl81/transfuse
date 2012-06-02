@@ -5,7 +5,7 @@ import org.androidtransfuse.annotations.Parcel;
 /**
  * @author John Ericksen
  */
-@Parcel
+@Parcel(ParcelTwoConverter.class)
 public class ParcelTwo {
 
     String value;

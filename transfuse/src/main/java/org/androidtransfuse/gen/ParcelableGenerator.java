@@ -7,18 +7,19 @@ import android.os.Parcelable;
 import android.util.SparseBooleanArray;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
+import org.androidtransfuse.analysis.ParcelableDescriptor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTArrayType;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.annotations.ParcelConverter;
 import org.androidtransfuse.util.ParcelableWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,9 +91,9 @@ public class ParcelableGenerator {
         parceableModifier.put(astType, new ReadWritePair(readMethod, writeMethod));
     }
 
-    public JDefinedClass generateParcelable(ASTType type, List<GetterSetterMethodPair> propertyMutators) {
+    public JDefinedClass generateParcelable(ASTType type, ParcelableDescriptor parcelableDescriptor) {
         if (!parceableMap.containsKey(type)) {
-            JDefinedClass definedClass = generateParcelableDefinedClass(type, propertyMutators);
+            JDefinedClass definedClass = generateParcelableDefinedClass(type, parcelableDescriptor);
             if (definedClass != null) {
                 parceableMap.put(type, definedClass);
             }
@@ -100,7 +101,7 @@ public class ParcelableGenerator {
         return parceableMap.get(type);
     }
 
-    private JDefinedClass generateParcelableDefinedClass(ASTType type, List<GetterSetterMethodPair> propertyMutators) {
+    private JDefinedClass generateParcelableDefinedClass(ASTType type, ParcelableDescriptor parcelableDescriptor) {
         try {
             JType inputType = codeModel.ref(type.getName());
 
@@ -115,27 +116,41 @@ public class ParcelableGenerator {
             JMethod parcelConstructor = parcelableClass.constructor(JMod.PUBLIC);
             JVar parcelParam = parcelConstructor.param(codeModel.ref(Parcel.class), namer.generateName(Parcel.class));
             JBlock parcelConstructorBody = parcelConstructor.body();
-            parcelConstructorBody.assign(wrapped, JExpr._new(inputType));
-
-            //read from parcel
-            for (GetterSetterMethodPair propertyMutator : propertyMutators) {
-                buildReadFromParcel(parcelConstructorBody, wrapped, propertyMutator, parcelParam);
-            }
-
-            //@Parcel input
-            JMethod inputConstructor = parcelableClass.constructor(JMod.PUBLIC);
-            JVar inputParam = inputConstructor.param(inputType, namer.generateName(type.getName()));
-            inputConstructor.body().assign(wrapped, inputParam);
 
             //writeToParcel(android.os.Parcel,int)
             JMethod writeToParcelMethod = parcelableClass.method(JMod.PUBLIC, codeModel.VOID, WRITE_TO_PARCEL);
             JVar wtParcelParam = writeToParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
             writeToParcelMethod.param(codeModel.INT, "flags");
 
-            for (GetterSetterMethodPair propertyMutator : propertyMutators) {
-                buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, propertyMutator, wrapped);
+            if (parcelableDescriptor.getParcelableConverterType() == null) {
+
+                parcelConstructorBody.assign(wrapped, JExpr._new(inputType));
+
+                //read from parcel
+                for (GetterSetterMethodPair propertyMutator : parcelableDescriptor.getGetterSetterPairs()) {
+                    buildReadFromParcel(parcelConstructorBody, wrapped, propertyMutator, parcelParam);
+                }
+
+                for (GetterSetterMethodPair propertyMutator : parcelableDescriptor.getGetterSetterPairs()) {
+                    buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, propertyMutator, wrapped);
+                }
+            } else {
+                //todo: inject ParcelConverter?
+                JClass converterType = codeModel.ref(parcelableDescriptor.getParcelableConverterType().getName());
+                JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
+                        namer.generateName(parcelableDescriptor.getParcelableConverterType().getName()));
+
+                converterField.assign(JExpr._new(converterType));
+
+                parcelConstructorBody.invoke(converterField, ParcelConverter.TRANSLATE_METHOD).arg(parcelParam);
+
+                writeToParcelMethod.body().invoke(converterField, ParcelConverter.TRANSLATE_METHOD).arg(wrapped).arg(wtParcelParam);
             }
 
+            //@Parcel input
+            JMethod inputConstructor = parcelableClass.constructor(JMod.PUBLIC);
+            JVar inputParam = inputConstructor.param(inputType, namer.generateName(type.getName()));
+            inputConstructor.body().assign(wrapped, inputParam);
 
             //describeContents()
             JMethod describeContentsMethod = parcelableClass.method(JMod.PUBLIC, codeModel.INT, DESCRIBE_CONTENTS);
@@ -194,8 +209,8 @@ public class ParcelableGenerator {
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(JExpr.cast(codeModel.ref(returnType.getName()), parcelParam.invoke("readSerializable")));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
-            List<GetterSetterMethodPair> analysisPairs = parcelableAnalysis.analyze(returnType);
-            generateParcelable(returnType, analysisPairs);
+            ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(returnType);
+            generateParcelable(returnType, parcelableDescriptor);
             JDefinedClass returnParcelable = parceableMap.get(returnType);
 
             JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable.fullName()));
@@ -218,8 +233,8 @@ public class ParcelableGenerator {
             body.invoke(parcel, "writeSerializable")
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName()));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
-            List<GetterSetterMethodPair> analysisPairs = parcelableAnalysis.analyze(returnType);
-            generateParcelable(returnType, analysisPairs);
+            ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(returnType);
+            generateParcelable(returnType, parcelableDescriptor);
             JDefinedClass returnParcelable = parceableMap.get(returnType);
 
             body.invoke(parcel, "writeParcelable").arg(JExpr._new(returnParcelable).arg(wrapped.invoke(propertyMutator.getGetter().getName())))

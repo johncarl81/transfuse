@@ -6,6 +6,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
+import org.androidtransfuse.analysis.ParcelableDescriptor;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
@@ -20,7 +21,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -56,9 +56,9 @@ public class ParcelableGeneratorTest {
         ASTType mockParcelASTType = astClassFactory.buildASTClassType(ParcelTarget.class);
         ASTType mockParcelTwoASTType = astClassFactory.buildASTClassType(ParcelSecondTarget.class);
 
-        List<GetterSetterMethodPair> methodPair = parcelableAnalysis.analyze(mockParcelASTType);
+        ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(mockParcelASTType);
 
-        parcelableGenerator.generateParcelable(mockParcelASTType, methodPair);
+        parcelableGenerator.generateParcelable(mockParcelASTType, parcelableDescriptor);
 
         ClassLoader classLoader = codeGenerationUtil.build();
         parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType).fullName());

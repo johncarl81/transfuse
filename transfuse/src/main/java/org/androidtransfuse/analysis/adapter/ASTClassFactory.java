@@ -179,7 +179,7 @@ public class ASTClassFactory {
         List<ASTAnnotation> astAnnotations = new ArrayList<ASTAnnotation>();
 
         for (Annotation annotation : annotations) {
-            astAnnotations.add(new ASTClassAnnotation(annotation));
+            astAnnotations.add(new ASTClassAnnotation(annotation, this));
         }
 
         return astAnnotations;
