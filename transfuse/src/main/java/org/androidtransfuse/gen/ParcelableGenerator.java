@@ -142,9 +142,9 @@ public class ParcelableGenerator {
 
                 converterField.assign(JExpr._new(converterType));
 
-                parcelConstructorBody.invoke(converterField, ParcelConverter.TRANSLATE_METHOD).arg(parcelParam);
+                parcelConstructorBody.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam);
 
-                writeToParcelMethod.body().invoke(converterField, ParcelConverter.TRANSLATE_METHOD).arg(wrapped).arg(wtParcelParam);
+                writeToParcelMethod.body().invoke(converterField, ParcelConverter.CONVERT_TO_PARCEL).arg(wrapped).arg(wtParcelParam);
             }
 
             //@Parcel input

@@ -7,12 +7,12 @@ import org.androidtransfuse.annotations.ParcelConverter;
  */
 public class ParcelTwoConverter implements ParcelConverter<ParcelTwo> {
     @Override
-    public void translate(ParcelTwo input, android.os.Parcel destinationParcel) {
+    public void toParcel(ParcelTwo input, android.os.Parcel destinationParcel) {
         destinationParcel.writeString(input.getValue());
     }
 
     @Override
-    public ParcelTwo translate(android.os.Parcel parcel) {
+    public ParcelTwo fromParcel(android.os.Parcel parcel) {
         ParcelTwo parcelTwo = new ParcelTwo();
         parcelTwo.setValue(parcel.readString());
         return parcelTwo;

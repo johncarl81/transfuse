@@ -5,19 +5,20 @@ package org.androidtransfuse.annotations;
  */
 public interface ParcelConverter<T> {
 
-    String TRANSLATE_METHOD = "translate";
+    String CONVERT_TO_PARCEL = "toParcel";
+    String CONVERT_FROM_PARCEL = "fromParcel";
 
-    void translate(T input, android.os.Parcel destinationParcel);
+    void toParcel(T input, android.os.Parcel destinationParcel);
 
-    T translate(android.os.Parcel parcel);
+    T fromParcel(android.os.Parcel parcel);
 
     public static final class EmptyConverter implements ParcelConverter<Object> {
         @Override
-        public void translate(Object input, android.os.Parcel destinationParcel) {
+        public void toParcel(Object input, android.os.Parcel destinationParcel) {
         }
 
         @Override
-        public Object translate(android.os.Parcel parcel) {
+        public Object fromParcel(android.os.Parcel parcel) {
             return null;
         }
     }
