@@ -7,6 +7,7 @@ import org.androidtransfuse.integrationTest.activity.ManifestManagedActivity;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
+import org.androidtransfuse.integrationTest.inject.ExtraInjectionActivityStrategy;
 import org.androidtransfuse.integrationTest.inject.ParcelExample;
 import org.androidtransfuse.integrationTest.inject.ParcelTwo;
 import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
