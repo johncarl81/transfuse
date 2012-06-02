@@ -120,7 +120,7 @@ public class ParcelableGenerator {
             //writeToParcel(android.os.Parcel,int)
             JMethod writeToParcelMethod = parcelableClass.method(JMod.PUBLIC, codeModel.VOID, WRITE_TO_PARCEL);
             JVar wtParcelParam = writeToParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
-            writeToParcelMethod.param(codeModel.INT, "flags");
+            JVar flags = writeToParcelMethod.param(codeModel.INT, "flags");
 
             if (parcelableDescriptor.getParcelableConverterType() == null) {
 
@@ -132,15 +132,13 @@ public class ParcelableGenerator {
                 }
 
                 for (GetterSetterMethodPair propertyMutator : parcelableDescriptor.getGetterSetterPairs()) {
-                    buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, propertyMutator, wrapped);
+                    buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, flags, propertyMutator, wrapped);
                 }
             } else {
                 //todo: inject ParcelConverter?
                 JClass converterType = codeModel.ref(parcelableDescriptor.getParcelableConverterType().getName());
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
-                        namer.generateName(parcelableDescriptor.getParcelableConverterType().getName()));
-
-                converterField.assign(JExpr._new(converterType));
+                        namer.generateName(parcelableDescriptor.getParcelableConverterType().getName()), JExpr._new(converterType));
 
                 parcelConstructorBody.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam);
 
@@ -215,7 +213,9 @@ public class ParcelableGenerator {
 
             JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable.fullName()));
 
-            parcelConstructorBody.assign(parceableField, parcelParam.invoke("readParcelable").arg(JExpr._null()));
+            parcelConstructorBody.assign(parceableField, parcelParam.invoke("readParcelable").arg(
+                    returnParcelable.dotclass().invoke("getClassLoader"))
+            );
 
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName()).arg(parceableField.invoke(ParcelableWrapper.GET_WRAPPED));
         } else {
@@ -223,7 +223,7 @@ public class ParcelableGenerator {
         }
     }
 
-    private void buildWriteToParcel(JBlock body, JVar parcel, GetterSetterMethodPair propertyMutator, JFieldVar wrapped) {
+    private void buildWriteToParcel(JBlock body, JVar parcel, JVar flags, GetterSetterMethodPair propertyMutator, JFieldVar wrapped) {
         ASTType returnType = propertyMutator.getGetter().getReturnType();
         if (parceableModifier.containsKey(returnType)) {
             body.invoke(parcel,
@@ -238,7 +238,7 @@ public class ParcelableGenerator {
             JDefinedClass returnParcelable = parceableMap.get(returnType);
 
             body.invoke(parcel, "writeParcelable").arg(JExpr._new(returnParcelable).arg(wrapped.invoke(propertyMutator.getGetter().getName())))
-                    .arg(JExpr.lit(0));
+                    .arg(flags);
         } else {
             throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to write " + returnType.getName());
         }

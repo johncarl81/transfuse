@@ -7,7 +7,8 @@ import org.androidtransfuse.integrationTest.activity.ManifestManagedActivity;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
-import org.androidtransfuse.integrationTest.inject.*;
+import org.androidtransfuse.integrationTest.inject.ParcelExample;
+import org.androidtransfuse.integrationTest.inject.ParcelTwo;
 import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.register.RegisterActivity;
@@ -85,7 +86,7 @@ public class Main {
         parcelExample.setValue(THE_ANSWER);
         parcelExample.setSerializableValue(new SerializableValue(TEST_VALUE));
 
-        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, new ParcelExample(), THE_ANSWER));
+        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, parcelExample, THE_ANSWER));
         return new ActivityListItem(intent, "Extras");
     }
 }
