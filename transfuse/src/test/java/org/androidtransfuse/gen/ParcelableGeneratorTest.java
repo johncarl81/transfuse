@@ -87,7 +87,7 @@ public class ParcelableGeneratorTest {
 
         EasyMock.expect(mockParcel.readString()).andReturn(TEST_VALUE);
         EasyMock.expect(mockParcel.readDouble()).andReturn(Math.PI);
-        EasyMock.expect(mockParcel.readParcelable(null)).andReturn(mockSecondParcel);
+        EasyMock.expect(mockParcel.readParcelable(EasyMock.anyObject(ClassLoader.class))).andReturn(mockSecondParcel);
         EasyMock.expect(((ParcelableWrapper) mockSecondParcel).getWrapped()).andReturn(parcelSecondTarget);
 
         PowerMock.replay(mockParcel, mockSecondParcel);
