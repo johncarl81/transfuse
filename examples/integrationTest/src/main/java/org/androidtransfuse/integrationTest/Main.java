@@ -84,6 +84,7 @@ public class Main {
         parcelExample.setName(TEST_VALUE);
         parcelExample.setValue(THE_ANSWER);
         parcelExample.setSerializableValue(new SerializableValue(TEST_VALUE));
+        parcelExample.setRealParcelable(new RealParcelable(TEST_VALUE));
 
         android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, parcelExample, THE_ANSWER));
         return new ActivityListItem(intent, "Extras");
