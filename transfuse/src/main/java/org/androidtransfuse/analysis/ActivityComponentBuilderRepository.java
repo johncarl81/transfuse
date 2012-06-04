@@ -58,7 +58,7 @@ public class ActivityComponentBuilderRepository {
             return onCreateComponentBuilder;
 
         } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
         }
     }
 }

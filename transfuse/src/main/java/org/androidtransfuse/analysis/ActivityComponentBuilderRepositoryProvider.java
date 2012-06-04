@@ -69,7 +69,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
                     componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
                             componentBuilderFactory.buildSimpleMethodGenerator(onListItemClickMethod, false)));
         } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
         }
 
         return listActivityCallbackGenerators;
@@ -106,7 +106,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
 
             return activityCallbackGenerators;
         } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build event method", e);
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
         }
     }
 

@@ -53,7 +53,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("TransfuseAnalysisException while trying to build listener registration", e);
         } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("NoSucMethodException while trying to build listener registration", e);
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build listener registration", e);
         }
     }
 
