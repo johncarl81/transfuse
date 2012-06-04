@@ -1,14 +1,8 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import com.google.inject.Provider;
-import org.androidtransfuse.annotations.Extra;
-import org.androidtransfuse.annotations.Resource;
-import org.androidtransfuse.annotations.SystemService;
-import org.androidtransfuse.annotations.View;
-import org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder;
+import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.gen.variableBuilder.*;
 
 import javax.inject.Inject;
 
@@ -19,14 +13,24 @@ import javax.inject.Inject;
  */
 public class BindingRepositoryProvider implements Provider<BindingRepository> {
 
-    @Inject
     private ViewInjectionNodeBuilder viewVariableBuilder;
-    @Inject
     private ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
-    @Inject
     private SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
-    @Inject
     private ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
+    private PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
+
+    @Inject
+    public BindingRepositoryProvider(ViewInjectionNodeBuilder viewVariableBuilder,
+                                     ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
+                                     SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
+                                     ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
+                                     PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder) {
+        this.viewVariableBuilder = viewVariableBuilder;
+        this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
+        this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
+        this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
+        this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
+    }
 
     @Override
     public BindingRepository get() {
@@ -37,6 +41,7 @@ public class BindingRepositoryProvider implements Provider<BindingRepository> {
         bindingRepository.addVariableBuilder(Extra.class, extraInjectionNodeBuilder);
         bindingRepository.addVariableBuilder(Resource.class, resourceInjectionNodeBuilder);
         bindingRepository.addVariableBuilder(SystemService.class, systemServiceBindingInjectionNodeBuilder);
+        bindingRepository.addVariableBuilder(Preference.class, preferenceInjectionNodeBuilder);
 
         return bindingRepository;
     }
