@@ -1,5 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -98,5 +101,24 @@ public class ASTArrayType implements ASTType {
     @Override
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return delegate.getASTAnnotation(annotation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ASTArrayType)) {
+            return false;
+        }
+
+        ASTArrayType that = (ASTArrayType) o;
+
+        return new EqualsBuilder().append(isArray(), that.isArray()).append(delegate, that.delegate).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(delegate).hashCode();
     }
 }

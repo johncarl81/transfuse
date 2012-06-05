@@ -23,6 +23,7 @@ public class ExtraInjectionTest {
     private static final long EXTRA_TWO_VALUE = 42L;
     private static final String EXTRA_THREE_VALUE = "hello optional";
     private static final String EXTRA_FOUR_VALUE = "hello serializable";
+    private static final boolean[] BOOLEANS = {true, false, true};
 
     private ParcelExample parcelExample;
 
@@ -30,13 +31,11 @@ public class ExtraInjectionTest {
     public void setup() {
         parcelExample = new ParcelExample();
 
-        ParcelTwo parcelTwo = new ParcelTwo();
-
-        parcelTwo.setValue(EXTRA_THREE_VALUE);
-
         parcelExample.setName(EXTRA_ONE_VALUE);
         parcelExample.setValue(EXTRA_TWO_VALUE);
-        parcelExample.setInnerParcel(parcelTwo);
+        parcelExample.setInnerParcel(new ParcelTwo(EXTRA_THREE_VALUE));
+        parcelExample.setBooleans(BOOLEANS);
+        parcelExample.setRealParcelable(new RealParcelable(EXTRA_ONE_VALUE));
     }
 
     @Test

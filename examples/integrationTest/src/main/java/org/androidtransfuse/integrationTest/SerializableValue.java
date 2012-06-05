@@ -1,5 +1,8 @@
 package org.androidtransfuse.integrationTest;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 
 /**
@@ -16,5 +19,15 @@ public class SerializableValue implements Serializable {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return EqualsBuilder.reflectionEquals(this, that);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

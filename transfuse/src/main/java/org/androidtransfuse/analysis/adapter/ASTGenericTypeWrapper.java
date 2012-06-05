@@ -1,6 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
 import com.google.inject.assistedinject.Assisted;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
@@ -88,5 +90,24 @@ public class ASTGenericTypeWrapper implements ASTType {
     @Override
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return astType.getASTAnnotation(annotation);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ASTType)) {
+            return false;
+        }
+
+        ASTType that = (ASTType) o;
+
+        return new EqualsBuilder().append(getName(), that.getName()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(getName()).hashCode();
     }
 }

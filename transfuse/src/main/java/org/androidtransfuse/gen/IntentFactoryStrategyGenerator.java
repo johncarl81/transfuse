@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
+import org.androidtransfuse.analysis.ParcelableDescriptor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
@@ -170,8 +171,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {
-            List<GetterSetterMethodPair> analysis = parcelableAnalysis.analyze(type);
-            JDefinedClass parcelableClass = parcelableGenerator.generateParcelable(type, analysis);
+            ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(type);
+            JDefinedClass parcelableClass = parcelableGenerator.generateParcelable(type, parcelableDescriptor);
 
             JVar parcelable = block.decl(parcelableClass, namer.generateName(parcelableClass.fullName()));
             block.assign(parcelable, JExpr._new(parcelableClass).arg(extraParam));

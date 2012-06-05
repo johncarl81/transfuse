@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parcel {
+
+    Class<? extends ParcelConverter> value() default ParcelConverter.EmptyConverter.class;
 }

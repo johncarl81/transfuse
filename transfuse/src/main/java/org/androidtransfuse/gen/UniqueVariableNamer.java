@@ -17,15 +17,19 @@ public class UniqueVariableNamer {
     }
 
     public synchronized String generateName(String fullClassName) {
-        if (!nameMap.containsKey(fullClassName)) {
-            nameMap.put(fullClassName, 0);
+
+        //remove array notation
+        String sanitizedFullClassName = fullClassName.replaceAll("\\[\\]", "");
+
+        if (!nameMap.containsKey(sanitizedFullClassName)) {
+            nameMap.put(sanitizedFullClassName, 0);
         } else {
-            nameMap.put(fullClassName, nameMap.get(fullClassName) + 1);
+            nameMap.put(sanitizedFullClassName, nameMap.get(sanitizedFullClassName) + 1);
         }
 
-        String className = fullClassName;
+        String className = sanitizedFullClassName;
         if (fullClassName.contains(".")) {
-            className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+            className = sanitizedFullClassName.substring(sanitizedFullClassName.lastIndexOf('.') + 1);
         }
 
         // build class name with the following format:
@@ -39,7 +43,7 @@ public class UniqueVariableNamer {
             builder.append(className.substring(1));
         }
         builder.append('_');
-        builder.append(nameMap.get(fullClassName));
+        builder.append(nameMap.get(sanitizedFullClassName));
         return builder.toString();
     }
 }

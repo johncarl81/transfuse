@@ -14,9 +14,11 @@ import java.lang.reflect.Method;
 public class ASTClassAnnotation implements ASTAnnotation {
 
     private Annotation annotation;
+    private ASTClassFactory astClassFactory;
 
-    public ASTClassAnnotation(Annotation annotation) {
+    public ASTClassAnnotation(Annotation annotation, ASTClassFactory astClassFactory) {
         this.annotation = annotation;
+        this.astClassFactory = astClassFactory;
     }
 
     @Override
@@ -24,11 +26,24 @@ public class ASTClassAnnotation implements ASTAnnotation {
         try {
             Method annotationParameter = annotation.annotationType().getMethod(name);
 
-            if (!annotationParameter.getReturnType().isAssignableFrom(type)) {
-                throw new TransfuseAnalysisException("Type not expected: " + type);
+            Class convertedType = type;
+            boolean converttoASTType = false;
+
+            if (type.equals(ASTType.class)) {
+                convertedType = Class.class;
+                converttoASTType = true;
             }
 
-            return (T) annotationParameter.invoke(annotation);
+            if (!annotationParameter.getReturnType().isAssignableFrom(convertedType)) {
+                throw new TransfuseAnalysisException("Type not expected: " + convertedType);
+            }
+
+            Object invocationResult = annotationParameter.invoke(annotation);
+
+            if (converttoASTType) {
+                return (T) astClassFactory.buildASTClassType((Class) invocationResult);
+            }
+            return (T) invocationResult;
 
         } catch (IllegalAccessException e) {
             throw new TransfuseAnalysisException("IllegalAccessException Exception while accessing annotation method: " + name, e);
