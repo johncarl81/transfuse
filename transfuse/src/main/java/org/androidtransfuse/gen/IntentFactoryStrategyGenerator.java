@@ -31,54 +31,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private ParcelableAnalysis parcelableAnalysis;
     private GeneratedClassAnnotator generatedClassAnnotator;
     private ASTClassFactory astClassFactory;
-
-    private enum PrimitiveExtraMethod {
-        PUTBOOLEAN(ASTPrimitiveType.BOOLEAN, "putBoolean"),
-        PUTBYTE(ASTPrimitiveType.BYTE, "putByte"),
-        PUTCHAR(ASTPrimitiveType.CHAR, "putChar"),
-        PUTDOUBLE(ASTPrimitiveType.DOUBLE, "putDouble"),
-        PUTFLOAT(ASTPrimitiveType.FLOAT, "putFloat"),
-        PUTINT(ASTPrimitiveType.INT, "putInt"),
-        PUTLONG(ASTPrimitiveType.LONG, "putLong"),
-        PUTSHORT(ASTPrimitiveType.SHORT, "putShort");
-
-        private static final Map<ASTPrimitiveType, PrimitiveExtraMethod> METHOD_MAPPING = new EnumMap<ASTPrimitiveType, PrimitiveExtraMethod>(ASTPrimitiveType.class);
-
-        private ASTPrimitiveType mappedPrimitiveType;
-        private String methodName;
-
-        static {
-            Set<ASTPrimitiveType> primitiveSet = new HashSet<ASTPrimitiveType>(Arrays.asList(ASTPrimitiveType.values()));
-            for (PrimitiveExtraMethod primitiveExtraMethod : values()) {
-                if (METHOD_MAPPING.containsKey(primitiveExtraMethod.getMappedPrimitiveType())) {
-                    throw new TransfuseAnalysisException("Duplicate Mapping of Primitive Type");
-                }
-                METHOD_MAPPING.put(primitiveExtraMethod.getMappedPrimitiveType(), primitiveExtraMethod);
-                primitiveSet.remove(primitiveExtraMethod.getMappedPrimitiveType());
-            }
-
-            if (!primitiveSet.isEmpty()) {
-                throw new TransfuseAnalysisException("Unmapped primitive types found.");
-            }
-        }
-
-        private PrimitiveExtraMethod(ASTPrimitiveType mappedPrimitiveType, String methodName) {
-            this.mappedPrimitiveType = mappedPrimitiveType;
-            this.methodName = methodName;
-        }
-
-        public ASTPrimitiveType getMappedPrimitiveType() {
-            return mappedPrimitiveType;
-        }
-
-        public String getMethodName() {
-            return methodName;
-        }
-
-        public static PrimitiveExtraMethod get(ASTPrimitiveType primitiveType) {
-            return METHOD_MAPPING.get(primitiveType);
-        }
-    }
+    private Map<ASTPrimitiveType, String> methodMapping = new EnumMap<ASTPrimitiveType, String>(ASTPrimitiveType.class);
 
     @Inject
     public IntentFactoryStrategyGenerator(JCodeModel codeModel,
@@ -92,6 +45,15 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         this.parcelableAnalysis = parcelableAnalysis;
         this.generatedClassAnnotator = generatedClassAnnotator;
         this.astClassFactory = astClassFactory;
+
+        methodMapping.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
+        methodMapping.put(ASTPrimitiveType.BYTE, "putByte");
+        methodMapping.put(ASTPrimitiveType.CHAR, "putChar");
+        methodMapping.put(ASTPrimitiveType.DOUBLE, "putDouble");
+        methodMapping.put(ASTPrimitiveType.FLOAT, "putFloat");
+        methodMapping.put(ASTPrimitiveType.INT, "putInt");
+        methodMapping.put(ASTPrimitiveType.LONG, "putLong");
+        methodMapping.put(ASTPrimitiveType.SHORT, "putShort");
     }
 
     @Override
@@ -161,7 +123,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         }
 
         if (primitiveType != null) {
-            return extras.invoke(PrimitiveExtraMethod.get(primitiveType).getMethodName()).arg(name).arg(extraParam);
+            return extras.invoke(methodMapping.get(primitiveType)).arg(name).arg(extraParam);
         } else if (type.getName().equals(String.class.getName())) {
             return extras.invoke("putString").arg(name).arg(extraParam);
         } else if (type.implementsFrom(astClassFactory.buildASTClassType(Serializable.class))) {

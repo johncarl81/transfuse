@@ -1,6 +1,5 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.ASTAnalysis;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTConstructor;

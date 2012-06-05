@@ -78,6 +78,7 @@ public class ASTClassFactory {
         ASTType astType = typeCache.get(clazz.getName());
 
         if (genericType instanceof ParameterizedType) {
+            //wrap with a parametrized type
             astType = astFactory.buildGenericTypeWrapper(astType, astFactory.builderParameterBuilder((ParameterizedType) genericType));
         }
 

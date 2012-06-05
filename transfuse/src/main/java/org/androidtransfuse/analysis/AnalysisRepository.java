@@ -1,6 +1,8 @@
 package org.androidtransfuse.analysis;
 
 
+import org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis;
+
 import java.util.HashSet;
 import java.util.Set;
 

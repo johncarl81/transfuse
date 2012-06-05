@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Visitor to convert between the given annotation field and the given type T
+ * Visitor to convert between the given annotation field and the given class type T
  *
  * @param <T>
  * @author John Ericksen

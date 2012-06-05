@@ -8,7 +8,7 @@ import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 
 /**
- * Builds
+ * Builds the appropriate (expected) ASTType for the visited Element
  *
  * @param <T>
  */

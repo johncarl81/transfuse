@@ -27,11 +27,12 @@ public class ASTClassAnnotation implements ASTAnnotation {
             Method annotationParameter = annotation.annotationType().getMethod(name);
 
             Class convertedType = type;
-            boolean converttoASTType = false;
+            boolean convertToASTType = false;
 
             if (type.equals(ASTType.class)) {
+                //convert classes into ASTType
                 convertedType = Class.class;
-                converttoASTType = true;
+                convertToASTType = true;
             }
 
             if (!annotationParameter.getReturnType().isAssignableFrom(convertedType)) {
@@ -40,7 +41,7 @@ public class ASTClassAnnotation implements ASTAnnotation {
 
             Object invocationResult = annotationParameter.invoke(annotation);
 
-            if (converttoASTType) {
+            if (convertToASTType) {
                 return (T) astClassFactory.buildASTClassType((Class) invocationResult);
             }
             return (T) invocationResult;

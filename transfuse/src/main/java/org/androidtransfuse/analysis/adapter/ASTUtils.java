@@ -5,6 +5,8 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import java.util.Collection;
 
 /**
+ * Utility singleton for AST classes.
+ *
  * @author John Ericksen
  */
 public final class ASTUtils {
@@ -19,6 +21,15 @@ public final class ASTUtils {
         return INSTANCE;
     }
 
+    /**
+     * Determines if the given ASTType inherits or extends from the given inheritable ASTType
+     *
+     * @param astType     target
+     * @param inheritable inheritance target
+     * @param implement
+     * @param extend
+     * @return
+     */
     public boolean inherits(ASTType astType, ASTType inheritable, boolean implement, boolean extend) {
         if (astType == null) {
             return false;

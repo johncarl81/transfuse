@@ -18,6 +18,11 @@ public abstract class ASTTypeLazyLoader<T extends Element> {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
+    /**
+     * Lazily builds the ASTType for the given element
+     *
+     * @return ASTType
+     */
     public synchronized ASTType getASTType() {
         if (astType == null) {
             astType = buildASTType(element, astTypeBuilderVisitor);

@@ -61,10 +61,6 @@ public class ASTInjectionAspect {
         this.methodInjectionPoints.addAll(methodInjectionPoints);
     }
 
-    public void addAllConstructorInjectionPoints(Set<ConstructorInjectionPoint> constructorInjectionPoints) {
-        this.constructorInjectionPoints.addAll(constructorInjectionPoints);
-    }
-
     public InjectionAssignmentType getAssignmentType() {
         return assignmentType;
     }

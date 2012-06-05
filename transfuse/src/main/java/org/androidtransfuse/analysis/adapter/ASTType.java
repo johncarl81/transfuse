@@ -60,15 +60,33 @@ public interface ASTType extends ASTBase {
     boolean isArray();
 
     /**
-     * returns a list of the generic type parameters, if they are appropriate for the type and exist.
+     * Generates a list of the generic type parameters, if they are appropriate for the type and exist.
      *
      * @return generic parameters
      */
     List<ASTType> getGenericParameters();
 
+    /**
+     * Determines if the current type inherits (extends or implements) from the given type.
+     *
+     * @param type implementing from
+     * @return inheritance
+     */
     boolean inheritsFrom(ASTType type);
 
+    /**
+     * Determines if the current type extends from the given type.
+     *
+     * @param type implementing from
+     * @return inheritance
+     */
     boolean extendsFrom(ASTType type);
 
+    /**
+     * Determines if the current type implements the given type.
+     *
+     * @param type implementing from
+     * @return inheritance
+     */
     boolean implementsFrom(ASTType type);
 }
