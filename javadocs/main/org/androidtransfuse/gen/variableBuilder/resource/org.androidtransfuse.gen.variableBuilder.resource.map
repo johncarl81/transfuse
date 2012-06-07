@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="c3886" href="./ResourceExpressionBuilderAdaptor.html" title="org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderAdaptor" alt="" coords="216,11,443,53"/>
+<area shape="rect" id="c3889" href="./AnimationResourceExpressionBuilderAdaptor.html" title="org.androidtransfuse.gen.variableBuilder.resource.AnimationResourceExpressionBuilderAdaptor" alt="" coords="16,118,301,143"/>
+<area shape="rect" id="c3892" href="./MethodBasedResourceExpressionBuilderAdaptor.html" title="org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptor" alt="" coords="347,118,653,143"/>
+<area shape="rect" id="c3887" href="./AnimationResourceExpressionBuilder.html" title="org.androidtransfuse.gen.variableBuilder.resource.AnimationResourceExpressionBuilder" alt="" coords="699,118,939,143"/>
+<area shape="rect" id="c3888" href="./MethodBasedResourceExpressionBuilder.html" title="org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilder" alt="" coords="984,118,1245,143"/>
+<area shape="rect" id="c3890" href="./MethodBasedResourceExpressionBuilderAdaptorFactory.html" title="org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory" alt="" coords="1102,11,1453,53"/>
+<area shape="rect" id="c3891" href="./ResourceExpressionBuilder.html" title="org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder" alt="" coords="876,11,1057,53"/>
+<area shape="rect" id="c3893" href="./ResourceExpressionBuilderFactory.html" title="org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderFactory" alt="" coords="1497,19,1722,45"/>
+<area shape="rect" id="c3894" href="./MethodBasedResourceExpressionBuilderFactory.html" title="org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory" alt="" coords="1766,11,2071,53"/>
+</map>

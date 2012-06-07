@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="c29344" href="./ASTAnalysis.html" title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" alt="" coords="199,11,297,53"/>
+<area shape="rect" id="c29350" href="./ASTAnalysisAdaptor.html" title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" alt="" coords="177,118,319,143"/>
+<area shape="rect" id="c29346" href="./AOPProxyAnalyzer.html" title="org.androidtransfuse.analysis.astAnalyzer.AOPProxyAnalyzer" alt="" coords="16,214,149,239"/>
+<area shape="rect" id="c29351" href="./ScopeAnalysis.html" title="org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis" alt="" coords="194,214,302,239"/>
+<area shape="rect" id="c29356" href="./MethodCallbackAnalysis.html" title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAnalysis" alt="" coords="347,214,512,239"/>
+</map>

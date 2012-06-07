@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c70694" href="../IntentFactoryStrategyGenerator.html" title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" alt="" coords="15,118,219,143"/>
+<area shape="rect" id="c70762" href="./ListenerRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" alt="" coords="263,118,457,143"/>
+<area shape="rect" id="c70764" href="./MethodCallbackGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" alt="" coords="501,118,673,143"/>
+<area shape="rect" id="c70765" href="./ExpressionVariableDependentGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" alt="" coords="233,11,487,53"/>
+</map>

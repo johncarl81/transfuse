@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="c60021" href="./ContextVariableInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ContextVariableInjectionNodeBuilder" alt="" coords="15,214,249,239"/>
+<area shape="rect" id="c60022" href="./VariableASTImplementationInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableASTImplementationInjectionNodeBuilder" alt="" coords="293,214,595,239"/>
+<area shape="rect" id="c60023" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="877,118,1142,143"/>
+<area shape="rect" id="c60027" href="./SystemServiceInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.SystemServiceInjectionNodeBuilder" alt="" coords="640,214,869,239"/>
+<area shape="rect" id="c60029" href="./ProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilder" alt="" coords="915,214,1104,239"/>
+<area shape="rect" id="c60031" href="./ResourcesInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder" alt="" coords="1149,214,1353,239"/>
+<area shape="rect" id="c60035" href="./ApplicationVariableInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder" alt="" coords="1397,214,1649,239"/>
+<area shape="rect" id="c60039" href="./VariableInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder" alt="" coords="1693,214,1881,239"/>
+<area shape="rect" id="c60026" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="939,11,1080,53"/>
+</map>

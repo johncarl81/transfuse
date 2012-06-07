@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="c4156" href="./VirtualProxyGenerator.html" title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator" alt="" coords="16,19,165,45"/>
+<area shape="rect" id="c4157" href="./AOPProxyGenerator.html" title="org.androidtransfuse.gen.proxy.AOPProxyGenerator" alt="" coords="210,19,350,45"/>
+<area shape="rect" id="c4158" href="./DelayedLoad.html" title="org.androidtransfuse.gen.proxy.DelayedLoad" alt="" coords="394,11,515,53"/>
+</map>

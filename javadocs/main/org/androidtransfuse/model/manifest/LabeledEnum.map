@@ -1,0 +1,15 @@
+<map id="G" name="G">
+<area shape="rect" id="c7593" href="./ReqKeyboardType.html" title="org.androidtransfuse.model.manifest.ReqKeyboardType" alt="" coords="15,113,145,154"/>
+<area shape="rect" id="c7596" href="./LabeledEnum.html" title="org.androidtransfuse.model.manifest.LabeledEnum" alt="" coords="934,11,1034,53"/>
+<area shape="rect" id="c7598" href="./ReqTouchScreen.html" title="org.androidtransfuse.model.manifest.ReqTouchScreen" alt="" coords="189,113,310,154"/>
+<area shape="rect" id="c7605" href="./ScreenDensity.html" title="org.androidtransfuse.model.manifest.ScreenDensity" alt="" coords="355,113,461,154"/>
+<area shape="rect" id="c7606" href="./LaunchMode.html" title="org.androidtransfuse.model.manifest.LaunchMode" alt="" coords="506,113,611,154"/>
+<area shape="rect" id="c7607" href="./WindowSoftInputMode.html" title="org.androidtransfuse.model.manifest.WindowSoftInputMode" alt="" coords="655,113,809,154"/>
+<area shape="rect" id="c7611" href="./ConfigChanges.html" title="org.androidtransfuse.model.manifest.ConfigChanges" alt="" coords="853,113,963,154"/>
+<area shape="rect" id="c7612" href="./UIOptions.html" title="org.androidtransfuse.model.manifest.UIOptions" alt="" coords="1007,113,1113,154"/>
+<area shape="rect" id="c7618" href="./ReqNavigation.html" title="org.androidtransfuse.model.manifest.ReqNavigation" alt="" coords="1157,113,1264,154"/>
+<area shape="rect" id="c7619" href="./InstallLocation.html" title="org.androidtransfuse.model.manifest.InstallLocation" alt="" coords="1309,113,1414,154"/>
+<area shape="rect" id="c7625" href="./ScreenOrientation.html" title="org.androidtransfuse.model.manifest.ScreenOrientation" alt="" coords="1459,113,1584,154"/>
+<area shape="rect" id="c7626" href="./ProtectionLevel.html" title="org.androidtransfuse.model.manifest.ProtectionLevel" alt="" coords="1629,113,1739,154"/>
+<area shape="rect" id="c7630" href="./ScreenSize.html" title="org.androidtransfuse.model.manifest.ScreenSize" alt="" coords="1783,113,1889,154"/>
+</map>

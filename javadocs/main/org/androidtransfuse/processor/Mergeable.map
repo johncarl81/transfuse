@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="c48335" href="../model/manifest/Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="16,113,101,138"/>
+<area shape="rect" id="c48338" href="../model/manifest/Category.html" title="org.androidtransfuse.model.manifest.Category" alt="" coords="146,113,219,138"/>
+<area shape="rect" id="c48339" href="../model/manifest/Manifest.html" title="org.androidtransfuse.model.manifest.Manifest" alt="" coords="263,113,334,138"/>
+<area shape="rect" id="c48348" href="../model/manifest/Action.html" title="org.androidtransfuse.model.manifest.Action" alt="" coords="378,113,435,138"/>
+<area shape="rect" id="c48365" href="../model/manifest/Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="479,113,545,138"/>
+<area shape="rect" id="c48367" href="../model/manifest/IntentFilter.html" title="org.androidtransfuse.model.manifest.IntentFilter" alt="" coords="589,113,672,138"/>
+<area shape="rect" id="c48490" href="./Mergeable.html" title="org.androidtransfuse.processor.Mergeable" alt="" coords="299,17,405,42"/>
+</map>

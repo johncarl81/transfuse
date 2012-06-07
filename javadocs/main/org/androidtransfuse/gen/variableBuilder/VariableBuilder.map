@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="c63935" href="./ConsistentTypeVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" alt="" coords="16,118,216,143"/>
+<area shape="rect" id="c63943" href="./VariableInjectionBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder" alt="" coords="261,118,419,143"/>
+<area shape="rect" id="c63947" href="./ProviderVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder" alt="" coords="463,118,619,143"/>
+<area shape="rect" id="c63952" href="./ResourceVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder" alt="" coords="663,118,827,143"/>
+<area shape="rect" id="c63953" href="./VariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" alt="" coords="589,11,697,53"/>
+<area shape="rect" id="c63956" href="./PreferenceVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.PreferenceVariableBuilder" alt="" coords="872,118,1043,143"/>
+<area shape="rect" id="c63987" href="../scopeBuilder/SingletonScopeBuilder.html" title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" alt="" coords="1088,118,1240,143"/>
+</map>

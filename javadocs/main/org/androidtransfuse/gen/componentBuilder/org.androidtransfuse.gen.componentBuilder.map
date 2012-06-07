@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="c4420" href="./ReturningMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator" alt="" coords="221,214,398,239"/>
+<area shape="rect" id="c4421" href="./ExistingMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExistingMethodGenerator" alt="" coords="16,118,184,143"/>
+<area shape="rect" id="c4422" href="./NoOpLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" alt="" coords="435,118,568,143"/>
+<area shape="rect" id="c4423" href="./LayoutHandlerBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" alt="" coords="613,118,758,143"/>
+<area shape="rect" id="c4424" href="./ListenerRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" alt="" coords="957,118,1150,143"/>
+<area shape="rect" id="c4425" href="./MethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodGenerator" alt="" coords="143,11,265,53"/>
+<area shape="rect" id="c4431" href="./SimpleMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator" alt="" coords="229,118,390,143"/>
+<area shape="rect" id="c4426" href="./MethodCallbackGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" alt="" coords="1194,118,1366,143"/>
+<area shape="rect" id="c4427" href="./ExpressionVariableDependentGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" alt="" coords="1040,11,1293,53"/>
+<area shape="rect" id="c4428" href="./ComponentBuilderFactory.html" title="org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory" alt="" coords="1338,11,1510,53"/>
+<area shape="rect" id="c4429" href="./RLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" alt="" coords="803,118,912,143"/>
+<area shape="rect" id="c4430" href="./OnCreateComponentBuilder.html" title="org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder" alt="" coords="1555,19,1739,45"/>
+<area shape="rect" id="c4432" href="./MethodDescriptor.html" title="org.androidtransfuse.gen.componentBuilder.MethodDescriptor" alt="" coords="1783,19,1907,45"/>
+<area shape="rect" id="c4433" href="./LayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" alt="" coords="635,11,735,53"/>
+</map>
