@@ -90,7 +90,7 @@ public class VirtualProxyGenerator {
                             for (ASTParameter parameter : method.getParameters()) {
                                 parameterMap.put(parameter,
                                         methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
-                                                variableNamer.generateName(parameter.getASTType().getName())));
+                                                variableNamer.generateName(parameter.getASTType())));
                             }
 
                             //define method body

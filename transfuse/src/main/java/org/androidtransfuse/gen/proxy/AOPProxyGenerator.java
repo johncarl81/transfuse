@@ -79,7 +79,7 @@ public class AOPProxyGenerator {
 
             List<JVar> superArguments = new ArrayList<JVar>();
             for (InjectionNode node : constructorInjectionPoint.getInjectionNodes()) {
-                String paramName = variableNamer.generateName(node.getClassName());
+                String paramName = variableNamer.generateName(node);
                 JVar param = constructor.param(codeModel.ref(node.getClassName()), paramName);
                 superArguments.add(param);
                 proxyConstructorInjectionPoint.addInjectionNode(node);
@@ -148,13 +148,13 @@ public class AOPProxyGenerator {
 
         //setup interceptor fields
         for (InjectionNode interceptorInjectionNode : methodInterceptorEntry.getValue()) {
-            String interceptorInstanceName = variableNamer.generateName(interceptorInjectionNode.getClassName());
+            String interceptorInstanceName = variableNamer.generateName(interceptorInjectionNode);
 
             JFieldVar interceptorField = definedClass.field(JMod.PRIVATE, codeModel.ref(interceptorInjectionNode.getClassName()), interceptorInstanceName);
 
             injectionNodeInstanceNameMap.put(interceptorInjectionNode, interceptorField);
 
-            JVar interceptorParam = constructor.param(codeModel.ref(interceptorInjectionNode.getClassName()), variableNamer.generateName(interceptorInjectionNode.getClassName()));
+            JVar interceptorParam = constructor.param(codeModel.ref(interceptorInjectionNode.getClassName()), variableNamer.generateName(interceptorInjectionNode));
 
             constructorBody.assign(interceptorField, interceptorParam);
 
@@ -171,7 +171,7 @@ public class AOPProxyGenerator {
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
                     methodDeclaration.param(JMod.FINAL, codeModel.ref(parameter.getASTType().getName()),
-                            variableNamer.generateName(parameter.getASTType().getName())));
+                            variableNamer.generateName(parameter.getASTType())));
         }
 
         //aop interceptor

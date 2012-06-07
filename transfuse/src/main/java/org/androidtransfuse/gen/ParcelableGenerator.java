@@ -75,7 +75,7 @@ public class ParcelableGenerator {
                     ._implements(codeModel.ref(ParcelableWrapper.class).narrow(inputType));
 
             //wrapped @Parcel
-            JFieldVar wrapped = parcelableClass.field(JMod.PRIVATE, inputType, namer.generateName(type.getName()));
+            JFieldVar wrapped = parcelableClass.field(JMod.PRIVATE, inputType, namer.generateName(type));
 
             //Parcel constructor
             JMethod parcelConstructor = parcelableClass.constructor(JMod.PUBLIC);
@@ -103,7 +103,7 @@ public class ParcelableGenerator {
                 //todo: inject ParcelConverter?
                 JClass converterType = codeModel.ref(parcelableDescriptor.getParcelableConverterType().getName());
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
-                        namer.generateName(parcelableDescriptor.getParcelableConverterType().getName()), JExpr._new(converterType));
+                        namer.generateName(parcelableDescriptor.getParcelableConverterType()), JExpr._new(converterType));
 
                 parcelConstructorBody.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam);
 
@@ -112,7 +112,7 @@ public class ParcelableGenerator {
 
             //@Parcel input
             JMethod inputConstructor = parcelableClass.constructor(JMod.PUBLIC);
-            JVar inputParam = inputConstructor.param(inputType, namer.generateName(type.getName()));
+            JVar inputParam = inputConstructor.param(inputType, namer.generateName(type));
             inputConstructor.body().assign(wrapped, inputParam);
 
             //describeContents()
@@ -178,7 +178,6 @@ public class ParcelableGenerator {
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(parcelParam.invoke(readWritePair.getReadMethod()).arg(returnJClassRef.dotclass().invoke("getClassLoader")));
         } else if (returnType.implementsFrom(astClassFactory.buildASTClassType(Parcelable.class))) {
-            ReadWritePair readWritePair = classLoaderModifier.get(returnType);
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(JExpr.cast(returnJClassRef, parcelParam.invoke("readParcelable").arg(returnJClassRef.dotclass().invoke("getClassLoader"))));
         } else if (returnType.inheritsFrom(astClassFactory.buildASTClassType(Serializable.class))) {
@@ -189,7 +188,7 @@ public class ParcelableGenerator {
             generateParcelable(returnType, parcelableDescriptor);
             JDefinedClass returnParcelable = parceableMap.get(returnType);
 
-            JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable.fullName()));
+            JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable));
 
             parcelConstructorBody.assign(parceableField, parcelParam.invoke("readParcelable").arg(
                     returnParcelable.dotclass().invoke("getClassLoader"))

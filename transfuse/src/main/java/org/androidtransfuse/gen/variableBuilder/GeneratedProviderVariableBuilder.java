@@ -38,7 +38,7 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
 
         JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode, injectionBuilderContext.getRResource());
 
-        JVar providerField = injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass.fullName()));
+        JVar providerField = injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass));
 
         injectionBuilderContext.getBlock().assign(providerField, JExpr._new(providerClass));
 

@@ -24,7 +24,7 @@ public class ProxyVariableBuilder {
 
     public JExpression buildProxyInstance(InjectionBuilderContext context, InjectionNode injectionNode, ProxyDescriptor proxyDescriptor) {
 
-        JVar proxyVariable = context.getBlock().decl(proxyDescriptor.getClassDefinition(), variableNamer.generateName(injectionNode.getClassName()));
+        JVar proxyVariable = context.getBlock().decl(proxyDescriptor.getClassDefinition(), variableNamer.generateName(injectionNode));
 
         context.getBlock().assign(proxyVariable, JExpr._new(proxyDescriptor.getClassDefinition()));
 

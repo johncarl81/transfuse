@@ -61,7 +61,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 List<JVar> parameters = new ArrayList<JVar>();
 
                 for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
-                    JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument.getName()));
+                    JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument));
                     parameters.add(param);
                     onCreateMethodDescriptor.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
                 }

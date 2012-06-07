@@ -31,7 +31,7 @@ public class SimpleMethodGenerator implements MethodGenerator {
 
         //parameters
         for (ASTParameter astParameter : overrideMethod.getParameters()) {
-            JVar param = method.param(codeModel.ref(astParameter.getASTType().getName()), variableNamer.generateName(astParameter.getName()));
+            JVar param = method.param(codeModel.ref(astParameter.getASTType().getName()), variableNamer.generateName(astParameter.getASTType()));
             methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
         }
 

@@ -71,9 +71,9 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                 return viewExpression;
             } else {
                 if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
-                    variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(injectionNode.getClassName()));
+                    variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(injectionNode));
                 } else {
-                    variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode.getClassName()));
+                    variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode));
                 }
                 JBlock block = injectionBuilderContext.getBlock();
 

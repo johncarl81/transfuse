@@ -1,5 +1,9 @@
 package org.androidtransfuse.gen;
 
+import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.model.InjectionNode;
+
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +18,18 @@ public class UniqueVariableNamer {
 
     public String generateName(Class clazz) {
         return generateName(clazz.getName());
+    }
+
+    public String generateName(ASTType astType) {
+        return generateName(astType.getName());
+    }
+
+    public String generateName(JDefinedClass definedClass) {
+        return generateName(definedClass.fullName());
+    }
+
+    public String generateName(InjectionNode injectionNode) {
+        return generateName(injectionNode.getClassName());
     }
 
     public synchronized String generateName(String fullClassName) {
