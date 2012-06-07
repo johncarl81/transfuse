@@ -27,7 +27,9 @@ public class Analyzer {
      * Analyze the given ASTType and produces a corresponding InjectionNode with the contained
      * AST injection related elements (constructor, method, field) recursively analyzed for InjectionNodes
      *
+     * @param instanceType astType instance
      * @param concreteType required type
+     * @param context      required
      * @return InjectionNode root
      */
     public InjectionNode analyze(final ASTType instanceType, final ASTType concreteType, final AnalysisContext context) {

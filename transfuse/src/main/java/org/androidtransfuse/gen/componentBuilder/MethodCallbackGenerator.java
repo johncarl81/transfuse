@@ -7,10 +7,10 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
-import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.TypedExpression;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;

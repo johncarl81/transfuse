@@ -1,7 +1,6 @@
-package org.androidtransfuse.analysis;
+package org.androidtransfuse.model;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.GetterSetterMethodPair;
 
 import java.util.ArrayList;
 import java.util.List;

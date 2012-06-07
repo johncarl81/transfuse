@@ -3,6 +3,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;

@@ -2,7 +2,9 @@ package org.androidtransfuse.analysis;
 
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.AOPRepository;
+import org.androidtransfuse.analysis.repository.AnalysisRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -24,7 +26,7 @@ public class AnalysisContext {
     private int superClassLevel;
 
     @Inject
-    public AnalysisContext(@Assisted AnalysisRepository analysisRepository, @Assisted InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
+    public AnalysisContext(@Assisted InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository, AOPRepository aopRepository) {
         this.dependents = Collections.emptyMap();
         this.dependencyHistory = new Stack<InjectionNode>();
         this.analysisRepository = analysisRepository;
@@ -34,7 +36,7 @@ public class AnalysisContext {
     }
 
     private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
-        this(analysisRepository, injectionNodeBuilders, aopRepository);
+        this(injectionNodeBuilders, analysisRepository, aopRepository);
         this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependents.putAll(previousContext.dependents);
         this.dependents.put(node.getASTType(), node);
@@ -43,7 +45,7 @@ public class AnalysisContext {
     }
 
     private AnalysisContext(Map<ASTType, InjectionNode> dependents, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository, int superClassLevel) {
-        this(analysisRepository, injectionNodeBuilders, aopRepository);
+        this(injectionNodeBuilders, analysisRepository, aopRepository);
         this.dependents = dependents;
         this.superClassLevel = superClassLevel;
     }

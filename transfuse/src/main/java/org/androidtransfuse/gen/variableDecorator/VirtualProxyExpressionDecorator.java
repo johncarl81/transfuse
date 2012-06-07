@@ -5,12 +5,12 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.Map;

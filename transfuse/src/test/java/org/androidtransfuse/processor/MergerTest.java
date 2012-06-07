@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
+import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;

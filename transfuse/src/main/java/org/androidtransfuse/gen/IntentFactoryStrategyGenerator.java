@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
-import org.androidtransfuse.analysis.ParcelableDescriptor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
@@ -13,7 +12,10 @@ import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.ParcelableDescriptor;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;

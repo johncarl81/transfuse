@@ -1,5 +1,7 @@
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.model.Mergeable;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,5 +12,6 @@ import java.util.Collection;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MergeCollection {
     Class<? extends Collection> collectionType();
+
     Class<? extends Mergeable> type();
 }

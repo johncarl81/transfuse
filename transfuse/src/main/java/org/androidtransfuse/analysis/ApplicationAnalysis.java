@@ -6,16 +6,16 @@ import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Application;
-import org.androidtransfuse.gen.ComponentDescriptor;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ProcessorContext;
@@ -60,23 +60,11 @@ public class ApplicationAnalysis {
         this.analysisContextFactory = analysisContextFactory;
     }
 
-    public ComponentDescriptor emptyApplication(ProcessorContext context) {
-
-        String packageName = context.getManifest().getApplicationPackage();
-
-        PackageClass applicationClassName = new PackageClass(packageName, "TransfuseApplication");
-
-        ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
-
-        //application generation profile
-        setupApplicationProfile(applicationDescriptor, null, context);
-
-        setupManifest(context, ".TransfuseApplication", null);
-
-        return applicationDescriptor;
+    public void emptyApplication(ProcessorContext context) {
+        setupManifest(context, android.app.Application.class.getName(), null);
     }
 
-    public ComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType, AnalysisRepository analysisRepository) {
+    public ComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
         PackageClass inputType = new PackageClass(astType.getName());
@@ -91,7 +79,7 @@ public class ApplicationAnalysis {
         ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
 
         //analyze delegate
-        AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap());
+        AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
 
         //application generation profile

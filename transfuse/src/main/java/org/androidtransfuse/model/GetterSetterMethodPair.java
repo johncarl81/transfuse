@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.model;
 
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 

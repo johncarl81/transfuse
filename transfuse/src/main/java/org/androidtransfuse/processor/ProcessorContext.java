@@ -1,7 +1,6 @@
 package org.androidtransfuse.processor;
 
 import com.google.inject.assistedinject.Assisted;
-import org.androidtransfuse.analysis.ModuleProcessor;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 
@@ -16,13 +15,11 @@ public class ProcessorContext {
     private Manifest manifest;
     private Manifest sourceManifest;
     private RResource rResource;
-    private ModuleProcessor moduleProcessor;
 
     @Inject
-    public ProcessorContext(@Assisted RResource rResource, @Assisted Manifest manifest, @Assisted ModuleProcessor moduleProcessor, Provider<Manifest> manifestProvider) {
+    public ProcessorContext(@Assisted RResource rResource, @Assisted Manifest manifest, Provider<Manifest> manifestProvider) {
         this.manifest = manifest;
         this.rResource = rResource;
-        this.moduleProcessor = moduleProcessor;
         sourceManifest = manifestProvider.get();
     }
 
@@ -32,10 +29,6 @@ public class ProcessorContext {
 
     public RResource getRResource() {
         return rResource;
-    }
-
-    public ModuleProcessor getModuleProcessor() {
-        return moduleProcessor;
     }
 
     public Manifest getSourceManifest() {

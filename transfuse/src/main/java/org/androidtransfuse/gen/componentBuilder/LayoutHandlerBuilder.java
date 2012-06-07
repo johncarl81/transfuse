@@ -6,8 +6,8 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.Logger;
 

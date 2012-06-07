@@ -1,7 +1,7 @@
 package org.androidtransfuse.analysis.module;
 
-import org.androidtransfuse.analysis.AOPRepository;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.AOPRepository;
 
 import javax.inject.Inject;
 

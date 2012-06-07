@@ -4,13 +4,17 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
-import org.androidtransfuse.analysis.*;
+import org.androidtransfuse.analysis.ActivityComponentBuilderRepository;
+import org.androidtransfuse.analysis.ActivityComponentBuilderRepositoryProvider;
+import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepository;
 import org.androidtransfuse.analysis.astAnalyzer.BindingRepositoryProvider;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.gen.CodeWriterFactory;
+import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
@@ -47,6 +51,7 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(VariableExpressionBuilderFactory.class));
         install(factoryModuleBuilder.build(ComponentBuilderFactory.class));
         install(factoryModuleBuilder.build(AnalysisContextFactory.class));
+        install(factoryModuleBuilder.build(CodeWriterFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
 
@@ -58,8 +63,6 @@ public class TransfuseGenerationGuiceModule extends AbstractModule {
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
         bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
         bind(ActivityComponentBuilderRepository.class).toProvider(ActivityComponentBuilderRepositoryProvider.class).asEagerSingleton();
-
-        bind(InjectionExpressionBuilder.class).to(InjectionExpressionBuilderImpl.class);
 
         bind(Logger.class).toInstance(logger);
     }

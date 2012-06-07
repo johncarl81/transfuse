@@ -4,7 +4,8 @@ import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.annotations.ParcelConverter;
 import org.androidtransfuse.annotations.Transient;
-import org.androidtransfuse.gen.GetterSetterMethodPair;
+import org.androidtransfuse.model.GetterSetterMethodPair;
+import org.androidtransfuse.model.ParcelableDescriptor;
 
 import javax.inject.Inject;
 import java.util.HashMap;

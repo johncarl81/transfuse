@@ -8,13 +8,14 @@ import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
-import org.androidtransfuse.analysis.ParcelableDescriptor;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTArrayType;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.ParcelConverter;
+import org.androidtransfuse.model.GetterSetterMethodPair;
+import org.androidtransfuse.model.ParcelableDescriptor;
 import org.androidtransfuse.util.ParcelableWrapper;
 
 import javax.inject.Inject;
@@ -52,57 +53,7 @@ public class ParcelableGenerator {
         this.namer = namer;
         this.astClassFactory = astClassFactory;
 
-        addPrimitivePair(ASTPrimitiveType.BYTE, "readByte", "writeByte");
-        addPrimitivePair(ASTPrimitiveType.DOUBLE, "readDouble", "writeDouble");
-        addPrimitivePair(ASTPrimitiveType.FLOAT, "readFloat", "writeFloat");
-        addPrimitivePair(ASTPrimitiveType.INT, "readInt", "writeInt");
-        addPrimitivePair(ASTPrimitiveType.LONG, "readLong", "writeLong");
-        addPrimitiveArrayPair(ASTPrimitiveType.BYTE, "createByteArray", "writeByteArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.CHAR, "createCharArray", "writeCharArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.BOOLEAN, "createBooleanArray", "writeBooleanArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.INT, "createByteArray", "writeIntArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.LONG, "createLongArray", "writeLongArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.FLOAT, "createFloatArray", "writeFloatArray");
-        addPrimitiveArrayPair(ASTPrimitiveType.DOUBLE, "createDoubleArray", "writeDoubleArray");
-        addArrayPair(String[].class, "createStringArray", "writeStringArray");
-        addPair(String.class, "readString", "writeString");
-        addPair(IBinder.class, "readStrongBinder", "writeStrongBinder");
-        addPair(Bundle.class, "readBundle", "writeBundle");
-        addArrayPair(Object[].class, "readArray", "writeArray");
-        addClassloaderPair(SparseArray.class, "readSparseArray", "writeSparseArray");
-        addPair(SparseBooleanArray.class, "readSparseBooleanArray", "writeSparseBooleanArray");
-        addPair(Exception.class, "readException", "writeException");
-    }
-
-    private void addClassloaderPair(Class clazz, String readSparseArray, String writeSparseArray) {
-        ASTType astType = astClassFactory.buildASTClassType(clazz);
-        classLoaderModifier.put(astType, new ReadWritePair(readSparseArray, writeSparseArray));
-    }
-
-    private void addPair(Class clazz, String readMethod, String writeMethod) {
-        addPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
-    }
-
-    private void addPrimitiveArrayPair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
-        addArrayPair(new ASTArrayType(primitiveType), readMethod, writeMethod);
-        addArrayPair(new ASTArrayType(astClassFactory.buildASTClassType(primitiveType.getObjectClass())), readMethod, writeMethod);
-    }
-
-    private void addArrayPair(Class clazz, String readMethod, String writeMethod) {
-        addArrayPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
-    }
-
-    private void addArrayPair(ASTType astArrayType, String readMethod, String writeMethod) {
-        arrayParceableModfier.put(astArrayType, new ReadWritePair(readMethod, writeMethod));
-    }
-
-    private void addPrimitivePair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
-        addPair(primitiveType, readMethod, writeMethod);
-        addPair(astClassFactory.buildASTClassType(primitiveType.getObjectClass()), readMethod, writeMethod);
-    }
-
-    private void addPair(ASTType astType, String readMethod, String writeMethod) {
-        parceableModifier.put(astType, new ReadWritePair(readMethod, writeMethod));
+        setup();
     }
 
     public JDefinedClass generateParcelable(ASTType type, ParcelableDescriptor parcelableDescriptor) {
@@ -305,5 +256,59 @@ public class ParcelableGenerator {
         public String getWriteMethod() {
             return writeMethod;
         }
+    }
+
+    private void setup() {
+        addPrimitivePair(ASTPrimitiveType.BYTE, "readByte", "writeByte");
+        addPrimitivePair(ASTPrimitiveType.DOUBLE, "readDouble", "writeDouble");
+        addPrimitivePair(ASTPrimitiveType.FLOAT, "readFloat", "writeFloat");
+        addPrimitivePair(ASTPrimitiveType.INT, "readInt", "writeInt");
+        addPrimitivePair(ASTPrimitiveType.LONG, "readLong", "writeLong");
+        addPrimitiveArrayPair(ASTPrimitiveType.BYTE, "createByteArray", "writeByteArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.CHAR, "createCharArray", "writeCharArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.BOOLEAN, "createBooleanArray", "writeBooleanArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.INT, "createByteArray", "writeIntArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.LONG, "createLongArray", "writeLongArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.FLOAT, "createFloatArray", "writeFloatArray");
+        addPrimitiveArrayPair(ASTPrimitiveType.DOUBLE, "createDoubleArray", "writeDoubleArray");
+        addArrayPair(String[].class, "createStringArray", "writeStringArray");
+        addPair(String.class, "readString", "writeString");
+        addPair(IBinder.class, "readStrongBinder", "writeStrongBinder");
+        addPair(Bundle.class, "readBundle", "writeBundle");
+        addArrayPair(Object[].class, "readArray", "writeArray");
+        addClassloaderPair(SparseArray.class, "readSparseArray", "writeSparseArray");
+        addPair(SparseBooleanArray.class, "readSparseBooleanArray", "writeSparseBooleanArray");
+        addPair(Exception.class, "readException", "writeException");
+    }
+
+    private void addClassloaderPair(Class clazz, String readSparseArray, String writeSparseArray) {
+        ASTType astType = astClassFactory.buildASTClassType(clazz);
+        classLoaderModifier.put(astType, new ReadWritePair(readSparseArray, writeSparseArray));
+    }
+
+    private void addPair(Class clazz, String readMethod, String writeMethod) {
+        addPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
+    }
+
+    private void addPrimitiveArrayPair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
+        addArrayPair(new ASTArrayType(primitiveType), readMethod, writeMethod);
+        addArrayPair(new ASTArrayType(astClassFactory.buildASTClassType(primitiveType.getObjectClass())), readMethod, writeMethod);
+    }
+
+    private void addArrayPair(Class clazz, String readMethod, String writeMethod) {
+        addArrayPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
+    }
+
+    private void addArrayPair(ASTType astArrayType, String readMethod, String writeMethod) {
+        arrayParceableModfier.put(astArrayType, new ReadWritePair(readMethod, writeMethod));
+    }
+
+    private void addPrimitivePair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
+        addPair(primitiveType, readMethod, writeMethod);
+        addPair(astClassFactory.buildASTClassType(primitiveType.getObjectClass()), readMethod, writeMethod);
+    }
+
+    private void addPair(ASTType astType, String readMethod, String writeMethod) {
+        parceableModifier.put(astType, new ReadWritePair(readMethod, writeMethod));
     }
 }

@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.model;
 
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.adapter.ASTType;

@@ -3,10 +3,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.model.*;
 import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;

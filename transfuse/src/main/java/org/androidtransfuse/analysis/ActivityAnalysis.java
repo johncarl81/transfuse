@@ -6,14 +6,14 @@ import android.content.res.Resources;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.ComponentBuilder;
-import org.androidtransfuse.gen.ComponentDescriptor;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
-import org.androidtransfuse.gen.InjectionNodeBuilderRepositoryFactory;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Action;
@@ -82,7 +82,7 @@ public class ActivityAnalysis {
         this.astClassFactory = astClassFactory;
     }
 
-    public ComponentDescriptor analyzeElement(ASTType input, AnalysisRepository analysisRepository, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
+    public ComponentDescriptor analyzeElement(ASTType input, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
@@ -107,7 +107,7 @@ public class ActivityAnalysis {
 
             Integer layout = buildLayout(layoutAnnotation);
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(analysisRepository, buildVariableBuilderMap(type));
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
             InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
 

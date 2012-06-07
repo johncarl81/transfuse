@@ -1,11 +1,7 @@
-package org.androidtransfuse.analysis;
+package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.module.BindInterceptorProcessor;
-import org.androidtransfuse.analysis.module.BindProcessor;
-import org.androidtransfuse.analysis.module.BindProviderProcessor;
-import org.androidtransfuse.analysis.module.MethodProcessor;
 import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;

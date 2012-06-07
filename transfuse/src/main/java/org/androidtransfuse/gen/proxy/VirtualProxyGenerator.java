@@ -9,10 +9,10 @@ import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.MethodSignature;
 import org.androidtransfuse.util.VirtualProxyException;
 

@@ -5,7 +5,7 @@ import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
 /**
  * @author John Ericksen
  */
-public class MethodInjectionPoint extends InjectionPointBase {
+public class MethodInjectionPoint extends MethodInjectionPointBase {
 
     private String name;
     private ASTAccessModifier accessModifier;

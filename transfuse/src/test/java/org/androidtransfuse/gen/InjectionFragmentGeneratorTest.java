@@ -12,6 +12,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.target.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter;

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-public abstract class InjectionPointBase {
+public abstract class MethodInjectionPointBase {
 
     private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
 

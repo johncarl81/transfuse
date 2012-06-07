@@ -1,9 +1,11 @@
 package org.androidtransfuse.gen;
 
+import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
 
 import javax.annotation.processing.Filer;
+import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,7 +20,8 @@ public class FilerSourceCodeWriter extends CodeWriter {
     private Filer filer;
     private Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
-    public FilerSourceCodeWriter(Filer filer) {
+    @Inject
+    public FilerSourceCodeWriter(@Assisted Filer filer) {
         this.filer = filer;
     }
 

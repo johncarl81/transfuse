@@ -2,9 +2,9 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.gen.ComponentDescriptor;
-import org.androidtransfuse.gen.TypedExpression;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import java.util.Map;

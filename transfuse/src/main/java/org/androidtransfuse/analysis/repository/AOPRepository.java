@@ -1,4 +1,4 @@
-package org.androidtransfuse.analysis;
+package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;

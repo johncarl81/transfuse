@@ -5,10 +5,14 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.InvocationBuilder;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 

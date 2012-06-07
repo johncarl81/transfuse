@@ -1,6 +1,6 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.model;
 
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -3,6 +3,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.EmptyRResource;
 
 import javax.inject.Inject;

@@ -4,10 +4,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.module.ModuleProcessor;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.gen.ComponentBuilder;
-import org.androidtransfuse.gen.ComponentDescriptor;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.processor.ProcessorContext;
@@ -35,8 +36,6 @@ public class ActivityAnalysisTest {
     public void setup() {
         Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
 
-        AnalysisRepository analysisRepository = injector.getInstance(AnalysisRepositoryFactory.class).get();
-
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
 
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
@@ -44,9 +43,9 @@ public class ActivityAnalysisTest {
 
         Application manifestApplication = new Application();
         ModuleProcessor moduleProcessor = injector.getInstance(ModuleProcessor.class);
-        ProcessorContext processorContext = processorFactory.buildContext(new EmptyRResource(), new Manifest(), moduleProcessor);
+        ProcessorContext processorContext = processorFactory.buildContext(new EmptyRResource(), new Manifest());
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), analysisRepository, manifestApplication, processorContext);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), manifestApplication, processorContext);
     }
 
     @Test
@@ -59,9 +58,5 @@ public class ActivityAnalysisTest {
         Set<ComponentBuilder> componentBuilders = activityDescriptor.getComponentBuilders();
 
         assertEquals(1, componentBuilders.size());
-        //ComponentBuilder componentBuilder = componentBuilders.iterator().next();
-        //assertEquals(MockActivityDelegate.class.getName(), ((OnCreateComponentBuilder)componentBuilder).
     }
-
-
 }

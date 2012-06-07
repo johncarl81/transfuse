@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.gen.ComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.processor.ProcessorContext;

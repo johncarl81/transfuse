@@ -10,11 +10,11 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
-import org.androidtransfuse.gen.ComponentDescriptor;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.TypedExpression;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;

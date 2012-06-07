@@ -2,9 +2,9 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 

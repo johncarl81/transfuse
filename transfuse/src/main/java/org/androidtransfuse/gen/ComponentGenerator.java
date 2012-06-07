@@ -1,6 +1,8 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
+import org.androidtransfuse.model.ComponentDescriptor;
 
 import javax.inject.Inject;
 
@@ -23,8 +25,6 @@ public class ComponentGenerator {
         final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
         generatedClassAnnotator.annotateClass(definedClass);
-
-        codeModel.ref(descriptor.getType());
 
         definedClass._extends(codeModel.ref(descriptor.getType()));
 

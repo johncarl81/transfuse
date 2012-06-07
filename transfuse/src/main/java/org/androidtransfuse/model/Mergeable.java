@@ -1,7 +1,8 @@
-package org.androidtransfuse.processor;
+package org.androidtransfuse.model;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.processor.MergeableTags;
 
 import java.util.Collections;
 import java.util.Set;

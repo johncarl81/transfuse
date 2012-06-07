@@ -2,21 +2,19 @@ package org.androidtransfuse;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.annotations.TransfuseModule;
 import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
+import org.androidtransfuse.gen.CodeWriterFactory;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
-import org.androidtransfuse.processor.ApplicationProcessor;
-import org.androidtransfuse.processor.ComponentProcessor;
-import org.androidtransfuse.processor.TransfuseAssembler;
+import org.androidtransfuse.processor.*;
 import org.androidtransfuse.util.*;
 
 import javax.annotation.processing.*;
@@ -27,7 +25,6 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
@@ -42,8 +39,6 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
     private boolean processorRan = false;
     @Inject
-    private TransfuseProcessor transfuseProcessor;
-    @Inject
     private CollectionConverterUtil collectionConverterUtil;
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;
@@ -55,6 +50,10 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     private RBuilder rBuilder;
     @Inject
     private ManifestLocatorFactory manifestLocatorFactory;
+    @Inject
+    private ProcessorFactory processorFactory;
+    @Inject
+    private CodeWriterFactory codeWriterFactory;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -73,31 +72,26 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
         if (!processorRan) {
 
-            //setup
-            transfuseProcessor.processModule(wrapASTCollection(
-                    roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class)
-            ));
-
+            //setup transfuse processor with manifest and R classes
             File manifestFile = manifestLocatorFactory.buildManifestLocator(processingEnv.getFiler()).findManifest();
             Manifest manifest = manifestParser.readManifest(manifestFile);
 
-            transfuseProcessor.processManifest(manifest);
-
             RResourceComposite r = new RResourceComposite(
                     buildR(manifest.getApplicationPackage() + ".R"),
-                    buildR("android.R")
-            );
+                    buildR("android.R"));
 
-            transfuseProcessor.processR(r);
+            TransfuseProcessor transfuseProcessor = processorFactory.buildProcessor(r, manifest);
 
-            //processing
+            transfuseProcessor.processModule(getASTTypesAnnotatedWith(roundEnvironment, TransfuseModule.class));
+
+            //process Application
             ApplicationProcessor applicationProcessor = transfuseProcessor.getApplicationProcessor();
 
-            Collection<? extends ASTType> applicationTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Application.class));
+            Collection<? extends ASTType> applicationTypes = getASTTypesAnnotatedWith(roundEnvironment, Application.class);
 
-            //if (applicationTypes.size() > 1) {
-            //todo: throw exception
-            //}
+            if (applicationTypes.size() > 1) {
+                throw new TransfuseAnalysisException("Unable to process with more than one application defined");
+            }
 
             ComponentProcessor componentProcessor;
             if (applicationTypes.isEmpty()) {
@@ -106,29 +100,29 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                 componentProcessor = applicationProcessor.processApplication(applicationTypes.iterator().next());
             }
 
-            for (Class<? extends Annotation> annotationClass : Arrays.asList(Activity.class)) {
-                componentProcessor.processComponent(wrapASTCollection(
-                        roundEnvironment.getElementsAnnotatedWith(annotationClass)
-                ));
-            }
+            //process all components
+            componentProcessor.processComponent(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
 
             //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
 
             Filer filer = processingEnv.getFiler();
 
-            transfuseAssembler.writeSource(new FilerSourceCodeWriter(filer),
-                    new ResourceCodeWriter(filer));
+            transfuseAssembler.writeSource(codeWriterFactory.buildSourceWriter(filer), codeWriterFactory.buildResourceWriter(filer));
 
             Manifest updatedManifest = transfuseAssembler.buildManifest();
 
-            //write back out, updating from processed classes
+            //write manifest back out, updating from processed classes
             manifestParser.writeManifest(updatedManifest, manifestFile);
 
             processorRan = true;
             return true;
         }
         return false;
+    }
+
+    private Collection<? extends ASTType> getASTTypesAnnotatedWith(RoundEnvironment roundEnvironment, Class<? extends Annotation> annotation) {
+        return wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(annotation));
     }
 
     private RResource buildR(String className) {

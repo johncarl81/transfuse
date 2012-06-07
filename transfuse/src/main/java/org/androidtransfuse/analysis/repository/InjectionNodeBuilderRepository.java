@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;

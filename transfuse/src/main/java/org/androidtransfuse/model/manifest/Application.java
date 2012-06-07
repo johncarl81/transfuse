@@ -3,9 +3,9 @@ package org.androidtransfuse.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
-import org.androidtransfuse.processor.Mergeable;
 
 import java.util.ArrayList;
 import java.util.List;

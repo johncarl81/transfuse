@@ -3,7 +3,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.JMethod;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
-import org.androidtransfuse.gen.TypedExpression;
+import org.androidtransfuse.model.TypedExpression;
 
 import java.util.HashMap;
 import java.util.Map;

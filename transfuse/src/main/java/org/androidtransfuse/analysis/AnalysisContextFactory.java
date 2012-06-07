@@ -1,11 +1,11 @@
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.gen.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 
 /**
  * @author John Ericksen
  */
 public interface AnalysisContextFactory {
 
-    AnalysisContext buildAnalysisContext(AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilderRepository);
+    AnalysisContext buildAnalysisContext(InjectionNodeBuilderRepository injectionNodeBuilderRepository);
 }

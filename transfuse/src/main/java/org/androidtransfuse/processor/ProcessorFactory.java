@@ -1,6 +1,5 @@
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.analysis.ModuleProcessor;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
@@ -15,5 +14,7 @@ public interface ProcessorFactory {
 
     TransfuseAssembler buildAssembler(ProcessorContext context);
 
-    ProcessorContext buildContext(RResource rResource, Manifest manifest, ModuleProcessor moduleProcessor);
+    ProcessorContext buildContext(RResource rResource, Manifest manifest);
+
+    TransfuseProcessor buildProcessor(RResource rResource, Manifest manifest);
 }

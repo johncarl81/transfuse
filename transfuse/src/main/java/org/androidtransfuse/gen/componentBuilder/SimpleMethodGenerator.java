@@ -4,8 +4,8 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 

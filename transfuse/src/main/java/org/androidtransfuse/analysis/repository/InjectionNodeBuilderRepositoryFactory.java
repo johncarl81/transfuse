@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.analysis.repository;
 
 import android.accounts.AccountManager;
 import android.app.*;

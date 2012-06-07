@@ -2,8 +2,8 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
-import org.androidtransfuse.processor.Mergeable;
 
 /**
  * attributes:

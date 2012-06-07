@@ -8,8 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.TypedExpression;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.HashMap;

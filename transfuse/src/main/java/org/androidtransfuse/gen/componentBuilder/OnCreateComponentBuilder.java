@@ -6,8 +6,11 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.config.Nullable;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
@@ -76,7 +79,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
 
                 Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
 
-                MethodGenerator onCreateMethodGenerator = new ExistingMethodGenerator(onCreateMethodDescriptor);
+                MethodGenerator onCreateMethodGenerator = new ExistingMethod(onCreateMethodDescriptor);
                 MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);
 
                 onCreateCallbackGenerator.generate(definedClass, block, expressionMap, descriptor, rResource);
