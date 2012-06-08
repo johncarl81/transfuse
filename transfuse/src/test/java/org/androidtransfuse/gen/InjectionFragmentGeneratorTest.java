@@ -1,9 +1,7 @@
 package org.androidtransfuse.gen;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
 import com.sun.codemodel.JCodeModel;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
@@ -13,14 +11,12 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.target.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.*;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,8 +52,7 @@ public class InjectionFragmentGeneratorTest {
 
     @Before
     public void setUp() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
+        TransfuseTestInjector.inject(this);
 
         context = contextFactory.buildContext();
     }

@@ -16,15 +16,17 @@ public class RLayoutBuilder implements LayoutBuilder {
 
     private Integer layout;
     private RResourceReferenceBuilder rResourceReferenceBuilder;
+    private RResource rResource;
 
     @Inject
-    public RLayoutBuilder(@Assisted Integer layout, RResourceReferenceBuilder rResourceReferenceBuilder) {
+    public RLayoutBuilder(@Assisted Integer layout, RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {
         this.layout = layout;
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
+        this.rResource = rResource;
     }
 
     @Override
-    public void buildLayoutCall(JDefinedClass definedClass, JBlock block, RResource rResource) {
+    public void buildLayoutCall(JDefinedClass definedClass, JBlock block) {
         //layout setting
         ResourceIdentifier layoutIdentifier = rResource.getResourceIdentifier(layout);
         if (layoutIdentifier != null) {

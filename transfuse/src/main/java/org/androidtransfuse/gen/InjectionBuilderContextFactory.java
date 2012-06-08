@@ -4,7 +4,6 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import java.util.Map;
 
@@ -13,5 +12,5 @@ import java.util.Map;
  */
 public interface InjectionBuilderContextFactory {
 
-    InjectionBuilderContext buildContext(Map<InjectionNode, TypedExpression> nodeVariableMap, JBlock block, JDefinedClass definedClass, RResource rResource);
+    InjectionBuilderContext buildContext(Map<InjectionNode, TypedExpression> nodeVariableMap, JBlock block, JDefinedClass definedClass);
 }

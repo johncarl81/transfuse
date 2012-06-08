@@ -5,7 +5,6 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -18,17 +17,14 @@ public class InjectionBuilderContext {
     private Map<InjectionNode, TypedExpression> variableMap;
     private JBlock block;
     private JDefinedClass definedClass;
-    private RResource rResource;
 
     @Inject
     public InjectionBuilderContext(@Assisted Map<InjectionNode, TypedExpression> variableMap,
                                    @Assisted JBlock block,
-                                   @Assisted JDefinedClass definedClass,
-                                   @Assisted RResource rResource) {
+                                   @Assisted JDefinedClass definedClass) {
         this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
-        this.rResource = rResource;
     }
 
     public Map<InjectionNode, TypedExpression> getVariableMap() {
@@ -41,9 +37,5 @@ public class InjectionBuilderContext {
 
     public JDefinedClass getDefinedClass() {
         return definedClass;
-    }
-
-    public RResource getRResource() {
-        return rResource;
     }
 }

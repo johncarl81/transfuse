@@ -9,7 +9,6 @@ import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,7 +35,7 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
     @Override
     public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
-        JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode, injectionBuilderContext.getRResource());
+        JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode);
 
         JVar providerField = injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass));
 
@@ -45,8 +44,8 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
         return providerField;
     }
 
-    private JDefinedClass generateProviderType(InjectionNode providerTypeInjectionNode, RResource rResource) {
+    private JDefinedClass generateProviderType(InjectionNode providerTypeInjectionNode) {
 
-        return providerGenerator.generateProvider(providerTypeInjectionNode, rResource);
+        return providerGenerator.generateProvider(providerTypeInjectionNode);
     }
 }

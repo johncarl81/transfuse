@@ -11,7 +11,6 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -29,13 +28,11 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
     private LayoutBuilder layoutBuilder;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTMethod onCreateASTMethod;
-    private RResource rResource;
 
     @Inject
     public OnCreateComponentBuilder(@Assisted @Nullable InjectionNode injectionNode,
                                     @Assisted LayoutBuilder layoutBuilder,
                                     @Assisted ASTMethod onCreateASTMethod,
-                                    @Assisted RResource rResource,
                                     InjectionFragmentGenerator injectionFragmentGenerator,
                                     JCodeModel codeModel,
                                     UniqueVariableNamer uniqueVariableNamer,
@@ -47,7 +44,6 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
         this.onCreateASTMethod = onCreateASTMethod;
         this.uniqueVariableNamer = uniqueVariableNamer;
         this.layoutBuilder = layoutBuilder;
-        this.rResource = rResource;
     }
 
     @Override
@@ -61,7 +57,7 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 List<JVar> parameters = new ArrayList<JVar>();
 
                 for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
-                    JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument));
+                    JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), uniqueVariableNamer.generateName(methodArgument.getASTType()));
                     parameters.add(param);
                     onCreateMethodDescriptor.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
                 }
@@ -75,17 +71,17 @@ public class OnCreateComponentBuilder implements ComponentBuilder {
                 }
 
                 //layout
-                layoutBuilder.buildLayoutCall(definedClass, block, rResource);
+                layoutBuilder.buildLayoutCall(definedClass, block);
 
-                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, rResource);
+                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
 
                 MethodGenerator onCreateMethodGenerator = new ExistingMethod(onCreateMethodDescriptor);
                 MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onCreate", onCreateMethodGenerator);
 
-                onCreateCallbackGenerator.generate(definedClass, block, expressionMap, descriptor, rResource);
+                onCreateCallbackGenerator.generate(definedClass, block, expressionMap, descriptor);
 
                 for (ExpressionVariableDependentGenerator methodCallbackGenerator : methodCallbackGenerators) {
-                    methodCallbackGenerator.generate(definedClass, block, expressionMap, descriptor, rResource);
+                    methodCallbackGenerator.generate(definedClass, block, expressionMap, descriptor);
                 }
             }
         } catch (ClassNotFoundException e) {

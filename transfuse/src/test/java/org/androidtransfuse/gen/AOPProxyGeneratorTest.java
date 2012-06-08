@@ -1,9 +1,7 @@
 package org.androidtransfuse.gen;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
 import com.sun.codemodel.JClassAlreadyExistsException;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
@@ -11,13 +9,11 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.proxy.MockDelegate;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,8 +64,7 @@ public class AOPProxyGeneratorTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
+        TransfuseTestInjector.inject(this);
 
         delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());

@@ -19,7 +19,9 @@ public class VariableASTImplementationInjectionNodeBuilder extends InjectionNode
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     @Inject
-    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType, Analyzer analyzer, Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
+    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType,
+                                                         Analyzer analyzer,
+                                                         Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
         this.analyzer = analyzer;
         this.implType = implType;
         this.variableInjectionBuilderProvider = variableInjectionBuilderProvider;

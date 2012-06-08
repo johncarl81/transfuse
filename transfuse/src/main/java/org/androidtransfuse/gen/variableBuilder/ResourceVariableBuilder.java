@@ -5,6 +5,7 @@ import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 
@@ -15,19 +16,21 @@ public class ResourceVariableBuilder implements VariableBuilder {
     private int resourceId;
     private ResourceExpressionBuilder resourceExpressionBuilder;
     private RResourceReferenceBuilder rResourceReferenceBuilder;
+    private RResource rResource;
 
     @Inject
     public ResourceVariableBuilder(@Assisted int resourceId,
                                    @Assisted ResourceExpressionBuilder resourceExpressionBuilder,
-                                   RResourceReferenceBuilder rResourceReferenceBuilder) {
+                                   RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {
         this.resourceId = resourceId;
         this.resourceExpressionBuilder = resourceExpressionBuilder;
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
+        this.rResource = rResource;
     }
 
     @Override
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        ResourceIdentifier resourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(resourceId);
+        ResourceIdentifier resourceIdentifier = rResource.getResourceIdentifier(resourceId);
 
         return resourceExpressionBuilder.buildExpression(injectionBuilderContext, rResourceReferenceBuilder.buildReference(resourceIdentifier));
     }

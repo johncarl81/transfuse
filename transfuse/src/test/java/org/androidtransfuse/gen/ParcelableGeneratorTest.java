@@ -2,15 +2,11 @@ package org.androidtransfuse.gen;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.model.ParcelableDescriptor;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.androidtransfuse.util.ParcelableWrapper;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -50,8 +46,7 @@ public class ParcelableGeneratorTest {
 
     @Before
     public void setup() throws ClassNotFoundException, IOException {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
+        TransfuseTestInjector.inject(this);
 
         ASTType mockParcelASTType = astClassFactory.buildASTClassType(ParcelTarget.class);
         ASTType mockParcelTwoASTType = astClassFactory.buildASTClassType(ParcelSecondTarget.class);

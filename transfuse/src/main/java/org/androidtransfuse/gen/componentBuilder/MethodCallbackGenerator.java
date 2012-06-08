@@ -11,7 +11,6 @@ import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         this.invocationBuilder = invocationBuilder;
     }
 
-    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
         try {
             MethodDescriptor methodDescriptor = null;
             for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {

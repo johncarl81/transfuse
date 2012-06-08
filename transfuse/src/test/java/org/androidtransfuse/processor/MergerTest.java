@@ -1,11 +1,7 @@
 package org.androidtransfuse.processor;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.model.Mergeable;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -126,15 +122,12 @@ public class MergerTest {
     private Provider<SubMergable> subMergableProvider;
     @Inject
     private Provider<MergeableRoot> mergeableRootProvider;
-
+    @Inject
     private Merger merger;
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
-
-        merger = new Merger();
+        TransfuseTestInjector.inject(this);
     }
 
     @Test

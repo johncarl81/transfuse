@@ -4,7 +4,6 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -32,17 +31,17 @@ public class ProviderGenerator {
         this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
-    public JDefinedClass generateProvider(InjectionNode injectionNode, RResource rResource) {
+    public JDefinedClass generateProvider(InjectionNode injectionNode) {
 
         if (!providerClasses.containsKey(injectionNode.getClassName())) {
-            JDefinedClass providerClass = innerGenerateProvider(injectionNode, rResource);
+            JDefinedClass providerClass = innerGenerateProvider(injectionNode);
             providerClasses.put(injectionNode.getClassName(), providerClass);
         }
 
         return providerClasses.get(injectionNode.getClassName());
     }
 
-    private JDefinedClass innerGenerateProvider(InjectionNode injectionNode, RResource rResource) {
+    private JDefinedClass innerGenerateProvider(InjectionNode injectionNode) {
 
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
@@ -59,7 +58,7 @@ public class ProviderGenerator {
 
             JBlock getMethodBody = getMethod.body();
 
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody, providerClass, injectionNode, rResource);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody, providerClass, injectionNode);
 
             getMethodBody._return(expressionMap.get(injectionNode).getExpression());
 

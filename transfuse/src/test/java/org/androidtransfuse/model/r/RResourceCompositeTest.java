@@ -1,11 +1,7 @@
 package org.androidtransfuse.model.r;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,8 +35,7 @@ public class RResourceCompositeTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
+        TransfuseTestInjector.inject(this);
 
         resourceOne = new RResourceMapping();
         resourceOne.addResource(astClassFactory.buildASTClassType(RTest.one.class), "id1", RTest.one.id1);

@@ -11,7 +11,6 @@ import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.SingletonScope;
 
@@ -38,7 +37,7 @@ public class SingletonScopeBuilder implements VariableBuilder {
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
         //build provider
-        JExpression provider = buildProvider(injectionNode, injectionBuilderContext.getRResource());
+        JExpression provider = buildProvider(injectionNode);
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
@@ -50,7 +49,7 @@ public class SingletonScopeBuilder implements VariableBuilder {
         return typedExpressionFactory.build(injectionNode.getASTType(), expression);
     }
 
-    private JExpression buildProvider(InjectionNode injectionNode, RResource rResource) {
+    private JExpression buildProvider(InjectionNode injectionNode) {
 
         InjectionNode nonScopedInjectionNode = new InjectionNode(injectionNode.getUsageType(), injectionNode.getASTType());
 
@@ -60,7 +59,7 @@ public class SingletonScopeBuilder implements VariableBuilder {
 
         nonScopedInjectionNode.getAspects().remove(ScopeAspect.class);
 
-        JDefinedClass providerClass = providerGenerator.generateProvider(nonScopedInjectionNode, rResource);
+        JDefinedClass providerClass = providerGenerator.generateProvider(nonScopedInjectionNode);
 
         return JExpr._new(providerClass);
     }

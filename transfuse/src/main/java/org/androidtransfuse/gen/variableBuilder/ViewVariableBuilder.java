@@ -13,6 +13,7 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
 
@@ -30,6 +31,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
     private InvocationBuilder injectionInvocationBuilder;
+    private RResource rResource;
 
     @Inject
     public ViewVariableBuilder(@Assisted int viewId,
@@ -39,7 +41,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                RResourceReferenceBuilder rResourceReferenceBuilder,
                                JCodeModel codeModel,
                                InvocationBuilder injectionInvocationBuilder,
-                               UniqueVariableNamer variableNamer) {
+                               UniqueVariableNamer variableNamer, RResource rResource) {
         super(View.class);
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
@@ -49,6 +51,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
         this.codeModel = codeModel;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.variableNamer = variableNamer;
+        this.rResource = rResource;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
             TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
-            ResourceIdentifier viewResourceIdentifier = injectionBuilderContext.getRResource().getResourceIdentifier(viewId);
+            ResourceIdentifier viewResourceIdentifier = rResource.getResourceIdentifier(viewId);
             JExpression viewIdRef = rResourceReferenceBuilder.buildReference(viewResourceIdentifier);
 
             JExpression viewExpression = contextVar.getExpression().invoke(FIND_VIEW).arg(viewIdRef);

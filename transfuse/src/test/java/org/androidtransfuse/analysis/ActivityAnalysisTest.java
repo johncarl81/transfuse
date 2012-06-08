@@ -1,20 +1,11 @@
 package org.androidtransfuse.analysis;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Stage;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.module.ModuleProcessor;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.manifest.Application;
-import org.androidtransfuse.model.manifest.Manifest;
-import org.androidtransfuse.processor.ProcessorContext;
-import org.androidtransfuse.processor.ProcessorFactory;
-import org.androidtransfuse.util.EmptyRResource;
-import org.androidtransfuse.util.JavaUtilLogger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,18 +25,13 @@ public class ActivityAnalysisTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
+        Injector injector = TransfuseTestInjector.getInjector(this);
 
         ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
 
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
-        ProcessorFactory processorFactory = injector.getInstance(ProcessorFactory.class);
 
-        Application manifestApplication = new Application();
-        ModuleProcessor moduleProcessor = injector.getInstance(ModuleProcessor.class);
-        ProcessorContext processorContext = processorFactory.buildContext(new EmptyRResource(), new Manifest());
-
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class), manifestApplication, processorContext);
+        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
     }
 
     @Test

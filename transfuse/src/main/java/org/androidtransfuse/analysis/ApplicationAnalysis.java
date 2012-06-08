@@ -18,7 +18,8 @@ import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.processor.ProcessorContext;
+import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.processor.ManifestManager;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -38,6 +39,8 @@ public class ApplicationAnalysis {
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
     private AnalysisContextFactory analysisContextFactory;
+    private RResource rResource;
+    private ManifestManager manifestManager;
 
     @Inject
     public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
@@ -48,7 +51,7 @@ public class ApplicationAnalysis {
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
-                               AnalysisContextFactory analysisContextFactory) {
+                               AnalysisContextFactory analysisContextFactory, RResource rResource, ManifestManager manifestManager) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -58,13 +61,15 @@ public class ApplicationAnalysis {
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
+        this.rResource = rResource;
+        this.manifestManager = manifestManager;
     }
 
-    public void emptyApplication(ProcessorContext context) {
-        setupManifest(context, android.app.Application.class.getName(), null);
+    public void emptyApplication() {
+        setupManifest(android.app.Application.class.getName(), null);
     }
 
-    public ComponentDescriptor analyzeApplication(ProcessorContext context, ASTType astType) {
+    public ComponentDescriptor analyzeApplication(ASTType astType) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
         PackageClass inputType = new PackageClass(astType.getName());
@@ -83,20 +88,20 @@ public class ApplicationAnalysis {
         InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
 
         //application generation profile
-        setupApplicationProfile(applicationDescriptor, injectionNode, context);
+        setupApplicationProfile(applicationDescriptor, injectionNode);
 
         //add manifest elements
-        setupManifest(context, applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
+        setupManifest(applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
 
         return applicationDescriptor;
     }
 
-    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, InjectionNode injectionNode, ProcessorContext context) {
+    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
 
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
             //onCreate
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod, context.getRResource());
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod);
             //onLowMemory
             onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
             //onTerminate
@@ -136,13 +141,13 @@ public class ApplicationAnalysis {
 
     }
 
-    private void setupManifest(ProcessorContext context, String name, String label) {
+    private void setupManifest(String name, String label) {
 
         org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
         manifestApplication.setName(name);
         manifestApplication.setLabel(StringUtils.isBlank(label) ? null : label);
 
-        context.getSourceManifest().getApplications().add(manifestApplication);
+        manifestManager.setApplication(manifestApplication);
     }
 }

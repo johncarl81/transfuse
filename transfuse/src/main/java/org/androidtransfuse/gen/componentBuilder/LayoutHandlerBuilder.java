@@ -8,7 +8,6 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -33,10 +32,10 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     }
 
     @Override
-    public void buildLayoutCall(JDefinedClass definedClass, JBlock block, RResource rResource) {
+    public void buildLayoutCall(JDefinedClass definedClass, JBlock block) {
 
         try {
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, rResource);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode);
 
             //LayoutHandlerDelegate.getlayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();

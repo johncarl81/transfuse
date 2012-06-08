@@ -1,21 +1,22 @@
 package org.androidtransfuse;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Application;
+import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.TransfuseModule;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
 import org.androidtransfuse.gen.CodeWriterFactory;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
 import org.androidtransfuse.processor.*;
-import org.androidtransfuse.util.*;
+import org.androidtransfuse.util.CollectionConverterUtil;
+import org.androidtransfuse.util.ManifestLocatorFactory;
+import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.annotation.processing.*;
 import javax.inject.Inject;
@@ -43,28 +44,19 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
-    private Logger logger;
-    @Inject
     private ManifestSerializer manifestParser;
     @Inject
     private RBuilder rBuilder;
     @Inject
     private ManifestLocatorFactory manifestLocatorFactory;
     @Inject
-    private ProcessorFactory processorFactory;
-    @Inject
     private CodeWriterFactory codeWriterFactory;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        try {
-            Injector injector = Guice.createInjector(new TransfuseGenerationGuiceModule(new MessagerLogger(processingEnv.getMessager())));
-            injector.injectMembers(this);
-        } catch (RuntimeException e) {
-            logger.error("Error during init of TransfuseAnnotationProcessor", e);
-            throw e;
-        }
+        Injector injector = TransfuseInjector.buildSetupInjector(processingEnv.getMessager());
+        injector.injectMembers(this);
     }
 
     @Override
@@ -77,10 +69,12 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             Manifest manifest = manifestParser.readManifest(manifestFile);
 
             RResourceComposite r = new RResourceComposite(
-                    buildR(manifest.getApplicationPackage() + ".R"),
-                    buildR("android.R"));
+                    buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
+                    buildR(rBuilder, "android.R"));
 
-            TransfuseProcessor transfuseProcessor = processorFactory.buildProcessor(r, manifest);
+            Injector injector = TransfuseInjector.buildProcessingInjector(r, manifest);
+
+            TransfuseProcessor transfuseProcessor = injector.getInstance(TransfuseProcessor.class);
 
             transfuseProcessor.processModule(getASTTypesAnnotatedWith(roundEnvironment, TransfuseModule.class));
 
@@ -100,8 +94,9 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                 componentProcessor = applicationProcessor.processApplication(applicationTypes.iterator().next());
             }
 
-            //process all components
-            componentProcessor.processComponent(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
+            //process components
+            componentProcessor.process(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
+            componentProcessor.process(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
 
             //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
@@ -125,7 +120,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
         return wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(annotation));
     }
 
-    private RResource buildR(String className) {
+    private RResource buildR(RBuilder rBuilder, String className) {
         TypeElement rTypeElement = processingEnv.getElementUtils().getTypeElement(className);
         Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
 

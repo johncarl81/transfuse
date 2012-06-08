@@ -1,6 +1,5 @@
 package org.androidtransfuse.processor;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.ApplicationAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -9,6 +8,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
@@ -18,30 +18,30 @@ public class ApplicationProcessor {
     private ApplicationAnalysis applicationAnalysis;
     private ComponentGenerator generator;
     private Logger logger;
-    private ProcessorFactory processorFactory;
-    private ProcessorContext context;
+    private Provider<ComponentProcessor> componentProcessorProvider;
+    private Provider<TransfuseAssembler> transfuseAssemblerProvider;
 
     @Inject
-    public ApplicationProcessor(@Assisted ProcessorContext context,
-                                ApplicationAnalysis applicationAnalysis,
+    public ApplicationProcessor(ApplicationAnalysis applicationAnalysis,
                                 ComponentGenerator generator,
                                 Logger logger,
-                                ProcessorFactory processorFactory) {
+                                Provider<TransfuseAssembler> transfuseAssemblerProvider,
+                                Provider<ComponentProcessor> componentProcessorProvider) {
         this.applicationAnalysis = applicationAnalysis;
         this.generator = generator;
         this.logger = logger;
-        this.processorFactory = processorFactory;
-        this.context = context;
+        this.transfuseAssemblerProvider = transfuseAssemblerProvider;
+        this.componentProcessorProvider = componentProcessorProvider;
     }
 
     public ComponentProcessor createComponentProcessor() {
-        applicationAnalysis.emptyApplication(context);
+        applicationAnalysis.emptyApplication();
 
         return buildComponentProcessor();
     }
 
     public ComponentProcessor processApplication(ASTType astType) {
-        ComponentDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(context, astType);
+        ComponentDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType);
 
         if (applicationDescriptor != null) {
 
@@ -56,10 +56,10 @@ public class ApplicationProcessor {
     }
 
     private ComponentProcessor buildComponentProcessor() {
-        return processorFactory.buildComponentProcessor(context, context.getSourceManifest().getApplications().get(0));
+        return componentProcessorProvider.get();
     }
 
     public TransfuseAssembler getTransfuseAssembler() {
-        return processorFactory.buildAssembler(context);
+        return transfuseAssemblerProvider.get();
     }
 }

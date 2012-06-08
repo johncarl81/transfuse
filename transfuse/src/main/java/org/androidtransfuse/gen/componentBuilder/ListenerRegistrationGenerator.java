@@ -15,7 +15,6 @@ import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.model.r.RResource;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -37,7 +36,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, RResource rResource) {
+    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
         try {
             //add listener registration
@@ -45,9 +44,9 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
                 if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
                     RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
-                    buildFieldRegistration(registrationAspect.getFieldRegistrations(), block, definedClass, rResource, injectionNodeJExpressionEntry.getValue());
-                    buildMethodRegistration(registrationAspect.getMethodRegistrations(), block, definedClass, rResource, injectionNodeJExpressionEntry.getValue());
-                    buildTypeRegistration(registrationAspect.getTypeRegistrations(), block, definedClass, rResource, injectionNodeJExpressionEntry.getValue());
+                    buildFieldRegistration(registrationAspect.getFieldRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
+                    buildMethodRegistration(registrationAspect.getMethodRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
+                    buildTypeRegistration(registrationAspect.getTypeRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                 }
             }
         } catch (ClassNotFoundException e) {
@@ -57,10 +56,10 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildTypeRegistration(Set<ListenerRegistration<ASTType>> typeRegistrations, JBlock block, JDefinedClass definedClass, RResource rResource, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private void buildTypeRegistration(Set<ListenerRegistration<ASTType>> typeRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
         for (ListenerRegistration<ASTType> typeRegistration : typeRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, typeRegistration.getViewInjectionNode(), rResource);
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, typeRegistration.getViewInjectionNode());
 
             JExpression viewExpression = viewExpressionMap.get(typeRegistration.getViewInjectionNode()).getExpression();
 
@@ -71,10 +70,10 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildMethodRegistration(Set<ListenerRegistration<ASTMethod>> methodRegistrations, JBlock block, JDefinedClass definedClass, RResource rResource, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private void buildMethodRegistration(Set<ListenerRegistration<ASTMethod>> methodRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
         for (ListenerRegistration<ASTMethod> methodRegistration : methodRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, methodRegistration.getViewInjectionNode(), rResource);
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, methodRegistration.getViewInjectionNode());
 
             JExpression viewExpression = viewExpressionMap.get(methodRegistration.getViewInjectionNode()).getExpression();
 
@@ -85,10 +84,10 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildFieldRegistration(Set<ListenerRegistration<ASTField>> fieldRegistrations, JBlock block, JDefinedClass definedClass, RResource rResource, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private void buildFieldRegistration(Set<ListenerRegistration<ASTField>> fieldRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
         for (ListenerRegistration<ASTField> listenerRegistration : fieldRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, listenerRegistration.getViewInjectionNode(), rResource);
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, listenerRegistration.getViewInjectionNode());
 
             JExpression viewExpression = viewExpressionMap.get(listenerRegistration.getViewInjectionNode()).getExpression();
 

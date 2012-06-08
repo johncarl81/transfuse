@@ -39,10 +39,10 @@ public class Manifest extends Mergeable<String> {
 
     @XStreamAlias("xmlns:transfuse")
     @XStreamAsAttribute
-    private final String transfuseNamespace = "xmlns:transfuse=\"http://johncarl81.github.com/transfuse/\"";
+    private final String transfuseNamespace = "http://johncarl81.github.com/transfuse/";
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
-    private final String namespace = "xmlns:android=\"http://schemas.android.com/apk/res/android\"";
+    private final String namespace = "http://schemas.android.com/apk/res/android";
     @XStreamAlias("package")
     @XStreamAsAttribute
     private String applicationPackage;

@@ -4,7 +4,6 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.util.EmptyRResource;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -32,7 +31,7 @@ public class InjectionFragmentGeneratorHarness {
         JMethod getMethod = definedClass.method(JMod.PUBLIC, codeModel.parseType(injectionNode.getClassName()), "get");
 
         JBlock block = getMethod.body();
-        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, new EmptyRResource());
+        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
 
         block._return(expressionMap.get(injectionNode).getExpression());
     }

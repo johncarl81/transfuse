@@ -1,10 +1,6 @@
 package org.androidtransfuse.model.manifest;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Stage;
-import org.androidtransfuse.config.TransfuseGenerationGuiceModule;
-import org.androidtransfuse.util.JavaUtilLogger;
+import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.util.ManifestSerializer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -29,8 +25,7 @@ public class ManifestTest {
 
     @Before
     public void setUp() {
-        Injector injector = Guice.createInjector(Stage.DEVELOPMENT, new TransfuseGenerationGuiceModule(new JavaUtilLogger(this)));
-        injector.injectMembers(this);
+        TransfuseTestInjector.inject(this);
     }
 
     @Test

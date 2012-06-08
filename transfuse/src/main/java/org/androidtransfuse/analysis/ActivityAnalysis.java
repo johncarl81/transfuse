@@ -19,7 +19,7 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
 import org.androidtransfuse.model.manifest.IntentFilter;
-import org.androidtransfuse.processor.ProcessorContext;
+import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -50,6 +50,7 @@ public class ActivityAnalysis {
     private AnalysisContextFactory analysisContextFactory;
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private ASTClassFactory astClassFactory;
+    private ManifestManager manifestManager;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -65,7 +66,7 @@ public class ActivityAnalysis {
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
-                            ASTClassFactory astClassFactory) {
+                            ASTClassFactory astClassFactory, ManifestManager manifestManager) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -80,9 +81,10 @@ public class ActivityAnalysis {
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.astClassFactory = astClassFactory;
+        this.manifestManager = manifestManager;
     }
 
-    public ComponentDescriptor analyzeElement(ASTType input, org.androidtransfuse.model.manifest.Application application, ProcessorContext processorContext) {
+    public ComponentDescriptor analyzeElement(ASTType input) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
@@ -115,11 +117,11 @@ public class ActivityAnalysis {
             InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
             //application generation profile
-            setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
+            setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode);
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, intent, application);
+        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, intent);
 
         return activityDescriptor;
     }
@@ -162,22 +164,18 @@ public class ActivityAnalysis {
         }
     }
 
-    private void setupManifest(String name, String label, IntentFilters intentFilters, Intent intent, org.androidtransfuse.model.manifest.Application application) {
+    private void setupManifest(String name, String label, IntentFilters intentFilters, Intent intent) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
         manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
         manifestActivity.setIntentFilters(buildIntentFilters(intentFilters, intent));
 
-        if (application.getActivities() == null) {
-            application.setActivities(new ArrayList<org.androidtransfuse.model.manifest.Activity>());
-        }
-
-        application.getActivities().add(manifestActivity);
+        manifestManager.addActivity(manifestActivity);
     }
 
-    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode, ProcessorContext processorContext) {
-        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode, processorContext);
+    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
+        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode);
 
         activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
     }
