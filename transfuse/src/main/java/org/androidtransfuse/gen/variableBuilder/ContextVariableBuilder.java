@@ -14,8 +14,8 @@ import javax.inject.Inject;
 public class ContextVariableBuilder extends ConsistentTypeVariableBuilder {
 
     @Inject
-    public ContextVariableBuilder(@Assisted Class clazz) {
-        super(clazz);
+    public ContextVariableBuilder(@Assisted Class clazz, TypedExpressionFactory typedExpressionFactory) {
+        super(clazz, typedExpressionFactory);
     }
 
     @Override

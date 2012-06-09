@@ -35,8 +35,9 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
                                 @Assisted("nullable") boolean nullable,
                                 @Assisted("wrapped") boolean wrapped,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
-                                JCodeModel codeModel) {
-        super(Object.class);
+                                JCodeModel codeModel,
+                                TypedExpressionFactory typedExpressionFactory) {
+        super(Object.class, typedExpressionFactory);
         this.extraId = extraId;
         this.activityInjectionNode = activityInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;

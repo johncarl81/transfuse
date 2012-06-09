@@ -12,7 +12,7 @@ public interface ParcelConverter<T> {
 
     T fromParcel(android.os.Parcel parcel);
 
-    public static final class EmptyConverter implements ParcelConverter<Object> {
+    class EmptyConverter implements ParcelConverter<Object> {
         @Override
         public void toParcel(Object input, android.os.Parcel destinationParcel) {
         }

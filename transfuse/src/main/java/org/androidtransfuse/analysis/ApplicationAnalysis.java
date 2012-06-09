@@ -39,7 +39,6 @@ public class ApplicationAnalysis {
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
     private AnalysisContextFactory analysisContextFactory;
-    private RResource rResource;
     private ManifestManager manifestManager;
 
     @Inject
@@ -51,7 +50,8 @@ public class ApplicationAnalysis {
                                InjectionNodeBuilderRepository injectionNodeBuilders,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
-                               AnalysisContextFactory analysisContextFactory, RResource rResource, ManifestManager manifestManager) {
+                               AnalysisContextFactory analysisContextFactory,
+                               ManifestManager manifestManager) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -61,7 +61,6 @@ public class ApplicationAnalysis {
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
-        this.rResource = rResource;
         this.manifestManager = manifestManager;
     }
 

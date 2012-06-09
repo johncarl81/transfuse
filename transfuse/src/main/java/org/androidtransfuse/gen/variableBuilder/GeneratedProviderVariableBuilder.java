@@ -25,8 +25,9 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
     @Inject
     public GeneratedProviderVariableBuilder(@Assisted InjectionNode providerTypeInjectionNode,
                                             ProviderGenerator providerGenerator,
-                                            UniqueVariableNamer variableNamer) {
-        super(Provider.class);
+                                            UniqueVariableNamer variableNamer,
+                                            TypedExpressionFactory typedExpressionFactory) {
+        super(Provider.class, typedExpressionFactory);
         this.providerGenerator = providerGenerator;
         this.variableNamer = variableNamer;
         this.providerTypeInjectionNode = providerTypeInjectionNode;

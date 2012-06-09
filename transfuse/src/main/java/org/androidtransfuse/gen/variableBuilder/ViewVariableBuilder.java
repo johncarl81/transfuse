@@ -41,8 +41,10 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                RResourceReferenceBuilder rResourceReferenceBuilder,
                                JCodeModel codeModel,
                                InvocationBuilder injectionInvocationBuilder,
-                               UniqueVariableNamer variableNamer, RResource rResource) {
-        super(View.class);
+                               UniqueVariableNamer variableNamer,
+                               RResource rResource,
+                               TypedExpressionFactory typedExpressionFactory) {
+        super(View.class, typedExpressionFactory);
         this.viewId = viewId;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;

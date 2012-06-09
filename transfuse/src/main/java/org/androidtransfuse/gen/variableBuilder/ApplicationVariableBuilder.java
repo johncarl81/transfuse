@@ -21,8 +21,10 @@ public class ApplicationVariableBuilder extends ConsistentTypeVariableBuilder {
     private InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
-    public ApplicationVariableBuilder(@Assisted InjectionNode contextInjectionNode, InjectionExpressionBuilder injectionExpressionBuilder) {
-        super(Application.class);
+    public ApplicationVariableBuilder(@Assisted InjectionNode contextInjectionNode,
+                                      InjectionExpressionBuilder injectionExpressionBuilder,
+                                      TypedExpressionFactory typedExpressionFactory) {
+        super(Application.class, typedExpressionFactory);
         this.contextInjectionNode = contextInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
     }

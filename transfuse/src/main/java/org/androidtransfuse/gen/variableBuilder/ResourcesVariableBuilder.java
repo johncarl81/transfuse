@@ -18,8 +18,9 @@ public class ResourcesVariableBuilder extends ConsistentTypeVariableBuilder {
 
     @Inject
     public ResourcesVariableBuilder(@Assisted InjectionNode applicationInjectionNode,
-                                    InjectionExpressionBuilder injectionExpressionBuilder) {
-        super(Resources.class);
+                                    InjectionExpressionBuilder injectionExpressionBuilder,
+                                    TypedExpressionFactory typedExpressionFactory) {
+        super(Resources.class, typedExpressionFactory);
         this.applicationInjectionNode = applicationInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
     }

@@ -41,9 +41,7 @@ public class ManifestManager {
         }
 
         localApplication.getActivities().addAll(activities);
-        System.out.println("Added: " + activities.size());
         localApplication.getReceivers().addAll(broadcastReceivers);
-        System.out.println("Added: " + broadcastReceivers.size());
 
         manifest.getApplications().add(localApplication);
 
