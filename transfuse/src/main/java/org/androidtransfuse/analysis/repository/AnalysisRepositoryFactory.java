@@ -15,18 +15,21 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
     private Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider;
     private Provider<ScopeAnalysis> scopeAnalysisProvider;
     private Provider<RegistrationAnalyzer> registrationAnalysisProvider;
+    private Provider<DeclareFieldAnalysis> declareFieldAnalysisProvider;
 
     @Inject
     public AnalysisRepositoryFactory(Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider,
                                      Provider<InjectionAnalyzer> injectionAnalyzerProvider,
                                      Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider,
                                      Provider<ScopeAnalysis> scopeAnalysisProvider,
-                                     Provider<RegistrationAnalyzer> registrationAnalysisProvider) {
+                                     Provider<RegistrationAnalyzer> registrationAnalysisProvider,
+                                     Provider<DeclareFieldAnalysis> declareFieldAnalysisProvider) {
         this.aopProxyAnalyzerProvider = aopProxyAnalyzerProvider;
         this.injectionAnalyzerProvider = injectionAnalyzerProvider;
         this.methodCallbackAnalysisProvider = methodCallbackAnalysisProvider;
         this.scopeAnalysisProvider = scopeAnalysisProvider;
         this.registrationAnalysisProvider = registrationAnalysisProvider;
+        this.declareFieldAnalysisProvider = declareFieldAnalysisProvider;
     }
 
     public AnalysisRepository get() {
@@ -37,6 +40,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
         analysisRepository.addAnalysis(methodCallbackAnalysisProvider.get());
         analysisRepository.addAnalysis(scopeAnalysisProvider.get());
         analysisRepository.addAnalysis(registrationAnalysisProvider.get());
+        analysisRepository.addAnalysis(declareFieldAnalysisProvider.get());
 
         return analysisRepository;
     }

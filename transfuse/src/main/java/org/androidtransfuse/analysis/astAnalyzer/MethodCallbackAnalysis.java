@@ -31,6 +31,8 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
         methodAnnotations.put(OnConfigurationChanged.class, "onConfigurationChanged");
         //List Activity
         methodAnnotations.put(OnListItemClick.class, "onListItemClick");
+        //BroadcastReceiver
+        methodAnnotations.put(OnReceive.class, "onReceive");
     }
 
     @Override
