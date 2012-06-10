@@ -42,7 +42,6 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
             block.invoke("setContentView").arg(layoutHandlerDelegate.invoke("getLayout"));
 
-
         } catch (ClassNotFoundException e) {
             logger.error("ClassNotFoundExcetion while trying to generate LayoutHandler", e);
         } catch (JClassAlreadyExistsException e) {

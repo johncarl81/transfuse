@@ -27,6 +27,7 @@ public class BroadcastReceiverAnalysis {
     private ComponentBuilderFactory componentBuilderFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private IntentFilterBuilder intentFilterBuilder;
+    private TypeMirrorUtil typeMirrorUtil;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
@@ -34,13 +35,15 @@ public class BroadcastReceiverAnalysis {
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
                                      InjectionNodeBuilderRepository injectionNodeBuilderRepository,
-                                     IntentFilterBuilder intentFilterBuilder) {
+                                     IntentFilterBuilder intentFilterBuilder,
+                                     TypeMirrorUtil typeMirrorUtil) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
         this.componentBuilderFactory = componentBuilderFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.intentFilterBuilder = intentFilterBuilder;
+        this.typeMirrorUtil = typeMirrorUtil;
     }
 
     public ComponentDescriptor analyzeElement(ASTType astType) {
@@ -58,7 +61,7 @@ public class BroadcastReceiverAnalysis {
         } else {
             receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
 
-            TypeMirror type = TypeMirrorUtil.getInstance().getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
+            TypeMirror type = typeMirrorUtil.getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
             String receiverType = buildReceiverType(type);
 
             receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);

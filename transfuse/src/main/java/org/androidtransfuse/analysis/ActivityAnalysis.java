@@ -19,6 +19,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -46,6 +47,7 @@ public class ActivityAnalysis {
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
     private IntentFilterBuilder intentFilterBuilder;
+    private TypeMirrorUtil typeMirrorUtil;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -58,7 +60,7 @@ public class ActivityAnalysis {
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
-                            ASTClassFactory astClassFactory, ManifestManager manifestManager, IntentFilterBuilder intentFilterBuilder) {
+                            ASTClassFactory astClassFactory, ManifestManager manifestManager, IntentFilterBuilder intentFilterBuilder, TypeMirrorUtil typeMirrorUtil) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -72,6 +74,7 @@ public class ActivityAnalysis {
         this.astClassFactory = astClassFactory;
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
+        this.typeMirrorUtil = typeMirrorUtil;
     }
 
     public ComponentDescriptor analyzeElement(ASTType input) {
@@ -91,11 +94,14 @@ public class ActivityAnalysis {
             Layout layoutAnnotation = input.getAnnotation(Layout.class);
             LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
 
-            TypeMirror type = TypeMirrorUtil.getInstance().getTypeMirror(new ActivityTypeRunnable(activityAnnotation));
+            TypeMirror type = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<Activity>(activityAnnotation) {
+                @Override
+                public void run(Activity annotation) {annotation.type();}
+            });
 
-            String activityType = buildActivityType(type);
+            String activityType = type == null ? android.app.Activity.class.getName() : type.toString();
 
-            Integer layout = buildLayout(layoutAnnotation);
+            Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
 
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
@@ -109,21 +115,17 @@ public class ActivityAnalysis {
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), input);
+        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation, input);
 
         return activityDescriptor;
     }
 
-    private Integer buildLayout(Layout layoutAnnotation) {
-        if (layoutAnnotation != null) {
-            return layoutAnnotation.value();
-        }
-        return null;
-    }
-
     private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
         if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = TypeMirrorUtil.getInstance().getTypeMirror(new LayoutHandlerTypeRunnable(layoutHandlerAnnotation));
+            TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<LayoutHandler>(layoutHandlerAnnotation) {
+                @Override
+                public void run(LayoutHandler annotation) {layoutHandlerAnnotation.value();}
+            });
 
             if (layoutHandlerType != null) {
                 ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
@@ -131,14 +133,6 @@ public class ActivityAnalysis {
             }
         }
         return null;
-    }
-
-    private String buildActivityType(TypeMirror type) {
-        if (type != null) {
-            return type.toString();
-        } else {
-            return android.app.Activity.class.getName();
-        }
     }
 
     private PackageClass buildPackageClass(ASTType input, String activityName) {
@@ -152,11 +146,11 @@ public class ActivityAnalysis {
         }
     }
 
-    private void setupManifest(String name, String label, ASTType type) {
+    private void setupManifest(String name, Activity activityAnnotation, ASTType type) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
-        manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
+        manifestActivity.setLabel(StringUtils.isBlank(activityAnnotation.label()) ? null : activityAnnotation.label());
         manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
 
         manifestManager.addActivity(manifestActivity);
@@ -184,33 +178,5 @@ public class ActivityAnalysis {
 
         return subRepository;
 
-    }
-
-    private static final class ActivityTypeRunnable implements Runnable {
-
-        private Activity activityAnnotation;
-
-        private ActivityTypeRunnable(Activity activityAnnotation) {
-            this.activityAnnotation = activityAnnotation;
-        }
-
-        public void run() {
-            //accessing this throws an exception, caught in TypeMiirrorUtil
-            activityAnnotation.type();
-        }
-    }
-
-    private static final class LayoutHandlerTypeRunnable implements Runnable {
-
-        private LayoutHandler layoutHandler;
-
-        private LayoutHandlerTypeRunnable(LayoutHandler layoutHandler) {
-            this.layoutHandler = layoutHandler;
-        }
-
-        public void run() {
-            //accessing this throws an exception, caught in TypeMiirrorUtil
-            layoutHandler.value();
-        }
     }
 }
