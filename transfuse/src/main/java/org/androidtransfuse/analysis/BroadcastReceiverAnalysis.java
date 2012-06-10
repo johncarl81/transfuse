@@ -3,12 +3,9 @@ package org.androidtransfuse.analysis;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
@@ -28,10 +25,6 @@ public class BroadcastReceiverAnalysis {
     private Provider<Receiver> receiverProvider;
     private ManifestManager manifestManager;
     private ComponentBuilderFactory componentBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
-    private AnalysisContextFactory analysisContextFactory;
-    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private IntentFilterBuilder intentFilterBuilder;
 
@@ -40,20 +33,12 @@ public class BroadcastReceiverAnalysis {
                                      Provider<Receiver> receiverProvider,
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
-                                     InjectionPointFactory injectionPointFactory,
-                                     AnalysisContextFactory analysisContextFactory,
-                                     InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                      InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                                      IntentFilterBuilder intentFilterBuilder) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.injectionPointFactory = injectionPointFactory;
-        this.analysisContextFactory = analysisContextFactory;
-        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.intentFilterBuilder = intentFilterBuilder;
     }
@@ -78,24 +63,12 @@ public class BroadcastReceiverAnalysis {
 
             receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
-            InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, context);
-
-            receiverDescriptor.getComponentBuilders().add(componentBuilderFactory.buildOnReceieve(injectionNode));
+            receiverDescriptor.getComponentBuilders().add(componentBuilderFactory.buildOnReceieve(injectionNodeBuilderRepository, astType));
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);
 
         return receiverDescriptor;
-    }
-
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
-
-        InjectionNodeBuilderRepository repository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilderRepository);
-
-        repository.put(android.content.BroadcastReceiver.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(BroadcastReceiver.class));
-
-        return repository;
     }
 
     private String buildReceiverType(TypeMirror type) {

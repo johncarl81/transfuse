@@ -8,9 +8,14 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.gen.variableBuilder.StaticExpressionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -25,24 +30,38 @@ public class ReceiveComponentBuilder implements ComponentBuilder{
 
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
-    private InjectionNode injectionNode;
+    private ASTType astType;
+    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private InjectionFragmentGenerator injectionFragmentGenerator;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
+    private AnalysisContextFactory analysisContextFactory;
+    private InjectionPointFactory injectionPointFactory;
+    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ReceiveComponentBuilder(@Assisted InjectionNode injectionNode,
+    public ReceiveComponentBuilder(@Assisted InjectionNodeBuilderRepository injectionNodeBuilderRepository,
+                                   @Assisted ASTType astType,
                                    JCodeModel codeModel,
                                    UniqueVariableNamer namer,
                                    InjectionFragmentGenerator injectionFragmentGenerator,
                                    ComponentBuilderFactory componentBuilderFactory,
-                                   ASTClassFactory astClassFactory) {
+                                   ASTClassFactory astClassFactory,
+                                   AnalysisContextFactory analysisContextFactory,
+                                   InjectionPointFactory injectionPointFactory,
+                                   InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory, VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.codeModel = codeModel;
         this.namer = namer;
-        this.injectionNode = injectionNode;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
+        this.astType = astType;
+        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
+        this.analysisContextFactory = analysisContextFactory;
+        this.injectionPointFactory = injectionPointFactory;
+        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
@@ -61,6 +80,9 @@ public class ReceiveComponentBuilder implements ComponentBuilder{
             }
             JBlock body = onReceiveMethod.body();
 
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(methodDescriptor));
+            InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, context);
+
             Map<InjectionNode,TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(body, definedClass, injectionNode);
 
             MethodGenerator onReceiveMethodGenerator = new ExistingMethod(methodDescriptor);
@@ -75,5 +97,17 @@ public class ReceiveComponentBuilder implements ComponentBuilder{
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(MethodDescriptor methodDescriptor) {
+
+        InjectionNodeBuilderRepository repository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilderRepository);
+        repository.put(android.content.BroadcastReceiver.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(org.androidtransfuse.annotations.BroadcastReceiver.class));
+
+        for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : methodDescriptor.getParameters().entrySet()) {
+            repository.put(parameterEntry.getKey().getASTType().getName(), new StaticExpressionNodeBuilder(parameterEntry.getValue()));
+        }
+
+        return repository;
     }
 }

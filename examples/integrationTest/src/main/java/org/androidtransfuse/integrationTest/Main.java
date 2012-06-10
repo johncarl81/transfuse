@@ -60,7 +60,8 @@ public class Main {
                 createLI(VariableLayoutActivity.class, "Variable Layout"),
                 createLI(RegisterActivity.class, "Listener Registration"),
                 createLI(ManifestManagedActivity.class, "Manifest Managed Activity"),
-                createLI(ToastTriggerActivity.class, "Broadcast Receiver")
+                createLI(ToastTriggerActivity.class, "Broadcast Receiver"),
+                createLI(PreferenceInjectionActivity.class, "Preference Injection")
         }));
 
         Collections.sort(values);

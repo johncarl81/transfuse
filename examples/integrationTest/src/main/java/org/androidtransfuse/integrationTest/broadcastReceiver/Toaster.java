@@ -7,6 +7,8 @@ import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentType;
 import org.androidtransfuse.annotations.OnReceive;
 
+import javax.inject.Inject;
+
 /**
  * @author John Ericksen
  */
@@ -18,10 +20,12 @@ public class Toaster {
 
     private static boolean onReceive = false;
 
+    @Inject
+    private Context context;
+
     @OnReceive
-    public void onReceive(Context context){
-        Toast hello = Toast.makeText(context, "Toast", 1000);
-        hello.show();
+    public void onReceive(){
+        Toast.makeText(context, "Toast", 1000).show();
         onReceive = true;
     }
 

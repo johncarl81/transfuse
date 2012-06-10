@@ -3,7 +3,6 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -54,17 +53,17 @@ public class PreferenceVariableBuilder implements VariableBuilder {
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         TypedExpression preferenceManagerExpression = injectionExpressionBuilder.buildVariable(injectionBuilderContext, preferenceManagerInjectionNode);
 
-        JExpression expression = invokePreferenceMethod(preferenceManagerExpression.getExpression().invoke("getSharedPreferences"));
+        JExpression expression = invokePreferenceMethod(preferenceManagerExpression.getExpression());
         return typedExpressionFactory.build(preferenceType, expression);
     }
 
-    private JExpression invokePreferenceMethod(JInvocation getSharedPreferences) {
+    private JExpression invokePreferenceMethod(JExpression preferences) {
         if (accessorMethods.containsKey(preferenceType)) {
             PrefGetBuilder getBuilder = accessorMethods.get(preferenceType);
-            return getSharedPreferences.invoke(getBuilder.getName()).arg(preferenceName).arg(getBuilder.getLit());
+            return preferences.invoke(getBuilder.getName()).arg(preferenceName).arg(getBuilder.getLit());
         }
         //todo: throw exception?
-        return getSharedPreferences;
+        return preferences;
 
     }
 

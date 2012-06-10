@@ -4,6 +4,7 @@ import android.accounts.AccountManager;
 import android.app.*;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -93,6 +94,9 @@ public class InjectionNodeBuilderRepositoryFactory implements Provider<Injection
                             systemServiceEntry.getKey(),
                             astClassFactory.buildASTClassType(systemServiceEntry.getValue())));
         }
+
+        injectionNodeBuilderRepository.put(SharedPreferences.class.getName(),
+                variableInjectionBuilderFactory.buildSharedPreferenceManagerInjectionNodeBuilder());
 
         //provider type
         injectionNodeBuilderRepository.put(Provider.class.getName(), generatedProviderInjectionNodeBuilderProvider.get());
