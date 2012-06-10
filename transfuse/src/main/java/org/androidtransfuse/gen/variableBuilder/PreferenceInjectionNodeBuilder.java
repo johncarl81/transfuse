@@ -1,6 +1,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.preference.PreferenceManager;
+import android.content.SharedPreferences;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
@@ -34,7 +34,7 @@ public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAn
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        ASTType preferenceManagerASTType = astClassFactory.buildASTClassType(PreferenceManager.class);
+        ASTType preferenceManagerASTType = astClassFactory.buildASTClassType(SharedPreferences.class);
         InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(preferenceManagerASTType, context);
 
         injectionNode.addAspect(VariableBuilder.class,

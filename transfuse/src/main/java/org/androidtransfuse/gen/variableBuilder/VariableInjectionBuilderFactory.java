@@ -38,4 +38,8 @@ public interface VariableInjectionBuilderFactory {
     ContextVariableInjectionNodeBuilder buildContextVariableInjectionNodeBuilder(Class clazz);
 
     PreferenceVariableBuilder buildPreferenceVariableBuilder(ASTType preferenceType, String preferenceName, InjectionNode preferenceManagerInjectionNode);
+
+    SharedPreferenceManagerInjectionNodeBuilder buildSharedPreferenceManagerInjectionNodeBuilder();
+
+    SharedPreferenceManagerVariableBuilder buildSharedPreferenceManagerVariableBuilder(InjectionNode contextInjectionNode);
 }

@@ -24,8 +24,9 @@ public class SystemServiceVariableBuilder extends ConsistentTypeVariableBuilder 
     @Inject
     public SystemServiceVariableBuilder(@Assisted String systemService,
                                         @Assisted InjectionNode contextInjectionNode,
-                                        InjectionExpressionBuilder injectionExpressionBuilder) {
-        super(Object.class);
+                                        InjectionExpressionBuilder injectionExpressionBuilder,
+                                        TypedExpressionFactory typedExpressionFactory) {
+        super(Object.class, typedExpressionFactory);
         this.systemService = systemService;
         this.contextInjectionNode = contextInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;

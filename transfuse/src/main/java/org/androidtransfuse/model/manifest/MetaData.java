@@ -2,6 +2,8 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
 
 /**
  * attributes:
@@ -11,7 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class MetaData {
+public class MetaData extends Mergeable<String> {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute
@@ -23,6 +25,7 @@ public class MetaData {
     @XStreamAsAttribute
     private String value;
 
+    @Merge(value = "n")
     public String getName() {
         return name;
     }
@@ -31,6 +34,7 @@ public class MetaData {
         this.name = name;
     }
 
+    @Merge(value = "s")
     public String getResourceSpecification() {
         return resourceSpecification;
     }
@@ -39,11 +43,17 @@ public class MetaData {
         this.resourceSpecification = resourceSpecification;
     }
 
+    @Merge(value = "v")
     public String getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "metaData";
     }
 }

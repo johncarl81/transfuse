@@ -24,4 +24,6 @@ public @interface BroadcastReceiver {
     boolean enabled() default true;
 
     boolean exported() default true;
+
+    Class<? extends android.content.BroadcastReceiver>  type() default android.content.BroadcastReceiver.class;
 }

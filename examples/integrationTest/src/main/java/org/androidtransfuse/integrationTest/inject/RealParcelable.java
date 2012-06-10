@@ -10,8 +10,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class RealParcelable implements Parcelable {
 
-    private String value;
-
     @SuppressWarnings("UnusedDeclaration")
     public final static Creator<RealParcelable> CREATOR = new Creator<RealParcelable>() {
 
@@ -25,6 +23,8 @@ public class RealParcelable implements Parcelable {
             return new RealParcelable[size];
         }
     };
+
+    private String value;
 
     public RealParcelable(Parcel parcel) {
         this.value = parcel.readString();

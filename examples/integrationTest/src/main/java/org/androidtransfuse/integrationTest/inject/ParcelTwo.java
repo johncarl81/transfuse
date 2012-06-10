@@ -8,7 +8,7 @@ import org.androidtransfuse.annotations.Parcel;
 @Parcel(ParcelTwoConverter.class)
 public class ParcelTwo {
 
-    String value;
+    private String value;
 
     public ParcelTwo() {
         //empty bean constructor

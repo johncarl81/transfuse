@@ -1,7 +1,10 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.analysis.ReceiveComponentBuilder;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
@@ -20,4 +23,6 @@ public interface ComponentBuilderFactory {
     ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
 
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
+
+    ReceiveComponentBuilder buildOnReceieve(InjectionNodeBuilderRepository injectionNodeBuilderRepository, ASTType astType);
 }

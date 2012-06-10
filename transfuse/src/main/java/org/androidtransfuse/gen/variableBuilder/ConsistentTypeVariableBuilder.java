@@ -15,12 +15,8 @@ public abstract class ConsistentTypeVariableBuilder implements VariableBuilder {
     private TypedExpressionFactory typedExpressionFactory;
     private Class clazz;
 
-    public ConsistentTypeVariableBuilder(Class clazz) {
+    public ConsistentTypeVariableBuilder(Class clazz, TypedExpressionFactory typedExpressionFactory) {
         this.clazz = clazz;
-    }
-
-    @Inject
-    public void setTypedExpressionFactory(TypedExpressionFactory typedExpressionFactory) {
         this.typedExpressionFactory = typedExpressionFactory;
     }
 

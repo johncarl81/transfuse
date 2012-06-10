@@ -327,6 +327,7 @@ public class Activity extends Mergeable<String> implements Comparable<Activity> 
         this.intentFilters = intentFilters;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = MetaData.class)
     public List<MetaData> getMetaData() {
         return metaData;
     }

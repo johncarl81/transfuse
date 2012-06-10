@@ -8,7 +8,9 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.annotations.Activity;
+import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.LayoutHandler;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
@@ -16,9 +18,6 @@ import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.model.manifest.Action;
-import org.androidtransfuse.model.manifest.Category;
-import org.androidtransfuse.model.manifest.IntentFilter;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
@@ -26,8 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Activity related Analysis
@@ -42,15 +39,13 @@ public class ActivityAnalysis {
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
-    private Provider<IntentFilter> intentFilterProvider;
-    private Provider<Action> actionProvider;
-    private Provider<Category> categoryProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ActivityComponentBuilderRepository activityComponentBuilderRepository;
     private AnalysisContextFactory analysisContextFactory;
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
+    private IntentFilterBuilder intentFilterBuilder;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -59,36 +54,29 @@ public class ActivityAnalysis {
                             Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                             Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider,
                             Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
-                            Provider<Category> categoryProvider,
-                            Provider<Action> actionProvider,
-                            Provider<IntentFilter> intentFilterProvider,
                             InjectionNodeBuilderRepository injectionNodeBuilders,
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
-                            ASTClassFactory astClassFactory, ManifestManager manifestManager) {
+                            ASTClassFactory astClassFactory, ManifestManager manifestManager, IntentFilterBuilder intentFilterBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
         this.manifestActivityProvider = manifestActivityProvider;
-        this.categoryProvider = categoryProvider;
-        this.actionProvider = actionProvider;
-        this.intentFilterProvider = intentFilterProvider;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.astClassFactory = astClassFactory;
         this.manifestManager = manifestManager;
+        this.intentFilterBuilder = intentFilterBuilder;
     }
 
     public ComponentDescriptor analyzeElement(ASTType input) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
-        IntentFilters intentFilters = input.getAnnotation(IntentFilters.class);
-        Intent intent = input.getAnnotation(Intent.class);
         PackageClass activityClassName;
         ComponentDescriptor activityDescriptor = null;
 
@@ -121,7 +109,7 @@ public class ActivityAnalysis {
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), intentFilters, intent);
+        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation.label(), input);
 
         return activityDescriptor;
     }
@@ -164,12 +152,12 @@ public class ActivityAnalysis {
         }
     }
 
-    private void setupManifest(String name, String label, IntentFilters intentFilters, Intent intent) {
+    private void setupManifest(String name, String label, ASTType type) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
         manifestActivity.setLabel(StringUtils.isBlank(label) ? null : label);
-        manifestActivity.setIntentFilters(buildIntentFilters(intentFilters, intent));
+        manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
 
         manifestManager.addActivity(manifestActivity);
     }
@@ -178,48 +166,6 @@ public class ActivityAnalysis {
         ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode);
 
         activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
-    }
-
-    private List<IntentFilter> buildIntentFilters(IntentFilters intentFilters, Intent intent) {
-        List<IntentFilter> convertedIntentFilters = new ArrayList<IntentFilter>();
-
-        IntentFilter intentFilter = null;
-        if (intentFilters != null) {
-            intentFilter = intentFilterProvider.get();
-            convertedIntentFilters.add(intentFilter);
-
-            for (Intent intentAnnotation : intentFilters.value()) {
-                addIntent(intentAnnotation, intentFilter);
-            }
-        }
-        if (intent != null) {
-            if (intentFilter == null) {
-                intentFilter = intentFilterProvider.get();
-                convertedIntentFilters.add(intentFilter);
-            }
-
-            addIntent(intent, intentFilter);
-        }
-
-        return convertedIntentFilters;
-    }
-
-    private void addIntent(Intent intentAnnotation, IntentFilter intentFilter) {
-        switch (intentAnnotation.type()) {
-            case ACTION:
-                Action action = actionProvider.get();
-                action.setName(intentAnnotation.name());
-                intentFilter.getActions().add(action);
-                break;
-            case CATEGORY:
-                Category category = categoryProvider.get();
-                category.setName(intentAnnotation.name());
-                intentFilter.getCategories().add(category);
-                break;
-            default:
-                //noop
-                break;
-        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
