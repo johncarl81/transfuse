@@ -1,7 +1,7 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.analysis.adapter.*;
-import org.androidtransfuse.analysis.astAnalyzer.BindingRepository;
+import org.androidtransfuse.analysis.repository.BindingRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;

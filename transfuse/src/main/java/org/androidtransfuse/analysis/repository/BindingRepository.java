@@ -1,4 +1,4 @@
-package org.androidtransfuse.analysis.astAnalyzer;
+package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
