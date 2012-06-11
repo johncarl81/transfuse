@@ -18,8 +18,6 @@ import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpr
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory;
-import org.androidtransfuse.matcher.ComponentGeneratorMatcherProvider;
-import org.androidtransfuse.matcher.Matcher;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
@@ -68,6 +66,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
         bind(ActivityComponentBuilderRepository.class).toProvider(ActivityComponentBuilderRepositoryProvider.class).asEagerSingleton();
 
-        bind(Matcher.class).annotatedWith(Names.named(COMPONENT_GENERATOR_MATCHER)).toProvider(ComponentGeneratorMatcherProvider.class);
+        bind(GeneratorRepository.class).toProvider(GeneratorRepositoryProvider.class);
     }
 }

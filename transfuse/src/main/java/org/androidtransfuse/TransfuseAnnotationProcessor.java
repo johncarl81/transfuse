@@ -8,12 +8,16 @@ import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.gen.CodeWriterFactory;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
-import org.androidtransfuse.processor.*;
+import org.androidtransfuse.processor.ComponentProcessor;
+import org.androidtransfuse.processor.TransfuseAssembler;
+import org.androidtransfuse.processor.TransfuseInjector;
+import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.util.CollectionConverterUtil;
 import org.androidtransfuse.util.ManifestLocatorFactory;
 import org.androidtransfuse.util.ManifestSerializer;
@@ -27,6 +31,7 @@ import javax.lang.model.util.ElementFilter;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -79,7 +84,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             transfuseProcessor.processModule(getASTTypesAnnotatedWith(roundEnvironment, TransfuseModule.class));
 
             //process Application
-            ApplicationProcessor applicationProcessor = transfuseProcessor.getApplicationProcessor();
+            ApplicationGenerator applicationProcessor = transfuseProcessor.getApplicationProcessor();
 
             Collection<? extends ASTType> applicationTypes = getASTTypesAnnotatedWith(roundEnvironment, Application.class);
 
@@ -87,16 +92,21 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                 throw new TransfuseAnalysisException("Unable to process with more than one application defined");
             }
 
-            ComponentProcessor componentProcessor;
             if (applicationTypes.isEmpty()) {
-                componentProcessor = applicationProcessor.createComponentProcessor();
+                applicationProcessor.generate();
             } else {
-                componentProcessor = applicationProcessor.processApplication(applicationTypes.iterator().next());
+                applicationProcessor.generate(applicationTypes.iterator().next());
             }
 
+            ComponentProcessor componentProcessor = applicationProcessor.getComponentProcessor();
+
             //process components
-            componentProcessor.process(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
-            componentProcessor.process(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
+            Set<ASTType> types = new HashSet<ASTType>();
+
+            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
+            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
+
+            componentProcessor.process(types);
 
             //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();

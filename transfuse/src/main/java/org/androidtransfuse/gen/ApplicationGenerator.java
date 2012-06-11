@@ -3,8 +3,6 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.ApplicationAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.ComponentGenerator;
-import org.androidtransfuse.gen.Generator;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.processor.ComponentProcessor;
 import org.androidtransfuse.processor.TransfuseAssembler;
@@ -37,10 +35,8 @@ public class ApplicationGenerator implements Generator {
         this.componentProcessorProvider = componentProcessorProvider;
     }
 
-    public ComponentProcessor createComponentProcessor() {
+    public void generate() {
         applicationAnalysis.emptyApplication();
-
-        return buildComponentProcessor();
     }
 
     public void generate(ASTType astType) {
@@ -56,7 +52,7 @@ public class ApplicationGenerator implements Generator {
         }
     }
 
-    public ComponentProcessor buildComponentProcessor() {
+    public ComponentProcessor getComponentProcessor() {
         return componentProcessorProvider.get();
     }
 

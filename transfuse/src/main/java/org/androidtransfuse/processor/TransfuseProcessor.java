@@ -4,6 +4,7 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleProcessor;
 import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.gen.ApplicationGenerator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -17,11 +18,11 @@ import java.util.Collection;
 public class TransfuseProcessor {
 
     private ModuleProcessor moduleProcessor;
-    private Provider<ApplicationProcessor> applicationProcessorProvider;
+    private Provider<ApplicationGenerator> applicationProcessorProvider;
 
     @Inject
     public TransfuseProcessor(ModuleProcessor moduleProcessor,
-                              Provider<ApplicationProcessor> applicationProcessorProvider) {
+                              Provider<ApplicationGenerator> applicationProcessorProvider) {
         this.moduleProcessor = moduleProcessor;
         this.applicationProcessorProvider = applicationProcessorProvider;
     }
@@ -37,7 +38,7 @@ public class TransfuseProcessor {
         }
     }
 
-    public ApplicationProcessor getApplicationProcessor() {
+    public ApplicationGenerator getApplicationProcessor() {
         return applicationProcessorProvider.get();
     }
 }

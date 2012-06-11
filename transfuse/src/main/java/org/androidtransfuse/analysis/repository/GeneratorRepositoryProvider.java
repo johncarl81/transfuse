@@ -1,11 +1,10 @@
 package org.androidtransfuse.analysis.repository;
 
-import org.androidtransfuse.analysis.repository.GeneratorRepository;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.BroadcastReceiver;
-import org.androidtransfuse.matcher.ASTMatcherBuilder;
-import org.androidtransfuse.matcher.ActivityMatchExecution;
-import org.androidtransfuse.matcher.BroadcastReceiverMatchExecution;
+import org.androidtransfuse.gen.ActivityGenerator;
+import org.androidtransfuse.gen.BroadcastReceiverGenerator;
+import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -16,13 +15,13 @@ import javax.inject.Provider;
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
 
     private ASTMatcherBuilder astMatcherBuilder;
-    private Provider<ActivityMatchExecution> activityMatchExecutionProvider;
-    private Provider<BroadcastReceiverMatchExecution> broadcastReceiverMatchExecutionProvider;
+    private Provider<ActivityGenerator> activityMatchExecutionProvider;
+    private Provider<BroadcastReceiverGenerator> broadcastReceiverMatchExecutionProvider;
 
     @Inject
     public GeneratorRepositoryProvider(ASTMatcherBuilder astMatcherBuilder,
-                                       Provider<BroadcastReceiverMatchExecution> broadcastReceiverMatchExecutionProvider,
-                                       Provider<ActivityMatchExecution> activityMatchExecutionProvider) {
+                                       Provider<BroadcastReceiverGenerator> broadcastReceiverMatchExecutionProvider,
+                                       Provider<ActivityGenerator> activityMatchExecutionProvider) {
         this.astMatcherBuilder = astMatcherBuilder;
         this.broadcastReceiverMatchExecutionProvider = broadcastReceiverMatchExecutionProvider;
         this.activityMatchExecutionProvider = activityMatchExecutionProvider;
