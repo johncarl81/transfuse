@@ -1,4 +1,4 @@
-package org.androidtransfuse.matcher;
+package org.androidtransfuse.util.matcher;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class ASTTypeMatcherBuilder {
         return this;
     }
 
-    public Match build() {
+    public Matcher build() {
         return new ASTTypeMatcher(annotations);
     }
 }

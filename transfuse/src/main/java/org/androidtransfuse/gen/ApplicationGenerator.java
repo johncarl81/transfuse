@@ -1,10 +1,13 @@
-package org.androidtransfuse.processor;
+package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.analysis.ApplicationAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.ComponentGenerator;
+import org.androidtransfuse.gen.Generator;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.processor.ComponentProcessor;
+import org.androidtransfuse.processor.TransfuseAssembler;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -13,7 +16,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class ApplicationProcessor {
+public class ApplicationGenerator implements Generator {
 
     private ApplicationAnalysis applicationAnalysis;
     private ComponentGenerator generator;
@@ -22,7 +25,7 @@ public class ApplicationProcessor {
     private Provider<TransfuseAssembler> transfuseAssemblerProvider;
 
     @Inject
-    public ApplicationProcessor(ApplicationAnalysis applicationAnalysis,
+    public ApplicationGenerator(ApplicationAnalysis applicationAnalysis,
                                 ComponentGenerator generator,
                                 Logger logger,
                                 Provider<TransfuseAssembler> transfuseAssemblerProvider,
@@ -40,7 +43,7 @@ public class ApplicationProcessor {
         return buildComponentProcessor();
     }
 
-    public ComponentProcessor processApplication(ASTType astType) {
+    public void generate(ASTType astType) {
         ComponentDescriptor applicationDescriptor = applicationAnalysis.analyzeApplication(astType);
 
         if (applicationDescriptor != null) {
@@ -51,11 +54,9 @@ public class ApplicationProcessor {
                 logger.error("JClassAlreadyExistsException while generating activity", e);
             }
         }
-
-        return buildComponentProcessor();
     }
 
-    private ComponentProcessor buildComponentProcessor() {
+    public ComponentProcessor buildComponentProcessor() {
         return componentProcessorProvider.get();
     }
 

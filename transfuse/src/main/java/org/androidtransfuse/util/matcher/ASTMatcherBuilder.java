@@ -1,4 +1,4 @@
-package org.androidtransfuse.matcher;
+package org.androidtransfuse.util.matcher;
 
 /**
  * @author John Ericksen

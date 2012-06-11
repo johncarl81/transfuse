@@ -1,4 +1,4 @@
-package org.androidtransfuse.matcher;
+package org.androidtransfuse.util.matcher;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-public class ASTTypeMatcher implements Match {
+public class ASTTypeMatcher implements Matcher<ASTType> {
 
     private Set<Class<? extends Annotation>> annotations;
 
@@ -17,7 +17,6 @@ public class ASTTypeMatcher implements Match {
         this.annotations = new HashSet<Class<? extends Annotation>>(annotations);
     }
 
-    @Override
     public boolean matches(ASTType astType) {
         boolean matched = true;
 
