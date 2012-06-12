@@ -18,7 +18,6 @@ import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.ManifestManager;
 import org.apache.commons.lang.StringUtils;
 
@@ -28,7 +27,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class ApplicationAnalysis {
+public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
@@ -68,7 +67,7 @@ public class ApplicationAnalysis {
         setupManifest(android.app.Application.class.getName(), null);
     }
 
-    public ComponentDescriptor analyzeApplication(ASTType astType) {
+    public ComponentDescriptor analyze(ASTType astType) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
         PackageClass inputType = new PackageClass(astType.getName());

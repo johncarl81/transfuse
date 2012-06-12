@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -23,7 +22,8 @@ import org.junit.Test;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * @author John Ericksen
@@ -34,8 +34,6 @@ public class InjectionFragmentGeneratorTest {
     private InjectionFragmentGeneratorHarness fragmentGeneratorHarness;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
-    @Inject
-    private JCodeModel codeModel;
     @Inject
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     @Inject
@@ -123,8 +121,6 @@ public class InjectionFragmentGeneratorTest {
 
         assertNotNull(proxyTarget.getDelayedProxyDependency());
         assertNotNull(proxyTarget.getDelayedProxyDependency().getDelayedProxy());
-        //assertEquals(proxyTarget, proxyTarget.getDelayedProxyDependency().getDelayedProxy());
-        assertTrue(proxyTarget.getDelayedProxyDependency().getDelayedProxy() instanceof DelayedProxy);
     }
 
     @Test

@@ -32,7 +32,7 @@ import javax.lang.model.type.TypeMirror;
  *
  * @author John Ericksen
  */
-public class ActivityAnalysis {
+public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
@@ -77,7 +77,7 @@ public class ActivityAnalysis {
         this.typeMirrorUtil = typeMirrorUtil;
     }
 
-    public ComponentDescriptor analyzeElement(ASTType input) {
+    public ComponentDescriptor analyze(ASTType input) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         PackageClass activityClassName;
@@ -96,7 +96,9 @@ public class ActivityAnalysis {
 
             TypeMirror type = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<Activity>(activityAnnotation) {
                 @Override
-                public void run(Activity annotation) {annotation.type();}
+                public void run(Activity annotation) {
+                    annotation.type();
+                }
             });
 
             String activityType = type == null ? android.app.Activity.class.getName() : type.toString();
@@ -124,7 +126,9 @@ public class ActivityAnalysis {
         if (layoutHandlerAnnotation != null) {
             TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<LayoutHandler>(layoutHandlerAnnotation) {
                 @Override
-                public void run(LayoutHandler annotation) {layoutHandlerAnnotation.value();}
+                public void run(LayoutHandler annotation) {
+                    layoutHandlerAnnotation.value();
+                }
             });
 
             if (layoutHandlerType != null) {

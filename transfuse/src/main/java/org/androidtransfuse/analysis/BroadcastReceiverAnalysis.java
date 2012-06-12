@@ -19,7 +19,7 @@ import javax.lang.model.type.TypeMirror;
 /**
  * @author John Ericksen
  */
-public class BroadcastReceiverAnalysis {
+public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTClassFactory astClassFactory;
     private Provider<Receiver> receiverProvider;
@@ -46,7 +46,7 @@ public class BroadcastReceiverAnalysis {
         this.typeMirrorUtil = typeMirrorUtil;
     }
 
-    public ComponentDescriptor analyzeElement(ASTType astType) {
+    public ComponentDescriptor analyze(ASTType astType) {
 
         BroadcastReceiver broadcastReceiver = astType.getAnnotation(BroadcastReceiver.class);
 
@@ -98,7 +98,6 @@ public class BroadcastReceiverAnalysis {
 
         manifestManager.addBroadcastReceiver(manifestReceiver);
     }
-
 
 
     private PackageClass buildPackageClass(ASTType astType, String className) {

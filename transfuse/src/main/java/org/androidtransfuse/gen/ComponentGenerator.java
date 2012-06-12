@@ -1,6 +1,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 
@@ -9,7 +10,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ComponentGenerator {
+public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
     private JCodeModel codeModel;
     private GeneratedClassAnnotator generatedClassAnnotator;
@@ -20,17 +21,20 @@ public class ComponentGenerator {
         this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
-    public void generate(ComponentDescriptor descriptor) throws JClassAlreadyExistsException {
+    public void generate(ComponentDescriptor descriptor) {
 
-        final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
+        try {
+            final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
-        generatedClassAnnotator.annotateClass(definedClass);
+            generatedClassAnnotator.annotateClass(definedClass);
 
-        definedClass._extends(codeModel.ref(descriptor.getType()));
+            definedClass._extends(codeModel.ref(descriptor.getType()));
 
-        for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
-            componentBuilder.build(definedClass, descriptor);
+            for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
+                componentBuilder.build(definedClass, descriptor);
+            }
+        } catch (JClassAlreadyExistsException e) {
+            throw new TransfuseAnalysisException("Class Already Exists ", e);
         }
-
     }
 }

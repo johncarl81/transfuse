@@ -1,11 +1,9 @@
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
-
 /**
  * @author John Ericksen
  */
-public interface Generator {
+public interface Generator<T> {
 
-    void generate(ASTType type);
+    void generate(T descriptor);
 }

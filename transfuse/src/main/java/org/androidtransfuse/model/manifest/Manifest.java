@@ -62,6 +62,8 @@ public class Manifest extends Mergeable<String> {
     @XStreamAsAttribute
     private InstallLocation installLocation;
 
+    @XStreamImplicit(itemFieldName = "uses-permission")
+    private List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
     @XStreamImplicit(itemFieldName = "application")
     private List<Application> applications = new ArrayList<Application>();
     @XStreamImplicit(itemFieldName = "instrumentation")
@@ -78,8 +80,6 @@ public class Manifest extends Mergeable<String> {
     private List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
     @XStreamImplicit(itemFieldName = "uses-configuration")
     private List<UsesConfiguration> usesConfigurations = new ArrayList<UsesConfiguration>();
-    @XStreamImplicit(itemFieldName = "uses-permission")
-    private List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
     @XStreamImplicit(itemFieldName = "uses-sdk")
     private List<UsesSDK> usesSDKs = new ArrayList<UsesSDK>();
     @XStreamImplicit(itemFieldName = "compatible-screens")

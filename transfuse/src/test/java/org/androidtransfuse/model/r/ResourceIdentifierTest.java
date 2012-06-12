@@ -55,7 +55,7 @@ public class ResourceIdentifierTest {
         assertFalse(otherValueIdentifier.equals(valueIdentifierDuplicate));
         assertNotSame(valueIdentifier.hashCode(), valueIdentifierDuplicate.hashCode());
 
-        assertFalse(valueIdentifier.equals(this));
+        assertFalse(valueIdentifier.equals(new Object()));
 
     }
 }

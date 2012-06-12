@@ -77,7 +77,7 @@ public class VirtualProxyGenerator {
                         //checking uniqueness
                         if (methodSignatures.add(new MethodSignature(method))) {
                             // public <type> <method_name> ( <parameters...>)
-                            JType returnType = null;
+                            JType returnType;
                             if (method.getReturnType() != null) {
                                 returnType = codeModel.ref(method.getReturnType().getName());
                             } else {

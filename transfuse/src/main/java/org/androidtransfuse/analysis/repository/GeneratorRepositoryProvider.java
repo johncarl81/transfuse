@@ -1,9 +1,11 @@
 package org.androidtransfuse.analysis.repository;
 
+import org.androidtransfuse.analysis.ActivityAnalysis;
+import org.androidtransfuse.analysis.BroadcastReceiverAnalysis;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.BroadcastReceiver;
-import org.androidtransfuse.gen.ActivityGenerator;
-import org.androidtransfuse.gen.BroadcastReceiverGenerator;
+import org.androidtransfuse.gen.AnalysisGenerationFactory;
+import org.androidtransfuse.gen.ComponentGenerator;
 import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
 
 import javax.inject.Inject;
@@ -15,16 +17,22 @@ import javax.inject.Provider;
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
 
     private ASTMatcherBuilder astMatcherBuilder;
-    private Provider<ActivityGenerator> activityMatchExecutionProvider;
-    private Provider<BroadcastReceiverGenerator> broadcastReceiverMatchExecutionProvider;
+    private AnalysisGenerationFactory analysisGenerationFactory;
+    private ActivityAnalysis activityAnalysis;
+    private ComponentGenerator componentGenerator;
+    private BroadcastReceiverAnalysis broadcastReceiverAnalysis;
 
     @Inject
     public GeneratorRepositoryProvider(ASTMatcherBuilder astMatcherBuilder,
-                                       Provider<BroadcastReceiverGenerator> broadcastReceiverMatchExecutionProvider,
-                                       Provider<ActivityGenerator> activityMatchExecutionProvider) {
+                                       AnalysisGenerationFactory analysisGenerationFactory,
+                                       ActivityAnalysis activityAnalysis,
+                                       ComponentGenerator componentGenerator,
+                                       BroadcastReceiverAnalysis broadcastReceiverAnalysis) {
         this.astMatcherBuilder = astMatcherBuilder;
-        this.broadcastReceiverMatchExecutionProvider = broadcastReceiverMatchExecutionProvider;
-        this.activityMatchExecutionProvider = activityMatchExecutionProvider;
+        this.analysisGenerationFactory = analysisGenerationFactory;
+        this.activityAnalysis = activityAnalysis;
+        this.componentGenerator = componentGenerator;
+        this.broadcastReceiverAnalysis = broadcastReceiverAnalysis;
     }
 
     @Override
@@ -32,9 +40,9 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         GeneratorRepository repository = new GeneratorRepository();
 
         repository.add(astMatcherBuilder.type().annotatedWith(Activity.class).build(),
-                activityMatchExecutionProvider.get());
+                analysisGenerationFactory.buildAnalysisGeneration(activityAnalysis, componentGenerator));
         repository.add(astMatcherBuilder.type().annotatedWith(BroadcastReceiver.class).build(),
-                broadcastReceiverMatchExecutionProvider.get());
+                analysisGenerationFactory.buildAnalysisGeneration(broadcastReceiverAnalysis, componentGenerator));
 
         return repository;
     }

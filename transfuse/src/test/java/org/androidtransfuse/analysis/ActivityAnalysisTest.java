@@ -31,7 +31,7 @@ public class ActivityAnalysisTest {
 
         ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
 
-        activityDescriptor = activityAnalysis.analyzeElement(astClassFactory.buildASTClassType(MockActivityDelegate.class));
+        activityDescriptor = activityAnalysis.analyze(astClassFactory.buildASTClassType(MockActivityDelegate.class));
     }
 
     @Test
