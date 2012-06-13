@@ -185,8 +185,7 @@ public class ParcelableGenerator {
                     .arg(JExpr.cast(returnJClassRef, parcelParam.invoke("readSerializable")));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
             ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(returnType);
-            generateParcelable(returnType, parcelableDescriptor);
-            JDefinedClass returnParcelable = parceableMap.get(returnType);
+            JDefinedClass returnParcelable = generateParcelable(returnType, parcelableDescriptor);
 
             JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable));
 
@@ -222,8 +221,7 @@ public class ParcelableGenerator {
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName()));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
             ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(returnType);
-            generateParcelable(returnType, parcelableDescriptor);
-            JDefinedClass returnParcelable = parceableMap.get(returnType);
+            JDefinedClass returnParcelable = generateParcelable(returnType, parcelableDescriptor);
 
             body.invoke(parcel, "writeParcelable").arg(JExpr._new(returnParcelable).arg(wrapped.invoke(propertyMutator.getGetter().getName())))
                     .arg(flags);

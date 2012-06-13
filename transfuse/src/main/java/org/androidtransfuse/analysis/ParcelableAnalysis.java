@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ParcelableAnalysis {
+public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
 
     private Map<ASTType, ParcelableDescriptor> parcelableCache = new HashMap<ASTType, ParcelableDescriptor>();
     private ASTClassFactory astClassFactory;
