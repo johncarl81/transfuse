@@ -13,7 +13,7 @@ import org.androidtransfuse.processor.Merge;
  *
  * @author John Ericksen
  */
-public class MetaData extends Mergeable<String> {
+public class MetaData extends Mergeable {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute

@@ -33,6 +33,8 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
         methodAnnotations.put(OnListItemClick.class, "onListItemClick");
         //BroadcastReceiver
         methodAnnotations.put(OnReceive.class, "onReceive");
+        //Service
+        methodAnnotations.put(OnRebind.class, "onRebind");
     }
 
     @Override

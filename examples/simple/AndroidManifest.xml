@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:transfuse="http://johncarl81.github.com/transfuse/" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.example.simple" android:versionCode="1" android:versionName="1.0">
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application transfuse:tag="n,l" android:label="Simple" android:name="org.androidtransfuse.example.simple.SimpleApp">
         <activity transfuse:tag="n,l" android:label="@string/app_name" android:name="org.androidtransfuse.example.simple.SecondActivity"/>
         <activity transfuse:tag="n,l" android:label="@string/simpleActivityName" android:name="org.androidtransfuse.example.simple.SimpleActivity">
@@ -9,6 +10,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="11"/>
 </manifest>

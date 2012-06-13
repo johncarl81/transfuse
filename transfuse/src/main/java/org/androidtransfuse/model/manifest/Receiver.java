@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Receiver extends Mergeable<String> implements Comparable<Receiver>{
+public class Receiver extends Mergeable implements Comparable<Receiver>{
 
     @XStreamAlias("android:enabled")
     @XStreamAsAttribute

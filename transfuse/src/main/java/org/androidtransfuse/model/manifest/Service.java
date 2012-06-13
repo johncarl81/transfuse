@@ -3,6 +3,9 @@ package org.androidtransfuse.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
+import org.androidtransfuse.processor.MergeCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Service {
+public class Service extends Mergeable {
 
     @XStreamAlias("android:enabled")
     @XStreamAsAttribute
@@ -52,6 +55,7 @@ public class Service {
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
+    @Merge(value = "e")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -60,6 +64,7 @@ public class Service {
         this.enabled = enabled;
     }
 
+    @Merge(value = "x")
     public Boolean getExported() {
         return exported;
     }
@@ -68,6 +73,7 @@ public class Service {
         this.exported = exported;
     }
 
+    @Merge(value = "i")
     public String getIcon() {
         return icon;
     }
@@ -76,6 +82,7 @@ public class Service {
         this.icon = icon;
     }
 
+    @Merge(value = "l")
     public String getLabel() {
         return label;
     }
@@ -84,6 +91,7 @@ public class Service {
         this.label = label;
     }
 
+    @Merge(value = "n")
     public String getName() {
         return name;
     }
@@ -92,6 +100,7 @@ public class Service {
         this.name = name;
     }
 
+    @Merge(value = "p")
     public String getPermission() {
         return permission;
     }
@@ -100,6 +109,7 @@ public class Service {
         this.permission = permission;
     }
 
+    @Merge(value = "r")
     public String getProcess() {
         return process;
     }
@@ -108,6 +118,7 @@ public class Service {
         this.process = process;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = IntentFilter.class)
     public List<IntentFilter> getIntentFilters() {
         return intentFilters;
     }
@@ -116,11 +127,17 @@ public class Service {
         this.intentFilters = intentFilters;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = MetaData.class)
     public List<MetaData> getMetaData() {
         return metaData;
     }
 
     public void setMetaData(List<MetaData> metaData) {
         this.metaData = metaData;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
     }
 }

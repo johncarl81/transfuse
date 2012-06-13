@@ -1,9 +1,6 @@
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.model.manifest.Activity;
-import org.androidtransfuse.model.manifest.Application;
-import org.androidtransfuse.model.manifest.Manifest;
-import org.androidtransfuse.model.manifest.Receiver;
+import org.androidtransfuse.model.manifest.*;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ public class ManifestManager {
     private Application application;
     private List<Activity> activities = new ArrayList<Activity>();
     private List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
+    private List<Service> services = new ArrayList<Service>();
 
     public void setApplication(Application application) {
         this.application = application;
@@ -31,6 +29,10 @@ public class ManifestManager {
         this.broadcastReceivers.add(broadcastReceiver);
     }
 
+    public void addService(Service service) {
+       this.services.add(service);
+    }
+
     public Manifest getManifest() {
         Manifest manifest = new Manifest();
 
@@ -42,6 +44,7 @@ public class ManifestManager {
 
         localApplication.getActivities().addAll(activities);
         localApplication.getReceivers().addAll(broadcastReceivers);
+        localApplication.getServices().addAll(services);
 
         manifest.getApplications().add(localApplication);
 

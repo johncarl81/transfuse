@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class IntentFilter extends Mergeable<String> {
+public class IntentFilter extends Mergeable {
 
     @XStreamAlias("android:icon")
     @XStreamAsAttribute

@@ -44,7 +44,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @XStreamAlias("application")
-public class Application extends Mergeable<String> {
+public class Application extends Mergeable {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -299,6 +299,7 @@ public class Application extends Mergeable<String> {
         this.activityAliases = activityAliases;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Service.class)
     public List<Service> getServices() {
         return services;
     }
@@ -307,6 +308,7 @@ public class Application extends Mergeable<String> {
         this.services = services;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Receiver.class)
     public List<Receiver> getReceivers() {
         return receivers;
     }

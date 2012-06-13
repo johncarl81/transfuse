@@ -55,7 +55,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Activity extends Mergeable<String> implements Comparable<Activity> {
+public class Activity extends Mergeable implements Comparable<Activity> {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute

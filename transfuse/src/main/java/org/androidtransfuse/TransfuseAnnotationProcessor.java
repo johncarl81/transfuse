@@ -4,10 +4,7 @@ import com.google.inject.Injector;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Application;
-import org.androidtransfuse.annotations.BroadcastReceiver;
-import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.gen.CodeWriterFactory;
 import org.androidtransfuse.model.manifest.Manifest;
@@ -105,6 +102,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
+            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Service.class));
 
             componentProcessor.process(types);
 

@@ -11,13 +11,13 @@ import java.util.Set;
  * @author John Ericksen
  */
 
-public abstract class Mergeable<T> {
+public abstract class Mergeable {
 
     @XStreamAlias("transfuse:tag")
     @XStreamAsAttribute
     private MergeableTags tags = new MergeableTags();
 
-    public abstract T getIdentifier();
+    public abstract String getIdentifier();
 
     public void addMergeTag(String tag) {
         tags.getTags().add(tag);

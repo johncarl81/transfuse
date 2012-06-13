@@ -35,7 +35,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @XStreamAlias("manifest")
-public class Manifest extends Mergeable<String> {
+public class Manifest extends Mergeable {
 
     @XStreamAlias("xmlns:transfuse")
     @XStreamAsAttribute

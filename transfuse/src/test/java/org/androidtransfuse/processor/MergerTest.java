@@ -26,7 +26,7 @@ import static junit.framework.Assert.assertNull;
  */
 public class MergerTest {
 
-    public static class MergeableRoot extends Mergeable<String> {
+    public static class MergeableRoot extends Mergeable {
         String id;
         String dontMerge;
         String stringValue;
@@ -82,7 +82,7 @@ public class MergerTest {
         }
     }
 
-    public static class SubMergable extends Mergeable<String> {
+    public static class SubMergable extends Mergeable {
         String value;
         String dontMergeValue;
         String id;

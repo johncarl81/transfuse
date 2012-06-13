@@ -11,7 +11,7 @@ import org.androidtransfuse.processor.Merge;
  *
  * @author John Ericksen
  */
-public class Action extends Mergeable<String> {
+public class Action extends Mergeable {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute

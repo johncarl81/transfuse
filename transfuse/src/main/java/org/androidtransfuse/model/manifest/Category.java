@@ -11,7 +11,7 @@ import org.androidtransfuse.processor.Merge;
  *
  * @author John Ericksen
  */
-public class Category extends Mergeable<String> {
+public class Category extends Mergeable {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute
