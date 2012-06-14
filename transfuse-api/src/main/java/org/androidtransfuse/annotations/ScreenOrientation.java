@@ -6,13 +6,13 @@ public enum ScreenOrientation implements LabeledEnum {
     BEHIND("behind"),
     LANDSCAPE("landscape"),
     PORTRAIT("portrait"),
-    REVERSELANDSCAPE("reverseLandscape"),
-    REVERSEPORTRAIT("reversePortrait"),
-    SENSORLANDSCAPE("sensorLandscape"),
-    SENSORPORTRAIT("sensorPortrait"),
+    REVERSE_LANDSCAPE("reverseLandscape"),
+    REVERSE_PORTRAIT("reversePortrait"),
+    SENSOR_LANDSCAPE("sensorLandscape"),
+    SENSOR_PORTRAIT("sensorPortrait"),
     SENSOR("sensor"),
-    FULLSENSOR("fullSensor"),
-    NOSENSOR("nosensor");
+    FULL_SENSOR("fullSensor"),
+    NO_SENSOR("nosensor");
 
     private String label;
 

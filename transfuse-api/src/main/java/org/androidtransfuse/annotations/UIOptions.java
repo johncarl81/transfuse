@@ -2,7 +2,7 @@ package org.androidtransfuse.annotations;
 
 public enum UIOptions implements LabeledEnum {
     NONE("none"),
-    SPLITACTIONBARWHENNARROW("splitActionBarWhenNarrow");
+    SPLIT_ACTION_BAR_WHEN_NARROW("splitActionBarWhenNarrow");
 
     private String label;
 

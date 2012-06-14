@@ -6,14 +6,14 @@ public enum ConfigChanges implements LabeledEnum {
     LOCALE("locale"),
     TOUCHSCREEN("touchscreen"),
     KEYBOARD("keyboard"),
-    KEYBOARDHIDDEN("keyboardHidden"),
+    KEYBOARD_HIDDEN("keyboardHidden"),
     NAVIGATION("navigation"),
-    SCREENLAYOUT("screenLayout"),
-    FONTSCALE("fontScale"),
-    UIMODE("uiMode"),
+    SCREEN_LAYOUT("screenLayout"),
+    FONT_SCALE("fontScale"),
+    UI_MODE("uiMode"),
     ORIENTATION("orientation"),
-    SCREENSIZE("screenSize"),
-    SMALLESTSCREENSIZE("smallestScreenSize");
+    SCREEN_SIZE("screenSize"),
+    SMALLEST_SCREENSIZE("smallestScreenSize");
 
     private String label;
 

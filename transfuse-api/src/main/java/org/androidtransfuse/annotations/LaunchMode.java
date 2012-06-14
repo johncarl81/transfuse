@@ -2,9 +2,9 @@ package org.androidtransfuse.annotations;
 
 public enum LaunchMode implements LabeledEnum {
     STANDARD("standard"),
-    SINGLETOP("singleTop"),
-    SINGLETASK("singleTask"),
-    SINGLEINSTANCE("singleInstance");
+    SINGLE_TOP("singleTop"),
+    SINGLE_TASK("singleTask"),
+    SINGLE_INSTANCE("singleInstance");
 
     private String label;
 
