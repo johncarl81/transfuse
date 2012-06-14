@@ -1,7 +1,7 @@
-package org.androidtransfuse.model.manifest;
+package org.androidtransfuse.annotations;
 
 public enum LaunchMode implements LabeledEnum {
-    MULTIPLE("multiple"),
+    STANDARD("standard"),
     SINGLETOP("singleTop"),
     SINGLETASK("singleTask"),
     SINGLEINSTANCE("singleInstance");

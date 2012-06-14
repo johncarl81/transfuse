@@ -1,5 +1,7 @@
 package org.androidtransfuse.model.manifest;
 
+import org.androidtransfuse.annotations.LabeledEnum;
+
 public enum ScreenSize implements LabeledEnum {
     SMALL("small"),
     NORMAL("normal"),

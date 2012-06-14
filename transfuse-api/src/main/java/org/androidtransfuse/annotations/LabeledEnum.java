@@ -1,4 +1,4 @@
-package org.androidtransfuse.model.manifest;
+package org.androidtransfuse.annotations;
 
 /**
  * @author John Ericksen

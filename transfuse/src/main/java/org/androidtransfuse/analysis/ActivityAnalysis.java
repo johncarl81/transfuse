@@ -8,9 +8,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.LayoutHandler;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
@@ -155,9 +153,46 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         manifestActivity.setName(name);
         manifestActivity.setLabel(StringUtils.isBlank(activityAnnotation.label()) ? null : activityAnnotation.label());
+        manifestActivity.setAllowTaskReparenting(!activityAnnotation.allowTaskReparenting()? null : true);
+        manifestActivity.setAlwaysRetainTaskState(!activityAnnotation.alwaysRetainTaskState() ? null : true);
+        manifestActivity.setClearTaskOnLaunch(!activityAnnotation.clearTaskOnLaunch() ? null : true);
+        manifestActivity.setConfigChanges(concatenate(activityAnnotation.configChanges(), "|"));
+        manifestActivity.setEnabled(activityAnnotation.enabled() ? null : false);
+        manifestActivity.setExcludeFromRecents(!activityAnnotation.excludeFromRecents() ? null : true);
+        manifestActivity.setExported(activityAnnotation.exported().getValue());
+        manifestActivity.setFinishOnTaskLaunch(!activityAnnotation.finishOnTaskLaunch() ? null : true);
+        manifestActivity.setHardwareAccelerated(!activityAnnotation.hardwareAccelerated() ? null : true);
+        manifestActivity.setIcon(StringUtils.isBlank(activityAnnotation.icon()) ? null : activityAnnotation.icon());
+        manifestActivity.setLaunchMode(activityAnnotation.launchMode() == LaunchMode.STANDARD ? null : activityAnnotation.launchMode());
+        manifestActivity.setMultiprocess(!activityAnnotation.multiprocess() ? null : true);
+        manifestActivity.setNoHistory(!activityAnnotation.noHistory() ? null : true);
+        manifestActivity.setPermission(StringUtils.isBlank(activityAnnotation.permission()) ? null : activityAnnotation.permission());
+        manifestActivity.setProcess(StringUtils.isBlank(activityAnnotation.process()) ? null : activityAnnotation.process());
+        manifestActivity.setScreenOrientation(activityAnnotation.screenOrientation() == ScreenOrientation.UNSPECIFIED ? null : activityAnnotation.screenOrientation());
+        manifestActivity.setStateNotNeeded(!activityAnnotation.stateNotNeeded() ? null : true);
+        manifestActivity.setTaskAffinity(StringUtils.isBlank(activityAnnotation.taskAffinity()) ? null : activityAnnotation.taskAffinity());
+        manifestActivity.setTheme(StringUtils.isBlank(activityAnnotation.theme()) ? null : activityAnnotation.theme());
+        manifestActivity.setUiOptions(activityAnnotation.uiOptions() == UIOptions.NONE ? null : activityAnnotation.uiOptions());
+        manifestActivity.setWindowSoftInputMode(activityAnnotation.windowSoftInputMode() == WindowSoftInputMode.STATE_UNSPECIFIED ? null : activityAnnotation.windowSoftInputMode());
         manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
 
         manifestManager.addActivity(manifestActivity);
+    }
+
+    private String concatenate(ConfigChanges[] configChanges, String separator) {
+        StringBuilder builder = new StringBuilder();
+
+        if(configChanges.length == 0){
+            return null;
+        }
+
+        builder.append(configChanges[0].getLabel());
+        for(int i = 1; i < configChanges.length; i++){
+            builder.append(separator);
+            builder.append(configChanges[i].getLabel());
+        }
+
+        return builder.toString();
     }
 
     private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {

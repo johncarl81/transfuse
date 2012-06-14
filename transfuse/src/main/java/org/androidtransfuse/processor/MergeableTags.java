@@ -1,21 +1,21 @@
 package org.androidtransfuse.processor;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author John Ericksen
  */
 public class MergeableTags {
     
-    private Set<String> tags;
+    private TreeSet<String> tags = new TreeSet<String>();
 
     public MergeableTags(){
-        tags = new HashSet<String>();
+        //empty bean constructor
     }
 
     public MergeableTags(Set<String> tags) {
-        this.tags = tags;
+        this.tags.addAll(tags);
     }
 
     public Set<String> getTags() {

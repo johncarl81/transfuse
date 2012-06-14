@@ -1,5 +1,7 @@
 package org.androidtransfuse.model.manifest;
 
+import org.androidtransfuse.annotations.LabeledEnum;
+
 /**
  * @author John Ericksen
  */

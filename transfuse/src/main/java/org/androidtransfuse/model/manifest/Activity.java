@@ -3,6 +3,10 @@ package org.androidtransfuse.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidtransfuse.annotations.LaunchMode;
+import org.androidtransfuse.annotations.ScreenOrientation;
+import org.androidtransfuse.annotations.UIOptions;
+import org.androidtransfuse.annotations.WindowSoftInputMode;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
@@ -68,7 +72,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
     private Boolean clearTaskOnLaunch;
     @XStreamAlias("android:configChanges")
     @XStreamAsAttribute
-    private ConfigChanges configChanges;
+    private String configChanges;
     @XStreamAlias("android:enabled")
     @XStreamAsAttribute
     private Boolean enabled;
@@ -156,11 +160,11 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.clearTaskOnLaunch = clearTaskOnLaunch;
     }
 
-    public ConfigChanges getConfigChanges() {
+    public String getConfigChanges() {
         return configChanges;
     }
 
-    public void setConfigChanges(ConfigChanges configChanges) {
+    public void setConfigChanges(String configChanges) {
         this.configChanges = configChanges;
     }
 

@@ -1,6 +1,7 @@
 package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
+import org.androidtransfuse.annotations.LabeledEnum;
 
 import java.util.HashMap;
 import java.util.Map;
