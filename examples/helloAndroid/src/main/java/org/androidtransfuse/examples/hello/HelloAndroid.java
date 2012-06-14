@@ -6,7 +6,7 @@ import org.androidtransfuse.annotations.*;
 import javax.inject.Inject;
 
 @Activity(label = "@string/app_name")
-@IntentFilters({
+@IntentFilter({
         @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
         @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })

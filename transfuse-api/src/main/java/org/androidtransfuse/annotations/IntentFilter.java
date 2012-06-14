@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IntentFilters {
-    IntentFilter[] value();
+public @interface IntentFilter {
+    Intent[] value();
 }

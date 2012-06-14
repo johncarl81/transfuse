@@ -26,7 +26,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @Activity(label = "@string/app_name", type = ListActivity.class)
-@IntentFilters({
+@IntentFilter({
         @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
         @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })

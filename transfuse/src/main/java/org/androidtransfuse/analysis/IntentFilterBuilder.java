@@ -2,10 +2,10 @@ package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Intent;
+import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
-import org.androidtransfuse.model.manifest.IntentFilter;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -17,46 +17,59 @@ import java.util.List;
  */
 public class IntentFilterBuilder {
 
-    private Provider<IntentFilter> intentFilterProvider;
+    private Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider;
     private Provider<Action> actionProvider;
     private Provider<Category> categoryProvider;
 
     @Inject
-    public IntentFilterBuilder(Provider<IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {
+    public IntentFilterBuilder(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {
         this.intentFilterProvider = intentFilterProvider;
         this.actionProvider = actionProvider;
         this.categoryProvider = categoryProvider;
     }
 
-    public List<IntentFilter> buildIntentFilters(ASTType astType) {
+    public List<org.androidtransfuse.model.manifest.IntentFilter> buildIntentFilters(ASTType astType) {
 
         IntentFilters intentFilters = astType.getAnnotation(IntentFilters.class);
+        IntentFilter intentFilter = astType.getAnnotation(IntentFilter.class);
         Intent intent = astType.getAnnotation(Intent.class);
 
-        List<IntentFilter> convertedIntentFilters = new ArrayList<IntentFilter>();
+        List<org.androidtransfuse.model.manifest.IntentFilter> convertedIntentFilters = new ArrayList<org.androidtransfuse.model.manifest.IntentFilter>();
 
-        IntentFilter intentFilter = null;
-        if (intentFilters != null) {
-            intentFilter = intentFilterProvider.get();
-            convertedIntentFilters.add(intentFilter);
-
-            for (Intent intentAnnotation : intentFilters.value()) {
-                addIntent(intentAnnotation, intentFilter);
+        if(intentFilters != null){
+            for (IntentFilter filter : intentFilters.value()) {
+                convertedIntentFilters.add(convertIntentFilter(filter));
             }
         }
+
+        org.androidtransfuse.model.manifest.IntentFilter resultIntentFilter = null;
+        if (intentFilter != null) {
+            resultIntentFilter = convertIntentFilter(intentFilter);
+            convertedIntentFilters.add(resultIntentFilter);
+        }
         if (intent != null) {
-            if (intentFilter == null) {
-                intentFilter = intentFilterProvider.get();
-                convertedIntentFilters.add(intentFilter);
+            if (resultIntentFilter == null) {
+                resultIntentFilter = intentFilterProvider.get();
+                convertedIntentFilters.add(resultIntentFilter);
             }
 
-            addIntent(intent, intentFilter);
+            addIntent(intent, resultIntentFilter);
         }
 
         return convertedIntentFilters;
     }
 
-    private void addIntent(Intent intentAnnotation, IntentFilter intentFilter) {
+    private org.androidtransfuse.model.manifest.IntentFilter convertIntentFilter(IntentFilter intentFilter){
+        org.androidtransfuse.model.manifest.IntentFilter resultIntentFilter = intentFilterProvider.get();
+
+        for (Intent intentAnnotation : intentFilter.value()) {
+            addIntent(intentAnnotation, resultIntentFilter);
+        }
+
+        return resultIntentFilter;
+    }
+
+    private void addIntent(Intent intentAnnotation, org.androidtransfuse.model.manifest.IntentFilter intentFilter) {
         switch (intentAnnotation.type()) {
             case ACTION:
                 Action action = actionProvider.get();
