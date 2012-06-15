@@ -11,7 +11,7 @@ import java.lang.reflect.ParameterizedType;
  */
 public interface ASTFactory {
 
-    ASTElementAnnotation buildASTElementAnnotation(AnnotationMirror annotationMirror);
+    ASTElementAnnotation buildASTElementAnnotation(AnnotationMirror annotationMirror, ASTType type);
 
     LazyClassParameterBuilder builderParameterBuilder(ParameterizedType genericType);
 

@@ -1,7 +1,9 @@
 package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
@@ -16,21 +18,24 @@ import java.util.Map;
  */
 public class ModuleProcessor {
 
-    private Map<String, MethodProcessor> methodProcessorMap = new HashMap<String, MethodProcessor>();
+    private Map<ASTType, MethodProcessor> methodProcessorMap = new HashMap<ASTType, MethodProcessor>();
 
     @Inject
-    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider, Provider<BindProviderProcessor> bindProviderProcessorProvider, Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider) {
-        methodProcessorMap.put(Bind.class.getName(), bindProcessorProvider.get());
-        methodProcessorMap.put(BindInterceptor.class.getName(), bindInterceptorProcessorProvider.get());
-        methodProcessorMap.put(BindProvider.class.getName(), bindProviderProcessorProvider.get());
+    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider,
+                           Provider<BindProviderProcessor> bindProviderProcessorProvider,
+                           Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider,
+                           ASTClassFactory astClassFactory) {
+        methodProcessorMap.put(astClassFactory.buildASTClassType(Bind.class), bindProcessorProvider.get());
+        methodProcessorMap.put(astClassFactory.buildASTClassType(BindInterceptor.class), bindInterceptorProcessorProvider.get());
+        methodProcessorMap.put(astClassFactory.buildASTClassType(BindProvider.class), bindProviderProcessorProvider.get());
     }
 
     public void processMethod(ASTMethod astMethod) {
 
         for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
 
-            if (methodProcessorMap.containsKey(astAnnotation.getName())) {
-                MethodProcessor methodProcessor = methodProcessorMap.get(astAnnotation.getName());
+            if (methodProcessorMap.containsKey(astAnnotation.getASTType())) {
+                MethodProcessor methodProcessor = methodProcessorMap.get(astAnnotation.getASTType());
 
                 methodProcessor.process(astMethod, astAnnotation);
             }

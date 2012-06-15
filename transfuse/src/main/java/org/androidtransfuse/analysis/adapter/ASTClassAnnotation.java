@@ -14,11 +14,13 @@ import java.lang.reflect.Method;
 public class ASTClassAnnotation implements ASTAnnotation {
 
     private Annotation annotation;
+    private ASTType type;
     private ASTClassFactory astClassFactory;
 
-    public ASTClassAnnotation(Annotation annotation, ASTClassFactory astClassFactory) {
+    public ASTClassAnnotation(Annotation annotation, ASTType type, ASTClassFactory astClassFactory) {
         this.annotation = annotation;
         this.astClassFactory = astClassFactory;
+        this.type = type;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class ASTClassAnnotation implements ASTAnnotation {
     }
 
     @Override
-    public String getName() {
-        return annotation.annotationType().getName();
+    public ASTType getASTType() {
+        return type;
     }
 }

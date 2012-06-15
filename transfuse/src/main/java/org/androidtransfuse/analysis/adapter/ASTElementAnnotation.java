@@ -16,13 +16,16 @@ import java.util.Map;
 public class ASTElementAnnotation implements ASTAnnotation {
 
     private AnnotationMirror annotationMirror;
+    private ASTType type;
     private ElementConverterFactory elementConverterFactory;
 
     @Inject
     public ASTElementAnnotation(@Assisted AnnotationMirror annotationMirror,
+                                @Assisted ASTType type,
                                 ElementConverterFactory elementConverterFactory) {
         this.annotationMirror = annotationMirror;
         this.elementConverterFactory = elementConverterFactory;
+        this.type = type;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class ASTElementAnnotation implements ASTAnnotation {
     }
 
     @Override
-    public String getName() {
-        return annotationMirror.getAnnotationType().asElement().toString();
+    public ASTType getASTType() {
+        return type;
     }
 }

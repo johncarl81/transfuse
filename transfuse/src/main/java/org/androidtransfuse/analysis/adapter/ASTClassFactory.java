@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
@@ -10,6 +11,7 @@ import java.util.*;
  *
  * @author John Ericksen
  */
+@Singleton
 public class ASTClassFactory {
 
     private Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
@@ -50,7 +52,9 @@ public class ASTClassFactory {
 
             Collection<ASTType> interfaces = new HashSet<ASTType>();
 
-            typeCache.put(clazz.getName(), new ASTClassType(clazz, buildAnnotations(clazz), constructors, methods, fields, superClass, interfaces));
+            Collection<ASTAnnotation> annotations = new HashSet<ASTAnnotation>();
+
+            typeCache.put(clazz.getName(), new ASTClassType(clazz, annotations, constructors, methods, fields, superClass, interfaces));
 
             Class<?>[] classInterfaces = clazz.getInterfaces();
             Type[] classGenericInterfaces = clazz.getGenericInterfaces();
@@ -73,6 +77,8 @@ public class ASTClassFactory {
             for (Field field : clazz.getDeclaredFields()) {
                 fields.add(buildASTClassField(field));
             }
+
+            annotations.addAll(buildAnnotations(clazz));
         }
 
         ASTType astType = typeCache.get(clazz.getName());
@@ -180,10 +186,15 @@ public class ASTClassFactory {
         List<ASTAnnotation> astAnnotations = new ArrayList<ASTAnnotation>();
 
         for (Annotation annotation : annotations) {
-            astAnnotations.add(new ASTClassAnnotation(annotation, this));
+            astAnnotations.add(buildAnnotation(annotation));
         }
 
         return astAnnotations;
+    }
+
+    public ASTAnnotation buildAnnotation(Annotation annotation) {
+        ASTType type = buildASTClassType(annotation.annotationType());
+        return new ASTClassAnnotation(annotation, type, this);
     }
 
 }

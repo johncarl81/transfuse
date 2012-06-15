@@ -11,17 +11,17 @@ import java.util.Map;
  */
 public class AOPRepository {
 
-    private Map<String, ASTType> interceptorAnnotationMap = new HashMap<String, ASTType>();
+    private Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
 
-    public void put(ASTType interceptor, ASTType annotationType) {
-        interceptorAnnotationMap.put(interceptor.getName(), annotationType);
+    public void put(ASTType annotationType, ASTType interceptor) {
+        interceptorAnnotationMap.put(annotationType, interceptor);
     }
 
-    public ASTType getInterceptor(String annotation) {
-        return interceptorAnnotationMap.get(annotation);
+    public ASTType getInterceptor(ASTType annotationType) {
+        return interceptorAnnotationMap.get(annotationType);
     }
 
     public boolean isInterceptor(ASTAnnotation annotation) {
-        return interceptorAnnotationMap.containsKey(annotation.getName());
+        return interceptorAnnotationMap.containsKey(annotation.getASTType());
     }
 }

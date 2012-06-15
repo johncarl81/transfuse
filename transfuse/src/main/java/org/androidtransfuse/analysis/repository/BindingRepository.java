@@ -1,9 +1,9 @@
 package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,17 +15,17 @@ import java.util.Map;
  */
 public class BindingRepository {
 
-    private Map<String, InjectionNodeBuilder> variableBuilderMap = new HashMap<String, InjectionNodeBuilder>();
+    private Map<ASTType, InjectionNodeBuilder> variableBuilderMap = new HashMap<ASTType, InjectionNodeBuilder>();
 
-    public void addVariableBuilder(Class<? extends Annotation> annotation, InjectionNodeBuilder variableBuilder) {
-        this.variableBuilderMap.put(annotation.getName(), variableBuilder);
+    public void addVariableBuilder(ASTType annotation, InjectionNodeBuilder variableBuilder) {
+        this.variableBuilderMap.put(annotation, variableBuilder);
     }
 
     public boolean containsBindingVariableBuilder(ASTAnnotation bindingAnnotation) {
-        return variableBuilderMap.containsKey(bindingAnnotation.getName());
+        return variableBuilderMap.containsKey(bindingAnnotation.getASTType());
     }
 
     public InjectionNodeBuilder getBindingVariableBuilder(ASTAnnotation bindingAnnotation) {
-        return variableBuilderMap.get(bindingAnnotation.getName());
+        return variableBuilderMap.get(bindingAnnotation.getASTType());
     }
 }

@@ -22,5 +22,5 @@ public interface ASTAnnotation {
      *
      * @return annotation name
      */
-    String getName();
+    ASTType getASTType();
 }

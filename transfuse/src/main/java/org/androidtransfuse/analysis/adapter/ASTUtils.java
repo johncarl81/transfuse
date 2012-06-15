@@ -51,7 +51,7 @@ public final class ASTUtils {
         ASTAnnotation annotation = null;
 
         for (ASTAnnotation astAnnotation : annotations) {
-            if (astAnnotation.getName().equals(resourceClass.getName())) {
+            if (astAnnotation.getASTType().getName().equals(resourceClass.getCanonicalName())) {
                 annotation = astAnnotation;
             }
         }

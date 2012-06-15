@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import org.androidtransfuse.util.CollectionConverterUtil;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.*;
  *
  * @author John Ericksen
  */
+@Singleton
 public class ASTElementFactory {
 
     private Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
@@ -52,7 +54,9 @@ public class ASTElementFactory {
                 interfaces.add(interfaceType);
             }
 
-            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, buildAnnotations(typeElement)));
+            List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
+
+            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, annotations));
 
             //iterate and build the contained elements within this TypeElement
             constructors.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
@@ -63,6 +67,8 @@ public class ASTElementFactory {
 
             methods.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTMethod.class)));
+
+            annotations.addAll(buildAnnotations(typeElement));
 
         }
 
@@ -162,7 +168,9 @@ public class ASTElementFactory {
         List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            annotations.add(astElementAnnotationFactory.buildASTElementAnnotation(annotationMirror));
+            ASTType type = buildASTElementType((TypeElement) annotationMirror.getAnnotationType().asElement());
+
+            annotations.add(astElementAnnotationFactory.buildASTElementAnnotation(annotationMirror, type));
         }
 
         return annotations;

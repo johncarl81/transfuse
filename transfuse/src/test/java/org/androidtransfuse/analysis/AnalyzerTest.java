@@ -27,6 +27,12 @@ import static org.junit.Assert.assertFalse;
  */
 public class AnalyzerTest {
 
+    //A -> E -> F
+    // |
+    // `-> B -> C -> D
+    //      |
+    //      `-> F
+
     public static interface B {
     }
 
