@@ -137,7 +137,7 @@ public class AOPProxyGenerator {
     private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
         ASTMethod method = methodInterceptorEntry.getKey();
 
-        if (method.getAccessModifier() == ASTAccessModifier.PRIVATE) {
+        if (method.getAccessModifier().equals(ASTAccessModifier.PRIVATE)) {
             throw new TransfuseAnalysisException("Unable to provide AOP on private methods");
         }
 
@@ -217,7 +217,7 @@ public class AOPProxyGenerator {
             superCall.arg(parameterMap.get(parameter));
         }
 
-        if (method.getReturnType() == ASTVoidType.VOID) {
+        if (method.getReturnType().equals(ASTVoidType.VOID)) {
             invokeMethod.body().add(superCall);
             invokeMethod.body()._return(JExpr._null());
         } else {
