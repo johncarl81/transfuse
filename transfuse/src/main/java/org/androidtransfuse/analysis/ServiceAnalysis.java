@@ -153,8 +153,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onCreate"));
 
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod);
-
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(
+                    new ExistingInjectionNodeFactory(injectionNode), new NoOpLayoutBuilder(),
+                    componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod));
 
             //onLowMemory
             //onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStart"));

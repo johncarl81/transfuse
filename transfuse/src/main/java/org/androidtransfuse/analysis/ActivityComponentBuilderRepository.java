@@ -44,7 +44,11 @@ public class ActivityComponentBuilderRepository {
 
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(Activity.class.getDeclaredMethod("onCreate", Bundle.class));
 
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, layoutBuilder, onCreateASTMethod);
+            OnCreateComponentBuilder onCreateComponentBuilder =
+                    componentBuilderFactory.buildOnCreateComponentBuilder(
+                            new ExistingInjectionNodeFactory(injectionNode),
+                            layoutBuilder,
+                            componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod));
 
             if (activityGenerators.containsKey(activityType)) {
                 onCreateComponentBuilder.addMethodCallbackBuilders(activityGenerators.get(activityType));

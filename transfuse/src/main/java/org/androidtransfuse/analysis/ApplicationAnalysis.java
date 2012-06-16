@@ -9,10 +9,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Application;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
-import org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -99,7 +96,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
             //onCreate
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(injectionNode, new NoOpLayoutBuilder(), onCreateASTMethod);
+            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(
+                    new ExistingInjectionNodeFactory(injectionNode), new NoOpLayoutBuilder(),
+                    componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod));
             //onLowMemory
             onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
             //onTerminate

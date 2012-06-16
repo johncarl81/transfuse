@@ -67,7 +67,7 @@ public class PreferenceVariableBuilder implements VariableBuilder {
 
     }
 
-    private final static class PrefGetBuilder {
+    private static final class PrefGetBuilder {
         private String name;
         private JExpression lit;
 

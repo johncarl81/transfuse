@@ -23,8 +23,8 @@ public class ComponentProcessor {
 
     public void process(Collection<? extends ASTType> astTypes) {
         for (ASTType astType : astTypes) {
-            for (Map.Entry<Matcher<ASTType>, Generator> generatorEntry : generatorRepository.getRepository().entrySet()) {
-                if(generatorEntry.getKey().matches(astType)){
+            for (Map.Entry<Matcher<ASTType>, Generator<ASTType>> generatorEntry : generatorRepository.getRepository().entrySet()) {
+                if (generatorEntry.getKey().matches(astType)) {
                     generatorEntry.getValue().generate(astType);
                 }
             }

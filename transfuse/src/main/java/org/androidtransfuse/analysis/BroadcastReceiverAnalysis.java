@@ -2,9 +2,9 @@ package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
@@ -25,7 +25,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private Provider<Receiver> receiverProvider;
     private ManifestManager manifestManager;
     private ComponentBuilderFactory componentBuilderFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
 
@@ -34,14 +33,12 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      Provider<Receiver> receiverProvider,
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
-                                     InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                                      IntentFilterBuilder intentFilterBuilder,
                                      TypeMirrorUtil typeMirrorUtil) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
     }
@@ -66,7 +63,11 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);
 
-            receiverDescriptor.getComponentBuilders().add(componentBuilderFactory.buildOnReceieve(injectionNodeBuilderRepository, astType));
+            receiverDescriptor.getComponentBuilders().add(componentBuilderFactory.buildOnCreateComponentBuilder(
+                    componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType),
+                    new NoOpLayoutBuilder(),
+                    componentBuilderFactory.buildOnReceiveMethodBuilder()
+            ));
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);

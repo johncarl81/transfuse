@@ -29,7 +29,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_APPLICATION = "manifestApplication";
-    public static final String COMPONENT_GENERATOR_MATCHER = "componentGeneratorMatcher";
 
     private RResource rResource;
     private Manifest manifest;

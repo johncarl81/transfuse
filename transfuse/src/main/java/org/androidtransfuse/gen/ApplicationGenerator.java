@@ -15,17 +15,18 @@ import javax.inject.Provider;
 public class ApplicationGenerator implements Generator<ASTType> {
 
     private ApplicationAnalysis applicationAnalysis;
-    private ComponentGenerator generator;
     private Provider<ComponentProcessor> componentProcessorProvider;
     private Provider<TransfuseAssembler> transfuseAssemblerProvider;
+    private AnalysisGeneration<ComponentDescriptor> analysisGeneration;
 
     @Inject
     public ApplicationGenerator(ApplicationAnalysis applicationAnalysis,
                                 ComponentGenerator generator,
+                                AnalysisGenerationFactory analysisGenerationFactory,
                                 Provider<TransfuseAssembler> transfuseAssemblerProvider,
                                 Provider<ComponentProcessor> componentProcessorProvider) {
+        this.analysisGeneration = analysisGenerationFactory.buildAnalysisGeneration(applicationAnalysis, generator);
         this.applicationAnalysis = applicationAnalysis;
-        this.generator = generator;
         this.transfuseAssemblerProvider = transfuseAssemblerProvider;
         this.componentProcessorProvider = componentProcessorProvider;
     }
@@ -35,11 +36,7 @@ public class ApplicationGenerator implements Generator<ASTType> {
     }
 
     public void generate(ASTType astType) {
-        ComponentDescriptor applicationDescriptor = applicationAnalysis.analyze(astType);
-
-        if (applicationDescriptor != null) {
-            generator.generate(applicationDescriptor);
-        }
+        analysisGeneration.generate(astType);
     }
 
     public ComponentProcessor getComponentProcessor() {

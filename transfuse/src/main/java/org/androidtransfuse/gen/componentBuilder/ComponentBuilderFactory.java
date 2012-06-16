@@ -1,10 +1,8 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.ReceiveComponentBuilder;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
@@ -12,7 +10,7 @@ import org.androidtransfuse.model.InjectionNode;
  */
 public interface ComponentBuilderFactory {
 
-    OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNode injectionNode, LayoutBuilder layoutBuilder, ASTMethod onCreateMethod);
+    OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNodeFactory injectionNodeFactory, LayoutBuilder layoutBuilder, MethodBuilder methodBuilder);
 
     MethodCallbackGenerator buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
 
@@ -24,5 +22,9 @@ public interface ComponentBuilderFactory {
 
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 
-    ReceiveComponentBuilder buildOnReceieve(InjectionNodeBuilderRepository injectionNodeBuilderRepository, ASTType astType);
+    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method);
+
+    OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
+
+    BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);
 }
