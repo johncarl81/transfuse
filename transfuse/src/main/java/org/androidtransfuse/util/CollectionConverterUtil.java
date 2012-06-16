@@ -11,7 +11,7 @@ import java.util.List;
 @Singleton
 public class CollectionConverterUtil {
 
-    public <T, V> List<V> wrapCollection(Collection<? extends T> input, CollectionConverter<? super T, ? extends V> converter) {
+    public <T, V> List<V> transform(Collection<? extends T> input, CollectionConverter<? super T, ? extends V> converter) {
         List<V> wrappedCollection = new ArrayList<V>();
         for (T t : input) {
             V converted = converter.convert(t);

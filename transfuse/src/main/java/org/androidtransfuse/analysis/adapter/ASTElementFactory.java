@@ -59,13 +59,13 @@ public class ASTElementFactory {
             typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, annotations));
 
             //iterate and build the contained elements within this TypeElement
-            constructors.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+            constructors.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTConstructor.class)));
 
-            fields.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+            fields.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTField.class)));
 
-            methods.addAll(collectionConverterUtil.wrapCollection(typeElement.getEnclosedElements(),
+            methods.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTMethod.class)));
 
             annotations.addAll(buildAnnotations(typeElement));

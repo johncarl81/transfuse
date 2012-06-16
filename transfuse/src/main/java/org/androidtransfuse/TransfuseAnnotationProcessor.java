@@ -136,7 +136,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     }
 
     private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
-        return collectionConverterUtil.wrapCollection(elementCollection,
+        return collectionConverterUtil.transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
     }

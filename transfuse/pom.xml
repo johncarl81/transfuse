@@ -97,6 +97,11 @@
             <version>1.4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
     </dependencies>
 
     <build>
