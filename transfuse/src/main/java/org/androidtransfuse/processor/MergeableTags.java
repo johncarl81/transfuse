@@ -7,10 +7,10 @@ import java.util.TreeSet;
  * @author John Ericksen
  */
 public class MergeableTags {
-    
-    private TreeSet<String> tags = new TreeSet<String>();
 
-    public MergeableTags(){
+    private Set<String> tags = new TreeSet<String>();
+
+    public MergeableTags() {
         //empty bean constructor
     }
 

@@ -13,16 +13,25 @@ import javax.annotation.processing.Messager;
 /**
  * @author John Ericksen
  */
-public class TransfuseInjector {
+public final class TransfuseInjector {
 
-    private static Injector setupInjector;
+    private static final TransfuseInjector INSTANCE = new TransfuseInjector();
+    private Injector setupInjector = null;
 
-    public static Injector buildSetupInjector(Messager messager) {
+    private TransfuseInjector() {
+        //private singleton constructor
+    }
+
+    public static TransfuseInjector getInstance() {
+        return INSTANCE;
+    }
+
+    public Injector buildSetupInjector(Messager messager) {
         setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(new MessagerLogger(messager)));
         return setupInjector;
     }
 
-    public static Injector buildProcessingInjector(RResource rResource, Manifest manifest) {
+    public Injector buildProcessingInjector(RResource rResource, Manifest manifest) {
         return setupInjector.createChildInjector(new TransfuseGenerateGuiceModule(rResource, manifest));
     }
 }

@@ -128,10 +128,58 @@ public class Merger {
                 return (Collection) merge(PropertyUtils.getPropertyType(target, propertyName), targetCollection, sourceCollection);
             }
 
-            Map<Object, Mergeable> targetMap = convertToMergable(targetCollection);
-            Map<Object, Mergeable> sourceMap = convertToMergable(sourceCollection);
-            Set<Object> originalTargetKeys = new HashSet<Object>(targetMap.keySet());
+            //update collection from source
+            Map<Object, Mergeable> targetMap = updateFromSource(targetCollection, sourceCollection, mergeCollectionAnnotation.type());
 
+            Collection targetResult = makeCollection(targetCollection, mergeCollectionAnnotation.collectionType(), target, propertyName);
+
+            targetResult.clear();
+            targetResult.addAll(targetMap.values());
+
+            return targetResult;
+
+        } catch (NoSuchMethodException e) {
+            throw new MergerException("NoSuchMethodException while trying to merge", e);
+        } catch (IllegalAccessException e) {
+            throw new MergerException("IllegalAccessException while trying to merge", e);
+        } catch (InvocationTargetException e) {
+            throw new MergerException("InvocationTargetException while trying to merge", e);
+        }
+    }
+
+    private <T extends Mergeable> Collection makeCollection(Collection targetCollection, Class<? extends Collection> collectionType, T target, String propertyName) throws MergerException {
+
+        try {
+            //merger only supports Lists for collections
+            if (targetCollection == null) {
+                //first look for specific impl in annotation
+                if (collectionType != Collection.class) {
+                    return collectionType.newInstance();
+                } else {
+                    //try to instantiate field type
+                    return (Collection) PropertyUtils.getPropertyType(target, propertyName).newInstance();
+                }
+            }
+
+            return targetCollection;
+        } catch (NoSuchMethodException e) {
+            throw new MergerException("NoSuchMethodException while trying to merge", e);
+        } catch (IllegalAccessException e) {
+            throw new MergerException("IllegalAccessException while trying to merge", e);
+        } catch (InstantiationException e) {
+            throw new MergerException("InstantiationException while trying to merge", e);
+        } catch (InvocationTargetException e) {
+            throw new MergerException("InvocationTargetException while trying to merge", e);
+        }
+    }
+
+    private Map<Object, Mergeable> updateFromSource(Collection targetCollection, Collection sourceCollection, Class<? extends Mergeable> type) throws MergerException {
+
+        Map<Object, Mergeable> targetMap = convertToMergable(targetCollection);
+        Map<Object, Mergeable> sourceMap = convertToMergable(sourceCollection);
+        Set<Object> originalTargetKeys = new HashSet<Object>(targetMap.keySet());
+
+        try {
             //update
             for (Map.Entry<Object, Mergeable> mergableSourceEntry : sourceMap.entrySet()) {
 
@@ -141,10 +189,10 @@ public class Merger {
                     //replace
                     Mergeable targetValue = targetMap.get(sourceKey);
                     if (targetValue.getMergeTags() != null && !targetValue.getMergeTags().isEmpty()) {
-                        targetMap.put(sourceKey, merge(mergeCollectionAnnotation.type(), targetValue, mergableSourceEntry.getValue()));
+                        targetMap.put(sourceKey, merge(type, targetValue, mergableSourceEntry.getValue()));
                     }
                 } else {
-                    targetMap.put(sourceKey, merge(mergeCollectionAnnotation.type(), mergeCollectionAnnotation.type().newInstance(), mergableSourceEntry.getValue()));
+                    targetMap.put(sourceKey, merge(type, type.newInstance(), mergableSourceEntry.getValue()));
                 }
                 originalTargetKeys.remove(sourceKey);
             }
@@ -157,33 +205,13 @@ public class Merger {
                     targetMap.remove(targetKey);
                 }
             }
-
-            Collection targetResult = targetCollection;
-            //merger only supports Lists for collections
-            if (targetResult == null) {
-                //first look for specific impl in annotation
-                if (mergeCollectionAnnotation.collectionType() != Collection.class) {
-                    targetResult = mergeCollectionAnnotation.collectionType().newInstance();
-                } else {
-                    //try to instantiate field type
-                    targetResult = (Collection) PropertyUtils.getPropertyType(target, propertyName).newInstance();
-                }
-            }
-
-            targetResult.clear();
-            targetResult.addAll(targetMap.values());
-
-            return targetResult;
-
-        } catch (NoSuchMethodException e) {
-            throw new MergerException("NoSuchMethodException while trying to merge", e);
         } catch (IllegalAccessException e) {
             throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InstantiationException e) {
             throw new MergerException("InstantiationException while trying to merge", e);
-        } catch (InvocationTargetException e) {
-            throw new MergerException("InvocationTargetException while trying to merge", e);
         }
+
+        return targetMap;
     }
 
     private Map<Object, Mergeable> convertToMergable(Collection input) {

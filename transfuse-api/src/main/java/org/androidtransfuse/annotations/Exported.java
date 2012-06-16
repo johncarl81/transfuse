@@ -8,9 +8,9 @@ public enum Exported {
     TRUE(true),
     FALSE(false);
 
-    Boolean value;
+    private Boolean value;
 
-    private Exported(Boolean value){
+    private Exported(Boolean value) {
         this.value = value;
     }
 

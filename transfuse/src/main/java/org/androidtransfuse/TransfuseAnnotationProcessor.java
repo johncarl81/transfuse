@@ -57,7 +57,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        Injector injector = TransfuseInjector.buildSetupInjector(processingEnv.getMessager());
+        Injector injector = TransfuseInjector.getInstance().buildSetupInjector(processingEnv.getMessager());
         injector.injectMembers(this);
     }
 
@@ -74,7 +74,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                     buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
                     buildR(rBuilder, "android.R"));
 
-            Injector injector = TransfuseInjector.buildProcessingInjector(r, manifest);
+            Injector injector = TransfuseInjector.getInstance().buildProcessingInjector(r, manifest);
 
             TransfuseProcessor transfuseProcessor = injector.getInstance(TransfuseProcessor.class);
 

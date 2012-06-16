@@ -92,12 +92,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             Layout layoutAnnotation = input.getAnnotation(Layout.class);
             LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<Activity>(activityAnnotation) {
-                @Override
-                public void run(Activity annotation) {
-                    annotation.type();
-                }
-            });
+            TypeMirror type = typeMirrorUtil.getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
 
             String activityType = type == null ? android.app.Activity.class.getName() : type.toString();
 
@@ -122,12 +117,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
         if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<LayoutHandler>(layoutHandlerAnnotation) {
-                @Override
-                public void run(LayoutHandler annotation) {
-                    layoutHandlerAnnotation.value();
-                }
-            });
+            TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new LayoutHandlerTypeMirrorRunnable(layoutHandlerAnnotation));
 
             if (layoutHandlerType != null) {
                 ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
@@ -152,42 +142,56 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
-        manifestActivity.setLabel(StringUtils.isBlank(activityAnnotation.label()) ? null : activityAnnotation.label());
-        manifestActivity.setAllowTaskReparenting(!activityAnnotation.allowTaskReparenting()? null : true);
-        manifestActivity.setAlwaysRetainTaskState(!activityAnnotation.alwaysRetainTaskState() ? null : true);
-        manifestActivity.setClearTaskOnLaunch(!activityAnnotation.clearTaskOnLaunch() ? null : true);
+        manifestActivity.setLabel(checkBlank(activityAnnotation.label()));
+        manifestActivity.setAllowTaskReparenting(checkDefault(activityAnnotation.allowTaskReparenting(), false));
+        manifestActivity.setAlwaysRetainTaskState(checkDefault(activityAnnotation.alwaysRetainTaskState(), false));
+        manifestActivity.setClearTaskOnLaunch(checkDefault(activityAnnotation.clearTaskOnLaunch(), false));
         manifestActivity.setConfigChanges(concatenate(activityAnnotation.configChanges(), "|"));
-        manifestActivity.setEnabled(activityAnnotation.enabled() ? null : false);
-        manifestActivity.setExcludeFromRecents(!activityAnnotation.excludeFromRecents() ? null : true);
+        manifestActivity.setEnabled(checkDefault(activityAnnotation.enabled(), true));
+        manifestActivity.setExcludeFromRecents(checkDefault(activityAnnotation.excludeFromRecents(), false));
         manifestActivity.setExported(activityAnnotation.exported().getValue());
-        manifestActivity.setFinishOnTaskLaunch(!activityAnnotation.finishOnTaskLaunch() ? null : true);
-        manifestActivity.setHardwareAccelerated(!activityAnnotation.hardwareAccelerated() ? null : true);
-        manifestActivity.setIcon(StringUtils.isBlank(activityAnnotation.icon()) ? null : activityAnnotation.icon());
-        manifestActivity.setLaunchMode(activityAnnotation.launchMode() == LaunchMode.STANDARD ? null : activityAnnotation.launchMode());
-        manifestActivity.setMultiprocess(!activityAnnotation.multiprocess() ? null : true);
-        manifestActivity.setNoHistory(!activityAnnotation.noHistory() ? null : true);
-        manifestActivity.setPermission(StringUtils.isBlank(activityAnnotation.permission()) ? null : activityAnnotation.permission());
-        manifestActivity.setProcess(StringUtils.isBlank(activityAnnotation.process()) ? null : activityAnnotation.process());
-        manifestActivity.setScreenOrientation(activityAnnotation.screenOrientation() == ScreenOrientation.UNSPECIFIED ? null : activityAnnotation.screenOrientation());
-        manifestActivity.setStateNotNeeded(!activityAnnotation.stateNotNeeded() ? null : true);
-        manifestActivity.setTaskAffinity(StringUtils.isBlank(activityAnnotation.taskAffinity()) ? null : activityAnnotation.taskAffinity());
-        manifestActivity.setTheme(StringUtils.isBlank(activityAnnotation.theme()) ? null : activityAnnotation.theme());
-        manifestActivity.setUiOptions(activityAnnotation.uiOptions() == UIOptions.NONE ? null : activityAnnotation.uiOptions());
-        manifestActivity.setWindowSoftInputMode(activityAnnotation.windowSoftInputMode() == WindowSoftInputMode.STATE_UNSPECIFIED ? null : activityAnnotation.windowSoftInputMode());
+        manifestActivity.setFinishOnTaskLaunch(checkDefault(activityAnnotation.finishOnTaskLaunch(), false));
+        manifestActivity.setHardwareAccelerated(checkDefault(activityAnnotation.hardwareAccelerated(), false));
+        manifestActivity.setIcon(checkBlank(activityAnnotation.icon()));
+        manifestActivity.setLaunchMode(checkDefault(activityAnnotation.launchMode(), LaunchMode.STANDARD));
+        manifestActivity.setMultiprocess(checkDefault(activityAnnotation.multiprocess(), false));
+        manifestActivity.setNoHistory(checkDefault(activityAnnotation.noHistory(), false));
+        manifestActivity.setPermission(checkBlank(activityAnnotation.permission()));
+        manifestActivity.setProcess(checkBlank(activityAnnotation.process()));
+        manifestActivity.setScreenOrientation(checkDefault(activityAnnotation.screenOrientation(), ScreenOrientation.UNSPECIFIED));
+        manifestActivity.setStateNotNeeded(checkDefault(activityAnnotation.stateNotNeeded(), false));
+        manifestActivity.setTaskAffinity(checkBlank(activityAnnotation.taskAffinity()));
+        manifestActivity.setTheme(checkBlank(activityAnnotation.theme()));
+        manifestActivity.setUiOptions(checkDefault(activityAnnotation.uiOptions(), UIOptions.NONE));
+        manifestActivity.setWindowSoftInputMode(checkDefault(activityAnnotation.windowSoftInputMode(), WindowSoftInputMode.STATE_UNSPECIFIED));
         manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
 
         manifestManager.addActivity(manifestActivity);
     }
 
+    private <T> T checkDefault(T input, T defaultValue) {
+        if (input.equals(defaultValue)) {
+            return null;
+        }
+        return input;
+    }
+
+    private String checkBlank(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        return input;
+    }
+
     private String concatenate(ConfigChanges[] configChanges, String separator) {
         StringBuilder builder = new StringBuilder();
 
-        if(configChanges.length == 0){
+        if (configChanges.length == 0) {
             return null;
         }
 
         builder.append(configChanges[0].getLabel());
-        for(int i = 1; i < configChanges.length; i++){
+        for (int i = 1; i < configChanges.length; i++) {
             builder.append(separator);
             builder.append(configChanges[i].getLabel());
         }
@@ -217,5 +221,27 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         return subRepository;
 
+    }
+
+    private static class ActivityTypeMirrorRunnable extends TypeMirrorRunnable<Activity> {
+        public ActivityTypeMirrorRunnable(Activity activityAnnotation) {
+            super(activityAnnotation);
+        }
+
+        @Override
+        public void run(Activity annotation) {
+            annotation.type();
+        }
+    }
+
+    private static class LayoutHandlerTypeMirrorRunnable extends TypeMirrorRunnable<LayoutHandler> {
+        public LayoutHandlerTypeMirrorRunnable(LayoutHandler layoutHandlerAnnotation) {
+            super(layoutHandlerAnnotation);
+        }
+
+        @Override
+        public void run(LayoutHandler annotation) {
+            annotation.value();
+        }
     }
 }

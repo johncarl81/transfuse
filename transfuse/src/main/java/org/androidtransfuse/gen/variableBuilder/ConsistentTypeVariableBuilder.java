@@ -5,8 +5,6 @@ import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
-import javax.inject.Inject;
-
 /**
  * @author John Ericksen
  */

@@ -87,18 +87,31 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         Receiver manifestReceiver = receiverProvider.get();
 
         manifestReceiver.setName(name);
-        manifestReceiver.setLabel(StringUtils.isBlank(annotation.label()) ? null : annotation.label());
-        manifestReceiver.setProcess(StringUtils.isBlank(annotation.process()) ? null : annotation.process());
-        manifestReceiver.setPermission(StringUtils.isBlank(annotation.permission()) ? null : annotation.permission());
-        manifestReceiver.setIcon(StringUtils.isBlank(annotation.icon()) ? null : annotation.icon());
-        manifestReceiver.setEnabled(annotation.enabled() ? null : false);
-        manifestReceiver.setExported(annotation.exported() ? null : false);
+        manifestReceiver.setLabel(checkBlank(annotation.label()));
+        manifestReceiver.setProcess(checkBlank(annotation.process()));
+        manifestReceiver.setPermission(checkBlank(annotation.permission()));
+        manifestReceiver.setIcon(checkBlank(annotation.icon()));
+        manifestReceiver.setEnabled(checkDefault(annotation.enabled(), true));
+        manifestReceiver.setExported(checkDefault(annotation.exported(), true));
 
         manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(astType));
 
         manifestManager.addBroadcastReceiver(manifestReceiver);
     }
 
+    private <T> T checkDefault(T input, T defaultValue) {
+        if (input.equals(defaultValue)) {
+            return null;
+        }
+        return input;
+    }
+
+    private String checkBlank(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        return input;
+    }
 
     private PackageClass buildPackageClass(ASTType astType, String className) {
         PackageClass inputPackageClass = new PackageClass(astType.getName());

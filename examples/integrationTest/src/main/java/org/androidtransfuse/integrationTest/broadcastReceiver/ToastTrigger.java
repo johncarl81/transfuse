@@ -21,7 +21,7 @@ public class ToastTrigger {
     private Context context;
 
     @RegisterListener(R.id.toastbutton)
-    View.OnClickListener listener = new View.OnClickListener(){
+    private View.OnClickListener listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {

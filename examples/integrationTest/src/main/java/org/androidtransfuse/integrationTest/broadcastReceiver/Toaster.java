@@ -24,8 +24,12 @@ public class Toaster {
     private Context context;
 
     @OnReceive
-    public void onReceive(){
+    public void onReceive() {
         Toast.makeText(context, "Toast", 1000).show();
+        onReceiveCalled();
+    }
+
+    private static void onReceiveCalled() {
         onReceive = true;
     }
 

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ReceiveComponentBuilder implements ComponentBuilder{
+public class ReceiveComponentBuilder implements ComponentBuilder {
 
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
@@ -83,7 +83,7 @@ public class ReceiveComponentBuilder implements ComponentBuilder{
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(methodDescriptor));
             InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, context);
 
-            Map<InjectionNode,TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(body, definedClass, injectionNode);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(body, definedClass, injectionNode);
 
             MethodGenerator onReceiveMethodGenerator = new ExistingMethod(methodDescriptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator("onReceive", onReceiveMethodGenerator);
@@ -91,11 +91,11 @@ public class ReceiveComponentBuilder implements ComponentBuilder{
             onCreateCallbackGenerator.generate(definedClass, body, expressionMap, descriptor);
 
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new TransfuseAnalysisException("ClassNotFoundException while building Injection Fragment", e);
         } catch (JClassAlreadyExistsException e) {
-            e.printStackTrace();
+            throw new TransfuseAnalysisException("JClassAlreadyExistsException while building Injection Fragment", e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new TransfuseAnalysisException("NoSuchMethodException while looking up onRecieve Method", e);
         }
     }
 

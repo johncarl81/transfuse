@@ -11,11 +11,8 @@ import com.sun.codemodel.JMod;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.LayoutHandler;
 import org.androidtransfuse.annotations.Service;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
@@ -45,7 +42,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ComponentBuilderFactory componentBuilderFactory;
     private AnalysisContextFactory analysisContextFactory;
-    private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
     private IntentFilterBuilder intentFilterBuilder;
@@ -60,7 +56,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            InjectionNodeBuilderRepository injectionNodeBuilders,
                            ComponentBuilderFactory componentBuilderFactory,
                            AnalysisContextFactory analysisContextFactory,
-                           Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
                            ASTClassFactory astClassFactory, ManifestManager manifestManager,
                            IntentFilterBuilder intentFilterBuilder,
                            TypeMirrorUtil typeMirrorUtil,
@@ -72,7 +67,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
-        this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.astClassFactory = astClassFactory;
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
@@ -95,25 +89,13 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             //generated Android Service
             serviceClassName = buildPackageClass(input, serviceAnnotation.name());
 
-            Layout layoutAnnotation = input.getAnnotation(Layout.class);
-            LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
+            TypeMirror type = typeMirrorUtil.getTypeMirror(new ServiceTypeMirrorRunnable(serviceAnnotation));
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<Service>(serviceAnnotation) {
-                @Override
-                public void run(Service annotation) {
-                    annotation.type();
-                }
-            });
+            String serviceType = type == null ? android.app.Service.class.getName() : type.toString();
 
-            String activityType = type == null ? android.app.Service.class.getName() : type.toString();
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
 
-            Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
-
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
-
-            InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
-
-            activityDescriptor = new ComponentDescriptor(activityType, serviceClassName);
+            activityDescriptor = new ComponentDescriptor(serviceType, serviceClassName);
             InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
             //application generation profile
@@ -124,23 +106,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         setupManifest(serviceClassName.getFullyQualifiedName(), serviceAnnotation, input);
 
         return activityDescriptor;
-    }
-
-    private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
-        if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new TypeMirrorRunnable<LayoutHandler>(layoutHandlerAnnotation) {
-                @Override
-                public void run(LayoutHandler annotation) {
-                    layoutHandlerAnnotation.value();
-                }
-            });
-
-            if (layoutHandlerType != null) {
-                ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
-                return injectionPointFactory.buildInjectionNode(layoutHandlerASTType, context);
-            }
-        }
-        return null;
     }
 
     private PackageClass buildPackageClass(ASTType input, String activityName) {
@@ -158,16 +123,31 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         org.androidtransfuse.model.manifest.Service manifestService = manifestServiceProvider.get();
 
         manifestService.setName(name);
-        manifestService.setEnabled(serviceAnnotation.enabled() ? null : false);
-        manifestService.setExported(serviceAnnotation.exported() ? null : false);
-        manifestService.setIcon(StringUtils.isBlank(serviceAnnotation.icon()) ? null : serviceAnnotation.icon());
-        manifestService.setLabel(StringUtils.isBlank(serviceAnnotation.label()) ? null : serviceAnnotation.label());
+        manifestService.setEnabled(checkDefault(serviceAnnotation.enabled(), true));
+        manifestService.setExported(checkDefault(serviceAnnotation.exported(), true));
+        manifestService.setIcon(checkBlank(serviceAnnotation.icon()));
+        manifestService.setLabel(checkBlank(serviceAnnotation.label()));
         manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-        manifestService.setPermission(StringUtils.isBlank(serviceAnnotation.permission()) ? null : serviceAnnotation.permission());
-        manifestService.setProcess(StringUtils.isBlank(serviceAnnotation.process()) ? null : serviceAnnotation.process());
+        manifestService.setPermission(checkBlank(serviceAnnotation.permission()));
+        manifestService.setProcess(checkBlank(serviceAnnotation.process()));
 
         manifestManager.addService(manifestService);
     }
+
+    private <T> T checkDefault(T input, T defaultValue) {
+        if (input.equals(defaultValue)) {
+            return null;
+        }
+        return input;
+    }
+
+    private String checkBlank(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        return input;
+    }
+
 
     private void setupServiceProfile(ComponentDescriptor activityDescriptor, InjectionNode injectionNode) {
         try {
@@ -214,7 +194,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildSimpleMethodGenerator(method, true));
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror serviceType) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
 
         InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
 
@@ -231,5 +211,16 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         return subRepository;
 
+    }
+
+    private static class ServiceTypeMirrorRunnable extends TypeMirrorRunnable<Service> {
+        public ServiceTypeMirrorRunnable(Service serviceAnnotation) {
+            super(serviceAnnotation);
+        }
+
+        @Override
+        public void run(Service annotation) {
+            annotation.type();
+        }
     }
 }

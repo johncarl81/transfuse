@@ -11,7 +11,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class RealParcelable implements Parcelable {
 
     @SuppressWarnings("UnusedDeclaration")
-    public final static Creator<RealParcelable> CREATOR = new Creator<RealParcelable>() {
+    public static final Creator<RealParcelable> CREATOR = new Creator<RealParcelable>() {
 
         @Override
         public RealParcelable createFromParcel(Parcel parcel) {
