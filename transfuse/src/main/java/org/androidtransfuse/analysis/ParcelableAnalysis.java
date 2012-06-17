@@ -17,6 +17,8 @@ import java.util.Map;
  */
 public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
 
+    private static final String GET = "get";
+    private static final String SET = "set";
     private Map<ASTType, ParcelableDescriptor> parcelableCache = new HashMap<ASTType, ParcelableDescriptor>();
     private ASTClassFactory astClassFactory;
 
@@ -63,7 +65,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
             //find all applicable getters
             for (ASTMethod astMethod : astType.getMethods()) {
                 if (isGetter(astMethod) && !astMethod.isAnnotated(Transient.class)) {
-                    String setterName = "set" + astMethod.getName().substring(3);
+                    String setterName = SET + astMethod.getName().substring(GET.length());
                     if (!methodNameMap.containsKey(setterName)) {
                         throw new TransfuseAnalysisException("Unable to find setter " + setterName + " to match getter " + astMethod.getName());
                     }
@@ -95,7 +97,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
     }
 
     private boolean isGetter(ASTMethod astMethod) {
-        boolean isGetter = astMethod.getParameters().size() == 0 && astMethod.getName().startsWith("get");
+        boolean isGetter = astMethod.getParameters().size() == 0 && astMethod.getName().startsWith(GET);
         if (isGetter && astMethod.getReturnType().equals(ASTVoidType.VOID)) {
             throw new TransfuseAnalysisException("Getter cannot return type void");
         }

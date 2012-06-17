@@ -10,8 +10,6 @@ import org.androidtransfuse.model.InjectionNode;
  */
 public interface ComponentBuilderFactory {
 
-    OnCreateComponentBuilder buildOnCreateComponentBuilder(InjectionNodeFactory injectionNodeFactory, LayoutBuilder layoutBuilder, MethodBuilder methodBuilder);
-
     MethodCallbackGenerator buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
@@ -22,7 +20,7 @@ public interface ComponentBuilderFactory {
 
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 
-    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method);
+    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, LayoutBuilder layoutBuilder);
 
     OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
 

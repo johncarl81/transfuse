@@ -1,4 +1,4 @@
-package org.androidtransfuse.analysis;
+package org.androidtransfuse.analysis.repository;
 
 import android.app.Activity;
 import android.app.ActivityGroup;
@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import com.sun.codemodel.JExpr;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
@@ -15,7 +16,6 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
-import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -31,15 +31,13 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
 
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
-    private Logger log;
     private IntentFactoryStrategyGenerator intentFactoryStrategyGenerator;
     private ListenerRegistrationGenerator listenerRegistrationGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, Logger log, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator) {
+    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.log = log;
         this.intentFactoryStrategyGenerator = intentFactoryStrategyGenerator;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
     }
@@ -55,7 +53,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
         methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ActivityGroup.class.getName(), activityMethodGenerators);
 
-        return new ActivityComponentBuilderRepository(componentBuilderFactory, methodCallbackGenerators, log, astClassFactory);
+        return new ActivityComponentBuilderRepository(methodCallbackGenerators);
     }
 
     private Set<ExpressionVariableDependentGenerator> buildListActivityMethodCallbackGenerators(Set<ExpressionVariableDependentGenerator> activityMethodGenerators) {

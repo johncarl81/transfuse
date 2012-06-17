@@ -111,7 +111,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     private String upperFirst(String name) {
-        return name.substring(0, 1).toUpperCase() + name.substring(1);
+        return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
     }
 
     private JStatement buildBundleMethod(JBlock block, JInvocation extras, ASTType type, String name, JVar extraParam) {

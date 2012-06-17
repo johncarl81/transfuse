@@ -4,12 +4,9 @@ import com.google.inject.Injector;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -37,12 +34,5 @@ public class ActivityAnalysisTest {
     @Test
     public void testActivityAnnotation() {
         assertEquals(TEST_NAME, activityDescriptor.getPackageClass().getClassName());
-    }
-
-    @Test
-    public void testDelegateInjectionPoint() {
-        Set<ComponentBuilder> componentBuilders = activityDescriptor.getComponentBuilders();
-
-        assertEquals(1, componentBuilders.size());
     }
 }

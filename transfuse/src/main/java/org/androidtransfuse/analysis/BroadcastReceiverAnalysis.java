@@ -4,7 +4,6 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
@@ -63,11 +62,9 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);
 
-            receiverDescriptor.getComponentBuilders().add(componentBuilderFactory.buildOnCreateComponentBuilder(
-                    componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType),
-                    new NoOpLayoutBuilder(),
-                    componentBuilderFactory.buildOnReceiveMethodBuilder()
-            ));
+            receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType));
+
+            receiverDescriptor.setMethodBuilder(componentBuilderFactory.buildOnReceiveMethodBuilder());
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);

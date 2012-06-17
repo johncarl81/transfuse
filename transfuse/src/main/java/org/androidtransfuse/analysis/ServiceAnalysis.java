@@ -153,21 +153,20 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onCreate"));
 
-            OnCreateComponentBuilder onCreateComponentBuilder = componentBuilderFactory.buildOnCreateComponentBuilder(
-                    new ExistingInjectionNodeFactory(injectionNode), new NoOpLayoutBuilder(),
-                    componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod));
+            activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+
+            activityDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
 
             //onLowMemory
             //onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStart"));
             //onTerminate
-            onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onDestroy"));
+            activityDescriptor.addGenerators(buildEventMethod("onDestroy"));
             //onTerminate
-            onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onLowMemory"));
+            activityDescriptor.addGenerators(buildEventMethod("onLowMemory"));
             //onTerminate
             //onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onRebind"));
 
-            activityDescriptor.getComponentBuilders().add(onCreateComponentBuilder);
-
+            //todo: move this somewhere else
             activityDescriptor.getComponentBuilders().add(new ComponentBuilder() {
                 @Override
                 public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {

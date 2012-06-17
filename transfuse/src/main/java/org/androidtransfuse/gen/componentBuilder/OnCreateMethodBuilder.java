@@ -19,12 +19,14 @@ public class OnCreateMethodBuilder implements MethodBuilder {
     private JCodeModel codeModel;
     private ASTMethod onCreateASTMethod;
     private UniqueVariableNamer namer;
+    private LayoutBuilder layoutBuilder;
 
     @Inject
-    public OnCreateMethodBuilder(@Assisted ASTMethod onCreateASTMethod, JCodeModel codeModel, UniqueVariableNamer namer) {
+    public OnCreateMethodBuilder(@Assisted ASTMethod onCreateASTMethod, @Assisted LayoutBuilder layoutBuilder, JCodeModel codeModel, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.onCreateASTMethod = onCreateASTMethod;
         this.namer = namer;
+        this.layoutBuilder = layoutBuilder;
     }
 
     @Override
@@ -47,6 +49,8 @@ public class OnCreateMethodBuilder implements MethodBuilder {
         for (JVar parameter : parameters) {
             invocation.arg(parameter);
         }
+
+        layoutBuilder.buildLayoutCall(definedClass, block);
 
         return onCreateMethodDescriptor;
     }

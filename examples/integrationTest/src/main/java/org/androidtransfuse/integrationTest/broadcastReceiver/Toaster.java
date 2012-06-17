@@ -17,6 +17,7 @@ import javax.inject.Inject;
 public class Toaster {
 
     public static final String INTENT = "Toaster";
+    private static final int ONE_SECOND = 1000;
 
     private static boolean onReceive = false;
 
@@ -25,7 +26,7 @@ public class Toaster {
 
     @OnReceive
     public void onReceive() {
-        Toast.makeText(context, "Toast", 1000).show();
+        Toast.makeText(context, "Toast", ONE_SECOND).show();
         onReceiveCalled();
     }
 

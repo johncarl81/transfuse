@@ -3,13 +3,19 @@ package org.androidtransfuse.analysis;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ExistingInjectionNodeFactory;
+import org.androidtransfuse.gen.componentBuilder.LayoutBuilder;
+import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -46,6 +52,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private ManifestManager manifestManager;
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
+    private ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -58,7 +65,11 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
-                            ASTClassFactory astClassFactory, ManifestManager manifestManager, IntentFilterBuilder intentFilterBuilder, TypeMirrorUtil typeMirrorUtil) {
+                            ASTClassFactory astClassFactory,
+                            ManifestManager manifestManager,
+                            IntentFilterBuilder intentFilterBuilder,
+                            TypeMirrorUtil typeMirrorUtil,
+                            ComponentBuilderFactory componentBuilderFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -73,6 +84,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
+        this.componentBuilderFactory = componentBuilderFactory;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -200,9 +212,30 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
-        ComponentBuilder activityComponentBuilder = activityComponentBuilderRepository.buildComponentBuilder(activityType, injectionNode, layout, layoutHandlerInjectionNode);
 
-        activityDescriptor.getComponentBuilders().add(activityComponentBuilder);
+        try {
+            LayoutBuilder layoutBuilder;
+            if (layout == null) {
+                if (layoutHandlerInjectionNode == null) {
+                    layoutBuilder = new NoOpLayoutBuilder();
+                } else {
+                    layoutBuilder = componentBuilderFactory.buildLayoutHandlerBuilder(layoutHandlerInjectionNode);
+                }
+            } else {
+                layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
+            }
+
+            ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onCreate", Bundle.class));
+            activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
+
+            activityDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
+
+            activityDescriptor.addGenerators(activityComponentBuilderRepository.getGenerators(activityType));
+
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to find onCreate Method", e);
+        }
+
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
