@@ -5,6 +5,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
+import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -21,10 +22,12 @@ import javax.inject.Inject;
 
 public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
-    private static final String FIND_VIEW = "findViewById";
+    private static final String FIND_VIEW_BY_ID = "findViewById";
+    private static final String FIND_VIEW_BY_TAG = "findViewWithTag";
 
     private JType viewType;
-    private int viewId;
+    private Integer viewId;
+    private String viewTag;
     private InjectionNode activityInjectionNode;
     private InjectionExpressionBuilder injectionExpressionBuilder;
     private RResourceReferenceBuilder rResourceReferenceBuilder;
@@ -34,7 +37,8 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private RResource rResource;
 
     @Inject
-    public ViewVariableBuilder(@Assisted int viewId,
+    public ViewVariableBuilder(@Assisted @Nullable Integer viewId,
+                               @Assisted @Nullable String viewTag,
                                @Assisted InjectionNode activityInjectionNode,
                                @Assisted JType viewType,
                                InjectionExpressionBuilder injectionExpressionBuilder,
@@ -46,6 +50,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                TypedExpressionFactory typedExpressionFactory) {
         super(View.class, typedExpressionFactory);
         this.viewId = viewId;
+        this.viewTag = viewTag;
         this.activityInjectionNode = activityInjectionNode;
         this.viewType = viewType;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
@@ -66,10 +71,17 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
             TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
-            ResourceIdentifier viewResourceIdentifier = rResource.getResourceIdentifier(viewId);
-            JExpression viewIdRef = rResourceReferenceBuilder.buildReference(viewResourceIdentifier);
-
-            JExpression viewExpression = contextVar.getExpression().invoke(FIND_VIEW).arg(viewIdRef);
+            JExpression viewExpression;
+            if (viewId != null) {
+                ResourceIdentifier viewResourceIdentifier = rResource.getResourceIdentifier(viewId);
+                JExpression viewIdRef = rResourceReferenceBuilder.buildReference(viewResourceIdentifier);
+                viewExpression = contextVar.getExpression().invoke(FIND_VIEW_BY_ID).arg(viewIdRef);
+            } else {
+                //viewTag is not null
+                //<Activity>.getWindow().getDecorView().findViewWithTag(...)
+                viewExpression = contextVar.getExpression()
+                        .invoke("getWindow").invoke("getDecorView").invoke(FIND_VIEW_BY_TAG).arg(JExpr.lit(viewTag));
+            }
 
             ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
             if (injectionAspect == null) {

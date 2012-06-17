@@ -29,7 +29,7 @@ public interface VariableInjectionBuilderFactory {
 
     ProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerInjectionNode);
 
-    ViewVariableBuilder buildViewVariableBuilder(Integer viewId, InjectionNode activityInjectionNode, JType jType);
+    ViewVariableBuilder buildViewVariableBuilder(Integer viewId, String viewTag, InjectionNode activityInjectionNode, JType jType);
 
     GeneratedProviderVariableBuilder buildGeneratedProviderVariableBuilder(InjectionNode providerTypeInjectionNode);
 

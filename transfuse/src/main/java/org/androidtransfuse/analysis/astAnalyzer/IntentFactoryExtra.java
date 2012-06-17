@@ -4,6 +4,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
+ * Token representing an extra parameter required by a Component
+ *
  * @author John Ericksen
  */
 public class IntentFactoryExtra implements Comparable<IntentFactoryExtra> {

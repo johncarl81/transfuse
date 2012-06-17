@@ -11,7 +11,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegisterListener {
-    int value();
+    int value() default -1;
+
+    String tag() default "";
 
     Class[] interfaces() default {};
 }

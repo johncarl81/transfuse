@@ -61,7 +61,8 @@ public class Main {
                 createLI(RegisterActivity.class, "Listener Registration"),
                 createLI(ManifestManagedActivity.class, "Manifest Managed Activity"),
                 createLI(ToastTriggerActivity.class, "Broadcast Receiver"),
-                createLI(PreferenceInjectionActivity.class, "Preference Injection")
+                createLI(PreferenceInjectionActivity.class, "Preference Injection"),
+                createLI(ViewInjectionActivity.class, "View Injection")
         }));
 
         Collections.sort(values);

@@ -19,6 +19,7 @@
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.inject.PreferenceInjectionActivity"/>
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.inject.ResourceInjectionActivity"/>
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.inject.SystemInjectionActivity"/>
+        <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.inject.ViewInjectionActivity"/>
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.layout.VariableLayoutActivity"/>
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity"/>
         <activity transfuse:tag="l,n" android:name="org.androidtransfuse.integrationTest.register.RegisterActivity"/>

@@ -112,6 +112,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
             ASTAnnotation registerAnnotation = astBase.getASTAnnotation(RegisterListener.class);
 
             Integer viewId = registerAnnotation.getProperty("value", Integer.class);
+            String viewTag = registerAnnotation.getProperty("tag", String.class);
             ASTType[] interfaces = registerAnnotation.getProperty("interfaces", ASTType[].class);
 
             List<ASTType> interfaceList = new ArrayList<ASTType>();
@@ -119,7 +120,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
                 interfaceList.addAll(Arrays.asList(interfaces));
             }
 
-            InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, context);
+            InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, viewTag, context);
 
             List<String> methods = buildListenerMethods(astType, interfaceList);
 
@@ -152,7 +153,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         return methods;
     }
 
-    private InjectionNode buildViewInjectionNode(Integer viewId, AnalysisContext context) {
+    private InjectionNode buildViewInjectionNode(Integer viewId, String viewTag, AnalysisContext context) {
 
         ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
@@ -161,7 +162,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         InjectionNode viewInjectionNode = analyzer.analyze(viewAstType, viewAstType, context);
 
         try {
-            viewInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, activityInjectionNode, codeModel.parseType(viewAstType.getName())));
+            viewInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, codeModel.parseType(viewAstType.getName())));
 
             return viewInjectionNode;
 
