@@ -30,4 +30,7 @@ public abstract class Mergeable {
         return tags.getTags();
     }
 
+    public void removeMergeTag(String tag) {
+        getMergeTags().remove(tag);
+    }
 }

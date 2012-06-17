@@ -48,6 +48,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private TypeMirrorUtil typeMirrorUtil;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
+    private MetaDataBuilder metadataBuilder;
 
     @Inject
     public ServiceAnalysis(InjectionPointFactory injectionPointFactory,
@@ -60,7 +61,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            IntentFilterBuilder intentFilterBuilder,
                            TypeMirrorUtil typeMirrorUtil,
                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                           Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider) {
+                           Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider, MetaDataBuilder metadataBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -73,6 +74,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.typeMirrorUtil = typeMirrorUtil;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
+        this.metadataBuilder = metadataBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -128,6 +130,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         manifestService.setIcon(checkBlank(serviceAnnotation.icon()));
         manifestService.setLabel(checkBlank(serviceAnnotation.label()));
         manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+        manifestService.setMetaData(metadataBuilder.buildMetaData(type));
         manifestService.setPermission(checkBlank(serviceAnnotation.permission()));
         manifestService.setProcess(checkBlank(serviceAnnotation.process()));
 

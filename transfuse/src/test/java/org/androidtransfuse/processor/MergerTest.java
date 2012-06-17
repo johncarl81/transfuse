@@ -58,12 +58,12 @@ public class MergerTest {
             this.dontMerge = dontMerge;
         }
 
-        @Merge(value = "v")
+        @Merge("v")
         public void setStringValue(String stringValue) {
             this.stringValue = stringValue;
         }
 
-        @Merge(value = "i")
+        @Merge("i")
         public void setIntValue(int intValue) {
             this.intValue = intValue;
         }
@@ -100,7 +100,7 @@ public class MergerTest {
             return id;
         }
 
-        @Merge(value = "v")
+        @Merge("v")
         public void setValue(String value) {
             this.value = value;
         }
@@ -109,6 +109,7 @@ public class MergerTest {
             this.dontMergeValue = dontMergeValue;
         }
 
+        @Merge("i")
         public void setId(String id) {
             this.id = id;
         }
@@ -193,6 +194,7 @@ public class MergerTest {
         assertEquals(1, merged.getSubMergables().size());
         SubMergable subMergable = merged.getSubMergables().iterator().next();
         assertNull(subMergable.getValue());
+        assertEquals(1, subMergable.getMergeTags().size());
         assertEquals("eight", subMergable.getDontMergeValue());
     }
 
@@ -310,7 +312,6 @@ public class MergerTest {
                 Method writeMethod = propertyDescriptor.getWriteMethod();
 
                 Merge mergeAnnotation = findAnnotation(Merge.class, writeMethod, readMethod);
-                //Object property = PropertyUtils.getProperty(mergeable, propertyDescriptor.getName());
 
                 if (mergeAnnotation != null) {
                     mergeable.addMergeTag(mergeAnnotation.value());

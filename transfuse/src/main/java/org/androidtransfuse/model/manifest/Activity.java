@@ -136,6 +136,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
+    @Merge("t")
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
     }
@@ -144,6 +145,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.allowTaskReparenting = allowTaskReparenting;
     }
 
+    @Merge("s")
     public Boolean getAlwaysRetainTaskState() {
         return alwaysRetainTaskState;
     }
@@ -152,6 +154,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.alwaysRetainTaskState = alwaysRetainTaskState;
     }
 
+    @Merge("c")
     public Boolean getClearTaskOnLaunch() {
         return clearTaskOnLaunch;
     }
@@ -160,6 +163,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.clearTaskOnLaunch = clearTaskOnLaunch;
     }
 
+    @Merge("a")
     public String getConfigChanges() {
         return configChanges;
     }
@@ -168,6 +172,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.configChanges = configChanges;
     }
 
+    @Merge("e")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -176,6 +181,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.enabled = enabled;
     }
 
+    @Merge("r")
     public Boolean getExcludeFromRecents() {
         return excludeFromRecents;
     }
@@ -184,6 +190,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.excludeFromRecents = excludeFromRecents;
     }
 
+    @Merge("x")
     public Boolean getExported() {
         return exported;
     }
@@ -192,6 +199,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.exported = exported;
     }
 
+    @Merge("f")
     public Boolean getFinishOnTaskLaunch() {
         return finishOnTaskLaunch;
     }
@@ -200,6 +208,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.finishOnTaskLaunch = finishOnTaskLaunch;
     }
 
+    @Merge("d")
     public Boolean getHardwareAccelerated() {
         return hardwareAccelerated;
     }
@@ -208,6 +217,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.hardwareAccelerated = hardwareAccelerated;
     }
 
+    @Merge("i")
     public String getIcon() {
         return icon;
     }
@@ -216,15 +226,16 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.icon = icon;
     }
 
+    @Merge("l")
     public String getLabel() {
         return label;
     }
 
-    @Merge(value = "l")
     public void setLabel(String label) {
         this.label = label;
     }
 
+    @Merge("u")
     public LaunchMode getLaunchMode() {
         return launchMode;
     }
@@ -233,6 +244,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.launchMode = launchMode;
     }
 
+    @Merge("m")
     public Boolean getMultiprocess() {
         return multiprocess;
     }
@@ -241,7 +253,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.multiprocess = multiprocess;
     }
 
-    @Merge(value = "n")
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -250,6 +262,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.name = name;
     }
 
+    @Merge("y")
     public Boolean getNoHistory() {
         return noHistory;
     }
@@ -258,6 +271,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.noHistory = noHistory;
     }
 
+    @Merge("p")
     public String getPermission() {
         return permission;
     }
@@ -266,6 +280,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.permission = permission;
     }
 
+    @Merge("o")
     public String getProcess() {
         return process;
     }
@@ -274,6 +289,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.process = process;
     }
 
+    @Merge("g")
     public ScreenOrientation getScreenOrientation() {
         return screenOrientation;
     }
@@ -282,6 +298,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.screenOrientation = screenOrientation;
     }
 
+    @Merge("d")
     public Boolean getStateNotNeeded() {
         return stateNotNeeded;
     }
@@ -290,6 +307,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.stateNotNeeded = stateNotNeeded;
     }
 
+    @Merge("y")
     public String getTaskAffinity() {
         return taskAffinity;
     }
@@ -298,6 +316,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.taskAffinity = taskAffinity;
     }
 
+    @Merge("h")
     public String getTheme() {
         return theme;
     }
@@ -306,6 +325,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.theme = theme;
     }
 
+    @Merge("b")
     public UIOptions getUiOptions() {
         return uiOptions;
     }
@@ -314,6 +334,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
         this.uiOptions = uiOptions;
     }
 
+    @Merge("w")
     public WindowSoftInputMode getWindowSoftInputMode() {
         return windowSoftInputMode;
     }
@@ -367,5 +388,11 @@ public class Activity extends Mergeable implements Comparable<Activity> {
     @Override
     public int compareTo(Activity activity) {
         return getName().compareTo(activity.getName());
+    }
+
+    public void updatePackage(String manifestPackage){
+        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+            name = name.substring(manifestPackage.length());
+        }
     }
 }

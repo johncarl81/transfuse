@@ -55,7 +55,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
     @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
-    @Merge(value = "e")
+    @Merge("e")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -64,7 +64,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.enabled = enabled;
     }
 
-    @Merge(value = "x")
+    @Merge("x")
     public Boolean getExported() {
         return exported;
     }
@@ -73,7 +73,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.exported = exported;
     }
 
-    @Merge(value = "i")
+    @Merge("i")
     public String getIcon() {
         return icon;
     }
@@ -82,7 +82,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.icon = icon;
     }
 
-    @Merge(value = "l")
+    @Merge("l")
     public String getLabel() {
         return label;
     }
@@ -91,7 +91,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.label = label;
     }
 
-    @Merge(value = "n")
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -100,7 +100,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.name = name;
     }
 
-    @Merge(value = "p")
+    @Merge("p")
     public String getPermission() {
         return permission;
     }
@@ -109,7 +109,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
         this.permission = permission;
     }
 
-    @Merge(value = "r")
+    @Merge("r")
     public String getProcess() {
         return process;
     }
@@ -144,5 +144,11 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
     @Override
     public String getIdentifier() {
         return name;
+    }
+
+    public void updatePackage(String manifestPackage){
+        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+            name = name.substring(manifestPackage.length());
+        }
     }
 }

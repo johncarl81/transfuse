@@ -25,7 +25,7 @@ public class MetaData extends Mergeable {
     @XStreamAsAttribute
     private String value;
 
-    @Merge(value = "n")
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -34,7 +34,7 @@ public class MetaData extends Mergeable {
         this.name = name;
     }
 
-    @Merge(value = "s")
+    @Merge("s")
     public String getResourceSpecification() {
         return resourceSpecification;
     }
@@ -43,7 +43,7 @@ public class MetaData extends Mergeable {
         this.resourceSpecification = resourceSpecification;
     }
 
-    @Merge(value = "v")
+    @Merge("v")
     public String getValue() {
         return value;
     }

@@ -193,7 +193,7 @@ public class Application extends Mergeable {
         this.killAfterRestore = killAfterRestore;
     }
 
-    @Merge(value = "l")
+    @Merge("l")
     public String getLabel() {
         return label;
     }
@@ -218,7 +218,7 @@ public class Application extends Mergeable {
         this.manageSpaceActivity = manageSpaceActivity;
     }
 
-    @Merge(value = "n")
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -337,5 +337,23 @@ public class Application extends Mergeable {
     @Override
     public String getIdentifier() {
         return name;
+    }
+
+    public void updatePackage(String manifestPackage) {
+        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+            name = name.substring(manifestPackage.length());
+        }
+
+        for (Activity activity : activities) {
+            activity.updatePackage(manifestPackage);
+        }
+
+        for (Service service : services) {
+            service.updatePackage(manifestPackage);
+        }
+
+        for (Receiver receiver : receivers) {
+            receiver.updatePackage(manifestPackage);
+        }
     }
 }

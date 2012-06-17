@@ -47,15 +47,16 @@ public class TransfuseAssembler {
     }
 
     public Manifest buildManifest() {
-
-        Manifest manifest = manifestManager.getManifest();
-
         try {
+
+            Manifest manifest = manifestManager.getManifest();
             Manifest mergedManifest = merger.merge(Manifest.class, originalManifest, manifest);
 
             for (Application application : mergedManifest.getApplications()) {
                 Collections.sort(application.getActivities());
             }
+
+            mergedManifest.updatePackages();
 
             return mergedManifest;
         } catch (MergerException e) {

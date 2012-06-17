@@ -98,15 +98,15 @@ public class Merger {
             Object sourceProperty = PropertyUtils.getProperty(source, propertyName);
             Class propertyType = PropertyUtils.getPropertyType(target, propertyName);
 
+            Object merged;
             if (tag != null && target.getMergeTags().contains(tag)) {
-                //merge away
-                return merge(propertyType, null, sourceProperty);
+                merged = sourceProperty;
             } else {
-                if (tag != null) {
-                    target.addMergeTag(tag);
-                }
-                return merge(propertyType, targetProperty, sourceProperty);
+                merged = merge(propertyType, targetProperty, sourceProperty);
             }
+
+            updateTag(target, tag, merged == null);
+            return merged;
 
         } catch (NoSuchMethodException e) {
             throw new MergerException("NoSuchMethodException while trying to merge", e);
@@ -114,6 +114,17 @@ public class Merger {
             throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InvocationTargetException e) {
             throw new MergerException("InvocationTargetException while trying to merge", e);
+        }
+    }
+
+    private <T extends Mergeable> void updateTag(T target, String tag, boolean remove) {
+        if(tag != null){
+            if(remove){
+                target.removeMergeTag(tag);
+            }
+            else{
+                target.addMergeTag(tag);
+            }
         }
     }
 

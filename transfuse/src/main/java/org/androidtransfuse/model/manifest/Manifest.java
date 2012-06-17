@@ -234,4 +234,12 @@ public class Manifest extends Mergeable {
     public String getIdentifier() {
         return "Manifest";
     }
+
+    public void updatePackages() {
+        if(applicationPackage != null){
+            for (Application application : applications) {
+                application.updatePackage(applicationPackage);
+            }
+        }
+    }
 }

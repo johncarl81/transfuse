@@ -26,6 +26,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private ComponentBuilderFactory componentBuilderFactory;
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
+    private MetaDataBuilder metaDataBuilder;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
@@ -33,13 +34,15 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
                                      IntentFilterBuilder intentFilterBuilder,
-                                     TypeMirrorUtil typeMirrorUtil) {
+                                     TypeMirrorUtil typeMirrorUtil,
+                                     MetaDataBuilder metaDataBuilder) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
         this.componentBuilderFactory = componentBuilderFactory;
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
+        this.metaDataBuilder = metaDataBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -93,6 +96,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         manifestReceiver.setExported(checkDefault(annotation.exported(), true));
 
         manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(astType));
+        manifestReceiver.setMetaData(metaDataBuilder.buildMetaData(astType));
 
         manifestManager.addBroadcastReceiver(manifestReceiver);
     }

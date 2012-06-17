@@ -21,7 +21,7 @@ public class Category extends Mergeable {
         return name;
     }
 
-    @Merge(value = "n")
+    @Merge("n")
     public void setName(String name) {
         this.name = name;
     }

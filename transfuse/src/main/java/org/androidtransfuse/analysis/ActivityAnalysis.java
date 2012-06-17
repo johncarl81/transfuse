@@ -53,6 +53,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
     private ComponentBuilderFactory componentBuilderFactory;
+    private MetaDataBuilder metadataBuilder;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -69,7 +70,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             ManifestManager manifestManager,
                             IntentFilterBuilder intentFilterBuilder,
                             TypeMirrorUtil typeMirrorUtil,
-                            ComponentBuilderFactory componentBuilderFactory) {
+                            ComponentBuilderFactory componentBuilderFactory, MetaDataBuilder metadataBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
@@ -85,6 +86,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.metadataBuilder = metadataBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -177,6 +179,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         manifestActivity.setUiOptions(checkDefault(activityAnnotation.uiOptions(), UIOptions.NONE));
         manifestActivity.setWindowSoftInputMode(checkDefault(activityAnnotation.windowSoftInputMode(), WindowSoftInputMode.STATE_UNSPECIFIED));
         manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+        manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
 
         manifestManager.addActivity(manifestActivity);
     }
