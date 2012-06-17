@@ -12,12 +12,12 @@ import org.androidtransfuse.integrationTest.R;
 public class ActivityLifecycle {
 
     private Bundle onCreateBundle;
-    private boolean onDestroy;
-    private boolean onStop;
-    private boolean onPause;
-    private boolean onResume;
-    private boolean onStart;
-    private boolean onRestart;
+    private boolean onDestroyCalled = false;
+    private boolean onStopCalled = false;
+    private boolean onPauseCalled = false;
+    private boolean onResumeCalled = false;
+    private boolean onStartCalled = false;
+    private boolean onRestartCalled = false;
 
     @OnCreate
     public void onCreate(Bundle bundle) {
@@ -26,59 +26,59 @@ public class ActivityLifecycle {
 
     @OnDestroy
     protected void onDestroy() {
-        onDestroy = true;
+        onDestroyCalled = true;
     }
 
     @OnStop
     private void onStop() {
-        onStop = true;
+        onStopCalled = true;
     }
 
     @OnPause
     void onPause() {
-        onPause = true;
+        onPauseCalled = true;
     }
 
     @OnResume
     public void onResume() {
-        onResume = true;
+        onResumeCalled = true;
     }
 
     @OnStart
     public void onStart() {
-        onStart = true;
+        onStartCalled = true;
     }
 
     @OnRestart
     public void onRestart() {
-        onRestart = true;
+        onRestartCalled = true;
     }
 
     public Bundle getOnCreateBundle() {
         return onCreateBundle;
     }
 
-    public boolean isOnDestroy() {
-        return onDestroy;
+    public boolean isOnDestroyCalled() {
+        return onDestroyCalled;
     }
 
-    public boolean isOnStop() {
-        return onStop;
+    public boolean isOnStopCalled() {
+        return onStopCalled;
     }
 
-    public boolean isOnPause() {
-        return onPause;
+    public boolean isOnPauseCalled() {
+        return onPauseCalled;
     }
 
-    public boolean isOnResume() {
-        return onResume;
+    public boolean isOnResumeCalled() {
+        return onResumeCalled;
     }
 
-    public boolean isOnStart() {
-        return onStart;
+    public boolean isOnStartCalled() {
+        return onStartCalled;
     }
 
-    public boolean isOnRestart() {
-        return onRestart;
+    public boolean isOnRestartCalled() {
+        return onRestartCalled;
     }
 }

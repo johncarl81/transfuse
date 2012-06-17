@@ -37,43 +37,43 @@ public class ActivityLifecycleTest {
 
     @Test
     public void onDestroy() {
-        assertFalse(activityLifecycle.isOnDestroy());
+        assertFalse(activityLifecycle.isOnDestroyCalled());
         lifecycleActivity.onDestroy();
-        assertTrue(activityLifecycle.isOnDestroy());
+        assertTrue(activityLifecycle.isOnDestroyCalled());
     }
 
     @Test
     public void onStop() {
-        assertFalse(activityLifecycle.isOnStop());
+        assertFalse(activityLifecycle.isOnStopCalled());
         lifecycleActivity.onStop();
-        assertTrue(activityLifecycle.isOnStop());
+        assertTrue(activityLifecycle.isOnStopCalled());
     }
 
     @Test
     public void onPause() {
-        assertFalse(activityLifecycle.isOnPause());
+        assertFalse(activityLifecycle.isOnPauseCalled());
         lifecycleActivity.onPause();
-        assertTrue(activityLifecycle.isOnPause());
+        assertTrue(activityLifecycle.isOnPauseCalled());
     }
 
     @Test
     public void onResume() {
-        assertFalse(activityLifecycle.isOnResume());
+        assertFalse(activityLifecycle.isOnResumeCalled());
         lifecycleActivity.onResume();
-        assertTrue(activityLifecycle.isOnResume());
+        assertTrue(activityLifecycle.isOnResumeCalled());
     }
 
     @Test
     public void onStart() {
-        assertFalse(activityLifecycle.isOnStart());
+        assertFalse(activityLifecycle.isOnStartCalled());
         lifecycleActivity.onStart();
-        assertTrue(activityLifecycle.isOnStart());
+        assertTrue(activityLifecycle.isOnStartCalled());
     }
 
     @Test
     public void onRestart() {
-        assertFalse(activityLifecycle.isOnRestart());
+        assertFalse(activityLifecycle.isOnRestartCalled());
         lifecycleActivity.onRestart();
-        assertTrue(activityLifecycle.isOnRestart());
+        assertTrue(activityLifecycle.isOnRestartCalled());
     }
 }

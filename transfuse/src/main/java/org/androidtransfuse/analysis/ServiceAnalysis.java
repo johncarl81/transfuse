@@ -157,14 +157,20 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
             activityDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
 
-            //onLowMemory
-            //onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onStart"));
-            //onTerminate
+            //onStart onStart(android.content.Intent intent, int startId)
+            ASTMethod onStartASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onStart", Intent.class, int.class));
+            activityDescriptor.addGenerators(
+                    componentBuilderFactory.buildMethodCallbackGenerator("onStart",
+                            componentBuilderFactory.buildSimpleMethodGenerator(onStartASTMethod, true)));
+            //onDestroy
             activityDescriptor.addGenerators(buildEventMethod("onDestroy"));
-            //onTerminate
+            //onLowMemory
             activityDescriptor.addGenerators(buildEventMethod("onLowMemory"));
-            //onTerminate
-            //onCreateComponentBuilder.addMethodCallbackBuilder(buildEventMethod("onRebind"));
+            //onRebind onRebind(android.content.Intent intent)
+            ASTMethod onRebindASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onRebind", Intent.class));
+            activityDescriptor.addGenerators(
+                    componentBuilderFactory.buildMethodCallbackGenerator("onRebind",
+                            componentBuilderFactory.buildSimpleMethodGenerator(onRebindASTMethod, true)));
 
             //todo: move this somewhere else
             activityDescriptor.getComponentBuilders().add(new ComponentBuilder() {
