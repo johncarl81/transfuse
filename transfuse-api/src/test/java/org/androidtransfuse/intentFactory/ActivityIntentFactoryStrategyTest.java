@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author John Ericksen
@@ -40,8 +41,8 @@ public class ActivityIntentFactoryStrategyTest {
 
     @Test
     public void testStart(){
-        mockContext.startActivity(mockIntent);
-
         activityIntentFactoryStrategy.start(mockContext, mockIntent);
+
+        verify(mockContext).startActivity(mockIntent);
     }
 }

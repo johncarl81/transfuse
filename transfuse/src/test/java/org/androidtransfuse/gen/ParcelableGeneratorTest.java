@@ -73,10 +73,6 @@ public class ParcelableGeneratorTest {
 
     @Test
     public void test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        mockParcel.writeString(TEST_VALUE);
-        mockParcel.writeDouble(Math.PI);
-        mockParcel.writeParcelable(any(Parcelable.class), eq(0));
-
         when(mockParcel.readString()).thenReturn(TEST_VALUE);
         when(mockParcel.readDouble()).thenReturn(Math.PI);
         when(mockParcel.readParcelable(any(ClassLoader.class))).thenReturn(mockSecondParcel);
@@ -91,5 +87,9 @@ public class ParcelableGeneratorTest {
         ParcelTarget wrapped = ((ParcelableWrapper<ParcelTarget>) inputParcelable).getWrapped();
 
         assertEquals(parcelTarget, wrapped);
+
+        verify(mockParcel).writeString(TEST_VALUE);
+        verify(mockParcel).writeDouble(Math.PI);
+        verify(mockParcel).writeParcelable(any(Parcelable.class), eq(0));
     }
 }

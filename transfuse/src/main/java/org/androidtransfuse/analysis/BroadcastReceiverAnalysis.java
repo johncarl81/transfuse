@@ -8,6 +8,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -125,17 +126,15 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         }
     }
 
-    private static final class ReceiverTypeRunnable implements Runnable {
-
-        private BroadcastReceiver receiverAnnotation;
-
+    private static final class ReceiverTypeRunnable extends TypeMirrorRunnable<BroadcastReceiver> {
         private ReceiverTypeRunnable(BroadcastReceiver receiverAnnotation) {
-            this.receiverAnnotation = receiverAnnotation;
+            super(receiverAnnotation);
         }
 
-        public void run() {
+        @Override
+        public void run(BroadcastReceiver annotation) {
             //accessing this throws an exception, caught in TypeMiirrorUtil
-            receiverAnnotation.type();
+            annotation.type();
         }
     }
 }

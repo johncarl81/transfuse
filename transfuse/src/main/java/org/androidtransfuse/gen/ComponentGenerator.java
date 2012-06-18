@@ -54,7 +54,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
             onCreateCallbackGenerator.generate(definedClass, block, expressionMap, descriptor);
 
-            //... and other listener
+            //... and other listeners
             for (ExpressionVariableDependentGenerator generator : descriptor.getGenerators()) {
                 generator.generate(definedClass, block, expressionMap, descriptor);
             }

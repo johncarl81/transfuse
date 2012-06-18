@@ -12,8 +12,12 @@ import javax.inject.Inject;
  */
 public class UIThreadMethodInterceptor implements MethodInterceptor {
 
-    @Inject
     private Handler handler;
+
+    @Inject
+    public UIThreadMethodInterceptor(Handler handler){
+        this.handler = handler;
+    }
 
     @Override
     public Object invoke(MethodInvocation invocation) {

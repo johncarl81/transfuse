@@ -9,6 +9,7 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author John Ericksen
  */
 public class AsynchronousMethodInterceptor implements MethodInterceptor {
+
     @Override
     public Object invoke(MethodInvocation invocation) {
         AsyncTask task = new MethodInterceptorAsyncTask(invocation);
