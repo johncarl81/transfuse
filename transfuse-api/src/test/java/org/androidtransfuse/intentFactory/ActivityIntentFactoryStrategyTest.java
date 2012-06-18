@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
+import org.powermock.api.mockito.PowerMockito;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -23,9 +22,9 @@ public class ActivityIntentFactoryStrategyTest {
 
     @Before
     public void setup(){
-        mockContext = PowerMock.createMock(Context.class);
-        mockBundle = PowerMock.createMock(Bundle.class);
-        mockIntent = PowerMock.createMock(Intent.class);
+        mockContext = PowerMockito.mock(Context.class);
+        mockBundle = PowerMockito.mock(Bundle.class);
+        mockIntent = PowerMockito.mock(Intent.class);
         activityIntentFactoryStrategy = new ActivityIntentFactoryStrategy(Activity.class, mockBundle);
     }
 
@@ -40,15 +39,9 @@ public class ActivityIntentFactoryStrategyTest {
     }
 
     @Test
-    public void test(){
-        EasyMock.reset(mockBundle, mockIntent, mockContext);
-
+    public void testStart(){
         mockContext.startActivity(mockIntent);
 
-        EasyMock.replay(mockBundle, mockIntent, mockContext);
-
         activityIntentFactoryStrategy.start(mockContext, mockIntent);
-
-        EasyMock.verify(mockBundle, mockIntent, mockContext);
     }
 }

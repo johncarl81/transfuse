@@ -37,6 +37,7 @@ public class ASTMatcherBuilderTest {
     @TestAnnotation
     public class SingleMatcherTarget{}
 
+    @TestAnnotationTwo
     @TestAnnotation
     public class DoubleMatcherTarget{}
 

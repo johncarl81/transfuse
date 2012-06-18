@@ -8,20 +8,22 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ParcelableDescriptor;
 import org.androidtransfuse.util.ParcelableWrapper;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * @author John Ericksen
  */
+@PrepareForTest(Parcel.class)
 public class ParcelableGeneratorTest {
 
     private static final String TEST_VALUE = "test value";
@@ -65,24 +67,20 @@ public class ParcelableGeneratorTest {
 
         parcelSecondTarget.setValue(TEST_VALUE);
 
-        mockParcel = PowerMock.createMock(Parcel.class);
-        mockSecondParcel = (Parcelable) PowerMock.createMock(parcelableTwoClass);
+        mockParcel = PowerMockito.mock(Parcel.class);
+        mockSecondParcel = (Parcelable) PowerMockito.mock(parcelableTwoClass);
     }
 
     @Test
     public void test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        PowerMock.reset(mockParcel, mockSecondParcel);
-
         mockParcel.writeString(TEST_VALUE);
         mockParcel.writeDouble(Math.PI);
-        mockParcel.writeParcelable(EasyMock.anyObject(Parcelable.class), EasyMock.eq(0));
+        mockParcel.writeParcelable(any(Parcelable.class), eq(0));
 
-        EasyMock.expect(mockParcel.readString()).andReturn(TEST_VALUE);
-        EasyMock.expect(mockParcel.readDouble()).andReturn(Math.PI);
-        EasyMock.expect(mockParcel.readParcelable(EasyMock.anyObject(ClassLoader.class))).andReturn(mockSecondParcel);
-        EasyMock.expect(((ParcelableWrapper) mockSecondParcel).getWrapped()).andReturn(parcelSecondTarget);
-
-        PowerMock.replay(mockParcel, mockSecondParcel);
+        when(mockParcel.readString()).thenReturn(TEST_VALUE);
+        when(mockParcel.readDouble()).thenReturn(Math.PI);
+        when(mockParcel.readParcelable(any(ClassLoader.class))).thenReturn(mockSecondParcel);
+        when(((ParcelableWrapper) mockSecondParcel).getWrapped()).thenReturn(parcelSecondTarget);
 
         Parcelable outputParcelable = parcelableClass.getConstructor(ParcelTarget.class).newInstance(parcelTarget);
 
@@ -93,7 +91,5 @@ public class ParcelableGeneratorTest {
         ParcelTarget wrapped = ((ParcelableWrapper<ParcelTarget>) inputParcelable).getWrapped();
 
         assertEquals(parcelTarget, wrapped);
-
-        PowerMock.verify(mockParcel, mockSecondParcel);
     }
 }

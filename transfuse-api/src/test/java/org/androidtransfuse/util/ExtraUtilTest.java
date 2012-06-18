@@ -1,16 +1,16 @@
 package org.androidtransfuse.util;
 
 import android.os.Bundle;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
+import org.powermock.api.mockito.PowerMockito;
 
 import java.lang.reflect.Method;
 
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 /**
  * @author John Ericksen
@@ -39,46 +39,34 @@ public class ExtraUtilTest {
     @Test
     public void getExtra() {
 
-        Bundle mockBundle = PowerMock.createMock(Bundle.class);
+        Bundle mockBundle = PowerMockito.mock(Bundle.class);
 
-        EasyMock.expect(mockBundle.containsKey(TEST_NAME)).andReturn(true);
-        EasyMock.expect(mockBundle.get(TEST_NAME)).andReturn(TEST_EXTRA_TARGET);
-
-        PowerMock.replay(mockBundle);
+        when(mockBundle.containsKey(TEST_NAME)).thenReturn(true);
+        when(mockBundle.get(TEST_NAME)).thenReturn(TEST_EXTRA_TARGET);
 
         Object extraOutput = extraUtil.getExtra(mockBundle, TEST_NAME, false);
 
         assertEquals(TEST_EXTRA_TARGET, extraOutput);
-
-        PowerMock.verify(mockBundle);
     }
 
     @Test(expected = TransfuseInjectionException.class)
     public void getExtraThatIsExpectedToExist() {
 
-        Bundle mockBundle = PowerMock.createMock(Bundle.class);
+        Bundle mockBundle = PowerMockito.mock(Bundle.class);
 
-        EasyMock.expect(mockBundle.containsKey(TEST_NAME)).andReturn(false);
-
-        PowerMock.replay(mockBundle);
+        when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
 
         assertNull(extraUtil.getExtra(mockBundle, TEST_NAME, false));
-
-        PowerMock.verify(mockBundle);
     }
 
     @Test
     public void getExtraThatIsOptional() {
 
-        Bundle mockBundle = PowerMock.createMock(Bundle.class);
+        Bundle mockBundle = PowerMockito.mock(Bundle.class);
 
-        EasyMock.expect(mockBundle.containsKey(TEST_NAME)).andReturn(false);
-
-        PowerMock.replay(mockBundle);
+        when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
 
         extraUtil.getExtra(mockBundle, TEST_NAME, true);
-
-        PowerMock.verify(mockBundle);
     }
 
     @Test

@@ -1,6 +1,5 @@
 package org.androidtransfuse.util;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +7,7 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * @author John Ericksen
@@ -22,26 +22,19 @@ public class TypeMirrorUtilTest {
     @Before
     public void setup(){
 
-        mockRunnable = EasyMock.createMock(Runnable.class);
-        mockException = EasyMock.createMock(MirroredTypeException.class);
-        mockTypeMirror = EasyMock.createMock(TypeMirror.class);
+        mockRunnable = mock(Runnable.class);
+        mockException = mock(MirroredTypeException.class);
+        mockTypeMirror = mock(TypeMirror.class);
 
         typeMirrorUtil = new TypeMirrorUtil();
     }
 
     @Test
     public void testThrows(){
-        EasyMock.reset(mockRunnable, mockException);
-
-        mockRunnable.run();
-        EasyMock.expectLastCall().andThrow(mockException);
-        EasyMock.expect(mockException.getTypeMirror()).andReturn(mockTypeMirror);
-
-        EasyMock.replay(mockRunnable, mockException);
+        doThrow(mockException).when(mockRunnable).run();
+        when(mockException.getTypeMirror()).thenReturn(mockTypeMirror);
 
         TypeMirror typeMirror = typeMirrorUtil.getTypeMirror(mockRunnable);
         assertEquals(mockTypeMirror, typeMirror);
-
-        EasyMock.verify(mockRunnable, mockException);
     }
 }

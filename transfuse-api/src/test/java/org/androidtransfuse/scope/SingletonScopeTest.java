@@ -1,6 +1,5 @@
 package org.androidtransfuse.scope;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,6 +8,8 @@ import java.lang.reflect.Method;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author John Ericksen
@@ -24,25 +25,19 @@ public class SingletonScopeTest {
 
     @Before
     public void setup() {
-        builder = EasyMock.createMock(ScopeTargetBuilder.class);
+        builder = mock(ScopeTargetBuilder.class);
         singletonScope = SingletonScope.getInstance();
         scopeTarget = new ScopeTarget();
     }
 
     @Test
     public void testScopedBuild() {
-        EasyMock.reset(builder);
-
-        EasyMock.expect(builder.get()).andReturn(scopeTarget);
-
-        EasyMock.replay(builder);
+        when(builder.get()).thenReturn(scopeTarget);
 
         ScopeTarget resultTarget = singletonScope.getScopedObject(ScopeTarget.class, builder);
         assertEquals(scopeTarget, resultTarget);
         ScopeTarget secondResultTarget = singletonScope.getScopedObject(ScopeTarget.class, builder);
         assertEquals(scopeTarget, secondResultTarget);
-
-        EasyMock.verify(builder);
     }
 
     @Test
