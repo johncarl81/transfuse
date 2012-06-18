@@ -21,8 +21,6 @@ public class AnalysisGeneration<T> implements Generator<ASTType> {
     public void generate(ASTType astType) {
         T descriptor = analysis.analyze(astType);
 
-        if (descriptor != null) {
-            generator.generate(descriptor);
-        }
+        generator.generate(descriptor);
     }
 }

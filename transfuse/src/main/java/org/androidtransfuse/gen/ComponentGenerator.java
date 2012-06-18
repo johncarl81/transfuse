@@ -32,6 +32,9 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
     }
 
     public void generate(ComponentDescriptor descriptor) {
+        if(descriptor == null){
+            return;
+        }
 
         try {
             final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);

@@ -10,13 +10,11 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ExistingInjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.ResourcesInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
 import org.apache.commons.lang.StringUtils;
@@ -29,7 +27,6 @@ import javax.inject.Provider;
  */
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
@@ -41,8 +38,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private ManifestManager manifestManager;
 
     @Inject
-    public ApplicationAnalysis(InjectionPointFactory injectionPointFactory,
-                               VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+    public ApplicationAnalysis(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
@@ -51,7 +47,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                ASTClassFactory astClassFactory,
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager) {
-        this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
@@ -83,10 +78,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         //analyze delegate
         AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
-        InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, analysisContext);
 
         //application generation profile
-        setupApplicationProfile(applicationDescriptor, injectionNode);
+        setupApplicationProfile(applicationDescriptor, astType, analysisContext);
 
         //add manifest elements
         setupManifest(applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
@@ -94,14 +88,14 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         return applicationDescriptor;
     }
 
-    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, InjectionNode injectionNode) {
+    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType, AnalysisContext context) {
 
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
             //onCreate
             applicationDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-            applicationDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
+            applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
             //onLowMemory
             applicationDescriptor.addGenerators(buildEventMethod("onLowMemory"));

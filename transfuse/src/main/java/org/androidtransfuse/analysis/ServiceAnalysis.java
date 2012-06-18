@@ -14,11 +14,13 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Service;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -36,7 +38,6 @@ import javax.lang.model.type.TypeMirror;
  */
 public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionPointFactory injectionPointFactory;
     private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
@@ -51,8 +52,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private MetaDataBuilder metadataBuilder;
 
     @Inject
-    public ServiceAnalysis(InjectionPointFactory injectionPointFactory,
-                           InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
+    public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                            Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
                            InjectionNodeBuilderRepository injectionNodeBuilders,
                            ComponentBuilderFactory componentBuilderFactory,
@@ -62,7 +62,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            TypeMirrorUtil typeMirrorUtil,
                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                            Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider, MetaDataBuilder metadataBuilder) {
-        this.injectionPointFactory = injectionPointFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
         this.injectionNodeBuilders = injectionNodeBuilders;
@@ -98,10 +97,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
 
             activityDescriptor = new ComponentDescriptor(serviceType, serviceClassName);
-            InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
             //application generation profile
-            setupServiceProfile(activityDescriptor, injectionNode);
+            setupServiceProfile(activityDescriptor, input, context);
         }
 
         //add manifest elements
@@ -152,13 +150,13 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     }
 
 
-    private void setupServiceProfile(ComponentDescriptor activityDescriptor, InjectionNode injectionNode) {
+    private void setupServiceProfile(ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context) {
         try {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onCreate"));
 
             activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-            activityDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
+            activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
             //onStart onStart(android.content.Intent intent, int startId)
             ASTMethod onStartASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onStart", Intent.class, int.class));

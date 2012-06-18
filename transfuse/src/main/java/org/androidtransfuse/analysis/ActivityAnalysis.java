@@ -13,7 +13,6 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ExistingInjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.LayoutBuilder;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
@@ -117,10 +116,9 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
 
             activityDescriptor = new ComponentDescriptor(activityType, activityClassName);
-            InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(input, context);
 
             //application generation profile
-            setupActivityProfile(activityType, activityDescriptor, injectionNode, layout, layoutHandlerInjectionNode);
+            setupActivityProfile(activityType, activityDescriptor, input, context, layout, layoutHandlerInjectionNode);
         }
 
         //add manifest elements
@@ -214,7 +212,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         return builder.toString();
     }
 
-    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, InjectionNode injectionNode, Integer layout, InjectionNode layoutHandlerInjectionNode) {
+    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context, Integer layout, InjectionNode layoutHandlerInjectionNode) {
 
         try {
             LayoutBuilder layoutBuilder;
@@ -231,7 +229,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onCreate", Bundle.class));
             activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
 
-            activityDescriptor.setInjectionNodeFactory(new ExistingInjectionNodeFactory(injectionNode));
+            activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
             activityDescriptor.addGenerators(activityComponentBuilderRepository.getGenerators(activityType));
 

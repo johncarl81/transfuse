@@ -1,6 +1,7 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
@@ -25,4 +26,6 @@ public interface ComponentBuilderFactory {
     OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
 
     BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);
+
+    InjectionNodeFactoryImpl buildInjectionNodeFactory(ASTType astType, AnalysisContext context);
 }
