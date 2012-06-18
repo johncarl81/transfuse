@@ -5,7 +5,6 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import java.lang.reflect.Method;
 
@@ -16,7 +15,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@PrepareForTest(Bundle.class)
 public class ExtraUtilTest {
 
     private ExtraUtil extraUtil;

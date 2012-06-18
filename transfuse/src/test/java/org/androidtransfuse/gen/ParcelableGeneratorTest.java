@@ -12,7 +12,6 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@PrepareForTest(Parcel.class)
 public class ParcelableGeneratorTest {
 
     private static final String TEST_VALUE = "test value";
