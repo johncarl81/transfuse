@@ -13,6 +13,8 @@
         <activity transfuse:tag="n" android:name=".activity.PreferencesActivity"/>
         <activity transfuse:tag="n" android:name=".aop.AOPActivity"/>
         <activity transfuse:tag="n" android:name=".broadcastReceiver.ToastTriggerActivity"/>
+        <activity transfuse:tag="n" android:name=".fragments.DetailActivity"/>
+        <activity transfuse:tag="n" android:name=".fragments.FragmentMainActivity"/>
         <activity transfuse:tag="n" android:name=".inject.CustomViewActivity"/>
         <activity transfuse:tag="n" android:name=".inject.ExtraInjectionActivity"/>
         <activity transfuse:tag="n" android:name=".inject.InjectionActivity"/>

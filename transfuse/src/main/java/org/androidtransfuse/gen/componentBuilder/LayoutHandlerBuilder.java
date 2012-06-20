@@ -6,6 +6,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.layout.LayoutHandlerDelegate;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.Logger;
@@ -37,10 +38,10 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
         try {
             Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode);
 
-            //LayoutHandlerDelegate.getlayout()
+            //LayoutHandlerDelegate.invokeLayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();
 
-            block.invoke("setContentView").arg(layoutHandlerDelegate.invoke("getLayout"));
+            block.add(layoutHandlerDelegate.invoke(LayoutHandlerDelegate.INVOKE_LAYOUT_METHOD));
 
         } catch (ClassNotFoundException e) {
             logger.error("ClassNotFoundExcetion while trying to generate LayoutHandler", e);

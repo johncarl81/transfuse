@@ -19,9 +19,9 @@ public class VariableLayoutHandler implements LayoutHandlerDelegate {
     private boolean getLayoutCalled = false;
 
     @Override
-    public int getLayout() {
+    public void invokeLayout() {
         getLayoutCalled = true;
-        return R.layout.main;
+        activity.setContentView(R.layout.main);
     }
 
     public VariableLayoutDependency getDependency() {

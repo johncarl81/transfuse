@@ -8,6 +8,7 @@ import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.PreferencesActivity;
 import org.androidtransfuse.integrationTest.aop.AOPActivity;
 import org.androidtransfuse.integrationTest.broadcastReceiver.ToastTriggerActivity;
+import org.androidtransfuse.integrationTest.fragments.FragmentMainActivity;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
@@ -62,7 +63,8 @@ public class Main {
                 createLI(ManifestManagedActivity.class, "Manifest Managed Activity"),
                 createLI(ToastTriggerActivity.class, "Broadcast Receiver"),
                 createLI(PreferenceInjectionActivity.class, "Preference Injection"),
-                createLI(ViewInjectionActivity.class, "View Injection")
+                createLI(ViewInjectionActivity.class, "View Injection"),
+                createLI(FragmentMainActivity.class, "Fragments")
         }));
 
         Collections.sort(values);

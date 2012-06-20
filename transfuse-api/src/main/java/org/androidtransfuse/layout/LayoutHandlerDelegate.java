@@ -5,5 +5,7 @@ package org.androidtransfuse.layout;
  */
 public interface LayoutHandlerDelegate {
 
-    int getLayout();
+    String INVOKE_LAYOUT_METHOD = "invokeLayout";
+
+    void invokeLayout();
 }
