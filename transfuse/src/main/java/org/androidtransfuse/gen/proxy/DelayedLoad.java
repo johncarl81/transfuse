@@ -5,5 +5,7 @@ package org.androidtransfuse.gen.proxy;
  */
 public interface DelayedLoad<T> {
 
+    String LOAD_METHOD = "load";
+
     void load(T target);
 }

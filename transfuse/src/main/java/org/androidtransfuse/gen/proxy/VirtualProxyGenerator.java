@@ -29,7 +29,6 @@ public class VirtualProxyGenerator {
 
     private static final String DELEGATE_NAME = "delegate";
     private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
-    protected static final String DELAYED_LOAD_METHOD_NAME = "load";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
 
     private JCodeModel codeModel;
@@ -61,7 +60,7 @@ public class VirtualProxyGenerator {
 
             definedClass._implements(codeModel.ref(DelayedLoad.class).narrow(delegateClass));
 
-            JMethod delayedLoadMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, DELAYED_LOAD_METHOD_NAME);
+            JMethod delayedLoadMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, DelayedLoad.LOAD_METHOD);
             JVar delegateParam = delayedLoadMethod.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
             delayedLoadMethod.body().assign(delegateField, delegateParam);
 
@@ -127,7 +126,7 @@ public class VirtualProxyGenerator {
     public TypedExpression initializeProxy(InjectionBuilderContext context, TypedExpression proxyVariable, TypedExpression variableBuilder) {
 
         context.getBlock().add(
-                proxyVariable.getExpression().invoke(DELAYED_LOAD_METHOD_NAME).arg(variableBuilder.getExpression()));
+                proxyVariable.getExpression().invoke(DelayedLoad.LOAD_METHOD).arg(variableBuilder.getExpression()));
 
         return variableBuilder;
     }
