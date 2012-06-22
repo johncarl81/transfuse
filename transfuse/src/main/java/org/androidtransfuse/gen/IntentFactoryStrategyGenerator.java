@@ -68,7 +68,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             //todo: different extends for different component types (Activity, Service, etc)
             strategyClass._extends(ActivityIntentFactoryStrategy.class);
 
-            JInvocation getExtrasMethod = JExpr.invoke("getExtras");
+            JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
 
             List<IntentFactoryExtra> extras = getExtras(expressionMap);
 
