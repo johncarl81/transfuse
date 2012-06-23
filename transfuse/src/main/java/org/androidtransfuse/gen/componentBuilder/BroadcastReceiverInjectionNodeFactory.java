@@ -1,5 +1,6 @@
 package org.androidtransfuse.gen.componentBuilder;
 
+import android.app.Application;
 import android.content.Context;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -10,7 +11,6 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.gen.variableBuilder.StaticExpressionNodeBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -28,6 +28,7 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private ASTType astType;
     private InjectionBindingBuilder injectionBindingBuilder;
+    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
 
     @Inject
     public BroadcastReceiverInjectionNodeFactory(@Assisted ASTType astType,
@@ -35,13 +36,14 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
                                                  InjectionPointFactory injectionPointFactory,
                                                  InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                                  InjectionNodeBuilderRepository injectionNodeBuilderRepository,
-                                                 InjectionBindingBuilder injectionBindingBuilder) {
+                                                 InjectionBindingBuilder injectionBindingBuilder, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory) {
         this.analysisContextFactory = analysisContextFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.astType = astType;
         this.injectionBindingBuilder = injectionBindingBuilder;
+        this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
     }
 
     @Override
@@ -53,12 +55,14 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
     private InjectionNodeBuilderRepository buildVariableBuilderMap(MethodDescriptor methodDescriptor) {
 
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
+        injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeBuilderRepository.putType(android.content.BroadcastReceiver.class, injectionBindingBuilder.buildThis(android.content.BroadcastReceiver.class));
 
         for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : methodDescriptor.getParameters().entrySet()) {
-            injectionNodeBuilderRepository.putType(parameterEntry.getKey().getASTType(), new StaticExpressionNodeBuilder(parameterEntry.getValue()));
             injectionNodeBuilderRepository.putType(parameterEntry.getKey().getASTType(), injectionBindingBuilder.buildExpression(parameterEntry.getValue()));
         }
+
+        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
         variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 

@@ -16,7 +16,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Resource> {
+public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
     private JCodeModel codeModel;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;

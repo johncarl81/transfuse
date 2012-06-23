@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Preference> {
+public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionPointFactory injectionPointFactory;

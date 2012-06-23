@@ -208,7 +208,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
 
-        //todo: map inheritance of activity type?
         if (type != null) {
             ASTType activityASTType = type.accept(astTypeBuilderVisitor, null);
             injectionNodeRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Service.class));

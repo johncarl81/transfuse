@@ -244,7 +244,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeBuilderRepository.putType(android.app.Activity.class, injectionBindingBuilder.buildThis(android.app.Activity.class));
 
-        //todo: map inheritance of activity type?
         if (activityType != null) {
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
             injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Activity.class));

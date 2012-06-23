@@ -12,11 +12,11 @@ import java.util.Collection;
 /**
  * @author John Ericksen
  */
-public abstract class InjectionNodeBuilderSingleAnnotationAdapter<T extends Annotation> implements InjectionNodeBuilder {
+public abstract class InjectionNodeBuilderSingleAnnotationAdapter implements InjectionNodeBuilder {
 
-    private Class<T> annotationClass;
+    private Class<? extends Annotation> annotationClass;
 
-    public InjectionNodeBuilderSingleAnnotationAdapter(Class<T> annotationClass) {
+    public InjectionNodeBuilderSingleAnnotationAdapter(Class<? extends Annotation> annotationClass) {
         this.annotationClass = annotationClass;
     }
 

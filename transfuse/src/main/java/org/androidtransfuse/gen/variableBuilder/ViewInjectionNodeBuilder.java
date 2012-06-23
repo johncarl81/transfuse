@@ -16,7 +16,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<View> {
+public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
     private JCodeModel codeModel;
     private InjectionPointFactory injectionPointFactory;
