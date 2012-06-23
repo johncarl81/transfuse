@@ -6,6 +6,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 
+import java.util.List;
+
 /**
  * @author John Ericksen
  */
@@ -39,7 +41,11 @@ public interface VariableInjectionBuilderFactory {
 
     PreferenceVariableBuilder buildPreferenceVariableBuilder(ASTType preferenceType, String preferenceName, InjectionNode preferenceManagerInjectionNode);
 
-    SharedPreferenceManagerInjectionNodeBuilder buildSharedPreferenceManagerInjectionNodeBuilder();
+    StaticInvocationVariableBuilder buildStaticInvocationVariableBuilder(Class invocationTarget, String staticInvocation);
 
-    SharedPreferenceManagerVariableBuilder buildSharedPreferenceManagerVariableBuilder(InjectionNode contextInjectionNode);
+    MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, List<String> arguments);
+
+    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(Class dependency, DependentVariableBuilder variableBuilder);
+
+    DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, Class type);
 }

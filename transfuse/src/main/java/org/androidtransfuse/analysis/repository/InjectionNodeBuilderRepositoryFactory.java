@@ -13,6 +13,7 @@ import android.net.wifi.WifiManager;
 import android.os.DropBoxManager;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.service.wallpaper.WallpaperService;
 import android.telephony.TelephonyManager;
 import android.text.ClipboardManager;
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
@@ -43,14 +45,16 @@ public class InjectionNodeBuilderRepositoryFactory {
     private Map<String, Class<?>> systemService;
     private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
     private ASTClassFactory astClassFactory;
+    private InjectionBindingBuilder injectionBindingBuilder;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                                  Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
-                                                 ASTClassFactory astClassFactory) {
+                                                 ASTClassFactory astClassFactory, InjectionBindingBuilder injectionBindingBuilder) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
         this.astClassFactory = astClassFactory;
+        this.injectionBindingBuilder = injectionBindingBuilder;
 
         systemService = new HashMap<String, Class<?>>();
         systemService.put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
@@ -89,13 +93,12 @@ public class InjectionNodeBuilderRepositoryFactory {
         //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
             repository.putType(systemServiceEntry.getValue(),
-                    variableInjectionBuilderFactory.buildSystemServiceInjectionNodeBuilder(
-                            systemServiceEntry.getKey(),
-                            astClassFactory.buildASTClassType(systemServiceEntry.getValue())));
+                    injectionBindingBuilder.dependency(Context.class).invoke("getSystemService").arg(systemServiceEntry.getKey()).build());
         }
 
+
         repository.putType(SharedPreferences.class,
-                variableInjectionBuilderFactory.buildSharedPreferenceManagerInjectionNodeBuilder());
+                injectionBindingBuilder.staticInvoke(PreferenceManager.class, "getDefaultSharedPreferences").depenencyArg(Context.class).build());
 
         //provider type
         repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
