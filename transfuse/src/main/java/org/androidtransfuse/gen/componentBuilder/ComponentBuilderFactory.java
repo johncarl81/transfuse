@@ -15,7 +15,7 @@ public interface ComponentBuilderFactory {
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 
-    SimpleMethodGenerator buildSimpleMethodGenerator(ASTMethod method, boolean superCall);
+    MirroredMethodGenerator buildSimpleMethodGenerator(ASTMethod method, boolean superCall);
 
     ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
 

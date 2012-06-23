@@ -9,14 +9,14 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 
-public class SimpleMethodGenerator implements MethodGenerator {
+public class MirroredMethodGenerator implements MethodGenerator {
     private ASTMethod overrideMethod;
     private boolean superCall;
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
 
     @Inject
-    public SimpleMethodGenerator(@Assisted ASTMethod overrideMethod, @Assisted boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+    public MirroredMethodGenerator(@Assisted ASTMethod overrideMethod, @Assisted boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
         this.overrideMethod = overrideMethod;
         this.superCall = superCall;
         this.codeModel = codeModel;

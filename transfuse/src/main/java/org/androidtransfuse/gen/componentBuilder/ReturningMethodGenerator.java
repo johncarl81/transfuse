@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ReturningMethodGenerator extends SimpleMethodGenerator {
+public class ReturningMethodGenerator extends MirroredMethodGenerator {
 
     private JExpression expression;
 
