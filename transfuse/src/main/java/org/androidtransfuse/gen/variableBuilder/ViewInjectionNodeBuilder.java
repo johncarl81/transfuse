@@ -7,7 +7,6 @@ import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.View;
 import org.androidtransfuse.model.InjectionNode;
@@ -20,20 +19,17 @@ import javax.inject.Inject;
 public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<View> {
 
     private JCodeModel codeModel;
-    private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Analyzer analyzer;
 
     @Inject
     public ViewInjectionNodeBuilder(JCodeModel codeModel,
-                                    ASTClassFactory astClassFactory,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                     Analyzer analyzer) {
         super(View.class);
         this.codeModel = codeModel;
-        this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
@@ -46,8 +42,7 @@ public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotati
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
-        ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
+        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
 
         try {
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, codeModel.parseType(astType.getName())));

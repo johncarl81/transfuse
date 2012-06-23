@@ -29,9 +29,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
     private AnalysisContextFactory analysisContextFactory;
@@ -40,18 +40,17 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     @Inject
     public ApplicationAnalysis(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                               Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
+                               InjectionNodeBuilderRepository injectionNodeBuilderRepository, Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
-                               InjectionNodeBuilderRepository injectionNodeBuilders,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
+        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationProvider = applicationProvider;
-        this.injectionNodeBuilders = injectionNodeBuilders;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -124,14 +123,13 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
+        injectionNodeBuilderRepository.putType(Context.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
+        injectionNodeBuilderRepository.putType(android.app.Application.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
+        injectionNodeBuilderRepository.putType(Resources.class, resourcesInjectionNodeBuilderProvider.get());
 
-        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
+        variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
-        subRepository.put(Context.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
-        subRepository.put(android.app.Application.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Application.class));
-        subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
-
-        return subRepository;
+        return injectionNodeBuilderRepository;
 
     }
 

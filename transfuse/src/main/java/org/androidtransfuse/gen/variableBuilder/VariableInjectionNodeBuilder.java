@@ -6,7 +6,6 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 /**
  * @author John Ericksen
@@ -14,19 +13,18 @@ import javax.inject.Provider;
 public class VariableInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
     private Analyzer analyzer;
-    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
-
+    private VariableInjectionBuilder variableInjectionBuilder;
     @Inject
-    public VariableInjectionNodeBuilder(Analyzer analyzer, Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
+    public VariableInjectionNodeBuilder(Analyzer analyzer, VariableInjectionBuilder variableInjectionBuilder) {
         this.analyzer = analyzer;
-        this.variableInjectionBuilderProvider = variableInjectionBuilderProvider;
+        this.variableInjectionBuilder = variableInjectionBuilder;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilder);
 
         return injectionNode;
     }

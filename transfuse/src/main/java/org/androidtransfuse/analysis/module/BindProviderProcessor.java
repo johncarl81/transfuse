@@ -2,29 +2,29 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
 import javax.inject.Inject;
 
 public class BindProviderProcessor extends ClassBindingMethodProcessorAdaptor {
 
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
+    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
 
     @Inject
-    public BindProviderProcessor(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                 InjectionNodeBuilderRepository injectionNodeBuilders,
+    public BindProviderProcessor(InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
+                                 VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                  ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository) {
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionNodeBuilders = injectionNodeBuilders;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
     }
 
     @Override
     public void innerProcess(ASTType returnType, ASTType providerType) {
-        injectionNodeBuilders.put(returnType.getName(),
+        injectionNodeBuilders.putModuleConfig(returnType,
                 variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(providerType));
 
         providerInjectionNodeBuilderRepository.addProvider(returnType,

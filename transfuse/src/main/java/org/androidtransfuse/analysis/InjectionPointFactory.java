@@ -1,7 +1,7 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.analysis.adapter.*;
-import org.androidtransfuse.analysis.repository.BindingRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -21,7 +21,12 @@ import java.util.List;
  */
 public class InjectionPointFactory {
 
-    private BindingRepository bindingRepository = null;
+    private ASTClassFactory astClassFactory;
+
+    @Inject
+    public InjectionPointFactory(ASTClassFactory astClassFactory) {
+        this.astClassFactory = astClassFactory;
+    }
 
     /**
      * Build a Constructor InjectionPoint from the given ASTConstructor
@@ -97,16 +102,21 @@ public class InjectionPointFactory {
         return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
     }
 
+    public InjectionNode buildInjectionNode(Class type, AnalysisContext context) {
+        return buildInjectionNode(astClassFactory.buildASTClassType(type), context);
+    }
+
     private InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
         int bindingCount = 0;
         InjectionNodeBuilder injectionNodeBuilder = null;
+        InjectionNodeBuilderRepository injectionNodeBuilders = context.getInjectionNodeBuilders();
 
         //specific binding annotation lookup
         for (ASTAnnotation bindingAnnotation : annotations) {
-            if (bindingRepository.containsBindingVariableBuilder(bindingAnnotation)) {
+            if (injectionNodeBuilders.containsBinding(bindingAnnotation)) {
                 bindingCount++;
-                injectionNodeBuilder = bindingRepository.getBindingVariableBuilder(bindingAnnotation);
+                injectionNodeBuilder = injectionNodeBuilders.getBinding(bindingAnnotation);
             }
         }
 
@@ -118,12 +128,7 @@ public class InjectionPointFactory {
             return injectionNodeBuilder.buildInjectionNode(astType, context, annotations);
         }
 
-        InjectionNodeBuilder noBindingInjectionNodeBuilder = context.getInjectionNodeBuilders().get(astType.getName());
+        InjectionNodeBuilder noBindingInjectionNodeBuilder = injectionNodeBuilders.getBinding(astType);
         return noBindingInjectionNodeBuilder.buildInjectionNode(astType, context, null);
-    }
-
-    @Inject
-    public void setBindingRepository(BindingRepository bindingRepository) {
-        this.bindingRepository = bindingRepository;
     }
 }

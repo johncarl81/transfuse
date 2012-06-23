@@ -105,7 +105,7 @@ public class AnalyzerTest {
 
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
-        analysisContext.getInjectionNodeBuilders().put(B.class.getCanonicalName(),
+        analysisContext.getInjectionNodeBuilders().putType(B.class,
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
     }
 

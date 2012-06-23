@@ -67,8 +67,6 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
         try {
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, injectionNode);
 
-            JType nodeType = codeModel.parseType(injectionNode.getClassName());
-
             TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
             JExpression viewExpression;
@@ -87,40 +85,48 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
             if (injectionAspect == null) {
                 return viewExpression;
             } else {
-                if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
-                    variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(injectionNode));
-                } else {
-                    variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode));
-                }
-                JBlock block = injectionBuilderContext.getBlock();
-
-
-                block.assign(variableRef, JExpr.cast(viewType, viewExpression));
-
-                //field injection
-                for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-                    block.add(
-                            injectionInvocationBuilder.buildFieldSet(
-                                    injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
-                                    fieldInjectionPoint,
-                                    variableRef));
-                }
-
-                //method injection
-                for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-                    block.add(
-                            injectionInvocationBuilder.buildMethodCall(
-                                    Object.class.getName(),
-                                    injectionBuilderContext.getVariableMap(),
-                                    methodInjectionPoint,
-                                    variableRef));
-                }
+                return inject(injectionAspect, injectionBuilderContext, injectionNode, viewExpression);
             }
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("JClassAlreadyExistsException while generating injection: " + injectionNode.getClassName(), e);
         }
+    }
+
+    public JVar inject(ASTInjectionAspect injectionAspect, InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode, JExpression viewExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+        JVar variableRef;
+        JType nodeType = codeModel.parseType(injectionNode.getClassName());
+
+        if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
+            variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(injectionNode));
+        } else {
+            variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(injectionNode));
+        }
+        JBlock block = injectionBuilderContext.getBlock();
+
+
+        block.assign(variableRef, JExpr.cast(viewType, viewExpression));
+
+        //field injection
+        for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
+            block.add(
+                    injectionInvocationBuilder.buildFieldSet(
+                            injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
+                            fieldInjectionPoint,
+                            variableRef));
+        }
+
+        //method injection
+        for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
+            block.add(
+                    injectionInvocationBuilder.buildMethodCall(
+                            Object.class.getName(),
+                            injectionBuilderContext.getVariableMap(),
+                            methodInjectionPoint,
+                            variableRef));
+        }
+
         return variableRef;
     }
 }

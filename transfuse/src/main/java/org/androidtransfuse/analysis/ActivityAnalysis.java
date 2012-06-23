@@ -8,7 +8,9 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository;
+import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
@@ -39,11 +41,11 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider;
     private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
     private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ActivityComponentBuilderRepository activityComponentBuilderRepository;
     private AnalysisContextFactory analysisContextFactory;
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
@@ -53,15 +55,17 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private TypeMirrorUtil typeMirrorUtil;
     private ComponentBuilderFactory componentBuilderFactory;
     private MetaDataBuilder metadataBuilder;
+    private BindingRepositoryFactory bindingRepositoryFactory;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
                             VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                            InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
+                            InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+                            InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                             Provider<ResourcesInjectionNodeBuilder> resourcesInjectionNodeBuilderProvider,
                             Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider,
                             Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
-                            InjectionNodeBuilderRepository injectionNodeBuilders,
                             ActivityComponentBuilderRepository activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
@@ -69,14 +73,14 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             ManifestManager manifestManager,
                             IntentFilterBuilder intentFilterBuilder,
                             TypeMirrorUtil typeMirrorUtil,
-                            ComponentBuilderFactory componentBuilderFactory, MetaDataBuilder metadataBuilder) {
+                            ComponentBuilderFactory componentBuilderFactory, MetaDataBuilder metadataBuilder, BindingRepositoryFactory bindingRepositoryFactory, ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
+        this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
+        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.resourcesInjectionNodeBuilderProvider = resourcesInjectionNodeBuilderProvider;
         this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
         this.manifestActivityProvider = manifestActivityProvider;
-        this.injectionNodeBuilders = injectionNodeBuilders;
         this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
@@ -86,6 +90,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.typeMirrorUtil = typeMirrorUtil;
         this.componentBuilderFactory = componentBuilderFactory;
         this.metadataBuilder = metadataBuilder;
+        this.bindingRepositoryFactory = bindingRepositoryFactory;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -241,19 +247,22 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
 
-        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
-
-        subRepository.put(Context.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
-        subRepository.put(Application.class.getName(), applicationVariableBuilderProvider.get());
-        subRepository.put(android.app.Activity.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
-        subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
+        injectionNodeBuilderRepository.putType(Context.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
+        injectionNodeBuilderRepository.putType(Application.class, applicationVariableBuilderProvider.get());
+        injectionNodeBuilderRepository.putType(android.app.Activity.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
+        injectionNodeBuilderRepository.putType(Resources.class, resourcesInjectionNodeBuilderProvider.get());
 
         //todo: map inheritance of activity type?
         if (activityType != null) {
-            subRepository.put(activityType.toString(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
+            ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
+            injectionNodeBuilderRepository.putType(activityASTType, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
         }
 
-        return subRepository;
+        bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);
+
+        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
+
+        return injectionNodeBuilderRepository;
 
     }
 

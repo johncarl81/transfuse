@@ -122,13 +122,13 @@ public class LoopAnalysisTest {
 
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
-        analysisContext.getInjectionNodeBuilders().put(B.class.getCanonicalName(),
+        analysisContext.getInjectionNodeBuilders().putType(B.class,
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
 
-        analysisContext.getInjectionNodeBuilders().put(F.class.getCanonicalName(),
+        analysisContext.getInjectionNodeBuilders().putType(F.class,
                 variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(astClassFactory.buildASTClassType(FProvider.class)));
 
-        analysisContext.getInjectionNodeBuilders().put(E.class.getCanonicalName(),
+        analysisContext.getInjectionNodeBuilders().putType(E.class,
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(EImpl.class)));
     }
 

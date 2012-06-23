@@ -45,7 +45,7 @@ public class DeclareFieldAnalysisTest {
 
     @Test
     public void testLocalAssigmentType() {
-        InjectionNode declareFieldInjectionNode = injectionPointFactory.buildInjectionNode(astClassFactory.buildASTClassType(DeclareFieldTarget.class), analysisContext);
+        InjectionNode declareFieldInjectionNode = injectionPointFactory.buildInjectionNode(DeclareFieldTarget.class, analysisContext);
 
         declareFieldAnalysis.analyzeType(declareFieldInjectionNode, declareFieldInjectionNode.getASTType(), analysisContext);
 
@@ -55,7 +55,7 @@ public class DeclareFieldAnalysisTest {
 
     @Test
     public void testFieldAssignmentType() {
-        InjectionNode nonDeclareFieldInjectionNode = injectionPointFactory.buildInjectionNode(astClassFactory.buildASTClassType(NonDecalreFieldTarget.class), analysisContext);
+        InjectionNode nonDeclareFieldInjectionNode = injectionPointFactory.buildInjectionNode(NonDecalreFieldTarget.class, analysisContext);
 
         declareFieldAnalysis.analyzeType(nonDeclareFieldInjectionNode, nonDeclareFieldInjectionNode.getASTType(), analysisContext);
 

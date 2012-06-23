@@ -155,8 +155,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private InjectionNode buildViewInjectionNode(Integer viewId, String viewTag, AnalysisContext context) {
 
-        ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
+        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
 
         ASTType viewAstType = astClassFactory.buildASTClassType(View.class);
         InjectionNode viewInjectionNode = analyzer.analyze(viewAstType, viewAstType, context);

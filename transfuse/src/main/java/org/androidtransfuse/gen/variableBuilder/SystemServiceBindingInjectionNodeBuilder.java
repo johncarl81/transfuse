@@ -4,7 +4,6 @@ import android.content.Context;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.SystemService;
 import org.androidtransfuse.model.InjectionNode;
@@ -16,16 +15,13 @@ import javax.inject.Inject;
  */
 public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<SystemService> {
 
-    private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public SystemServiceBindingInjectionNodeBuilder(ASTClassFactory astClassFactory,
-                                                    InjectionPointFactory injectionPointFactory,
+    public SystemServiceBindingInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
                                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         super(SystemService.class);
-        this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
@@ -36,8 +32,7 @@ public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuild
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        ASTType contextType = astClassFactory.buildASTClassType(Context.class);
-        InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(contextType, context);
+        InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(Context.class, context);
 
         injectionNode.addAspect(VariableBuilder.class,
                 variableInjectionBuilderFactory.buildSystemServiceVariableBuilder(

@@ -3,7 +3,6 @@ package org.androidtransfuse.gen.variableBuilder;
 import android.app.Application;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -14,15 +13,12 @@ import javax.inject.Inject;
  */
 public class ResourcesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
-    private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ResourcesInjectionNodeBuilder(ASTClassFactory astClassFactory,
-                                         InjectionPointFactory injectionPointFactory,
+    public ResourcesInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
-        this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
@@ -31,8 +27,7 @@ public class ResourcesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotat
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        ASTType applicationType = astClassFactory.buildASTClassType(Application.class);
-        InjectionNode applicationInjectionNode = injectionPointFactory.buildInjectionNode(applicationType, context);
+        InjectionNode applicationInjectionNode = injectionPointFactory.buildInjectionNode(Application.class, context);
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildResourcesVariableBuilder(applicationInjectionNode));
 

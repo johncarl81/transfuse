@@ -1,9 +1,12 @@
 package org.androidtransfuse.analysis.repository;
 
+import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 
-import javax.inject.Provider;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,32 +15,45 @@ import java.util.Map;
  */
 public class InjectionNodeBuilderRepository {
 
-    private Map<String, InjectionNodeBuilder> builderMap = new HashMap<String, InjectionNodeBuilder>();
-    private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
-    private InjectionNodeBuilderRepository parentRepository;
+    private Map<ASTType, InjectionNodeBuilder> bindingAnnotations = new HashMap<ASTType, InjectionNodeBuilder>();
+    private Map<ASTType, InjectionNodeBuilder> typeBindings = new HashMap<ASTType, InjectionNodeBuilder>();
+    private InjectionNodeBuilder defaultBinding;
+    private ASTClassFactory astClassFactory;
 
-    public InjectionNodeBuilderRepository(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider) {
-        this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
+    @Inject
+    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory){
+        this.defaultBinding = defaultBinding;
+        this.astClassFactory = astClassFactory;
     }
 
-    public InjectionNodeBuilderRepository(InjectionNodeBuilderRepository parentRepository,
-                                          Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider) {
-        this(variableInjectionNodeBuilderProvider);
-
-        this.parentRepository = parentRepository;
+    public void putAnnotation(ASTType annotationType, InjectionNodeBuilder annotatedVariableBuilder){
+        bindingAnnotations.put(annotationType, annotatedVariableBuilder);
     }
 
-    public void put(String name, InjectionNodeBuilder variableBuilder) {
-        builderMap.put(name, variableBuilder);
+    public void putAnnotation(Class<?> viewClass, InjectionNodeBuilder viewVariableBuilder) {
+        putAnnotation(astClassFactory.buildASTClassType(viewClass), viewVariableBuilder);
     }
 
-    public InjectionNodeBuilder get(String name) {
-        if (!builderMap.containsKey(name)) {
-            if (parentRepository != null) {
-                return parentRepository.get(name);
-            }
-            builderMap.put(name, variableInjectionNodeBuilderProvider.get());
+    public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
+        typeBindings.put(type, variableBuilder);
+    }
+
+    public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
+        putType(astClassFactory.buildASTClassType(clazz), variableBuilder);
+    }
+
+    public boolean containsBinding(ASTAnnotation bindingAnnotation) {
+        return bindingAnnotations.containsKey(bindingAnnotation.getASTType());
+    }
+
+    public InjectionNodeBuilder getBinding(ASTAnnotation bindingAnnotation) {
+        return bindingAnnotations.get(bindingAnnotation.getASTType());
+    }
+
+    public InjectionNodeBuilder getBinding(ASTType type) {
+        if(typeBindings.containsKey(type)){
+            return typeBindings.get(type);
         }
-        return builderMap.get(name);
+        return defaultBinding;
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
 import org.androidtransfuse.annotations.Extra;
@@ -18,16 +17,13 @@ import javax.inject.Inject;
  */
 public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Extra> {
 
-    private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public ExtraInjectionNodeBuilder(ASTClassFactory astClassFactory,
-                                     InjectionPointFactory injectionPointFactory,
+    public ExtraInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         super(Extra.class);
-        this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
@@ -45,8 +41,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        ASTType activityType = astClassFactory.buildASTClassType(Activity.class);
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(activityType, context);
+        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
 
         injectionNode.addAspect(IntentFactoryExtra.class, new IntentFactoryExtra(!optional, extraId, astType));
 

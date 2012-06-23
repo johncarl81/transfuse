@@ -38,9 +38,9 @@ import javax.lang.model.type.TypeMirror;
  */
 public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private InjectionNodeBuilderRepository injectionNodeRepository;
+    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
     private ComponentBuilderFactory componentBuilderFactory;
     private AnalysisContextFactory analysisContextFactory;
     private ASTClassFactory astClassFactory;
@@ -52,8 +52,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private MetaDataBuilder metadataBuilder;
 
     @Inject
-    public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                           Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
+    public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
+                           InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
                            InjectionNodeBuilderRepository injectionNodeBuilders,
                            ComponentBuilderFactory componentBuilderFactory,
                            AnalysisContextFactory analysisContextFactory,
@@ -62,9 +62,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            TypeMirrorUtil typeMirrorUtil,
                            VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                            Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider, MetaDataBuilder metadataBuilder) {
-        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
+        this.injectionNodeRepository = injectionNodeRepository;
+        this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
-        this.injectionNodeBuilders = injectionNodeBuilders;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astClassFactory = astClassFactory;
@@ -203,12 +203,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
 
-        InjectionNodeBuilderRepository subRepository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilders);
-
-
-        subRepository.put(Context.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
-        subRepository.put(Application.class.getName(), applicationVariableBuilderProvider.get());
-        subRepository.put(android.app.Activity.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
+        injectionNodeRepository.putType(Context.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
+        injectionNodeRepository.putType(Application.class, applicationVariableBuilderProvider.get());
+        injectionNodeRepository.putType(android.app.Activity.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
         /*subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
 
         //todo: map inheritance of activity type?
@@ -216,7 +213,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             subRepository.put(activityType.toString(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
         }*/
 
-        return subRepository;
+        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeRepository);
+
+        return injectionNodeRepository;
 
     }
 

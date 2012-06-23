@@ -21,32 +21,33 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
+import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class InjectionNodeBuilderRepositoryFactory implements Provider<InjectionNodeBuilderRepository> {
+@Singleton
+public class InjectionNodeBuilderRepositoryFactory {
 
-    private Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider;
+    private Map<ASTType, InjectionNodeBuilder> moduleConfiguration = new HashMap<ASTType, InjectionNodeBuilder>();
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Map<String, Class<?>> systemService;
     private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
     private ASTClassFactory astClassFactory;
 
     @Inject
-    public InjectionNodeBuilderRepositoryFactory(Provider<VariableInjectionNodeBuilder> variableInjectionNodeBuilderProvider,
-                                                 VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+    public InjectionNodeBuilderRepositoryFactory(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                                  Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
                                                  ASTClassFactory astClassFactory) {
-        this.variableInjectionNodeBuilderProvider = variableInjectionNodeBuilderProvider;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
         this.astClassFactory = astClassFactory;
@@ -84,27 +85,27 @@ public class InjectionNodeBuilderRepositoryFactory implements Provider<Injection
         systemService.put(Context.WINDOW_SERVICE, WindowManager.class);
     }
 
-    public InjectionNodeBuilderRepository get() {
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = new InjectionNodeBuilderRepository(variableInjectionNodeBuilderProvider);
-
+    public void addApplicationInjections(InjectionNodeBuilderRepository repository){
         //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
-            injectionNodeBuilderRepository.put(systemServiceEntry.getValue().getName(),
+            repository.putType(systemServiceEntry.getValue(),
                     variableInjectionBuilderFactory.buildSystemServiceInjectionNodeBuilder(
                             systemServiceEntry.getKey(),
                             astClassFactory.buildASTClassType(systemServiceEntry.getValue())));
         }
 
-        injectionNodeBuilderRepository.put(SharedPreferences.class.getName(),
+        repository.putType(SharedPreferences.class,
                 variableInjectionBuilderFactory.buildSharedPreferenceManagerInjectionNodeBuilder());
 
         //provider type
-        injectionNodeBuilderRepository.put(Provider.class.getName(), generatedProviderInjectionNodeBuilderProvider.get());
+        repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
 
-        return injectionNodeBuilderRepository;
+        for (Map.Entry<ASTType, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
+            repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
+        }
     }
 
-    public InjectionNodeBuilderRepository buildRepository(InjectionNodeBuilderRepository parent) {
-        return new InjectionNodeBuilderRepository(parent, variableInjectionNodeBuilderProvider);
+    public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder){
+        moduleConfiguration.put(type, injectionNodeBuilder);
     }
 }

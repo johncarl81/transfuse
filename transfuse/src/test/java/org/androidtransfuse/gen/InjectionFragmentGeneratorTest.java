@@ -130,7 +130,7 @@ public class InjectionFragmentGeneratorTest {
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(ASTAccessModifier.PRIVATE, "target", buildInjectionNode(VariableTarget.class), 0);
         getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
-        injectionNodeBuilderRepository.put(VariableTarget.class.getName(), new InjectionNodeBuilderNoAnnotationAdapter() {
+        injectionNodeBuilderRepository.putType(VariableTarget.class, new InjectionNodeBuilderNoAnnotationAdapter() {
 
             @Override
             public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
@@ -146,7 +146,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testProviderBuilder() throws Exception {
 
-        injectionNodeBuilderRepository.put(VariableTarget.class.getName(), variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(
+        injectionNodeBuilderRepository.putType(VariableTarget.class, variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(
                 astClassFactory.buildASTClassType(VariableTargetProvider.class)));
 
         InjectionNode injectionNode = buildInjectionNode(VariableTarget.class);

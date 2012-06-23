@@ -1,7 +1,5 @@
 package org.androidtransfuse.analysis.repository;
 
-import com.google.inject.Provider;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.variableBuilder.*;
 
@@ -12,40 +10,34 @@ import javax.inject.Inject;
  *
  * @author John Ericksen
  */
-public class BindingRepositoryProvider implements Provider<BindingRepository> {
+public class BindingRepositoryFactory {
 
     private ViewInjectionNodeBuilder viewVariableBuilder;
     private ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
     private SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
     private ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
     private PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
-    private ASTClassFactory astClassFactory;
 
     @Inject
-    public BindingRepositoryProvider(ViewInjectionNodeBuilder viewVariableBuilder,
+    public BindingRepositoryFactory(ViewInjectionNodeBuilder viewVariableBuilder,
                                      ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
                                      SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
                                      ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
-                                     PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder, ASTClassFactory astClassFactory) {
+                                     PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder) {
         this.viewVariableBuilder = viewVariableBuilder;
         this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
         this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
         this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
         this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
-        this.astClassFactory = astClassFactory;
     }
 
-    @Override
-    public BindingRepository get() {
+    public void addBindingAnnotations(InjectionNodeBuilderRepository injectionNodeBuilderRepository) {
 
-        BindingRepository bindingRepository = new BindingRepository();
+        injectionNodeBuilderRepository.putAnnotation(View.class, viewVariableBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Resource.class, resourceInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
 
-        bindingRepository.addVariableBuilder(astClassFactory.buildASTClassType(View.class), viewVariableBuilder);
-        bindingRepository.addVariableBuilder(astClassFactory.buildASTClassType(Extra.class), extraInjectionNodeBuilder);
-        bindingRepository.addVariableBuilder(astClassFactory.buildASTClassType(Resource.class), resourceInjectionNodeBuilder);
-        bindingRepository.addVariableBuilder(astClassFactory.buildASTClassType(SystemService.class), systemServiceBindingInjectionNodeBuilder);
-        bindingRepository.addVariableBuilder(astClassFactory.buildASTClassType(Preference.class), preferenceInjectionNodeBuilder);
-
-        return bindingRepository;
     }
 }

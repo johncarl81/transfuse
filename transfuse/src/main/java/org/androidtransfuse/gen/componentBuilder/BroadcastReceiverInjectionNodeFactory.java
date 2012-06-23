@@ -51,13 +51,14 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(MethodDescriptor methodDescriptor) {
 
-        InjectionNodeBuilderRepository repository = variableBuilderRepositoryFactory.buildRepository(injectionNodeBuilderRepository);
-        repository.put(android.content.BroadcastReceiver.class.getName(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(org.androidtransfuse.annotations.BroadcastReceiver.class));
+        injectionNodeBuilderRepository.putType(android.content.BroadcastReceiver.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(org.androidtransfuse.annotations.BroadcastReceiver.class));
 
         for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : methodDescriptor.getParameters().entrySet()) {
-            repository.put(parameterEntry.getKey().getASTType().getName(), new StaticExpressionNodeBuilder(parameterEntry.getValue()));
+            injectionNodeBuilderRepository.putType(parameterEntry.getKey().getASTType(), new StaticExpressionNodeBuilder(parameterEntry.getValue()));
         }
 
-        return repository;
+        variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
+
+        return injectionNodeBuilderRepository;
     }
 }

@@ -10,7 +10,9 @@ import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryPro
 import org.androidtransfuse.analysis.repository.*;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderAdaptorFactory;
 import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpressionBuilderFactory;
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
@@ -27,6 +29,7 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_APPLICATION = "manifestApplication";
+    public static final String DEFAULT_BINDING = "defaultBinding";
 
     private RResource rResource;
     private Manifest manifest;
@@ -54,11 +57,10 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(InjectionBuilderContextFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
+        bind(InjectionNodeBuilder.class).annotatedWith(Names.named(DEFAULT_BINDING)).to(VariableInjectionNodeBuilder.class);
 
         bind(VariableExpressionBuilder.class).toProvider(ExpressionDecoratorFactory.class);
-        bind(BindingRepository.class).toProvider(BindingRepositoryProvider.class);
         bind(ScopeAspectFactoryRepository.class).toProvider(ScopeAspectFactoryRepositoryProvider.class);
-        bind(InjectionNodeBuilderRepository.class).toProvider(InjectionNodeBuilderRepositoryFactory.class).asEagerSingleton();
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
         bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
         bind(ActivityComponentBuilderRepository.class).toProvider(ActivityComponentBuilderRepositoryProvider.class).asEagerSingleton();

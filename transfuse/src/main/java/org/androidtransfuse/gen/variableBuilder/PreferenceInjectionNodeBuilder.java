@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Preference;
 import org.androidtransfuse.model.InjectionNode;
@@ -17,14 +16,12 @@ import javax.inject.Inject;
 public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter<Preference> {
 
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private ASTClassFactory astClassFactory;
     private InjectionPointFactory injectionPointFactory;
 
     @Inject
-    public PreferenceInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, ASTClassFactory astClassFactory, InjectionPointFactory injectionPointFactory) {
+    public PreferenceInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionPointFactory injectionPointFactory) {
         super(Preference.class);
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
     }
 
@@ -34,8 +31,7 @@ public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAn
 
         InjectionNode injectionNode = new InjectionNode(astType);
 
-        ASTType preferenceManagerASTType = astClassFactory.buildASTClassType(SharedPreferences.class);
-        InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(preferenceManagerASTType, context);
+        InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(SharedPreferences.class, context);
 
         injectionNode.addAspect(VariableBuilder.class,
                 variableInjectionBuilderFactory.buildPreferenceVariableBuilder(astType, preferenceName, preferenceManagerInjectionNode));
