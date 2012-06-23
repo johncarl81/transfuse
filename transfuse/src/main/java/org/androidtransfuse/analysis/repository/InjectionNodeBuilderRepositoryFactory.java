@@ -5,6 +5,7 @@ import android.app.*;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -21,12 +22,10 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -41,19 +40,14 @@ import java.util.Map;
 public class InjectionNodeBuilderRepositoryFactory {
 
     private Map<ASTType, InjectionNodeBuilder> moduleConfiguration = new HashMap<ASTType, InjectionNodeBuilder>();
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private Map<String, Class<?>> systemService;
     private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
-    private ASTClassFactory astClassFactory;
     private InjectionBindingBuilder injectionBindingBuilder;
 
     @Inject
-    public InjectionNodeBuilderRepositoryFactory(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
-                                                 ASTClassFactory astClassFactory, InjectionBindingBuilder injectionBindingBuilder) {
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+    public InjectionNodeBuilderRepositoryFactory(Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
+                                                 InjectionBindingBuilder injectionBindingBuilder) {
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
-        this.astClassFactory = astClassFactory;
         this.injectionBindingBuilder = injectionBindingBuilder;
 
         systemService = new HashMap<String, Class<?>>();
@@ -90,15 +84,17 @@ public class InjectionNodeBuilderRepositoryFactory {
     }
 
     public void addApplicationInjections(InjectionNodeBuilderRepository repository){
+        //resources
+        repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
+
         //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
             repository.putType(systemServiceEntry.getValue(),
-                    injectionBindingBuilder.dependency(Context.class).invoke("getSystemService").arg(systemServiceEntry.getKey()).build());
+                    injectionBindingBuilder.dependency(Context.class).invoke(Object.class, "getSystemService").arg(systemServiceEntry.getKey()).build());
         }
 
-
         repository.putType(SharedPreferences.class,
-                injectionBindingBuilder.staticInvoke(PreferenceManager.class, "getDefaultSharedPreferences").depenencyArg(Context.class).build());
+                injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").depenencyArg(Context.class).build());
 
         //provider type
         repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());

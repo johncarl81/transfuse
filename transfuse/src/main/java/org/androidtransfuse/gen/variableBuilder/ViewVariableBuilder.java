@@ -63,7 +63,6 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
     @Override
     public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        JVar variableRef;
         try {
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, injectionNode);
 

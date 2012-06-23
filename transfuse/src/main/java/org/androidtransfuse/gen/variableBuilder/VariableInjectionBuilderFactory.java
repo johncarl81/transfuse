@@ -1,10 +1,12 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
+import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 
 import java.util.List;
 
@@ -15,29 +17,19 @@ public interface VariableInjectionBuilderFactory {
 
     ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(ASTType astType);
 
+    ProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerInjectionNode);
+
     VariableASTImplementationInjectionNodeBuilder buildVariableInjectionNodeBuilder(ASTType astType);
 
     SystemServiceVariableBuilder buildSystemServiceVariableBuilder(String systemService, InjectionNode contextInjectionNode);
-
-    SystemServiceInjectionNodeBuilder buildSystemServiceInjectionNodeBuilder(String systemService, ASTType systemServiceClass);
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
     ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, @Assisted("nullable") boolean nullable, @Assisted("wrapped") boolean wrapped);
 
-    ApplicationVariableBuilder buildApplicationVariableBuilder(InjectionNode contextInjectionNode);
-
-    ResourcesVariableBuilder buildResourcesVariableBuilder(InjectionNode applicationInjectionNode);
-
-    ProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerInjectionNode);
-
     ViewVariableBuilder buildViewVariableBuilder(Integer viewId, String viewTag, InjectionNode activityInjectionNode, JType jType);
 
     GeneratedProviderVariableBuilder buildGeneratedProviderVariableBuilder(InjectionNode providerTypeInjectionNode);
-
-    ContextVariableBuilder buildContextVariableBuilder(Class clazz);
-
-    ContextVariableInjectionNodeBuilder buildContextVariableInjectionNodeBuilder(Class clazz);
 
     PreferenceVariableBuilder buildPreferenceVariableBuilder(ASTType preferenceType, String preferenceName, InjectionNode preferenceManagerInjectionNode);
 
@@ -45,7 +37,13 @@ public interface VariableInjectionBuilderFactory {
 
     MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, List<String> arguments);
 
-    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(Class dependency, DependentVariableBuilder variableBuilder);
+    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") Class dependency, @Assisted("returnType") Class returnType, DependentVariableBuilder variableBuilder);
 
     DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, Class type);
+
+    IndependentInjectionNodeBuilder buildInjectionNodeBuilder(VariableBuilder variableBuilder);
+
+    IndependentVariableBuilderWrapper buildIndependentVariableBuilderWrapper(Class clazz, JExpression expression);
+
+    ExpressionVariableBuilderWrapper buildExpressionWrapper(TypedExpression typedExpression);
 }

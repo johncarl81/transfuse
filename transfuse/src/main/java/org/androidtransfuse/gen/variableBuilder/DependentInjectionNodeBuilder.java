@@ -16,16 +16,19 @@ import java.util.Collection;
 public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
 
     private Class dependency;
+    private Class returnType;
     private DependentVariableBuilder variableBuilder;
     private InjectionPointFactory injectionPointFactory;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public DependentInjectionNodeBuilder(@Assisted Class dependency,
+    public DependentInjectionNodeBuilder(@Assisted("dependency") Class dependency,
+                                         @Assisted("returnType") Class returnType,
                                          @Assisted DependentVariableBuilder variableBuilder,
                                          InjectionPointFactory injectionPointFactory,
                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.dependency = dependency;
+        this.returnType = returnType;
         this.variableBuilder = variableBuilder;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
@@ -37,7 +40,7 @@ public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
 
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(dependency, context);
 
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildDependentVariableBuilderWrapper(contextInjectionNode, variableBuilder, Object.class));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildDependentVariableBuilderWrapper(contextInjectionNode, variableBuilder, returnType));
 
         return injectionNode;
     }

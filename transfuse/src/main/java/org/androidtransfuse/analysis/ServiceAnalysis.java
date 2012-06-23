@@ -11,6 +11,7 @@ import com.sun.codemodel.JMod;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Service;
@@ -18,8 +19,7 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
-import org.androidtransfuse.gen.variableBuilder.ApplicationVariableInjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
@@ -47,21 +47,22 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private ManifestManager manifestManager;
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider;
     private MetaDataBuilder metadataBuilder;
+    private InjectionBindingBuilder injectionBindingBuilder;
+    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
     @Inject
     public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
-                           InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
-                           InjectionNodeBuilderRepository injectionNodeBuilders,
+                           InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+                           Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
                            ComponentBuilderFactory componentBuilderFactory,
                            AnalysisContextFactory analysisContextFactory,
                            ASTClassFactory astClassFactory, ManifestManager manifestManager,
                            IntentFilterBuilder intentFilterBuilder,
                            TypeMirrorUtil typeMirrorUtil,
-                           VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                           Provider<ApplicationVariableInjectionNodeBuilder> applicationVariableBuilderProvider, MetaDataBuilder metadataBuilder) {
+                           MetaDataBuilder metadataBuilder,
+                           InjectionBindingBuilder injectionBindingBuilder,
+                           ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         this.injectionNodeRepository = injectionNodeRepository;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -71,9 +72,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        this.applicationVariableBuilderProvider = applicationVariableBuilderProvider;
         this.metadataBuilder = metadataBuilder;
+        this.injectionBindingBuilder = injectionBindingBuilder;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -94,7 +95,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
             String serviceType = type == null ? android.app.Service.class.getName() : type.toString();
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
             activityDescriptor = new ComponentDescriptor(serviceType, serviceClassName);
 
@@ -201,17 +202,17 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildSimpleMethodGenerator(method, true));
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
 
-        injectionNodeRepository.putType(Context.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(Context.class));
-        injectionNodeRepository.putType(Application.class, applicationVariableBuilderProvider.get());
-        injectionNodeRepository.putType(android.app.Activity.class, variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
-        /*subRepository.put(Resources.class.getName(), resourcesInjectionNodeBuilderProvider.get());
+        injectionNodeRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
+        injectionNodeRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
+        injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
 
         //todo: map inheritance of activity type?
-        if (activityType != null) {
-            subRepository.put(activityType.toString(), variableInjectionBuilderFactory.buildContextVariableInjectionNodeBuilder(android.app.Activity.class));
-        }*/
+        if (type != null) {
+            ASTType activityASTType = type.accept(astTypeBuilderVisitor, null);
+            injectionNodeRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Service.class));
+        }
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeRepository);
 
