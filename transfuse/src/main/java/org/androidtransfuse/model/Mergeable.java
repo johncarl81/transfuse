@@ -4,33 +4,47 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.processor.MergeableTags;
 
-import java.util.Collections;
-import java.util.Set;
-
 /**
  * @author John Ericksen
  */
 
-public abstract class Mergeable {
+public class Mergeable {
 
-    @XStreamAlias("transfuse:tag")
+    private static final String GENERATED_TOKEN = "+";
+
+    @XStreamAlias("t:tag")
     @XStreamAsAttribute
     private MergeableTags tags = new MergeableTags();
 
-    public abstract String getIdentifier();
+    public int getMergeTagSize(){
+        if(tags != null){
+            return tags.getTags().size();
+        }
+        return 0;
+    }
 
     public void addMergeTag(String tag) {
         tags.getTags().add(tag);
     }
 
-    public Set<String> getMergeTags() {
-        if (tags == null) {
-            return Collections.emptySet();
-        }
-        return tags.getTags();
+    public boolean containsTag(String tag) {
+        return tags != null && tags.getTags().contains(tag);
     }
 
     public void removeMergeTag(String tag) {
-        getMergeTags().remove(tag);
+        if(tags != null){
+            tags.getTags().remove(tag);
+        }
+    }
+
+    public boolean isGenerated(){
+        return containsTag(GENERATED_TOKEN);
+    }
+
+    public synchronized void setGenerated(boolean generated) {
+        if(tags == null){
+            tags = new MergeableTags();
+        }
+        this.tags.getTags().add(GENERATED_TOKEN);
     }
 }

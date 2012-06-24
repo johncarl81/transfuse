@@ -37,7 +37,7 @@ import java.util.List;
 @XStreamAlias("manifest")
 public class Manifest extends Mergeable {
 
-    @XStreamAlias("xmlns:transfuse")
+    @XStreamAlias("xmlns:t")
     @XStreamAsAttribute
     private final String transfuseNamespace = "http://johncarl81.github.com/transfuse/";
     @XStreamAlias("xmlns:android")
@@ -228,11 +228,6 @@ public class Manifest extends Mergeable {
 
     public void setCompatibleScreens(List<CompatibleScreens> compatibleScreens) {
         this.compatibleScreens = compatibleScreens;
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "Manifest";
     }
 
     public void updatePackages() {

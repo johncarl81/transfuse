@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class IntentFilter extends Mergeable {
     @XStreamImplicit(itemFieldName = "data")
     private List<Data> data = new ArrayList<Data>();
 
+    @Merge("i")
     public String getIcon() {
         return icon;
     }
@@ -50,6 +52,7 @@ public class IntentFilter extends Mergeable {
         this.icon = icon;
     }
 
+    @Merge("l")
     public String getLabel() {
         return label;
     }
@@ -58,6 +61,7 @@ public class IntentFilter extends Mergeable {
         this.label = label;
     }
 
+    @Merge("p")
     public Integer getPriority() {
         return priority;
     }
@@ -90,10 +94,5 @@ public class IntentFilter extends Mergeable {
 
     public void setData(List<Data> data) {
         this.data = data;
-    }
-
-    @Override
-    public String getIdentifier() {
-        return "IntentFilter";
     }
 }

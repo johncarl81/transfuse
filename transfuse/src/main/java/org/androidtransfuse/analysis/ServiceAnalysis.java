@@ -210,8 +210,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
 
         if (type != null) {
-            ASTType activityASTType = type.accept(astTypeBuilderVisitor, null);
-            injectionNodeRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Service.class));
+            ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
+            injectionNodeRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
         }
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeRepository);

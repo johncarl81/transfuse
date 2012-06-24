@@ -18,7 +18,6 @@ import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpr
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory;
-import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 
@@ -28,7 +27,6 @@ import org.androidtransfuse.model.r.RResource;
 public class TransfuseGenerateGuiceModule extends AbstractModule {
 
     public static final String ORIGINAL_MANIFEST = "originalManifest";
-    public static final String MANIFEST_APPLICATION = "manifestApplication";
     public static final String DEFAULT_BINDING = "defaultBinding";
 
     private RResource rResource;
@@ -43,7 +41,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
     protected void configure() {
 
         bind(Manifest.class).annotatedWith(Names.named(ORIGINAL_MANIFEST)).toInstance(manifest);
-        bind(Application.class).annotatedWith(Names.named(MANIFEST_APPLICATION)).toInstance(manifest.getApplications().get(0));
         bind(RResource.class).toInstance(rResource);
 
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();

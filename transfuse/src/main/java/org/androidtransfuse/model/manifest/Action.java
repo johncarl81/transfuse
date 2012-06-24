@@ -2,6 +2,7 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 
@@ -11,7 +12,7 @@ import org.androidtransfuse.processor.Merge;
  *
  * @author John Ericksen
  */
-public class Action extends Mergeable {
+public class Action extends Mergeable implements Identified {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute

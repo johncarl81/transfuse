@@ -2,15 +2,12 @@ package org.androidtransfuse.integrationTest.fragments;
 
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
-import org.androidtransfuse.annotations.Extra;
-import org.androidtransfuse.annotations.LayoutHandler;
-import org.androidtransfuse.annotations.OnCreate;
-import org.androidtransfuse.annotations.View;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
 
-@org.androidtransfuse.annotations.Activity(type = FragmentActivity.class)
+@Activity(type = FragmentActivity.class)
 @LayoutHandler(FragmentActivityLayoutHandler.class)
 public class Detail {
 

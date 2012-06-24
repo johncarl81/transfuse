@@ -62,8 +62,8 @@ public class ManifestManager {
         }
     }
 
-    private <T extends Mergeable> void updateMergeTags(Class<T> clazz, List<T> mergableCollection) throws MergerException {
-        for (T mergeable : mergableCollection) {
+    private <T extends Mergeable> void updateMergeTags(Class<T> clazz, List<T> mergeableCollection) throws MergerException {
+        for (T mergeable : mergeableCollection) {
             updateMergeTags(clazz, mergeable);
         }
     }
@@ -105,6 +105,8 @@ public class ManifestManager {
 
     private <T extends Mergeable> void updateMergeTags(Class<T> clazz, T mergeable) throws MergerException {
         try {
+            mergeable.setGenerated(true);
+
             BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
 
             for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {

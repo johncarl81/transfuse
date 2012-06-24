@@ -3,6 +3,7 @@ package org.androidtransfuse.model.manifest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
@@ -26,7 +27,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Receiver extends Mergeable implements Comparable<Receiver>{
+public class Receiver extends Mergeable implements Comparable<Receiver>, Identified {
 
     @XStreamAlias("android:enabled")
     @XStreamAsAttribute
@@ -147,7 +148,7 @@ public class Receiver extends Mergeable implements Comparable<Receiver>{
     }
 
     public void updatePackage(String manifestPackage){
-        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+        if(name != null && name.startsWith(manifestPackage) && containsTag("n")){
             name = name.substring(manifestPackage.length());
         }
     }

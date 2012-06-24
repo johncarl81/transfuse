@@ -3,6 +3,8 @@ package org.androidtransfuse.gen.variableBuilder;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import com.sun.codemodel.JExpr;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -15,10 +17,12 @@ import java.util.List;
 public class InjectionBindingBuilder {
 
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private ASTClassFactory astClassFactory;
 
     @Inject
-    public InjectionBindingBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+    public InjectionBindingBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, ASTClassFactory astClassFactory) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.astClassFactory = astClassFactory;
     }
 
     public DependencyBindingBuilder dependency(Class clazz){
@@ -30,8 +34,13 @@ public class InjectionBindingBuilder {
     }
 
     public InjectionNodeBuilder buildThis(Class targetClass) {
+        ASTType astType = astClassFactory.buildASTClassType(targetClass);
+        return buildThis(astType);
+    }
+
+    public InjectionNodeBuilder buildThis(ASTType targetType) {
         return variableInjectionBuilderFactory.buildInjectionNodeBuilder(
-                variableInjectionBuilderFactory.buildIndependentVariableBuilderWrapper(targetClass, JExpr._this()));
+                variableInjectionBuilderFactory.buildIndependentVariableBuilderWrapper(targetType, JExpr._this()));
     }
 
     public InjectionNodeBuilder buildExpression(TypedExpression typedExpression) {

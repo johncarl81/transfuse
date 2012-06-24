@@ -1,6 +1,7 @@
 package org.androidtransfuse.processor;
 
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -52,7 +53,7 @@ public class Merger {
                     //check for mergeCollection
                     MergeCollection mergeCollection = findAnnotation(MergeCollection.class, getter, setter);
                     if (Collection.class.isAssignableFrom(propertyDescriptor.getPropertyType())) {
-                        PropertyUtils.setProperty(target, propertyName, mergeCollections(mergeCollection, propertyName, target, source));
+                        PropertyUtils.setProperty(target, propertyName, mergeList(mergeCollection, propertyName, target, source));
                     }
 
                     //check for merge
@@ -99,7 +100,7 @@ public class Merger {
             Class propertyType = PropertyUtils.getPropertyType(target, propertyName);
 
             Object merged;
-            if (tag != null && target.getMergeTags().contains(tag)) {
+            if (tag != null && target.isGenerated() && target.containsTag(tag)) {
                 merged = sourceProperty;
             } else {
                 merged = merge(propertyType, targetProperty, sourceProperty);
@@ -128,24 +129,24 @@ public class Merger {
         }
     }
 
-    private <T extends Mergeable> Collection mergeCollections(MergeCollection mergeCollectionAnnotation, String propertyName, T target, T source) throws MergerException {
+    private <T extends Mergeable> List mergeList(MergeCollection mergeCollectionAnnotation, String propertyName, T target, T source) throws MergerException {
 
         try {
 
-            Collection targetCollection = (Collection) PropertyUtils.getProperty(target, propertyName);
-            Collection sourceCollection = (Collection) PropertyUtils.getProperty(source, propertyName);
+            List targetCollection = (List) PropertyUtils.getProperty(target, propertyName);
+            List sourceCollection = (List) PropertyUtils.getProperty(source, propertyName);
 
             if (mergeCollectionAnnotation == null) {
-                return (Collection) merge(PropertyUtils.getPropertyType(target, propertyName), targetCollection, sourceCollection);
+                return (List) merge(PropertyUtils.getPropertyType(target, propertyName), targetCollection, sourceCollection);
             }
 
             //update collection from source
-            Map<Object, Mergeable> targetMap = updateFromSource(targetCollection, sourceCollection, mergeCollectionAnnotation.type());
+            Collection<Mergeable> merged = updateFromSource(targetCollection, sourceCollection, mergeCollectionAnnotation.type());
 
-            Collection targetResult = makeCollection(targetCollection, mergeCollectionAnnotation.collectionType(), target, propertyName);
+            List targetResult = makeCollection(targetCollection, mergeCollectionAnnotation.collectionType(), target, propertyName);
 
             targetResult.clear();
-            targetResult.addAll(targetMap.values());
+            targetResult.addAll(merged);
 
             return targetResult;
 
@@ -158,21 +159,21 @@ public class Merger {
         }
     }
 
-    private <T extends Mergeable> Collection makeCollection(Collection targetCollection, Class<? extends Collection> collectionType, T target, String propertyName) throws MergerException {
+    private <T extends Mergeable> List makeCollection(List targetList, Class<? extends List> listType, T target, String propertyName) throws MergerException {
 
         try {
-            //merger only supports Lists for collections
-            if (targetCollection == null) {
+            //merger only supports Lists
+            if (targetList == null) {
                 //first look for specific impl in annotation
-                if (collectionType != Collection.class) {
-                    return collectionType.newInstance();
+                if (listType != List.class) {
+                    return listType.newInstance();
                 } else {
                     //try to instantiate field type
-                    return (Collection) PropertyUtils.getPropertyType(target, propertyName).newInstance();
+                    return (List) PropertyUtils.getPropertyType(target, propertyName).newInstance();
                 }
             }
 
-            return targetCollection;
+            return targetList;
         } catch (NoSuchMethodException e) {
             throw new MergerException("NoSuchMethodException while trying to merge", e);
         } catch (IllegalAccessException e) {
@@ -184,59 +185,68 @@ public class Merger {
         }
     }
 
-    private Map<Object, Mergeable> updateFromSource(Collection targetCollection, Collection sourceCollection, Class<? extends Mergeable> type) throws MergerException {
+    private List<Mergeable> updateFromSource(List targetList, List sourceList, Class<? extends Mergeable> type) throws MergerException {
 
-        Map<Object, Mergeable> targetMap = convertToMergable(targetCollection);
-        Map<Object, Mergeable> sourceMap = convertToMergable(sourceCollection);
+        Map<Object, Mergeable> targetMap = buildIdentifierMap(targetList);
+        Map<Object, Mergeable> sourceMap = buildIdentifierMap(sourceList);
         Set<Object> originalTargetKeys = new HashSet<Object>(targetMap.keySet());
 
         try {
             //update
-            for (Map.Entry<Object, Mergeable> mergableSourceEntry : sourceMap.entrySet()) {
+            for (Map.Entry<Object, Mergeable> mergeableSourceEntry : sourceMap.entrySet()) {
 
-                Object sourceKey = mergableSourceEntry.getKey();
+                Object sourceKey = mergeableSourceEntry.getKey();
 
                 if (targetMap.containsKey(sourceKey)) {
                     //replace
                     Mergeable targetValue = targetMap.get(sourceKey);
-                    if (targetValue.getMergeTags() != null && !targetValue.getMergeTags().isEmpty()) {
-                        targetMap.put(sourceKey, merge(type, targetValue, mergableSourceEntry.getValue()));
+                    if (targetValue.isGenerated()) {
+                        targetMap.put(sourceKey, merge(type, targetValue, mergeableSourceEntry.getValue()));
                     }
                 } else {
-                    targetMap.put(sourceKey, merge(type, type.newInstance(), mergableSourceEntry.getValue()));
+                    targetMap.put(sourceKey, merge(type, type.newInstance(), mergeableSourceEntry.getValue()));
                 }
                 originalTargetKeys.remove(sourceKey);
             }
 
-            //figure out what targets were not updated
+            //remove the targets were not updated
             for (Object targetKey : originalTargetKeys) {
-                Mergeable mergable = targetMap.get(targetKey);
+                Mergeable mergeable = targetMap.get(targetKey);
 
-                if (mergable.getMergeTags() != null && !mergable.getMergeTags().isEmpty()) {
+                if (mergeable.isGenerated()) {
                     targetMap.remove(targetKey);
                 }
             }
         } catch (IllegalAccessException e) {
             throw new MergerException("IllegalAccessException while trying to merge", e);
         } catch (InstantiationException e) {
-            throw new MergerException("InstantiationException while trying to merge", e);
+            throw new MergerException("InstantiationException while trying to merge!", e);
         }
 
-        return targetMap;
+        //order should e preserved by LinkedHashMap
+        return new ArrayList<Mergeable>(targetMap.values());
     }
 
-    private Map<Object, Mergeable> convertToMergable(Collection input) {
-        Map<Object, Mergeable> mergeable = new HashMap<Object, Mergeable>();
+    private Map<Object, Mergeable> buildIdentifierMap(List input) {
+        Map<Object, Mergeable> mergeable = new LinkedHashMap<Object, Mergeable>();
 
         if (input != null) {
+            int i = 0;
             for (Object o : input) {
                 //validate all instance are of type Mergeable
                 if (!(o instanceof Mergeable)) {
                     throw new TransfuseAnalysisException("Merge collection failed on type: " + o.getClass().getName());
                 }
                 Mergeable t = (Mergeable) o;
-                mergeable.put(t.getIdentifier(), t);
-
+                Object key;
+                if(t instanceof Identified){
+                    key = ((Identified)t).getIdentifier();
+                }
+                else{
+                    key = i;
+                }
+                mergeable.put(key, t);
+                i++;
             }
         }
 

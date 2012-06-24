@@ -43,7 +43,7 @@ public interface VariableInjectionBuilderFactory {
 
     IndependentInjectionNodeBuilder buildInjectionNodeBuilder(VariableBuilder variableBuilder);
 
-    IndependentVariableBuilderWrapper buildIndependentVariableBuilderWrapper(Class clazz, JExpression expression);
+    IndependentVariableBuilderWrapper buildIndependentVariableBuilderWrapper(ASTType astType, JExpression expression);
 
     ExpressionVariableBuilderWrapper buildExpressionWrapper(TypedExpression typedExpression);
 }

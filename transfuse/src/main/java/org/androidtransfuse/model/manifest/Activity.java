@@ -7,6 +7,7 @@ import org.androidtransfuse.annotations.LaunchMode;
 import org.androidtransfuse.annotations.ScreenOrientation;
 import org.androidtransfuse.annotations.UIOptions;
 import org.androidtransfuse.annotations.WindowSoftInputMode;
+import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
@@ -59,7 +60,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Activity extends Mergeable implements Comparable<Activity> {
+public class Activity extends Mergeable implements Comparable<Activity>, Identified {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -391,7 +392,7 @@ public class Activity extends Mergeable implements Comparable<Activity> {
     }
 
     public void updatePackage(String manifestPackage){
-        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+        if(name != null && name.startsWith(manifestPackage) && containsTag("n")){
             name = name.substring(manifestPackage.length());
         }
     }

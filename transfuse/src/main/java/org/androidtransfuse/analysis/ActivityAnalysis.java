@@ -253,7 +253,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         if (activityType != null) {
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
-            injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Activity.class));
+            injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
         }
 
         bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);

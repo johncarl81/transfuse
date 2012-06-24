@@ -11,5 +11,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IntentFilter {
+
+    String icon() default "";
+
+    String label() default "";
+
+    int priority() default -1;
+
     Intent[] value();
 }

@@ -6,6 +6,7 @@ import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -62,11 +63,29 @@ public class IntentFilterBuilder {
     private org.androidtransfuse.model.manifest.IntentFilter convertIntentFilter(IntentFilter intentFilter){
         org.androidtransfuse.model.manifest.IntentFilter resultIntentFilter = intentFilterProvider.get();
 
+        resultIntentFilter.setIcon(checkBlank(intentFilter.icon()));
+        resultIntentFilter.setLabel(checkBlank(intentFilter.label()));
+        resultIntentFilter.setPriority(checkDefault(intentFilter.priority(), -1));
+
         for (Intent intentAnnotation : intentFilter.value()) {
             addIntent(intentAnnotation, resultIntentFilter);
         }
 
         return resultIntentFilter;
+    }
+
+    private <T> T checkDefault(T input, T defaultValue) {
+        if (input.equals(defaultValue)) {
+            return null;
+        }
+        return input;
+    }
+
+    private String checkBlank(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        return input;
     }
 
     private void addIntent(Intent intentAnnotation, org.androidtransfuse.model.manifest.IntentFilter intentFilter) {

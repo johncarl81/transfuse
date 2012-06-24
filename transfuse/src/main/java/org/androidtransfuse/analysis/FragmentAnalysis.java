@@ -1,8 +1,8 @@
 package org.androidtransfuse.analysis;
-
 import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -170,12 +170,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
 
         injectionNodeBuilderRepository.putType(android.support.v4.app.Fragment.class, injectionBindingBuilder.buildThis(android.support.v4.app.Fragment.class));
         injectionNodeBuilderRepository.putType(Activity.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Activity.class, "getActivity").build());
+        injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Context.class, "getActivity").build());
         injectionNodeBuilderRepository.putType(FragmentManager.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(FragmentManager.class, "getFragmentManager").build());
         injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Activity.class).invoke(Application.class, "getApplication").build());
 
         if (type != null) {
-            ASTType activityASTType = type.accept(astTypeBuilderVisitor, null);
-            injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(android.app.Activity.class));
+            ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);
+            injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
         }
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);

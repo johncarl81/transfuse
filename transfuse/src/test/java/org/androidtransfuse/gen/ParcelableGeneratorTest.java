@@ -72,7 +72,7 @@ public class ParcelableGeneratorTest {
     }
 
     @Test
-    public void test() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    public void testGeneratedParcelable() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         when(mockParcel.readString()).thenReturn(TEST_VALUE);
         when(mockParcel.readDouble()).thenReturn(Math.PI);
         when(mockParcel.readParcelable(any(ClassLoader.class))).thenReturn(mockSecondParcel);

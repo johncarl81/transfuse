@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:transfuse="http://johncarl81.github.com/transfuse/" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.examples.hello" android:versionCode="1" android:versionName="1.0">
-    <application transfuse:tag="n" android:name="android.app.Application">
-        <activity transfuse:tag="l,n" android:label="@string/app_name" android:name=".HelloAndroidActivity">
-            <intent-filter>
-                <action transfuse:tag="n" android:name="android.intent.action.MAIN"/>
-                <category transfuse:tag="n" android:name="android.intent.category.LAUNCHER"/>
+<manifest t:tag="+" xmlns:t="http://johncarl81.github.com/transfuse/" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.examples.hello" android:versionCode="1" android:versionName="1.0">
+    <application t:tag="+,n" android:name="android.app.Application">
+        <activity t:tag="+,l,n" android:label="@string/app_name" android:name=".HelloAndroidActivity">
+            <intent-filter t:tag="+">
+                <action t:tag="+,n" android:name="android.intent.action.MAIN"/>
+                <category t:tag="+,n" android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>

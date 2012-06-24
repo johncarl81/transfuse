@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.annotations.UIOptions;
+import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
@@ -45,7 +46,7 @@ import java.util.List;
  * @author John Ericksen
  */
 @XStreamAlias("application")
-public class Application extends Mergeable {
+public class Application extends Mergeable implements Identified {
 
     @XStreamAlias("android:allowTaskReparenting")
     @XStreamAsAttribute
@@ -340,20 +341,26 @@ public class Application extends Mergeable {
     }
 
     public void updatePackage(String manifestPackage) {
-        if(name != null && name.startsWith(manifestPackage) && getMergeTags().contains("n")){
+        if(name != null && name.startsWith(manifestPackage) && containsTag("n")){
             name = name.substring(manifestPackage.length());
         }
 
-        for (Activity activity : activities) {
-            activity.updatePackage(manifestPackage);
+        if(activities != null){
+            for (Activity activity : activities) {
+                activity.updatePackage(manifestPackage);
+            }
         }
 
-        for (Service service : services) {
-            service.updatePackage(manifestPackage);
+        if(services != null){
+            for (Service service : services) {
+                service.updatePackage(manifestPackage);
+            }
         }
 
-        for (Receiver receiver : receivers) {
-            receiver.updatePackage(manifestPackage);
+        if(receivers != null){
+            for (Receiver receiver : receivers) {
+                receiver.updatePackage(manifestPackage);
+            }
         }
     }
 }
