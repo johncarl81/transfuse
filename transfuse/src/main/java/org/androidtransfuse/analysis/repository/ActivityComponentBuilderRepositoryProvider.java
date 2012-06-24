@@ -60,64 +60,68 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
         Set<ExpressionVariableDependentGenerator> listActivityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
         listActivityCallbackGenerators.addAll(activityMethodGenerators);
 
-        try {
-            //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
-            ASTMethod onListItemClickMethod = astClassFactory.buildASTClassMethod(ListActivity.class.getDeclaredMethod("onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE));
-            listActivityCallbackGenerators.add(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
-                            componentBuilderFactory.buildSimpleMethodGenerator(onListItemClickMethod, false)));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
-        }
+        //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
+        ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, int.class, long.class);
+        listActivityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
+                        componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
 
         return listActivityCallbackGenerators;
     }
 
     private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
-        try {
-            Set<ExpressionVariableDependentGenerator> activityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
-            // onDestroy
-            activityCallbackGenerators.add(buildEventMethod("onDestroy"));
-            // onPause
-            activityCallbackGenerators.add(buildEventMethod("onPause"));
-            // onRestart
-            activityCallbackGenerators.add(buildEventMethod("onRestart"));
-            // onResume
-            activityCallbackGenerators.add(buildEventMethod("onResume"));
-            // onStart
-            activityCallbackGenerators.add(buildEventMethod("onStart"));
-            // onStop
-            activityCallbackGenerators.add(buildEventMethod("onStop"));
+        Set<ExpressionVariableDependentGenerator> activityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
+        // onDestroy
+        activityCallbackGenerators.add(buildEventMethod("onDestroy"));
+        // onPause
+        activityCallbackGenerators.add(buildEventMethod("onPause"));
+        // onRestart
+        activityCallbackGenerators.add(buildEventMethod("onRestart"));
+        // onResume
+        activityCallbackGenerators.add(buildEventMethod("onResume"));
+        // onStart
+        activityCallbackGenerators.add(buildEventMethod("onStart"));
+        // onStop
+        activityCallbackGenerators.add(buildEventMethod("onStop"));
 
-            //ontouch method
-            ASTMethod onTouchMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onTouchEvent", MotionEvent.class));
-            activityCallbackGenerators.add(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
-                            componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
+        //ontouch method
+        ASTMethod onTouchMethod = getASTMethod("onTouchEvent", MotionEvent.class);
+        activityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
+                        componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
 
-            //extra intent factory
-            activityCallbackGenerators.add(intentFactoryStrategyGenerator);
+        //extra intent factory
+        activityCallbackGenerators.add(intentFactoryStrategyGenerator);
 
-            //listener registration
-            activityCallbackGenerators.add(listenerRegistrationGenerator);
+        //listener registration
+        activityCallbackGenerators.add(listenerRegistrationGenerator);
 
 
-            return activityCallbackGenerators;
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
-        }
+        return activityCallbackGenerators;
     }
 
 
-    private MethodCallbackGenerator buildEventMethod(String name) throws NoSuchMethodException {
+    private MethodCallbackGenerator buildEventMethod(String name) {
         return buildEventMethod(name, name);
     }
 
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) throws NoSuchMethodException {
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
 
-        ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod(methodName));
+        ASTMethod method = getASTMethod(methodName);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
-                componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+                componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+    }
+
+    private ASTMethod getASTMethod(String methodName, Class... args){
+        return getASTMethod(Activity.class, methodName, args);
+    }
+
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
+        try{
+            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
+        }
     }
 }

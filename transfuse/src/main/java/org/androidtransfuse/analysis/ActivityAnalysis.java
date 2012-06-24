@@ -213,29 +213,36 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context, Integer layout, InjectionNode layoutHandlerInjectionNode) {
 
-        try {
-            LayoutBuilder layoutBuilder;
-            if (layout == null) {
-                if (layoutHandlerInjectionNode == null) {
-                    layoutBuilder = new NoOpLayoutBuilder();
-                } else {
-                    layoutBuilder = componentBuilderFactory.buildLayoutHandlerBuilder(layoutHandlerInjectionNode);
-                }
+        LayoutBuilder layoutBuilder;
+        if (layout == null) {
+            if (layoutHandlerInjectionNode == null) {
+                layoutBuilder = new NoOpLayoutBuilder();
             } else {
-                layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
+                layoutBuilder = componentBuilderFactory.buildLayoutHandlerBuilder(layoutHandlerInjectionNode);
             }
-
-            ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Activity.class.getDeclaredMethod("onCreate", Bundle.class));
-            activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
-
-            activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
-
-            activityDescriptor.addGenerators(activityComponentBuilderRepository.getGenerators(activityType));
-
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to find onCreate Method", e);
+        } else {
+            layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
         }
 
+        ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
+        activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
+
+        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+
+        activityDescriptor.addGenerators(activityComponentBuilderRepository.getGenerators(activityType));
+
+    }
+
+    private ASTMethod getASTMethod(String methodName, Class... args){
+        return getASTMethod(android.app.Activity.class, methodName, args);
+    }
+
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
+        try{
+            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
+        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {

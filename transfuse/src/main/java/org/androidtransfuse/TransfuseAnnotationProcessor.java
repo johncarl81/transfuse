@@ -103,6 +103,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Service.class));
+            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Fragment.class));
 
             componentProcessor.process(types);
 

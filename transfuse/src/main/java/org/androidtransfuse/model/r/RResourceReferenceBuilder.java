@@ -13,10 +13,16 @@ import javax.inject.Inject;
 public class RResourceReferenceBuilder {
 
     private JCodeModel codeModel;
+    private RResource rResource;
 
     @Inject
-    public RResourceReferenceBuilder(JCodeModel codeModel) {
+    public RResourceReferenceBuilder(JCodeModel codeModel, RResource rResource) {
         this.codeModel = codeModel;
+        this.rResource = rResource;
+    }
+
+    public JExpression buildReference(Integer id){
+        return buildReference(rResource.getResourceIdentifier(id));
     }
 
     public JExpression buildReference(ResourceIdentifier viewResourceIdentifier) {

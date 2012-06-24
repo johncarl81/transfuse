@@ -15,13 +15,15 @@ public interface ComponentBuilderFactory {
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 
-    MirroredMethodGenerator buildSimpleMethodGenerator(ASTMethod method, boolean superCall);
+    MirroredMethodGenerator buildMirroredMethodGenerator(ASTMethod method, boolean superCall);
 
     ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
 
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 
     OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, LayoutBuilder layoutBuilder);
+
+    FragmentSimpleLayoutBuilder buildFragmentSimpleLayoutBuilder(Integer layout);
 
     OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
 

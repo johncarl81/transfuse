@@ -152,54 +152,55 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
 
     private void setupServiceProfile(ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context) {
-        try {
-            ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onCreate"));
 
-            activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        ASTMethod onCreateASTMethod = getASTMethod("onCreate");
 
-            activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-            //onStart onStart(android.content.Intent intent, int startId)
-            ASTMethod onStartASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onStart", Intent.class, int.class));
-            activityDescriptor.addGenerators(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onStart",
-                            componentBuilderFactory.buildSimpleMethodGenerator(onStartASTMethod, true)));
-            //onDestroy
-            activityDescriptor.addGenerators(buildEventMethod("onDestroy"));
-            //onLowMemory
-            activityDescriptor.addGenerators(buildEventMethod("onLowMemory"));
-            //onRebind onRebind(android.content.Intent intent)
-            ASTMethod onRebindASTMethod = astClassFactory.buildASTClassMethod(android.app.Service.class.getDeclaredMethod("onRebind", Intent.class));
-            activityDescriptor.addGenerators(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onRebind",
-                            componentBuilderFactory.buildSimpleMethodGenerator(onRebindASTMethod, true)));
+        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-            //todo: move this somewhere else
-            activityDescriptor.getComponentBuilders().add(new ComponentBuilder() {
-                @Override
-                public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
-                    JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
-                    onBind.param(Intent.class, "intent");
+        //onStart onStart(android.content.Intent intent, int startId)
+        activityDescriptor.addGenerators(buildEventMethod("onStart", Intent.class, int.class));
+        //onDestroy
+        activityDescriptor.addGenerators(buildEventMethod("onDestroy"));
+        //onLowMemory
+        activityDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        //onRebind onRebind(android.content.Intent intent)
+        activityDescriptor.addGenerators(buildEventMethod("onRebind", Intent.class));
 
-                    onBind.body()._return(JExpr._null());
-                }
-            });
+        //todo: move this somewhere else
+        activityDescriptor.getComponentBuilders().add(new ComponentBuilder() {
+            @Override
+            public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
+                JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
+                onBind.param(Intent.class, "intent");
 
-
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("Unable to find Service onCreate method", e);
-        }
+                onBind.body()._return(JExpr._null());
+            }
+        });
     }
 
-    private MethodCallbackGenerator buildEventMethod(String name) throws NoSuchMethodException {
-        return buildEventMethod(name, name);
+    private MethodCallbackGenerator buildEventMethod(String name, Class... args) {
+        return buildEventMethod(name, name, args);
     }
 
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) throws NoSuchMethodException {
-        ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Service.class.getMethod(methodName));
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName, Class... args) {
+        ASTMethod method = getASTMethod(methodName, args);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
-                componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+                componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+    }
+
+    private ASTMethod getASTMethod(String methodName, Class... args){
+        return getASTMethod(android.app.Service.class, methodName, args);
+    }
+
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
+        try{
+            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
+        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {

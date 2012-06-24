@@ -1,36 +1,34 @@
 package org.androidtransfuse.integrationTest.fragments;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
+import org.androidtransfuse.annotations.Fragment;
+import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.OnActivityCreated;
+import org.androidtransfuse.annotations.OnCreate;
 import org.androidtransfuse.integrationTest.R;
 
-public class DetailFragment extends Fragment {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Log.e("Test", "hello");
+import javax.inject.Inject;
+
+@Fragment
+@Layout(R.layout.details)
+public class DetailFragment {
+
+    @Inject
+    private android.support.v4.app.Fragment fragment;
+
+	@OnCreate
+	public void onCreate() {
+		Log.i("fragments", "onCreate");
 	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.details, container, false);
-		return view;
+	@OnActivityCreated
+	public void onActivityCreated() {
+        Log.i("fragments", "onActivityCreated");
 	}
 
 	public void setText(String item) {
-		TextView view = (TextView) getView().findViewById(R.id.detailsText);
+		TextView view = (TextView) fragment.getView().findViewById(R.id.detailsText);
 		view.setText(item);
 	}
 }

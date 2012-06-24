@@ -84,37 +84,40 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType, AnalysisContext context) {
 
-        try {
-            ASTMethod onCreateASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onCreate"));
-            //onCreate
-            applicationDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        ASTMethod onCreateASTMethod = getASTMethod("onCreate");
+        //onCreate
+        applicationDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-            applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-            //onLowMemory
-            applicationDescriptor.addGenerators(buildEventMethod("onLowMemory"));
-            //onTerminate
-            applicationDescriptor.addGenerators(buildEventMethod("onTerminate"));
-            //onConfigurationChanged
-            ASTMethod onConfigurationChangedASTMethod = astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod("onConfigurationChanged", Configuration.class));
-            applicationDescriptor.addGenerators(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
-                            componentBuilderFactory.buildSimpleMethodGenerator(onConfigurationChangedASTMethod, true)));
-
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to build event method", e);
-        }
+        //onLowMemory
+        applicationDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        //onTerminate
+        applicationDescriptor.addGenerators(buildEventMethod("onTerminate"));
+        //onConfigurationChanged
+        ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", Configuration.class);
+        applicationDescriptor.addGenerators(
+                componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
+                        componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
     }
 
-    private MethodCallbackGenerator buildEventMethod(String name) throws NoSuchMethodException {
+    private MethodCallbackGenerator buildEventMethod(String name) {
         return buildEventMethod(name, name);
     }
 
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) throws NoSuchMethodException {
-        ASTMethod method = astClassFactory.buildASTClassMethod(android.app.Application.class.getMethod(methodName));
+    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
+        ASTMethod method = getASTMethod(methodName);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
-                componentBuilderFactory.buildSimpleMethodGenerator(method, true));
+                componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+    }
+
+    private ASTMethod getASTMethod(String methodName, Class... args){
+        try{
+            return astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod(methodName, args));
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
+        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {

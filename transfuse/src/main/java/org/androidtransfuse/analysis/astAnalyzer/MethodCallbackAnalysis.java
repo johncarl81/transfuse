@@ -35,6 +35,10 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
         methodAnnotations.put(OnReceive.class, "onReceive");
         //Service
         methodAnnotations.put(OnRebind.class, "onRebind");
+        //Fragment
+        methodAnnotations.put(OnActivityCreated.class, "onActivityCreated");
+        methodAnnotations.put(OnDestroyView.class, "onDestroyView");
+        methodAnnotations.put(OnDetach.class, "onDetach");
     }
 
     @Override
