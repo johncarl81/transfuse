@@ -1,5 +1,7 @@
 package org.androidtransfuse.integrationTest.aop;
 
+import android.content.Context;
+import android.widget.Toast;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -9,16 +11,24 @@ import javax.inject.Inject;
  * @author John Ericksen
  */
 public class InjectedInterceptor implements MethodInterceptor {
-    @Inject
-    private InterceptorDependency dependency;
 
+    private static final int ONE_SECOND = 1000;
+
+    @Inject
+    private Stopwatch stopwatch;
+    @Inject
+    private Context context;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        return invocation.proceed();
+        stopwatch.start();
+        Object retValue = invocation.proceed();
+        Toast.makeText(context, "Call took " + stopwatch.stop() + "ms and returned " + retValue, ONE_SECOND).show();
+
+        return retValue;
     }
 
-    public InterceptorDependency getDependency() {
-        return dependency;
+    public Stopwatch getStopwatch() {
+        return stopwatch;
     }
 }

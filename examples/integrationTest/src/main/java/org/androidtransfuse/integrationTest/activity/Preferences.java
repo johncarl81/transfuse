@@ -9,6 +9,8 @@ import org.androidtransfuse.integrationTest.R;
 import javax.inject.Inject;
 
 /**
+ * Tests registration of a Special Activity type, PreferenceActivity.
+ *
  * @author John Ericksen
  */
 @Activity(type = PreferenceActivity.class)

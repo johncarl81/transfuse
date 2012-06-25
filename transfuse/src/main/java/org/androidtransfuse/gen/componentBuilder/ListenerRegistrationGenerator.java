@@ -93,7 +93,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
 
             for (String listenerMethod : listenerRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod)
-                        .arg(invocationBuilder.buildFieldGet(listenerRegistration.getASTBase().getASTType().getName(), variableExpression.getExpression(), listenerRegistration.getASTBase().getName(), listenerRegistration.getASTBase().getAccessModifier(), 0));
+                        .arg(invocationBuilder.buildFieldGet(listenerRegistration.getASTBase().getASTType().getName(), variableExpression.getExpression(), listenerRegistration.getASTBase().getName(), listenerRegistration.getASTBase().getAccessModifier(), listenerRegistration.getLevel()));
             }
         }
     }

@@ -1,6 +1,8 @@
 package org.androidtransfuse.integrationTest.register;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.Toast;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.OnPause;
@@ -10,11 +12,15 @@ import org.androidtransfuse.integrationTest.R;
 import javax.inject.Inject;
 
 /**
+ * Tests listener registration of the View.On*Listener implementation to the appropriate view objects.
+ *
  * @author John Ericksen
  */
 @Activity
 @Layout(R.layout.button)
 public class Register {
+
+    private static final int ONE_SECOND = 1000;
 
     private boolean listener5Clicked = false;
 
@@ -32,12 +38,18 @@ public class Register {
     @Inject
     private TypeRegisterOnClickListener listener4;
 
+    @Inject
+    private Context context;
+
     @RegisterListener(value = R.id.button5)
     private View.OnClickListener listener5 = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             listener5Clicked = true;
+
+            Toast toast = Toast.makeText(context, "Method Registration", ONE_SECOND);
+            toast.show();
         }
     };
 

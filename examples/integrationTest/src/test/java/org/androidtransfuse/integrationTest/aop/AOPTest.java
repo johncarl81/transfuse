@@ -47,6 +47,6 @@ public class AOPTest {
 
     @Test
     public void testInterceptionDependency() {
-        assertNotNull(injectedInterceptor.getDependency());
+        assertNotNull(injectedInterceptor.getStopwatch());
     }
 }
