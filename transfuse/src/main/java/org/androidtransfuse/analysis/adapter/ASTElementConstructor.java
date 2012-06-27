@@ -13,11 +13,13 @@ public class ASTElementConstructor extends ASTElementBase implements ASTConstruc
 
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
+    private List<ASTType> throwsTypes;
 
-    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
         super(executableElement, annotations);
         this.parameters = parameters;
         this.modifier = modifier;
+        this.throwsTypes = throwsTypes;
     }
 
     @Override
@@ -27,5 +29,10 @@ public class ASTElementConstructor extends ASTElementBase implements ASTConstruc
 
     public ASTAccessModifier getAccessModifier() {
         return modifier;
+    }
+
+    @Override
+    public List<ASTType> getThrowsTypes() {
+        return throwsTypes;
     }
 }

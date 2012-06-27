@@ -38,6 +38,7 @@ public class InjectionPointFactory {
     public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {
 
         ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astConstructor.getAccessModifier());
+        constructorInjectionPoint.addThrows(astConstructor.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
         //bindingAnnotations for single parameter from method level
@@ -64,6 +65,7 @@ public class InjectionPointFactory {
     public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
 
         MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getAccessModifier(), astMethod.getName(), context.getSuperClassLevel());
+        methodInjectionPoint.addThrows(astMethod.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
         //bindingAnnotations for single parameter from method level

@@ -22,4 +22,11 @@ public interface ASTConstructor extends ASTBase {
      * @return
      */
     ASTAccessModifier getAccessModifier();
+
+    /**
+     * Supplies all throws associated with this method
+     *
+     * @return throw types
+     */
+    List<ASTType> getThrowsTypes();
 }

@@ -16,12 +16,14 @@ public class ASTClassConstructor implements ASTConstructor {
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
     private List<ASTAnnotation> annotations;
+    private List<ASTType> throwsTypes;
 
-    public ASTClassConstructor(List<ASTAnnotation> annotations, Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier) {
+    public ASTClassConstructor(List<ASTAnnotation> annotations, Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier, List<ASTType> throwsTypes) {
         this.annotations = annotations;
         this.constructor = constructor;
         this.parameters = parameters;
         this.modifier = modifier;
+        this.throwsTypes = throwsTypes;
     }
 
     @Override
@@ -52,6 +54,11 @@ public class ASTClassConstructor implements ASTConstructor {
     @Override
     public ASTAccessModifier getAccessModifier() {
         return modifier;
+    }
+
+    @Override
+    public List<ASTType> getThrowsTypes() {
+        return throwsTypes;
     }
 
     @Override

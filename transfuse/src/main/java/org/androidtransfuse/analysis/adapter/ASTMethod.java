@@ -29,4 +29,11 @@ public interface ASTMethod extends ASTBase {
      * @return method access modifier
      */
     ASTAccessModifier getAccessModifier();
+
+    /**
+     * Supplies all throws associated with this method
+     *
+     * @return throw types
+     */
+    List<ASTType> getThrowsTypes();
 }

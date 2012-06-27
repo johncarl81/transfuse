@@ -12,6 +12,7 @@ import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.util.TransfuseInjectionException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,6 +59,9 @@ public class InjectionPointFactoryTest {
             TypeVariable typeParameter = typeParameters[i];
             assertEquals(typeParameter.getName(), injectionNode.getClassName());
         }
+
+        assertEquals(1, constructorInjectionPoint.getThrowsTypes().size());
+        assertEquals(astClassFactory.buildASTClassType(TransfuseInjectionException.class), constructorInjectionPoint.getThrowsTypes().get(0));
     }
 
     @Test
@@ -78,6 +82,9 @@ public class InjectionPointFactoryTest {
             ASTParameter typeParameter = astParameters.get(i);
             assertEquals(typeParameter.getName(), injectionNode.getClassName());
         }
+
+        assertEquals(1, methodInjectionPoint.getThrowsTypes().size());
+        assertEquals(astClassFactory.buildASTClassType(TransfuseInjectionException.class), methodInjectionPoint.getThrowsTypes().get(0));
     }
 
     @Test

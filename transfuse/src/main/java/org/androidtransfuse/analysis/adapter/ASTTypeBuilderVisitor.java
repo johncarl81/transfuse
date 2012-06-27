@@ -14,10 +14,7 @@ import javax.lang.model.util.SimpleTypeVisitor6;
  */
 public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
-    @Inject
     private ASTElementFactory astElementFactory;
-    @Inject
-    private ASTFactory astFactory;
 
     @Override
     public ASTType visitPrimitive(PrimitiveType primitiveType, Void aVoid) {
@@ -26,7 +23,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitNull(NullType nullType, Void aVoid) {
-        return null;
+        throw new TransfuseAnalysisException("Encountered NullType, unable to recover");
     }
 
     @Override
@@ -36,13 +33,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitDeclared(DeclaredType declaredType, Void aVoid) {
-
-        ASTType astType = astElementFactory.buildASTElementType((TypeElement) declaredType.asElement());
-
-        if (declaredType.getTypeArguments().size() > 0) {
-            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder(declaredType));
-        }
-        return astType;
+        return astElementFactory.buildASTElementType(declaredType);
     }
 
     @Override
@@ -52,7 +43,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitTypeVariable(TypeVariable typeVariable, Void aVoid) {
-        return null;
+        throw new TransfuseAnalysisException("Encountered TypeVariable, unable to recover");
     }
 
     @Override
@@ -79,6 +70,11 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
 
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void aVoid) {
-        return null;
+        throw new TransfuseAnalysisException("Encountered unknown TypeMirror, unable to recover");
+    }
+
+    @Inject
+    public void setAstElementFactory(ASTElementFactory astElementFactory) {
+        this.astElementFactory = astElementFactory;
     }
 }

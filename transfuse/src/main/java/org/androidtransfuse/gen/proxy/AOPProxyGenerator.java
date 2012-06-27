@@ -25,9 +25,8 @@ import java.util.*;
 @Singleton
 public class AOPProxyGenerator {
 
-    private static final String INVOKE_METHOD = "invoke";
     private static final String SUPER_REF = "super";
-    private static final String GET_METHOD = "getMethod";
+    private static final String CLASS_GET_METHOD = "getMethod";
 
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
@@ -74,6 +73,12 @@ public class AOPProxyGenerator {
 
             //copy constructor elements and add aop interceptors
             JMethod constructor = definedClass.constructor(JMod.PUBLIC);
+
+            //converting exceptions into runtime exceptions
+            proxyConstructorInjectionPoint.addThrows(constructorInjectionPoint.getThrowsTypes());
+            for (ASTType throwType : constructorInjectionPoint.getThrowsTypes()) {
+                constructor._throws(codeModel.ref(throwType.getName()));
+            }
 
             JBlock constructorBody = constructor.body();
 
@@ -198,9 +203,9 @@ public class AOPProxyGenerator {
         JDefinedClass methodExecutionClass = codeModel.anonymousClass(MethodInterceptorChain.MethodExecution.class);
 
         //getMethod()
-        JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, GET_METHOD);
+        JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, MethodInterceptorChain.MethodExecution.GET_METHOD);
 
-        JInvocation getMethodInvocation = definedClass.dotclass().invoke(GET_METHOD).arg(method.getName());
+        JInvocation getMethodInvocation = definedClass.dotclass().invoke(CLASS_GET_METHOD).arg(method.getName());
         getMethod.body()._return(getMethodInvocation);
         getMethod._throws(NoSuchMethodException.class);
 
@@ -209,7 +214,12 @@ public class AOPProxyGenerator {
         }
 
         //invoke()
-        JMethod invokeMethod = methodExecutionClass.method(JMod.PUBLIC, Object.class, INVOKE_METHOD);
+        JMethod invokeMethod = methodExecutionClass.method(JMod.PUBLIC, Object.class, MethodInterceptorChain.MethodExecution.INVOKE);
+
+        //add all throws of contained method
+        for (ASTType throwable : method.getThrowsTypes()) {
+            invokeMethod._throws(codeModel.ref(throwable.getName()));
+        }
 
         JInvocation superCall = definedClass.staticRef(SUPER_REF).invoke(method.getName());
 

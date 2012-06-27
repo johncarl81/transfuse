@@ -5,6 +5,7 @@ import org.androidtransfuse.util.CollectionConverterUtil;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
 
@@ -25,7 +26,17 @@ public class ASTElementFactory {
     @Inject
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     @Inject
-    private ASTFactory astElementAnnotationFactory;
+    private ASTFactory astFactory;
+
+    public ASTType buildASTElementType(DeclaredType declaredType) {
+
+        ASTType astType = buildASTElementType((TypeElement) declaredType.asElement());
+
+        if (declaredType.getTypeArguments().size() > 0) {
+            return astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder(declaredType));
+        }
+        return astType;
+    }
 
     /**
      * Build a ASTType from the provided TypeElement.
@@ -112,8 +123,19 @@ public class ASTElementFactory {
 
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
+        List<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
-        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, buildAnnotations(executableElement));
+        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
+    }
+
+    private List<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
+        List<ASTType> types = new ArrayList<ASTType>();
+
+        for (TypeMirror mirrorType : mirrorTypes) {
+            types.add(mirrorType.accept(astTypeBuilderVisitor, null));
+        }
+
+        return types;
     }
 
     /**
@@ -161,7 +183,9 @@ public class ASTElementFactory {
     public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
         List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        return new ASTElementConstructor(executableElement, parameters, modifier, buildAnnotations(executableElement));
+        List<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
+
+        return new ASTElementConstructor(executableElement, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
     }
 
     private Collection<ASTAnnotation> buildAnnotations(Element element) {
@@ -170,7 +194,7 @@ public class ASTElementFactory {
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
             ASTType type = buildASTElementType((TypeElement) annotationMirror.getAnnotationType().asElement());
 
-            annotations.add(astElementAnnotationFactory.buildASTElementAnnotation(annotationMirror, type));
+            annotations.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
         }
 
         return annotations;

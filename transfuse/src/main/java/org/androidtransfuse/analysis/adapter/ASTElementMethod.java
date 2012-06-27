@@ -14,10 +14,12 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     private ASTTypeLazyLoader<ExecutableElement> astTypeLoader;
     private List<ASTParameter> parameters;
     private ASTAccessModifier modifier;
+    private List<ASTType> throwsTypes;
 
-    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
         super(executableElement, annotations);
         this.modifier = modifier;
+        this.throwsTypes = throwsTypes;
         this.astTypeLoader = new ASTMethodTypeLazyLoader(executableElement, astTypeBuilderVisitor);
         this.parameters = parameters;
     }
@@ -45,5 +47,10 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
     public ASTAccessModifier getAccessModifier() {
         return modifier;
+    }
+
+    @Override
+    public List<ASTType> getThrowsTypes() {
+        return throwsTypes;
     }
 }

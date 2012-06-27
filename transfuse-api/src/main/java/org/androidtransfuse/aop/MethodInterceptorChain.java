@@ -74,8 +74,12 @@ public class MethodInterceptorChain {
 
     public interface MethodExecution {
 
+        String GET_METHOD = "getMethod";
+
+        String INVOKE = "invoke";
+
         Method getMethod() throws Exception;
 
-        Object invoke();
+        Object invoke() throws Throwable;
     }
 } 

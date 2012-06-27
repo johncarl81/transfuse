@@ -141,8 +141,19 @@ public class ASTClassFactory {
 
         List<ASTParameter> astParameters = buildASTTypeParameters(method);
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(method.getModifiers());
+        List<ASTType> throwsTypes = buildASTClassTypes(method.getExceptionTypes());
 
-        return new ASTClassMethod(method, buildASTClassType(method.getReturnType(), method.getGenericReturnType()), astParameters, modifier, buildAnnotations(method));
+        return new ASTClassMethod(method, buildASTClassType(method.getReturnType(), method.getGenericReturnType()), astParameters, modifier, buildAnnotations(method), throwsTypes);
+    }
+
+    private List<ASTType> buildASTClassTypes(Class<?>[] inputClasses) {
+        List<ASTType> types = new ArrayList<ASTType>();
+
+        for (Class<?> inputClass : inputClasses) {
+            types.add(buildASTClassType(inputClass));
+        }
+
+        return types;
     }
 
     /**
@@ -167,8 +178,9 @@ public class ASTClassFactory {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
         List<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
+        List<ASTType> throwsTypes = buildASTClassTypes(constructor.getExceptionTypes());
 
-        return new ASTClassConstructor(buildAnnotations(constructor), constructor, constructorParameters, modifier);
+        return new ASTClassConstructor(buildAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);
     }
 
     private List<ASTAnnotation> buildAnnotations(AnnotatedElement element) {

@@ -23,7 +23,11 @@ public class AOP {
     public View.OnClickListener aopclick1 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            interceptorWithDependency();
+            try {
+                interceptorWithDependency();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -45,12 +49,8 @@ public class AOP {
     }
 
     @DependencyInterceptor
-    public String interceptorWithDependency() {
-        try {
-            Thread.sleep(ONE_SECOND);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public String interceptorWithDependency() throws InterruptedException {
+        Thread.sleep(ONE_SECOND);
 
         return "@DependencyInterceptor";
     }

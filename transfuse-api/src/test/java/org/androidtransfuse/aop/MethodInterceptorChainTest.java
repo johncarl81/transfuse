@@ -10,8 +10,7 @@ import org.mockito.stubbing.Answer;
 
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +25,7 @@ public class MethodInterceptorChainTest {
     private Object proxy;
 
     @Before
-    public void setup(){
+    public void setup() {
         proxy = new Object();
     }
 
@@ -35,7 +34,7 @@ public class MethodInterceptorChainTest {
 
         MethodInterceptor[] interceptors = new MethodInterceptor[INTERCEPTOR_SIZE];
 
-        for(int i = 0; i < INTERCEPTOR_SIZE; i++){
+        for (int i = 0; i < INTERCEPTOR_SIZE; i++) {
             interceptors[i] = mock(MethodInterceptor.class);
 
             //mock chain of invocations
@@ -71,7 +70,7 @@ public class MethodInterceptorChainTest {
 
         when(methodExecution.getMethod()).thenReturn(mockMethod);
 
-        MethodInterceptorChain interceptorChain = new MethodInterceptorChain(methodExecution, proxy, new MethodInterceptor(){
+        MethodInterceptorChain interceptorChain = new MethodInterceptorChain(methodExecution, proxy, new MethodInterceptor() {
 
             @Override
             public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -88,7 +87,15 @@ public class MethodInterceptorChainTest {
         verify(methodExecution, times(2)).getMethod();
     }
 
-    public void targetMethod(){
+    public void targetMethod() {
         //used to avoid mocking issues
+    }
+
+    @Test
+    public void verifyMethodNames() throws NoSuchMethodException {
+        Method getMethod = MethodInterceptorChain.MethodExecution.class.getMethod(MethodInterceptorChain.MethodExecution.GET_METHOD);
+        assertNotNull(getMethod);
+        Method invokeMethod = MethodInterceptorChain.MethodExecution.class.getMethod(MethodInterceptorChain.MethodExecution.INVOKE);
+        assertNotNull(invokeMethod);
     }
 }
