@@ -69,7 +69,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
 
-            System.out.println("Constructor throws size: " + injectionAspect.getConstructorInjectionPoint().getThrowsTypes().size());
             //constructor injection
             wrapExceptionHandling(block,
                     injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
