@@ -3,6 +3,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
@@ -51,14 +52,20 @@ public class VariableInjectionBuilder implements VariableBuilder {
         try {
 
             //AOP proxy (if applicable).  This method will return the injectionNode (without proxying) if no AOPProxyAspect exists
-            InjectionNode proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
+            InjectionNode proxyableInjectionNode = injectionNode;
+            if (injectionNode.containsAspect(AOPProxyAspect.class)) {
+                proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
+            }
 
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, proxyableInjectionNode);
 
             final JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
 
             final ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
-            if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
+            if (injectionAspect == null) {
+                System.out.println("Injection node not mapped: " + proxyableInjectionNode.getClassName());
+                throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
+            } else if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
                 variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode));
             } else {
                 variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode));

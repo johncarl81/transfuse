@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTBase;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.util.List;
@@ -11,11 +12,11 @@ import java.util.List;
 public class ListenerRegistration<T extends ASTBase> {
 
     private InjectionNode viewInjectionNode;
-    private List<String> methods;
+    private List<ASTMethod> methods;
     private T astBase;
     private int level;
 
-    public ListenerRegistration(InjectionNode viewInjectionNode, List<String> methods, T astBase, int level) {
+    public ListenerRegistration(InjectionNode viewInjectionNode, List<ASTMethod> methods, T astBase, int level) {
         this.viewInjectionNode = viewInjectionNode;
         this.methods = methods;
         this.astBase = astBase;
@@ -26,7 +27,7 @@ public class ListenerRegistration<T extends ASTBase> {
         return viewInjectionNode;
     }
 
-    public List<String> getMethods() {
+    public List<ASTMethod> getMethods() {
         return methods;
     }
 
@@ -34,7 +35,7 @@ public class ListenerRegistration<T extends ASTBase> {
         return astBase;
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 }

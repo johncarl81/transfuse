@@ -1,5 +1,6 @@
 package org.androidtransfuse.integrationTest.aop;
 
+import android.util.Log;
 import android.view.View;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
@@ -20,19 +21,19 @@ public class AOP {
     public static final String INTERCEPT_VALUE = "interception";
 
     @RegisterListener(R.id.aopbutton1)
-    public View.OnClickListener aopclick1 = new View.OnClickListener() {
+    private View.OnClickListener aopclick1 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
                 interceptorWithDependency();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("error", "InterruptedException while invoking interceptorWithDepenency()", e);
             }
         }
     };
 
     @RegisterListener(R.id.aopbutton2)
-    public View.OnClickListener aopclick2 = new View.OnClickListener() {
+    private View.OnClickListener aopclick2 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             interceptMeWithReturn();

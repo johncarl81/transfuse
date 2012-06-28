@@ -25,7 +25,7 @@ public class InjectionBindingBuilder {
         this.astClassFactory = astClassFactory;
     }
 
-    public DependencyBindingBuilder dependency(Class clazz){
+    public DependencyBindingBuilder dependency(Class clazz) {
         return new DependencyBindingBuilder(clazz);
     }
 
@@ -48,7 +48,7 @@ public class InjectionBindingBuilder {
                 variableInjectionBuilderFactory.buildExpressionWrapper(typedExpression));
     }
 
-    public class StaticInvocationBindingBuilder{
+    public final class StaticInvocationBindingBuilder {
 
         private Class invocationTarget;
         private Class returnType;
@@ -65,7 +65,7 @@ public class InjectionBindingBuilder {
         }
     }
 
-    public class StaticInvocationBindingBuilderArgument{
+    public final class StaticInvocationBindingBuilderArgument {
 
         private StaticInvocationBindingBuilder parent;
         private Class dependency;
@@ -75,7 +75,7 @@ public class InjectionBindingBuilder {
             this.dependency = dependency;
         }
 
-        public InjectionNodeBuilder build(){
+        public InjectionNodeBuilder build() {
             return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
                     dependency,
                     parent.returnType,
@@ -83,7 +83,7 @@ public class InjectionBindingBuilder {
         }
     }
 
-    public class DependencyBindingBuilder{
+    public final class DependencyBindingBuilder {
 
         private Class clazz;
 
@@ -91,7 +91,7 @@ public class InjectionBindingBuilder {
             this.clazz = clazz;
         }
 
-        public DepenentVariableBuilderWrapper invoke(Class returnType, DependentVariableBuilder dependentVariableBuilder){
+        public DepenentVariableBuilderWrapper invoke(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
             return new DepenentVariableBuilderWrapper(returnType, dependentVariableBuilder);
         }
 
@@ -99,7 +99,7 @@ public class InjectionBindingBuilder {
             return new DependencyArgumentBindingBuilder(clazz, returnType, methodName);
         }
 
-        public class DependencyArgumentBindingBuilder{
+        public final class DependencyArgumentBindingBuilder {
 
             private Class clazz;
             private Class returnType;
@@ -112,12 +112,12 @@ public class InjectionBindingBuilder {
                 this.methodName = methodName;
             }
 
-            public DependencyArgumentBindingBuilder arg(String value){
+            public DependencyArgumentBindingBuilder arg(String value) {
                 arguments.add(value);
                 return this;
             }
 
-            public InjectionNodeBuilder build(){
+            public InjectionNodeBuilder build() {
                 return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
                         clazz,
                         returnType,
@@ -125,7 +125,7 @@ public class InjectionBindingBuilder {
             }
         }
 
-        public class DepenentVariableBuilderWrapper{
+        public final class DepenentVariableBuilderWrapper {
             private DependentVariableBuilder dependentVariableBuilder;
             private Class returnType;
 
@@ -134,7 +134,7 @@ public class InjectionBindingBuilder {
                 this.dependentVariableBuilder = dependentVariableBuilder;
             }
 
-            public InjectionNodeBuilder build(){
+            public InjectionNodeBuilder build() {
                 return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
                         clazz,
                         returnType,

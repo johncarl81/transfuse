@@ -14,7 +14,7 @@ public class InterceptorRecorder implements MethodInterceptor {
 
     private static final int ONE_SECOND = 1000;
 
-    private static Object retValue = null;
+    private static Object storedValue = null;
     private static boolean called;
     @Inject
     private Context context;
@@ -28,21 +28,21 @@ public class InterceptorRecorder implements MethodInterceptor {
     }
 
     private static Object update(Object value) {
-        retValue = value;
+        storedValue = value;
         called = true;
-        return retValue;
+        return storedValue;
     }
 
     public static boolean isCalled() {
         return called;
     }
 
-    public static Object getRetValue() {
-        return retValue;
+    public static Object getValue() {
+        return storedValue;
     }
 
     public static void reset() {
-        retValue = null;
+        storedValue = null;
         called = false;
     }
 }

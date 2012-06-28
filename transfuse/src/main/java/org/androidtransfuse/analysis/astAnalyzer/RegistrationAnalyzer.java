@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class RegistrationAnalyzer implements ASTAnalysis {
 
-    private Map<ASTType, String> listenerMethods = new HashMap<ASTType, String>();
+    private Map<ASTType, ASTMethod> listenerMethods = new HashMap<ASTType, ASTMethod>();
     private ASTClassFactory astClassFactory;
     private Analyzer analyzer;
     private JCodeModel codeModel;
@@ -33,18 +33,26 @@ public class RegistrationAnalyzer implements ASTAnalysis {
                                 ASTClassFactory astClassFactory,
                                 JCodeModel codeModel,
                                 VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                InjectionPointFactory injectionPointFactory) {
+                                InjectionPointFactory injectionPointFactory) throws NoSuchMethodException {
         this.analyzer = analyzer;
         this.astClassFactory = astClassFactory;
         this.codeModel = codeModel;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnClickListener.class), "setOnClickListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnLongClickListener.class), "setOnLongClickListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnCreateContextMenuListener.class), "setOnCreateContextMenuListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnKeyListener.class), "setOnKeyListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnTouchListener.class), "setOnTouchListener");
-        listenerMethods.put(astClassFactory.buildASTClassType(View.OnFocusChangeListener.class), "setOnFocusChangeListener");
+        addListenerMethod("setOnClickListener", View.OnClickListener.class);
+        addListenerMethod("setOnLongClickListener", View.OnLongClickListener.class);
+        addListenerMethod("setOnCreateContextMenuListener", View.OnCreateContextMenuListener.class);
+        addListenerMethod("setOnKeyListener", View.OnKeyListener.class);
+        addListenerMethod("setOnTouchListener", View.OnTouchListener.class);
+        addListenerMethod("setOnFocusChangeListener", View.OnFocusChangeListener.class);
+    }
+
+    private void addListenerMethod(String listenerMethod, Class<?> listenerClass) throws NoSuchMethodException {
+        ASTType listenerType = astClassFactory.buildASTClassType(listenerClass);
+
+        ASTMethod method = astClassFactory.buildASTClassMethod(View.class.getMethod(listenerMethod, listenerClass));
+
+        listenerMethods.put(listenerType, method);
     }
 
     @Override
@@ -61,7 +69,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods, int level) {
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
 
             registrationAspect.addTypeRegistration(new ListenerRegistration<ASTType>(viewInjectionNode, methods, astType, level));
         }
@@ -81,7 +89,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods, int level) {
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
 
             registrationAspect.addMethodRegistration(new ListenerRegistration<ASTMethod>(viewInjectionNode, methods, astMethod, level));
         }
@@ -101,7 +109,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods, int level) {
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
 
             registrationAspect.addFieldRegistration(new ListenerRegistration<ASTField>(viewInjectionNode, methods, astField, level));
         }
@@ -122,7 +130,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
             InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, viewTag, context);
 
-            List<String> methods = buildListenerMethods(astType, interfaceList);
+            List<ASTMethod> methods = buildListenerMethods(astType, interfaceList);
 
 
             if (!methods.isEmpty()) {
@@ -135,15 +143,15 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private interface ListenerRegistrationFactory<T> {
 
-        void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<String> methods, int level);
+        void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level);
     }
 
-    private List<String> buildListenerMethods(ASTType astType, List<ASTType> interfaceList) {
+    private List<ASTMethod> buildListenerMethods(ASTType astType, List<ASTType> interfaceList) {
 
-        List<String> methods = new ArrayList<String>();
+        List<ASTMethod> methods = new ArrayList<ASTMethod>();
 
 
-        for (Map.Entry<ASTType, String> classStringEntry : listenerMethods.entrySet()) {
+        for (Map.Entry<ASTType, ASTMethod> classStringEntry : listenerMethods.entrySet()) {
             if ((interfaceList.isEmpty() || interfaceList.contains(classStringEntry.getKey()))
                     && astType.inheritsFrom(classStringEntry.getKey())) {
                 methods.add(classStringEntry.getValue());

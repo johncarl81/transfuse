@@ -30,19 +30,19 @@ public class AOPTest {
     @Test
     public void testNoReturnInterception() {
         assertFalse(InterceptorRecorder.isCalled());
-        assertNull(InterceptorRecorder.getRetValue());
+        assertNull(InterceptorRecorder.getValue());
         aop.interceptMe();
         assertTrue(InterceptorRecorder.isCalled());
-        assertNull(InterceptorRecorder.getRetValue());
+        assertNull(InterceptorRecorder.getValue());
     }
 
     @Test
     public void testReturnInterception() {
         assertFalse(InterceptorRecorder.isCalled());
-        assertNull(InterceptorRecorder.getRetValue());
+        assertNull(InterceptorRecorder.getValue());
         aop.interceptMeWithReturn();
         assertTrue(InterceptorRecorder.isCalled());
-        assertEquals(AOP.INTERCEPT_VALUE, InterceptorRecorder.getRetValue());
+        assertEquals(AOP.INTERCEPT_VALUE, InterceptorRecorder.getValue());
     }
 
     @Test
