@@ -11,16 +11,16 @@ import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * Tests listener registration of the View.On*Listener implementation to the appropriate view objects.
  *
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "Listener Registration")
 @Layout(R.layout.button)
 public class Register {
-
-    private static final int ONE_SECOND = 1000;
 
     private boolean listener5Clicked = false;
 

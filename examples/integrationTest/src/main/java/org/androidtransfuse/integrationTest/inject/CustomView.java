@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "CustomView")
 @Layout(R.layout.customview)
 public class CustomView {
 

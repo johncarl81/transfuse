@@ -13,7 +13,7 @@ import javax.inject.Inject;
  *
  * @author John Ericksen
  */
-@Activity(type = PreferenceActivity.class)
+@Activity(type = PreferenceActivity.class, label = "Preferences")
 public class Preferences {
 
     @Inject

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "Preference Injection")
 @Layout(R.layout.preferenceinjection)
 public class PreferenceInjection {
 

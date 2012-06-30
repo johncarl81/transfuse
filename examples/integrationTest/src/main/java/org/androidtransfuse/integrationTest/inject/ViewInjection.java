@@ -12,7 +12,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "View Injection")
 @Layout(R.layout.viewinjection)
 public class ViewInjection {
 

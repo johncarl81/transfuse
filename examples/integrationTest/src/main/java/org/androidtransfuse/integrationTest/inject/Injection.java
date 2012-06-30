@@ -11,7 +11,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-@Activity(name = "InjectionActivity")
+@Activity(name = "InjectionActivity", label = "Injection")
 @Layout(R.layout.main)
 public class Injection {
 

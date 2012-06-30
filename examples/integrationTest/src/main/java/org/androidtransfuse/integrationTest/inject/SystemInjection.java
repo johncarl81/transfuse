@@ -1,23 +1,31 @@
 package org.androidtransfuse.integrationTest.inject;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Vibrator;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnPause;
-import org.androidtransfuse.annotations.SystemService;
+import android.view.View;
+import android.widget.Toast;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.intentFactory.IntentFactory;
 
 import javax.inject.Inject;
+
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
 
 /**
  * @author John Ericksen
  */
-@Activity(name = "SystemInjectionActivity")
-@Layout(R.layout.main)
+@Activity(name = "SystemInjectionActivity", label = "System Services")
+@Layout(R.layout.system)
 public class SystemInjection {
+
+    private static final int NOTIFICATION_ID = 42;
 
     private Vibrator vibrator;
 
@@ -34,9 +42,63 @@ public class SystemInjection {
     @Inject
     private Application application;
 
+    @Inject
+    private IntentFactory intentFactory;
+
+    @Inject
+    private LocationToaster locationToaster;
+
     public Vibrator getVibrator() {
         return vibrator;
     }
+
+    @RegisterListener(R.id.vibratebutton)
+    private View.OnClickListener vibrateOnClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            vibrator.vibrate(ONE_SECOND);
+        }
+    };
+
+    @RegisterListener(R.id.notificationbutton)
+    private View.OnClickListener notificationOnClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Notification notification = new Notification(R.drawable.icon, "Hello", System.currentTimeMillis());
+
+            //setup return from notification
+            android.content.Intent notificationIntent = intentFactory.buildIntent(new SystemInjectionActivityStrategy());
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+
+            notification.setLatestEventInfo(context, "Simple Service", "Notification", contentIntent);
+
+
+            ((NotificationManager)notificationService).notify("test notification", NOTIFICATION_ID, notification);
+        }
+    };
+
+    @RegisterListener(R.id.locationbutton)
+    private View.OnClickListener locationOnClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            criteria.setCostAllowed(false);
+
+            String providerName = locationManager.getBestProvider(criteria, true);
+
+            String results;
+            if (providerName != null) {
+                locationManager.requestLocationUpdates(providerName,
+                        10000,          // 10-second interval.
+                        10,             // 10 meters.
+                        locationToaster);
+            }
+            else{
+                Toast.makeText(context, "Could not find location provider", ONE_SECOND).show();
+            }
+        }
+    };
 
     @OnPause
     public void keepInActivity() {

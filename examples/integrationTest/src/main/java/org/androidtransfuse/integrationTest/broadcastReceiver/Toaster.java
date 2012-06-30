@@ -9,6 +9,8 @@ import org.androidtransfuse.annotations.OnReceive;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * @author John Ericksen
  */
@@ -17,7 +19,6 @@ import javax.inject.Inject;
 public class Toaster {
 
     public static final String INTENT = "Toaster";
-    private static final int ONE_SECOND = 1000;
 
     private static boolean onReceive = false;
 
@@ -26,7 +27,7 @@ public class Toaster {
 
     @OnReceive
     public void onReceive() {
-        Toast.makeText(context, "Toast", ONE_SECOND).show();
+        Toast.makeText(context, "Broadcast Received", ONE_SECOND).show();
         onReceiveCalled();
     }
 

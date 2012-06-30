@@ -7,7 +7,7 @@ import org.androidtransfuse.annotations.OnPause;
 /**
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "Variable Layout")
 @LayoutHandler(VariableLayoutHandler.class)
 public class VariableLayout {
 

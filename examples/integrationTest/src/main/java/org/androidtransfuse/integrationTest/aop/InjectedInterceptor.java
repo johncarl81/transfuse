@@ -7,12 +7,12 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * @author John Ericksen
  */
 public class InjectedInterceptor implements MethodInterceptor {
-
-    private static final int ONE_SECOND = 1000;
 
     @Inject
     private Stopwatch stopwatch;

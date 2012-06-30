@@ -7,7 +7,7 @@ import org.androidtransfuse.integrationTest.R;
 /**
  * @author John Ericksen
  */
-@Activity(name = "ActivityLifecycleActivity")
+@Activity(name = "ActivityLifecycleActivity", label = "Activity Lifecycle")
 @Layout(R.layout.main)
 public class ActivityLifecycle {
 

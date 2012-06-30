@@ -53,7 +53,7 @@ public class Main {
                 createLI(InjectionActivity.class, "Injection"),
                 createLI(ResourceInjectionActivity.class, "Resources"),
                 createLI(SystemInjectionActivity.class, "System Services"),
-                createLI(ActivityLifecycleActivity.class, "Lifecycle"),
+                createLI(ActivityLifecycleActivity.class, "Activity Lifecycle"),
                 createLI(ScopeOneActivity.class, "Scope One"),
                 createLI(ScopeTwoActivity.class, "Scope Two"),
                 createLI(NotManagedActivity.class, "Not Managed"),

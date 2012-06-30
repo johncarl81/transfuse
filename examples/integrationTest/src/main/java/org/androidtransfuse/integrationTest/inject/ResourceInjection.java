@@ -11,7 +11,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity(name = "ResourceInjectionActivity")
+@Activity(name = "ResourceInjectionActivity", label = "Resources")
 @Layout(R.layout.main)
 public class ResourceInjection {
 

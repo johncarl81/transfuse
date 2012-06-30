@@ -8,16 +8,17 @@ import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.integrationTest.R;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * Tests the Aspect Oriented Programming Method Interceptor.
  *
  * @author John Ericksen
  */
-@Activity(name = "AOPActivity")
+@Activity(name = "AOPActivity", label = "AOP")
 @Layout(R.layout.aop)
 public class AOP {
 
-    private static final int ONE_SECOND = 1000;
     public static final String INTERCEPT_VALUE = "interception";
 
     @RegisterListener(R.id.aopbutton1)

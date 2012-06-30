@@ -6,12 +6,12 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * @author John Ericksen
  */
 public class RegisterOnClickListener implements View.OnClickListener, View.OnLongClickListener {
-
-    private static final int ONE_SECOND = 1000;
 
     @Inject
     private Context context;

@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "Broadcast Receiver")
 @Layout(R.layout.toasttrigger)
 public class ToastTrigger {
 

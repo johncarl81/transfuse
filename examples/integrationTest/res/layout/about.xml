@@ -2,14 +2,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:layout_gravity="center"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+              android:layout_height="wrap_content">
     <TextView android:layout_height="wrap_content"
               android:layout_width="fill_parent"
               android:text="@string/transfuse_title"
-              android:textStyle="bold"
               android:gravity="center"
-              android:textSize="20dp"/>
+              android:textSize="26dp"/>
     <ImageView android:src="@drawable/icon"
                android:layout_height="wrap_content"
                android:layout_width="fill_parent"

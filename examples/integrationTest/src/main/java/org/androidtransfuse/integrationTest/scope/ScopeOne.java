@@ -10,7 +10,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity(name = "ScopeOneActivity")
+@Activity(name = "ScopeOneActivity", label = "Scope One")
 @Layout(R.layout.scoped)
 public class ScopeOne {
 

@@ -10,7 +10,7 @@ import org.androidtransfuse.integrationTest.R;
  *
  * @author John Ericksen
  */
-@Activity
+@Activity(label = "Manifest Managed")
 public class ManifestManagedActivity extends android.app.Activity {
 
     private static final String MANAGED_TEXT = "This Activity's Manifest entry is added automatically";

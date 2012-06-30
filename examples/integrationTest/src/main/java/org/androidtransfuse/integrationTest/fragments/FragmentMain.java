@@ -5,7 +5,7 @@ import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.integrationTest.R;
 
-@Activity(type = FragmentActivity.class)
+@Activity(type = FragmentActivity.class, label = "Fragments")
 @Layout(R.layout.mainfragment)
 public class FragmentMain {
 }

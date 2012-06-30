@@ -7,12 +7,12 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
+
 /**
  * @author John Ericksen
  */
 public class InterceptorRecorder implements MethodInterceptor {
-
-    private static final int ONE_SECOND = 1000;
 
     private static Object storedValue = null;
     private static boolean called;
