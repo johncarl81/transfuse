@@ -46,4 +46,9 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
             throw new TransfuseAnalysisException("NoSuchMethodException while looking up onReceive method", e);
         }
     }
+
+    @Override
+    public void closeMethod(MethodDescriptor descriptor) {
+        //no close necessary
+    }
 }

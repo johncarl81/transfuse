@@ -1,4 +1,5 @@
 package org.androidtransfuse.analysis;
+
 import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
@@ -7,20 +8,21 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Fragment;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.LayoutBuilder;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
@@ -34,7 +36,7 @@ import javax.lang.model.type.TypeMirror;
 /**
  * @author John Ericksen
  */
-public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
+public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTClassFactory astClassFactory;
     private TypeMirrorUtil typeMirrorUtil;
@@ -44,6 +46,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private ComponentBuilderFactory componentBuilderFactory;
+    private BindingRepositoryFactory bindingRepositoryFactory;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -51,7 +54,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
                             AnalysisContextFactory analysisContextFactory,
                             InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                             InjectionBindingBuilder injectionBindinBuilder,
-                            ASTTypeBuilderVisitor astTypeBuilderVisitor, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, ComponentBuilderFactory componentBuilderFactory) {
+                            ASTTypeBuilderVisitor astTypeBuilderVisitor, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, ComponentBuilderFactory componentBuilderFactory, BindingRepositoryFactory bindingRepositoryFactory) {
         this.astClassFactory = astClassFactory;
         this.typeMirrorUtil = typeMirrorUtil;
         this.analysisContextFactory = analysisContextFactory;
@@ -60,6 +63,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.bindingRepositoryFactory = bindingRepositoryFactory;
     }
 
     @Override
@@ -77,8 +81,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
 
             TypeMirror type = typeMirrorUtil.getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
 
-            ASTType fragmentType = type == null? astClassFactory.buildASTClassType(android.support.v4.app.Fragment.class)
-                                               : type.accept(astTypeBuilderVisitor, null);
+            ASTType fragmentType = type == null ? astClassFactory.buildASTClassType(android.support.v4.app.Fragment.class)
+                    : type.accept(astTypeBuilderVisitor, null);
 
 
             Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
@@ -98,17 +102,9 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
 
     private void setupFragmentProfile(ComponentDescriptor fragmentDescriptor, ASTType astType, ASTType fragmentType, AnalysisContext context, Integer layout) {
 
-        LayoutBuilder layoutBuilder;
-        if(layout == null){
-            layoutBuilder = new NoOpLayoutBuilder();
-        }
-        else{
-            layoutBuilder = componentBuilderFactory.buildFragmentSimpleLayoutBuilder(layout);
-        }
+        ASTMethod onCreateViewMethod = getASTMethod("onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
 
-        //onCreate
-        ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
-        fragmentDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
+        fragmentDescriptor.setMethodBuilder(componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
 
         fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
@@ -134,7 +130,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
         //onConfigurationChanged
         fragmentDescriptor.addGenerators(buildEventMethod("onConfigurationChanged", "onConfigurationChanged", Configuration.class));
 
-        if(fragmentType.extendsFrom(astClassFactory.buildASTClassType(ListFragment.class))){
+        if (fragmentType.extendsFrom(astClassFactory.buildASTClassType(ListFragment.class))) {
             ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE);
             fragmentDescriptor.addGenerators(
                     componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
@@ -154,13 +150,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
         return componentBuilderFactory.buildMethodCallbackGenerator(eventName, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args){
+    private ASTMethod getASTMethod(String methodName, Class... args) {
         return getASTMethod(android.support.v4.app.Fragment.class, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
-        try{
-           return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
+        try {
+            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
         }
@@ -178,6 +174,10 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor>{
             ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);
             injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
         }
+
+        bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);
+        //bind views
+        bindingRepositoryFactory.addFragmentViewBindingAnnotation(injectionNodeBuilderRepository);
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 

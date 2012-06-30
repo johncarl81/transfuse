@@ -233,12 +233,12 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args){
+    private ASTMethod getASTMethod(String methodName, Class... args) {
         return getASTMethod(android.app.Activity.class, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
-        try{
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
+        try {
             return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
@@ -257,6 +257,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);
+        bindingRepositoryFactory.addViewBindingAnnotation(injectionNodeBuilderRepository);
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 

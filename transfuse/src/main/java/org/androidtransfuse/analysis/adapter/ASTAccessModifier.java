@@ -3,8 +3,6 @@ package org.androidtransfuse.analysis.adapter;
 import com.sun.codemodel.JMod;
 
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Enumeration of available access modifiers, associated with codeModel modifier types
@@ -13,21 +11,33 @@ import java.util.Map;
  */
 public enum ASTAccessModifier {
 
-    PUBLIC(JMod.PUBLIC, Modifier.PUBLIC),
-    PROTECTED(JMod.PROTECTED, Modifier.PROTECTED),
-    PACKAGE_PRIVATE(JMod.NONE, 0),
-    PRIVATE(JMod.PRIVATE, Modifier.PRIVATE);
+    PUBLIC(JMod.PUBLIC, Modifier.PUBLIC) {
+        @Override
+        public boolean isModifier(int modifier) {
+            return Modifier.isPublic(modifier);
+        }
+    },
+    PROTECTED(JMod.PROTECTED, Modifier.PROTECTED) {
+        @Override
+        public boolean isModifier(int modifier) {
+            return Modifier.isProtected(modifier);
+        }
+    },
+    PACKAGE_PRIVATE(JMod.NONE, 0) {
+        @Override
+        public boolean isModifier(int modifier) {
+            return false;
+        }
+    },
+    PRIVATE(JMod.PRIVATE, Modifier.PRIVATE) {
+        @Override
+        public boolean isModifier(int modifier) {
+            return Modifier.isPrivate(modifier);
+        }
+    };
 
     private int codeModelJMod;
     private int javaModifier;
-
-    private static Map<Integer, ASTAccessModifier> modifierMap = new HashMap<Integer, ASTAccessModifier>();
-
-    static {
-        for (ASTAccessModifier astAccessModifier : values()) {
-            modifierMap.put(astAccessModifier.getJavaModifier(), astAccessModifier);
-        }
-    }
 
     private ASTAccessModifier(int codeModelJMod, int javaModifier) {
         this.codeModelJMod = codeModelJMod;
@@ -43,6 +53,13 @@ public enum ASTAccessModifier {
     }
 
     public static ASTAccessModifier getModifier(int modifier) {
-        return modifierMap.get(modifier);
+        for (ASTAccessModifier astAccessModifier : values()) {
+            if (astAccessModifier.isModifier(modifier)) {
+                return astAccessModifier;
+            }
+        }
+        return PACKAGE_PRIVATE;
     }
+
+    public abstract boolean isModifier(int modifier);
 }

@@ -54,4 +54,9 @@ public class OnCreateMethodBuilder implements MethodBuilder {
 
         return onCreateMethodDescriptor;
     }
+
+    @Override
+    public void closeMethod(MethodDescriptor descriptor) {
+        //no close necessary
+    }
 }

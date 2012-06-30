@@ -25,6 +25,8 @@ public interface ComponentBuilderFactory {
 
     FragmentSimpleLayoutBuilder buildFragmentSimpleLayoutBuilder(Integer layout);
 
+    FragmentOnCreateViewMethodBuilder buildFragmentMethodBuilder(Integer layout, ASTMethod method);
+
     OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
 
     BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);

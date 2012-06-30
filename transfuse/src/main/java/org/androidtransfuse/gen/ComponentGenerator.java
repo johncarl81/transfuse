@@ -32,7 +32,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
     }
 
     public void generate(ComponentDescriptor descriptor) {
-        if(descriptor == null){
+        if (descriptor == null) {
             return;
         }
 
@@ -65,6 +65,8 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
             for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
                 componentBuilder.build(definedClass, descriptor);
             }
+
+            descriptor.getMethodBuilder().closeMethod(onCreateMethodDescriptor);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {

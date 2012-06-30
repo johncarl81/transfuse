@@ -1,5 +1,7 @@
 package org.androidtransfuse.integrationTest.fragments;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 import org.androidtransfuse.annotations.*;
@@ -19,10 +21,14 @@ public class Detail {
     @View(R.id.detailsText)
     private TextView view;
 
+    @Inject
+    private Resources resources;
+
     @OnCreate
-	protected void onCreate() {
-		if (value != null) {
-			view.setText(value);
-		}
-	}
+    protected void onCreate() {
+        if (resources.getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
+                value != null) {
+            view.setText(value);
+        }
+    }
 }

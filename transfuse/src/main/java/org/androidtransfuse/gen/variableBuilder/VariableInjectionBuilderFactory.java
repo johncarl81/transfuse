@@ -46,4 +46,6 @@ public interface VariableInjectionBuilderFactory {
     IndependentVariableBuilderWrapper buildIndependentVariableBuilderWrapper(ASTType astType, JExpression expression);
 
     ExpressionVariableBuilderWrapper buildExpressionWrapper(TypedExpression typedExpression);
+
+    FragmentViewVariableBuilder buildFragmentViewVariableBuilder(Integer viewId, String viewTag, InjectionNode fragmentInjectionNode, JType jType);
 }

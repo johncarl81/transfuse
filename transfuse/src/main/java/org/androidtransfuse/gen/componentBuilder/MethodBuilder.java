@@ -9,4 +9,6 @@ public interface MethodBuilder {
 
     MethodDescriptor buildMethod(JDefinedClass definedClass);
 
+    void closeMethod(MethodDescriptor descriptor);
+
 }
