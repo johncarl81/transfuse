@@ -12,6 +12,9 @@ import org.androidtransfuse.integrationTest.inject.InjectTargetProvider;
 import org.androidtransfuse.integrationTest.inject.LoopThree;
 import org.androidtransfuse.integrationTest.inject.LoopThreeImpl;
 import org.androidtransfuse.integrationTest.inject.ProvidedInjectTarget;
+import org.androidtransfuse.integrationTest.layout.RandomProvider;
+
+import java.util.Random;
 
 /**
  * @author John Ericksen
@@ -30,4 +33,7 @@ public interface IntegrationModule {
 
     @BindProvider(InjectTargetProvider.class)
     ProvidedInjectTarget getInjectTarget();
+
+    @BindProvider(RandomProvider.class)
+    Random getRandom();
 }

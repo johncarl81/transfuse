@@ -64,16 +64,14 @@ public class SystemInjection {
     private View.OnClickListener notificationOnClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            Notification notification = new Notification(R.drawable.icon, "Hello", System.currentTimeMillis());
+            Notification notification = new Notification(R.drawable.icon, "Notification", System.currentTimeMillis());
 
             //setup return from notification
-            android.content.Intent notificationIntent = intentFactory.buildIntent(new SystemInjectionActivityStrategy());
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+            PendingIntent contentIntent = intentFactory.buildPendingIntent(new SystemInjectionActivityStrategy());
 
-            notification.setLatestEventInfo(context, "Simple Service", "Notification", contentIntent);
+            notification.setLatestEventInfo(context, "Transfuse Integration Application", "Notification", contentIntent);
 
-
-            ((NotificationManager)notificationService).notify("test notification", NOTIFICATION_ID, notification);
+            ((NotificationManager)notificationService).notify("Transfuse Notification", NOTIFICATION_ID, notification);
         }
     };
 

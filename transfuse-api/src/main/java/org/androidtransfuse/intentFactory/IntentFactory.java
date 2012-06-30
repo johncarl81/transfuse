@@ -1,5 +1,6 @@
 package org.androidtransfuse.intentFactory;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
@@ -30,5 +31,9 @@ public class IntentFactory {
         intent.putExtras(parameters.getExtras());
 
         return intent;
+    }
+
+    public PendingIntent buildPendingIntent(IntentFactoryStrategy parameters){
+        return PendingIntent.getActivity(context, 0, buildIntent(parameters), 0);
     }
 }
