@@ -21,11 +21,13 @@
     <TextView android:layout_height="wrap_content"
               android:layout_width="fill_parent"
               android:gravity="center"
-              android:text="@string/transfuse_website"/>
+              android:text="@string/transfuse_website"
+              android:autoLink="web"/>
     <TextView android:layout_height="wrap_content"
               android:layout_width="fill_parent"
               android:gravity="center"
               android:textSize="10dp"
-              android:text="@string/transfuse_icon_attribution"/>
+              android:text="@string/transfuse_icon_attribution"
+              android:autoLink="web"/>
 
 </LinearLayout>
