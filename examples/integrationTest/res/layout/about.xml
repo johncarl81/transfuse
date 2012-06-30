@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+    <TextView android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:text="@string/transfuse_title"
+              android:textStyle="bold"
+              android:gravity="center"
+              android:textSize="20dp"/>
+    <ImageView android:src="@drawable/icon"
+               android:layout_height="wrap_content"
+               android:layout_width="fill_parent"
+               android:contentDescription="@string/transfuse_syringe"/>
+    <TextView android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:gravity="center"
+              android:text="@string/transfuse_description"/>
+    <TextView android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:gravity="center"
+              android:text="@string/transfuse_website"/>
+    <TextView android:layout_height="wrap_content"
+              android:layout_width="fill_parent"
+              android:gravity="center"
+              android:textSize="10dp"
+              android:text="@string/transfuse_icon_attribution"/>
+
+</LinearLayout>

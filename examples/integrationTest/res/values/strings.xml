@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">Integration Test</string>
     <string name="custom_string">Custom View String</string>
+    <string name="transfuse_description">A Dependency Injection and Integration framework for Google Android</string>
+    <string name="transfuse_title">Android Transfuse</string>
+    <string name="transfuse_syringe">Transfuse Syringe</string>
+    <string name="transfuse_website">http://www.androidtransfuse.com</string>
+    <string name="transfuse_icon_attribution">Icon use under license from http://pixel-mixer.com/</string>
     <bool name="bool">true</bool>
     <string-array name="colors">
         <item>red</item>

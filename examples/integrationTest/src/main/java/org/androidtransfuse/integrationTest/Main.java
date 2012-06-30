@@ -64,7 +64,8 @@ public class Main {
                 createLI(ToastTriggerActivity.class, "Broadcast Receiver"),
                 createLI(PreferenceInjectionActivity.class, "Preference Injection"),
                 createLI(ViewInjectionActivity.class, "View Injection"),
-                createLI(FragmentMainActivity.class, "Fragments")
+                createLI(FragmentMainActivity.class, "Fragments"),
+                createLI(AboutActivity.class, "About")
         }));
 
         Collections.sort(values);
