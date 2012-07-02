@@ -20,7 +20,7 @@ public class ASTElementBase implements ASTBase {
     }
 
     public boolean isAnnotated(Class<? extends Annotation> annotation) {
-        return getAnnotation(annotation) != null;
+        return getASTAnnotation(annotation) != null;
     }
 
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {

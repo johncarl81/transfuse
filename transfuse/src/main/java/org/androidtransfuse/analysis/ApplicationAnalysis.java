@@ -9,12 +9,14 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.scope.ContextScopeHolder;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -33,6 +35,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private AnalysisContextFactory analysisContextFactory;
     private ManifestManager manifestManager;
     private InjectionBindingBuilder injectionBindingBuilder;
+    private ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
@@ -41,7 +44,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
                                AnalysisContextFactory analysisContextFactory,
-                               ManifestManager manifestManager, InjectionBindingBuilder injectionBindingBuilder) {
+                               ManifestManager manifestManager,
+                               InjectionBindingBuilder injectionBindingBuilder,
+                               ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.applicationProvider = applicationProvider;
@@ -50,6 +55,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.analysisContextFactory = analysisContextFactory;
         this.manifestManager = manifestManager;
         this.injectionBindingBuilder = injectionBindingBuilder;
+        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
     }
 
     public void emptyApplication() {
@@ -99,6 +105,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         applicationDescriptor.addGenerators(
                 componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
+
+        applicationDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
     }
 
     private MethodCallbackGenerator buildEventMethod(String name) {
@@ -123,6 +131,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
         injectionNodeBuilderRepository.putType(android.app.Application.class, injectionBindingBuilder.buildThis((android.app.Application.class)));
+        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 

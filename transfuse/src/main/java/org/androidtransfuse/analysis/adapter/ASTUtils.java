@@ -1,7 +1,5 @@
 package org.androidtransfuse.analysis.adapter;
 
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
-
 import java.util.Collection;
 
 /**
@@ -48,18 +46,11 @@ public final class ASTUtils {
     }
 
     public ASTAnnotation getAnnotation(Class resourceClass, Collection<ASTAnnotation> annotations) {
-        ASTAnnotation annotation = null;
-
         for (ASTAnnotation astAnnotation : annotations) {
             if (astAnnotation.getASTType().getName().equals(resourceClass.getCanonicalName())) {
-                annotation = astAnnotation;
+                return astAnnotation;
             }
         }
-
-        if (annotation == null) {
-            throw new TransfuseAnalysisException("Unable to find annotation: " + resourceClass.getName());
-        }
-
-        return annotation;
+        return null;
     }
 }

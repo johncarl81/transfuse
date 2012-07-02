@@ -4,6 +4,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
@@ -28,6 +29,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private IntentFilterBuilder intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
     private MetaDataBuilder metaDataBuilder;
+    private ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
@@ -36,7 +38,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ComponentBuilderFactory componentBuilderFactory,
                                      IntentFilterBuilder intentFilterBuilder,
                                      TypeMirrorUtil typeMirrorUtil,
-                                     MetaDataBuilder metaDataBuilder) {
+                                     MetaDataBuilder metaDataBuilder,
+                                     ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
@@ -44,6 +47,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         this.intentFilterBuilder = intentFilterBuilder;
         this.typeMirrorUtil = typeMirrorUtil;
         this.metaDataBuilder = metaDataBuilder;
+        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -69,6 +73,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType));
 
             receiverDescriptor.setMethodBuilder(componentBuilderFactory.buildOnReceiveMethodBuilder());
+
+            receiverDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);

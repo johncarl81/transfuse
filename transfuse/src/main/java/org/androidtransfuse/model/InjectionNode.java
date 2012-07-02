@@ -36,9 +36,22 @@ public class InjectionNode {
         return astType;
     }
 
-    public <T> T getAspect(Class<T> clazz) {
+    public <T> T getAspect(Class<T> clazz){
         return (T) aspects.get(clazz);
     }
+
+    /*public synchronized <T> T getAspect(Class<T> clazz, boolean autoGenerate) {
+        if(!aspects.containsKey(clazz) && autoGenerate){
+            try {
+                addAspect(clazz, clazz.newInstance());
+            } catch (InstantiationException e) {
+                throw new TransfuseAnalysisException("Uanble to call empty constructor of aspect " + clazz.getName());
+            } catch (IllegalAccessException e) {
+                throw new TransfuseAnalysisException("Uanble to call empty constructor of aspect " + clazz.getName());
+            }
+        }
+        return getAspect(clazz);
+    }*/
 
     public void addAspect(Object object) {
         aspects.put(object.getClass(), object);

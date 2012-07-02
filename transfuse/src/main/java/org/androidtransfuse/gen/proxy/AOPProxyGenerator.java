@@ -197,6 +197,7 @@ public class AOPProxyGenerator {
 
     private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
 
+        //todo:move into named inner class
         JDefinedClass methodExecutionClass = codeModel.anonymousClass(MethodInterceptorChain.MethodExecution.class);
 
         //getMethod()

@@ -6,6 +6,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -39,7 +40,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                 MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
                 if (methodCallbackAspect != null && methodCallbackAspect.contains(name)) {
-                    Set<MethodCallbackAspect.MethodCallback> methods = methodCallbackAspect.getMethodCallbacks(name);
+                        Set<ASTMethod> methods = methodCallbackAspect.getMethodCallbacks(name);
 
                     //define method on demand for possible lazy init
                     if (methodDescriptor == null) {
@@ -47,15 +48,14 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                     }
                     JBlock body = methodDescriptor.getMethod().body();
 
-
-                    for (MethodCallbackAspect.MethodCallback methodCallback : methods) {
+                    for (ASTMethod methodCallback : methods) {
 
                         JStatement methodCall = invocationBuilder.buildMethodCall(
                                 Object.class.getName(),
                                 methodDescriptor.getASTMethod().getParameters(),
                                 methodDescriptor.getParameters(),
                                 injectionNodeJExpressionEntry.getValue().getExpression(),
-                                methodCallback.getMethod());
+                                methodCallback);
 
                         body.add(methodCall);
                     }

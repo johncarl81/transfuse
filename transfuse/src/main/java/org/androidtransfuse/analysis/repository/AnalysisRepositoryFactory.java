@@ -10,37 +10,41 @@ import javax.inject.Provider;
  */
 public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
 
-    private Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider;
-    private Provider<InjectionAnalyzer> injectionAnalyzerProvider;
-    private Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider;
-    private Provider<ScopeAnalysis> scopeAnalysisProvider;
-    private Provider<RegistrationAnalyzer> registrationAnalysisProvider;
-    private Provider<DeclareFieldAnalysis> declareFieldAnalysisProvider;
+    private AOPProxyAnalyzer aopProxyAnalyzer;
+    private InjectionAnalyzer injectionAnalyzer;
+    private MethodCallbackAnalysis methodCallbackAnalysis;
+    private ScopeAnalysis scopeAnalysis;
+    private RegistrationAnalyzer registrationAnalysis;
+    private DeclareFieldAnalysis declareFieldAnalysis;
+    private ObservesAnalysis observesAnalysis;
 
     @Inject
-    public AnalysisRepositoryFactory(Provider<AOPProxyAnalyzer> aopProxyAnalyzerProvider,
-                                     Provider<InjectionAnalyzer> injectionAnalyzerProvider,
-                                     Provider<MethodCallbackAnalysis> methodCallbackAnalysisProvider,
-                                     Provider<ScopeAnalysis> scopeAnalysisProvider,
-                                     Provider<RegistrationAnalyzer> registrationAnalysisProvider,
-                                     Provider<DeclareFieldAnalysis> declareFieldAnalysisProvider) {
-        this.aopProxyAnalyzerProvider = aopProxyAnalyzerProvider;
-        this.injectionAnalyzerProvider = injectionAnalyzerProvider;
-        this.methodCallbackAnalysisProvider = methodCallbackAnalysisProvider;
-        this.scopeAnalysisProvider = scopeAnalysisProvider;
-        this.registrationAnalysisProvider = registrationAnalysisProvider;
-        this.declareFieldAnalysisProvider = declareFieldAnalysisProvider;
+    public AnalysisRepositoryFactory(AOPProxyAnalyzer aopProxyAnalyzer,
+                                     InjectionAnalyzer injectionAnalyzer,
+                                     MethodCallbackAnalysis methodCallbackAnalysis,
+                                     ScopeAnalysis scopeAnalysis,
+                                     RegistrationAnalyzer registrationAnalysis,
+                                     DeclareFieldAnalysis declareFieldAnalysis,
+                                     ObservesAnalysis observesAnalysis) {
+        this.aopProxyAnalyzer = aopProxyAnalyzer;
+        this.injectionAnalyzer = injectionAnalyzer;
+        this.methodCallbackAnalysis = methodCallbackAnalysis;
+        this.scopeAnalysis = scopeAnalysis;
+        this.registrationAnalysis = registrationAnalysis;
+        this.declareFieldAnalysis = declareFieldAnalysis;
+        this.observesAnalysis = observesAnalysis;
     }
 
     public AnalysisRepository get() {
         AnalysisRepository analysisRepository = new AnalysisRepository();
 
-        analysisRepository.addAnalysis(aopProxyAnalyzerProvider.get());
-        analysisRepository.addAnalysis(injectionAnalyzerProvider.get());
-        analysisRepository.addAnalysis(methodCallbackAnalysisProvider.get());
-        analysisRepository.addAnalysis(scopeAnalysisProvider.get());
-        analysisRepository.addAnalysis(registrationAnalysisProvider.get());
-        analysisRepository.addAnalysis(declareFieldAnalysisProvider.get());
+        analysisRepository.addAnalysis(aopProxyAnalyzer);
+        analysisRepository.addAnalysis(injectionAnalyzer);
+        analysisRepository.addAnalysis(methodCallbackAnalysis);
+        analysisRepository.addAnalysis(scopeAnalysis);
+        analysisRepository.addAnalysis(registrationAnalysis);
+        analysisRepository.addAnalysis(declareFieldAnalysis);
+        analysisRepository.addAnalysis(observesAnalysis);
 
         return analysisRepository;
     }

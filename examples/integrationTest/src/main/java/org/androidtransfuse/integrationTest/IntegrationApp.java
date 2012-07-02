@@ -6,7 +6,7 @@ import org.androidtransfuse.annotations.*;
 /**
  * @author John Ericksen
  */
-@Application
+@Application(label = "Transfuse Integration Test")
 public class IntegrationApp {
 
     private boolean onCreate;

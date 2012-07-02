@@ -85,12 +85,8 @@ public class SystemInjection {
 
             String providerName = locationManager.getBestProvider(criteria, true);
 
-            String results;
             if (providerName != null) {
-                locationManager.requestLocationUpdates(providerName,
-                        10000,          // 10-second interval.
-                        10,             // 10 meters.
-                        locationToaster);
+                locationManager.requestLocationUpdates(providerName, 0, 10, locationToaster);
             }
             else{
                 Toast.makeText(context, "Could not find location provider", ONE_SECOND).show();

@@ -77,7 +77,6 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
         }
         ASTType viewType = astClassFactory.buildASTClassType(View.class);
-        System.out.println("Mapping: " + viewType.getName());
         onCreateMethodDescriptor.putType(viewType, new TypedExpression(viewType, viewDeclaration));
 
         return onCreateMethodDescriptor;

@@ -79,11 +79,10 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
                 viewExpression = contextVar.getExpression().invoke(FIND_VIEW_BY_TAG).arg(JExpr.lit(viewTag));
             }
 
-            ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
-            if (injectionAspect == null) {
-                return viewExpression;
+            if (injectionNode.containsAspect(ASTInjectionAspect.class)) {
+                return inject(injectionNode.getAspect(ASTInjectionAspect.class), injectionBuilderContext, injectionNode, viewExpression);
             } else {
-                return inject(injectionAspect, injectionBuilderContext, injectionNode, viewExpression);
+                return viewExpression;
             }
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);

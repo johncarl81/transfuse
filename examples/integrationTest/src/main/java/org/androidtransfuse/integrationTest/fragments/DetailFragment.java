@@ -2,11 +2,9 @@ package org.androidtransfuse.integrationTest.fragments;
 
 import android.util.Log;
 import android.widget.TextView;
-import org.androidtransfuse.annotations.Fragment;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnActivityCreated;
-import org.androidtransfuse.annotations.View;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.integrationTest.observes.EventOne;
 
 import javax.inject.Inject;
 
@@ -26,7 +24,7 @@ public class DetailFragment {
         Log.i("fragments", "onActivityCreated");
     }
 
-    public void setText(String item) {
-        view.setText(item);
+    public void setText(@Observes EventOne textChange) {
+        view.setText(textChange.getValue());
     }
 }

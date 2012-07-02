@@ -23,9 +23,11 @@ import org.androidtransfuse.annotations.Fragment;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.ObservesGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +49,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private ComponentBuilderFactory componentBuilderFactory;
     private BindingRepositoryFactory bindingRepositoryFactory;
+    private ObservesGenerator observesGenerator;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -54,7 +57,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             AnalysisContextFactory analysisContextFactory,
                             InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                             InjectionBindingBuilder injectionBindinBuilder,
-                            ASTTypeBuilderVisitor astTypeBuilderVisitor, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, ComponentBuilderFactory componentBuilderFactory, BindingRepositoryFactory bindingRepositoryFactory) {
+                            ASTTypeBuilderVisitor astTypeBuilderVisitor, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, ComponentBuilderFactory componentBuilderFactory, BindingRepositoryFactory bindingRepositoryFactory, ObservesGenerator observesGenerator) {
         this.astClassFactory = astClassFactory;
         this.typeMirrorUtil = typeMirrorUtil;
         this.analysisContextFactory = analysisContextFactory;
@@ -64,6 +67,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.bindingRepositoryFactory = bindingRepositoryFactory;
+        this.observesGenerator = observesGenerator;
     }
 
     @Override
@@ -137,6 +141,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
 
+        fragmentDescriptor.addGenerators(observesGenerator);
 
     }
 
@@ -169,6 +174,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Context.class, "getActivity").build());
         injectionNodeBuilderRepository.putType(FragmentManager.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(FragmentManager.class, "getFragmentManager").build());
         injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Activity.class).invoke(Application.class, "getApplication").build());
+        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Activity.class, "getActivity").build());
 
         if (type != null) {
             ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);

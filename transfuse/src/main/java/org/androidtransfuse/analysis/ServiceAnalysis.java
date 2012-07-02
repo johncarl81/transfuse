@@ -15,14 +15,12 @@ import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Service;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
@@ -50,6 +48,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private MetaDataBuilder metadataBuilder;
     private InjectionBindingBuilder injectionBindingBuilder;
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
@@ -62,7 +61,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            TypeMirrorUtil typeMirrorUtil,
                            MetaDataBuilder metadataBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
-                           ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+                           ASTTypeBuilderVisitor astTypeBuilderVisitor, ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.injectionNodeRepository = injectionNodeRepository;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -75,6 +74,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.metadataBuilder = metadataBuilder;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -151,25 +151,25 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     }
 
 
-    private void setupServiceProfile(ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context) {
+    private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType, AnalysisContext context) {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
 
-        activityDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        serviceDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        serviceDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
         //onStart onStart(android.content.Intent intent, int startId)
-        activityDescriptor.addGenerators(buildEventMethod("onStart", Intent.class, int.class));
+        serviceDescriptor.addGenerators(buildEventMethod("onStart", Intent.class, int.class));
         //onDestroy
-        activityDescriptor.addGenerators(buildEventMethod("onDestroy"));
+        serviceDescriptor.addGenerators(buildEventMethod("onDestroy"));
         //onLowMemory
-        activityDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        serviceDescriptor.addGenerators(buildEventMethod("onLowMemory"));
         //onRebind onRebind(android.content.Intent intent)
-        activityDescriptor.addGenerators(buildEventMethod("onRebind", Intent.class));
+        serviceDescriptor.addGenerators(buildEventMethod("onRebind", Intent.class));
 
         //todo: move this somewhere else
-        activityDescriptor.getComponentBuilders().add(new ComponentBuilder() {
+        serviceDescriptor.getComponentBuilders().add(new ComponentBuilder() {
             @Override
             public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
                 JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
@@ -178,6 +178,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 onBind.body()._return(JExpr._null());
             }
         });
+
+        serviceDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
     }
 
     private MethodCallbackGenerator buildEventMethod(String name, Class... args) {
@@ -208,6 +210,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
         injectionNodeRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
+        injectionNodeRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         if (type != null) {
             ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);

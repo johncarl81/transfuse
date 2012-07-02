@@ -20,8 +20,8 @@ public class ScopedExpressionDecorator extends VariableExpressionBuilderDecorato
 
     @Override
     public TypedExpression buildVariableExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
-        ScopeAspect scopeAspect = injectionNode.getAspect(ScopeAspect.class);
-        if (scopeAspect != null) {
+        if (injectionNode.containsAspect(ScopeAspect.class)) {
+            ScopeAspect scopeAspect = injectionNode.getAspect(ScopeAspect.class);
             return scopeAspect.getScopeBuilder().buildVariable(injectionBuilderContext, injectionNode);
         } else {
             return getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);

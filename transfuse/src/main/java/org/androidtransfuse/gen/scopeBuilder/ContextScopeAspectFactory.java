@@ -10,17 +10,17 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class SingletonScopeAspectFactory implements ScopeAspectFactory {
+public class ContextScopeAspectFactory implements ScopeAspectFactory{
 
-    private SingletonScopeBuilder singletonScopeBuilder;
+    private ContextScopeVariableBuilder contextScopeVariableBuilder;
 
     @Inject
-    public SingletonScopeAspectFactory(SingletonScopeBuilder singletonScopeBuilder) {
-        this.singletonScopeBuilder = singletonScopeBuilder;
+    public ContextScopeAspectFactory(ContextScopeVariableBuilder contextScopeVariableBuilder) {
+        this.contextScopeVariableBuilder = contextScopeVariableBuilder;
     }
 
     @Override
     public ScopeAspect buildAspect(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
-        return new ScopeAspect(singletonScopeBuilder);
+        return new ScopeAspect(contextScopeVariableBuilder);
     }
 }

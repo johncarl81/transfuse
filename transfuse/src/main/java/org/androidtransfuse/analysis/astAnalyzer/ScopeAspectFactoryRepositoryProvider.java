@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.annotations.ContextScope;
+import org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
 
 import javax.inject.Inject;
@@ -12,10 +14,13 @@ import javax.inject.Singleton;
 public class ScopeAspectFactoryRepositoryProvider implements Provider<ScopeAspectFactoryRepository> {
 
     private SingletonScopeAspectFactory singletonScopeAspectFactory;
+    private ContextScopeAspectFactory conextScopeAspectFactory;
 
     @Inject
-    public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory) {
+    public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory,
+                                                ContextScopeAspectFactory conextScopeAspectFactory) {
         this.singletonScopeAspectFactory = singletonScopeAspectFactory;
+        this.conextScopeAspectFactory = conextScopeAspectFactory;
     }
 
 
@@ -24,6 +29,7 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<ScopeAspec
         ScopeAspectFactoryRepository scopedVariableBuilderRepository = new ScopeAspectFactoryRepository();
 
         scopedVariableBuilderRepository.putAspectFactory(Singleton.class, singletonScopeAspectFactory);
+        scopedVariableBuilderRepository.putAspectFactory(ContextScope.class, conextScopeAspectFactory);
 
         return scopedVariableBuilderRepository;
     }

@@ -9,7 +9,8 @@
               android:layout_width="fill_parent"
               android:text="@string/transfuse_title"
               android:gravity="center"
-              android:textSize="26dp"/>
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textSize="30dip"/>
     <ImageView android:src="@drawable/icon"
                android:layout_height="wrap_content"
                android:layout_width="fill_parent"

@@ -45,19 +45,19 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
     public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
         for (Class<?> annotation : methodAnnotations.keySet()) {
             if (astMethod.isAnnotated((Class<Annotation>) annotation)) {
-                addMethod(injectionNode, annotation, astMethod, context);
+                addMethod(injectionNode, annotation, astMethod);
             }
         }
     }
 
-    private void addMethod(InjectionNode injectionNode, Class<?> annotation, ASTMethod astMethod, AnalysisContext context) {
+    private void addMethod(InjectionNode injectionNode, Class<?> annotation, ASTMethod astMethod) {
 
         if (!injectionNode.containsAspect(MethodCallbackAspect.class)) {
             injectionNode.addAspect(new MethodCallbackAspect());
         }
         MethodCallbackAspect methodCallbackToken = injectionNode.getAspect(MethodCallbackAspect.class);
 
-        methodCallbackToken.addMethodCallback(methodAnnotations.get(annotation), astMethod, context.getSuperClassLevel());
+        methodCallbackToken.addMethodCallback(methodAnnotations.get(annotation), astMethod);
 
         if (!annotation.equals(OnCreate.class)) {
             ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
