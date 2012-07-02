@@ -60,7 +60,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         bind(ScopeAspectFactoryRepository.class).toProvider(ScopeAspectFactoryRepositoryProvider.class);
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
         bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
-        bind(ActivityComponentBuilderRepository.class).toProvider(ActivityComponentBuilderRepositoryProvider.class).asEagerSingleton();
 
         bind(GeneratorRepository.class).toProvider(GeneratorRepositoryProvider.class);
     }

@@ -1,18 +1,20 @@
 package org.androidtransfuse.gen.scopeBuilder;
 
+import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.scope.Scope;
-import org.androidtransfuse.scope.SingletonScope;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -25,13 +27,20 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     private ProviderGenerator providerGenerator;
     private JCodeModel codeModel;
     private TypedExpressionFactory typedExpressionFactory;
+    private InjectionNode contextScopeHolder;
+    private InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
-    public ContextScopeVariableBuilder(JCodeModel codeModel,
-                                 ProviderGenerator providerGenerator, TypedExpressionFactory typedExpressionFactory) {
+    public ContextScopeVariableBuilder(@Assisted InjectionNode contextScopeHolder,
+                                       JCodeModel codeModel,
+                                       ProviderGenerator providerGenerator,
+                                       TypedExpressionFactory typedExpressionFactory,
+                                       InjectionExpressionBuilder injectionExpressionBuilder) {
         this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
         this.typedExpressionFactory = typedExpressionFactory;
+        this.contextScopeHolder = contextScopeHolder;
+        this.injectionExpressionBuilder = injectionExpressionBuilder;
     }
 
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
@@ -41,8 +50,11 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
+        TypedExpression contextScopeHolder = injectionExpressionBuilder.buildVariable(injectionBuilderContext, this.contextScopeHolder);
         JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
-        JExpression scopeVar = codeModel.ref(SingletonScope.class).staticInvoke(SingletonScope.GET_INSTANCE);
+        //todo:coerce type?
+        JExpression cast = JExpr.cast(codeModel.ref(ContextScopeHolder.class), contextScopeHolder.getExpression());
+        JExpression scopeVar = cast.invoke(ContextScopeHolder.GET_SCOPE);
 
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
 

@@ -8,14 +8,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import com.sun.codemodel.JExpr;
+import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
+import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,29 +27,26 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-public class ActivityComponentBuilderRepositoryProvider implements Provider<ActivityComponentBuilderRepository> {
+public class ActivityComponentBuilderRepositoryFactory {
 
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
     private IntentFactoryStrategyGenerator intentFactoryStrategyGenerator;
     private ListenerRegistrationGenerator listenerRegistrationGenerator;
-    private ObservesGenerator observesGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryProvider(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator, ObservesGenerator observesGenerator) {
+    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.intentFactoryStrategyGenerator = intentFactoryStrategyGenerator;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
-        this.observesGenerator = observesGenerator;
     }
 
-    @Override
-    public ActivityComponentBuilderRepository get() {
+    public ActivityComponentBuilderRepository build(AnalysisContext context) {
 
         Map<String, Set<ExpressionVariableDependentGenerator>> methodCallbackGenerators = new HashMap<String, Set<ExpressionVariableDependentGenerator>>();
 
-        Set<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators();
+        Set<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators(context);
         methodCallbackGenerators.put(Activity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ListActivity.class.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
         methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
@@ -68,7 +68,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
         return listActivityCallbackGenerators;
     }
 
-    private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
+    private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators(AnalysisContext context) {
         Set<ExpressionVariableDependentGenerator> activityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
         // onDestroy
         activityCallbackGenerators.add(buildEventMethod("onDestroy"));
@@ -96,7 +96,7 @@ public class ActivityComponentBuilderRepositoryProvider implements Provider<Acti
         activityCallbackGenerators.add(listenerRegistrationGenerator);
 
         //observes registration
-        activityCallbackGenerators.add(observesGenerator);
+        activityCallbackGenerators.add(componentBuilderFactory.buildObservesGenerator(context));
 
 
         return activityCallbackGenerators;

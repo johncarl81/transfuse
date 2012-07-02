@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -48,4 +49,6 @@ public interface VariableInjectionBuilderFactory {
     ExpressionVariableBuilderWrapper buildExpressionWrapper(TypedExpression typedExpression);
 
     FragmentViewVariableBuilder buildFragmentViewVariableBuilder(Integer viewId, String viewTag, InjectionNode fragmentInjectionNode, JType jType);
+
+    ContextScopeVariableBuilder buildContextScopeVariableBuilder(InjectionNode contextScopeHolder);
 }

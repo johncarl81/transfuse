@@ -7,7 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
-import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository;
+import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory;
 import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
@@ -41,7 +41,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
-    private ActivityComponentBuilderRepository activityComponentBuilderRepository;
+    private ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository;
     private AnalysisContextFactory analysisContextFactory;
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private ASTClassFactory astClassFactory;
@@ -60,7 +60,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                             Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
-                            ActivityComponentBuilderRepository activityComponentBuilderRepository,
+                            ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
                             ASTClassFactory astClassFactory,
@@ -233,7 +233,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-        activityDescriptor.addGenerators(activityComponentBuilderRepository.getGenerators(activityType));
+        activityDescriptor.addGenerators(activityComponentBuilderRepository.build(context).getGenerators(activityType));
 
         activityDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
 

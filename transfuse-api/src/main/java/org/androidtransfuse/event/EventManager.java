@@ -17,7 +17,7 @@ public class EventManager {
     public static final String REGISTER_METHOD = "register";
     public static final String TRIGGER_METHOD = "trigger";
 
-    private static Map<Class, Set<EventObserver>> observers = new HashMap<Class, Set<EventObserver>>();
+    private Map<Class, Set<EventObserver>> observers = new HashMap<Class, Set<EventObserver>>();
 
     public <T> void register(Class<T> event, EventObserver<T> observer){
         if(!observers.containsKey(event)){

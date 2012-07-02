@@ -48,7 +48,11 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
             JBlock block = onCreateMethodDescriptor.getMethod().body();
 
             //Injections
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, descriptor.getInjectionNodeFactory().buildInjectionNode(onCreateMethodDescriptor));
+            Map<InjectionNode, TypedExpression> expressionMap =
+                    injectionFragmentGenerator.buildFragment(
+                        block,
+                        definedClass,
+                        descriptor.getInjectionNodeFactory().buildInjectionNode(onCreateMethodDescriptor));
 
             //Method Callbacks
             MethodGenerator onCreateMethodGenerator = new ExistingMethod(onCreateMethodDescriptor);
