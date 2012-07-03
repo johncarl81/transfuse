@@ -12,10 +12,33 @@ import javax.inject.Inject;
 public class IntentFactory {
 
     private Context context;
+    private IntentAdapterFactory intentMockFactory;
+
+    protected interface IntentAdapterFactory {
+        Intent buildIntent(Context context, Class<? extends Context> clazz);
+    }
+
+    private static final class IntentAdapterFactoryImpl implements IntentAdapterFactory{
+        @Override
+        public Intent buildIntent(Context context, Class<? extends Context> clazz) {
+            return new android.content.Intent(context, clazz);
+        }
+    }
 
     @Inject
     public IntentFactory(Context context) {
+        this(context, new IntentAdapterFactoryImpl());
+    }
+
+    /**
+     * Constructor used for testing purposes.
+     *
+     * @param context
+     * @param intentMockFactory
+     */
+    protected IntentFactory(Context context, IntentAdapterFactory intentMockFactory){
         this.context = context;
+        this.intentMockFactory = intentMockFactory;
     }
 
     public void start(IntentFactoryStrategy parameters) {
@@ -26,7 +49,7 @@ public class IntentFactory {
     }
 
     public Intent buildIntent(IntentFactoryStrategy parameters) {
-        android.content.Intent intent = new android.content.Intent(context, parameters.getTargetContext());
+        android.content.Intent intent = intentMockFactory.buildIntent(context, parameters.getTargetContext());
 
         intent.putExtras(parameters.getExtras());
 

@@ -21,6 +21,17 @@ public class InjectionUtilTest {
     }
 
     @Test
+    public void testGetField(){
+        Target target = new Target();
+
+        target.setValue(TEST_VALUE);
+
+        String value = injectionUtil.getField(String.class, target, 0, "value");
+
+        assertEquals(TEST_VALUE, value);
+    }
+
+    @Test
     public void testPrivateMethodInjection() {
         Target target = new Target();
 
