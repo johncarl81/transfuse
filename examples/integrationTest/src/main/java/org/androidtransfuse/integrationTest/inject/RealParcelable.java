@@ -51,4 +51,11 @@ public class RealParcelable implements Parcelable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
+
+    @Override
+    public String toString() {
+        return "RP{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

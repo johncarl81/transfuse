@@ -73,4 +73,16 @@ public class ParcelExample {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
+
+    @Override
+    public String toString() {
+        return "ParcelExample{" +
+                "\n\tname='" + name + '\'' +
+                ", \n\tvalue=" + value +
+                ", \n\ttinnerParcel=" + innerParcel +
+                ", \n\trealParcelable=" + realParcelable +
+                ", \n\tserializableValue=" + serializableValue +
+                ", \n\tbooleans=" + booleans +
+                '}';
+    }
 }

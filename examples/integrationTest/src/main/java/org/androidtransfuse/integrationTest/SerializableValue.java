@@ -30,4 +30,11 @@ public class SerializableValue implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
+
+    @Override
+    public String toString() {
+        return "SV{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }
