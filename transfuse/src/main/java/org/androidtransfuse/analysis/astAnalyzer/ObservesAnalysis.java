@@ -1,12 +1,16 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Observes;
 import org.androidtransfuse.event.EventManager;
+import org.androidtransfuse.event.WeakObserver;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -17,10 +21,14 @@ import javax.inject.Inject;
 public class ObservesAnalysis extends ASTAnalysisAdaptor {
 
     private InjectionPointFactory injectionNodeFactory;
+    private Analyzer analyzer;
+    private ASTClassFactory astClassFactory;
 
     @Inject
-    public ObservesAnalysis(InjectionPointFactory injectionNodeFactory) {
+    public ObservesAnalysis(InjectionPointFactory injectionNodeFactory, Analyzer analyzer, ASTClassFactory astClassFactory) {
         this.injectionNodeFactory = injectionNodeFactory;
+        this.analyzer = analyzer;
+        this.astClassFactory = astClassFactory;
     }
 
     @Override
@@ -40,7 +48,9 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
 
             if(!injectionNode.containsAspect(ObservesAspect.class)){
                 InjectionNode eventManagerInjectionNode = injectionNodeFactory.buildInjectionNode(EventManager.class, context);
-                injectionNode.addAspect(new ObservesAspect(eventManagerInjectionNode));
+                ASTType weakObserverASTType = astClassFactory.buildASTClassType(WeakObserver.class);
+                InjectionNode weakObserverInjectionNode = analyzer.analyze(weakObserverASTType, weakObserverASTType, context);
+                injectionNode.addAspect(new ObservesAspect(eventManagerInjectionNode, weakObserverInjectionNode));
             }
             ObservesAspect aspect = injectionNode.getAspect(ObservesAspect.class);
 

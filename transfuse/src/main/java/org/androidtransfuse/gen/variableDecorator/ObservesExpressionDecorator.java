@@ -2,7 +2,9 @@ package org.androidtransfuse.gen.variableDecorator;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
+import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTProxyType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventManager;
@@ -11,6 +13,7 @@ import org.androidtransfuse.event.WeakObserver;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -26,16 +29,21 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
     private InjectionExpressionBuilder injectionExpressionBuilder;
+    private InjectionPointFactory injectionNodeFactory;
+    private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public ObservesExpressionDecorator(@Assisted VariableExpressionBuilder decorated,
                                        JCodeModel codeModel,
                                        UniqueVariableNamer namer,
-                                       InjectionExpressionBuilder injectionExpressionBuilder) {
+                                       InjectionExpressionBuilder injectionExpressionBuilder,
+                                       InjectionPointFactory injectionNodeFactory, TypedExpressionFactory typedExpressionFactory) {
         super(decorated);
         this.codeModel = codeModel;
         this.namer = namer;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
+        this.injectionNodeFactory = injectionNodeFactory;
+        this.typedExpressionFactory = typedExpressionFactory;
     }
 
     @Override
@@ -45,6 +53,7 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
         if(injectionNode.containsAspect(ObservesAspect.class)){
             try {
                 JBlock block = injectionBuilderContext.getBlock();
+                JDefinedClass definedClass = injectionBuilderContext.getDefinedClass();
                 ObservesAspect aspect = injectionNode.getAspect(ObservesAspect.class);
 
                 for (ASTType event : aspect.getEvents()) {
@@ -53,7 +62,7 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
                     JClass eventRef = codeModel.ref(event.getName());
                     JClass targetRef = codeModel.ref(typedExpression.getType().getName());
 
-                    JDefinedClass observerClass = injectionBuilderContext.getDefinedClass()._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateName(typedExpression.getType()));
+                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateName(typedExpression.getType()));
 
                     //match default constructor public WeakObserver(T target){
                     JMethod constructor = observerClass.constructor(JMod.PUBLIC);
@@ -75,10 +84,19 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
                         triggerBody.invoke(targetParam, observerMethod.getName()).arg(eventParam);
                     }
 
-                    JVar observer = block.decl(observerClass, namer.generateName(WeakObserver.class),
-                            JExpr._new(observerClass).arg(typedExpression.getExpression()));
+                    JFieldVar observer = definedClass.field(JMod.PRIVATE, observerClass, namer.generateName(EventObserver.class));
 
+                    block.assign(observer, JExpr._new(observerClass).arg(typedExpression.getExpression()));
 
+                    block.invoke(observer, "setEventManager").arg(getEventManager(injectionBuilderContext, aspect));
+
+                    //add onPause callback
+                    InjectionNode weakObserverInjectionNode = new InjectionNode(
+                            new ASTProxyType(aspect.getObserverInjectionNode().getASTType(), observerClass.name()));
+
+                    weakObserverInjectionNode.getAspects().putAll(aspect.getObserverInjectionNode().getAspects());
+
+                    injectionBuilderContext.getVariableMap().put(weakObserverInjectionNode, typedExpressionFactory.build(WeakObserver.class, observer));
 
                     //register
                     block.invoke(getEventManager(injectionBuilderContext, aspect), EventManager.REGISTER_METHOD).arg(eventRef.dotclass()).arg(observer);

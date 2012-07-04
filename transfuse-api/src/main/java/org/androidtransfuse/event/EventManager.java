@@ -3,10 +3,7 @@ package org.androidtransfuse.event;
 import android.util.Log;
 
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -39,5 +36,17 @@ public class EventManager {
                 }
             }
         }
+    }
+
+    public void unregister(EventObserver observer){
+        Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
+        while(entryIterator.hasNext()){
+            Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();
+            entry.getValue().remove(observer);
+            if(entry.getValue().isEmpty()){
+                entryIterator.remove();
+            }
+        }
+
     }
 }
