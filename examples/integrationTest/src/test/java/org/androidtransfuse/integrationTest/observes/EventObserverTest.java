@@ -20,11 +20,11 @@ public class EventObserverTest {
 
     private EventObserver eventObserver;
     private EventManager eventManager;
-
+    private EventObserverActivity eventObserverActivity;
 
     @Before
     public void setup() {
-        EventObserverActivity eventObserverActivity = new EventObserverActivity();
+        eventObserverActivity = new EventObserverActivity();
         eventObserverActivity.onCreate(null);
 
         eventManager = SingletonScope.getInstance().getScopedObject(EventManager.class, new EventManager_Provider());
@@ -52,6 +52,18 @@ public class EventObserverTest {
         assertFalse(singletonObserver.isObservedEventThree());
         eventManager.trigger(new EventThree());
         assertTrue(singletonObserver.isObservedEventThree());
+    }
+
+    @Test
+    public void testReregister(){
+        eventObserverActivity.onPause();
+        assertFalse(eventObserver.isEventTwoTriggered());
+        eventManager.trigger(new EventTwo());
+        assertFalse(eventObserver.isEventTwoTriggered());
+        eventObserverActivity.onRestart();
+        assertFalse(eventObserver.isEventTwoTriggered());
+        eventManager.trigger(new EventTwo());
+        assertTrue(eventObserver.isEventTwoTriggered());
     }
 
 

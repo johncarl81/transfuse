@@ -10,7 +10,7 @@ import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Observes;
 import org.androidtransfuse.event.EventManager;
-import org.androidtransfuse.event.WeakObserver;
+import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -46,11 +46,15 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
 
         if(firstParameter != null && (firstParameter.isAnnotated(Observes.class) || astMethod.isAnnotated(Observes.class))){
 
+            if(astMethod.getParameters().size() != 1){
+                throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
+            }
+
             if(!injectionNode.containsAspect(ObservesAspect.class)){
                 InjectionNode eventManagerInjectionNode = injectionNodeFactory.buildInjectionNode(EventManager.class, context);
-                ASTType weakObserverASTType = astClassFactory.buildASTClassType(WeakObserver.class);
-                InjectionNode weakObserverInjectionNode = analyzer.analyze(weakObserverASTType, weakObserverASTType, context);
-                injectionNode.addAspect(new ObservesAspect(eventManagerInjectionNode, weakObserverInjectionNode));
+                ASTType observerTestingASType = astClassFactory.buildASTClassType(EventTending.class);
+                InjectionNode observerTendingInjectionNode = analyzer.analyze(observerTestingASType, observerTestingASType, context);
+                injectionNode.addAspect(new ObservesAspect(eventManagerInjectionNode, observerTendingInjectionNode));
             }
             ObservesAspect aspect = injectionNode.getAspect(ObservesAspect.class);
 

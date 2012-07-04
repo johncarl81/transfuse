@@ -16,11 +16,11 @@ public class ObservesAspect {
 
     private Map<ASTType, Set<MethodSignatureWrapper>> observesMap = new HashMap<ASTType, Set<MethodSignatureWrapper>>();
     private InjectionNode eventManagerInjectionNode;
-    private InjectionNode observerInjectionNode;
+    private InjectionNode observerTendingInjectionNode;
 
-    public ObservesAspect(InjectionNode eventManagerInjectionNode, InjectionNode observerInjectionNode) {
+    public ObservesAspect(InjectionNode eventManagerInjectionNode, InjectionNode observerTendingInjectionNode) {
         this.eventManagerInjectionNode = eventManagerInjectionNode;
-        this.observerInjectionNode = observerInjectionNode;
+        this.observerTendingInjectionNode = observerTendingInjectionNode;
     }
 
     public void addObserver(ASTType event, ASTMethod method){
@@ -51,7 +51,7 @@ public class ObservesAspect {
         return eventManagerInjectionNode;
     }
 
-    public InjectionNode getObserverInjectionNode() {
-        return observerInjectionNode;
+    public InjectionNode getObserverTendingInjectionNode() {
+        return observerTendingInjectionNode;
     }
 }
