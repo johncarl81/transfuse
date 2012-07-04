@@ -1,8 +1,8 @@
 package org.androidtransfuse.event;
 
 import android.util.Log;
-import org.androidtransfuse.annotations.ContextScope;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-@ContextScope
+@Singleton
 public class EventManager {
 
     public static final String REGISTER_METHOD = "register";
