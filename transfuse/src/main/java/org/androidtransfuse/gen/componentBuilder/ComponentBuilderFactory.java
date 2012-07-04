@@ -32,6 +32,4 @@ public interface ComponentBuilderFactory {
     BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);
 
     InjectionNodeFactoryImpl buildInjectionNodeFactory(ASTType astType, AnalysisContext context);
-
-    ObservesGenerator buildObservesGenerator(AnalysisContext context);
 }

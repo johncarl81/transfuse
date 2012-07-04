@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.model.InjectionNode;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,11 @@ import java.util.Set;
 public class ObservesAspect {
 
     private Map<ASTType, Set<MethodSignatureWrapper>> observesMap = new HashMap<ASTType, Set<MethodSignatureWrapper>>();
+    private InjectionNode eventManagerInjectionNode;
+
+    public ObservesAspect(InjectionNode eventManagerInjectionNode) {
+        this.eventManagerInjectionNode = eventManagerInjectionNode;
+    }
 
     public void addObserver(ASTType event, ASTMethod method){
         if(!observesMap.containsKey(event)){
@@ -37,5 +43,9 @@ public class ObservesAspect {
         }
 
         return methods;
+    }
+
+    public InjectionNode getEventManagerInjectionNode() {
+        return eventManagerInjectionNode;
     }
 }

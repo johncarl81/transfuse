@@ -50,7 +50,7 @@ public class ProviderGenerator {
 
             generatedClassAnnotator.annotateClass(providerClass);
 
-            providerClass._implements(Provider.class).narrow(injectionNodeClassRef);
+            providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 
             //todo:possible context variable injections?
             //get() method

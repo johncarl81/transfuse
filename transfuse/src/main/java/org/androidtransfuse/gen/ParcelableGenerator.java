@@ -137,8 +137,9 @@ public class ParcelableGenerator {
                 }
             };
             */
-            //todo:move into named inner class
-            JDefinedClass creatorClass = codeModel.anonymousClass(codeModel.ref(Parcelable.Creator.class).narrow(parcelableClass));
+            JDefinedClass creatorClass = parcelableClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, namer.generateClassName(Parcelable.Creator.class));
+
+            creatorClass._implements(codeModel.ref(Parcelable.Creator.class).narrow(parcelableClass));
 
             //createFromParcel method
             JMethod createFromParcelMethod = creatorClass.method(JMod.PUBLIC, parcelableClass, CREATE_FROM_PARCEL);

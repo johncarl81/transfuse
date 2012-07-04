@@ -27,6 +27,8 @@ public class EventObserver {
     private EditText editText;
     @Inject
     private Context context;
+    @Inject
+    private SingletonObserver observer;
 
     @RegisterListener(R.id.eventonebutton)
     private android.view.View.OnClickListener eventOneListener = new android.view.View.OnClickListener() {
@@ -41,6 +43,14 @@ public class EventObserver {
         @Override
         public void onClick(android.view.View v) {
             eventManager.trigger(new EventTwo());
+        }
+    };
+
+    @RegisterListener(R.id.eventthreeobutton)
+    private android.view.View.OnClickListener eventThreeListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View v) {
+            eventManager.trigger(new EventThree());
         }
     };
 

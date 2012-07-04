@@ -141,8 +141,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
 
-        fragmentDescriptor.addGenerators(componentBuilderFactory.buildObservesGenerator(context));
-
     }
 
     private MethodCallbackGenerator buildEventMethod(String name, Class... args) {

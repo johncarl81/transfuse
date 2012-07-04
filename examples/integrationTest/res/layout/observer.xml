@@ -18,4 +18,9 @@
             android:layout_height="wrap_content"
             android:text="Event Two"
             android:id="@+id/eventtwobutton"/>
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Three (Check Log)"
+            android:id="@+id/eventthreeobutton"/>
 </LinearLayout>

@@ -95,9 +95,6 @@ public class ActivityComponentBuilderRepositoryFactory {
         //listener registration
         activityCallbackGenerators.add(listenerRegistrationGenerator);
 
-        //observes registration
-        activityCallbackGenerators.add(componentBuilderFactory.buildObservesGenerator(context));
-
 
         return activityCallbackGenerators;
     }

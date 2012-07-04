@@ -2,12 +2,12 @@ package org.androidtransfuse.integrationTest.observes;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.event.EventManager;
+import org.androidtransfuse.event.EventManager_Provider;
 import org.androidtransfuse.integrationTest.DelegateUtil;
+import org.androidtransfuse.scope.SingletonScope;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.inject.Provider;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -27,12 +27,7 @@ public class EventObserverTest {
         EventObserverActivity eventObserverActivity = new EventObserverActivity();
         eventObserverActivity.onCreate(null);
 
-        eventManager = eventObserverActivity.getScope().getScopedObject(EventManager.class, new Provider<EventManager>() {
-            @Override
-            public EventManager get() {
-                return new EventManager();
-            }
-        });
+        eventManager = SingletonScope.getInstance().getScopedObject(EventManager.class, new EventManager_Provider());
 
         eventObserver = DelegateUtil.getDelegate(eventObserverActivity, EventObserver.class);
     }
@@ -49,6 +44,14 @@ public class EventObserverTest {
         assertFalse(eventObserver.isEventTwoTriggered());
         eventManager.trigger(new EventTwo());
         assertTrue(eventObserver.isEventTwoTriggered());
+    }
+
+    @Test
+    public void testSingletonObserver(){
+        SingletonObserver singletonObserver = SingletonScope.getInstance().getScopedObject(SingletonObserver.class, new SingletonObserver_Provider());
+        assertFalse(singletonObserver.isObservedEventThree());
+        eventManager.trigger(new EventThree());
+        assertTrue(singletonObserver.isObservedEventThree());
     }
 
 
