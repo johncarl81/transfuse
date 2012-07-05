@@ -11,6 +11,15 @@ nav ul li a, nav ul li a:visited, nav ul li a:active {
   text-decoration: none;
 }
 
-.title{
+.title {
   text-decoration: none;
 }
+
+img {
+  vertical-align:text-bottom;
+} 
+
+#footer {
+   height: 200px;
+}
+
