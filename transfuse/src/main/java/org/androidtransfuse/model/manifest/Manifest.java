@@ -37,9 +37,11 @@ import java.util.List;
 @XStreamAlias("manifest")
 public class Manifest extends Mergeable {
 
+    public static final String NAMESPACE = "http://johncarl81.github.com/transfuse/";
+
     @XStreamAlias("xmlns:t")
     @XStreamAsAttribute
-    private final String transfuseNamespace = "http://johncarl81.github.com/transfuse/";
+    private String transfuseNamespace;
     @XStreamAlias("xmlns:android")
     @XStreamAsAttribute
     private final String namespace = "http://schemas.android.com/apk/res/android";
@@ -91,6 +93,10 @@ public class Manifest extends Mergeable {
 
     public void setApplicationPackage(String applicationPackage) {
         this.applicationPackage = applicationPackage;
+    }
+
+    public void updateNamespace(){
+        transfuseNamespace = NAMESPACE;
     }
 
     public String getSharedUserId() {

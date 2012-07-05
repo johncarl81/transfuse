@@ -58,6 +58,8 @@ public class TransfuseAssembler {
 
             mergedManifest.updatePackages();
 
+            mergedManifest.updateNamespace();
+
             return mergedManifest;
         } catch (MergerException e) {
             logger.error("InstantiationException while merging manifest", e);
