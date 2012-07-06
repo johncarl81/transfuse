@@ -2,6 +2,7 @@ package org.androidtransfuse.gen;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
@@ -12,6 +13,7 @@ import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodDescriptor;
+import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -27,6 +29,7 @@ import java.util.*;
  */
 public class IntentFactoryStrategyGenerator implements ExpressionVariableDependentGenerator {
 
+    private Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
     private ParcelableGenerator parcelableGenerator;
@@ -36,11 +39,13 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private Map<ASTPrimitiveType, String> methodMapping = new EnumMap<ASTPrimitiveType, String>(ASTPrimitiveType.class);
 
     @Inject
-    public IntentFactoryStrategyGenerator(JCodeModel codeModel,
+    public IntentFactoryStrategyGenerator(@Assisted Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass,
+                                          JCodeModel codeModel,
                                           UniqueVariableNamer namer,
                                           ParcelableGenerator parcelableGenerator,
                                           ParcelableAnalysis parcelableAnalysis, GeneratedClassAnnotator generatedClassAnnotator,
                                           ASTClassFactory astClassFactory) {
+        this.factoryStrategyClass = factoryStrategyClass;
         this.codeModel = codeModel;
         this.namer = namer;
         this.parcelableGenerator = parcelableGenerator;
@@ -66,8 +71,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
             generatedClassAnnotator.annotateClass(strategyClass);
 
-            //todo: different extends for different component types (Activity, Service, etc)
-            strategyClass._extends(ActivityIntentFactoryStrategy.class);
+            strategyClass._extends(factoryStrategyClass);
 
             JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
 

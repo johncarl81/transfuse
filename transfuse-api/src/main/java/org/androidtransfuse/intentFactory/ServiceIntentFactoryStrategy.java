@@ -7,13 +7,14 @@ import android.os.Bundle;
 /**
  * @author John Ericksen
  */
-public class ActivityIntentFactoryStrategy extends AbstractIntentFactoryStrategy {
+public class ServiceIntentFactoryStrategy extends AbstractIntentFactoryStrategy {
 
-    protected ActivityIntentFactoryStrategy(Class<? extends Context> targetContext, Bundle bundle) {
+    protected ServiceIntentFactoryStrategy(Class<? extends Context> targetContext, Bundle bundle) {
         super(targetContext, bundle);
     }
 
+    @Override
     public void start(Context context, Intent intent) {
-        context.startActivity(intent);
+        context.startService(intent);
     }
 }

@@ -13,8 +13,12 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.gen.GeneratorFactory;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
+import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -29,15 +33,15 @@ public class ActivityComponentBuilderRepositoryFactory {
 
     private ComponentBuilderFactory componentBuilderFactory;
     private ASTClassFactory astClassFactory;
-    private IntentFactoryStrategyGenerator intentFactoryStrategyGenerator;
+    private GeneratorFactory generatorFactory;
     private ListenerRegistrationGenerator listenerRegistrationGenerator;
     private NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator, NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator) {
+    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, GeneratorFactory generatorFactory, ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.intentFactoryStrategyGenerator = intentFactoryStrategyGenerator;
+        this.generatorFactory = generatorFactory;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
         this.nonConfigurationInstanceGenerator = nonConfigurationInstanceGenerator;
     }
@@ -104,7 +108,7 @@ public class ActivityComponentBuilderRepositoryFactory {
                         componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
 
         //extra intent factory
-        activityCallbackGenerators.add(intentFactoryStrategyGenerator);
+        activityCallbackGenerators.add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
 
         //listener registration
         activityCallbackGenerators.add(listenerRegistrationGenerator);

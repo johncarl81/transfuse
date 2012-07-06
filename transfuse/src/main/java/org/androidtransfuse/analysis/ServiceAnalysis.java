@@ -15,8 +15,10 @@ import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Service;
+import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
@@ -52,6 +54,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionBindingBuilder injectionBindingBuilder;
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private GeneratorFactory generatorFactory;
 
     @Inject
     public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
@@ -64,7 +67,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            TypeMirrorUtil typeMirrorUtil,
                            MetaDataBuilder metadataBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
-                           ASTTypeBuilderVisitor astTypeBuilderVisitor, ContextScopeComponentBuilder contextScopeComponentBuilder) {
+                           ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                           ContextScopeComponentBuilder contextScopeComponentBuilder,
+                           GeneratorFactory generatorFactory) {
         this.injectionNodeRepository = injectionNodeRepository;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -78,6 +83,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
+        this.generatorFactory = generatorFactory;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -183,6 +189,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         });
 
         serviceDescriptor.addGenerators(contextScopeComponentBuilder);
+
+        serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }
 
     private MethodCallbackGenerator buildEventMethod(String name, Class... args) {

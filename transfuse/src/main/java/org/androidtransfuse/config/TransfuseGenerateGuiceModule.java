@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider;
 import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
@@ -52,6 +53,7 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(ComponentBuilderFactory.class));
         install(factoryModuleBuilder.build(AnalysisContextFactory.class));
         install(factoryModuleBuilder.build(InjectionBuilderContextFactory.class));
+        install(factoryModuleBuilder.build(GeneratorFactory.class));
 
         bind(JCodeModel.class).asEagerSingleton();
         bind(InjectionNodeBuilder.class).annotatedWith(Names.named(DEFAULT_BINDING)).to(VariableInjectionNodeBuilder.class);
