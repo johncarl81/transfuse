@@ -82,7 +82,29 @@ public class ParcelExample {
                 ", \n\ttinnerParcel=" + innerParcel +
                 ", \n\trealParcelable=" + realParcelable +
                 ", \n\tserializableValue=" + serializableValue +
-                ", \n\tbooleans=" + booleans +
+                ", \n\tbooleans=" + printBooleans() +
                 '}';
+    }
+
+    private String printBooleans(){
+        if(booleans == null){
+            return "null";
+        }
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('[');
+        boolean first = true;
+        for(boolean b : booleans){
+            if(first){
+                first = false;
+            }
+            else{
+                builder.append(',');
+            }
+            builder.append(b);
+        }
+        builder.append(']');
+        return builder.toString();
+
     }
 }

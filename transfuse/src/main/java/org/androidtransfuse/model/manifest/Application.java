@@ -122,6 +122,7 @@ public class Application extends Mergeable implements Identified {
     @XStreamImplicit(itemFieldName = "uses-library")
     private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
 
+    @Merge("r")
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
     }
@@ -130,6 +131,7 @@ public class Application extends Mergeable implements Identified {
         this.allowTaskReparenting = allowTaskReparenting;
     }
 
+    @Merge("a")
     public String getBackupAgent() {
         return backupAgent;
     }
@@ -138,6 +140,7 @@ public class Application extends Mergeable implements Identified {
         this.backupAgent = backupAgent;
     }
 
+    @Merge("b")
     public Boolean getDebuggable() {
         return debuggable;
     }
@@ -146,6 +149,7 @@ public class Application extends Mergeable implements Identified {
         this.debuggable = debuggable;
     }
 
+    @Merge("d")
     public String getDescription() {
         return description;
     }
@@ -154,6 +158,7 @@ public class Application extends Mergeable implements Identified {
         this.description = description;
     }
 
+    @Merge("e")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -162,6 +167,7 @@ public class Application extends Mergeable implements Identified {
         this.enabled = enabled;
     }
 
+    @Merge("c")
     public Boolean getHasCode() {
         return hasCode;
     }
@@ -170,6 +176,7 @@ public class Application extends Mergeable implements Identified {
         this.hasCode = hasCode;
     }
 
+    @Merge("h")
     public Boolean getHardwareAccelerated() {
         return hardwareAccelerated;
     }
@@ -178,6 +185,7 @@ public class Application extends Mergeable implements Identified {
         this.hardwareAccelerated = hardwareAccelerated;
     }
 
+    @Merge("i")
     public String getIcon() {
         return icon;
     }
@@ -186,6 +194,7 @@ public class Application extends Mergeable implements Identified {
         this.icon = icon;
     }
 
+    @Merge("k")
     public Boolean getKillAfterRestore() {
         return killAfterRestore;
     }
@@ -203,6 +212,7 @@ public class Application extends Mergeable implements Identified {
         this.label = label;
     }
 
+    @Merge("o")
     public String getLogo() {
         return logo;
     }
@@ -211,6 +221,7 @@ public class Application extends Mergeable implements Identified {
         this.logo = logo;
     }
 
+    @Merge("s")
     public String getManageSpaceActivity() {
         return manageSpaceActivity;
     }
@@ -228,6 +239,7 @@ public class Application extends Mergeable implements Identified {
         this.name = name;
     }
 
+    @Merge("m")
     public String getPermission() {
         return permission;
     }
@@ -236,6 +248,7 @@ public class Application extends Mergeable implements Identified {
         this.permission = permission;
     }
 
+    @Merge("x")
     public Boolean getPersistent() {
         return persistent;
     }
@@ -244,6 +257,7 @@ public class Application extends Mergeable implements Identified {
         this.persistent = persistent;
     }
 
+    @Merge("p")
     public String getProcess() {
         return process;
     }
@@ -252,6 +266,7 @@ public class Application extends Mergeable implements Identified {
         this.process = process;
     }
 
+    @Merge("v")
     public Boolean getRestoreAnyVersion() {
         return restoreAnyVersion;
     }
@@ -260,6 +275,7 @@ public class Application extends Mergeable implements Identified {
         this.restoreAnyVersion = restoreAnyVersion;
     }
 
+    @Merge("f")
     public String getTaskAffinity() {
         return taskAffinity;
     }
@@ -268,6 +284,7 @@ public class Application extends Mergeable implements Identified {
         this.taskAffinity = taskAffinity;
     }
 
+    @Merge("t")
     public String getTheme() {
         return theme;
     }
@@ -276,6 +293,7 @@ public class Application extends Mergeable implements Identified {
         this.theme = theme;
     }
 
+    @Merge("u")
     public UIOptions getUiOptions() {
         return uiOptions;
     }

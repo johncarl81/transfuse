@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Application;
+import org.androidtransfuse.annotations.UIOptions;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
@@ -59,7 +60,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     public void emptyApplication() {
-        setupManifest(android.app.Application.class.getName(), null);
+        setupManifest(android.app.Application.class.getName());
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -83,7 +84,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         setupApplicationProfile(applicationDescriptor, astType, analysisContext);
 
         //add manifest elements
-        setupManifest(applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
+        setupManifest(applicationAnnotation, applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
 
         return applicationDescriptor;
     }
@@ -120,8 +121,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args){
-        try{
+    private ASTMethod getASTMethod(String methodName, Class... args) {
+        try {
             return astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
@@ -139,13 +140,56 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private void setupManifest(String name, String label) {
+    private void setupManifest(String name){
+        org.androidtransfuse.model.manifest.Application manifestApplication = buildManifest(name);
 
+        manifestManager.setApplication(manifestApplication);
+    }
+
+    private void setupManifest(Application annotation, String name, String label) {
+
+        org.androidtransfuse.model.manifest.Application manifestApplication = buildManifest(name);
+
+        manifestApplication.setLabel(checkBlank(label));
+        manifestApplication.setAllowTaskReparenting(checkDefault(annotation.allowTaskReparenting(), false));
+        manifestApplication.setBackupAgent(checkBlank(annotation.backupAgent()));
+        manifestApplication.setDebuggable(checkDefault(annotation.debuggable(), false));
+        manifestApplication.setDescription(checkBlank(annotation.description()));
+        manifestApplication.setEnabled(checkDefault(annotation.enabled(), true));
+        manifestApplication.setHasCode(checkDefault(annotation.hasCode(), true));
+        manifestApplication.setHardwareAccelerated(checkDefault(annotation.hardwareAccelerated(), false));
+        manifestApplication.setIcon(checkBlank(annotation.icon()));
+        manifestApplication.setKillAfterRestore(checkDefault(annotation.killAfterRestore(), true));
+        manifestApplication.setLogo(checkBlank(annotation.logo()));
+        manifestApplication.setManageSpaceActivity(checkBlank(annotation.manageSpaceActivity()));
+        manifestApplication.setPermission(checkBlank(annotation.permission()));
+        manifestApplication.setPersistent(checkDefault(annotation.persistent(), false));
+        manifestApplication.setProcess(checkBlank(annotation.process()));
+        manifestApplication.setRestoreAnyVersion(checkDefault(annotation.restoreAnyVersion(), false));
+        manifestApplication.setTaskAffinity(checkBlank(annotation.taskAffinity()));
+        manifestApplication.setTheme(checkBlank(annotation.theme()));
+        manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
+        manifestManager.setApplication(manifestApplication);
+    }
+
+    private org.androidtransfuse.model.manifest.Application buildManifest(String name){
         org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
         manifestApplication.setName(name);
-        manifestApplication.setLabel(StringUtils.isBlank(label) ? null : label);
+        return manifestApplication;
+    }
 
-        manifestManager.setApplication(manifestApplication);
+    private <T> T checkDefault(T input, T defaultValue) {
+        if (input.equals(defaultValue)) {
+            return null;
+        }
+        return input;
+    }
+
+    private String checkBlank(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        return input;
     }
 }

@@ -36,7 +36,7 @@ public class NonConfigInstance {
     private Button restartButton;
 
     @RegisterListener(R.id.restart_button)
-    public android.view.View.OnClickListener restartClick = new android.view.View.OnClickListener(){
+    private android.view.View.OnClickListener restartClick = new android.view.View.OnClickListener(){
         @Override
         public void onClick(android.view.View v) {
             if(asyncTask.isRunning()){

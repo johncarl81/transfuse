@@ -209,7 +209,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
         this.finishOnTaskLaunch = finishOnTaskLaunch;
     }
 
-    @Merge("d")
+    @Merge("j")
     public Boolean getHardwareAccelerated() {
         return hardwareAccelerated;
     }
@@ -263,7 +263,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
         this.name = name;
     }
 
-    @Merge("y")
+    @Merge("v")
     public Boolean getNoHistory() {
         return noHistory;
     }

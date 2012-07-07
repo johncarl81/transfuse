@@ -63,7 +63,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             final ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
             if (injectionAspect == null) {
-                System.out.println("Injection node not mapped: " + proxyableInjectionNode.getClassName());
                 throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
             } else if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
                 variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode));
