@@ -14,6 +14,7 @@ import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.observes.EventObserverActivity;
 import org.androidtransfuse.integrationTest.register.RegisterActivity;
+import org.androidtransfuse.integrationTest.saveState.NonConfigInstanceActivity;
 import org.androidtransfuse.integrationTest.saveState.SaveInstanceStateActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
@@ -69,6 +70,7 @@ public class Main {
                 createLI(FragmentMainActivity.class, "Fragments"),
                 createLI(EventObserverActivity.class, "Event Observer"),
                 createLI(SaveInstanceStateActivity.class, "Save Instance State"),
+                createLI(NonConfigInstanceActivity.class, "NonConfigurationInstance task"),
                 createLI(AboutActivity.class, "About")
         }));
 

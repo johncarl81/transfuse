@@ -82,6 +82,8 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod("onStart"));
         // onStop
         activityCallbackGenerators.add(buildEventMethod("onStop"));
+        // onBackPressed
+        activityCallbackGenerators.add(buildEventMethod("onBackPressed"));
 
         // onSaveInstanceState
         ASTMethod onSaveIntanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);

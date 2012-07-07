@@ -96,7 +96,8 @@ public class VariableInjectionBuilder implements VariableBuilder {
                         injectionInvocationBuilder.buildFieldSet(
                                 injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                                 fieldInjectionPoint,
-                                variableRef));
+                                variableRef,
+                                fieldInjectionPoint.getSubclassLevel()));
             }
 
             //method injection

@@ -144,11 +144,11 @@ public class InvocationBuilder {
         return methodInvocation;
     }
 
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable, int level) throws ClassNotFoundException, JClassAlreadyExistsException {
         if (ASTAccessModifier.PUBLIC.equals(fieldInjectionPoint.getAccessModifier())) {
             return buildPublicFieldSet(expression, fieldInjectionPoint, variable);
         }
-        return buildPrivateFieldSet(expression, fieldInjectionPoint, variable);
+        return buildPrivateFieldSet(expression, fieldInjectionPoint, variable, level);
     }
 
     private JStatement buildPublicFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
@@ -160,10 +160,10 @@ public class InvocationBuilder {
         return assignmentBlock;
     }
 
-    private JStatement buildPrivateFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JStatement buildPrivateFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable, int level) throws ClassNotFoundException, JClassAlreadyExistsException {
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_FIELD_METHOD)
                 .arg(variable)
-                .arg(JExpr.lit(fieldInjectionPoint.getSubclassLevel()))
+                .arg(JExpr.lit(level))
                 .arg(fieldInjectionPoint.getName())
                 .arg(expression.getExpression());
     }

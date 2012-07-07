@@ -29,6 +29,7 @@
         <activity t:tag="+,l,n" android:label="Activity Lifecycle" android:name=".lifecycle.ActivityLifecycleActivity"/>
         <activity t:tag="+,l,n" android:label="Observes" android:name=".observes.EventObserverActivity"/>
         <activity t:tag="+,l,n" android:label="Listener Registration" android:name=".register.RegisterActivity"/>
+        <activity t:tag="+,n" android:name=".saveState.NonConfigInstanceActivity"/>
         <activity t:tag="+,l,n" android:label="Save Instance State" android:name=".saveState.SaveInstanceStateActivity"/>
         <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeOneActivity"/>
         <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeTwoActivity"/>
