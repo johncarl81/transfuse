@@ -14,6 +14,7 @@ import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
 import org.androidtransfuse.integrationTest.observes.EventObserverActivity;
 import org.androidtransfuse.integrationTest.register.RegisterActivity;
+import org.androidtransfuse.integrationTest.saveState.SaveInstanceStateActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeOneActivity;
 import org.androidtransfuse.integrationTest.scope.ScopeTwoActivity;
 import org.androidtransfuse.intentFactory.IntentFactory;
@@ -67,6 +68,7 @@ public class Main {
                 createLI(ViewInjectionActivity.class, "View Injection"),
                 createLI(FragmentMainActivity.class, "Fragments"),
                 createLI(EventObserverActivity.class, "Event Observer"),
+                createLI(SaveInstanceStateActivity.class, "Save Instance State"),
                 createLI(AboutActivity.class, "About")
         }));
 

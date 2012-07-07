@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.repository;
 import android.app.Activity;
 import android.app.ActivityGroup;
 import android.app.ListActivity;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,6 +83,18 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod("onStart"));
         // onStop
         activityCallbackGenerators.add(buildEventMethod("onStop"));
+
+        // onSaveInstanceState
+        ASTMethod onSaveIntanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
+        activityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator("onSaveInstanceState",
+                        componentBuilderFactory.buildMirroredMethodGenerator(onSaveIntanceStateMethod, true)));
+
+        // onRestoreInstanceState
+        ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", Bundle.class);
+        activityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator("onRestoreInstanceState",
+                        componentBuilderFactory.buildMirroredMethodGenerator(onRestoreInstanceState, true)));
 
         //ontouch method
         ASTMethod onTouchMethod = getASTMethod("onTouchEvent", MotionEvent.class);
