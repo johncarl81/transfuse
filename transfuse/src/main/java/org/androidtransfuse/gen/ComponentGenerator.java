@@ -43,34 +43,30 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 
-            MethodDescriptor onCreateMethodDescriptor = descriptor.getMethodBuilder().buildMethod(definedClass);
+            MethodDescriptor methodDescriptor = descriptor.getMethodBuilder().buildMethod(definedClass);
 
-            JBlock block = onCreateMethodDescriptor.getMethod().body();
+            JBlock block = methodDescriptor.getMethod().body();
 
             //Injections
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
                         block,
                         definedClass,
-                        descriptor.getInjectionNodeFactory().buildInjectionNode(onCreateMethodDescriptor));
+                        descriptor.getInjectionNodeFactory().buildInjectionNode(methodDescriptor));
 
             //Method Callbacks
-            MethodGenerator onCreateMethodGenerator = new ExistingMethod(onCreateMethodDescriptor);
+            MethodGenerator onCreateMethodGenerator = new ExistingMethod(methodDescriptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(
-                    onCreateMethodDescriptor.getASTMethod().getName(), onCreateMethodGenerator);
+                    methodDescriptor.getASTMethod().getName(), onCreateMethodGenerator);
 
-            onCreateCallbackGenerator.generate(definedClass, block, expressionMap, descriptor);
+            onCreateCallbackGenerator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
 
             //... and other listeners
             for (ExpressionVariableDependentGenerator generator : descriptor.getGenerators()) {
-                generator.generate(definedClass, block, expressionMap, descriptor);
+                generator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
             }
 
-            for (ComponentBuilder componentBuilder : descriptor.getComponentBuilders()) {
-                componentBuilder.build(definedClass, descriptor);
-            }
-
-            descriptor.getMethodBuilder().closeMethod(onCreateMethodDescriptor);
+            descriptor.getMethodBuilder().closeMethod(methodDescriptor);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {

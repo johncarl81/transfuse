@@ -3,16 +3,19 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.scope.Scope;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class ContextScopeComponentBuilder implements ComponentBuilder{
+public class ContextScopeComponentBuilder implements ExpressionVariableDependentGenerator{
 
     private JCodeModel codeModel;
     private UniqueVariableNamer namer;
@@ -24,8 +27,7 @@ public class ContextScopeComponentBuilder implements ComponentBuilder{
     }
 
     @Override
-    public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
-
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
         //setup context scope
         definedClass._implements(ContextScopeHolder.class);
 

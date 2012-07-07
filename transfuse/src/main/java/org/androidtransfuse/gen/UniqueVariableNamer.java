@@ -32,6 +32,10 @@ public class UniqueVariableNamer {
         return generateName(injectionNode.getClassName(), true);
     }
 
+    public String generateName(String name){
+        return generateName(name, true);
+    }
+
     public String generateClassName(Class clazz) {
         return generateName(clazz.getName(), false);
     }
@@ -46,6 +50,10 @@ public class UniqueVariableNamer {
 
     public String generateClassName(InjectionNode injectionNode) {
         return generateName(injectionNode.getClassName(), false);
+    }
+
+    public String generateClassName(String name){
+        return generateName(name, false);
     }
 
     private synchronized String generateName(String fullClassName, boolean lowerFirst) {

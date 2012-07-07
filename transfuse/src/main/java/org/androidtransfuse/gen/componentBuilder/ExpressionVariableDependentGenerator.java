@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -13,5 +12,5 @@ import java.util.Map;
  */
 public interface ExpressionVariableDependentGenerator {
 
-    void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor);
+    void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor);
 }

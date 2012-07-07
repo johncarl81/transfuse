@@ -1,11 +1,13 @@
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -14,7 +16,6 @@ public class ComponentDescriptor {
 
     private PackageClass packageClass;
     private String type;
-    private Set<ComponentBuilder> componentBuilders = new HashSet<ComponentBuilder>();
     private MethodBuilder methodBuilder;
     private List<ExpressionVariableDependentGenerator> generators = new ArrayList<ExpressionVariableDependentGenerator>();
     private InjectionNodeFactory injectionNodeFactory;
@@ -30,10 +31,6 @@ public class ComponentDescriptor {
 
     public String getType() {
         return type;
-    }
-
-    public Set<ComponentBuilder> getComponentBuilders() {
-        return componentBuilders;
     }
 
     public MethodBuilder getMethodBuilder() {

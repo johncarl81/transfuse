@@ -14,10 +14,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
-import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
-import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.*;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -34,13 +31,15 @@ public class ActivityComponentBuilderRepositoryFactory {
     private ASTClassFactory astClassFactory;
     private IntentFactoryStrategyGenerator intentFactoryStrategyGenerator;
     private ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator) {
+    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, IntentFactoryStrategyGenerator intentFactoryStrategyGenerator, ListenerRegistrationGenerator listenerRegistrationGenerator, NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.intentFactoryStrategyGenerator = intentFactoryStrategyGenerator;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
+        this.nonConfigurationInstanceGenerator = nonConfigurationInstanceGenerator;
     }
 
     public ActivityComponentBuilderRepository build(AnalysisContext context) {
@@ -107,6 +106,10 @@ public class ActivityComponentBuilderRepositoryFactory {
 
         //listener registration
         activityCallbackGenerators.add(listenerRegistrationGenerator);
+
+        //non configuration instance update
+        activityCallbackGenerators.add(nonConfigurationInstanceGenerator);
+
 
 
         return activityCallbackGenerators;

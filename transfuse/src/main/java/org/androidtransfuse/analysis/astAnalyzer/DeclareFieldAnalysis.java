@@ -16,14 +16,11 @@ public class DeclareFieldAnalysis extends ASTAnalysisAdaptor {
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
         if (astType.isAnnotated(DeclareField.class)) {
-            ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
-
-            if (injectionAspect == null) {
-                injectionAspect = new ASTInjectionAspect();
-                injectionNode.addAspect(ASTInjectionAspect.class, injectionAspect);
+            if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
+                injectionNode.addAspect(ASTInjectionAspect.class, new ASTInjectionAspect());
             }
 
-            injectionAspect.setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
+            injectionNode.getAspect(ASTInjectionAspect.class).setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
         }
     }
 }

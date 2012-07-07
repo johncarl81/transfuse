@@ -74,7 +74,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             receiverDescriptor.setMethodBuilder(componentBuilderFactory.buildOnReceiveMethodBuilder());
 
-            receiverDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
+            receiverDescriptor.addGenerators(contextScopeComponentBuilder);
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);

@@ -106,7 +106,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
 
-        applicationDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
+        applicationDescriptor.addGenerators(contextScopeComponentBuilder);
     }
 
     private MethodCallbackGenerator buildEventMethod(String name) {

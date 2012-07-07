@@ -37,9 +37,11 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
         try {
+            JBlock block = methodDescriptor.getMethod().body();
+
             //add listener registration
             for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
                 if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
@@ -104,7 +106,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
 
             for (ASTMethod listenerMethod : listenerRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod.getName())
-                        .arg(invocationBuilder.buildFieldGet(listenerRegistration.getASTBase().getASTType().getName(),
+                        .arg(invocationBuilder.buildFieldGet(listenerRegistration.getASTBase().getASTType(),
                                 variableExpression.getExpression(),
                                 listenerRegistration.getASTBase().getName(),
                                 listenerRegistration.getASTBase().getAccessModifier(),

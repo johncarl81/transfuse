@@ -17,6 +17,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
     private RegistrationAnalyzer registrationAnalysis;
     private DeclareFieldAnalysis declareFieldAnalysis;
     private ObservesAnalysis observesAnalysis;
+    private NonConfigurationAnalysis nonConfigurationAnalysis;
 
     @Inject
     public AnalysisRepositoryFactory(AOPProxyAnalyzer aopProxyAnalyzer,
@@ -25,7 +26,8 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
                                      ScopeAnalysis scopeAnalysis,
                                      RegistrationAnalyzer registrationAnalysis,
                                      DeclareFieldAnalysis declareFieldAnalysis,
-                                     ObservesAnalysis observesAnalysis) {
+                                     ObservesAnalysis observesAnalysis,
+                                     NonConfigurationAnalysis nonConfigurationAnalysis) {
         this.aopProxyAnalyzer = aopProxyAnalyzer;
         this.injectionAnalyzer = injectionAnalyzer;
         this.methodCallbackAnalysis = methodCallbackAnalysis;
@@ -33,6 +35,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
         this.registrationAnalysis = registrationAnalysis;
         this.declareFieldAnalysis = declareFieldAnalysis;
         this.observesAnalysis = observesAnalysis;
+        this.nonConfigurationAnalysis = nonConfigurationAnalysis;
     }
 
     public AnalysisRepository get() {
@@ -45,6 +48,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
         analysisRepository.addAnalysis(registrationAnalysis);
         analysisRepository.addAnalysis(declareFieldAnalysis);
         analysisRepository.addAnalysis(observesAnalysis);
+        analysisRepository.addAnalysis(nonConfigurationAnalysis);
 
         return analysisRepository;
     }

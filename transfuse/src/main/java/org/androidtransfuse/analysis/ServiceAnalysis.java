@@ -18,7 +18,9 @@ import org.androidtransfuse.annotations.Service;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -28,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
+import java.util.Map;
 
 /**
  * Service related Analysis
@@ -169,9 +172,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addGenerators(buildEventMethod("onRebind", Intent.class));
 
         //todo: move this somewhere else
-        serviceDescriptor.getComponentBuilders().add(new ComponentBuilder() {
+        serviceDescriptor.addGenerators(new ExpressionVariableDependentGenerator() {
             @Override
-            public void build(JDefinedClass definedClass, ComponentDescriptor descriptor) {
+            public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
                 JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
                 onBind.param(Intent.class, "intent");
 
@@ -179,7 +182,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             }
         });
 
-        serviceDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
+        serviceDescriptor.addGenerators(contextScopeComponentBuilder);
     }
 
     private MethodCallbackGenerator buildEventMethod(String name, Class... args) {

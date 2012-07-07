@@ -168,16 +168,16 @@ public class InvocationBuilder {
                 .arg(expression.getExpression());
     }
 
-    public JExpression buildFieldGet(String returnType, JExpression variable, String name, ASTAccessModifier accessModifier, int subclassLevel) {
+    public JExpression buildFieldGet(ASTType returnType, JExpression variable, String name, ASTAccessModifier accessModifier, int subclassLevel) {
         if (accessModifier.equals(ASTAccessModifier.PUBLIC)) {
             return buildPublicFieldGet(variable, name);
         }
         return buildPrivateFieldGet(returnType, variable, name, subclassLevel);
     }
 
-    private JExpression buildPrivateFieldGet(String returnType, JExpression variable, String name, int subclassLevel) {
+    private JExpression buildPrivateFieldGet(ASTType returnType, JExpression variable, String name, int subclassLevel) {
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.GET_FIELD_METHOD)
-                .arg(codeModel.ref(returnType).dotclass())
+                .arg(codeModel.ref(returnType.getName()).dotclass())
                 .arg(variable)
                 .arg(JExpr.lit(subclassLevel))
                 .arg(name);

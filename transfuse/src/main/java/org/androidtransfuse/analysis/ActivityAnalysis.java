@@ -235,7 +235,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         activityDescriptor.addGenerators(activityComponentBuilderRepository.build(context).getGenerators(activityType));
 
-        activityDescriptor.getComponentBuilders().add(contextScopeComponentBuilder);
+        activityDescriptor.addGenerators(contextScopeComponentBuilder);
 
     }
 
