@@ -22,9 +22,9 @@ mvn archetype:generate \
 
 {% endhighlight %}
 
-You should now have a fully functional Android application.
+After running this you should have a basic Android application.
 
-Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml (Transfuse will add this back and manage it for you!).  Your AndroidManifest.xml should look like this:
+Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml.  Don't worry, Transfuse will add the Application xml back and manage it for you.  Your AndroidManifest.xml should look like this:
 
 {% highlight xml %}
 <?xml version="1.0" encoding="utf-8"?>
@@ -33,7 +33,7 @@ package="org.androidtransfuse" android:versionCode="1" android:versionName="1.0-
 </manifest>
 {% endhighlight %}
 
-Worth noting, Transfuse is legacy friendly and allows you to migrate your Activities and other Android components into Transfuse as you wish, so for applications with an existing codebase the previous step is not required.
+Worth noting, Transfuse is legacy friendly and allows you to migrate your Activities and other Android components into Transfuse as you wish, so for applications with an existing codebase the previous step is not required but some manual merging may be needed.
 
 #### Download Transfuse
 
