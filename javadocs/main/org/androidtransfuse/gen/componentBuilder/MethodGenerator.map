@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="c70237" href="./ExistingMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExistingMethodGenerator" alt="" coords="16,118,184,143"/>
-<area shape="rect" id="c70241" href="./MethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodGenerator" alt="" coords="143,11,265,53"/>
-<area shape="rect" id="c70247" href="./SimpleMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator" alt="" coords="229,118,390,143"/>
+<area shape="rect" id="c86468" href="./MethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodGenerator" alt="" coords="102,11,223,53"/>
+<area shape="rect" id="c86469" href="./ExistingMethod.html" title="org.androidtransfuse.gen.componentBuilder.ExistingMethod" alt="" coords="15,118,126,143"/>
+<area shape="rect" id="c86473" href="./MirroredMethodGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator" alt="" coords="171,118,339,143"/>
 </map>

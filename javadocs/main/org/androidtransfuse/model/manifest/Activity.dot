@@ -9,24 +9,33 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.model.Mergeable
+	c20551 [label=<<table title="org.androidtransfuse.model.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Mergeable.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Mergeable </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.model.Identified
+	c20553 [label=<<table title="org.androidtransfuse.model.Identified" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Identified.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Identified </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Activity
-	c15720 [label=<<table title="org.androidtransfuse.model.manifest.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Activity.html">
+	c20587 [label=<<table title="org.androidtransfuse.model.manifest.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Activity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Activity </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.Mergeable<T>
-	c15845 [label=<<table title="org.androidtransfuse.processor.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../processor/Mergeable.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Mergeable&lt;T&gt; </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.model.manifest.Activity extends org.androidtransfuse.processor.Mergeable<java.lang.String>
-	c15845:p -> c15720:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.model.manifest.Activity extends org.androidtransfuse.model.Mergeable
+	c20551:p -> c20587:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.model.manifest.Activity implements java.lang.Comparable<T>
-	c15940:p -> c15720:p [dir=back,arrowtail=empty,style=dashed];
+	c20831:p -> c20587:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.model.manifest.Activity implements org.androidtransfuse.model.Identified
+	c20553:p -> c20587:p [dir=back,arrowtail=empty,style=dashed];
 	// java.lang.Comparable<T>
-	c15940 [label=<<table title="java.lang.Comparable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html">
+	c20831 [label=<<table title="java.lang.Comparable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Comparable&lt;T&gt; </td></tr>

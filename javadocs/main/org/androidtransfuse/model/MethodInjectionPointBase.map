@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="c8522" href="./MethodInjectionPoint.html" title="org.androidtransfuse.model.MethodInjectionPoint" alt="" coords="15,113,158,138"/>
+<area shape="rect" id="c8524" href="./MethodInjectionPointBase.html" title="org.androidtransfuse.model.MethodInjectionPointBase" alt="" coords="100,17,273,42"/>
+<area shape="rect" id="c8528" href="./ConstructorInjectionPoint.html" title="org.androidtransfuse.model.ConstructorInjectionPoint" alt="" coords="203,113,371,138"/>
+</map>

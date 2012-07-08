@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.module.BindInterceptorProcessor
-	c42719 [label=<<table title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./BindInterceptorProcessor.html">
+	c51176 [label=<<table title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./BindInterceptorProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BindInterceptorProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor
-	c42720 [label=<<table title="org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ClassBindingMethodProcessorAdaptor.html">
+	c51178 [label=<<table title="org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ClassBindingMethodProcessorAdaptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ClassBindingMethodProcessorAdaptor </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.module.BindInterceptorProcessor extends org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor
-	c42720:p -> c42719:p [dir=back,arrowtail=empty];
+	c51178:p -> c51176:p [dir=back,arrowtail=empty];
 }
 

@@ -9,20 +9,11 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.gen.InjectionExpressionBuilderImpl
-	c53989 [label=<<table title="org.androidtransfuse.gen.InjectionExpressionBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionExpressionBuilderImpl.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> InjectionExpressionBuilderImpl </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectionExpressionBuilder
-	c53995 [label=<<table title="org.androidtransfuse.gen.InjectionExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionExpressionBuilder.html">
+	c64711 [label=<<table title="org.androidtransfuse.gen.InjectionExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionExpressionBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionExpressionBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.InjectionExpressionBuilderImpl implements org.androidtransfuse.gen.InjectionExpressionBuilder
-	c53995:p -> c53989:p [dir=back,arrowtail=empty,style=dashed];
 }
 

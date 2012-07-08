@@ -1,7 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c1969" href="./BindProviderProcessor.html" title="org.androidtransfuse.analysis.module.BindProviderProcessor" alt="" coords="15,214,169,239"/>
-<area shape="rect" id="c1970" href="./MethodProcessor.html" title="org.androidtransfuse.analysis.module.MethodProcessor" alt="" coords="236,11,359,53"/>
-<area shape="rect" id="c1972" href="./ClassBindingMethodProcessorAdaptor.html" title="org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor" alt="" coords="175,118,420,143"/>
-<area shape="rect" id="c1971" href="./BindInterceptorProcessor.html" title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" alt="" coords="213,214,381,239"/>
-<area shape="rect" id="c1973" href="./BindProcessor.html" title="org.androidtransfuse.analysis.module.BindProcessor" alt="" coords="426,214,531,239"/>
+<area shape="rect" id="c2495" href="./BindProviderProcessor.html" title="org.androidtransfuse.analysis.module.BindProviderProcessor" alt="" coords="15,214,169,239"/>
+<area shape="rect" id="c2496" href="./MethodProcessor.html" title="org.androidtransfuse.analysis.module.MethodProcessor" alt="" coords="236,11,359,53"/>
+<area shape="rect" id="c2499" href="./ClassBindingMethodProcessorAdaptor.html" title="org.androidtransfuse.analysis.module.ClassBindingMethodProcessorAdaptor" alt="" coords="175,118,420,143"/>
+<area shape="rect" id="c2497" href="./BindInterceptorProcessor.html" title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" alt="" coords="213,214,381,239"/>
+<area shape="rect" id="c2498" href="./ModuleProcessor.html" title="org.androidtransfuse.analysis.module.ModuleProcessor" alt="" coords="403,19,525,45"/>
+<area shape="rect" id="c2500" href="./BindProcessor.html" title="org.androidtransfuse.analysis.module.BindProcessor" alt="" coords="426,214,531,239"/>
 </map>

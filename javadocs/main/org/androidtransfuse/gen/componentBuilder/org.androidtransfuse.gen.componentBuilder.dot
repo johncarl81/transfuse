@@ -10,108 +10,180 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator
-	c4420 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReturningMethodGenerator.html">
+	c5539 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReturningMethodGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ReturningMethodGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.componentBuilder.ExistingMethodGenerator
-	c4421 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ExistingMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExistingMethodGenerator.html">
+	// org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl
+	c5540 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeFactoryImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ExistingMethodGenerator </td></tr>
+<tr><td align="center" balign="center"> InjectionNodeFactoryImpl </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder
+	c5541 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ContextScopeComponentBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ContextScopeComponentBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder
-	c4422 [label=<<table title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NoOpLayoutBuilder.html">
+	c5542 [label=<<table title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NoOpLayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NoOpLayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
+	c5543 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> InjectionNodeFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator
+	c5544 [label=<<table title="org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NonConfigurationInstanceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> NonConfigurationInstanceGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder
-	c4423 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandlerBuilder.html">
+	c5545 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandlerBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> LayoutHandlerBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator
-	c4424 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistrationGenerator.html">
+	c5546 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistrationGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ListenerRegistrationGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.MethodGenerator
-	c4425 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodGenerator.html">
+	c5547 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> MethodGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.ExistingMethod
+	c5548 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ExistingMethod" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExistingMethod.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ExistingMethod </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator
-	c4426 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackGenerator.html">
+	c5549 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodCallbackGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.MethodBuilder
+	c5550 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> MethodBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator
-	c4427 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExpressionVariableDependentGenerator.html">
+	c5551 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExpressionVariableDependentGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ExpressionVariableDependentGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator
+	c5552 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MirroredMethodGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MirroredMethodGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.OnCreateMethodBuilder
+	c5553 [label=<<table title="org.androidtransfuse.gen.componentBuilder.OnCreateMethodBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnCreateMethodBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> OnCreateMethodBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory
-	c4428 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentBuilderFactory.html">
+	c5554 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentBuilderFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ComponentBuilderFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.FragmentOnCreateViewMethodBuilder
+	c5555 [label=<<table title="org.androidtransfuse.gen.componentBuilder.FragmentOnCreateViewMethodBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentOnCreateViewMethodBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FragmentOnCreateViewMethodBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.RLayoutBuilder
-	c4429 [label=<<table title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RLayoutBuilder.html">
+	c5556 [label=<<table title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RLayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RLayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder
-	c4430 [label=<<table title="org.androidtransfuse.gen.componentBuilder.OnCreateComponentBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnCreateComponentBuilder.html">
+	// org.androidtransfuse.gen.componentBuilder.OnReceiveMethodBuilder
+	c5557 [label=<<table title="org.androidtransfuse.gen.componentBuilder.OnReceiveMethodBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnReceiveMethodBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> OnCreateComponentBuilder </td></tr>
+<tr><td align="center" balign="center"> OnReceiveMethodBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator
-	c4431 [label=<<table title="org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SimpleMethodGenerator.html">
+	// org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory
+	c5558 [label=<<table title="org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverInjectionNodeFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> SimpleMethodGenerator </td></tr>
+<tr><td align="center" balign="center"> BroadcastReceiverInjectionNodeFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder
+	c5559 [label=<<table title="org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentSimpleLayoutBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FragmentSimpleLayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.MethodDescriptor
-	c4432 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodDescriptor.html">
+	c5560 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MethodDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodDescriptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c4433 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutBuilder.html">
+	c5561 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> LayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator extends org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator
-	c4431:p -> c4420:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.gen.componentBuilder.ExistingMethodGenerator implements org.androidtransfuse.gen.componentBuilder.MethodGenerator
-	c4425:p -> c4421:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator extends org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator
+	c5552:p -> c5539:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl implements org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
+	c5543:p -> c5540:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder implements org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator
+	c5551:p -> c5541:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c4433:p -> c4422:p [dir=back,arrowtail=empty,style=dashed];
+	c5561:p -> c5542:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator implements org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator
+	c5551:p -> c5544:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c4433:p -> c4423:p [dir=back,arrowtail=empty,style=dashed];
+	c5561:p -> c5545:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator implements org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator
-	c4427:p -> c4424:p [dir=back,arrowtail=empty,style=dashed];
+	c5551:p -> c5546:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.ExistingMethod implements org.androidtransfuse.gen.componentBuilder.MethodGenerator
+	c5547:p -> c5548:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator implements org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator
-	c4427:p -> c4426:p [dir=back,arrowtail=empty,style=dashed];
+	c5551:p -> c5549:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator implements org.androidtransfuse.gen.componentBuilder.MethodGenerator
+	c5547:p -> c5552:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.OnCreateMethodBuilder implements org.androidtransfuse.gen.componentBuilder.MethodBuilder
+	c5550:p -> c5553:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.FragmentOnCreateViewMethodBuilder implements org.androidtransfuse.gen.componentBuilder.MethodBuilder
+	c5550:p -> c5555:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.RLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c4433:p -> c4429:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator implements org.androidtransfuse.gen.componentBuilder.MethodGenerator
-	c4425:p -> c4431:p [dir=back,arrowtail=empty,style=dashed];
+	c5561:p -> c5556:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.OnReceiveMethodBuilder implements org.androidtransfuse.gen.componentBuilder.MethodBuilder
+	c5550:p -> c5557:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory implements org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
+	c5543:p -> c5558:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
+	c5561:p -> c5559:p [dir=back,arrowtail=empty,style=dashed];
 }
 

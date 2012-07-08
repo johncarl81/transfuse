@@ -10,36 +10,36 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.ASTClassField
-	c40337 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTClassField.html">
+	c48506 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTClassField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTClassField </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTElementField
-	c40343 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTElementField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTElementField.html">
+	c48512 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTElementField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTElementField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTElementField </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTBase
-	c40346 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTBase.html">
+	c48515 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTBase.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTBase </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTField
-	c40361 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTField.html">
+	c48530 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTField </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.ASTClassField implements org.androidtransfuse.analysis.adapter.ASTField
-	c40361:p -> c40337:p [dir=back,arrowtail=empty,style=dashed];
+	c48530:p -> c48506:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.adapter.ASTElementField implements org.androidtransfuse.analysis.adapter.ASTField
-	c40361:p -> c40343:p [dir=back,arrowtail=empty,style=dashed];
+	c48530:p -> c48512:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.adapter.ASTField implements org.androidtransfuse.analysis.adapter.ASTBase
-	c40346:p -> c40361:p [dir=back,arrowtail=empty,style=dashed];
+	c48515:p -> c48530:p [dir=back,arrowtail=empty,style=dashed];
 }
 

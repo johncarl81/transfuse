@@ -9,127 +9,175 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis
+	c1843 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObservesAnalysis.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ObservesAnalysis </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect
-	c1388 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyAspect.html">
+	c1844 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AOPProxyAspect </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository
+	c1845 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderInjectionNodeBuilderRepository.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ProviderInjectionNodeBuilderRepository </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer
-	c1389 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionAnalyzer.html">
+	c1846 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionAnalyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ScopeAspect
-	c1390 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspect.html">
+	c1847 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAspect </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration<T extends org.androidtransfuse.analysis.adapter.ASTBase>
-	c1391 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistration.html">
+	c1848 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistration.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ListenerRegistration&lt;T extends ASTBase&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.DeclareFieldAnalysis
+	c1849 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.DeclareFieldAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeclareFieldAnalysis.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> DeclareFieldAnalysis </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c1392 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysis.html">
+	c1850 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.astAnalyzer.ListenerRegistrationAspect
-	c1393 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ListenerRegistrationAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistrationAspect.html">
+	// org.androidtransfuse.analysis.astAnalyzer.ObservesAspect
+	c1851 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ObservesAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObservesAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ListenerRegistrationAspect </td></tr>
+<tr><td align="center" balign="center"> ObservesAspect </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect
+	c1852 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NonConfigurationAspect.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> NonConfigurationAspect </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAnalysis
+	c1853 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NonConfigurationAnalysis.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> NonConfigurationAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.AOPProxyAnalyzer
-	c1394 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.AOPProxyAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyAnalyzer.html">
+	c1854 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.AOPProxyAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyAnalyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AOPProxyAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.astAnalyzer.ListenerRegistrationAnalyzer
-	c1395 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ListenerRegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ListenerRegistrationAnalyzer.html">
+	// org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect
+	c1855 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ListenerRegistrationAnalyzer </td></tr>
+<tr><td align="center" balign="center"> VirtualProxyAspect </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.MethodSignatureWrapper
+	c1856 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodSignatureWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodSignatureWrapper.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MethodSignatureWrapper </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer
+	c1857 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegistrationAnalyzer.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> RegistrationAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect
-	c1396 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackAspect.html">
+	c1858 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodCallbackAspect </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect.MethodCallback
-	c1397 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect.MethodCallback" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackAspect.MethodCallback.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> MethodCallback </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c1398 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
+	c1859 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTAnalysisAdaptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis
-	c1399 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAnalysis.html">
+	c1860 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra
-	c1400 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFactoryExtra.html">
+	c1861 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFactoryExtra.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IntentFactoryExtra </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository
-	c1401 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepository.html">
+	c1862 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAspectFactoryRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect
-	c1402 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTInjectionAspect.html">
+	c1863 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTInjectionAspect.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTInjectionAspect </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect.InjectionAssignmentType
-	c1403 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect.InjectionAssignmentType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTInjectionAspect.InjectionAssignmentType.html">
+	c1864 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect.InjectionAssignmentType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTInjectionAspect.InjectionAssignmentType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionAssignmentType </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect
+	c1865 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegistrationAspect.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> RegistrationAspect </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAnalysis
-	c1404 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackAnalysis.html">
+	c1866 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallbackAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodCallbackAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider
-	c1405 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepositoryProvider.html">
+	c1867 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepositoryProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAspectFactoryRepositoryProvider </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
+	c1859:p -> c1843:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c1392:p -> c1389:p [dir=back,arrowtail=empty,style=dashed];
+	c1850:p -> c1846:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.astAnalyzer.DeclareFieldAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
+	c1859:p -> c1849:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
+	c1859:p -> c1853:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.analysis.astAnalyzer.AOPProxyAnalyzer extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c1398:p -> c1394:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.analysis.astAnalyzer.ListenerRegistrationAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c1392:p -> c1395:p [dir=back,arrowtail=empty,style=dashed];
+	c1859:p -> c1854:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
+	c1850:p -> c1857:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c1392:p -> c1398:p [dir=back,arrowtail=empty,style=dashed];
+	c1850:p -> c1859:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c1398:p -> c1399:p [dir=back,arrowtail=empty];
+	c1859:p -> c1860:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c1398:p -> c1404:p [dir=back,arrowtail=empty];
+	c1859:p -> c1866:p [dir=back,arrowtail=empty];
 }
 

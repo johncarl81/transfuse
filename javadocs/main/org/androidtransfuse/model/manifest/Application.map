@@ -1,4 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="c7858" href="./Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="25,113,111,138"/>
-<area shape="rect" id="c8013" href="../../processor/Mergeable.html" title="org.androidtransfuse.processor.Mergeable" alt="" coords="15,17,121,42"/>
+<area shape="rect" id="c13218" href="../Mergeable.html" title="org.androidtransfuse.model.Mergeable" alt="" coords="15,19,97,45"/>
+<area shape="rect" id="c13229" href="./Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="77,118,163,143"/>
+<area shape="rect" id="c13220" href="../Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="141,11,227,53"/>
 </map>

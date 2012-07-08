@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.ASTAnnotation
-	c40599 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTAnnotation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnnotation.html">
+	c48800 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTAnnotation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnnotation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTAnnotation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTClassAnnotation
-	c40623 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassAnnotation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassAnnotation.html">
+	c48824 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassAnnotation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassAnnotation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTClassAnnotation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.ASTClassAnnotation implements org.androidtransfuse.analysis.adapter.ASTAnnotation
-	c40599:p -> c40623:p [dir=back,arrowtail=empty,style=dashed];
+	c48800:p -> c48824:p [dir=back,arrowtail=empty,style=dashed];
 }
 

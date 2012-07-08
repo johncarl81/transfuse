@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c60542 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConsistentTypeVariableBuilder.html">
+	c72058 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConsistentTypeVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ConsistentTypeVariableBuilder </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder
-	c60547 [label=<<table title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./GeneratedProviderVariableBuilder.html">
+	c72062 [label=<<table title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./GeneratedProviderVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> GeneratedProviderVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c60542:p -> c60547:p [dir=back,arrowtail=empty];
+	c72058:p -> c72062:p [dir=back,arrowtail=empty];
 }
 

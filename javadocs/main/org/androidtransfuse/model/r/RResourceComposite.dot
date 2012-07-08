@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.r.RResourceComposite
-	c20175 [label=<<table title="org.androidtransfuse.model.r.RResourceComposite" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./RResourceComposite.html">
+	c22353 [label=<<table title="org.androidtransfuse.model.r.RResourceComposite" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./RResourceComposite.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RResourceComposite </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.r.RResource
-	c20178 [label=<<table title="org.androidtransfuse.model.r.RResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RResource.html">
+	c22356 [label=<<table title="org.androidtransfuse.model.r.RResource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RResource.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> RResource </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.model.r.RResourceComposite implements org.androidtransfuse.model.r.RResource
-	c20178:p -> c20175:p [dir=back,arrowtail=empty,style=dashed];
+	c22356:p -> c22353:p [dir=back,arrowtail=empty,style=dashed];
 }
 

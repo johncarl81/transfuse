@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter
-	c64199 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderNoAnnotationAdapter.html">
+	c76455 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderNoAnnotationAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderNoAnnotationAdapter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder
-	c64215 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableInjectionNodeBuilder.html">
+	c76472 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> VariableInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter
-	c64199:p -> c64215:p [dir=back,arrowtail=empty];
+	c76455:p -> c76472:p [dir=back,arrowtail=empty];
 }
 

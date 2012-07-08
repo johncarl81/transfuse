@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder
-	c60285 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ResourceInjectionNodeBuilder.html">
+	c71768 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ResourceInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ResourceInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter<T extends java.lang.annotation.Annotation>
-	c60295 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
+	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
+	c71780 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderSingleAnnotationAdapter&lt;T extends Annotation&gt; </font></td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderSingleAnnotationAdapter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter<org.androidtransfuse.annotations.Resource>
-	c60295:p -> c60285:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
+	c71780:p -> c71768:p [dir=back,arrowtail=empty];
 }
 

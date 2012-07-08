@@ -1,13 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" id="c567" href="./FieldInjectionPoint.html" title="org.androidtransfuse.model.FieldInjectionPoint" alt="" coords="16,17,144,42"/>
-<area shape="rect" id="c568" href="./ApplicationDescriptor.html" title="org.androidtransfuse.model.ApplicationDescriptor" alt="" coords="189,17,334,42"/>
-<area shape="rect" id="c569" href="./PackageClass.html" title="org.androidtransfuse.model.PackageClass" alt="" coords="378,17,483,42"/>
-<area shape="rect" id="c570" href="./MethodInjectionPoint.html" title="org.androidtransfuse.model.MethodInjectionPoint" alt="" coords="421,113,563,138"/>
-<area shape="rect" id="c571" href="./ActivityDescriptor.html" title="org.androidtransfuse.model.ActivityDescriptor" alt="" coords="701,17,827,42"/>
-<area shape="rect" id="c572" href="./InjectionNode.html" title="org.androidtransfuse.model.InjectionNode" alt="" coords="872,17,973,42"/>
-<area shape="rect" id="c573" href="./ProxyDescriptor.html" title="org.androidtransfuse.model.ProxyDescriptor" alt="" coords="1019,17,1133,42"/>
-<area shape="rect" id="c574" href="./DependencyInjectionPoint.html" title="org.androidtransfuse.model.DependencyInjectionPoint" alt="" coords="1179,17,1352,42"/>
-<area shape="rect" id="c575" href="./ConstructorInjectionPoint.html" title="org.androidtransfuse.model.ConstructorInjectionPoint" alt="" coords="608,113,776,138"/>
-<area shape="rect" id="c576" href="./InjectionPointBase.html" title="org.androidtransfuse.model.InjectionPointBase" alt="" coords="527,17,657,42"/>
-<area shape="rect" id="c577" href="./SingletonDescriptor.html" title="org.androidtransfuse.model.SingletonDescriptor" alt="" coords="1397,17,1531,42"/>
+<area shape="rect" id="c297" href="./FieldInjectionPoint.html" title="org.androidtransfuse.model.FieldInjectionPoint" alt="" coords="16,19,144,45"/>
+<area shape="rect" id="c298" href="./PackageClass.html" title="org.androidtransfuse.model.PackageClass" alt="" coords="189,19,294,45"/>
+<area shape="rect" id="c299" href="./MethodInjectionPoint.html" title="org.androidtransfuse.model.MethodInjectionPoint" alt="" coords="254,118,397,143"/>
+<area shape="rect" id="c300" href="./ComponentDescriptor.html" title="org.androidtransfuse.model.ComponentDescriptor" alt="" coords="557,19,705,45"/>
+<area shape="rect" id="c301" href="./MethodInjectionPointBase.html" title="org.androidtransfuse.model.MethodInjectionPointBase" alt="" coords="339,19,512,45"/>
+<area shape="rect" id="c305" href="./ConstructorInjectionPoint.html" title="org.androidtransfuse.model.ConstructorInjectionPoint" alt="" coords="441,118,609,143"/>
+<area shape="rect" id="c302" href="./InjectionNode.html" title="org.androidtransfuse.model.InjectionNode" alt="" coords="749,19,851,45"/>
+<area shape="rect" id="c303" href="./ProxyDescriptor.html" title="org.androidtransfuse.model.ProxyDescriptor" alt="" coords="896,19,1011,45"/>
+<area shape="rect" id="c304" href="./TypedExpression.html" title="org.androidtransfuse.model.TypedExpression" alt="" coords="1055,19,1177,45"/>
+<area shape="rect" id="c306" href="./Mergeable.html" title="org.androidtransfuse.model.Mergeable" alt="" coords="1221,19,1302,45"/>
+<area shape="rect" id="c307" href="./ParcelableDescriptor.html" title="org.androidtransfuse.model.ParcelableDescriptor" alt="" coords="1347,19,1488,45"/>
+<area shape="rect" id="c308" href="./Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="1533,11,1619,53"/>
+<area shape="rect" id="c309" href="./GetterSetterMethodPair.html" title="org.androidtransfuse.model.GetterSetterMethodPair" alt="" coords="1664,19,1821,45"/>
 </map>

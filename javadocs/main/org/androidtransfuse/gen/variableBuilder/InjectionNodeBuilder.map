@@ -1,6 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c60797" href="./GeneratedProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder" alt="" coords="15,118,265,143"/>
-<area shape="rect" id="c60806" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="309,118,574,143"/>
-<area shape="rect" id="c60809" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="371,11,512,53"/>
-<area shape="rect" id="c60817" href="./InjectionNodeBuilderSingleAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" alt="" coords="619,118,1043,143"/>
+<area shape="rect" id="c72344" href="./IndependentInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.IndependentInjectionNodeBuilder" alt="" coords="15,118,227,143"/>
+<area shape="rect" id="c72346" href="./GeneratedProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder" alt="" coords="271,118,521,143"/>
+<area shape="rect" id="c72353" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="565,118,830,143"/>
+<area shape="rect" id="c72356" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="627,11,768,53"/>
+<area shape="rect" id="c72366" href="./InjectionNodeBuilderSingleAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" alt="" coords="874,118,1158,143"/>
+<area shape="rect" id="c72383" href="./DependentInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder" alt="" coords="1202,118,1406,143"/>
 </map>

@@ -10,74 +10,67 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.processor.TransfuseAssembler
-	c2769 [label=<<table title="org.androidtransfuse.processor.TransfuseAssembler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAssembler.html">
+	c3689 [label=<<table title="org.androidtransfuse.processor.TransfuseAssembler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAssembler.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseAssembler </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.ComponentProcessor
-	c2770 [label=<<table title="org.androidtransfuse.processor.ComponentProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentProcessor.html">
+	c3690 [label=<<table title="org.androidtransfuse.processor.ComponentProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ComponentProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.ProcessorContext
-	c2771 [label=<<table title="org.androidtransfuse.processor.ProcessorContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProcessorContext.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ProcessorContext </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeableTagConverter
-	c2772 [label=<<table title="org.androidtransfuse.processor.MergeableTagConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTagConverter.html">
+	c3691 [label=<<table title="org.androidtransfuse.processor.MergeableTagConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTagConverter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeableTagConverter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.Merger
-	c2773 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merger.html">
+	c3692 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merger.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Merger </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergerException
-	c2774 [label=<<table title="org.androidtransfuse.processor.MergerException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergerException.html">
+	c3693 [label=<<table title="org.androidtransfuse.processor.MergerException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergerException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergerException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ManifestManager
+	c3694 [label=<<table title="org.androidtransfuse.processor.ManifestManager" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestManager.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ManifestManager </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeCollection
-	c2775 [label=<<table title="org.androidtransfuse.processor.MergeCollection" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeCollection.html">
+	c3695 [label=<<table title="org.androidtransfuse.processor.MergeCollection" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeCollection.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MergeCollection </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.Mergeable<T>
-	c2776 [label=<<table title="org.androidtransfuse.processor.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Mergeable.html">
+	// org.androidtransfuse.processor.TransfuseProcessor
+	c3696 [label=<<table title="org.androidtransfuse.processor.TransfuseProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Mergeable&lt;T&gt; </font></td></tr>
+<tr><td align="center" balign="center"> TransfuseProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.ProcessorFactory
-	c2777 [label=<<table title="org.androidtransfuse.processor.ProcessorFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProcessorFactory.html">
+	// org.androidtransfuse.processor.TransfuseInjector
+	c3697 [label=<<table title="org.androidtransfuse.processor.TransfuseInjector" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseInjector.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> ProcessorFactory </td></tr>
+<tr><td align="center" balign="center"> TransfuseInjector </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.Merge
-	c2778 [label=<<table title="org.androidtransfuse.processor.Merge" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merge.html">
+	c3698 [label=<<table title="org.androidtransfuse.processor.Merge" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merge.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Merge </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.ApplicationProcessor
-	c2779 [label=<<table title="org.androidtransfuse.processor.ApplicationProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationProcessor.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ApplicationProcessor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeableTags
-	c2780 [label=<<table title="org.androidtransfuse.processor.MergeableTags" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTags.html">
+	c3699 [label=<<table title="org.androidtransfuse.processor.MergeableTags" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTags.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeableTags </td></tr>
 		</table></td></tr>

@@ -10,43 +10,51 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator
-	c56612 [label=<<table title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CachedExpressionDecorator.html">
+	c67646 [label=<<table title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CachedExpressionDecorator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> CachedExpressionDecorator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder
-	c56613 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableExpressionBuilder.html">
+	c67647 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableExpressionBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> VariableExpressionBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator
-	c56614 [label=<<table title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopedExpressionDecorator.html">
+	c67648 [label=<<table title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopedExpressionDecorator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopedExpressionDecorator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.variableDecorator.ObservesExpressionDecorator
+	c67650 [label=<<table title="org.androidtransfuse.gen.variableDecorator.ObservesExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ObservesExpressionDecorator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ObservesExpressionDecorator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator
-	c56617 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableExpressionBuilderDecorator.html">
+	c67652 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableExpressionBuilderDecorator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> VariableExpressionBuilderDecorator </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator
-	c56618 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyExpressionDecorator.html">
+	c67653 [label=<<table title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyExpressionDecorator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> VirtualProxyExpressionDecorator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator extends org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator
-	c56617:p -> c56612:p [dir=back,arrowtail=empty];
+	c67652:p -> c67646:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator extends org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator
-	c56617:p -> c56614:p [dir=back,arrowtail=empty];
+	c67652:p -> c67648:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.variableDecorator.ObservesExpressionDecorator extends org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator
+	c67652:p -> c67650:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator implements org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder
-	c56613:p -> c56617:p [dir=back,arrowtail=empty,style=dashed];
+	c67647:p -> c67652:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator extends org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator
-	c56617:p -> c56618:p [dir=back,arrowtail=empty];
+	c67652:p -> c67653:p [dir=back,arrowtail=empty];
 }
 

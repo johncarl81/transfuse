@@ -9,19 +9,19 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter<T extends java.lang.annotation.Annotation>
-	c65254 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
+	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
+	c79691 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderSingleAnnotationAdapter&lt;T extends Annotation&gt; </font></td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderSingleAnnotationAdapter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder
-	c65263 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ExtraInjectionNodeBuilder.html">
+	c79706 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ExtraInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExtraInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter<org.androidtransfuse.annotations.Extra>
-	c65254:p -> c65263:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
+	c79691:p -> c79706:p [dir=back,arrowtail=empty];
 }
 

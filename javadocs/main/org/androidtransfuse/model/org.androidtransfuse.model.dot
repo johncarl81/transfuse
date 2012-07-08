@@ -10,74 +10,87 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.FieldInjectionPoint
-	c567 [label=<<table title="org.androidtransfuse.model.FieldInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FieldInjectionPoint.html">
+	c297 [label=<<table title="org.androidtransfuse.model.FieldInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FieldInjectionPoint.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FieldInjectionPoint </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.ApplicationDescriptor
-	c568 [label=<<table title="org.androidtransfuse.model.ApplicationDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationDescriptor.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ApplicationDescriptor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.PackageClass
-	c569 [label=<<table title="org.androidtransfuse.model.PackageClass" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PackageClass.html">
+	c298 [label=<<table title="org.androidtransfuse.model.PackageClass" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PackageClass.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PackageClass </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.MethodInjectionPoint
-	c570 [label=<<table title="org.androidtransfuse.model.MethodInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodInjectionPoint.html">
+	c299 [label=<<table title="org.androidtransfuse.model.MethodInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodInjectionPoint.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodInjectionPoint </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.ActivityDescriptor
-	c571 [label=<<table title="org.androidtransfuse.model.ActivityDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityDescriptor.html">
+	// org.androidtransfuse.model.ComponentDescriptor
+	c300 [label=<<table title="org.androidtransfuse.model.ComponentDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ActivityDescriptor </td></tr>
+<tr><td align="center" balign="center"> ComponentDescriptor </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.model.MethodInjectionPointBase
+	c301 [label=<<table title="org.androidtransfuse.model.MethodInjectionPointBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodInjectionPointBase.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MethodInjectionPointBase </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.InjectionNode
-	c572 [label=<<table title="org.androidtransfuse.model.InjectionNode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNode.html">
+	c302 [label=<<table title="org.androidtransfuse.model.InjectionNode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNode.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionNode </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.ProxyDescriptor
-	c573 [label=<<table title="org.androidtransfuse.model.ProxyDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProxyDescriptor.html">
+	c303 [label=<<table title="org.androidtransfuse.model.ProxyDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProxyDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ProxyDescriptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.DependencyInjectionPoint
-	c574 [label=<<table title="org.androidtransfuse.model.DependencyInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DependencyInjectionPoint.html">
+	// org.androidtransfuse.model.TypedExpression
+	c304 [label=<<table title="org.androidtransfuse.model.TypedExpression" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TypedExpression.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> DependencyInjectionPoint </td></tr>
+<tr><td align="center" balign="center"> TypedExpression </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.ConstructorInjectionPoint
-	c575 [label=<<table title="org.androidtransfuse.model.ConstructorInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConstructorInjectionPoint.html">
+	c305 [label=<<table title="org.androidtransfuse.model.ConstructorInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConstructorInjectionPoint.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ConstructorInjectionPoint </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.InjectionPointBase
-	c576 [label=<<table title="org.androidtransfuse.model.InjectionPointBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionPointBase.html">
+	// org.androidtransfuse.model.Mergeable
+	c306 [label=<<table title="org.androidtransfuse.model.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Mergeable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionPointBase </font></td></tr>
+<tr><td align="center" balign="center"> Mergeable </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.SingletonDescriptor
-	c577 [label=<<table title="org.androidtransfuse.model.SingletonDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SingletonDescriptor.html">
+	// org.androidtransfuse.model.ParcelableDescriptor
+	c307 [label=<<table title="org.androidtransfuse.model.ParcelableDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> SingletonDescriptor </td></tr>
+<tr><td align="center" balign="center"> ParcelableDescriptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.model.MethodInjectionPoint extends org.androidtransfuse.model.InjectionPointBase
-	c576:p -> c570:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.model.ConstructorInjectionPoint extends org.androidtransfuse.model.InjectionPointBase
-	c576:p -> c575:p [dir=back,arrowtail=empty];
+	// org.androidtransfuse.model.Identified
+	c308 [label=<<table title="org.androidtransfuse.model.Identified" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Identified.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Identified </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.model.GetterSetterMethodPair
+	c309 [label=<<table title="org.androidtransfuse.model.GetterSetterMethodPair" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GetterSetterMethodPair.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> GetterSetterMethodPair </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.model.MethodInjectionPoint extends org.androidtransfuse.model.MethodInjectionPointBase
+	c301:p -> c299:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.model.ConstructorInjectionPoint extends org.androidtransfuse.model.MethodInjectionPointBase
+	c301:p -> c305:p [dir=back,arrowtail=empty];
 }
 

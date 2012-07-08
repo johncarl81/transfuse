@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.ASTClassField
-	c34070 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassField.html">
+	c41471 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTClassField </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTField
-	c34094 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTField.html">
+	c41495 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTField </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.ASTClassField implements org.androidtransfuse.analysis.adapter.ASTField
-	c34094:p -> c34070:p [dir=back,arrowtail=empty,style=dashed];
+	c41495:p -> c41471:p [dir=back,arrowtail=empty,style=dashed];
 }
 

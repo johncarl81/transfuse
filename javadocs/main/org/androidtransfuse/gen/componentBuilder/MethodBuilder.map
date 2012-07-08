@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c87350" href="./MethodBuilder.html" title="org.androidtransfuse.gen.componentBuilder.MethodBuilder" alt="" coords="291,11,395,53"/>
+<area shape="rect" id="c87353" href="./OnCreateMethodBuilder.html" title="org.androidtransfuse.gen.componentBuilder.OnCreateMethodBuilder" alt="" coords="16,118,176,143"/>
+<area shape="rect" id="c87355" href="./FragmentOnCreateViewMethodBuilder.html" title="org.androidtransfuse.gen.componentBuilder.FragmentOnCreateViewMethodBuilder" alt="" coords="221,118,465,143"/>
+<area shape="rect" id="c87357" href="./OnReceiveMethodBuilder.html" title="org.androidtransfuse.gen.componentBuilder.OnReceiveMethodBuilder" alt="" coords="509,118,678,143"/>
+</map>

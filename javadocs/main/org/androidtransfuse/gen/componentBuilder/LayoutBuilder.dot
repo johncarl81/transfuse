@@ -10,35 +10,43 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder
-	c72326 [label=<<table title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NoOpLayoutBuilder.html">
+	c90565 [label=<<table title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NoOpLayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> NoOpLayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder
-	c72327 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandlerBuilder.html">
+	c90568 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandlerBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> LayoutHandlerBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.RLayoutBuilder
-	c72333 [label=<<table title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RLayoutBuilder.html">
+	c90579 [label=<<table title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RLayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RLayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder
+	c90582 [label=<<table title="org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentSimpleLayoutBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FragmentSimpleLayoutBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c72337 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./LayoutBuilder.html">
+	c90584 [label=<<table title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./LayoutBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> LayoutBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c72337:p -> c72326:p [dir=back,arrowtail=empty,style=dashed];
+	c90584:p -> c90565:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c72337:p -> c72327:p [dir=back,arrowtail=empty,style=dashed];
+	c90584:p -> c90568:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.RLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
-	c72337:p -> c72333:p [dir=back,arrowtail=empty,style=dashed];
+	c90584:p -> c90579:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder implements org.androidtransfuse.gen.componentBuilder.LayoutBuilder
+	c90584:p -> c90582:p [dir=back,arrowtail=empty,style=dashed];
 }
 

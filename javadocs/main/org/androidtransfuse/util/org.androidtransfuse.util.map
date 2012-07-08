@@ -1,12 +1,13 @@
 <map id="G" name="G">
-<area shape="rect" id="c2498" href="./MethodSignature.html" title="org.androidtransfuse.util.MethodSignature" alt="" coords="15,19,134,45"/>
-<area shape="rect" id="c2499" href="./Logger.html" title="org.androidtransfuse.util.Logger" alt="" coords="179,11,264,53"/>
-<area shape="rect" id="c2507" href="./MessagerLogger.html" title="org.androidtransfuse.util.MessagerLogger" alt="" coords="163,118,280,143"/>
-<area shape="rect" id="c2500" href="./ElementVisitorAdaptor.html" title="org.androidtransfuse.util.ElementVisitorAdaptor" alt="" coords="309,19,502,45"/>
-<area shape="rect" id="c2501" href="./CollectionConverterUtil.html" title="org.androidtransfuse.util.CollectionConverterUtil" alt="" coords="546,19,702,45"/>
-<area shape="rect" id="c2502" href="./ManifestLocator.html" title="org.androidtransfuse.util.ManifestLocator" alt="" coords="746,19,859,45"/>
-<area shape="rect" id="c2503" href="./CollectionConverter.html" title="org.androidtransfuse.util.CollectionConverter" alt="" coords="903,11,1081,53"/>
-<area shape="rect" id="c2504" href="./TypeMirrorUtil.html" title="org.androidtransfuse.util.TypeMirrorUtil" alt="" coords="1125,19,1227,45"/>
-<area shape="rect" id="c2505" href="./ManifestSerializer.html" title="org.androidtransfuse.util.ManifestSerializer" alt="" coords="1272,19,1397,45"/>
-<area shape="rect" id="c2506" href="./ManifestLocatorFactory.html" title="org.androidtransfuse.util.ManifestLocatorFactory" alt="" coords="1443,11,1600,53"/>
+<area shape="rect" id="c3088" href="./MethodSignature.html" title="org.androidtransfuse.util.MethodSignature" alt="" coords="15,19,134,45"/>
+<area shape="rect" id="c3089" href="./Logger.html" title="org.androidtransfuse.util.Logger" alt="" coords="179,11,264,53"/>
+<area shape="rect" id="c3098" href="./MessagerLogger.html" title="org.androidtransfuse.util.MessagerLogger" alt="" coords="163,118,280,143"/>
+<area shape="rect" id="c3090" href="./ElementVisitorAdaptor.html" title="org.androidtransfuse.util.ElementVisitorAdaptor" alt="" coords="309,19,502,45"/>
+<area shape="rect" id="c3091" href="./CollectionConverterUtil.html" title="org.androidtransfuse.util.CollectionConverterUtil" alt="" coords="546,19,702,45"/>
+<area shape="rect" id="c3092" href="./ManifestLocator.html" title="org.androidtransfuse.util.ManifestLocator" alt="" coords="746,19,859,45"/>
+<area shape="rect" id="c3093" href="./CollectionConverter.html" title="org.androidtransfuse.util.CollectionConverter" alt="" coords="903,11,1081,53"/>
+<area shape="rect" id="c3094" href="./TypeMirrorRunnable.html" title="org.androidtransfuse.util.TypeMirrorRunnable" alt="" coords="1125,19,1286,45"/>
+<area shape="rect" id="c3095" href="./TypeMirrorUtil.html" title="org.androidtransfuse.util.TypeMirrorUtil" alt="" coords="1330,19,1433,45"/>
+<area shape="rect" id="c3096" href="./ManifestSerializer.html" title="org.androidtransfuse.util.ManifestSerializer" alt="" coords="1477,19,1603,45"/>
+<area shape="rect" id="c3097" href="./ManifestLocatorFactory.html" title="org.androidtransfuse.util.ManifestLocatorFactory" alt="" coords="1648,11,1805,53"/>
 </map>

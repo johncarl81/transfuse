@@ -9,14 +9,8 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.TransfuseProcessor
-	c2235 [label=<<table title="org.androidtransfuse.TransfuseProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseProcessor.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> TransfuseProcessor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.TransfuseAnnotationProcessor
-	c2236 [label=<<table title="org.androidtransfuse.TransfuseAnnotationProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAnnotationProcessor.html">
+	c2794 [label=<<table title="org.androidtransfuse.TransfuseAnnotationProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAnnotationProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseAnnotationProcessor </td></tr>
 		</table></td></tr>

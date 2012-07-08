@@ -10,10 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.ComponentGenerator
-	c50850 [label=<<table title="org.androidtransfuse.gen.ComponentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ComponentGenerator.html">
+	c61182 [label=<<table title="org.androidtransfuse.gen.ComponentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ComponentGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ComponentGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.Generator<T>
+	c61188 [label=<<table title="org.androidtransfuse.gen.Generator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Generator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Generator&lt;T&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.gen.ComponentGenerator implements org.androidtransfuse.gen.Generator<T>
+	c61188:p -> c61182:p [dir=back,arrowtail=empty,style=dashed];
 }
 

@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.ASTType
-	c40869 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTType.html">
+	c49102 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTType </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTClassType
-	c40885 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassType.html">
+	c49118 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTClassType </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.ASTClassType implements org.androidtransfuse.analysis.adapter.ASTType
-	c40869:p -> c40885:p [dir=back,arrowtail=empty,style=dashed];
+	c49102:p -> c49118:p [dir=back,arrowtail=empty,style=dashed];
 }
 

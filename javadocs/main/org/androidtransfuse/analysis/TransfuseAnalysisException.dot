@@ -10,15 +10,15 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.TransfuseAnalysisException
-	c24108 [label=<<table title="org.androidtransfuse.analysis.TransfuseAnalysisException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TransfuseAnalysisException.html">
+	c25587 [label=<<table title="org.androidtransfuse.analysis.TransfuseAnalysisException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./TransfuseAnalysisException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseAnalysisException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.TransfuseAnalysisException extends java.lang.RuntimeException
-	c24296:p -> c24108:p [dir=back,arrowtail=empty];
+	c25814:p -> c25587:p [dir=back,arrowtail=empty];
 	// java.lang.RuntimeException
-	c24296 [label=<<table title="java.lang.RuntimeException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/RuntimeException.html">
+	c25814 [label=<<table title="java.lang.RuntimeException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/RuntimeException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RuntimeException </td></tr>
 		</table></td></tr>

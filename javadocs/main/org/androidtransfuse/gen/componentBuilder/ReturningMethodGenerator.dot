@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator
-	c68931 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ReturningMethodGenerator.html">
+	c84116 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ReturningMethodGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ReturningMethodGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator
-	c68942 [label=<<table title="org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SimpleMethodGenerator.html">
+	// org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator
+	c84129 [label=<<table title="org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MirroredMethodGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> SimpleMethodGenerator </td></tr>
+<tr><td align="center" balign="center"> MirroredMethodGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator extends org.androidtransfuse.gen.componentBuilder.SimpleMethodGenerator
-	c68942:p -> c68931:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.componentBuilder.ReturningMethodGenerator extends org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator
+	c84129:p -> c84116:p [dir=back,arrowtail=empty];
 }
 

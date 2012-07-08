@@ -10,69 +10,75 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.util.MethodSignature
-	c2498 [label=<<table title="org.androidtransfuse.util.MethodSignature" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodSignature.html">
+	c3088 [label=<<table title="org.androidtransfuse.util.MethodSignature" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodSignature.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodSignature </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.Logger
-	c2499 [label=<<table title="org.androidtransfuse.util.Logger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Logger.html">
+	c3089 [label=<<table title="org.androidtransfuse.util.Logger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Logger.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Logger </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.ElementVisitorAdaptor<T, R>
-	c2500 [label=<<table title="org.androidtransfuse.util.ElementVisitorAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ElementVisitorAdaptor.html">
+	c3090 [label=<<table title="org.androidtransfuse.util.ElementVisitorAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ElementVisitorAdaptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ElementVisitorAdaptor&lt;T, R&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.CollectionConverterUtil
-	c2501 [label=<<table title="org.androidtransfuse.util.CollectionConverterUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionConverterUtil.html">
+	c3091 [label=<<table title="org.androidtransfuse.util.CollectionConverterUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionConverterUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> CollectionConverterUtil </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.ManifestLocator
-	c2502 [label=<<table title="org.androidtransfuse.util.ManifestLocator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestLocator.html">
+	c3092 [label=<<table title="org.androidtransfuse.util.ManifestLocator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestLocator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ManifestLocator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.CollectionConverter<T, V>
-	c2503 [label=<<table title="org.androidtransfuse.util.CollectionConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionConverter.html">
+	c3093 [label=<<table title="org.androidtransfuse.util.CollectionConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CollectionConverter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> CollectionConverter&lt;T, V&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.TypeMirrorRunnable<T>
+	c3094 [label=<<table title="org.androidtransfuse.util.TypeMirrorRunnable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TypeMirrorRunnable.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> TypeMirrorRunnable&lt;T&gt; </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.TypeMirrorUtil
-	c2504 [label=<<table title="org.androidtransfuse.util.TypeMirrorUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TypeMirrorUtil.html">
+	c3095 [label=<<table title="org.androidtransfuse.util.TypeMirrorUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TypeMirrorUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TypeMirrorUtil </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.ManifestSerializer
-	c2505 [label=<<table title="org.androidtransfuse.util.ManifestSerializer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestSerializer.html">
+	c3096 [label=<<table title="org.androidtransfuse.util.ManifestSerializer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestSerializer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ManifestSerializer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.ManifestLocatorFactory
-	c2506 [label=<<table title="org.androidtransfuse.util.ManifestLocatorFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestLocatorFactory.html">
+	c3097 [label=<<table title="org.androidtransfuse.util.ManifestLocatorFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestLocatorFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ManifestLocatorFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.MessagerLogger
-	c2507 [label=<<table title="org.androidtransfuse.util.MessagerLogger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MessagerLogger.html">
+	c3098 [label=<<table title="org.androidtransfuse.util.MessagerLogger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MessagerLogger.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MessagerLogger </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.util.MessagerLogger implements org.androidtransfuse.util.Logger
-	c2499:p -> c2507:p [dir=back,arrowtail=empty,style=dashed];
+	c3089:p -> c3098:p [dir=back,arrowtail=empty,style=dashed];
 }
 

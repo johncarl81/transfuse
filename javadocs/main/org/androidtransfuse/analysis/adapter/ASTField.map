@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c40337" href="./ASTClassField.html" title="org.androidtransfuse.analysis.adapter.ASTClassField" alt="" coords="16,219,125,245"/>
-<area shape="rect" id="c40343" href="./ASTElementField.html" title="org.androidtransfuse.analysis.adapter.ASTElementField" alt="" coords="171,219,293,245"/>
-<area shape="rect" id="c40346" href="./ASTBase.html" title="org.androidtransfuse.analysis.adapter.ASTBase" alt="" coords="108,11,193,53"/>
-<area shape="rect" id="c40361" href="./ASTField.html" title="org.androidtransfuse.analysis.adapter.ASTField" alt="" coords="108,113,193,154"/>
+<area shape="rect" id="c48506" href="./ASTClassField.html" title="org.androidtransfuse.analysis.adapter.ASTClassField" alt="" coords="16,219,125,245"/>
+<area shape="rect" id="c48512" href="./ASTElementField.html" title="org.androidtransfuse.analysis.adapter.ASTElementField" alt="" coords="171,219,293,245"/>
+<area shape="rect" id="c48515" href="./ASTBase.html" title="org.androidtransfuse.analysis.adapter.ASTBase" alt="" coords="108,11,193,53"/>
+<area shape="rect" id="c48530" href="./ASTField.html" title="org.androidtransfuse.analysis.adapter.ASTField" alt="" coords="108,113,193,154"/>
 </map>

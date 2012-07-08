@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="c14408" href="./LabeledEnumConverter.html" title="org.androidtransfuse.model.manifest.LabeledEnumConverter" alt="" coords="15,113,329,138"/>
-<area shape="rect" id="c14634" href="http://java.sun.com/j2se/1.4.2/docs/api/com/thoughtworks/xstream/converters/basic/AbstractSingleValueConverter.html" title="com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter" alt="" coords="74,17,270,42"/>
+<area shape="rect" id="c19408" href="./LabeledEnumConverter.html" title="org.androidtransfuse.model.manifest.LabeledEnumConverter" alt="" coords="15,113,329,138"/>
+<area shape="rect" id="c19657" href="http://java.sun.com/j2se/1.4.2/docs/api/com/thoughtworks/xstream/converters/basic/AbstractSingleValueConverter.html" title="com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter" alt="" coords="74,17,270,42"/>
 </map>

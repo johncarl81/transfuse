@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.ASTMethod
-	c38000 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTMethod" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTMethod.html">
+	c45881 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTMethod" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTMethod.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTMethod </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.ASTClassMethod
-	c38003 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassMethod" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassMethod.html">
+	c45884 [label=<<table title="org.androidtransfuse.analysis.adapter.ASTClassMethod" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTClassMethod.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTClassMethod </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.ASTClassMethod implements org.androidtransfuse.analysis.adapter.ASTMethod
-	c38000:p -> c38003:p [dir=back,arrowtail=empty,style=dashed];
+	c45881:p -> c45884:p [dir=back,arrowtail=empty,style=dashed];
 }
 

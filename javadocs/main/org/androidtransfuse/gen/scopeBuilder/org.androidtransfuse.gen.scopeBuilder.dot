@@ -10,25 +10,39 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory
-	c4695 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SingletonScopeAspectFactory.html">
+	c5855 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SingletonScopeAspectFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SingletonScopeAspectFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory
+	c5856 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ContextScopeAspectFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ContextScopeAspectFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder
-	c4696 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SingletonScopeBuilder.html">
+	c5857 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SingletonScopeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SingletonScopeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder
+	c5858 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ContextScopeVariableBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ContextScopeVariableBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory
-	c4697 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactory.html">
+	c5859 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ScopeAspectFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory implements org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory
-	c4697:p -> c4695:p [dir=back,arrowtail=empty,style=dashed];
+	c5859:p -> c5855:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory implements org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory
+	c5859:p -> c5856:p [dir=back,arrowtail=empty,style=dashed];
 }
 

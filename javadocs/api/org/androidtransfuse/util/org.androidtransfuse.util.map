@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c215" href="./Generated.html" title="org.androidtransfuse.util.Generated" alt="" coords="15,19,97,45"/>
-<area shape="rect" id="c216" href="./InjectionUtil.html" title="org.androidtransfuse.util.InjectionUtil" alt="" coords="141,19,230,45"/>
-<area shape="rect" id="c217" href="./ExtraUtil.html" title="org.androidtransfuse.util.ExtraUtil" alt="" coords="275,19,347,45"/>
-<area shape="rect" id="c218" href="./ParcelableWrapper.html" title="org.androidtransfuse.util.ParcelableWrapper" alt="" coords="392,11,547,53"/>
-<area shape="rect" id="c219" href="./AccessibleElementPrivilegedAction.html" title="org.androidtransfuse.util.AccessibleElementPrivilegedAction" alt="" coords="592,19,1016,45"/>
-<area shape="rect" id="c220" href="./TransfuseInjectionException.html" title="org.androidtransfuse.util.TransfuseInjectionException" alt="" coords="1061,19,1246,45"/>
-<area shape="rect" id="c221" href="./VirtualProxyException.html" title="org.androidtransfuse.util.VirtualProxyException" alt="" coords="1291,19,1440,45"/>
-</map>

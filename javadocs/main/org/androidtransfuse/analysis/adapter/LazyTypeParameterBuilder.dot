@@ -10,27 +10,27 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder
-	c39283 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LazyClassParameterBuilder.html">
+	c47324 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LazyClassParameterBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> LazyClassParameterBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder
-	c39292 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LazyElementParameterBuilder.html">
+	c47333 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LazyElementParameterBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> LazyElementParameterBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder
-	c39313 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./LazyTypeParameterBuilder.html">
+	c47354 [label=<<table title="org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./LazyTypeParameterBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> LazyTypeParameterBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder implements org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder
-	c39313:p -> c39283:p [dir=back,arrowtail=empty,style=dashed];
+	c47354:p -> c47324:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder implements org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder
-	c39313:p -> c39292:p [dir=back,arrowtail=empty,style=dashed];
+	c47354:p -> c47333:p [dir=back,arrowtail=empty,style=dashed];
 }
 

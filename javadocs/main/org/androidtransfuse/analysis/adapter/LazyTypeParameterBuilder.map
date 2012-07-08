@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="c39283" href="./LazyClassParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder" alt="" coords="15,118,198,143"/>
-<area shape="rect" id="c39292" href="./LazyElementParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder" alt="" coords="243,118,440,143"/>
-<area shape="rect" id="c39313" href="./LazyTypeParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder" alt="" coords="135,11,313,53"/>
+<area shape="rect" id="c47324" href="./LazyClassParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyClassParameterBuilder" alt="" coords="15,118,198,143"/>
+<area shape="rect" id="c47333" href="./LazyElementParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyElementParameterBuilder" alt="" coords="243,118,440,143"/>
+<area shape="rect" id="c47354" href="./LazyTypeParameterBuilder.html" title="org.androidtransfuse.analysis.adapter.LazyTypeParameterBuilder" alt="" coords="135,11,313,53"/>
 </map>

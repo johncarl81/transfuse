@@ -9,11 +9,28 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.model.Mergeable
+	c17908 [label=<<table title="org.androidtransfuse.model.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Mergeable.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Mergeable </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.model.Identified
+	c17910 [label=<<table title="org.androidtransfuse.model.Identified" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Identified.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Identified </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Service
-	c13098 [label=<<table title="org.androidtransfuse.model.manifest.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Service.html">
+	c17935 [label=<<table title="org.androidtransfuse.model.manifest.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Service.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Service </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.model.manifest.Service extends org.androidtransfuse.model.Mergeable
+	c17908:p -> c17935:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.model.manifest.Service implements org.androidtransfuse.model.Identified
+	c17910:p -> c17935:p [dir=back,arrowtail=empty,style=dashed];
 }
 

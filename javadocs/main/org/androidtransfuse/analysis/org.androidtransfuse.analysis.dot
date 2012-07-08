@@ -9,133 +9,103 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.analysis.ProviderInjectionNodeBuilderRepository
-	c1106 [label=<<table title="org.androidtransfuse.analysis.ProviderInjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderInjectionNodeBuilderRepository.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ProviderInjectionNodeBuilderRepository </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.AnalysisRepository
-	c1107 [label=<<table title="org.androidtransfuse.analysis.AnalysisRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepository.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AnalysisRepository </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.AOPRepository
-	c1108 [label=<<table title="org.androidtransfuse.analysis.AOPRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepository.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AOPRepository </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.AnalysisDependencyProcessingCallback
-	c1109 [label=<<table title="org.androidtransfuse.analysis.AnalysisDependencyProcessingCallback" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisDependencyProcessingCallback.html">
+	// org.androidtransfuse.analysis.Analysis<T>
+	c1231 [label=<<table title="org.androidtransfuse.analysis.Analysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Analysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> AnalysisDependencyProcessingCallback </td></tr>
+<tr><td align="center" balign="center"> Analysis&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.ActivityComponentBuilderRepositoryProvider
-	c1110 [label=<<table title="org.androidtransfuse.analysis.ActivityComponentBuilderRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepositoryProvider.html">
+	// org.androidtransfuse.analysis.FragmentAnalysis
+	c1232 [label=<<table title="org.androidtransfuse.analysis.FragmentAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ActivityComponentBuilderRepositoryProvider </td></tr>
+<tr><td align="center" balign="center"> FragmentAnalysis </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.BroadcastReceiverAnalysis
+	c1233 [label=<<table title="org.androidtransfuse.analysis.BroadcastReceiverAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverAnalysis.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> BroadcastReceiverAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.AnalysisContext
-	c1111 [label=<<table title="org.androidtransfuse.analysis.AnalysisContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisContext.html">
+	c1234 [label=<<table title="org.androidtransfuse.analysis.AnalysisContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisContext.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AnalysisContext </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ParcelableAnalysis
-	c1112 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableAnalysis.html">
+	c1235 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ParcelableAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.BindingRepositoryProvider
-	c1113 [label=<<table title="org.androidtransfuse.analysis.BindingRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindingRepositoryProvider.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> BindingRepositoryProvider </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.AOPRepositoryProvider
-	c1114 [label=<<table title="org.androidtransfuse.analysis.AOPRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepositoryProvider.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AOPRepositoryProvider </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ActivityAnalysis
-	c1115 [label=<<table title="org.androidtransfuse.analysis.ActivityAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAnalysis.html">
+	c1236 [label=<<table title="org.androidtransfuse.analysis.ActivityAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActivityAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.AnalysisContextFactory
-	c1116 [label=<<table title="org.androidtransfuse.analysis.AnalysisContextFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisContextFactory.html">
+	c1237 [label=<<table title="org.androidtransfuse.analysis.AnalysisContextFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisContextFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> AnalysisContextFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.TransfuseAnalysisException
-	c1117 [label=<<table title="org.androidtransfuse.analysis.TransfuseAnalysisException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAnalysisException.html">
+	c1238 [label=<<table title="org.androidtransfuse.analysis.TransfuseAnalysisException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAnalysisException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseAnalysisException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.ParcelableDescriptor
-	c1118 [label=<<table title="org.androidtransfuse.analysis.ParcelableDescriptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableDescriptor.html">
+	// org.androidtransfuse.analysis.MetaDataBuilder
+	c1239 [label=<<table title="org.androidtransfuse.analysis.MetaDataBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaDataBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ParcelableDescriptor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.AnalysisRepositoryFactory
-	c1119 [label=<<table title="org.androidtransfuse.analysis.AnalysisRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepositoryFactory.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AnalysisRepositoryFactory </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.BindingRepository
-	c1120 [label=<<table title="org.androidtransfuse.analysis.BindingRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindingRepository.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> BindingRepository </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.VirtualProxyAspect
-	c1121 [label=<<table title="org.androidtransfuse.analysis.VirtualProxyAspect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyAspect.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> VirtualProxyAspect </td></tr>
+<tr><td align="center" balign="center"> MetaDataBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ApplicationAnalysis
-	c1122 [label=<<table title="org.androidtransfuse.analysis.ApplicationAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationAnalysis.html">
+	c1240 [label=<<table title="org.androidtransfuse.analysis.ApplicationAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ApplicationAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.InjectionPointFactory
-	c1123 [label=<<table title="org.androidtransfuse.analysis.InjectionPointFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionPointFactory.html">
+	c1241 [label=<<table title="org.androidtransfuse.analysis.InjectionPointFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionPointFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionPointFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.ModuleProcessor
-	c1124 [label=<<table title="org.androidtransfuse.analysis.ModuleProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleProcessor.html">
+	// org.androidtransfuse.analysis.IntentFilterBuilder
+	c1242 [label=<<table title="org.androidtransfuse.analysis.IntentFilterBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilterBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ModuleProcessor </td></tr>
+<tr><td align="center" balign="center"> IntentFilterBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.ActivityComponentBuilderRepository
-	c1125 [label=<<table title="org.androidtransfuse.analysis.ActivityComponentBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepository.html">
+	// org.androidtransfuse.analysis.ServiceAnalysis
+	c1243 [label=<<table title="org.androidtransfuse.analysis.ServiceAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ServiceAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ActivityComponentBuilderRepository </td></tr>
+<tr><td align="center" balign="center"> ServiceAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.Analyzer
-	c1126 [label=<<table title="org.androidtransfuse.analysis.Analyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Analyzer.html">
+	c1244 [label=<<table title="org.androidtransfuse.analysis.Analyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Analyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Analyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.analysis.FragmentAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1232:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.BroadcastReceiverAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1233:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.ParcelableAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1235:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.ActivityAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1236:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.ApplicationAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1240:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.ServiceAnalysis implements org.androidtransfuse.analysis.Analysis<T>
+	c1231:p -> c1243:p [dir=back,arrowtail=empty,style=dashed];
 }
 

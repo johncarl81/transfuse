@@ -1,5 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c15720" href="./Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="113,118,178,143"/>
-<area shape="rect" id="c15845" href="../../processor/Mergeable.html" title="org.androidtransfuse.processor.Mergeable" alt="" coords="15,19,121,45"/>
-<area shape="rect" id="c15940" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html" title="java.lang.Comparable" alt="" coords="165,11,280,53"/>
+<area shape="rect" id="c20551" href="../Mergeable.html" title="org.androidtransfuse.model.Mergeable" alt="" coords="15,19,97,45"/>
+<area shape="rect" id="c20587" href="./Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="151,118,217,143"/>
+<area shape="rect" id="c20553" href="../Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="141,11,227,53"/>
+<area shape="rect" id="c20831" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html" title="java.lang.Comparable" alt="" coords="272,11,387,53"/>
 </map>

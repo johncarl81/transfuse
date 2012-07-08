@@ -15,16 +15,22 @@ digraph G {
 <tr><td align="center" balign="center"> XStreamProvider </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.TransfuseSetupGuiceModule
+	c1 [label=<<table title="org.androidtransfuse.config.TransfuseSetupGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseSetupGuiceModule.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransfuseSetupGuiceModule </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.Nullable
-	c1 [label=<<table title="org.androidtransfuse.config.Nullable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Nullable.html">
+	c2 [label=<<table title="org.androidtransfuse.config.Nullable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Nullable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Nullable </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.config.TransfuseGenerationGuiceModule
-	c2 [label=<<table title="org.androidtransfuse.config.TransfuseGenerationGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseGenerationGuiceModule.html">
+	// org.androidtransfuse.config.TransfuseGenerateGuiceModule
+	c3 [label=<<table title="org.androidtransfuse.config.TransfuseGenerateGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseGenerateGuiceModule.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> TransfuseGenerationGuiceModule </td></tr>
+<tr><td align="center" balign="center"> TransfuseGenerateGuiceModule </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }
