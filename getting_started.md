@@ -7,6 +7,10 @@ title: Transfuse
 
 The code produced by this tutorial is located here:  [https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid][2]
 
+#### Prerequisites
+
+Transfuse requires a Java 6 (or greater) SDK and the [Android SDK][3].
+
 #### Create an Android project
 
 An easy way to get up and running with a new Android project is to use the Maven archetype:
@@ -117,3 +121,4 @@ You should now have a fully functional Android application built using Transfuse
 
 [1]: http://developer.android.com/training/index.html
 [2]: https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid
+[3]: http://developer.android.com/sdk/index.html

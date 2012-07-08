@@ -26,7 +26,7 @@ public class HelloTransfuse {
 }
 {% endhighlight %}
 
-Transfuse has been designed from the ground up to be extremely lightweight and performant.  The code enabling the features of Transfuse is generated at compile time, which allows the library to avoid overhead associated with runtime bytecode generation.  In addition, using this compile time code generation technique Transfuse puts a variety of AOP features within arm's reach.
+Transfuse has been designed from the ground up to be extremely lightweight and performant.  The code enabling the features of Transfuse is generated at compile time with a standard Java 6+ compiler, allowing the library to avoid overhead associated with runtime bytecode generation.  In addition, using this compile time code generation technique Transfuse puts a variety of AOP features within reach.
 
 Interested?  Read more about the features in the [[Documentation](documentation.html)] and [[Motivation](motivation.html)] sections and give Transfuse a spin for yourself.  If you're new to the library or Android the [[Getting Started](getting_started.html)] section will get you up and running in a flash.
 
