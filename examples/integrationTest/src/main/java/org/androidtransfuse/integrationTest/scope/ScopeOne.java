@@ -2,8 +2,8 @@ package org.androidtransfuse.integrationTest.scope;
 
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -12,6 +12,7 @@ import javax.inject.Inject;
  */
 @Activity(name = "ScopeOneActivity", label = "Scope One")
 @Layout(R.layout.scoped)
+@DeclareField
 public class ScopeOne {
 
     @Inject
@@ -22,9 +23,5 @@ public class ScopeOne {
 
     public SingletonObject getSingleton() {
         return singleton;
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 }

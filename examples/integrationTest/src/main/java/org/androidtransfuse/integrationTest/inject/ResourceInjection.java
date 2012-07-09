@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.inject;
 import android.widget.TextView;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,7 @@ import javax.inject.Inject;
  */
 @Activity(name = "ResourceInjectionActivity", label = "Resources")
 @Layout(R.layout.display)
+@DeclareField
 public class ResourceInjection {
 
     @Inject
@@ -28,9 +30,5 @@ public class ResourceInjection {
     @OnCreate
     public void updateDisplayText(){
         textView.setText("Text Resource: " + appName);
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 }

@@ -3,8 +3,8 @@ package org.androidtransfuse.integrationTest.activity;
 import android.preference.PreferenceActivity;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.OnCreate;
-import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -14,6 +14,7 @@ import javax.inject.Inject;
  * @author John Ericksen
  */
 @Activity(type = PreferenceActivity.class, label = "Preferences")
+@DeclareField
 public class Preferences {
 
     @Inject
@@ -26,9 +27,5 @@ public class Preferences {
 
     public PreferenceActivity getActivity() {
         return activity;
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 }

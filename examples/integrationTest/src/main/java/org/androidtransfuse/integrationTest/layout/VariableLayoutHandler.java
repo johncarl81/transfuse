@@ -1,9 +1,9 @@
 package org.androidtransfuse.integrationTest.layout;
 
 import android.app.Activity;
-import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 import java.util.Random;
@@ -11,6 +11,7 @@ import java.util.Random;
 /**
  * @author John Ericksen
  */
+@DeclareField
 public class VariableLayoutHandler implements LayoutHandlerDelegate {
 
     private VariableLayoutDependency dependency;
@@ -33,10 +34,6 @@ public class VariableLayoutHandler implements LayoutHandlerDelegate {
 
     public VariableLayoutDependency getDependency() {
         return dependency;
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 
     public boolean isGetLayoutCalled() {

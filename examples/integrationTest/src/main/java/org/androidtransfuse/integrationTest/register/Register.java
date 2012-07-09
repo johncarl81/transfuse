@@ -5,9 +5,9 @@ import android.view.View;
 import android.widget.Toast;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -20,6 +20,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
  */
 @Activity(label = "Listener Registration")
 @Layout(R.layout.button)
+@DeclareField
 public class Register {
 
     private boolean listener5Clicked = false;
@@ -76,9 +77,5 @@ public class Register {
 
     public View.OnClickListener getListener5() {
         return listener5;
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 }

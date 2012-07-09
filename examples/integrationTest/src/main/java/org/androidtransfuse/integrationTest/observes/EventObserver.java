@@ -6,6 +6,7 @@ import android.widget.Toast;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.event.EventManager;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -16,6 +17,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
  */
 @Activity(label = "Observes")
 @Layout(R.layout.observer)
+@DeclareField
 public class EventObserver {
 
     private boolean eventOneTriggered;
@@ -71,10 +73,5 @@ public class EventObserver {
 
     public boolean isEventTwoTriggered() {
         return eventTwoTriggered;
-    }
-
-    @OnPause
-    public void keepInActivity(){
-
     }
 }

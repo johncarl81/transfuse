@@ -4,6 +4,7 @@ import android.widget.TextView;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.integrationTest.SerializableValue;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -12,6 +13,7 @@ import javax.inject.Inject;
  */
 @Activity(label = "Extras")
 @Layout(R.layout.extras)
+@DeclareField
 public class ExtraInjection {
 
     public static final String EXTRA_ONE = "extraOne";
@@ -41,11 +43,6 @@ public class ExtraInjection {
     @Inject
     @View(R.id.extrasText)
     private TextView textView;
-
-
-    @OnPause
-    public void keepInActivity() {
-    }
 
     @Inject
     @Extra(EXTRA_TWO)

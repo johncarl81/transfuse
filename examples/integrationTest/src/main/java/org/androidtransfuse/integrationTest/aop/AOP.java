@@ -4,9 +4,9 @@ import android.util.Log;
 import android.view.View;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
 
@@ -17,6 +17,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
  */
 @Activity(name = "AOPActivity", label = "AOP")
 @Layout(R.layout.aop)
+@DeclareField
 public class AOP {
 
     public static final String INTERCEPT_VALUE = "interception";
@@ -55,9 +56,5 @@ public class AOP {
         Thread.sleep(ONE_SECOND);
 
         return "@DependencyInterceptor";
-    }
-
-    @OnPause
-    public void keepInActivity() {
     }
 }

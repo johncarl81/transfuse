@@ -10,9 +10,13 @@ import android.location.LocationManager;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Toast;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.annotations.Activity;
+import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.RegisterListener;
+import org.androidtransfuse.annotations.SystemService;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.intentFactory.IntentFactory;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -23,6 +27,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
  */
 @Activity(name = "SystemInjectionActivity", label = "System Services")
 @Layout(R.layout.system)
+@DeclareField
 public class SystemInjection {
 
     private static final int NOTIFICATION_ID = 42;
@@ -93,10 +98,6 @@ public class SystemInjection {
             }
         }
     };
-
-    @OnPause
-    public void keepInActivity() {
-    }
 
     @Inject
     public void setVibrator(Vibrator vibrator) {
