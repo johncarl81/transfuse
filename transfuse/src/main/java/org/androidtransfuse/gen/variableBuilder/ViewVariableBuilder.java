@@ -113,8 +113,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                     injectionInvocationBuilder.buildFieldSet(
                             injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                             fieldInjectionPoint,
-                            variableRef,
-                            fieldInjectionPoint.getSubclassLevel()));
+                            variableRef));
         }
 
         //method injection

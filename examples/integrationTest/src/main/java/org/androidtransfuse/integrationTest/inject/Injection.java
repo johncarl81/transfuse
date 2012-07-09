@@ -13,7 +13,7 @@ import javax.inject.Provider;
  */
 @Activity(name = "InjectionActivity", label = "Injection")
 @Layout(R.layout.main)
-public class Injection {
+public class Injection extends InjectionBase{
 
     @Inject
     private InjectTarget privateInjection;

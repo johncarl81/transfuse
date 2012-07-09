@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTField;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.NonConfigurationInstance;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -21,11 +22,11 @@ public class NonConfigurationAnalysis extends ASTAnalysisAdaptor {
     }
 
     @Override
-    public void analyzeField(InjectionNode injectionNode, ASTField astField, AnalysisContext context) {
+    public void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context) {
 
         if(astField.isAnnotated(NonConfigurationInstance.class)){
             NonConfigurationAspect aspect = buildAspect(injectionNode);
-            aspect.add(injectionPointFactory.buildInjectionPoint(astField, context));
+            aspect.add(injectionPointFactory.buildInjectionPoint(concreteType, astField, context));
 
             if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
                 injectionNode.addAspect(ASTInjectionAspect.class, new ASTInjectionAspect());

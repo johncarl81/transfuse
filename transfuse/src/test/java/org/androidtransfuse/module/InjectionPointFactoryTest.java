@@ -7,6 +7,7 @@ import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.targets.MockAnalysisClass;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -70,9 +71,10 @@ public class InjectionPointFactoryTest {
         Method method = methods[0];
 
         List<ASTParameter> astParameters = astClassFactory.buildASTTypeParameters(method);
+        ASTType containingType = astClassFactory.buildASTClassType(MockAnalysisClass.class);
         ASTMethod astMethod = astClassFactory.buildASTClassMethod(method);
 
-        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(astMethod, emptyContext);
+        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astMethod, emptyContext);
 
 
         List<InjectionNode> injectionNodes = methodInjectionPoint.getInjectionNodes();
@@ -92,7 +94,9 @@ public class InjectionPointFactoryTest {
         Field[] fields = MockAnalysisClass.class.getDeclaredFields();
         Field field = fields[0];
 
-        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassField(field), emptyContext);
+        ASTType containingType = astClassFactory.buildASTClassType(MockAnalysisClass.class);
+
+        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astClassFactory.buildASTClassField(field), emptyContext);
 
         InjectionNode injectionNode = fieldInjectionPoint.getInjectionNode();
 

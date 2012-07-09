@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -45,7 +46,7 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
     }
 
     @Override
-    public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
+    public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
         for (Class<?> annotation : methodAnnotations.keySet()) {
             if (astMethod.isAnnotated((Class<Annotation>) annotation)) {
                 addMethod(injectionNode, annotation, astMethod);

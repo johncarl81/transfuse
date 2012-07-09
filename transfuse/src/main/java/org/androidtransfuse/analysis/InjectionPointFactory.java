@@ -58,13 +58,15 @@ public class InjectionPointFactory {
     /**
      * Build a Method Injection Point from the given ASTMethod
      *
+     *
+     * @param concreteType
      * @param astMethod required ASTMethod
      * @param context   analysis context
      * @return MethodInjectionPoint
      */
-    public MethodInjectionPoint buildInjectionPoint(ASTMethod astMethod, AnalysisContext context) {
+    public MethodInjectionPoint buildInjectionPoint(ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(astMethod.getAccessModifier(), astMethod.getName(), context.getSuperClassLevel());
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(concreteType, astMethod.getAccessModifier(), astMethod.getName());
         methodInjectionPoint.addThrows(astMethod.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
@@ -85,12 +87,14 @@ public class InjectionPointFactory {
     /**
      * Build a Field InjectionPoint from the given ASTField
      *
+     *
+     * @param concreteType
      * @param astField required ASTField
      * @param context  analysis context
      * @return FieldInjectionPoint
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context), context.getSuperClassLevel());
+    public FieldInjectionPoint buildInjectionPoint(ASTType concreteType, ASTField astField, AnalysisContext context) {
+        return new FieldInjectionPoint(concreteType, astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
     }
 
     /**

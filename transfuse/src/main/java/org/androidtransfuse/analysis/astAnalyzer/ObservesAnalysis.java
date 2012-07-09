@@ -32,7 +32,7 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
     }
 
     @Override
-    public void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context) {
+    public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
 
         ASTParameter firstParameter = null;
         if(astMethod.getParameters().size() > 0){

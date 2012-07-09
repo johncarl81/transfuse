@@ -4,7 +4,6 @@ import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -81,20 +80,13 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                 //assign variables
                 for (InjectionNode nonConfigurationComponent : nonConfigurationComponents) {
 
-                    //todo:figure out a better way to do this
-                    int proxyLevel = 0;
-                    if (nonConfigurationComponent.containsAspect(AOPProxyAspect.class)) {
-                        proxyLevel = 1;
-                    }
-
                     NonConfigurationAspect aspect = nonConfigurationComponent.getAspect(NonConfigurationAspect.class);
                     for (FieldInjectionPoint nonConfigurationField : aspect.getFields()) {
                         TypedExpression fieldExpression = typeExpressionFactory.build(nonConfigurationField.getInjectionNode().getASTType(), JExpr.ref(bodyVar, fieldMap.get(nonConfigurationField)));
                         conditional.add(
                                 invocationBuilder.buildFieldSet(fieldExpression,
                                         nonConfigurationField,
-                                        expressionMap.get(nonConfigurationComponent).getExpression(),
-                                        nonConfigurationField.getSubclassLevel() + proxyLevel));
+                                        expressionMap.get(nonConfigurationComponent).getExpression()));
                     }
                 }
 
@@ -114,20 +106,14 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
 
                 for (InjectionNode injectionNode : nonConfigurationComponents) {
 
-                    //todo:figure out a better way to do this
-                    int proxyLevel = 0;
-                    if (injectionNode.containsAspect(AOPProxyAspect.class)) {
-                        proxyLevel = 1;
-                    }
-
                     NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
                     for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                         construction.arg(invocationBuilder.buildFieldGet(
                                 fieldInjectionPoint.getInjectionNode().getASTType(),
+                                codeModel.ref(expressionMap.get(injectionNode).getType().getName()),
                                 expressionMap.get(injectionNode).getExpression(),
                                 fieldInjectionPoint.getName(),
-                                fieldInjectionPoint.getAccessModifier(),
-                                fieldInjectionPoint.getSubclassLevel() + proxyLevel));
+                                fieldInjectionPoint.getAccessModifier()));
                     }
                 }
 

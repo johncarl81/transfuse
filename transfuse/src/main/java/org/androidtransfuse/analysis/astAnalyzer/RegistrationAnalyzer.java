@@ -76,7 +76,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     @Override
-    public void analyzeMethod(InjectionNode injectionNode, final ASTMethod astMethod, AnalysisContext context) {
+    public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, final ASTMethod astMethod, AnalysisContext context) {
         analyze(astMethod, astMethod.getReturnType(), injectionNode, context, new MethodListenerRegistrationFactory(astMethod));
     }
 
@@ -96,7 +96,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     @Override
-    public void analyzeField(InjectionNode injectionNode, final ASTField astField, AnalysisContext context) {
+    public void analyzeField(InjectionNode injectionNode, ASTType concreteType, final ASTField astField, AnalysisContext context) {
         analyze(astField, astField.getASTType(), injectionNode, context, new FieldListenerRegistrationFactory(astField));
     }
 

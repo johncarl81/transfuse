@@ -76,7 +76,7 @@ public class AOPProxyAnalyzerTest {
         analysisContext.getAOPRepository().put(aopAnnotationASTType, methodInterceptorASTType);
 
         for (ASTMethod astMethod : proxyTargetASTType.getMethods()) {
-            proxyAnalyzer.analyzeMethod(proxyTargetInjectionNode, astMethod, analysisContext);
+            proxyAnalyzer.analyzeMethod(proxyTargetInjectionNode, proxyTargetASTType, astMethod, analysisContext);
         }
 
         assertTrue(proxyTargetInjectionNode.containsAspect(AOPProxyAspect.class));

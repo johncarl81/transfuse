@@ -1,21 +1,21 @@
 package org.androidtransfuse.model;
 
 import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
+import org.androidtransfuse.analysis.adapter.ASTType;
 
 /**
  * @author John Ericksen
  */
 public class MethodInjectionPoint extends MethodInjectionPointBase {
 
+    private ASTType containingType;
     private String name;
     private ASTAccessModifier accessModifier;
-    private int superClassLevel;
-    private boolean proxied;
 
-    public MethodInjectionPoint(ASTAccessModifier accessModifier, String name, int superClassLevel) {
+    public MethodInjectionPoint(ASTType containingType, ASTAccessModifier accessModifier, String name) {
         this.name = name;
         this.accessModifier = accessModifier;
-        this.superClassLevel = superClassLevel;
+        this.containingType = containingType;
     }
 
     public String getName() {
@@ -26,11 +26,7 @@ public class MethodInjectionPoint extends MethodInjectionPointBase {
         return accessModifier;
     }
 
-    public int getSuperClassLevel() {
-        return proxied ? superClassLevel + 1 : superClassLevel;
-    }
-
-    public void setProxied(boolean proxied) {
-        this.proxied = proxied;
+    public ASTType getContainingType() {
+        return containingType;
     }
 }

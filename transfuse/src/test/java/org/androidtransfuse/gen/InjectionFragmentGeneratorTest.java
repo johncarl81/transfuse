@@ -73,7 +73,9 @@ public class InjectionFragmentGeneratorTest {
     public void testMethodInjection() throws Exception {
         InjectionNode injectionNode = buildInjectionNode(MethodInjectable.class);
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(ASTAccessModifier.PUBLIC, "setInjectionTarget", 0);
+        ASTType containingType = astClassFactory.buildASTClassType(MethodInjectable.class);
+
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(containingType, ASTAccessModifier.PUBLIC, "setInjectionTarget");
         methodInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
         getInjectionAspect(injectionNode).add(methodInjectionPoint);
 
@@ -86,7 +88,9 @@ public class InjectionFragmentGeneratorTest {
     public void testFieldInjection() throws Exception {
         InjectionNode injectionNode = buildInjectionNode(FieldInjectable.class);
 
-        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(ASTAccessModifier.PRIVATE, "injectionTarget", buildInjectionNode(InjectionTarget.class), 0);
+        ASTType containingType = astClassFactory.buildASTClassType(FieldInjectable.class);
+
+        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, ASTAccessModifier.PRIVATE, "injectionTarget", buildInjectionNode(InjectionTarget.class));
         getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
         FieldInjectable fieldInjectable = buildInstance(FieldInjectable.class, injectionNode);
@@ -127,7 +131,9 @@ public class InjectionFragmentGeneratorTest {
     public void testVariableBuilder() throws Exception {
         InjectionNode injectionNode = buildInjectionNode(VariableBuilderInjectable.class);
 
-        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(ASTAccessModifier.PRIVATE, "target", buildInjectionNode(VariableTarget.class), 0);
+        ASTType containingType = astClassFactory.buildASTClassType(VariableBuilderInjectable.class);
+
+        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, ASTAccessModifier.PRIVATE, "target", buildInjectionNode(VariableTarget.class));
         getInjectionAspect(injectionNode).add(fieldInjectionPoint);
 
         injectionNodeBuilderRepository.putType(VariableTarget.class, new InjectionNodeBuilderNoAnnotationAdapter() {

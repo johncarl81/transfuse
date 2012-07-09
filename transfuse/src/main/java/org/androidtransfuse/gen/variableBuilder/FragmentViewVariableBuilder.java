@@ -111,8 +111,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
                     injectionInvocationBuilder.buildFieldSet(
                             injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                             fieldInjectionPoint,
-                            variableRef,
-                            fieldInjectionPoint.getSubclassLevel()));
+                            variableRef));
         }
 
         //method injection

@@ -91,11 +91,11 @@ public class Analyzer {
             analysis.analyzeType(injectionNode, concreteType, context);
 
             for (ASTMethod astMethod : concreteType.getMethods()) {
-                analysis.analyzeMethod(injectionNode, astMethod, context);
+                analysis.analyzeMethod(injectionNode, concreteType, astMethod, context);
             }
 
             for (ASTField astField : concreteType.getFields()) {
-                analysis.analyzeField(injectionNode, astField, context);
+                analysis.analyzeField(injectionNode, concreteType, astField, context);
             }
         }
     }

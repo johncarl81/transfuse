@@ -40,7 +40,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                 MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
 
                 if (methodCallbackAspect != null && methodCallbackAspect.contains(name)) {
-                        Set<ASTMethod> methods = methodCallbackAspect.getMethodCallbacks(name);
+                    Set<ASTMethod> methods = methodCallbackAspect.getMethodCallbacks(name);
 
                     //define method on demand for possible lazy init
                     if (methodDescriptor == null) {
@@ -54,6 +54,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                                 Object.class.getName(),
                                 methodDescriptor.getASTMethod().getParameters(),
                                 methodDescriptor.getParameters(),
+                                injectionNodeJExpressionEntry.getValue().getType(),
                                 injectionNodeJExpressionEntry.getValue().getExpression(),
                                 methodCallback);
 

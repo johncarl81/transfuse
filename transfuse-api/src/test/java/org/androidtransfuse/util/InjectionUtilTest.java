@@ -26,7 +26,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.callMethod(Void.class, target, 0, "setPrivateValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.callMethod(Void.class, Target.class, target, "setPrivateValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -38,7 +38,7 @@ public class InjectionUtilTest {
         assertNull(target.getValue());
         target.setValue(TEST_VALUE);
 
-        assertEquals(TEST_VALUE, injectionUtil.callMethod(String.class, target, 0, "getPrivateValue", new Class[]{}, new Object[]{}));
+        assertEquals(TEST_VALUE, injectionUtil.callMethod(String.class, Target.class, target, "getPrivateValue", new Class[]{}, new Object[]{}));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.callMethod(Void.class, target, 1, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        injectionUtil.callMethod(Void.class, TargetSuper.class, target, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
@@ -65,7 +65,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setField(target, 0, "value", TEST_VALUE);
+        injectionUtil.setField(Target.class, target, "value", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -76,7 +76,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setField(target, 1, "superValue", TEST_VALUE);
+        injectionUtil.setField(TargetSuper.class, target, "superValue", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
@@ -88,11 +88,11 @@ public class InjectionUtilTest {
         assertNotNull(getInstanceMethod);
         Method callConstructorMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_CONSTRUCTOR_METHOD, Class.class, Class[].class, Object[].class);
         assertNotNull(callConstructorMethod);
-        Method callMethodMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_METHOD_METHOD, Class.class, Object.class, int.class, String.class, Class[].class, Object[].class);
+        Method callMethodMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_METHOD_METHOD, Class.class, Class.class, Object.class, String.class, Class[].class, Object[].class);
         assertNotNull(callMethodMethod);
-        Method getFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.GET_FIELD_METHOD, Class.class, Object.class, int.class, String.class);
+        Method getFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.GET_FIELD_METHOD, Class.class, Class.class, Object.class, String.class);
         assertNotNull(getFieldMethod);
-        Method setFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.SET_FIELD_METHOD, Object.class, int.class, String.class, Object.class);
+        Method setFieldMethod = InjectionUtil.class.getMethod(InjectionUtil.SET_FIELD_METHOD, Class.class, Object.class, String.class, Object.class);
         assertNotNull(setFieldMethod);
     }
 }

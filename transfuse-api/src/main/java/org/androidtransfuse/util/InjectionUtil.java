@@ -28,9 +28,9 @@ public final class InjectionUtil {
         //singleton constructor
     }
 
-    public <T> T getField(Class<T> returnType, Object target, int superLevel, String field) {
+    public <T> T getField(Class<T> returnType, Class<?> targetClass, Object target, String field) {
         try {
-            Field declaredField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
+            Field declaredField = targetClass.getDeclaredField(field);
 
             return AccessController.doPrivileged(
                     new GetFieldPrivilegedAction<T>(declaredField, target));
@@ -60,9 +60,9 @@ public final class InjectionUtil {
         }
     }
 
-    public void setField(Object target, int superLevel, String field, Object source) {
+    public void setField(Class<?> targetClass, Object target, String field, Object source) {
         try {
-            Field classField = getSuperClass(target.getClass(), superLevel).getDeclaredField(field);
+            Field classField = targetClass.getDeclaredField(field);
 
             AccessController.doPrivileged(
                     new SetFieldPrivilegedAction(classField, target, source));
@@ -96,9 +96,9 @@ public final class InjectionUtil {
         }
     }
 
-    public <T> T callMethod(Class<T> retClass, Object target, int superLevel, String method, Class[] argClasses, Object[] args) {
+    public <T> T callMethod(Class<T> retClass, Class<?> targetClass, Object target, String method, Class[] argClasses, Object[] args) {
         try {
-            Method classMethod = getSuperClass(target.getClass(), superLevel).getDeclaredMethod(method, argClasses);
+            Method classMethod = targetClass.getDeclaredMethod(method, argClasses);
 
             return AccessController.doPrivileged(
                     new SetMethodPrivilegedAction<T>(classMethod, target, args));
@@ -159,14 +159,6 @@ public final class InjectionUtil {
         @Override
         public T run(Constructor classConstructor) throws InvocationTargetException, InstantiationException, IllegalAccessException {
             return (T) classConstructor.newInstance(args);
-        }
-    }
-
-    private static Class getSuperClass(Class input, int level) {
-        if (level == 0) {
-            return input;
-        } else {
-            return getSuperClass(input.getSuperclass(), level - 1);
         }
     }
 }

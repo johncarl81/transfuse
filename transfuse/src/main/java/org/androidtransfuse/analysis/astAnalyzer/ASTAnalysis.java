@@ -26,17 +26,19 @@ public interface ASTAnalysis {
      * Analyze the given method.  Used during the class scanning phase to perform method level operations.
      *
      * @param injectionNode current injection node
+     * @param concreteType
      * @param astMethod     method
      * @param context       current context
      */
-    void analyzeMethod(InjectionNode injectionNode, ASTMethod astMethod, AnalysisContext context);
+    void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context);
 
     /**
      * Analyze the given field.  Used during the class scanning phase to perform field level operations.
      *
      * @param injectionNode current injection node
+     * @param concreteType
      * @param astField      field
      * @param context       current context
      */
-    void analyzeField(InjectionNode injectionNode, ASTField astField, AnalysisContext context);
+    void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context);
 }

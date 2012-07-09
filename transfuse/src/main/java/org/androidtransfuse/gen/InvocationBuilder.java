@@ -26,7 +26,7 @@ public class InvocationBuilder {
         this.astClassFactory = astClassFactory;
     }
 
-    public JInvocation buildMethodCall(String returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, JExpression targetExpression, ASTMethod methodToCall) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JInvocation buildMethodCall(String returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) throws ClassNotFoundException, JClassAlreadyExistsException {
         List<ASTParameter> matchedParameters = matchMethodArguments(callingParameters, methodToCall);
         List<ASTType> parameterTypes = new ArrayList<ASTType>();
 
@@ -39,8 +39,7 @@ public class InvocationBuilder {
             return buildPublicMethodCall(parameters, methodToCall.getName(), matchedParameters, parameterTypes, targetExpression);
         }
         //non-public access
-        //todo:add superclass level
-        return buildPrivateMethodCall(returnType, 0, parameters, methodToCall.getName(), matchedParameters, pullASTParameterTypes(matchedParameters), targetExpression);
+        return buildPrivateMethodCall(returnType, parameters, methodToCall.getName(), matchedParameters, pullASTParameterTypes(matchedParameters), codeModel.ref(targetExpressionType.getName()), targetExpression);
     }
 
     private List<ASTType> pullASTParameterTypes(List<ASTParameter> matchedParameters) {
@@ -94,7 +93,8 @@ public class InvocationBuilder {
 
             return buildPublicMethodCall(expressionMap, methodInjectionPoint.getName(), methodInjectionPoint.getInjectionNodes(), types, variable);
         }
-        return buildPrivateMethodCall(returnType, methodInjectionPoint.getSuperClassLevel(), expressionMap, methodInjectionPoint.getName(), methodInjectionPoint.getInjectionNodes(), pullASTTypes(methodInjectionPoint.getInjectionNodes()), variable);
+        JClass containingType = codeModel.ref(methodInjectionPoint.getContainingType().getName());
+        return buildPrivateMethodCall(returnType, expressionMap, methodInjectionPoint.getName(), methodInjectionPoint.getInjectionNodes(), pullASTTypes(methodInjectionPoint.getInjectionNodes()), containingType, variable);
     }
 
     private List<ASTType> pullASTTypes(List<InjectionNode> injectionNodes) {
@@ -107,18 +107,18 @@ public class InvocationBuilder {
         return astTypes;
     }
 
-    private <T> JInvocation buildPrivateMethodCall(String returnType, int superClassLevel, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectioNodeType, JExpression targetExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private <T> JInvocation buildPrivateMethodCall(String returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, JClass targetType, JExpression targetExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        //InjectionUtil.getInstance().setMethod(Object target, int superLevel, String method, Class[] argClasses,Object[] args)
+        //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)
         JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.CALL_METHOD_METHOD)
                 .arg(codeModel.ref(returnType).dotclass())
+                .arg(targetType.dotclass())
                 .arg(targetExpression)
-                .arg(JExpr.lit(superClassLevel))
                 .arg(methodName);
 
         //add classes
         JArray classArray = JExpr.newArray(codeModel.ref(Class.class));
-        for (ASTType injectionNode : injectioNodeType) {
+        for (ASTType injectionNode : injectionNodeType) {
             classArray.add(codeModel.ref(injectionNode.getName()).dotclass());
         }
         methodInvocation.arg(classArray);
@@ -144,11 +144,12 @@ public class InvocationBuilder {
         return methodInvocation;
     }
 
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable, int level) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         if (ASTAccessModifier.PUBLIC.equals(fieldInjectionPoint.getAccessModifier())) {
             return buildPublicFieldSet(expression, fieldInjectionPoint, variable);
         }
-        return buildPrivateFieldSet(expression, fieldInjectionPoint, variable, level);
+        JClass containingType = codeModel.ref(fieldInjectionPoint.getContainingType().getName());
+        return buildPrivateFieldSet(expression, fieldInjectionPoint, containingType, variable);
     }
 
     private JStatement buildPublicFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
@@ -160,26 +161,26 @@ public class InvocationBuilder {
         return assignmentBlock;
     }
 
-    private JStatement buildPrivateFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable, int level) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private JStatement buildPrivateFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JClass variableType, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_FIELD_METHOD)
+                .arg(variableType.dotclass())
                 .arg(variable)
-                .arg(JExpr.lit(level))
                 .arg(fieldInjectionPoint.getName())
                 .arg(expression.getExpression());
     }
 
-    public JExpression buildFieldGet(ASTType returnType, JExpression variable, String name, ASTAccessModifier accessModifier, int subclassLevel) {
+    public JExpression buildFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
         if (accessModifier.equals(ASTAccessModifier.PUBLIC)) {
             return buildPublicFieldGet(variable, name);
         }
-        return buildPrivateFieldGet(returnType, variable, name, subclassLevel);
+        return buildPrivateFieldGet(returnType, variableType, variable, name);
     }
 
-    private JExpression buildPrivateFieldGet(ASTType returnType, JExpression variable, String name, int subclassLevel) {
+    private JExpression buildPrivateFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name) {
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.GET_FIELD_METHOD)
                 .arg(codeModel.ref(returnType.getName()).dotclass())
+                .arg(variableType.dotclass())
                 .arg(variable)
-                .arg(JExpr.lit(subclassLevel))
                 .arg(name);
     }
 

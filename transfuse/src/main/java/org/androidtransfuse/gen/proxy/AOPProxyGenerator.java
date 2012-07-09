@@ -9,9 +9,7 @@ import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -117,14 +115,7 @@ public class AOPProxyGenerator {
 
         //alter construction injection
         ASTInjectionAspect proxyInjectionAspect = new ASTInjectionAspect();
-        //flag InjectionUtil that it needs to set the super class' fields
-        for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-            fieldInjectionPoint.setProxied(true);
-        }
         proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
-        for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-            methodInjectionPoint.setProxied(true);
-        }
         proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
         //replace proxy constructor because of optional interceptor construction parameters
         proxyInjectionAspect.add(proxyConstructorInjectionPoint);

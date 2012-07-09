@@ -81,4 +81,9 @@ public class InjectionTest {
         assertNotNull(injectTargetTwo);
         assertNotSame(injectTargetOne, injectTargetTwo);
     }
+
+    @Test
+    public void testBaseClassInjection(){
+        assertNotNull(injection.getBaseTarget());
+    }
 }
