@@ -50,13 +50,13 @@ or via Maven:
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>{{site.currentVersion}}</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse-api</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>{{site.currentVersion}}</version>
 </dependency>
 
 {% endhighlight %}

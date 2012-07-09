@@ -9,7 +9,7 @@ The code produced by this tutorial is located here:  [https://github.com/johncar
 
 #### Prerequisites
 
-Transfuse requires a Java 6 (or greater) SDK and the [Android SDK][3].
+Transfuse requires a Java 6 (or greater) JDK and the [Android SDK][3].
 
 #### Create an Android project
 
@@ -48,13 +48,13 @@ Add the transfuse dependencies into your Maven pom:
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>{{site.currentVersion}}</version>
     <scope>compile</scope>
 </dependency>
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse-api</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>{{site.currentVersion}}</version>
 </dependency>
 
 {% endhighlight %}
