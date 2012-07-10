@@ -26,7 +26,7 @@ public class InjectionUtilTest {
 
         target.setValue(TEST_VALUE);
 
-        String value = injectionUtil.getField(String.class, target, 0, "value");
+        String value = injectionUtil.getField(String.class, Target.class, target, "value");
 
         assertEquals(TEST_VALUE, value);
     }

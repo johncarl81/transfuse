@@ -14,10 +14,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.GeneratorFactory;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
-import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
-import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 
 import javax.inject.Inject;
@@ -38,7 +35,11 @@ public class ActivityComponentBuilderRepositoryFactory {
     private NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
 
     @Inject
-    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory, GeneratorFactory generatorFactory, ListenerRegistrationGenerator listenerRegistrationGenerator) {
+    public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory,
+                                                     ComponentBuilderFactory componentBuilderFactory,
+                                                     GeneratorFactory generatorFactory,
+                                                     ListenerRegistrationGenerator listenerRegistrationGenerator,
+                                                     NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.generatorFactory = generatorFactory;
