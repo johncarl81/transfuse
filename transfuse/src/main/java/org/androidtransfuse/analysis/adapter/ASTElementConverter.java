@@ -1,6 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
-import org.androidtransfuse.util.CollectionConverter;
+import org.androidtransfuse.util.Conversion;
 
 import javax.lang.model.element.Element;
 
@@ -10,7 +10,7 @@ import javax.lang.model.element.Element;
  *
  * @author John Ericksen
  */
-public class ASTElementConverter<T> implements CollectionConverter<Element, T> {
+public class ASTElementConverter<T> implements Conversion<Element, T> {
 
     private Class<T> astTypeClass;
     private ElementConverterFactory elementConverterFactory;

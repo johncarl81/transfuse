@@ -177,7 +177,7 @@ public class InjectionFragmentGeneratorTest {
     }
 
     private <T> T buildInstance(Class<T> instanceClass, InjectionNode injectionNode) throws Exception {
-        PackageClass providerPackageClass = new PackageClass(instanceClass).add("Provider");
+        PackageClass providerPackageClass = new PackageClass(instanceClass).append("Provider");
 
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPackageClass);
 

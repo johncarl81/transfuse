@@ -23,7 +23,6 @@ public class AnalysisContext {
     private AnalysisRepository analysisRepository;
     private InjectionNodeBuilderRepository injectionNodeBuilders;
     private AOPRepository aopRepository;
-    private int superClassLevel;
 
     @Inject
     public AnalysisContext(@Assisted InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository, AOPRepository aopRepository) {
@@ -32,7 +31,6 @@ public class AnalysisContext {
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.aopRepository = aopRepository;
-        this.superClassLevel = 0;
     }
 
     private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
@@ -42,16 +40,6 @@ public class AnalysisContext {
         this.dependents.put(node.getASTType(), node);
         this.dependencyHistory.addAll(previousContext.dependencyHistory);
         this.dependencyHistory.push(node);
-    }
-
-    private AnalysisContext(Map<ASTType, InjectionNode> dependents, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository, int superClassLevel) {
-        this(injectionNodeBuilders, analysisRepository, aopRepository);
-        this.dependents = dependents;
-        this.superClassLevel = superClassLevel;
-    }
-
-    public AnalysisContext incrementSuperClassLevel() {
-        return new AnalysisContext(this.dependents, analysisRepository, injectionNodeBuilders, aopRepository, superClassLevel + 1);
     }
 
     public AnalysisContext addDependent(InjectionNode node) {
@@ -76,10 +64,6 @@ public class AnalysisContext {
 
     public AOPRepository getAOPRepository() {
         return aopRepository;
-    }
-
-    public int getSuperClassLevel() {
-        return superClassLevel;
     }
 
     public Stack<InjectionNode> getDependencyHistory() {

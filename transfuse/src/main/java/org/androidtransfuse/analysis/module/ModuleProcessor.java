@@ -9,11 +9,23 @@ import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Central module processor class.  Scanns the input AST elements for the appropriate annotations and registers
+ * the results with the given processor.  For instance:
+ *
+ * {@code
+ * @TransfuseModule
+ * public interface IntegrationModule {
+ *     @Bind(LoopThreeImpl.class)
+ *     LoopThree getThree();
+ * }
+ * }
+ *
+ * associates teh LoopThreeImpl class to be used when a LoopThree is injected.
+ *
  * @author John Ericksen
  */
 public class ModuleProcessor {
@@ -21,13 +33,13 @@ public class ModuleProcessor {
     private Map<ASTType, MethodProcessor> methodProcessorMap = new HashMap<ASTType, MethodProcessor>();
 
     @Inject
-    public ModuleProcessor(Provider<BindProcessor> bindProcessorProvider,
-                           Provider<BindProviderProcessor> bindProviderProcessorProvider,
-                           Provider<BindInterceptorProcessor> bindInterceptorProcessorProvider,
+    public ModuleProcessor(BindProcessor bindProcessor,
+                           BindProviderProcessor bindProviderProcessor,
+                           BindInterceptorProcessor bindInterceptorProcessor,
                            ASTClassFactory astClassFactory) {
-        methodProcessorMap.put(astClassFactory.buildASTClassType(Bind.class), bindProcessorProvider.get());
-        methodProcessorMap.put(astClassFactory.buildASTClassType(BindInterceptor.class), bindInterceptorProcessorProvider.get());
-        methodProcessorMap.put(astClassFactory.buildASTClassType(BindProvider.class), bindProviderProcessorProvider.get());
+        methodProcessorMap.put(astClassFactory.buildASTClassType(Bind.class), bindProcessor);
+        methodProcessorMap.put(astClassFactory.buildASTClassType(BindInterceptor.class), bindInterceptorProcessor);
+        methodProcessorMap.put(astClassFactory.buildASTClassType(BindProvider.class), bindProviderProcessor);
     }
 
     public void processMethod(ASTMethod astMethod) {

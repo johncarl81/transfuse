@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * Aspect to flag the the given InjectionNode requires a virtual proxy.  This is due to some circular dependency
- * which is broken by this InjectionNode proxy.
+ * which is broken by a virtual proxy.
  *
  * @author John Ericksen
  */

@@ -1,12 +1,13 @@
 package org.androidtransfuse.util;
 
 import org.androidtransfuse.TransfuseTestInjector;
-import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -21,7 +22,7 @@ public class CollectionConverterUtilTest {
     @Inject
     private IntToStringConverter converter;
 
-    private static final class IntToStringConverter implements CollectionConverter<Integer, String> {
+    private static final class IntToStringConverter implements Conversion<Integer, String> {
 
         @Override
         public String convert(Integer integer) {
@@ -40,9 +41,9 @@ public class CollectionConverterUtilTest {
     @Test
     public void testConversion() {
         List<Integer> input = Arrays.asList(1, 2, 3, null, 4);
-        List<String> output = collectionConverterUtil.transform(input, converter);
+        Collection<String> output = collectionConverterUtil.transform(input, converter);
 
-        assertTrue(ListUtils.isEqualList(Arrays.asList("1", "2", "3", "4"), output));
+        assertTrue(CollectionUtils.isEqualCollection(Arrays.asList("1", "2", "3", "4"), output));
     }
 
 

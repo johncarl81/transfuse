@@ -16,6 +16,9 @@ import org.androidtransfuse.model.InjectionNode;
 import javax.inject.Inject;
 
 /**
+ * Analysis class to find the methods annotated with @Observes.  When found, an ObservesAspect is populated with the
+ * observing method.  Multiple observer methods could be defined per class and per InjectionNode
+ *
  * @author John Ericksen
  */
 public class ObservesAnalysis extends ASTAnalysisAdaptor {
@@ -40,12 +43,13 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
         }
         for(int i = 1; i < astMethod.getParameters().size(); i++){
             if(astMethod.getParameters().get(i).isAnnotated(Observes.class)){
+                //don't accept @Observes outside of the first parameter
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }
         }
 
         if(firstParameter != null && (firstParameter.isAnnotated(Observes.class) || astMethod.isAnnotated(Observes.class))){
-
+            //don't accept @Observes with more than one parameter
             if(astMethod.getParameters().size() != 1){
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }

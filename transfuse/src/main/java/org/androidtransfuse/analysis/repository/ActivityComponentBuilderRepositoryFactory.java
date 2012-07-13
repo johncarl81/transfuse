@@ -51,7 +51,7 @@ public class ActivityComponentBuilderRepositoryFactory {
 
         Map<String, Set<ExpressionVariableDependentGenerator>> methodCallbackGenerators = new HashMap<String, Set<ExpressionVariableDependentGenerator>>();
 
-        Set<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators(context);
+        Set<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators();
         methodCallbackGenerators.put(Activity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ListActivity.class.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
         methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
@@ -73,7 +73,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         return listActivityCallbackGenerators;
     }
 
-    private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators(AnalysisContext context) {
+    private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
         Set<ExpressionVariableDependentGenerator> activityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
         // onDestroy
         activityCallbackGenerators.add(buildEventMethod("onDestroy"));
@@ -116,8 +116,6 @@ public class ActivityComponentBuilderRepositoryFactory {
 
         //non configuration instance update
         activityCallbackGenerators.add(nonConfigurationInstanceGenerator);
-
-
 
         return activityCallbackGenerators;
     }

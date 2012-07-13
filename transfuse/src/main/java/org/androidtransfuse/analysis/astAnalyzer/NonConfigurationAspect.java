@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * NonConfiguration Instance Aspect highlighting the fields to use in the code generation of
+ * onRetainNonConfigurationInstance and getLastNonConfigurationInstance
+ *
  * @author John Ericksen
  */
 public class NonConfigurationAspect {

@@ -12,9 +12,6 @@ import javax.inject.Inject;
 public class DetailFragment {
 
     @Inject
-    private android.support.v4.app.Fragment fragment;
-
-    @Inject
     @View(R.id.detailsText)
     private TextView view;
 

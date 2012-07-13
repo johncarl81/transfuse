@@ -7,7 +7,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.astAnalyzer.MethodCallbackAspect;
+import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -37,10 +37,10 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         try {
             MethodDescriptor methodDescriptor = null;
             for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-                MethodCallbackAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(MethodCallbackAspect.class);
+                ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
 
                 if (methodCallbackAspect != null && methodCallbackAspect.contains(name)) {
-                    Set<ASTMethod> methods = methodCallbackAspect.getMethodCallbacks(name);
+                    Set<ASTMethod> methods = methodCallbackAspect.getListeners(name);
 
                     //define method on demand for possible lazy init
                     if (methodDescriptor == null) {

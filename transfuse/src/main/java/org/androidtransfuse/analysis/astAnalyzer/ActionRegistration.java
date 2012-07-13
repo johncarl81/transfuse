@@ -7,24 +7,25 @@ import org.androidtransfuse.model.InjectionNode;
 import java.util.List;
 
 /**
+ * Listener registration associating an InjectionNode with the series of methods that will be wired to the given
+ * triggering method.
+ *
  * @author John Ericksen
  */
-public class ListenerRegistration<T extends ASTBase> {
+public class ActionRegistration<T extends ASTBase> {
 
-    private InjectionNode viewInjectionNode;
+    private InjectionNode injectionNode;
     private List<ASTMethod> methods;
     private T astBase;
-    private int level;
 
-    public ListenerRegistration(InjectionNode viewInjectionNode, List<ASTMethod> methods, T astBase, int level) {
-        this.viewInjectionNode = viewInjectionNode;
+    public ActionRegistration(InjectionNode injectionNode, List<ASTMethod> methods, T astBase) {
+        this.injectionNode = injectionNode;
         this.methods = methods;
         this.astBase = astBase;
-        this.level = level;
     }
 
-    public InjectionNode getViewInjectionNode() {
-        return viewInjectionNode;
+    public InjectionNode getInjectionNode() {
+        return injectionNode;
     }
 
     public List<ASTMethod> getMethods() {
@@ -33,9 +34,5 @@ public class ListenerRegistration<T extends ASTBase> {
 
     public T getASTBase() {
         return astBase;
-    }
-
-    public int getLevel() {
-        return level;
     }
 }

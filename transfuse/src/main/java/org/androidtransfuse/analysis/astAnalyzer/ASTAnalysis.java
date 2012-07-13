@@ -26,7 +26,8 @@ public interface ASTAnalysis {
      * Analyze the given method.  Used during the class scanning phase to perform method level operations.
      *
      * @param injectionNode current injection node
-     * @param concreteType
+     * @param concreteType  concrete type being analyzed.  This will be either the same type as represented by the
+     *                      injection node or a super type under analysis.
      * @param astMethod     method
      * @param context       current context
      */
@@ -36,7 +37,8 @@ public interface ASTAnalysis {
      * Analyze the given field.  Used during the class scanning phase to perform field level operations.
      *
      * @param injectionNode current injection node
-     * @param concreteType
+     * @param concreteType  concrete type being analyzed.  This will be either the same type as represented by the
+     *                      injection node or a super type under analysis.
      * @param astField      field
      * @param context       current context
      */

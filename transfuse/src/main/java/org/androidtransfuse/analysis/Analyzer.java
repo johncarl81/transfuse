@@ -83,7 +83,7 @@ public class Analyzer {
 
     private void scanClassHierarchy(ASTType concreteType, InjectionNode injectionNode, AnalysisContext context) {
         if (concreteType.getSuperClass() != null) {
-            scanClassHierarchy(concreteType.getSuperClass(), injectionNode, context.incrementSuperClassLevel());
+            scanClassHierarchy(concreteType.getSuperClass(), injectionNode, context);
         }
 
         for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {

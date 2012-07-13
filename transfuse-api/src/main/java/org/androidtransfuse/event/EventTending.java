@@ -25,7 +25,7 @@ public class EventTending<T> {
     }
 
     @OnRestart
-    public void register(){
+    public final void register(){
         eventManager.register(event, observer);
     }
 }

@@ -6,8 +6,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author John Ericksen
@@ -32,6 +31,18 @@ public class EventManagerTest {
         }
     }
 
+    private class TargetEventTriggered implements EventObserver<ObservesEvent>{
+        private boolean triggered = false;
+        @Override
+        public void trigger(ObservesEvent event) {
+            triggered = true;
+        }
+
+        public boolean isTriggered() {
+            return triggered;
+        }
+    }
+
     @Before
     public void setup(){
         eventManager = new EventManager();
@@ -52,6 +63,17 @@ public class EventManagerTest {
         eventManager.trigger(event);
 
         assertEquals(event, target.getEvent());
+    }
+
+    @Test
+    public void testUnregister(){
+        TargetEventTriggered trigger = new TargetEventTriggered();
+        eventManager.register(ObservesEvent.class, trigger);
+        eventManager.unregister(trigger);
+
+        eventManager.trigger(new ObservesEvent());
+
+        assertFalse(trigger.isTriggered());
     }
 
     @Test

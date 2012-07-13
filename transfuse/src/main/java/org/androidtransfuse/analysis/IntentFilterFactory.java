@@ -6,24 +6,28 @@ import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.model.manifest.Action;
 import org.androidtransfuse.model.manifest.Category;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
+ * Factory to build the IntentFilter metadata from an annotated class.
+ *
  * @author John Ericksen
  */
-public class IntentFilterBuilder {
+public class IntentFilterFactory {
 
     private Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider;
     private Provider<Action> actionProvider;
     private Provider<Category> categoryProvider;
 
     @Inject
-    public IntentFilterBuilder(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {
+    public IntentFilterFactory(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {
         this.intentFilterProvider = intentFilterProvider;
         this.actionProvider = actionProvider;
         this.categoryProvider = categoryProvider;
@@ -72,20 +76,6 @@ public class IntentFilterBuilder {
         }
 
         return resultIntentFilter;
-    }
-
-    private <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
-            return null;
-        }
-        return input;
-    }
-
-    private String checkBlank(String input) {
-        if (StringUtils.isBlank(input)) {
-            return null;
-        }
-        return input;
     }
 
     private void addIntent(Intent intentAnnotation, org.androidtransfuse.model.manifest.IntentFilter intentFilter) {

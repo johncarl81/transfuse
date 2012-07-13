@@ -5,7 +5,12 @@ import org.androidtransfuse.analysis.repository.AOPRepository;
 
 import javax.inject.Inject;
 
-public class BindInterceptorProcessor extends ClassBindingMethodProcessorAdaptor {
+/**
+ * Adds the given annotated method return type as a MethodInterceptor associated with input the annotation value.
+ *
+ * @author John Ericksen
+ */
+public class BindInterceptorProcessor extends MethodProcessor {
 
     private AOPRepository aopRepository;
 

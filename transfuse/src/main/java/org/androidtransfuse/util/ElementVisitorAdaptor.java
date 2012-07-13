@@ -4,6 +4,8 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.SimpleElementVisitor6;
 
 /**
+ * Adapter to allow the implementing class to not define certain visitors, defaulted to noop behaviour.
+ *
  * @author John Ericksen
  */
 public class ElementVisitorAdaptor<T, R> extends SimpleElementVisitor6<T, R> {

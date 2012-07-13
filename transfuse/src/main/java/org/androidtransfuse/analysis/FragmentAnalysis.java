@@ -193,7 +193,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass inputPackageClass = new PackageClass(input.getName());
 
         if (StringUtils.isBlank(fragmentName)) {
-            return inputPackageClass.add("Fragment");
+            return inputPackageClass.append("Fragment");
         } else {
             return inputPackageClass.replaceName(fragmentName);
         }

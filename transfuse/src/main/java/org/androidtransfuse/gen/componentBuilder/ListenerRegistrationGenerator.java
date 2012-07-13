@@ -5,7 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.astAnalyzer.ListenerRegistration;
+import org.androidtransfuse.analysis.astAnalyzer.ActionRegistration;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -45,7 +45,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
                 if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
                     RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
-                    buildFieldRegistration(registrationAspect.getFieldRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getKey(), injectionNodeJExpressionEntry.getValue());
+                    buildFieldRegistration(registrationAspect.getFieldRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                     buildMethodRegistration(registrationAspect.getMethodRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                     buildTypeRegistration(registrationAspect.getTypeRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                 }
@@ -57,12 +57,12 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildTypeRegistration(Set<ListenerRegistration<ASTType>> typeRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
-        for (ListenerRegistration<ASTType> typeRegistration : typeRegistrations) {
+    private void buildTypeRegistration(Set<ActionRegistration<ASTType>> typeRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+        for (ActionRegistration<ASTType> typeRegistration : typeRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, typeRegistration.getViewInjectionNode());
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, typeRegistration.getInjectionNode());
 
-            JExpression viewExpression = viewExpressionMap.get(typeRegistration.getViewInjectionNode()).getExpression();
+            JExpression viewExpression = viewExpressionMap.get(typeRegistration.getInjectionNode()).getExpression();
 
             for (ASTMethod listenerMethod : typeRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod.getName())
@@ -71,12 +71,12 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildMethodRegistration(Set<ListenerRegistration<ASTMethod>> methodRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
-        for (ListenerRegistration<ASTMethod> methodRegistration : methodRegistrations) {
+    private void buildMethodRegistration(Set<ActionRegistration<ASTMethod>> methodRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+        for (ActionRegistration<ASTMethod> methodRegistration : methodRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, methodRegistration.getViewInjectionNode());
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, methodRegistration.getInjectionNode());
 
-            JExpression viewExpression = viewExpressionMap.get(methodRegistration.getViewInjectionNode()).getExpression();
+            JExpression viewExpression = viewExpressionMap.get(methodRegistration.getInjectionNode()).getExpression();
 
             for (ASTMethod listenerMethod : methodRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod.getName())
@@ -90,12 +90,12 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
         }
     }
 
-    private void buildFieldRegistration(Set<ListenerRegistration<ASTField>> fieldRegistrations, JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
-        for (ListenerRegistration<ASTField> listenerRegistration : fieldRegistrations) {
+    private void buildFieldRegistration(Set<ActionRegistration<ASTField>> fieldRegistrations, JBlock block, JDefinedClass definedClass, TypedExpression variableExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+        for (ActionRegistration<ASTField> listenerRegistration : fieldRegistrations) {
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, listenerRegistration.getViewInjectionNode());
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, listenerRegistration.getInjectionNode());
 
-            JExpression viewExpression = viewExpressionMap.get(listenerRegistration.getViewInjectionNode()).getExpression();
+            JExpression viewExpression = viewExpressionMap.get(listenerRegistration.getInjectionNode()).getExpression();
 
             for (ASTMethod listenerMethod : listenerRegistration.getMethods()) {
                 block.invoke(viewExpression, listenerMethod.getName())

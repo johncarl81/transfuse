@@ -11,13 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Analyzes the given class for listener annotations.  Addes these annotated methods to a ListenerAspect for
+ * code generation during the generation phase.
+ *
  * @author John Ericksen
  */
-public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
+public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
     private Map<Class<?>, String> methodAnnotations = new HashMap<Class<?>, String>();
 
-    public MethodCallbackAnalysis() {
+    public ListenerAnalysis() {
         methodAnnotations.put(OnCreate.class, "onCreate");
         methodAnnotations.put(OnTouch.class, "onTouch");
         methodAnnotations.put(OnDestroy.class, "onDestroy");
@@ -56,10 +59,10 @@ public class MethodCallbackAnalysis extends ASTAnalysisAdaptor {
 
     private void addMethod(InjectionNode injectionNode, Class<?> annotation, ASTMethod astMethod) {
 
-        if (!injectionNode.containsAspect(MethodCallbackAspect.class)) {
-            injectionNode.addAspect(new MethodCallbackAspect());
+        if (!injectionNode.containsAspect(ListenerAspect.class)) {
+            injectionNode.addAspect(new ListenerAspect());
         }
-        MethodCallbackAspect methodCallbackToken = injectionNode.getAspect(MethodCallbackAspect.class);
+        ListenerAspect methodCallbackToken = injectionNode.getAspect(ListenerAspect.class);
 
         methodCallbackToken.addMethodCallback(methodAnnotations.get(annotation), astMethod);
 

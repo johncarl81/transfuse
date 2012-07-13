@@ -43,7 +43,9 @@ public class StringCodeWriter extends CodeWriter {
         Map<String, String> outputMap = new HashMap<String, String>();
 
         for (Map.Entry<PackageClass, ByteArrayOutputStream> byteStreamEntry : streams.entrySet()) {
-            outputMap.put(byteStreamEntry.getKey().removeDotJava().getFullyQualifiedName(), new String(byteStreamEntry.getValue().toByteArray()));
+            outputMap.put(byteStreamEntry.getKey()
+                    .getFullyQualifiedName(),
+                    new String(byteStreamEntry.getValue().toByteArray()));
         }
 
         return outputMap;

@@ -34,6 +34,9 @@ import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 import java.util.Map;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
  * Service related Analysis
  *
@@ -48,7 +51,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private AnalysisContextFactory analysisContextFactory;
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
-    private IntentFilterBuilder intentFilterBuilder;
+    private IntentFilterFactory intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
     private MetaDataBuilder metadataBuilder;
     private InjectionBindingBuilder injectionBindingBuilder;
@@ -63,7 +66,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            ComponentBuilderFactory componentBuilderFactory,
                            AnalysisContextFactory analysisContextFactory,
                            ASTClassFactory astClassFactory, ManifestManager manifestManager,
-                           IntentFilterBuilder intentFilterBuilder,
+                           IntentFilterFactory intentFilterBuilder,
                            TypeMirrorUtil typeMirrorUtil,
                            MetaDataBuilder metadataBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
@@ -123,7 +126,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass inputPackageClass = new PackageClass(input.getName());
 
         if (StringUtils.isBlank(activityName)) {
-            return inputPackageClass.add("Service");
+            return inputPackageClass.append("Service");
         } else {
             return inputPackageClass.replaceName(activityName);
         }
@@ -144,21 +147,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         manifestManager.addService(manifestService);
     }
-
-    private <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
-            return null;
-        }
-        return input;
-    }
-
-    private String checkBlank(String input) {
-        if (StringUtils.isBlank(input)) {
-            return null;
-        }
-        return input;
-    }
-
 
     private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType, AnalysisContext context) {
 

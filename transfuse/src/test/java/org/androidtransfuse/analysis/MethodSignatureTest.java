@@ -1,9 +1,10 @@
-package org.androidtransfuse.util;
+package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.adapter.MethodSignature;
 import org.junit.Before;
 import org.junit.Test;
 

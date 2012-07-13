@@ -60,7 +60,17 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         analyze(astType, astType, injectionNode, context, new TypeListenerRegistrationFactory(astType));
     }
 
-    private static final class TypeListenerRegistrationFactory implements ListenerRegistrationFactory<Object> {
+    @Override
+    public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, final ASTMethod astMethod, AnalysisContext context) {
+        analyze(astMethod, astMethod.getReturnType(), injectionNode, context, new MethodListenerRegistrationFactory(astMethod));
+    }
+
+    @Override
+    public void analyzeField(InjectionNode injectionNode, ASTType concreteType, final ASTField astField, AnalysisContext context) {
+        analyze(astField, astField.getASTType(), injectionNode, context, new FieldListenerRegistrationFactory(astField));
+    }
+
+    private static final class TypeListenerRegistrationFactory implements ListenerRegistrationFactory {
 
         private ASTType astType;
 
@@ -69,18 +79,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
-
-            registrationAspect.addTypeRegistration(new ListenerRegistration<ASTType>(viewInjectionNode, methods, astType, level));
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods) {
+            registrationAspect.addTypeRegistration(new ActionRegistration<ASTType>(viewInjectionNode, methods, astType));
         }
     }
 
-    @Override
-    public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, final ASTMethod astMethod, AnalysisContext context) {
-        analyze(astMethod, astMethod.getReturnType(), injectionNode, context, new MethodListenerRegistrationFactory(astMethod));
-    }
-
-    private static final class MethodListenerRegistrationFactory implements ListenerRegistrationFactory<Object> {
+    private static final class MethodListenerRegistrationFactory implements ListenerRegistrationFactory {
 
         private ASTMethod astMethod;
 
@@ -89,18 +93,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
-
-            registrationAspect.addMethodRegistration(new ListenerRegistration<ASTMethod>(viewInjectionNode, methods, astMethod, level));
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods) {
+            registrationAspect.addMethodRegistration(new ActionRegistration<ASTMethod>(viewInjectionNode, methods, astMethod));
         }
     }
 
-    @Override
-    public void analyzeField(InjectionNode injectionNode, ASTType concreteType, final ASTField astField, AnalysisContext context) {
-        analyze(astField, astField.getASTType(), injectionNode, context, new FieldListenerRegistrationFactory(astField));
-    }
-
-    private static final class FieldListenerRegistrationFactory implements ListenerRegistrationFactory<Object> {
+    private static final class FieldListenerRegistrationFactory implements ListenerRegistrationFactory {
 
         private ASTField astField;
 
@@ -109,13 +107,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level) {
-
-            registrationAspect.addFieldRegistration(new ListenerRegistration<ASTField>(viewInjectionNode, methods, astField, level));
+        public void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods) {
+            registrationAspect.addFieldRegistration(new ActionRegistration<ASTField>(viewInjectionNode, methods, astField));
         }
     }
 
-    private <T> void analyze(ASTBase astBase, ASTType astType, InjectionNode injectionNode, AnalysisContext context, ListenerRegistrationFactory<T> factory) {
+    private <T> void analyze(ASTBase astBase, ASTType astType, InjectionNode injectionNode, AnalysisContext context, ListenerRegistrationFactory factory) {
         if (astBase.isAnnotated(RegisterListener.class)) {
             ASTAnnotation registerAnnotation = astBase.getASTAnnotation(RegisterListener.class);
 
@@ -136,14 +133,14 @@ public class RegistrationAnalyzer implements ASTAnalysis {
             if (!methods.isEmpty()) {
                 RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
 
-                factory.assignRegistration(registrationAspect, viewInjectionNode, methods, context.getSuperClassLevel());
+                factory.assignRegistration(registrationAspect, viewInjectionNode, methods);
             }
         }
     }
 
-    private interface ListenerRegistrationFactory<T> {
+    private interface ListenerRegistrationFactory {
 
-        void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods, int level);
+        void assignRegistration(RegistrationAspect registrationAspect, InjectionNode viewInjectionNode, List<ASTMethod> methods);
     }
 
     private List<ASTMethod> buildListenerMethods(ASTType astType, List<ASTType> interfaceList) {

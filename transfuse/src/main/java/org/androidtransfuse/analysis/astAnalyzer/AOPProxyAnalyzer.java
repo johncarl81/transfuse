@@ -27,7 +27,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
         //AOP is only available on top level
-        if (context.getSuperClassLevel() == 0) {
+        if (injectionNode.getASTType().equals(concreteType)) {
             for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
                 if (context.getAOPRepository().isInterceptor(methodAnnotation)) {
                     addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation, context));

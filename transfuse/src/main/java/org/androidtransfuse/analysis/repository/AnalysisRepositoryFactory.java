@@ -12,7 +12,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
 
     private AOPProxyAnalyzer aopProxyAnalyzer;
     private InjectionAnalyzer injectionAnalyzer;
-    private MethodCallbackAnalysis methodCallbackAnalysis;
+    private ListenerAnalysis methodCallbackAnalysis;
     private ScopeAnalysis scopeAnalysis;
     private RegistrationAnalyzer registrationAnalysis;
     private DeclareFieldAnalysis declareFieldAnalysis;
@@ -22,7 +22,7 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
     @Inject
     public AnalysisRepositoryFactory(AOPProxyAnalyzer aopProxyAnalyzer,
                                      InjectionAnalyzer injectionAnalyzer,
-                                     MethodCallbackAnalysis methodCallbackAnalysis,
+                                     ListenerAnalysis methodCallbackAnalysis,
                                      ScopeAnalysis scopeAnalysis,
                                      RegistrationAnalyzer registrationAnalysis,
                                      DeclareFieldAnalysis declareFieldAnalysis,

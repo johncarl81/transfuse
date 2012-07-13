@@ -30,6 +30,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
  * Activity related Analysis
  *
@@ -46,7 +49,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
-    private IntentFilterBuilder intentFilterBuilder;
+    private IntentFilterFactory intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
     private ComponentBuilderFactory componentBuilderFactory;
     private MetaDataBuilder metadataBuilder;
@@ -65,7 +68,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
                             ASTClassFactory astClassFactory,
                             ManifestManager manifestManager,
-                            IntentFilterBuilder intentFilterBuilder,
+                            IntentFilterFactory intentFilterBuilder,
                             TypeMirrorUtil typeMirrorUtil,
                             ComponentBuilderFactory componentBuilderFactory,
                             MetaDataBuilder metadataBuilder,
@@ -147,7 +150,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass inputPackageClass = new PackageClass(input.getName());
 
         if (StringUtils.isBlank(activityName)) {
-            return inputPackageClass.add("Activity");
+            return inputPackageClass.append("Activity");
         } else {
             return inputPackageClass.replaceName(activityName);
         }
@@ -183,20 +186,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
 
         manifestManager.addActivity(manifestActivity);
-    }
-
-    private <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
-            return null;
-        }
-        return input;
-    }
-
-    private String checkBlank(String input) {
-        if (StringUtils.isBlank(input)) {
-            return null;
-        }
-        return input;
     }
 
     private String concatenate(ConfigChanges[] configChanges, String separator) {

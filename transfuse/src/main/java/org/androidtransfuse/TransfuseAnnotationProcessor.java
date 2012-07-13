@@ -32,10 +32,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
+ * codebase.
+ *
+ * To use this class, you simply have to annotate your classes with the proper root components (Activity,
+ * Application, etc) and have this annotation processor on the classpath during a full compilation.
+ *
+ * This approach is compatible with Java 6 and above.
+ *
+ * See http://androidtransfuse.org for more details
+ *
  * @author John Ericksen
  */
 @SupportedAnnotationTypes({"org.androidtransfuse.annotations.Activity",
         "org.androidtransfuse.annotations.Application",
+        "org.androidtransfuse.annotations.BroadcastReceiver",
+        "org.androidtransfuse.annotations.Service",
+        "org.androidtransfuse.annotations.Fragment",
         "org.androidtransfuse.annotations.TransfuseModule"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class TransfuseAnnotationProcessor extends AbstractProcessor {

@@ -4,7 +4,7 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;

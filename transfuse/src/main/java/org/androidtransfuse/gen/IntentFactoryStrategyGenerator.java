@@ -9,7 +9,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtra;
+import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodDescriptor;
@@ -75,7 +75,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
             JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
 
-            List<IntentFactoryExtra> extras = getExtras(expressionMap);
+            List<IntentFactoryExtraAspect> extras = getExtras(expressionMap);
 
             //constructor, with required extras
             JMethod constructor = strategyClass.constructor(JMod.PUBLIC);
@@ -88,7 +88,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                     .arg(JExpr._new(codeModel._ref(Bundle.class)))
             );
 
-            for (IntentFactoryExtra extra : extras) {
+            for (IntentFactoryExtraAspect extra : extras) {
                 if (extra.isRequired()) {
                     JVar extraParam = constructor.param(codeModel.ref(extra.getType().getName()), extra.getName());
 
@@ -151,11 +151,11 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         throw new TransfuseAnalysisException("Unable to find appropriate type to build intent factory strategy: " + type.getName());
     }
 
-    private List<IntentFactoryExtra> getExtras(Map<InjectionNode, TypedExpression> expressionMap) {
-        Set<IntentFactoryExtra> uniqueExtras = new HashSet<IntentFactoryExtra>();
-        List<IntentFactoryExtra> extras = new ArrayList<IntentFactoryExtra>();
+    private List<IntentFactoryExtraAspect> getExtras(Map<InjectionNode, TypedExpression> expressionMap) {
+        Set<IntentFactoryExtraAspect> uniqueExtras = new HashSet<IntentFactoryExtraAspect>();
+        List<IntentFactoryExtraAspect> extras = new ArrayList<IntentFactoryExtraAspect>();
         for (InjectionNode injectionNode : expressionMap.keySet()) {
-            IntentFactoryExtra intentFactoryExtra = injectionNode.getAspect(IntentFactoryExtra.class);
+            IntentFactoryExtraAspect intentFactoryExtra = injectionNode.getAspect(IntentFactoryExtraAspect.class);
             if (intentFactoryExtra != null && !uniqueExtras.contains(intentFactoryExtra)) {
                 uniqueExtras.add(intentFactoryExtra);
                 extras.add(intentFactoryExtra);

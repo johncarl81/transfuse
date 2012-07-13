@@ -1,4 +1,4 @@
-package org.androidtransfuse.analysis.astAnalyzer;
+package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 

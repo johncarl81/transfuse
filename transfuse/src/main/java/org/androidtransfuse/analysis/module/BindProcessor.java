@@ -6,7 +6,12 @@ import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
 import javax.inject.Inject;
 
-public class BindProcessor extends ClassBindingMethodProcessorAdaptor {
+/**
+ * Associates the given return type with the annotated field as a binding.
+ *
+ * @author John Ericksen
+ */
+public class BindProcessor extends MethodProcessor {
 
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;

@@ -18,26 +18,26 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-public class IntentFilterBuilderTest {
+public class IntentFilterFactoryTest {
 
     protected static final String TEST_INTENT = "test";
 
-    @Intent(type = IntentType.ACTION, name = IntentFilterBuilderTest.TEST_INTENT)
+    @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT)
     public class IntentTarget {}
 
     @IntentFilter({
-            @Intent(type = IntentType.ACTION, name = IntentFilterBuilderTest.TEST_INTENT),
-            @Intent(type = IntentType.CATEGORY, name = IntentFilterBuilderTest.TEST_INTENT)
+            @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT),
+            @Intent(type = IntentType.CATEGORY, name = IntentFilterFactoryTest.TEST_INTENT)
     })
     public class IntentFilerTarget{}
 
 
     @IntentFilters ({
             @IntentFilter(
-                @Intent(type = IntentType.ACTION, name = IntentFilterBuilderTest.TEST_INTENT)
+                @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT)
             ),
             @IntentFilter(
-                    @Intent(type = IntentType.CATEGORY, name = IntentFilterBuilderTest.TEST_INTENT)
+                    @Intent(type = IntentType.CATEGORY, name = IntentFilterFactoryTest.TEST_INTENT)
             )
     })
     public class IntentFiltersTarget {}
@@ -45,7 +45,7 @@ public class IntentFilterBuilderTest {
     @Inject
     private ASTClassFactory astClassFactory;
     @Inject
-    private IntentFilterBuilder intentFilterBuilder;
+    private IntentFilterFactory intentFilterBuilder;
 
     @Before
     public void setup(){

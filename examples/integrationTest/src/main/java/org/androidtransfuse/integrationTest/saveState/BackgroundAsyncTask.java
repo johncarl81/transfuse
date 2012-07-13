@@ -8,6 +8,9 @@ import javax.inject.Inject;
 
 public class BackgroundAsyncTask extends AsyncTask<Object, Integer, Object> {
 
+    private static final int SLEEP_STEPS = 100;
+    private static final int SLEEP_TIME = 200;
+
     @Inject
     private EventManager eventManager;
     private boolean running = false;
@@ -18,12 +21,12 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, Object> {
         int progress = 0;
         running = true;
         setPaused(false);
-        while (progress < 100) {
+        while (progress < SLEEP_STEPS) {
             if(!paused){
                 progress++;
                 eventManager.trigger(new ProgressEvent(progress));
             }
-            SystemClock.sleep(200);
+            SystemClock.sleep(SLEEP_TIME);
             if(isCancelled()){
                 return null;
             }

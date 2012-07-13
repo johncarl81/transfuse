@@ -38,7 +38,7 @@ public class EventManager {
         }
     }
 
-    public void unregister(EventObserver observer){
+    public void unregister(EventObserver<?> observer){
         Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
         while(entryIterator.hasNext()){
             Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();

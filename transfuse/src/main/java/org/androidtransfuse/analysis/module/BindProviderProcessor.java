@@ -1,13 +1,13 @@
 package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.astAnalyzer.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
+import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 
 import javax.inject.Inject;
 
-public class BindProviderProcessor extends ClassBindingMethodProcessorAdaptor {
+public class BindProviderProcessor extends MethodProcessor {
 
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private VariableInjectionBuilderFactory variableInjectionBuilderFactory;

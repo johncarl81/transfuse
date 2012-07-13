@@ -25,14 +25,14 @@ public class InjectionAnalyzer implements ASTAnalysis {
     }
 
     @Override
-    public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
+    public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
 
-        if (context.getSuperClassLevel() == 0) {
+        if (injectionNode.getASTType().equals(concreteType)) {
             //only analyze the root class for constructor injection
             ASTConstructor noArgConstructor = null;
             ASTConstructor annotatedConstructor = null;
 
-            for (ASTConstructor astConstructor : astType.getConstructors()) {
+            for (ASTConstructor astConstructor : concreteType.getConstructors()) {
                 if (astConstructor.isAnnotated(Inject.class)) {
                     annotatedConstructor = astConstructor;
                     getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));

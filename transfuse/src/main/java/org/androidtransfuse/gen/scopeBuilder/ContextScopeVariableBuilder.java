@@ -50,10 +50,10 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        TypedExpression contextScopeHolder = injectionExpressionBuilder.buildVariable(injectionBuilderContext, this.contextScopeHolder);
+        TypedExpression contextScopeHolderExpression = injectionExpressionBuilder.buildVariable(injectionBuilderContext, this.contextScopeHolder);
         JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
         //todo:coerce type?
-        JExpression cast = JExpr.cast(codeModel.ref(ContextScopeHolder.class), contextScopeHolder.getExpression());
+        JExpression cast = JExpr.cast(codeModel.ref(ContextScopeHolder.class), contextScopeHolderExpression.getExpression());
         JExpression scopeVar = cast.invoke(ContextScopeHolder.GET_SCOPE);
 
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);

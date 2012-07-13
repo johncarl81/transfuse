@@ -23,6 +23,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
  * @author John Ericksen
  */
@@ -70,7 +73,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass applicationClassName;
 
         if (StringUtils.isBlank(applicationAnnotation.name())) {
-            applicationClassName = inputType.appendName("Application");
+            applicationClassName = inputType.append("Application");
         } else {
             applicationClassName = inputType.replaceName(applicationAnnotation.name());
         }
@@ -177,19 +180,5 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         manifestApplication.setName(name);
         return manifestApplication;
-    }
-
-    private <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
-            return null;
-        }
-        return input;
-    }
-
-    private String checkBlank(String input) {
-        if (StringUtils.isBlank(input)) {
-            return null;
-        }
-        return input;
     }
 }

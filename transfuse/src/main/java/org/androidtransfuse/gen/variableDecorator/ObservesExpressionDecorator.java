@@ -2,6 +2,7 @@ package org.androidtransfuse.gen.variableDecorator;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
@@ -92,7 +93,7 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
                     injectionBuilderContext.getVariableMap().put(copy(observerTendingInjectionNode), typedExpressionFactory.build(EventTending.class, observerTending));
                 }
             } catch (JClassAlreadyExistsException e) {
-                e.printStackTrace();
+                throw new TransfuseAnalysisException("Tried to generate a class that alread exists", e);
             }
         }
         return typedExpression;

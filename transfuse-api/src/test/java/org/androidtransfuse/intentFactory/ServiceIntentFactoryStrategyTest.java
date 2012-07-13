@@ -1,6 +1,6 @@
 package org.androidtransfuse.intentFactory;
 
-import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 /**
  * @author John Ericksen
  */
-public class ActivityIntentFactoryStrategyTest {
+public class ServiceIntentFactoryStrategyTest {
 
-    private ActivityIntentFactoryStrategy activityIntentFactoryStrategy;
+    private ServiceIntentFactoryStrategy activityIntentFactoryStrategy;
     private Context mockContext;
     private Bundle mockBundle;
     private Intent mockIntent;
@@ -26,12 +26,12 @@ public class ActivityIntentFactoryStrategyTest {
         mockContext = mock(Context.class);
         mockBundle = mock(Bundle.class);
         mockIntent = mock(Intent.class);
-        activityIntentFactoryStrategy = new ActivityIntentFactoryStrategy(Activity.class, mockBundle);
+        activityIntentFactoryStrategy = new ServiceIntentFactoryStrategy(Service.class, mockBundle);
     }
 
     @Test
     public void testContext(){
-        assertEquals(Activity.class, activityIntentFactoryStrategy.getTargetContext());
+        assertEquals(Service.class, activityIntentFactoryStrategy.getTargetContext());
     }
 
     @Test
@@ -43,6 +43,6 @@ public class ActivityIntentFactoryStrategyTest {
     public void testStart(){
         activityIntentFactoryStrategy.start(mockContext, mockIntent);
 
-        verify(mockContext).startActivity(mockIntent);
+        verify(mockContext).startService(mockIntent);
     }
 }

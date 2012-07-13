@@ -43,14 +43,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
     public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
         try{
-            List<InjectionNode> nonConfigurationComponents = new ArrayList<InjectionNode>();
-            for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
-
-                if(expressionEntry.getKey().containsAspect(NonConfigurationAspect.class)){
-                    nonConfigurationComponents.add(expressionEntry.getKey());
-                }
-
-            }
+            List<InjectionNode> nonConfigurationComponents = buildNonConfigurationComponents(expressionMap);
 
             if(!nonConfigurationComponents.isEmpty()){
 
@@ -58,19 +51,8 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                 JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, namer.generateClassName("NonConfigurationInstance"));
 
                 JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
-                Map<FieldInjectionPoint, JVar> constructorParamMap = new HashMap<FieldInjectionPoint, JVar>();
-                Map<FieldInjectionPoint, JFieldVar> fieldMap = new HashMap<FieldInjectionPoint, JFieldVar>();
-                for (InjectionNode injectionNode : nonConfigurationComponents) {
-                    NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
-                    for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
-                        JClass fieldNodeType = codeModel.ref(fieldInjectionPoint.getInjectionNode().getASTType().getName());
-                        JVar param = constructor.param(fieldNodeType, namer.generateName(fieldInjectionPoint.getInjectionNode()));
-                        constructorParamMap.put(fieldInjectionPoint, param);
-                        JFieldVar field = nonConfigurationInstance.field(JMod.PRIVATE, fieldNodeType, namer.generateName(injectionNode));
-                        constructor.body().assign(field, param);
-                        fieldMap.put(fieldInjectionPoint, field);
-                    }
-                }
+                Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);
+
                 //add on create init
                 //super.getLastNonConfigurationInstance()
                 JBlock body = methodDescriptor.getMethod().body();
@@ -126,5 +108,33 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Unable to file class", e);
         }
+    }
+
+    private Map<FieldInjectionPoint, JFieldVar> configureConstructor(JMethod constructor, JDefinedClass nonConfigurationInstance, List<InjectionNode> nonConfigurationComponents) {
+        Map<FieldInjectionPoint, JFieldVar> fieldMap = new HashMap<FieldInjectionPoint, JFieldVar>();
+        for (InjectionNode injectionNode : nonConfigurationComponents) {
+            NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
+            for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
+                //add all fields to constructor in order
+                JClass fieldNodeType = codeModel.ref(fieldInjectionPoint.getInjectionNode().getASTType().getName());
+                JVar param = constructor.param(fieldNodeType, namer.generateName(fieldInjectionPoint.getInjectionNode()));
+                JFieldVar field = nonConfigurationInstance.field(JMod.PRIVATE, fieldNodeType, namer.generateName(injectionNode));
+                constructor.body().assign(field, param);
+                fieldMap.put(fieldInjectionPoint, field);
+            }
+        }
+        return fieldMap;
+    }
+
+    private List<InjectionNode> buildNonConfigurationComponents(Map<InjectionNode, TypedExpression> expressionMap) {
+        List<InjectionNode> nonConfigurationComponents = new ArrayList<InjectionNode>();
+        for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
+
+            if(expressionEntry.getKey().containsAspect(NonConfigurationAspect.class)){
+                nonConfigurationComponents.add(expressionEntry.getKey());
+            }
+
+        }
+        return nonConfigurationComponents;
     }
 }

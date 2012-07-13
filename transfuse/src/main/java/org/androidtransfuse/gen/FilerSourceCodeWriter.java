@@ -3,6 +3,7 @@ package org.androidtransfuse.gen;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
+import org.androidtransfuse.model.PackageClass;
 
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
@@ -13,6 +14,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
+ * Adapter class to allow codemodel to write its output source and source files to the Java Annotation Processor Filer
+ *
  * @author John Ericksen
  */
 public class FilerSourceCodeWriter extends CodeWriter {
@@ -27,6 +30,7 @@ public class FilerSourceCodeWriter extends CodeWriter {
 
     @Override
     public OutputStream openBinary(JPackage jPackage, String fileName) throws IOException {
+        //generate a source file based on package and filename
         JavaFileObject sourceFile = filer.createSourceFile(toQualifiedClassName(jPackage, fileName));
 
         OutputStream os = sourceFile.openOutputStream();
@@ -36,8 +40,7 @@ public class FilerSourceCodeWriter extends CodeWriter {
     }
 
     private String toQualifiedClassName(JPackage pkg, String fileName) {
-        int suffixPosition = fileName.lastIndexOf('.');
-        return pkg.name() + "." + fileName.substring(0, suffixPosition);
+        return new PackageClass(pkg.name(), fileName).getFullyQualifiedName();
     }
 
     @Override

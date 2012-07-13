@@ -8,36 +8,41 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Aspect to associate an element (method, field or type) with a listener registration.  This triggers the code generator to
+ * register the given element with the identified resource.  Typically this means generating an on*() like so:
+ *
+ * {@code resource.onClickListener(field);}
+ *
  * @author John Ericksen
  */
 public class RegistrationAspect {
 
-    private Set<ListenerRegistration<ASTMethod>> methodRegistrations = new HashSet<ListenerRegistration<ASTMethod>>();
-    private Set<ListenerRegistration<ASTField>> fieldRegistrations = new HashSet<ListenerRegistration<ASTField>>();
-    private Set<ListenerRegistration<ASTType>> typeRegistrations = new HashSet<ListenerRegistration<ASTType>>();
+    private Set<ActionRegistration<ASTMethod>> methodRegistrations = new HashSet<ActionRegistration<ASTMethod>>();
+    private Set<ActionRegistration<ASTField>> fieldRegistrations = new HashSet<ActionRegistration<ASTField>>();
+    private Set<ActionRegistration<ASTType>> typeRegistrations = new HashSet<ActionRegistration<ASTType>>();
 
 
-    public void addMethodRegistration(ListenerRegistration<ASTMethod> registration) {
+    public void addMethodRegistration(ActionRegistration<ASTMethod> registration) {
         methodRegistrations.add(registration);
     }
 
-    public void addFieldRegistration(ListenerRegistration<ASTField> registration) {
+    public void addFieldRegistration(ActionRegistration<ASTField> registration) {
         fieldRegistrations.add(registration);
     }
 
-    public void addTypeRegistration(ListenerRegistration<ASTType> registration) {
+    public void addTypeRegistration(ActionRegistration<ASTType> registration) {
         typeRegistrations.add(registration);
     }
 
-    public Set<ListenerRegistration<ASTMethod>> getMethodRegistrations() {
+    public Set<ActionRegistration<ASTMethod>> getMethodRegistrations() {
         return methodRegistrations;
     }
 
-    public Set<ListenerRegistration<ASTField>> getFieldRegistrations() {
+    public Set<ActionRegistration<ASTField>> getFieldRegistrations() {
         return fieldRegistrations;
     }
 
-    public Set<ListenerRegistration<ASTType>> getTypeRegistrations() {
+    public Set<ActionRegistration<ASTType>> getTypeRegistrations() {
         return typeRegistrations;
     }
 }

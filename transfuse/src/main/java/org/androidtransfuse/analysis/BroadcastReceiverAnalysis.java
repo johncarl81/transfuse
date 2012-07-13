@@ -17,6 +17,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
  * @author John Ericksen
  */
@@ -26,7 +29,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private Provider<Receiver> receiverProvider;
     private ManifestManager manifestManager;
     private ComponentBuilderFactory componentBuilderFactory;
-    private IntentFilterBuilder intentFilterBuilder;
+    private IntentFilterFactory intentFilterBuilder;
     private TypeMirrorUtil typeMirrorUtil;
     private MetaDataBuilder metaDataBuilder;
     private ContextScopeComponentBuilder contextScopeComponentBuilder;
@@ -36,7 +39,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      Provider<Receiver> receiverProvider,
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
-                                     IntentFilterBuilder intentFilterBuilder,
+                                     IntentFilterFactory intentFilterBuilder,
                                      TypeMirrorUtil typeMirrorUtil,
                                      MetaDataBuilder metaDataBuilder,
                                      ContextScopeComponentBuilder contextScopeComponentBuilder) {
@@ -108,25 +111,11 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         manifestManager.addBroadcastReceiver(manifestReceiver);
     }
 
-    private <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
-            return null;
-        }
-        return input;
-    }
-
-    private String checkBlank(String input) {
-        if (StringUtils.isBlank(input)) {
-            return null;
-        }
-        return input;
-    }
-
     private PackageClass buildPackageClass(ASTType astType, String className) {
         PackageClass inputPackageClass = new PackageClass(astType.getName());
 
         if (StringUtils.isBlank(className)) {
-            return inputPackageClass.add("BroadcastReceiver");
+            return inputPackageClass.append("BroadcastReceiver");
         } else {
             return inputPackageClass.replaceName(className);
         }

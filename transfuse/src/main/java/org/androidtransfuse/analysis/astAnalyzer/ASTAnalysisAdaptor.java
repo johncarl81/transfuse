@@ -12,6 +12,7 @@ import org.androidtransfuse.model.InjectionNode;
  * @author John Ericksen
  */
 public class ASTAnalysisAdaptor implements ASTAnalysis {
+
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
         //emtpy

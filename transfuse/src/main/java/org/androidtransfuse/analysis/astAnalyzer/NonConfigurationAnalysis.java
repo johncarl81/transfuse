@@ -10,6 +10,10 @@ import org.androidtransfuse.model.InjectionNode;
 import javax.inject.Inject;
 
 /**
+ * Analysis class to identify nonConfiguration Instances(NCI).  This analysis triggers the given NCI to be defined as
+ * a field in the containing component.  This field is then used in the generated onRetainNonConfigurationInstance() and
+ * getLastNonConfigurationInstance() methods.
+ *
  * @author John Ericksen
  */
 public class NonConfigurationAnalysis extends ASTAnalysisAdaptor {

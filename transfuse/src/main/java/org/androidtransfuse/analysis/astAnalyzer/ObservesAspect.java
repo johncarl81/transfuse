@@ -1,20 +1,18 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTMethodUniqueSignatureDecorator;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author John Ericksen
  */
 public class ObservesAspect {
 
-    private Map<ASTType, Set<MethodSignatureWrapper>> observesMap = new HashMap<ASTType, Set<MethodSignatureWrapper>>();
+    private Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
     private InjectionNode eventManagerInjectionNode;
     private InjectionNode observerTendingInjectionNode;
 
@@ -25,10 +23,10 @@ public class ObservesAspect {
 
     public void addObserver(ASTType event, ASTMethod method){
         if(!observesMap.containsKey(event)){
-            observesMap.put(event, new HashSet<MethodSignatureWrapper>());
+            observesMap.put(event, new HashSet<ASTMethod>());
         }
 
-        observesMap.get(event).add(new MethodSignatureWrapper(method));
+        observesMap.get(event).add(new ASTMethodUniqueSignatureDecorator(method));
     }
 
     public Set<ASTType> getEvents(){
@@ -36,15 +34,11 @@ public class ObservesAspect {
     }
 
     public Set<ASTMethod> getObserverMethods(ASTType event){
-        Set<ASTMethod> methods = new HashSet<ASTMethod>();
-
         if(observesMap.containsKey(event)){
-            for (MethodSignatureWrapper methodSignatureWrapper : observesMap.get(event)) {
-                methods.add(methodSignatureWrapper.getMethod());
-            }
+            return observesMap.get(event);
         }
 
-        return methods;
+        return Collections.emptySet();
     }
 
     public InjectionNode getEventManagerInjectionNode() {

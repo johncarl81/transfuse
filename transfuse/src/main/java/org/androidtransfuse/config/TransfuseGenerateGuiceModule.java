@@ -5,8 +5,6 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
-import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepository;
-import org.androidtransfuse.analysis.astAnalyzer.ScopeAspectFactoryRepositoryProvider;
 import org.androidtransfuse.analysis.repository.*;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
