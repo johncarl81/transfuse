@@ -13,6 +13,7 @@ import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.VirtualProxyException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
+@Singleton
 public class VirtualProxyGenerator {
 
     private static final String DELEGATE_NAME = "delegate";
@@ -30,6 +32,7 @@ public class VirtualProxyGenerator {
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
     private GeneratedClassAnnotator generatedClassAnnotator;
+    private Map<ASTType, ProxyDescriptor> definitionCache = new HashMap<ASTType, ProxyDescriptor>();
 
     @Inject
     public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator) {
@@ -39,6 +42,13 @@ public class VirtualProxyGenerator {
     }
 
     public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
+        if (!definitionCache.containsKey(injectionNode.getASTType())) {
+            definitionCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
+        }
+        return definitionCache.get(injectionNode.getASTType());
+    }
+
+    private ProxyDescriptor innerGenerateProxy(InjectionNode injectionNode) {
 
         try {
 

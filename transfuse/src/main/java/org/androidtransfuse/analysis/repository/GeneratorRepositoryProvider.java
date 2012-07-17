@@ -4,12 +4,10 @@ import org.androidtransfuse.analysis.ActivityAnalysis;
 import org.androidtransfuse.analysis.BroadcastReceiverAnalysis;
 import org.androidtransfuse.analysis.FragmentAnalysis;
 import org.androidtransfuse.analysis.ServiceAnalysis;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.BroadcastReceiver;
-import org.androidtransfuse.annotations.Fragment;
-import org.androidtransfuse.annotations.Service;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
 import org.androidtransfuse.gen.ComponentGenerator;
+import org.androidtransfuse.gen.InjectorGenerator;
 import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
 
 import javax.inject.Inject;
@@ -27,6 +25,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private BroadcastReceiverAnalysis broadcastReceiverAnalysis;
     private ServiceAnalysis serviceAnalysis;
     private FragmentAnalysis fragmentAnalysis;
+    private InjectorGenerator injectorGenerator;
 
     @Inject
     public GeneratorRepositoryProvider(ASTMatcherBuilder astMatcherBuilder,
@@ -35,7 +34,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        ComponentGenerator componentGenerator,
                                        BroadcastReceiverAnalysis broadcastReceiverAnalysis,
                                        ServiceAnalysis serviceAnalysis,
-                                       FragmentAnalysis fragmentAnalysis) {
+                                       FragmentAnalysis fragmentAnalysis,
+                                       InjectorGenerator injectorGenerator) {
         this.astMatcherBuilder = astMatcherBuilder;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysis = activityAnalysis;
@@ -43,12 +43,15 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.broadcastReceiverAnalysis = broadcastReceiverAnalysis;
         this.serviceAnalysis = serviceAnalysis;
         this.fragmentAnalysis = fragmentAnalysis;
+        this.injectorGenerator = injectorGenerator;
     }
 
     @Override
     public GeneratorRepository get() {
         GeneratorRepository repository = new GeneratorRepository();
 
+        repository.add(astMatcherBuilder.type().annotatedWith(Injector.class).build(),
+                injectorGenerator);
         repository.add(astMatcherBuilder.type().annotatedWith(Activity.class).build(),
                 analysisGenerationFactory.buildAnalysisGeneration(activityAnalysis, componentGenerator));
         repository.add(astMatcherBuilder.type().annotatedWith(BroadcastReceiver.class).build(),

@@ -257,6 +257,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
+        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+
         return injectionNodeBuilderRepository;
 
     }

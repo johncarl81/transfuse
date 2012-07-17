@@ -27,6 +27,12 @@ public class InjectionTest {
     }
 
     @Test
+    public void testStaticInjection() {
+        assertNotNull(injection.getStaticInjectionTarget());
+        assertNotNull(injection.getStaticInjectionLoop());
+    }
+
+    @Test
     public void testFieldInjections() {
         assertNotNull(injection.getPublicInjection());
         assertNotNull(injection.getPrivateInjection());
@@ -83,7 +89,7 @@ public class InjectionTest {
     }
 
     @Test
-    public void testBaseClassInjection(){
+    public void testBaseClassInjection() {
         assertNotNull(injection.getBaseTarget());
     }
 }

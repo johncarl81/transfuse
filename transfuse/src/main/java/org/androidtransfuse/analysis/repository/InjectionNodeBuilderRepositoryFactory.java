@@ -83,7 +83,7 @@ public class InjectionNodeBuilderRepositoryFactory {
         systemService.put(Context.WINDOW_SERVICE, WindowManager.class);
     }
 
-    public void addApplicationInjections(InjectionNodeBuilderRepository repository){
+    public void addApplicationInjections(InjectionNodeBuilderRepository repository) {
         //resources
         repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
 
@@ -98,13 +98,15 @@ public class InjectionNodeBuilderRepositoryFactory {
 
         //provider type
         repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
+    }
 
+    public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
         for (Map.Entry<ASTType, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
             repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
         }
     }
 
-    public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder){
+    public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
         moduleConfiguration.put(type, injectionNodeBuilder);
     }
 }

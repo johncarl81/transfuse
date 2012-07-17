@@ -2,6 +2,7 @@ package org.androidtransfuse.integrationTest.inject;
 
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.integrationTest.InjectorFinder;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.util.DeclareField;
 
@@ -14,7 +15,7 @@ import javax.inject.Provider;
 @Activity(name = "InjectionActivity", label = "Injection")
 @Layout(R.layout.main)
 @DeclareField
-public class Injection extends InjectionBase{
+public class Injection extends InjectionBase {
 
     @Inject
     private InjectTarget privateInjection;
@@ -89,5 +90,13 @@ public class Injection extends InjectionBase{
 
     public Provider<ProvidedInjectTarget> getProvidedInjectTargetProvider() {
         return providedInjectTargetProvider;
+    }
+
+    public InjectTarget getStaticInjectionTarget() {
+        return InjectorFinder.create(Injector.class).getTarget();
+    }
+
+    public LoopOne getStaticInjectionLoop() {
+        return InjectorFinder.create(Injector.class).getLoop();
     }
 }

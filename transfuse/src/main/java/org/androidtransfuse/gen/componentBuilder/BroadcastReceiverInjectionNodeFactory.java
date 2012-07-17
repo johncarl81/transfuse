@@ -64,6 +64,8 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
+        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+
         variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
         return injectionNodeBuilderRepository;

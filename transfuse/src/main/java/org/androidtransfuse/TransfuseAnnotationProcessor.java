@@ -49,7 +49,8 @@ import java.util.Set;
         "org.androidtransfuse.annotations.BroadcastReceiver",
         "org.androidtransfuse.annotations.Service",
         "org.androidtransfuse.annotations.Fragment",
-        "org.androidtransfuse.annotations.TransfuseModule"})
+        "org.androidtransfuse.annotations.TransfuseModule",
+        "org.androidtransfuse.annotations.Injector"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
@@ -113,6 +114,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             //process components
             Set<ASTType> types = new HashSet<ASTType>();
 
+            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, org.androidtransfuse.annotations.Injector.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
             types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Service.class));

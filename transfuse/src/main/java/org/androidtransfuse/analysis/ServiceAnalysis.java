@@ -192,12 +192,12 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args){
+    private ASTMethod getASTMethod(String methodName, Class... args) {
         return getASTMethod(android.app.Service.class, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
-        try{
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
+        try {
             return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
@@ -217,6 +217,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeRepository);
+
+        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeRepository);
 
         return injectionNodeRepository;
 

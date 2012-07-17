@@ -185,6 +185,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
+        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+
         return injectionNodeBuilderRepository;
     }
 

@@ -139,11 +139,13 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
+        variableBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+
         return injectionNodeBuilderRepository;
 
     }
 
-    private void setupManifest(String name){
+    private void setupManifest(String name) {
         org.androidtransfuse.model.manifest.Application manifestApplication = buildManifest(name);
 
         manifestManager.setApplication(manifestApplication);
@@ -175,7 +177,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestManager.setApplication(manifestApplication);
     }
 
-    private org.androidtransfuse.model.manifest.Application buildManifest(String name){
+    private org.androidtransfuse.model.manifest.Application buildManifest(String name) {
         org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
 
         manifestApplication.setName(name);
