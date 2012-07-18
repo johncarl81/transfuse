@@ -68,9 +68,7 @@ public class AnalysisContext {
 
     public Stack<InjectionNode> getDependencyHistory() {
         Stack<InjectionNode> dependencyHistoryCopy = new Stack<InjectionNode>();
-
         dependencyHistoryCopy.addAll(dependencyHistory);
-
         return dependencyHistoryCopy;
     }
 }

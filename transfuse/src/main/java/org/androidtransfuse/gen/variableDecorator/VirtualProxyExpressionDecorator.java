@@ -52,7 +52,7 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
             variableMap.put(injectionNode, proxyVariable);
             //init dependencies
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, injectionNode);
-            //and initialize delegate
+            //and initialize proxied
             TypedExpression delegateVariable = getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);
             variable = virtualProxyGenerator.initializeProxy(injectionBuilderContext, proxyVariable, delegateVariable);
         } else {

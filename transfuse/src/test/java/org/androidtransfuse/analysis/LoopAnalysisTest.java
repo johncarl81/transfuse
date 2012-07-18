@@ -1,22 +1,27 @@
 package org.androidtransfuse.analysis;
 
 import com.google.inject.Injector;
+import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.analysis.targets.*;
+import org.androidtransfuse.gen.CodeGenerationUtil;
+import org.androidtransfuse.gen.InjectionFragmentGeneratorHarness;
 import org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.PackageClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
+import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -31,83 +36,11 @@ public class LoopAnalysisTest {
     private ASTClassFactory astClassFactory;
     private AnalysisContext analysisContext;
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    private InjectionFragmentGeneratorHarness fragmentGeneratorHarness;
+    private CodeGenerationUtil codeGenerationUtil;
 
     //A -> B (BImpl) -> C -> A
-    public static class A {
-        private B b;
-
-        @Inject
-        public A(B b) {
-            this.b = b;
-        }
-    }
-
-    public static interface B {
-    }
-
-    public static class BImpl implements B {
-        private C c;
-
-        @Inject
-        public BImpl(C c) {
-            this.c = c;
-        }
-    }
-
-    public static class C {
-        private A a;
-
-        @Inject
-        public C(A a) {
-            this.a = a;
-        }
-    }
-
     //D -> E (EImpl) -> F (FProvider.get()) -> D
-
-    public static class D {
-        private E e;
-
-        @Inject
-        public D(E e) {
-            this.e = e;
-        }
-    }
-
-    public static interface E {
-    }
-
-    public static class EImpl implements E {
-        private F f;
-
-        @Inject
-        public EImpl(F f) {
-            this.f = f;
-        }
-    }
-
-    public static class F {
-        private D d;
-
-        public F(D d) {
-            this.d = d;
-        }
-    }
-
-    public static class FProvider implements Provider<F> {
-
-        private D d;
-
-        @Inject
-        public FProvider(D d) {
-            this.d = d;
-        }
-
-        @Override
-        public F get() {
-            return new F(d);
-        }
-    }
 
     @Before
     public void setup() {
@@ -115,6 +48,8 @@ public class LoopAnalysisTest {
 
         VariableInjectionBuilderFactory variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
 
+        fragmentGeneratorHarness = injector.getInstance(InjectionFragmentGeneratorHarness.class);
+        codeGenerationUtil = injector.getInstance(CodeGenerationUtil.class);
         analyzer = injector.getInstance(Analyzer.class);
         astClassFactory = injector.getInstance(ASTClassFactory.class);
 
@@ -160,6 +95,32 @@ public class LoopAnalysisTest {
     }
 
     @Test
+    public void testLoopGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
+        A.reset();
+        BImpl.reset();
+        C.reset();
+
+        ASTType astType = astClassFactory.buildASTClassType(A.class);
+
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+
+        Class<Provider<A>> providerClass = (Class<Provider<A>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+
+        Provider<A> testProvider = providerClass.newInstance();
+
+        //C c = testProvider.get();
+
+        assertEquals(1, BImpl.getConstructionCounter());
+        assertEquals(1, C.getConstructionCounter());
+        assertEquals(1, A.getConstructionCounter());
+        //assertEquals(c, c.getA().getB().getC());
+    }
+
+    @Test
     public void testBackLinkAnalysis() {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
@@ -186,6 +147,7 @@ public class LoopAnalysisTest {
         InjectionNode aInjectionNode = caConstructorInjectionPoint.getInjectionNodes().get(0);
         assertFalse(isProxyRequired(aInjectionNode));
         assertEquals(A.class.getCanonicalName(), aInjectionNode.getClassName());
+        assertEquals(injectionNode, aInjectionNode);
     }
 
     private boolean isProxyRequired(InjectionNode injectionNode) {
