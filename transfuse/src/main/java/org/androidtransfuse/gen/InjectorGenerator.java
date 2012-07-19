@@ -73,17 +73,10 @@ public class InjectorGenerator implements Generator<ASTType> {
 
             }
 
-
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);
         } catch (ClassNotFoundException e) {
             throw new TransfuseAnalysisException("Target class not found", e);
         }
-
-
-    }
-
-    private MethodDescriptor buildMethodDescriptor(ASTMethod interfaceMethod) {
-        return null;  //TODO:Implement
     }
 }
