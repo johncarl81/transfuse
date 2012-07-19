@@ -96,14 +96,15 @@ public class InjectionNodeBuilderRepositoryFactory {
         repository.putType(SharedPreferences.class,
                 injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").depenencyArg(Context.class).build());
 
-        //provider type
-        repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
     }
 
     public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
         for (Map.Entry<ASTType, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
             repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
         }
+
+        //provider type
+        repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
     }
 
     public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {

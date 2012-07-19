@@ -1,5 +1,7 @@
 package org.androidtransfuse.integrationTest.inject;
 
+import javax.inject.Provider;
+
 /**
  * @author John Ericksen
  */
@@ -13,4 +15,6 @@ public interface Injector {
     LoopTwo getLoopTwo();
 
     LoopThree getLoopThree();
+
+    Provider<LoopThree> getLoopThreeProvider();
 }
