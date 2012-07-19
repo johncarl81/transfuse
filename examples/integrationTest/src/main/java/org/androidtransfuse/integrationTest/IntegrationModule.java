@@ -4,6 +4,8 @@ import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
 import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.event.EventManager;
+import org.androidtransfuse.event.EventManagerProvider;
 import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
@@ -36,4 +38,7 @@ public interface IntegrationModule {
 
     @BindProvider(RandomProvider.class)
     Random getRandom();
+
+    @BindProvider(EventManagerProvider.class)
+    EventManager getEventManager();
 }
