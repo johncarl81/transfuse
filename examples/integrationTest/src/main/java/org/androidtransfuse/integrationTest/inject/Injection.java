@@ -99,4 +99,8 @@ public class Injection extends InjectionBase {
     public LoopOne getStaticInjectionLoop() {
         return InjectorFinder.create(Injector.class).getLoop();
     }
+
+    public Provider<LoopThree> getStaticInjectionProvider() {
+        return InjectorFinder.create(Injector.class).getLoopThreeProvider();
+    }
 }
