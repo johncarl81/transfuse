@@ -2,13 +2,12 @@ package org.androidtransfuse.event;
 
 import android.util.Log;
 
-import javax.inject.Singleton;
 import java.util.*;
 
 /**
  * @author John Ericksen
  */
-@Singleton
+//todo: fix @Singleton with provider
 public class EventManager {
 
     public static final String REGISTER_METHOD = "register";

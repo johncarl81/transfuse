@@ -30,14 +30,16 @@ public class InjectorGenerator implements Generator<ASTType> {
     private ComponentBuilderFactory componentBuilderFactory;
     private AnalysisContextFactory analysisContextFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private InjectorRepositoryGenerator injectorRepositoryGenerator;
 
     @Inject
-    public InjectorGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ComponentBuilderFactory componentBuilderFactory, AnalysisContextFactory analysisContextFactory, InjectionNodeBuilderRepository injectionNodeBuilderRepository, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory) {
+    public InjectorGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ComponentBuilderFactory componentBuilderFactory, AnalysisContextFactory analysisContextFactory, InjectionNodeBuilderRepository injectionNodeBuilderRepository, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, InjectorRepositoryGenerator injectorRepositoryGenerator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
+        this.injectorRepositoryGenerator = injectorRepositoryGenerator;
         injectionNodeBuilderRepositoryFactory.addModuleConfiguration(this.injectionNodeBuilderRepository);
     }
 
@@ -50,8 +52,9 @@ public class InjectorGenerator implements Generator<ASTType> {
 
         try {
             JDefinedClass implClass = codeModel._class(JMod.PUBLIC, descriptor.getName() + IMPL_EXT, ClassType.CLASS);
+            JClass interfaceClass = codeModel.ref(descriptor.getName());
 
-            implClass._implements(codeModel.ref(descriptor.getName()));
+            implClass._implements(interfaceClass);
 
             for (ASTMethod interfaceMethod : descriptor.getMethods()) {
                 MirroredMethodGenerator mirroredMethodGenerator = componentBuilderFactory.buildMirroredMethodGenerator(interfaceMethod, false);
@@ -72,6 +75,8 @@ public class InjectorGenerator implements Generator<ASTType> {
                 block._return(expressionMap.get(returnType).getExpression());
 
             }
+
+            injectorRepositoryGenerator.generateInjectorRepository(interfaceClass, implClass);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);

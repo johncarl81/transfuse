@@ -1,8 +1,8 @@
 package org.androidtransfuse.integrationTest.inject;
 
+import org.androidtransfuse.InjectorRepository;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.integrationTest.InjectorFinder;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.util.DeclareField;
 
@@ -93,14 +93,14 @@ public class Injection extends InjectionBase {
     }
 
     public InjectTarget getStaticInjectionTarget() {
-        return InjectorFinder.create(Injector.class).getTarget();
+        return InjectorRepository.get(Injector.class).getTarget();
     }
 
     public LoopOne getStaticInjectionLoop() {
-        return InjectorFinder.create(Injector.class).getLoop();
+        return InjectorRepository.get(Injector.class).getLoop();
     }
 
     public Provider<LoopThree> getStaticInjectionProvider() {
-        return InjectorFinder.create(Injector.class).getLoopThreeProvider();
+        return InjectorRepository.get(Injector.class).getLoopThreeProvider();
     }
 }
