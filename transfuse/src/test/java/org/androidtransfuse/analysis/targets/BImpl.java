@@ -23,4 +23,21 @@ public class BImpl implements B {
     public static void reset(){
         constructionCounter = 0;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof B)) return false;
+
+        B b = (B) o;
+
+        if (c != null ? !c.equals(b.getC()) : b.getC() != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return c != null ? c.hashCode() : 0;
+    }
 }

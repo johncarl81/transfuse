@@ -122,4 +122,9 @@ public enum ASTPrimitiveType implements ASTType {
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
 }

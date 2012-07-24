@@ -46,6 +46,10 @@ public class LoopAnalysisTest {
     public void setup() {
         Injector injector = TransfuseTestInjector.getInjector(this);
 
+        A.reset();
+        BImpl.reset();
+        C.reset();
+
         VariableInjectionBuilderFactory variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
 
         fragmentGeneratorHarness = injector.getInstance(InjectionFragmentGeneratorHarness.class);
@@ -96,10 +100,53 @@ public class LoopAnalysisTest {
 
     @Test
     public void testLoopGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
-        A.reset();
-        BImpl.reset();
-        C.reset();
+        ASTType astType = astClassFactory.buildASTClassType(C.class);
 
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+
+        Class<Provider<C>> providerClass = (Class<Provider<C>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+
+        Provider<C> testProvider = providerClass.newInstance();
+
+        C c = testProvider.get();
+
+        assertEquals(2, BImpl.getConstructionCounter());
+        //only one C because we have already created a C in the injection stack parents
+        assertEquals(1, C.getConstructionCounter());
+        assertEquals(1, A.getConstructionCounter());
+        assertEquals(c, c.getA().getB().getC());
+    }
+
+    @Test
+    public void testLoopRootGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
+        ASTType astType = astClassFactory.buildASTClassType(B.class);
+        ASTType astImplType = astClassFactory.buildASTClassType(BImpl.class);
+
+        InjectionNode injectionNode = analyzer.analyze(astType, astImplType, analysisContext);
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+
+        Class<Provider<B>> providerClass = (Class<Provider<B>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+
+        Provider<B> testProvider = providerClass.newInstance();
+
+        B b = testProvider.get();
+
+        assertEquals(1, BImpl.getConstructionCounter());
+        //only one C because we have already created a C in the injection stack parents
+        assertEquals(1, C.getConstructionCounter());
+        assertEquals(1, A.getConstructionCounter());
+        assertEquals(b, b.getC().getA().getB());
+    }
+
+    @Test
+    public void testLoopWithPostDependenciesGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
         ASTType astType = astClassFactory.buildASTClassType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
@@ -112,12 +159,13 @@ public class LoopAnalysisTest {
 
         Provider<A> testProvider = providerClass.newInstance();
 
-        //C c = testProvider.get();
+        A a = testProvider.get();
 
-        assertEquals(1, BImpl.getConstructionCounter());
-        assertEquals(1, C.getConstructionCounter());
+        assertEquals(2, BImpl.getConstructionCounter());
+        assertEquals(2, C.getConstructionCounter());
         assertEquals(1, A.getConstructionCounter());
-        //assertEquals(c, c.getA().getB().getC());
+        assertEquals(a, a.getB().getC().getA());
+
     }
 
     @Test
