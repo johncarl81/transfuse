@@ -14,6 +14,7 @@ import org.androidtransfuse.util.VirtualProxyException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,23 +33,25 @@ public class VirtualProxyGenerator {
     private JCodeModel codeModel;
     private UniqueVariableNamer variableNamer;
     private GeneratedClassAnnotator generatedClassAnnotator;
-    private Map<ASTType, ProxyDescriptor> definitionCache = new HashMap<ASTType, ProxyDescriptor>();
+    private ASTClassFactory astClassFactory;
+    private Map<ASTType, ProxyDescriptor> descriptorCache = new HashMap<ASTType, ProxyDescriptor>();
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator, ASTClassFactory astClassFactory) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.generatedClassAnnotator = generatedClassAnnotator;
+        this.astClassFactory = astClassFactory;
     }
 
     public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
-        if (!definitionCache.containsKey(injectionNode.getASTType())) {
-            definitionCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
+        if(!descriptorCache.containsKey(injectionNode.getASTType())){
+            descriptorCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
         }
-        return definitionCache.get(injectionNode.getASTType());
+        return descriptorCache.get(injectionNode.getASTType());
     }
 
-    private ProxyDescriptor innerGenerateProxy(InjectionNode injectionNode) {
+    public ProxyDescriptor innerGenerateProxy(InjectionNode injectionNode) {
 
         try {
 
@@ -81,52 +84,80 @@ public class VirtualProxyGenerator {
                     for (ASTMethod method : interfaceType.getMethods()) {
                         //checking uniqueness
                         if (methodSignatures.add(new MethodSignature(method))) {
-                            // public <type> <method_name> ( <parameters...>)
-                            JType returnType;
-                            if (method.getReturnType() != null) {
-                                returnType = codeModel.ref(method.getReturnType().getName());
-                            } else {
-                                returnType = codeModel.VOID;
-                            }
-                            JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
-
-                            //define method parameter
-                            Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
-                            for (ASTParameter parameter : method.getParameters()) {
-                                parameterMap.put(parameter,
-                                        methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
-                                                variableNamer.generateName(parameter.getASTType())));
-                            }
-
-                            //define method body
-                            JBlock body = methodDeclaration.body();
-
-                            JBlock delegateNullBlock = body._if(delegateField.eq(JExpr._null()))._then();
-
-                            //todo: add method name?
-                            delegateNullBlock._throw(JExpr._new(codeModel.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
-
-                            //delegate invocation
-                            JInvocation invocation = delegateField.invoke(method.getName());
-
-                            for (ASTParameter parameter : method.getParameters()) {
-                                invocation.arg(parameterMap.get(parameter));
-                            }
-
-                            if (method.getReturnType().equals(ASTVoidType.VOID)) {
-                                body.add(invocation);
-                            } else {
-                                body._return(invocation);
-                            }
+                            buildProxyMethod(definedClass, delegateField, method);
                         }
                     }
                 }
+
+                //equals, hashcode, and toString()
+                ASTMethod equals = getASTMethod("equals", Object.class);
+                ASTMethod hashCode = getASTMethod("hashCode");
+                ASTMethod toString = getASTMethod("toString");
+                if(methodSignatures.add(new MethodSignature(equals))){
+                    buildProxyMethod(definedClass, delegateField, equals);
+                }
+
+                if(methodSignatures.add(new MethodSignature(hashCode))){
+                    buildProxyMethod(definedClass, delegateField, hashCode);
+                }
+
+                if(methodSignatures.add(new MethodSignature(toString))){
+                    buildProxyMethod(definedClass, delegateField, toString);
+                }
+
             }
 
             return new ProxyDescriptor(definedClass);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Error while trying to build new class", e);
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseAnalysisException("Unable to find expected method", e);
         }
+    }
+
+    private void buildProxyMethod(JDefinedClass definedClass, JFieldVar delegateField, ASTMethod method) {
+        // public <type> <method_name> ( <parameters...>)
+        JType returnType;
+        if (method.getReturnType() != null) {
+            returnType = codeModel.ref(method.getReturnType().getName());
+        } else {
+            returnType = codeModel.VOID;
+        }
+        JMethod methodDeclaration = definedClass.method(JMod.PUBLIC, returnType, method.getName());
+
+        //define method parameter
+        Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
+        for (ASTParameter parameter : method.getParameters()) {
+            parameterMap.put(parameter,
+                    methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
+                            variableNamer.generateName(parameter.getASTType())));
+        }
+
+        //define method body
+        JBlock body = methodDeclaration.body();
+
+        JBlock delegateNullBlock = body._if(delegateField.eq(JExpr._null()))._then();
+
+        //todo: add method name?
+        delegateNullBlock._throw(JExpr._new(codeModel.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
+
+        //delegate invocation
+        JInvocation invocation = delegateField.invoke(method.getName());
+
+        for (ASTParameter parameter : method.getParameters()) {
+            invocation.arg(parameterMap.get(parameter));
+        }
+
+        if (method.getReturnType().equals(ASTVoidType.VOID)) {
+            body.add(invocation);
+        } else {
+            body._return(invocation);
+        }
+    }
+
+    private ASTMethod getASTMethod(String name, Class... parameters) throws NoSuchMethodException {
+        Method method = Object.class.getMethod(name, parameters);
+        return astClassFactory.buildASTClassMethod(method);
     }
 
     public TypedExpression initializeProxy(InjectionBuilderContext context, TypedExpression proxyVariable, TypedExpression variableBuilder) {

@@ -110,4 +110,9 @@ public class ASTGenericTypeWrapper implements ASTType {
     public int hashCode() {
         return new HashCodeBuilder().append(getName()).hashCode();
     }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
 }

@@ -121,4 +121,9 @@ public class ASTArrayType implements ASTType {
     public int hashCode() {
         return new HashCodeBuilder().append(delegate).hashCode();
     }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
 }

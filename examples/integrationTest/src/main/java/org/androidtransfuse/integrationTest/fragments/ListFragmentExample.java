@@ -40,7 +40,7 @@ public class ListFragmentExample {
     @OnListItemClick
     public void onListItemClick(int position) {
         String item = (String) listFragment.getListAdapter().getItem(position);
-        DetailFragmentFragment fragment = (DetailFragmentFragment) fragmentManager.findFragmentById(R.id.detailFragment);
+        android.support.v4.app.Fragment fragment = fragmentManager.findFragmentById(R.id.detailFragment);
         if (fragment != null && fragment.isInLayout()) {
             eventManager.trigger(new TextChange(item));
         } else {

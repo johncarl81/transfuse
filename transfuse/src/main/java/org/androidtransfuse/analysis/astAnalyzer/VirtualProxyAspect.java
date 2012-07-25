@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.model.TypedExpression;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,8 @@ import java.util.Set;
 public class VirtualProxyAspect {
 
     private Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
+    private boolean proxyDefined = false;
+    private TypedExpression proxyExpression;
 
     public Set<ASTType> getProxyInterfaces() {
         return proxyInterfaces;
@@ -21,5 +24,21 @@ public class VirtualProxyAspect {
 
     public boolean isProxyRequired() {
         return !proxyInterfaces.isEmpty();
+    }
+
+    public boolean isProxyDefined() {
+        return proxyDefined;
+    }
+
+    public void setProxyDefined(boolean proxyDefined) {
+        this.proxyDefined = proxyDefined;
+    }
+
+    public void setProxyExpression(TypedExpression proxyExpression) {
+        this.proxyExpression = proxyExpression;
+    }
+
+    public TypedExpression getProxyExpression() {
+        return proxyExpression;
     }
 }

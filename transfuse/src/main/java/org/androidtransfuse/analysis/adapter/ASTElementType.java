@@ -116,4 +116,9 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
 }

@@ -15,8 +15,7 @@ public class InjectionNode {
     private Map<Class, Object> aspects = new HashMap<Class, Object>();
 
     public InjectionNode(ASTType astType) {
-        this.usageType = astType;
-        this.astType = astType;
+        this(astType, astType);
     }
 
     public InjectionNode(ASTType usageType, ASTType astType) {
