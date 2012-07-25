@@ -4,7 +4,6 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.gen.variableBuilder.ProxyVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
@@ -22,19 +21,16 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
 
     private VirtualProxyGenerator virtualProxyGenerator;
     private ProxyVariableBuilder proxyVariableBuilder;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
     private TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public VirtualProxyExpressionDecorator(@Assisted VariableExpressionBuilder decorated,
                                            ProxyVariableBuilder proxyVariableBuilder,
                                            VirtualProxyGenerator virtualProxyGenerator,
-                                           InjectionExpressionBuilder injectionExpressionBuilder,
                                            TypedExpressionFactory typedExpressionFactory) {
         super(decorated);
         this.proxyVariableBuilder = proxyVariableBuilder;
         this.virtualProxyGenerator = virtualProxyGenerator;
-        this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.typedExpressionFactory = typedExpressionFactory;
     }
 

@@ -81,10 +81,11 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
 
                 JBlock methodBody = onNonConfigInst.body();
 
-                JVar instanceDecl = methodBody.decl(nonConfigurationInstance, namer.generateName(nonConfigurationInstance));
+
 
                 JInvocation construction = JExpr._new(nonConfigurationInstance);
-                methodBody.assign(instanceDecl, construction);
+                JVar instanceDecl = methodBody.decl(nonConfigurationInstance, namer.generateName(nonConfigurationInstance)
+                        , construction);
 
                 for (InjectionNode injectionNode : nonConfigurationComponents) {
 

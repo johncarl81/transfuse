@@ -142,8 +142,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(type);
             JDefinedClass parcelableClass = parcelableGenerator.generateParcelable(type, parcelableDescriptor);
 
-            JVar parcelable = block.decl(parcelableClass, namer.generateName(parcelableClass));
-            block.assign(parcelable, JExpr._new(parcelableClass).arg(extraParam));
+            JVar parcelable = block.decl(parcelableClass, namer.generateName(parcelableClass),
+                    JExpr._new(parcelableClass).arg(extraParam));
 
             return extras.invoke("putParcelable").arg(name).arg(parcelable);
         }

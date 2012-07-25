@@ -2,7 +2,6 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JVar;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
@@ -23,11 +22,7 @@ public class ProxyVariableBuilder {
     }
 
     public JExpression buildProxyInstance(InjectionBuilderContext context, InjectionNode injectionNode, ProxyDescriptor proxyDescriptor) {
-
-        JVar proxyVariable = context.getBlock().decl(proxyDescriptor.getClassDefinition(), variableNamer.generateName(injectionNode));
-
-        context.getBlock().assign(proxyVariable, JExpr._new(proxyDescriptor.getClassDefinition()));
-
-        return proxyVariable;
+        return context.getBlock().decl(proxyDescriptor.getClassDefinition(), variableNamer.generateName(injectionNode),
+                JExpr._new(proxyDescriptor.getClassDefinition()));
     }
 }

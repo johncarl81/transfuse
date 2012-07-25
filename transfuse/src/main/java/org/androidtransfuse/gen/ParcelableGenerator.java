@@ -189,10 +189,8 @@ public class ParcelableGenerator {
             ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(returnType);
             JDefinedClass returnParcelable = generateParcelable(returnType, parcelableDescriptor);
 
-            JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable));
-
-            parcelConstructorBody.assign(parceableField, parcelParam.invoke("readParcelable").arg(
-                    returnParcelable.dotclass().invoke("getClassLoader"))
+            JVar parceableField = parcelConstructorBody.decl(returnParcelable, namer.generateName(returnParcelable),
+                    parcelParam.invoke("readParcelable").arg(returnParcelable.dotclass().invoke("getClassLoader"))
             );
 
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName()).arg(parceableField.invoke(ParcelableWrapper.GET_WRAPPED));

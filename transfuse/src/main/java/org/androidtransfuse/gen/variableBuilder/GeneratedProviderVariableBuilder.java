@@ -4,7 +4,6 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JVar;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -38,11 +37,8 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
 
         JDefinedClass providerClass = generateProviderType(providerTypeInjectionNode);
 
-        JVar providerField = injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass));
-
-        injectionBuilderContext.getBlock().assign(providerField, JExpr._new(providerClass));
-
-        return providerField;
+        return injectionBuilderContext.getBlock().decl(providerClass, variableNamer.generateName(providerClass),
+                JExpr._new(providerClass));
     }
 
     private JDefinedClass generateProviderType(InjectionNode providerTypeInjectionNode) {
