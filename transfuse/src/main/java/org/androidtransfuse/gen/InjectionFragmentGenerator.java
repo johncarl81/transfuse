@@ -24,7 +24,9 @@ public class InjectionFragmentGenerator {
     private VirtualProxyGenerator virtualProxyGenerator;
 
     @Inject
-    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory, InjectionExpressionBuilder injectionExpressionBuilder, VirtualProxyGenerator virtualProxyGenerator) {
+    public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory,
+                                      InjectionExpressionBuilder injectionExpressionBuilder,
+                                      VirtualProxyGenerator virtualProxyGenerator) {
         this.injectionBuilderContextFactory = injectionBuilderContextFactory;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.virtualProxyGenerator = virtualProxyGenerator;

@@ -2,22 +2,16 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.util.TransfuseInjectionException;
 
 import javax.inject.Inject;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -30,6 +24,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private AOPProxyGenerator aopProxyGenerator;
     private InjectionExpressionBuilder injectionExpressionBuilder;
     private TypedExpressionFactory typedExpressionFactory;
+    private ExceptionWrapper exceptionWrapper;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
@@ -37,13 +32,15 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     InvocationBuilder injectionInvocationBuilder,
                                     AOPProxyGenerator aopProxyGenerator,
                                     InjectionExpressionBuilder injectionExpressionBuilder,
-                                    TypedExpressionFactory typedExpressionFactory) {
+                                    TypedExpressionFactory typedExpressionFactory,
+                                    ExceptionWrapper exceptionWrapper) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.aopProxyGenerator = aopProxyGenerator;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.typedExpressionFactory = typedExpressionFactory;
+        this.exceptionWrapper = exceptionWrapper;
     }
 
     @Override
@@ -65,10 +62,13 @@ public class VariableInjectionBuilder implements VariableBuilder {
             if (injectionAspect == null) {
                 throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
             }
+            else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
+                throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
+            }
             else {
-                variableRef = wrapExceptionHandling(block,
+                variableRef = exceptionWrapper.wrapException(block,
                         injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
-                        new BlockWriter<JVar>() {
+                        new ExceptionWrapper.BlockWriter<JVar>() {
                             @Override
                             public JVar write(JBlock block) throws ClassNotFoundException {
 
@@ -85,15 +85,9 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     block.assign(variableRef, constructionExpression);
                                     return variableRef;
                                 }
-                            }});
+                            }
+                        });
             }
-
-
-            if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
-                throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
-            }
-
-
 
             //field injection
             for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
@@ -106,9 +100,9 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             //method injection
             for (final MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-                wrapExceptionHandling(block,
+                exceptionWrapper.wrapException(block,
                         methodInjectionPoint.getThrowsTypes(),
-                        new BlockWriter<Void>() {
+                        new ExceptionWrapper.BlockWriter<Void>() {
                             @Override
                             public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
                                 block.add(
@@ -129,32 +123,5 @@ public class VariableInjectionBuilder implements VariableBuilder {
         }
 
         return typedExpressionFactory.build(injectionNode.getASTType(), variableRef);
-    }
-
-    private <T> T wrapExceptionHandling(JBlock block, List<ASTType> throwsTypes, BlockWriter<T> blockWriter) throws ClassNotFoundException, JClassAlreadyExistsException {
-        JTryBlock tryBlock = null;
-        JBlock writeBlock = block;
-        if (throwsTypes.size() > 0) {
-            tryBlock = block._try();
-            writeBlock = tryBlock.body();
-        }
-
-        T output = blockWriter.write(writeBlock);
-
-        if (tryBlock != null) {
-            for (ASTType throwsType : throwsTypes) {
-                JCatchBlock catchBlock = tryBlock._catch(codeModel.ref(throwsType.getName()));
-                JVar exceptionParam = catchBlock.param("e");
-
-                catchBlock.body()._throw(JExpr._new(codeModel.ref(TransfuseInjectionException.class))
-                        .arg(JExpr.lit(throwsType.getName() + " while performing dependency injection"))
-                        .arg(exceptionParam));
-            }
-        }
-        return output;
-    }
-
-    private interface BlockWriter<T> {
-        T write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException;
     }
 }

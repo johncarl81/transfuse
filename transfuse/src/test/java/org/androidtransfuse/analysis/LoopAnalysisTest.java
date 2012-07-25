@@ -106,7 +106,7 @@ public class LoopAnalysisTest {
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build();
 
         Class<Provider<C>> providerClass = (Class<Provider<C>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
 
@@ -130,7 +130,7 @@ public class LoopAnalysisTest {
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build();
 
         Class<Provider<B>> providerClass = (Class<Provider<B>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
 
@@ -153,7 +153,7 @@ public class LoopAnalysisTest {
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
-        ClassLoader classLoader = codeGenerationUtil.build(true);
+        ClassLoader classLoader = codeGenerationUtil.build();
 
         Class<Provider<A>> providerClass = (Class<Provider<A>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
 
