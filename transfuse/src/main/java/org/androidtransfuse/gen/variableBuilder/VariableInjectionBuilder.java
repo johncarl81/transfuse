@@ -52,42 +52,48 @@ public class VariableInjectionBuilder implements VariableBuilder {
         try {
 
             //AOP proxy (if applicable).  This method will return the injectionNode (without proxying) if no AOPProxyAspect exists
-            InjectionNode proxyableInjectionNode = injectionNode;
-            if (injectionNode.containsAspect(AOPProxyAspect.class)) {
-                proxyableInjectionNode = aopProxyGenerator.generateProxy(injectionNode);
-            }
+            final InjectionNode proxyableInjectionNode = injectionNode.containsAspect(AOPProxyAspect.class) ?
+                    aopProxyGenerator.generateProxy(injectionNode) : injectionNode;
 
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, proxyableInjectionNode);
 
             final JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
 
             final ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
+            JBlock block = injectionBuilderContext.getBlock();
+
             if (injectionAspect == null) {
                 throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
-            } else if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
-                variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode));
-            } else {
-                variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode));
             }
-            JBlock block = injectionBuilderContext.getBlock();
+            else {
+                variableRef = wrapExceptionHandling(block,
+                        injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
+                        new BlockWriter<JVar>() {
+                            @Override
+                            public JVar write(JBlock block) throws ClassNotFoundException {
+
+                                //constructor injection
+                                JExpression constructionExpression = injectionInvocationBuilder.buildConstructorCall(
+                                        injectionBuilderContext.getVariableMap(),
+                                        injectionAspect.getConstructorInjectionPoint(),
+                                        nodeType);
+
+                                if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
+                                    return injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode), constructionExpression);
+                                } else {
+                                    JVar variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode));
+                                    block.assign(variableRef, constructionExpression);
+                                    return variableRef;
+                                }
+                            }});
+            }
+
 
             if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
 
-            //constructor injection
-            wrapExceptionHandling(block,
-                    injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
-                    new BlockWriter() {
-                        @Override
-                        public void write(JBlock block) throws ClassNotFoundException {
-                            block.assign(variableRef,
-                                    injectionInvocationBuilder.buildConstructorCall(
-                                            injectionBuilderContext.getVariableMap(),
-                                            injectionAspect.getConstructorInjectionPoint(),
-                                            nodeType));
-                        }
-                    });
+
 
             //field injection
             for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
@@ -102,15 +108,16 @@ public class VariableInjectionBuilder implements VariableBuilder {
             for (final MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
                 wrapExceptionHandling(block,
                         methodInjectionPoint.getThrowsTypes(),
-                        new BlockWriter() {
+                        new BlockWriter<Void>() {
                             @Override
-                            public void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
+                            public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
                                 block.add(
                                         injectionInvocationBuilder.buildMethodCall(
                                                 Object.class.getName(),
                                                 injectionBuilderContext.getVariableMap(),
                                                 methodInjectionPoint,
                                                 variableRef));
+                                return null;
                             }
                         });
             }
@@ -124,7 +131,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
         return typedExpressionFactory.build(injectionNode.getASTType(), variableRef);
     }
 
-    private void wrapExceptionHandling(JBlock block, List<ASTType> throwsTypes, BlockWriter blockWriter) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private <T> T wrapExceptionHandling(JBlock block, List<ASTType> throwsTypes, BlockWriter<T> blockWriter) throws ClassNotFoundException, JClassAlreadyExistsException {
         JTryBlock tryBlock = null;
         JBlock writeBlock = block;
         if (throwsTypes.size() > 0) {
@@ -132,7 +139,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
             writeBlock = tryBlock.body();
         }
 
-        blockWriter.write(writeBlock);
+        T output = blockWriter.write(writeBlock);
 
         if (tryBlock != null) {
             for (ASTType throwsType : throwsTypes) {
@@ -144,9 +151,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
                         .arg(exceptionParam));
             }
         }
+        return output;
     }
 
-    private interface BlockWriter {
-        void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException;
+    private interface BlockWriter<T> {
+        T write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException;
     }
 }

@@ -5,15 +5,14 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
-import org.androidtransfuse.gen.variableDecorator.LateInit;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -38,24 +37,23 @@ public class InjectionFragmentGenerator {
 
         injectionExpressionBuilder.buildVariable(injectionBuilderContext, injectionNode);
 
-        Set<InjectionNode> proxied = new HashSet<InjectionNode>();
-        for (InjectionNode node : nodeVariableMap.keySet()) {
-            if(node.containsAspect(LateInit.class)){
-                proxied.add(node);
+        //loop over remaining injection chains, building cyclic graph
+        while(!injectionBuilderContext.getProxyLoad().isEmpty()){
+            List<InjectionNode> proxied = new ArrayList<InjectionNode>(injectionBuilderContext.getProxyLoad());
+            injectionBuilderContext.getProxyLoad().clear();
+            for (InjectionNode node : proxied) {
+                injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, node);
+
+                VirtualProxyAspect virtualProxyAspect = node.getAspect(VirtualProxyAspect.class);
+                virtualProxyAspect.setProxyDefined(true); //signals the injection expression builder to avoid buliding a proxy
+                TypedExpression proxyExpression = virtualProxyAspect.getProxyExpression();
+                nodeVariableMap.remove(node);
+
+                TypedExpression delegateVariable = injectionExpressionBuilder.buildVariable(injectionBuilderContext, node);
+
+                //init proxy
+                virtualProxyGenerator.initializeProxy(injectionBuilderContext, proxyExpression, delegateVariable);
             }
-        }
-
-        for (InjectionNode node : proxied) {
-            injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, node);
-
-            TypedExpression proxyExpression = node.getAspect(LateInit.class).getProxyVariable();
-            node.getAspects().remove(VirtualProxyAspect.class);
-            nodeVariableMap.remove(node);
-
-            TypedExpression delegateVariable = injectionExpressionBuilder.buildVariable(injectionBuilderContext, node);
-
-            //init proxy
-            virtualProxyGenerator.initializeProxy(injectionBuilderContext, proxyExpression, delegateVariable);
         }
 
         return nodeVariableMap;

@@ -44,13 +44,14 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
         Map<InjectionNode, TypedExpression> variableMap = injectionBuilderContext.getVariableMap();
         TypedExpression variable;
 
-        if (proxyAspect != null && proxyAspect.isProxyRequired()) {
+        if (proxyAspect != null && proxyAspect.isProxyRequired() && !proxyAspect.isProxyDefined()) {
             //proxy
             ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
             JExpression proxyExpression = proxyVariableBuilder.buildProxyInstance(injectionBuilderContext, injectionNode, proxyDescriptor);
             variable = typedExpressionFactory.build(injectionNode.getASTType(), proxyExpression);
             variableMap.put(injectionNode, variable);
-            injectionNode.addAspect(new LateInit(variable));
+            proxyAspect.setProxyExpression(variable);
+            injectionBuilderContext.getProxyLoad().add(injectionNode);
         } else {
             variable = getDecorated().buildVariableExpression(injectionBuilderContext, injectionNode);
         }
