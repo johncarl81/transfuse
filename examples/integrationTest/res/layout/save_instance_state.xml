@@ -4,12 +4,22 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
-    <EditText
-            android:id="@+id/state1"
+
+    <TextView
+            android:id="@+id/stateOutput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     <EditText
-            android:id="@+id/state2"
+            android:id="@+id/stateInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+    <Button
+            android:id="@+id/stateSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter some text, save it then flip the screen"/>
 </LinearLayout>

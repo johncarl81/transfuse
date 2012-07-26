@@ -16,25 +16,42 @@ public class SaveInstanceState {
 
     public static final String TEXT_KEY = "key";
 
-    @Inject
-    @View(R.id.state1)
-    private TextView state1;
+    private CharSequence value = "";
 
     @Inject
-    @View(R.id.state2)
-    private TextView state2;
+    @View(R.id.stateInput)
+    private TextView stateInput;
+
+    @Inject
+    @View(R.id.stateOutput)
+    private TextView stateOutput;
+
+    @RegisterListener(R.id.stateSave)
+    public android.view.View.OnClickListener stateSaveListener = new android.view.View.OnClickListener() {
+        @Override
+        public void onClick(android.view.View v) {
+            value = stateInput.getText();
+            stateInput.setText("");
+            updateValueText();
+        }
+    };
+
+    public void updateValueText(){
+        stateOutput.setText(value);
+    }
 
     @OnSaveInstanceState
     public void saveText(Bundle bundle){
-        bundle.putCharSequence(TEXT_KEY, state1.getText());
+        bundle.putCharSequence(TEXT_KEY, value);
     }
 
     @OnRestoreInstanceState
     public void restoreText(Bundle bundle){
-        state1.setText(bundle.getCharSequence(TEXT_KEY));
+        value = bundle.getCharSequence(TEXT_KEY);
+        updateValueText();
     }
 
-    public TextView getState1() {
-        return state1;
+    public TextView getStateInput() {
+        return stateInput;
     }
 }

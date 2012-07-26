@@ -28,6 +28,7 @@ public class VirtualProxyGenerator {
 
     private static final String DELEGATE_NAME = "delegate";
     private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
+    private static final String CHECK_DELEGATE = "checkDelegate";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
 
     private JCodeModel codeModel;
@@ -73,6 +74,12 @@ public class VirtualProxyGenerator {
             JVar delegateParam = delayedLoadMethod.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
             delayedLoadMethod.body().assign(delegateField, delegateParam);
 
+            JMethod delegateCheckMethod = definedClass.method(JMod.PRIVATE, codeModel.VOID, CHECK_DELEGATE);
+            JBlock delegateNullBlock = delegateCheckMethod.body()._if(delegateField.eq(JExpr._null()))._then();
+
+            delegateNullBlock._throw(JExpr._new(codeModel.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
+
+
             Set<MethodSignature> methodSignatures = new HashSet<MethodSignature>();
 
             //implements interfaces
@@ -84,7 +91,7 @@ public class VirtualProxyGenerator {
                     for (ASTMethod method : interfaceType.getMethods()) {
                         //checking uniqueness
                         if (methodSignatures.add(new MethodSignature(method))) {
-                            buildProxyMethod(definedClass, delegateField, method);
+                            buildProxyMethod(definedClass, delegateField, delegateCheckMethod, method);
                         }
                     }
                 }
@@ -94,15 +101,15 @@ public class VirtualProxyGenerator {
                 ASTMethod hashCode = getASTMethod("hashCode");
                 ASTMethod toString = getASTMethod("toString");
                 if(methodSignatures.add(new MethodSignature(equals))){
-                    buildProxyMethod(definedClass, delegateField, equals);
+                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, equals);
                 }
 
                 if(methodSignatures.add(new MethodSignature(hashCode))){
-                    buildProxyMethod(definedClass, delegateField, hashCode);
+                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, hashCode);
                 }
 
                 if(methodSignatures.add(new MethodSignature(toString))){
-                    buildProxyMethod(definedClass, delegateField, toString);
+                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, toString);
                 }
 
             }
@@ -115,7 +122,7 @@ public class VirtualProxyGenerator {
         }
     }
 
-    private void buildProxyMethod(JDefinedClass definedClass, JFieldVar delegateField, ASTMethod method) {
+    private void buildProxyMethod(JDefinedClass definedClass, JFieldVar delegateField, JMethod checkDelegateMethod, ASTMethod method) {
         // public <type> <method_name> ( <parameters...>)
         JType returnType;
         if (method.getReturnType() != null) {
@@ -136,10 +143,7 @@ public class VirtualProxyGenerator {
         //define method body
         JBlock body = methodDeclaration.body();
 
-        JBlock delegateNullBlock = body._if(delegateField.eq(JExpr._null()))._then();
-
-        //todo: add method name?
-        delegateNullBlock._throw(JExpr._new(codeModel.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
+        body.invoke(checkDelegateMethod);
 
         //delegate invocation
         JInvocation invocation = delegateField.invoke(method.getName());

@@ -32,7 +32,7 @@ public class SaveInstanceStateTest {
 
     @Test
     public void testOnSaveInstanceState(){
-        saveInstanceState.getState1().setText(TEST_TEXT);
+        saveInstanceState.getStateInput().setText(TEST_TEXT);
         saveInstanceStateActivity.onSaveInstanceState(bundle);
         //todo: figure out how to make robolectric work here:
         //assertEquals(TEST_TEXT, bundle.getCharSequence(SaveInstanceState.TEXT_KEY));
