@@ -61,12 +61,6 @@ public class UniqueVariableNamer {
         //remove array notation
         String sanitizedFullClassName = fullClassName.replaceAll("\\[\\]", "");
 
-        if (!nameMap.containsKey(sanitizedFullClassName)) {
-            nameMap.put(sanitizedFullClassName, 0);
-        } else {
-            nameMap.put(sanitizedFullClassName, nameMap.get(sanitizedFullClassName) + 1);
-        }
-
         String className = sanitizedFullClassName;
         if (fullClassName.contains(".")) {
             className = sanitizedFullClassName.substring(sanitizedFullClassName.lastIndexOf('.') + 1);
@@ -87,8 +81,20 @@ public class UniqueVariableNamer {
         else{
             builder.append(className);
         }
+
+        String nameRoot = builder.toString();
+
         builder.append('_');
-        builder.append(nameMap.get(sanitizedFullClassName));
+        builder.append(nullSaveIterGet(nameRoot));
         return builder.toString();
+    }
+
+    private int nullSaveIterGet(String name){
+        if (!nameMap.containsKey(name)) {
+            nameMap.put(name, 0);
+        } else {
+            nameMap.put(name, nameMap.get(name) + 1);
+        }
+        return nameMap.get(name);
     }
 }

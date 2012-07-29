@@ -28,6 +28,7 @@
         <activity t:tag="+,l,n" android:label="Variable Layout" android:name=".layout.VariableLayoutActivity"/>
         <activity t:tag="+,l,n" android:label="Activity Lifecycle" android:name=".lifecycle.ActivityLifecycleActivity"/>
         <activity t:tag="+,l,n" android:label="Activity Listeners" android:name=".listeners.ListenersActivity"/>
+        <activity t:tag="+,l,n" android:label="Menu" android:name=".menu.MenuActivity"/>
         <activity t:tag="+,l,n" android:label="Observes" android:name=".observes.EventObserverActivity"/>
         <activity t:tag="+,l,n" android:label="Listener Registration" android:name=".register.RegisterActivity"/>
         <activity t:tag="+,n" android:name=".saveState.NonConfigInstanceActivity"/>

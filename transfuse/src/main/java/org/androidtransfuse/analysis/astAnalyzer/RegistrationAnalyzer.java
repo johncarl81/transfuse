@@ -57,6 +57,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         addListenerBuilder(ActivityOnKeyMultipleListener.class);
         addListenerBuilder(ActivityOnTouchEventListener.class);
         addListenerBuilder(ActivityOnTrackballEventListener.class);
+        addListenerBuilder(ActivityMenuComponent.class);
     }
 
     private interface RegistrationGeneratorFactory{
@@ -123,6 +124,11 @@ public class RegistrationAnalyzer implements ASTAnalysis {
                 throw new TransfuseAnalysisException("ASTBase type not mapped");
             }
 
+            //set injection node to field
+            if(!injectionNode.containsAspect(ASTInjectionAspect.class)){
+                injectionNode.addAspect(new ASTInjectionAspect());
+            }
+            injectionNode.getAspect(ASTInjectionAspect.class).setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
 
             return componentBuilderFactory.buildActivityRegistrationGenerator(delegateASTReference, methods);
         }
