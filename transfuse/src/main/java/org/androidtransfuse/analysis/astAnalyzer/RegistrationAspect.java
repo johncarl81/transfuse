@@ -1,11 +1,9 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.gen.componentBuilder.RegistrationGenerator;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Aspect to associate an element (method, field or type) with a listener registration.  This triggers the code generator to
@@ -17,32 +15,13 @@ import java.util.Set;
  */
 public class RegistrationAspect {
 
-    private Set<ActionRegistration<ASTMethod>> methodRegistrations = new HashSet<ActionRegistration<ASTMethod>>();
-    private Set<ActionRegistration<ASTField>> fieldRegistrations = new HashSet<ActionRegistration<ASTField>>();
-    private Set<ActionRegistration<ASTType>> typeRegistrations = new HashSet<ActionRegistration<ASTType>>();
+    private List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
 
-
-    public void addMethodRegistration(ActionRegistration<ASTMethod> registration) {
-        methodRegistrations.add(registration);
+    public void addRegistrationbuilders(List<RegistrationGenerator> builders){
+        registrationBuilders.addAll(builders);
     }
 
-    public void addFieldRegistration(ActionRegistration<ASTField> registration) {
-        fieldRegistrations.add(registration);
-    }
-
-    public void addTypeRegistration(ActionRegistration<ASTType> registration) {
-        typeRegistrations.add(registration);
-    }
-
-    public Set<ActionRegistration<ASTMethod>> getMethodRegistrations() {
-        return methodRegistrations;
-    }
-
-    public Set<ActionRegistration<ASTField>> getFieldRegistrations() {
-        return fieldRegistrations;
-    }
-
-    public Set<ActionRegistration<ASTType>> getTypeRegistrations() {
-        return typeRegistrations;
+    public List<RegistrationGenerator> getRegistrationBuilders() {
+        return registrationBuilders;
     }
 }

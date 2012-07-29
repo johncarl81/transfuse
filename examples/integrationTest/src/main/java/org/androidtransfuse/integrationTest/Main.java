@@ -12,6 +12,8 @@ import org.androidtransfuse.integrationTest.fragments.FragmentMainActivity;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.VariableLayoutActivity;
 import org.androidtransfuse.integrationTest.lifecycle.ActivityLifecycleActivity;
+import org.androidtransfuse.integrationTest.listeners.ListenersActivity;
+import org.androidtransfuse.integrationTest.menu.MenuActivity;
 import org.androidtransfuse.integrationTest.observes.EventObserverActivity;
 import org.androidtransfuse.integrationTest.register.RegisterActivity;
 import org.androidtransfuse.integrationTest.saveState.NonConfigInstanceActivity;
@@ -71,6 +73,8 @@ public class Main {
                 createLI(EventObserverActivity.class, "Event Observer"),
                 createLI(SaveInstanceStateActivity.class, "Save Instance State"),
                 createLI(NonConfigInstanceActivity.class, "NonConfigurationInstance task"),
+                createLI(ListenersActivity.class, "Activity Listeners"),
+                createLI(MenuActivity.class, "Menu")
         }));
 
         Collections.sort(values);

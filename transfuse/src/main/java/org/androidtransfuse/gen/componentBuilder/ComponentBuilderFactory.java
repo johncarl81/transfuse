@@ -1,10 +1,13 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JExpression;
+import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
+
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -17,13 +20,9 @@ public interface ComponentBuilderFactory {
 
     MirroredMethodGenerator buildMirroredMethodGenerator(ASTMethod method, boolean superCall);
 
-    ReturningMethodGenerator buildReturningMethodGenerator(ASTMethod method, boolean superCall, JExpression expression);
-
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 
     OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, LayoutBuilder layoutBuilder);
-
-    FragmentSimpleLayoutBuilder buildFragmentSimpleLayoutBuilder(Integer layout);
 
     FragmentOnCreateViewMethodBuilder buildFragmentMethodBuilder(Integer layout, ASTMethod method);
 
@@ -32,4 +31,18 @@ public interface ComponentBuilderFactory {
     BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);
 
     InjectionNodeFactoryImpl buildInjectionNodeFactory(ASTType astType, AnalysisContext context);
+
+    ViewRegistrationGenerator buildViewRegistrationGenerator(@Assisted("viewInjectionNode")InjectionNode viewInjectionNode, String listenerMethod, @Assisted("targetInjectionNode")InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
+
+    ViewMethodRegistrationInvocationBuilderImpl buildViewMethodRegistrationInvocationBuilder(ASTMethod getterMethod);
+
+    ViewFieldRegistrationInvocationBuilderImpl buildViewFieldRegistrationInvocationBuilder(ASTField field);
+
+    ActivityDelegateRegistrationGenerator buildActivityRegistrationGenerator(ActivityDelegateASTReference activityDelegateASTReference, List<ASTMethod> methods);
+
+    ActivityTypeDelegateASTReference buildActivityTypeDelegateASTReference();
+
+    ActivityMethodDelegateASTReference buildActivityMethodDelegateASTReference(ASTMethod astMethod);
+
+    ActivityFieldDelegateASTReference buildActivityFieldDelegateASTReference(ASTField astField);
 }

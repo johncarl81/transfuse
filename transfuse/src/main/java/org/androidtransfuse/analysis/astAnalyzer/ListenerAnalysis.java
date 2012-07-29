@@ -22,7 +22,6 @@ public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
     public ListenerAnalysis() {
         methodAnnotations.put(OnCreate.class, "onCreate");
-        methodAnnotations.put(OnTouch.class, "onTouch");
         methodAnnotations.put(OnDestroy.class, "onDestroy");
         methodAnnotations.put(OnPause.class, "onPause");
         methodAnnotations.put(OnRestart.class, "onRestart");

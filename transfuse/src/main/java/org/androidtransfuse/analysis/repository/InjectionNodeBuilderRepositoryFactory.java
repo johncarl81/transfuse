@@ -19,6 +19,7 @@ import android.service.wallpaper.WallpaperService;
 import android.telephony.TelephonyManager;
 import android.text.ClipboardManager;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
@@ -86,6 +87,9 @@ public class InjectionNodeBuilderRepositoryFactory {
     public void addApplicationInjections(InjectionNodeBuilderRepository repository) {
         //resources
         repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
+
+        //menu inflator
+        repository.putType(MenuInflater.class, injectionBindingBuilder.dependency(android.app.Activity.class).invoke(MenuInflater.class, "getMenuInflater").build());
 
         //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
