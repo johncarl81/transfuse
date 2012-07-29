@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(RobolectricTestRunner.class)
 public class ResourceInjectionTest {
 
-    private static final String APP_NAME = "Integration Test";
+    private static final String APP_NAME = "Transfuse Integration Test";
 
     private ResourceInjection resourceInjection;
 

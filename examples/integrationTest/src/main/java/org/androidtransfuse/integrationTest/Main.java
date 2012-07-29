@@ -71,10 +71,11 @@ public class Main {
                 createLI(EventObserverActivity.class, "Event Observer"),
                 createLI(SaveInstanceStateActivity.class, "Save Instance State"),
                 createLI(NonConfigInstanceActivity.class, "NonConfigurationInstance task"),
-                createLI(AboutActivity.class, "About")
         }));
 
         Collections.sort(values);
+
+        values.add(createLI(AboutActivity.class, "About"));
 
         ArrayAdapter<ActivityListItem> adapter = new ArrayAdapter<ActivityListItem>(listActivity, android.R.layout.simple_list_item_1, values);
         listActivity.setListAdapter(adapter);

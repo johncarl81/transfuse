@@ -14,6 +14,8 @@ import java.util.Random;
 @DeclareField
 public class VariableLayoutHandler implements LayoutHandlerDelegate {
 
+    private static final int TOTAL_LAYOUTS = 3;
+
     private VariableLayoutDependency dependency;
     private Activity activity;
     private Random rand;
@@ -45,7 +47,7 @@ public class VariableLayoutHandler implements LayoutHandlerDelegate {
     }
 
     public int getRandomLayout() {
-        switch (rand.nextInt(3)){
+        switch (rand.nextInt(TOTAL_LAYOUTS)){
             case 0:
                 return R.layout.variablelayoutone;
             case 1:

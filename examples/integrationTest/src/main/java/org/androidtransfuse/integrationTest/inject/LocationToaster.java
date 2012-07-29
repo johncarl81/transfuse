@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.inject;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -18,9 +19,14 @@ public class LocationToaster implements LocationListener{
     @Inject
     private Context context;
 
+    @Inject
+    private LocationManager locationManager;
+
     @Override
     public void onLocationChanged(Location location) {
         Toast.makeText(context, buildLocationString(location), ONE_SECOND).show();
+
+        locationManager.removeUpdates(this);
     }
 
     private String buildLocationString(Location location) {

@@ -3,7 +3,7 @@ package org.androidtransfuse.integrationTest;
 /**
  * @author John Ericksen
  */
-public class SharedVariables {
+public final class SharedVariables {
 
     private SharedVariables(){
         //noop utility class constructor

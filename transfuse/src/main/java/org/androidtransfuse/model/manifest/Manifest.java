@@ -37,7 +37,7 @@ import java.util.List;
 @XStreamAlias("manifest")
 public class Manifest extends Mergeable {
 
-    public static final String NAMESPACE = "http://johncarl81.github.com/transfuse/";
+    public static final String NAMESPACE = "http://androidtransfuse.org";
 
     @XStreamAlias("xmlns:t")
     @XStreamAsAttribute
