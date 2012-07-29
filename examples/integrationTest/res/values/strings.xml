@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Integration Test</string>
+    <string name="app_name">Transfuse Integration Test</string>
     <string name="custom_string">Custom View String</string>
     <string name="transfuse_description">A Dependency Injection and Integration framework for Google Android</string>
     <string name="transfuse_title">Android Transfuse</string>

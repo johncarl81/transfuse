@@ -48,6 +48,10 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
                     buildFieldRegistration(registrationAspect.getFieldRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                     buildMethodRegistration(registrationAspect.getMethodRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
                     buildTypeRegistration(registrationAspect.getTypeRegistrations(), block, definedClass, injectionNodeJExpressionEntry.getValue());
+
+                    for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
+                        builder.build(definedClass, block, injectionNodeJExpressionEntry.getValue());
+                    }
                 }
             }
         } catch (ClassNotFoundException e) {

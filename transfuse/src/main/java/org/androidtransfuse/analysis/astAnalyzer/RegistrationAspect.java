@@ -3,8 +3,11 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.gen.componentBuilder.RegistrationGenerator;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,10 +20,19 @@ import java.util.Set;
  */
 public class RegistrationAspect {
 
+    private List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
+
     private Set<ActionRegistration<ASTMethod>> methodRegistrations = new HashSet<ActionRegistration<ASTMethod>>();
     private Set<ActionRegistration<ASTField>> fieldRegistrations = new HashSet<ActionRegistration<ASTField>>();
     private Set<ActionRegistration<ASTType>> typeRegistrations = new HashSet<ActionRegistration<ASTType>>();
 
+    public void addRegistrationbuilders(List<RegistrationGenerator> builders){
+        registrationBuilders.addAll(builders);
+    }
+
+    public List<RegistrationGenerator> getRegistrationBuilders() {
+        return registrationBuilders;
+    }
 
     public void addMethodRegistration(ActionRegistration<ASTMethod> registration) {
         methodRegistrations.add(registration);

@@ -27,7 +27,7 @@ public class SaveInstanceState {
     private TextView stateOutput;
 
     @RegisterListener(R.id.stateSave)
-    public android.view.View.OnClickListener stateSaveListener = new android.view.View.OnClickListener() {
+    private android.view.View.OnClickListener stateSaveListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View v) {
             value = stateInput.getText();

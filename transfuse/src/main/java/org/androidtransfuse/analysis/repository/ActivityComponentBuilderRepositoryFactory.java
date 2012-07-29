@@ -5,10 +5,8 @@ import android.app.ActivityGroup;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
-import com.sun.codemodel.JExpr;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
@@ -101,12 +99,6 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator("onRestoreInstanceState",
                         componentBuilderFactory.buildMirroredMethodGenerator(onRestoreInstanceState, true)));
-
-        //ontouch method
-        ASTMethod onTouchMethod = getASTMethod("onTouchEvent", MotionEvent.class);
-        activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator("onTouch",
-                        componentBuilderFactory.buildReturningMethodGenerator(onTouchMethod, false, JExpr.TRUE)));
 
         //extra intent factory
         activityCallbackGenerators.add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
