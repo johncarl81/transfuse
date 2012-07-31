@@ -6,7 +6,7 @@ import org.androidtransfuse.event.EventManager;
 
 import javax.inject.Inject;
 
-public class BackgroundAsyncTask extends AsyncTask<Object, Integer, Object> {
+public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> {
 
     private static final int SLEEP_STEPS = 100;
     private static final int SLEEP_TIME = 200;
@@ -17,10 +17,11 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, Object> {
     private boolean paused = true;
 
     @Override
-    protected Object doInBackground(Object... params) {
+    protected ResetEvent doInBackground(Object... params) {
         int progress = 0;
         running = true;
-        setPaused(false);
+        paused = false;
+        broadcastUpdate();
         while (progress < SLEEP_STEPS) {
             if(!paused){
                 progress++;
@@ -31,22 +32,27 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, Object> {
                 return null;
             }
         }
-        eventManager.trigger(new ResetEvent());
         running = false;
-        setPaused(true);
-        return null;
+        paused = true;
+        broadcastUpdate();
+        return new ResetEvent();
+    }
+
+    @Override
+    protected void onPostExecute(ResetEvent resetEvent) {
+        eventManager.trigger(resetEvent);
     }
 
     public boolean isRunning() {
         return running;
     }
 
-    public boolean isPaused() {
-        return paused;
+    public void togglePause() {
+        paused = !paused;
+        broadcastUpdate();
     }
 
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-        eventManager.trigger(new PauseEvent());
+    private void broadcastUpdate(){
+        eventManager.trigger(new UpdateEvent(paused));
     }
 }

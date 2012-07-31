@@ -1,12 +1,14 @@
 package org.androidtransfuse.analysis;
 
-import com.google.inject.Injector;
+import android.app.Activity;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.inject.Inject;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -18,22 +20,22 @@ public class ActivityAnalysisTest {
     public static final String TEST_NAME = "ActivityTestTarget";
     public static final int TEST_LAYOUT_ID = 123456;
 
-    private ComponentDescriptor activityDescriptor;
+    @Inject
+    private ActivityAnalysis activityAnalysis;
+    @Inject
+    private ASTClassFactory astClassFactory;
 
     @Before
     public void setup() {
-        Injector injector = TransfuseTestInjector.getInjector(this);
-
-        ActivityAnalysis activityAnalysis = injector.getInstance(ActivityAnalysis.class);
-
-        ASTClassFactory astClassFactory = injector.getInstance(ASTClassFactory.class);
-
-        activityDescriptor = activityAnalysis.analyze(astClassFactory.buildASTClassType(MockActivityDelegate.class));
+        TransfuseTestInjector.inject(this);
     }
 
     @Test
     public void testActivityAnnotation() {
+        ComponentDescriptor activityDescriptor = activityAnalysis.analyze(astClassFactory.buildASTClassType(MockActivityDelegate.class));
         assertEquals(TEST_NAME, activityDescriptor.getPackageClass().getClassName());
+
+        assertEquals(Activity.class.getName(), activityDescriptor.getType());
 
         //todo:fill in
     }

@@ -40,12 +40,7 @@ public class NonConfigInstance {
         @Override
         public void onClick(android.view.View v) {
             if(asyncTask.isRunning()){
-                if(asyncTask.isPaused()){
-                    asyncTask.setPaused(false);
-                }
-                else{
-                    asyncTask.setPaused(true);
-                }
+                asyncTask.togglePause();
             }
             else{
                 asyncTask.execute();
@@ -58,11 +53,10 @@ public class NonConfigInstance {
         if(asyncTask == null || asyncTask.isCancelled()){
             asyncTask = taskProvider.get();
         }
-        if(asyncTask.isRunning()){
-            updateButton();
-        }
+        updateButton(!asyncTask.isRunning());
     }
 
+    @UIThread
     public void updateProgress(@Observes ProgressEvent progressEvent){
         progressBar.setProgress(progressEvent.getProgress());
     }
@@ -70,7 +64,7 @@ public class NonConfigInstance {
     @UIThread
     public void resetProgress(@Observes ResetEvent resetEvent){
         asyncTask = taskProvider.get();
-        updateButton();
+        updateButton(true);
     }
 
     @OnBackPressed
@@ -78,12 +72,13 @@ public class NonConfigInstance {
         asyncTask.cancel(true);
     }
 
-    public void pauseTriggered(@Observes PauseEvent pauseEvent){
-        updateButton();
+    @UIThread
+    public void pauseTriggered(@Observes UpdateEvent updateEvent){
+        updateButton(updateEvent.isPaused());
     }
 
-    public void updateButton(){
-        if(asyncTask.isPaused()){
+    public void updateButton(boolean paused){
+        if(paused){
             restartButton.setText(startTaskText);
         }
         else{

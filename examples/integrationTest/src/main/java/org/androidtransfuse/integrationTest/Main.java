@@ -72,7 +72,7 @@ public class Main {
                 createLI(FragmentMainActivity.class, "Fragments"),
                 createLI(EventObserverActivity.class, "Event Observer"),
                 createLI(SaveInstanceStateActivity.class, "Save Instance State"),
-                createLI(NonConfigInstanceActivity.class, "NonConfigurationInstance task"),
+                createLI(NonConfigInstanceActivity.class, "NonConfiguration AsyncTask"),
                 createLI(ListenersActivity.class, "Activity Listeners"),
                 createLI(MenuActivity.class, "Menu")
         }));
