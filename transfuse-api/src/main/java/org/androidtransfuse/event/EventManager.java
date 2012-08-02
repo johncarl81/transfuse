@@ -2,7 +2,11 @@ package org.androidtransfuse.event;
 
 import android.util.Log;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author John Ericksen
@@ -13,14 +17,24 @@ public class EventManager {
     public static final String REGISTER_METHOD = "register";
     public static final String TRIGGER_METHOD = "trigger";
 
-    private Map<Class, Set<EventObserver>> observers = new HashMap<Class, Set<EventObserver>>();
+    private final ConcurrentHashMap<Class, Set<EventObserver>> observers = new ConcurrentHashMap<Class, java.util.Set<EventObserver>>();
 
     public <T> void register(Class<T> event, EventObserver<T> observer){
-        if(!observers.containsKey(event)){
-            observers.put(event, new HashSet<EventObserver>());
-        }
-        observers.get(event).add(observer);
+        nullSafeGet(event).add(observer);
     }
+
+    private Set<EventObserver> nullSafeGet(Class<?> clazz) {
+        Set<EventObserver> result = observers.get(clazz);
+        if (result == null) {
+            Set<EventObserver> value = new CopyOnWriteArraySet<EventObserver>();
+            result = observers.putIfAbsent(clazz, value);
+            if (result == null) {
+                result = value;
+            }
+        }
+        return result;
+    }
+
 
     public void trigger(Object event){
         if(observers.containsKey(event.getClass())){
