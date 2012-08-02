@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.gen.CodeWriterFactory;
 import org.androidtransfuse.model.manifest.Manifest;
@@ -92,7 +93,10 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             TransfuseProcessor transfuseProcessor = injector.getInstance(TransfuseProcessor.class);
 
-            transfuseProcessor.processModule(getASTTypesAnnotatedWith(roundEnvironment, TransfuseModule.class));
+            Set<Element> moduleElements = new HashSet<Element>();
+            moduleElements.addAll(roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class));
+            moduleElements.add(processingEnv.getElementUtils().getTypeElement(TransfuseAndroidModule.class.getName()));
+            transfuseProcessor.processModule(wrapASTCollection(moduleElements));
 
             //process Application
             ApplicationGenerator applicationProcessor = transfuseProcessor.getApplicationProcessor();
@@ -112,15 +116,15 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             ComponentProcessor componentProcessor = applicationProcessor.getComponentProcessor();
 
             //process components
-            Set<ASTType> types = new HashSet<ASTType>();
+            Set<Element> componentElements = new HashSet<Element>();
 
-            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, org.androidtransfuse.annotations.Injector.class));
-            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Activity.class));
-            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, BroadcastReceiver.class));
-            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Service.class));
-            types.addAll(getASTTypesAnnotatedWith(roundEnvironment, Fragment.class));
+            componentElements.addAll(roundEnvironment.getElementsAnnotatedWith(org.androidtransfuse.annotations.Injector.class));
+            componentElements.addAll(roundEnvironment.getElementsAnnotatedWith(Activity.class));
+            componentElements.addAll(roundEnvironment.getElementsAnnotatedWith(BroadcastReceiver.class));
+            componentElements.addAll(roundEnvironment.getElementsAnnotatedWith(Service.class));
+            componentElements.addAll(roundEnvironment.getElementsAnnotatedWith(Fragment.class));
 
-            componentProcessor.process(types);
+            componentProcessor.process(wrapASTCollection(componentElements));
 
             //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
