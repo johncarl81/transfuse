@@ -43,11 +43,11 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
         eventManager.trigger(resetEvent);
     }
 
-    public boolean isRunning() {
+    public synchronized boolean isRunning() {
         return running;
     }
 
-    public void togglePause() {
+    public synchronized void togglePause() {
         paused = !paused;
         broadcastUpdate();
     }
