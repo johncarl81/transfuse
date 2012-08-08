@@ -14,13 +14,12 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
     @Inject
     private EventManager eventManager;
     private boolean running = false;
-    private boolean paused = true;
+    private boolean paused = false;
 
     @Override
     protected ResetEvent doInBackground(Object... params) {
         int progress = 0;
         running = true;
-        paused = false;
         broadcastUpdate();
         while (progress < SLEEP_STEPS) {
             if(!paused){
@@ -33,7 +32,6 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
             }
         }
         running = false;
-        paused = true;
         broadcastUpdate();
         return new ResetEvent();
     }
