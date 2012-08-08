@@ -32,6 +32,7 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
             }
         }
         running = false;
+        paused = false;
         broadcastUpdate();
         return new ResetEvent();
     }
