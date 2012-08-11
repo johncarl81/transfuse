@@ -14,7 +14,7 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
     @Inject
     private EventManager eventManager;
     private boolean running = false;
-    private boolean paused = false;
+    private volatile boolean paused = false;
 
     @Override
     protected ResetEvent doInBackground(Object... params) {
