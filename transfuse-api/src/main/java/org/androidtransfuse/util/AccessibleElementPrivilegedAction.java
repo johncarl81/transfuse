@@ -10,7 +10,7 @@ import java.security.PrivilegedExceptionAction;
  */
 public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleObject> implements PrivilegedExceptionAction<T> {
 
-    private E accessible;
+    private final E accessible;
 
     protected AccessibleElementPrivilegedAction(E accessible) {
         this.accessible = accessible;

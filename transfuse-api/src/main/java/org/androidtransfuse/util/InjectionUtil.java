@@ -47,7 +47,7 @@ public final class InjectionUtil {
 
     private static final class GetFieldPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Field> {
 
-        private Object target;
+        private final Object target;
 
         private GetFieldPrivilegedAction(Field classField, Object target) {
             super(classField);
@@ -79,8 +79,8 @@ public final class InjectionUtil {
 
     private static final class SetFieldPrivilegedAction extends AccessibleElementPrivilegedAction<Void, Field> {
 
-        private Object target;
-        private Object source;
+        private final Object target;
+        private final Object source;
 
         private SetFieldPrivilegedAction(Field classField, Object target, Object source) {
             super(classField);
@@ -114,8 +114,8 @@ public final class InjectionUtil {
 
     private static final class SetMethodPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Method> {
 
-        private Object target;
-        private Object[] args;
+        private final Object target;
+        private final Object[] args;
 
         private SetMethodPrivilegedAction(Method classMethod, Object target, Object[] args) {
             super(classMethod);
@@ -149,7 +149,7 @@ public final class InjectionUtil {
     }
 
     private static final class SetConstructorPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Constructor> {
-        private Object[] args;
+        private final Object[] args;
 
         private SetConstructorPrivilegedAction(Constructor classConstructor, Object[] args) {
             super(classConstructor);
