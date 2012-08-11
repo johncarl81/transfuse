@@ -4,8 +4,6 @@ import org.androidtransfuse.annotations.Observes;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
-
 import static org.junit.Assert.*;
 
 /**
@@ -21,13 +19,22 @@ public class EventManagerTest {
     private class ObserverTarget{
 
         private ObservesEvent event;
+        private Object objectEvent;
 
         public void observes(@Observes ObservesEvent event){
             this.event = event;
         }
 
+        public void observes(@Observes Object event){
+            this.objectEvent = event;
+        }
+
         public ObservesEvent getEvent() {
             return event;
+        }
+
+        public Object getObjectEvent() {
+            return objectEvent;
         }
     }
 
@@ -51,18 +58,24 @@ public class EventManagerTest {
 
     @Test
     public void testRegistration(){
-        eventManager.register(ObservesEvent.class, new EventObserver<ObservesEvent>() {
-            @Override
-            public void trigger(ObservesEvent event) {
-                target.observes(event);
-            }
-        });
+        registerEvents();
 
         ObservesEvent event = new ObservesEvent();
-
         eventManager.trigger(event);
 
         assertEquals(event, target.getEvent());
+        assertEquals(event, target.getObjectEvent());
+    }
+
+    @Test
+    public void testEventHierarchyTrigger(){
+        registerEvents();
+
+        Object event = new Object();
+        eventManager.trigger(event);
+
+        assertNull(target.getEvent());
+        assertEquals(event, target.getObjectEvent());
     }
 
     @Test
@@ -76,11 +89,18 @@ public class EventManagerTest {
         assertFalse(trigger.isTriggered());
     }
 
-    @Test
-    public void verifyMethods() throws NoSuchMethodException {
-        Method triggerMethod = EventManager.class.getMethod(EventManager.TRIGGER_METHOD, Object.class);
-        assertNotNull(triggerMethod);
-        Method registerMethod = EventManager.class.getMethod(EventManager.REGISTER_METHOD, Class.class, EventObserver.class);
-        assertNotNull(registerMethod);
+    private void registerEvents(){
+        eventManager.register(ObservesEvent.class, new EventObserver<ObservesEvent>() {
+            @Override
+            public void trigger(ObservesEvent event) {
+                target.observes(event);
+            }
+        });
+        eventManager.register(Object.class, new EventObserver<Object>() {
+            @Override
+            public void trigger(Object event) {
+                target.observes(event);
+            }
+        });
     }
 }

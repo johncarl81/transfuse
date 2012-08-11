@@ -15,9 +15,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 //todo: fix @Singleton with provider
 public class EventManager {
 
-    public static final String REGISTER_METHOD = "register";
-    public static final String TRIGGER_METHOD = "trigger";
-
     private final ConcurrentMap<Class, Set<EventObserver>> observers = new ConcurrentHashMap<Class, java.util.Set<EventObserver>>();
 
     private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue =

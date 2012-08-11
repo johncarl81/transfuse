@@ -11,8 +11,8 @@ import javax.inject.Inject;
  */
 public class IntentFactory {
 
-    private Context context;
-    private IntentAdapterFactory intentMockFactory;
+    private final Context context;
+    private final IntentAdapterFactory intentMockFactory;
 
     protected interface IntentAdapterFactory {
         Intent buildIntent(Context context, Class<? extends Context> clazz);

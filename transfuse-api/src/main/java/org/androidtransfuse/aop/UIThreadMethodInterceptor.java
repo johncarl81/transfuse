@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 public class UIThreadMethodInterceptor implements MethodInterceptor {
 
-    private Handler handler;
+    private final Handler handler;
 
     @Inject
     public UIThreadMethodInterceptor(Handler handler){

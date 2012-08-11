@@ -8,8 +8,8 @@ import android.os.Bundle;
  */
 public abstract class AbstractIntentFactoryStrategy implements IntentFactoryStrategy{
 
-    private Class<? extends Context> targetContext;
-    private Bundle bundle;
+    private final Class<? extends Context> targetContext;
+    private final Bundle bundle;
 
     protected AbstractIntentFactoryStrategy(Class<? extends Context> targetContext, Bundle bundle) {
         this.targetContext = targetContext;

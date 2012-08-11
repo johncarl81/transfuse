@@ -12,10 +12,7 @@ public class AsynchronousMethodInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) {
-        AsyncTask task = new MethodInterceptorAsyncTask(invocation);
-
-        task.execute();
-
+        new MethodInterceptorAsyncTask(invocation).execute();
         //asynchronous, so cannot return
         return null;
     }

@@ -3,6 +3,9 @@ package org.androidtransfuse.event;
 import java.lang.ref.WeakReference;
 
 /**
+ * Weak referencing Event Observer. Will trigger an event on the given reference only if the referenced
+ * object exists.
+ *
  * @author John Ericksen
  */
 public abstract class WeakObserver<E, T> implements EventObserver<E>{

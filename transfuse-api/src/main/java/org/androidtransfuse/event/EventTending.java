@@ -4,13 +4,15 @@ import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.OnRestart;
 
 /**
+ * Coordinates registration/unregistration of observers to events based on Android lifecycle
+ *
  * @author John Ericksen
  */
 public class EventTending<T> {
 
-    private Class<T> event;
-    private EventObserver<T> observer;
-    private EventManager eventManager;
+    private final Class<T> event;
+    private final EventObserver<T> observer;
+    private final EventManager eventManager;
 
     public EventTending(Class<T> event, EventObserver<T> observer, EventManager eventManager) {
         this.event = event;
