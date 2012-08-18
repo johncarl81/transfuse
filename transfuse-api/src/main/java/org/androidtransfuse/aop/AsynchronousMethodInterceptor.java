@@ -19,7 +19,7 @@ public class AsynchronousMethodInterceptor implements MethodInterceptor {
 
     private static final class MethodInterceptorAsyncTask extends AsyncTask {
 
-        private MethodInvocation invocation;
+        private final MethodInvocation invocation;
 
         private MethodInterceptorAsyncTask(MethodInvocation invocation) {
             this.invocation = invocation;

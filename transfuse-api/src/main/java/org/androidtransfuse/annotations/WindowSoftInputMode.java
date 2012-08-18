@@ -11,7 +11,7 @@ public enum WindowSoftInputMode implements LabeledEnum {
     ADJUST_RESIZE("adjustResize"),
     ADJUST_PAN("adjustPan");
 
-    private String label;
+    private final String label;
 
     private WindowSoftInputMode(String label) {
         this.label = label;

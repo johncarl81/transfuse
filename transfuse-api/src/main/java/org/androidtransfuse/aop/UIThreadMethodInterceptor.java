@@ -30,7 +30,7 @@ public class UIThreadMethodInterceptor implements MethodInterceptor {
 
     private static final class MethodInvocationRunnable implements Runnable {
 
-        private MethodInvocation methodInvocation;
+        private final MethodInvocation methodInvocation;
 
         private MethodInvocationRunnable(MethodInvocation methodInvocation) {
             this.methodInvocation = methodInvocation;

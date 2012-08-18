@@ -15,7 +15,7 @@ public enum ConfigChanges implements LabeledEnum {
     SCREEN_SIZE("screenSize"),
     SMALLEST_SCREENSIZE("smallestScreenSize");
 
-    private String label;
+    private final String label;
 
     private ConfigChanges(String label) {
         this.label = label;

@@ -14,7 +14,7 @@ public enum ScreenOrientation implements LabeledEnum {
     FULL_SENSOR("fullSensor"),
     NO_SENSOR("nosensor");
 
-    private String label;
+    private final String label;
 
     private ScreenOrientation(String label) {
         this.label = label;

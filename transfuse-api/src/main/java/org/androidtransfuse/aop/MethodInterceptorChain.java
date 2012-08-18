@@ -31,7 +31,7 @@ public class MethodInterceptorChain {
     private final class MethodInterceptorIterator implements MethodInvocation {
 
         private int i = -1;
-        private Object[] arguments;
+        private final Object[] arguments;
 
         private MethodInterceptorIterator(Object[] arguments) {
             this.arguments = arguments;

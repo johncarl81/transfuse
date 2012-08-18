@@ -6,7 +6,7 @@ public enum LaunchMode implements LabeledEnum {
     SINGLE_TASK("singleTask"),
     SINGLE_INSTANCE("singleInstance");
 
-    private String label;
+    private final String label;
 
     private LaunchMode(String label) {
         this.label = label;

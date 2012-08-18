@@ -1,5 +1,7 @@
 package org.androidtransfuse.event;
 
+import org.androidtransfuse.util.TransfuseRuntimeException;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,25 +18,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class EventManager {
 
     private final ConcurrentMap<Class, Set<EventObserver>> observers = new ConcurrentHashMap<Class, java.util.Set<EventObserver>>();
-
-    private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue =
-            new ThreadLocal<ConcurrentLinkedQueue<EventExecution>>(){
-                @Override
-                protected ConcurrentLinkedQueue<EventExecution> initialValue() {
-                    return new ConcurrentLinkedQueue<EventExecution>();
-                }
-            };
-
-    private final ThreadLocal<Boolean> executing = new ThreadLocal<Boolean>(){
-        @Override
-        protected Boolean initialValue() {
-            return false;
-        }
-    };
+    private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue = new ExecutionQueueThreadLocal();
+    private final ThreadLocal<Boolean> executing = new BooleanThreadLocal();
 
     private static final class EventExecution{
-        private Object event;
-        private EventObserver observer;
+        private final Object event;
+        private final EventObserver observer;
 
         private EventExecution(Object event, EventObserver observer) {
             this.event = event;
@@ -46,7 +35,7 @@ public class EventManager {
                 observer.trigger(event);
             }
             catch (Exception e){
-                throw new RuntimeException("Exception caught during event trigger", e);
+                throw new TransfuseRuntimeException("Exception caught during event trigger", e);
             }
         }
     }
@@ -131,5 +120,19 @@ public class EventManager {
             entry.getValue().remove(observer);
         }
 
+    }
+
+    private static class BooleanThreadLocal extends ThreadLocal<Boolean>{
+        @Override
+        protected Boolean initialValue() {
+            return false;
+        }
+    }
+
+    private class ExecutionQueueThreadLocal extends ThreadLocal<ConcurrentLinkedQueue<EventExecution>> {
+        @Override
+        protected ConcurrentLinkedQueue<EventExecution> initialValue() {
+            return new ConcurrentLinkedQueue<EventExecution>();
+        }
     }
 }

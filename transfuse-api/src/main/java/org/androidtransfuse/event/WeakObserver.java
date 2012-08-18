@@ -10,7 +10,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class WeakObserver<E, T> implements EventObserver<E>{
 
-    private WeakReference<T> reference;
+    private final WeakReference<T> reference;
 
     public WeakObserver(T target){
         reference = new WeakReference<T>(target);
