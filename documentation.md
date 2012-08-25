@@ -3,9 +3,7 @@ layout: default
 title: Transfuse
 ---
 
-
 ### Documentation
-
 
 #### Components
 
@@ -13,8 +11,11 @@ A Transfuse application is made up of a set of components.  These components are
 
 {% highlight java %}
 @Activity
-public class Example {
-}
+public class ExampleActivity {}
+@Service
+public class ExampleService {}
+@BroadcastReceiver
+public class ExampleBroadcastReceiver {}
 {% endhighlight %} 
 
 This tells Transfuse to use the class as an Activity.  This turns on a number of features, such as depdendency injection and event mapping.
@@ -26,8 +27,7 @@ Annotating your class begins the process of developing your Transfuse applicatio
 {% highlight java %}
 @Activity
 @Layout(R.id.example_layout)
-public class Example {
-}
+public class Example {}
 {% endhighlight %}
 
 A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.
@@ -37,11 +37,10 @@ As an example, we can set the label to our example Activity as follows:
 {% highlight java %}
 @Activity(label = "Transfuse Example")
 @Layout(R.id.example_layout)
-public class Example {
-}
+public class Example {}
 {% endhighlight %}
 
-Transfuse will add this property to the AndroidManifest.xml for you, resulting in the following:
+Transfuse will add this property to the AndroidManifest.xml for you, resulting in the following entry in the AndroidManifest.xml:
 
 {% highlight xml %}
 <activity t:tag="+,l,n" android:label="Transfuse Example" android:name=".ExampleActivity">
@@ -57,11 +56,12 @@ In addion to the manifest activity properties you are able to define IntentFilte
         @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
         @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })
-public class Example {
-}
+public class Example {}
 {% endhighlight %}
 
-This sets up the Activity as the main home Activity in your application and adds it to the list of applications on the phone. 
+This sets up the Activity as the home screen and adds it to the list of applications on the phone. 
+
+<hr/>
 
 #### Legacy Support
 
@@ -85,5 +85,6 @@ public class Example extends Activity {
 
 #### Reference
 <a href="javadocs/api/index.html">API Javadocs</a>
-<br/>
+<br/><br/>
 <a href="javadocs/main/index.html">Main Javadocs</a>
+
