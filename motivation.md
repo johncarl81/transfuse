@@ -6,7 +6,7 @@ title: Transfuse
 
 ### Motivation
 
-The Android API requires the developer to write a lot of boilerplate code.  This makes the Android API difficult to use and hard to get right.  In addition, the typical approaches to eliminate boilerplate that work in server applicatoins bog down the critical startup time of your Android application.  It is Tranfuse's mission to make Android a better API in a performance sensitive way.   
+The Android API requires the developer to write a lot of boilerplate code.  This makes the Android API difficult to use and hard to get right.  In addition, the typical approaches to eliminate boilerplate that work in server applicatoins bog down the critical startup time of your Android application.  It is Tranfuse's mission to make Android a better API using performance sensitive techniques.   
 
 Transfuse is a collection of techniques surrounding compile time code generation.  
 
