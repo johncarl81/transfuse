@@ -6,9 +6,9 @@ title: Transfuse
 
 ### Motivation
 
-The Android API requires the developer to write a lot of boilerplate code.  This makes the Android API difficult to use and hard to get right.  In addition, the typical approaches to eliminate boilerplate that work in server applicatoins bog down the critical startup time of your Android application.  It is Tranfuse's mission to make Android a better API using performance sensitive techniques.   
+The Android API requires the developer to write a lot of boilerplate code.  This makes the Android API difficult to use and hard to get right.  The typical approaches to eliminate boilerplate that work in enterprise java applications bog down the critical startup time of your Android application.  It is Transfuse's mission to make Android a better API using performance sensitive techniques.
 
-Transfuse is a collection of techniques surrounding compile time code generation.  
+Transfuse is a collection of techniques surrounding compile time code generation.
 
 ##### Dependency Injection
 First and foremost, Transfuse is a [[JSR-330](http://www.jcp.org/en/jsr/detail?id=330)] compliant dependency injection framework.  This means that Transfuse offers the standard set of injection annotations with the common functionality found in the top DI frameworks (Guice, Seam, Spring).  The difference with Transfuse is the implementation.  Dependency Injection in Transfuse is implemented statically during compile time making it as fast as possible, often avoiding reflection.
