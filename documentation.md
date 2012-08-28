@@ -19,7 +19,9 @@ public class ExampleBroadcastReceiver {}
 
 {% endhighlight %} 
 
-This tells Transfuse to use the class as an Android Component.  This turns on a number of features, such as dependency injection and event mapping.
+These annotations tell Transfuse to use the class as an Android Component.  This turns on a number of features, such as dependency injection and event mapping.
+
+<hr/>
 
 ##### @Activity
 
@@ -31,7 +33,7 @@ Annotating your Activity class begins the process of developing your Transfuse a
 public class Example {}
 {% endhighlight %}
 
-A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.
+A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the Don't-Repeat-Yourself principle, keeping the declaration and configuration of your Activity in one place.
 
 As an example, we can set the label to our example Activity as follows:
 
@@ -118,12 +120,30 @@ public class Example {
 }
 {% endhighlight %}
 
+
+##### Listener Registration
+
+Another common event to be raised by the Android system are by listeners on view components.  Transfuse allows you to easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
+
+{% highlight java %}
+@Activity
+@Layout(R.id.example_layout)
+public class Example{
+    @RegisterListener(value = R.id.button5)
+    private View.OnClickListener listener = new View.OnClickListener() {
+        public void onClick(View v) {
+            Log.("Example Info", "Button Clicked");
+        }
+    };
+}
+{% endhighlight %}
+
 <hr/>
 #### Legacy Support
 
 It is nice when you are able to start developing an application from a blank slate, but often we are stuck with a legacy code base.  It is expected that you may start a Transfuse application from an existing Android application.  Therefore, the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
 
-You may define your Android components as normal, and register them in the AndroidManifest.xml yourself.  You will not be able to use a majority of Transfuse's features and Transfuse will not register your component in teh AndroidManifest.xml file.  However, if you manually add a component to the AndroidManifest.xml file Transfuse will detect your additions, preserve them and work around them.
+You may define your Android components as normal, and register them in the AndroidManifest.xml yourself.  You will not be able to use a majority of Transfuse's features and Transfuse will not register your component in the AndroidManifest.xml file.  However, if you manually add a component to the AndroidManifest.xml file Transfuse will detect your additions, preserve them and work around them.
 
 You may define your Android component as normal and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so it will add it to the manifest.  Please note that these components are still Android components and dependency injection and the other code generation features will not be available.  This looks like the following:
 
