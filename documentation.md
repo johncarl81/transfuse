@@ -5,6 +5,26 @@ title: Transfuse
 
 ### Documentation
 
+#### Motivation
+
+The Android API has a common theme throughout its components.  Each component must be extended to implement your application's specific functionality.  Although this approach works, it has subtle side effects.  If your component handles many separate features your component classes quickly become a mismatch of behavior.  This results in hard to read and hard to tests classes.  Also, any 3rd party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these 3rd party libraries incomparable with each other.
+
+Additionally, each component must be registered individually in the AndroidManifest.xml file.  How many times have you forgotten to register a new component only to find out after it is deployed to your emulator or device?  This duplication of registration and declaration violates the Do Not Repeat Yourself principle.
+
+These are just a couple of issues resolved by Transfuse.  Transfuse changes the model of Android components into POJOs, allowing you to develop your components the way you want.  No more extending Activity, Service, etc in order to implement the corresponding component.  You simply need to annotate the component classes to register them in your Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
+
+Transfuse also offers a compile time dependency injection framework based on JSR-330.  This is the same framework used by the leading DI frameworks Guice, Spring, Seam, etc.  Dependency injection allows you to eliminate boilerplate plumbing code in your application further, as well as encourages well formed application architecture.  Transfuse implements Dependency Injection differently than the mentioned frameworks, it performs all analysis and code generation during compile time.  This reduces the critical startup time of your application, especially any lag based on runtime startup of Transfuse.
+
+It is Transfuse's mission to make Android a better API using performance sensitive techniques.
+
+#### High level
+
+A Transfuse application is built using a series of components analogous to the set of Android components.  These components are declared using the Transfuse API annotations on the class type level.
+
+Transfuse moves the declaration of Manifest metadata to the class level.  This combines declaration of the Transfuse component with registration as an application Component.  Transfuse writes and manages the AndroidManifest.xml for you.
+
+Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component or any instance injected into it.
+
 #### Components
 
 A Transfuse application is made up of a set of components.  These components are analogous to the standard set of Android components:  The Activity, Service, Application, and Broadcast Receiver.  Each of these components are defined by annotating a class as follows:
