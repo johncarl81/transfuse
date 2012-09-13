@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen.proxy;
+package org.androidtransfuse.util;
 
 /**
  * @author John Ericksen

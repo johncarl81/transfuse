@@ -1,7 +1,5 @@
 package org.androidtransfuse.gen.proxy;
 
-import org.androidtransfuse.gen.VirtualProxyGeneratorTest;
-
 public class MockDelegate implements MockInterface, SecondMockInteface {
 
     private boolean exectuted = false;

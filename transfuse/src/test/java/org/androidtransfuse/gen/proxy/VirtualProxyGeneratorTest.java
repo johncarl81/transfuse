@@ -1,4 +1,4 @@
-package org.androidtransfuse.gen;
+package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.TransfuseTestInjector;
@@ -7,9 +7,10 @@ import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
-import org.androidtransfuse.gen.proxy.*;
+import org.androidtransfuse.gen.CodeGenerationUtil;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
+import org.androidtransfuse.util.DelayedLoad;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -10,6 +10,7 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.DelayedLoad;
 import org.androidtransfuse.util.VirtualProxyException;
 
 import javax.inject.Inject;

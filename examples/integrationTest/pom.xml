@@ -14,7 +14,7 @@
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
