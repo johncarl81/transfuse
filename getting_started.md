@@ -49,7 +49,7 @@ Add the transfuse dependencies into your Maven pom:
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse</artifactId>
     <version>{{site.currentVersion}}</version>
-    <scope>compile</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.androidtransfuse</groupId>
