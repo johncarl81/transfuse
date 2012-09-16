@@ -23,7 +23,6 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -32,6 +31,7 @@ import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
 import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * Activity related Analysis
@@ -50,7 +50,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
     private IntentFilterFactory intentFilterBuilder;
-    private TypeMirrorUtil typeMirrorUtil;
     private ComponentBuilderFactory componentBuilderFactory;
     private MetaDataBuilder metadataBuilder;
     private BindingRepositoryFactory bindingRepositoryFactory;
@@ -69,7 +68,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             ASTClassFactory astClassFactory,
                             ManifestManager manifestManager,
                             IntentFilterFactory intentFilterBuilder,
-                            TypeMirrorUtil typeMirrorUtil,
                             ComponentBuilderFactory componentBuilderFactory,
                             MetaDataBuilder metadataBuilder,
                             BindingRepositoryFactory bindingRepositoryFactory,
@@ -85,7 +83,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.astClassFactory = astClassFactory;
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
-        this.typeMirrorUtil = typeMirrorUtil;
         this.componentBuilderFactory = componentBuilderFactory;
         this.metadataBuilder = metadataBuilder;
         this.bindingRepositoryFactory = bindingRepositoryFactory;
@@ -111,7 +108,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             Layout layoutAnnotation = input.getAnnotation(Layout.class);
             LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
+            TypeMirror type = getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
 
             String activityType = type == null ? android.app.Activity.class.getName() : type.toString();
 
@@ -135,7 +132,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
         if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = typeMirrorUtil.getTypeMirror(new LayoutHandlerTypeMirrorRunnable(layoutHandlerAnnotation));
+            TypeMirror layoutHandlerType = getTypeMirror(new LayoutHandlerTypeMirrorRunnable(layoutHandlerAnnotation));
 
             if (layoutHandlerType != null) {
                 ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);

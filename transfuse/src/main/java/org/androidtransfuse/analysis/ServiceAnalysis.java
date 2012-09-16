@@ -26,7 +26,6 @@ import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -36,6 +35,7 @@ import java.util.Map;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
 import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * Service related Analysis
@@ -52,7 +52,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private ASTClassFactory astClassFactory;
     private ManifestManager manifestManager;
     private IntentFilterFactory intentFilterBuilder;
-    private TypeMirrorUtil typeMirrorUtil;
     private MetaDataBuilder metadataBuilder;
     private InjectionBindingBuilder injectionBindingBuilder;
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -67,7 +66,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            AnalysisContextFactory analysisContextFactory,
                            ASTClassFactory astClassFactory, ManifestManager manifestManager,
                            IntentFilterFactory intentFilterBuilder,
-                           TypeMirrorUtil typeMirrorUtil,
                            MetaDataBuilder metadataBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
@@ -81,7 +79,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.astClassFactory = astClassFactory;
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
-        this.typeMirrorUtil = typeMirrorUtil;
         this.metadataBuilder = metadataBuilder;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
@@ -103,7 +100,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             //generated Android Service
             serviceClassName = buildPackageClass(input, serviceAnnotation.name());
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new ServiceTypeMirrorRunnable(serviceAnnotation));
+            TypeMirror type = getTypeMirror(new ServiceTypeMirrorRunnable(serviceAnnotation));
 
             String serviceType = type == null ? android.app.Service.class.getName() : type.toString();
 

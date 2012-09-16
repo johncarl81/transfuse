@@ -28,11 +28,12 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.lang.model.type.TypeMirror;
+
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * @author John Ericksen
@@ -40,7 +41,6 @@ import javax.lang.model.type.TypeMirror;
 public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTClassFactory astClassFactory;
-    private TypeMirrorUtil typeMirrorUtil;
     private AnalysisContextFactory analysisContextFactory;
     private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private InjectionBindingBuilder injectionBindingBuilder;
@@ -51,7 +51,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
-                            TypeMirrorUtil typeMirrorUtil,
                             AnalysisContextFactory analysisContextFactory,
                             InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                             InjectionBindingBuilder injectionBindinBuilder,
@@ -60,7 +59,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ComponentBuilderFactory componentBuilderFactory,
                             BindingRepositoryFactory bindingRepositoryFactory) {
         this.astClassFactory = astClassFactory;
-        this.typeMirrorUtil = typeMirrorUtil;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.injectionBindingBuilder = injectionBindinBuilder;
@@ -83,7 +81,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             Layout layoutAnnotation = astType.getAnnotation(Layout.class);
             //todo: fragment specific layout handler
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
+            TypeMirror type = getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
 
             ASTType fragmentType = type == null ? astClassFactory.buildASTClassType(android.support.v4.app.Fragment.class)
                     : type.accept(astTypeBuilderVisitor, null);

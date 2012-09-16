@@ -10,7 +10,6 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.util.TypeMirrorUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -19,6 +18,7 @@ import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
 import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * @author John Ericksen
@@ -30,7 +30,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private ManifestManager manifestManager;
     private ComponentBuilderFactory componentBuilderFactory;
     private IntentFilterFactory intentFilterBuilder;
-    private TypeMirrorUtil typeMirrorUtil;
     private MetaDataBuilder metaDataBuilder;
     private ContextScopeComponentBuilder contextScopeComponentBuilder;
 
@@ -40,7 +39,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ManifestManager manifestManager,
                                      ComponentBuilderFactory componentBuilderFactory,
                                      IntentFilterFactory intentFilterBuilder,
-                                     TypeMirrorUtil typeMirrorUtil,
                                      MetaDataBuilder metaDataBuilder,
                                      ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.astClassFactory = astClassFactory;
@@ -48,7 +46,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         this.manifestManager = manifestManager;
         this.componentBuilderFactory = componentBuilderFactory;
         this.intentFilterBuilder = intentFilterBuilder;
-        this.typeMirrorUtil = typeMirrorUtil;
         this.metaDataBuilder = metaDataBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
     }
@@ -68,7 +65,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         } else {
             receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
 
-            TypeMirror type = typeMirrorUtil.getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
+            TypeMirror type = getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
             String receiverType = buildReceiverType(type);
 
             receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);
