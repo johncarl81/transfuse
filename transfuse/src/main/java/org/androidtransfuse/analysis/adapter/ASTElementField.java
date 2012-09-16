@@ -11,9 +11,9 @@ import java.util.Collection;
  */
 public class ASTElementField extends ASTElementBase implements ASTField {
 
-    private ASTTypeLazyLoader<Element> astTypeLoader;
-    private ASTAccessModifier modifier;
-    private VariableElement variableElement;
+    private final ASTTypeLazyLoader<Element> astTypeLoader;
+    private final ASTAccessModifier modifier;
+    private final VariableElement variableElement;
 
     public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
         super(variableElement, annotations);

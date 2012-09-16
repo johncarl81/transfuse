@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Determines matching based on the input set of annotations.  All annotations must be present to match the given type.
+ *
  * @author John Ericksen
  */
 public class ASTTypeMatcher implements Matcher<ASTType> {

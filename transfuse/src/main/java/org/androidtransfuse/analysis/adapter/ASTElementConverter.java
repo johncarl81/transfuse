@@ -12,8 +12,8 @@ import javax.lang.model.element.Element;
  */
 public class ASTElementConverter<T> implements Conversion<Element, T> {
 
-    private Class<T> astTypeClass;
-    private ElementConverterFactory elementConverterFactory;
+    private final Class<T> astTypeClass;
+    private final ElementConverterFactory elementConverterFactory;
 
     public ASTElementConverter(Class<T> astTypeClass, ElementConverterFactory elementConverterFactory) {
         this.astTypeClass = astTypeClass;

@@ -17,7 +17,7 @@ import static org.androidtransfuse.util.CollectionConverterUtil.transform;
 @Singleton
 public class ASTElementFactory {
 
-    private Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
+    private final Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
 
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;

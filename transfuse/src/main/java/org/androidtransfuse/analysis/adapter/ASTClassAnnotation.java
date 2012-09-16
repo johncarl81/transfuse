@@ -13,9 +13,9 @@ import java.lang.reflect.Method;
  */
 public class ASTClassAnnotation implements ASTAnnotation {
 
-    private Annotation annotation;
-    private ASTType type;
-    private ASTClassFactory astClassFactory;
+    private final Annotation annotation;
+    private final ASTType type;
+    private final ASTClassFactory astClassFactory;
 
     public ASTClassAnnotation(Annotation annotation, ASTType type, ASTClassFactory astClassFactory) {
         this.annotation = annotation;

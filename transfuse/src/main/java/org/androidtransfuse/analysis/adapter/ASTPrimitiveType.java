@@ -21,8 +21,8 @@ public enum ASTPrimitiveType implements ASTType {
 
     private static final Map<String, ASTPrimitiveType> AUTOBOX_TYPE_MAP = new HashMap<String, ASTPrimitiveType>();
 
-    private Class clazz;
-    private String label;
+    private final Class clazz;
+    private final String label;
 
     static {
         for (ASTPrimitiveType astPrimitive : ASTPrimitiveType.values()) {

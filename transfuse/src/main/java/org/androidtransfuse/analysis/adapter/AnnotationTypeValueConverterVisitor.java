@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
 
-    private Class<T> type;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private ElementConverterFactory astTypeElementConverterFactory;
+    private final Class<T> type;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final ElementConverterFactory astTypeElementConverterFactory;
 
     public AnnotationTypeValueConverterVisitor(Class<T> type,
                                                ASTTypeBuilderVisitor astTypeBuilderVisitor,

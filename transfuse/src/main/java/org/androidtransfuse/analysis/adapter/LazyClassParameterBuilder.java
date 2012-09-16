@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class LazyClassParameterBuilder implements LazyTypeParameterBuilder {
 
-    private ParameterizedType parameterizedType;
-    private ASTClassFactory astClassFactory;
+    private final ParameterizedType parameterizedType;
+    private final ASTClassFactory astClassFactory;
     private List<ASTType> genericParameters = null;
 
     @Inject
@@ -28,11 +28,9 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder {
     }
 
     public List<ASTType> buildGenericParameters() {
-
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
-
         return genericParameters;
     }
 

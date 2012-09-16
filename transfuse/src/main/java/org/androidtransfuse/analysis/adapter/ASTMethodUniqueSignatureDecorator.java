@@ -12,8 +12,8 @@ import java.util.List;
  *
  */
 public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
-    private ASTMethod method;
-    private MethodSignature methodSignature;
+    private final ASTMethod method;
+    private final MethodSignature methodSignature;
 
     public ASTMethodUniqueSignatureDecorator(ASTMethod method) {
         this.method = method;

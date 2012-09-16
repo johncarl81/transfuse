@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class ASTClassConstructor implements ASTConstructor {
 
-    private Constructor constructor;
-    private List<ASTParameter> parameters;
-    private ASTAccessModifier modifier;
-    private List<ASTAnnotation> annotations;
-    private List<ASTType> throwsTypes;
+    private final Constructor constructor;
+    private final List<ASTParameter> parameters;
+    private final ASTAccessModifier modifier;
+    private final List<ASTAnnotation> annotations;
+    private final List<ASTType> throwsTypes;
 
     public ASTClassConstructor(List<ASTAnnotation> annotations, Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier, List<ASTType> throwsTypes) {
         this.annotations = annotations;

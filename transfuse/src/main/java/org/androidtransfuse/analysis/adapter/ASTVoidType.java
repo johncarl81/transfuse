@@ -13,8 +13,8 @@ import java.util.List;
 public enum ASTVoidType implements ASTType {
     VOID("void", Void.class);
 
-    private String label;
-    private Class clazz;
+    private final String label;
+    private final Class clazz;
 
     private ASTVoidType(String label, Class clazz) {
         this.label = label;

@@ -10,8 +10,8 @@ import javax.lang.model.element.Element;
 public abstract class ASTTypeLazyLoader<T extends Element> {
 
     private ASTType astType = null;
-    private T element;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final T element;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
     public ASTTypeLazyLoader(T element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         this.element = element;

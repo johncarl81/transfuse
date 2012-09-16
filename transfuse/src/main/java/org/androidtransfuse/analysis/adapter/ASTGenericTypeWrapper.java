@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class ASTGenericTypeWrapper implements ASTType {
 
-    private ASTType astType;
-    private LazyTypeParameterBuilder lazyTypeParameterBuilder;
+    private final ASTType astType;
+    private final LazyTypeParameterBuilder lazyTypeParameterBuilder;
 
     @Inject
     public ASTGenericTypeWrapper(@Assisted ASTType astType, @Assisted LazyTypeParameterBuilder lazyTypeParameterBuilder) {

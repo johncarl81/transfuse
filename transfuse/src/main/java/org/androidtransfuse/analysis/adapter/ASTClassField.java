@@ -16,10 +16,10 @@ import java.util.Collection;
  */
 public class ASTClassField implements ASTField {
 
-    private Field field;
-    private ASTType astType;
-    private ASTAccessModifier modifier;
-    private Collection<ASTAnnotation> annotations;
+    private final Field field;
+    private final ASTType astType;
+    private final ASTAccessModifier modifier;
+    private final Collection<ASTAnnotation> annotations;
 
     public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
         this.field = field;

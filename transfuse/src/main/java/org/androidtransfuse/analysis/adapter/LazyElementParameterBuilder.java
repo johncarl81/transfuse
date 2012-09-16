@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
 
-    private DeclaredType declaredType;
+    private final DeclaredType declaredType;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private List<ASTType> genericParameters = null;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
 
     @Inject
     public LazyElementParameterBuilder(@Assisted DeclaredType declaredType,
@@ -26,11 +26,9 @@ public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
     }
 
     public List<ASTType> buildGenericParameters() {
-
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
-
         return genericParameters;
     }
 

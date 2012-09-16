@@ -121,7 +121,7 @@ public class ASTClassFactory {
                             buildAnnotations(parameterAnnotations[i])));
         }
 
-        return astParameters;
+        return Collections.unmodifiableList(astParameters);
     }
 
     private Type nullSafeAccess(Type[] typeArray, int i) {

@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class ASTElementConstructor extends ASTElementBase implements ASTConstructor {
 
-    private List<ASTParameter> parameters;
-    private ASTAccessModifier modifier;
-    private List<ASTType> throwsTypes;
+    private final List<ASTParameter> parameters;
+    private final ASTAccessModifier modifier;
+    private final List<ASTType> throwsTypes;
 
     public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
         super(executableElement, annotations);

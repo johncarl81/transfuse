@@ -15,9 +15,9 @@ import java.util.Map;
  */
 public class ASTElementAnnotation implements ASTAnnotation {
 
-    private AnnotationMirror annotationMirror;
-    private ASTType type;
-    private ElementConverterFactory elementConverterFactory;
+    private final AnnotationMirror annotationMirror;
+    private final ASTType type;
+    private final ElementConverterFactory elementConverterFactory;
 
     @Inject
     public ASTElementAnnotation(@Assisted AnnotationMirror annotationMirror,

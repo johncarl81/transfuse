@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class ASTElementParameter extends ASTElementBase implements ASTParameter {
 
-    private ASTTypeLazyLoader<Element> astTypeLoader;
+    private final ASTTypeLazyLoader<Element> astTypeLoader;
 
     public ASTElementParameter(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, Collection<ASTAnnotation> annotations) {
         this((Element) variableElement, astTypeBuilderVisitor, annotations);

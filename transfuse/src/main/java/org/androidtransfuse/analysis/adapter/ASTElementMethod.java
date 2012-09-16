@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
-    private ASTTypeLazyLoader<ExecutableElement> astTypeLoader;
-    private List<ASTParameter> parameters;
-    private ASTAccessModifier modifier;
-    private List<ASTType> throwsTypes;
+    private final ASTTypeLazyLoader<ExecutableElement> astTypeLoader;
+    private final List<ASTParameter> parameters;
+    private final ASTAccessModifier modifier;
+    private final List<ASTType> throwsTypes;
 
     public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
         super(executableElement, annotations);

@@ -8,6 +8,7 @@ import javax.lang.model.element.Element;
  * @author John Ericksen
  */
 public class ElementASTTypeLazyLoader extends ASTTypeLazyLoader<Element> {
+    
     public ElementASTTypeLazyLoader(Element element, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
         super(element, astTypeBuilderVisitor);
     }

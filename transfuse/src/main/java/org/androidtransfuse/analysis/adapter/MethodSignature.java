@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class MethodSignature {
 
-    private String methodSignature;
-    private ASTMethod method;
+    private final String methodSignature;
+    private final ASTMethod method;
 
     public MethodSignature(ASTMethod method) {
-        methodSignature = makeDescriptor(method);
+        this.methodSignature = makeDescriptor(method);
         this.method = method;
     }
 

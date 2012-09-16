@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class ASTArrayType implements ASTType {
 
-    private ASTType delegate;
+    private final ASTType delegate;
 
     public ASTArrayType(ASTType delegate) {
         this.delegate = delegate;

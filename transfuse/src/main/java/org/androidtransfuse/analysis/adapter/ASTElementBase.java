@@ -11,8 +11,8 @@ import java.util.Collection;
  */
 public class ASTElementBase implements ASTBase {
 
-    private Element element;
-    private Collection<ASTAnnotation> annotations;
+    private final Element element;
+    private final Collection<ASTAnnotation> annotations;
 
     public ASTElementBase(Element element, Collection<ASTAnnotation> annotations) {
         this.element = element;

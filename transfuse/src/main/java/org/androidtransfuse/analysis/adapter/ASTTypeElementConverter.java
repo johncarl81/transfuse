@@ -16,8 +16,8 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     private static final String CONSTRUCTOR_IDENTIFIER = "<init>";
 
-    private Class<T> astTypeClass;
-    private ASTElementFactory astElementFactory;
+    private final Class<T> astTypeClass;
+    private final ASTElementFactory astElementFactory;
 
     public ASTTypeElementConverter(Class<T> astTypeClass,
                                    ASTElementFactory astElementFactory) {

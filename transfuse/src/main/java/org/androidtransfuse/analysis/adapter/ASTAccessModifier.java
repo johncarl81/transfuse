@@ -36,8 +36,8 @@ public enum ASTAccessModifier {
         }
     };
 
-    private int codeModelJMod;
-    private int javaModifier;
+    private final int codeModelJMod;
+    private final int javaModifier;
 
     private ASTAccessModifier(int codeModelJMod, int javaModifier) {
         this.codeModelJMod = codeModelJMod;

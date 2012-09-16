@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class ASTProxyType implements ASTType {
 
-    private ASTType proxyASTType;
-    private String name;
+    private final ASTType proxyASTType;
+    private final String name;
 
     public ASTProxyType(ASTType proxyASTType, String name) {
         this.proxyASTType = proxyASTType;

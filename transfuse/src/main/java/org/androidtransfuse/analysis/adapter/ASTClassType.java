@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class ASTClassType implements ASTType {
 
-    private Class<?> clazz;
-    private Collection<ASTAnnotation> annotationList;
-    private Collection<ASTMethod> methods;
-    private Collection<ASTConstructor> constructors;
-    private Collection<ASTField> fields;
-    private ASTType superClass;
-    private Collection<ASTType> interfaces;
+    private final Class<?> clazz;
+    private final Collection<ASTAnnotation> annotationList;
+    private final Collection<ASTMethod> methods;
+    private final Collection<ASTConstructor> constructors;
+    private final Collection<ASTField> fields;
+    private final ASTType superClass;
+    private final Collection<ASTType> interfaces;
 
     public ASTClassType(Class<?> clazz, Collection<ASTAnnotation> annotationList, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces) {
         this.clazz = clazz;

@@ -12,12 +12,12 @@ import java.util.List;
  */
 public class ASTClassMethod implements ASTMethod {
 
-    private Method method;
-    private List<ASTParameter> parameters;
-    private ASTType returnType;
-    private ASTAccessModifier modifier;
-    private Collection<ASTAnnotation> annotations;
-    private List<ASTType> throwTypes;
+    private final Method method;
+    private final List<ASTParameter> parameters;
+    private final ASTType returnType;
+    private final ASTAccessModifier modifier;
+    private final Collection<ASTAnnotation> annotations;
+    private final List<ASTType> throwTypes;
 
     public ASTClassMethod(Method method, ASTType returnType, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwTypes) {
         this.method = method;
