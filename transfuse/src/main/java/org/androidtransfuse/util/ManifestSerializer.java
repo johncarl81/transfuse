@@ -7,9 +7,13 @@ import javax.inject.Inject;
 import java.io.*;
 
 /**
+ * Serializes the Manifest to and from xml
+ *
  * @author John Ericksen
  */
 public class ManifestSerializer {
+
+    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
     private XStream xStream;
     private Logger logger;
@@ -31,7 +35,7 @@ public class ManifestSerializer {
     public void writeManifest(Manifest manifest, OutputStream manifestStream) {
         try {
             Writer writer = new OutputStreamWriter(manifestStream, "UTF-8");
-            writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
+            writer.write(XML_HEADER);
 
             xStream.toXML(manifest, writer);
         } catch (FileNotFoundException e) {

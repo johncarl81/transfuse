@@ -1,6 +1,5 @@
 package org.androidtransfuse.gen;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
 import org.androidtransfuse.model.PackageClass;
@@ -24,7 +23,7 @@ public class FilerSourceCodeWriter extends CodeWriter {
     private Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
-    public FilerSourceCodeWriter(@Assisted Filer filer) {
+    public FilerSourceCodeWriter(Filer filer) {
         this.filer = filer;
     }
 

@@ -8,7 +8,7 @@ import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.MessagerLogger;
 
-import javax.annotation.processing.Messager;
+import javax.annotation.processing.ProcessingEnvironment;
 
 /**
  * @author John Ericksen
@@ -26,8 +26,8 @@ public final class TransfuseInjector {
         return INSTANCE;
     }
 
-    public Injector buildSetupInjector(Messager messager) {
-        setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(new MessagerLogger(messager)));
+    public Injector buildSetupInjector(ProcessingEnvironment environment) {
+        setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(new MessagerLogger(environment.getMessager()), environment.getFiler()));
         return setupInjector;
     }
 

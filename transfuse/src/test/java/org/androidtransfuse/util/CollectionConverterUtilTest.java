@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static org.androidtransfuse.util.CollectionConverterUtil.transform;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -17,8 +18,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class CollectionConverterUtilTest {
 
-    @Inject
-    private CollectionConverterUtil collectionConverterUtil;
     @Inject
     private IntToStringConverter converter;
 
@@ -41,7 +40,7 @@ public class CollectionConverterUtilTest {
     @Test
     public void testConversion() {
         List<Integer> input = Arrays.asList(1, 2, 3, null, 4);
-        Collection<String> output = collectionConverterUtil.transform(input, converter);
+        Collection<String> output = transform(input, converter);
 
         assertTrue(CollectionUtils.isEqualCollection(Arrays.asList("1", "2", "3", "4"), output));
     }

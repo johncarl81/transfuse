@@ -1,13 +1,13 @@
 package org.androidtransfuse.analysis.adapter;
 
-import org.androidtransfuse.util.CollectionConverterUtil;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.*;
+
+import static org.androidtransfuse.util.CollectionConverterUtil.transform;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -19,8 +19,6 @@ public class ASTElementFactory {
 
     private Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
 
-    @Inject
-    private CollectionConverterUtil collectionConverterUtil;
     @Inject
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
@@ -70,13 +68,13 @@ public class ASTElementFactory {
             typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, annotations));
 
             //iterate and build the contained elements within this TypeElement
-            constructors.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
+            constructors.addAll(transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTConstructor.class)));
 
-            fields.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
+            fields.addAll(transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTField.class)));
 
-            methods.addAll(collectionConverterUtil.transform(typeElement.getEnclosedElements(),
+            methods.addAll(transform(typeElement.getEnclosedElements(),
                     astElementConverterFactory.buildASTElementConverter(ASTMethod.class)));
 
             annotations.addAll(buildAnnotations(typeElement));

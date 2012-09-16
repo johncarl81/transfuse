@@ -9,7 +9,11 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class CollectionConverterUtil {
+public final class CollectionConverterUtil {
+
+    private CollectionConverterUtil(){
+        //noop utility class constructor
+    }
 
     /**
      * Transform the input collection into the output collection, using the supplied conversion to convert element to element.
@@ -19,7 +23,7 @@ public class CollectionConverterUtil {
      * @param <V> output collection generic type
      * @return converted collection
      */
-    public <T, V> Collection<V> transform(Collection<? extends T> input, Conversion<? super T, ? extends V> conversion) {
+    public static <T, V> Collection<V> transform(Collection<? extends T> input, Conversion<? super T, ? extends V> conversion) {
         List<V> wrappedCollection = new ArrayList<V>();
         for (T t : input) {
             V converted = conversion.convert(t);

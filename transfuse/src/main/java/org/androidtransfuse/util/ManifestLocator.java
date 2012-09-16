@@ -1,6 +1,5 @@
 package org.androidtransfuse.util;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 
 import javax.annotation.processing.Filer;
@@ -41,7 +40,7 @@ public class ManifestLocator {
     private Logger logger;
 
     @Inject
-    public ManifestLocator(@Assisted Filer filer, Logger logger) {
+    public ManifestLocator(Filer filer, Logger logger) {
         this.filer = filer;
         this.logger = logger;
     }

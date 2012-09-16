@@ -7,7 +7,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.gen.ApplicationGenerator;
-import org.androidtransfuse.gen.CodeWriterFactory;
+import org.androidtransfuse.gen.FilerSourceCodeWriter;
+import org.androidtransfuse.gen.ResourceCodeWriter;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
@@ -16,8 +17,7 @@ import org.androidtransfuse.processor.ComponentProcessor;
 import org.androidtransfuse.processor.TransfuseAssembler;
 import org.androidtransfuse.processor.TransfuseInjector;
 import org.androidtransfuse.processor.TransfuseProcessor;
-import org.androidtransfuse.util.CollectionConverterUtil;
-import org.androidtransfuse.util.ManifestLocatorFactory;
+import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.annotation.processing.*;
@@ -31,6 +31,8 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.androidtransfuse.util.CollectionConverterUtil.transform;
 
 /**
  * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
@@ -57,22 +59,22 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
     private boolean processorRan = false;
     @Inject
-    private CollectionConverterUtil collectionConverterUtil;
-    @Inject
     private ASTElementConverterFactory astElementConverterFactory;
     @Inject
     private ManifestSerializer manifestParser;
     @Inject
     private RBuilder rBuilder;
     @Inject
-    private ManifestLocatorFactory manifestLocatorFactory;
+    private ManifestLocator manifestLocator;
     @Inject
-    private CodeWriterFactory codeWriterFactory;
+    private FilerSourceCodeWriter codeWriter;
+    @Inject
+    private ResourceCodeWriter resourceWriter;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        Injector injector = TransfuseInjector.getInstance().buildSetupInjector(processingEnv.getMessager());
+        Injector injector = TransfuseInjector.getInstance().buildSetupInjector(processingEnv);
         injector.injectMembers(this);
     }
 
@@ -82,7 +84,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
         if (!processorRan) {
 
             //setup transfuse processor with manifest and R classes
-            File manifestFile = manifestLocatorFactory.buildManifestLocator(processingEnv.getFiler()).findManifest();
+            File manifestFile = manifestLocator.findManifest();
             Manifest manifest = manifestParser.readManifest(manifestFile);
 
             RResourceComposite r = new RResourceComposite(
@@ -131,7 +133,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
             Filer filer = processingEnv.getFiler();
 
-            transfuseAssembler.writeSource(codeWriterFactory.buildSourceWriter(filer), codeWriterFactory.buildResourceWriter(filer));
+            transfuseAssembler.writeSource(codeWriter, resourceWriter);
 
             Manifest updatedManifest = transfuseAssembler.buildManifest();
 
@@ -156,7 +158,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     }
 
     private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
-        return collectionConverterUtil.transform(elementCollection,
+        return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
     }

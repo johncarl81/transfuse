@@ -26,7 +26,7 @@ public class TransfuseTestInjector {
         manifest.getApplications().add(new Application());
 
         return Guice.createInjector(Stage.DEVELOPMENT,
-                new TransfuseSetupGuiceModule(new JavaUtilLogger(input)),
+                new TransfuseSetupGuiceModule(new JavaUtilLogger(input), new NoOpFiler()),
                 new TransfuseGenerateGuiceModule(new EmptyRResource(), manifest));
     }
 }
