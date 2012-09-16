@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class ActivityComponentBuilderRepository {
 
-    private Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators;
+    private final Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators;
 
     public ActivityComponentBuilderRepository(Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators) {
         this.activityGenerators = activityGenerators;

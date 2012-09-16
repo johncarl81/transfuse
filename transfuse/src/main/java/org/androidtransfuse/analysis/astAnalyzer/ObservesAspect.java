@@ -12,9 +12,9 @@ import java.util.*;
  */
 public class ObservesAspect {
 
-    private Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
-    private InjectionNode eventManagerInjectionNode;
-    private InjectionNode observerTendingInjectionNode;
+    private final Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
+    private final InjectionNode eventManagerInjectionNode;
+    private final InjectionNode observerTendingInjectionNode;
 
     public ObservesAspect(InjectionNode eventManagerInjectionNode, InjectionNode observerTendingInjectionNode) {
         this.eventManagerInjectionNode = eventManagerInjectionNode;

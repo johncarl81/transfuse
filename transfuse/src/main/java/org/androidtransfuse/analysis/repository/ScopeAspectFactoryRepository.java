@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class ScopeAspectFactoryRepository {
 
-    private Map<Class<? extends Annotation>, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<Class<? extends Annotation>, ScopeAspectFactory>();
+    private final Map<Class<? extends Annotation>, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<Class<? extends Annotation>, ScopeAspectFactory>();
 
     public void putAspectFactory(Class<? extends Annotation> scopeType, ScopeAspectFactory scopeAspectFactory) {
         scopeVariableBuilderMap.put(scopeType, scopeAspectFactory);

@@ -9,7 +9,7 @@ import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
  */
 public class ScopeAspect {
 
-    private VariableBuilder scopeBuilder;
+    private final VariableBuilder scopeBuilder;
 
     public ScopeAspect(VariableBuilder scopeBuilder) {
         this.scopeBuilder = scopeBuilder;

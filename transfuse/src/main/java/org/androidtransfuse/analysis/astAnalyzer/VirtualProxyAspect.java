@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class VirtualProxyAspect {
 
-    private Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
+    private final Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
     private boolean proxyDefined = false;
     private TypedExpression proxyExpression;
 

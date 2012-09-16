@@ -15,8 +15,8 @@ public class ManifestSerializer {
 
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
-    private XStream xStream;
-    private Logger logger;
+    private final XStream xStream;
+    private final Logger logger;
 
     @Inject
     public ManifestSerializer(XStream xStream, Logger logger) {

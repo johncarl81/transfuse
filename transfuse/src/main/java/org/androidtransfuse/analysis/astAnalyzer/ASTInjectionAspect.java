@@ -20,9 +20,9 @@ public class ASTInjectionAspect {
         LOCAL
     }
 
-    private Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
-    private Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
-    private Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
+    private final Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
+    private final Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
+    private final Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
     private InjectionAssignmentType assignmentType = InjectionAssignmentType.LOCAL;
 
     public void add(ConstructorInjectionPoint constructorInjectionPoint) {

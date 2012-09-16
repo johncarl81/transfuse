@@ -8,7 +8,6 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -18,15 +17,14 @@ import java.util.Stack;
  */
 public class AnalysisContext {
 
-    private Map<ASTType, InjectionNode> dependents;
-    private Stack<InjectionNode> dependencyHistory;
-    private AnalysisRepository analysisRepository;
-    private InjectionNodeBuilderRepository injectionNodeBuilders;
-    private AOPRepository aopRepository;
+    private final Map<ASTType, InjectionNode> dependents = new HashMap<ASTType, InjectionNode>();
+    private final Stack<InjectionNode> dependencyHistory;
+    private final AnalysisRepository analysisRepository;
+    private final InjectionNodeBuilderRepository injectionNodeBuilders;
+    private final AOPRepository aopRepository;
 
     @Inject
     public AnalysisContext(@Assisted InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository, AOPRepository aopRepository) {
-        this.dependents = Collections.emptyMap();
         this.dependencyHistory = new Stack<InjectionNode>();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
@@ -35,7 +33,6 @@ public class AnalysisContext {
 
     private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
         this(injectionNodeBuilders, analysisRepository, aopRepository);
-        this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependents.putAll(previousContext.dependents);
         this.dependents.put(node.getASTType(), node);
         this.dependencyHistory.addAll(previousContext.dependencyHistory);

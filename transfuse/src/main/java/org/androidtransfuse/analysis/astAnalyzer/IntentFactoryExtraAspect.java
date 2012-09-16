@@ -11,9 +11,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  */
 public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAspect> {
 
-    private boolean required;
-    private String name;
-    private ASTType type;
+    private final boolean required;
+    private final String name;
+    private final ASTType type;
 
     public IntentFactoryExtraAspect(boolean required, String name, ASTType type) {
         this.required = required;

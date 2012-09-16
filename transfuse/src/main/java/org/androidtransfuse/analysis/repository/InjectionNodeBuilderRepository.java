@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class InjectionNodeBuilderRepository {
 
-    private Map<ASTType, InjectionNodeBuilder> bindingAnnotations = new HashMap<ASTType, InjectionNodeBuilder>();
-    private Map<ASTType, InjectionNodeBuilder> typeBindings = new HashMap<ASTType, InjectionNodeBuilder>();
-    private InjectionNodeBuilder defaultBinding;
-    private ASTClassFactory astClassFactory;
+    private final Map<ASTType, InjectionNodeBuilder> bindingAnnotations = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final Map<ASTType, InjectionNodeBuilder> typeBindings = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final InjectionNodeBuilder defaultBinding;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory){

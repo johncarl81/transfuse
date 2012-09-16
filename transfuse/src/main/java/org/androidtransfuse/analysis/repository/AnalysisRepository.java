@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class AnalysisRepository {
 
-    private Set<ASTAnalysis> analysisSet = new HashSet<ASTAnalysis>();
+    private final Set<ASTAnalysis> analysisSet = new HashSet<ASTAnalysis>();
 
     public void addAnalysis(ASTAnalysis astAnalysis) {
         analysisSet.add(astAnalysis);

@@ -23,9 +23,9 @@ import javax.inject.Inject;
  */
 public class ObservesAnalysis extends ASTAnalysisAdaptor {
 
-    private InjectionPointFactory injectionNodeFactory;
-    private Analyzer analyzer;
-    private ASTClassFactory astClassFactory;
+    private final InjectionPointFactory injectionNodeFactory;
+    private final Analyzer analyzer;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public ObservesAnalysis(InjectionPointFactory injectionNodeFactory, Analyzer analyzer, ASTClassFactory astClassFactory) {

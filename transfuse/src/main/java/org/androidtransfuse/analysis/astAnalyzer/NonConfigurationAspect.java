@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class NonConfigurationAspect {
 
-    private List<FieldInjectionPoint> fields = new ArrayList<FieldInjectionPoint>();
+    private final List<FieldInjectionPoint> fields = new ArrayList<FieldInjectionPoint>();
 
     public void add(FieldInjectionPoint nonConfigurationField) {
         fields.add(nonConfigurationField);

@@ -13,8 +13,8 @@ import javax.inject.Inject;
  */
 public class BindProcessor extends MethodProcessor {
 
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public BindProcessor(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionNodeBuilderRepositoryFactory injectionNodeBuilders) {

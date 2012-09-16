@@ -16,7 +16,7 @@ import java.lang.annotation.Annotation;
  */
 public class ScopeAnalysis extends ASTAnalysisAdaptor {
 
-    private ScopeAspectFactoryRepository scopeAspectFactoryRepository;
+    private final ScopeAspectFactoryRepository scopeAspectFactoryRepository;
 
     @Inject
     public ScopeAnalysis(ScopeAspectFactoryRepository scopeAspectFactoryRepository) {

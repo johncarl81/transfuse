@@ -13,8 +13,8 @@ import javax.inject.Singleton;
  */
 public class ScopeAspectFactoryRepositoryProvider implements Provider<ScopeAspectFactoryRepository> {
 
-    private SingletonScopeAspectFactory singletonScopeAspectFactory;
-    private ContextScopeAspectFactory contextScopeAspectFactory;
+    private final SingletonScopeAspectFactory singletonScopeAspectFactory;
+    private final ContextScopeAspectFactory contextScopeAspectFactory;
 
     @Inject
     public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory,

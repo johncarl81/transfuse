@@ -24,13 +24,13 @@ import java.util.*;
  */
 public class RegistrationAnalyzer implements ASTAnalysis {
 
-    private Map<ASTType, RegistrationGeneratorFactory> generatorFactories = new HashMap<ASTType, RegistrationGeneratorFactory>();
-    private ASTClassFactory astClassFactory;
-    private Analyzer analyzer;
-    private JCodeModel codeModel;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
-    private ComponentBuilderFactory componentBuilderFactory;
+    private final Map<ASTType, RegistrationGeneratorFactory> generatorFactories = new HashMap<ASTType, RegistrationGeneratorFactory>();
+    private final ASTClassFactory astClassFactory;
+    private final Analyzer analyzer;
+    private final JCodeModel codeModel;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
+    private final ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public RegistrationAnalyzer(Analyzer analyzer,

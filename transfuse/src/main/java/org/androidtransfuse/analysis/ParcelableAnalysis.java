@@ -19,8 +19,8 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
 
     private static final String GET = "get";
     private static final String SET = "set";
-    private Map<ASTType, ParcelableDescriptor> parcelableCache = new HashMap<ASTType, ParcelableDescriptor>();
-    private ASTClassFactory astClassFactory;
+    private final Map<ASTType, ParcelableDescriptor> parcelableCache = new HashMap<ASTType, ParcelableDescriptor>();
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public ParcelableAnalysis(ASTClassFactory astClassFactory) {

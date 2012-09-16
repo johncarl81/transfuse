@@ -40,22 +40,22 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionPointFactory injectionPointFactory;
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
-    private ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository;
-    private AnalysisContextFactory analysisContextFactory;
-    private Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
-    private ASTClassFactory astClassFactory;
-    private ManifestManager manifestManager;
-    private IntentFilterFactory intentFilterBuilder;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private MetaDataBuilder metadataBuilder;
-    private BindingRepositoryFactory bindingRepositoryFactory;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private InjectionBindingBuilder injectionBindingBuilder;
-    private ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final InjectionPointFactory injectionPointFactory;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
+    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
+    private final ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
+    private final ASTClassFactory astClassFactory;
+    private final ManifestManager manifestManager;
+    private final IntentFilterFactory intentFilterBuilder;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final MetaDataBuilder metadataBuilder;
+    private final BindingRepositoryFactory bindingRepositoryFactory;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final InjectionBindingBuilder injectionBindingBuilder;
+    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,

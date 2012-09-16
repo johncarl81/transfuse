@@ -26,11 +26,11 @@ import java.util.Set;
  */
 public class ActivityComponentBuilderRepositoryFactory {
 
-    private ComponentBuilderFactory componentBuilderFactory;
-    private ASTClassFactory astClassFactory;
-    private GeneratorFactory generatorFactory;
-    private ListenerRegistrationGenerator listenerRegistrationGenerator;
-    private NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final ASTClassFactory astClassFactory;
+    private final GeneratorFactory generatorFactory;
+    private final ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
 
     @Inject
     public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory,

@@ -7,6 +7,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,33 +19,36 @@ import java.util.Map;
  */
 public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
-    private Map<Class<?>, String> methodAnnotations = new HashMap<Class<?>, String>();
+    private final Map<Class<?>, String> methodAnnotations;
 
     public ListenerAnalysis() {
-        methodAnnotations.put(OnCreate.class, "onCreate");
-        methodAnnotations.put(OnDestroy.class, "onDestroy");
-        methodAnnotations.put(OnPause.class, "onPause");
-        methodAnnotations.put(OnRestart.class, "onRestart");
-        methodAnnotations.put(OnResume.class, "onResume");
-        methodAnnotations.put(OnStart.class, "onStart");
-        methodAnnotations.put(OnStop.class, "onStop");
-        methodAnnotations.put(OnLowMemory.class, "onLowMemory");
-        methodAnnotations.put(OnSaveInstanceState.class, "onSaveInstanceState");
-        methodAnnotations.put(OnRestoreInstanceState.class, "onRestoreInstanceState");
-        methodAnnotations.put(OnBackPressed.class, "onBackPressed");
+        Map<Class<?>, String> eventListenerAnnotations = new HashMap<Class<?>, String>();
+        eventListenerAnnotations.put(OnCreate.class, "onCreate");
+        eventListenerAnnotations.put(OnDestroy.class, "onDestroy");
+        eventListenerAnnotations.put(OnPause.class, "onPause");
+        eventListenerAnnotations.put(OnRestart.class, "onRestart");
+        eventListenerAnnotations.put(OnResume.class, "onResume");
+        eventListenerAnnotations.put(OnStart.class, "onStart");
+        eventListenerAnnotations.put(OnStop.class, "onStop");
+        eventListenerAnnotations.put(OnLowMemory.class, "onLowMemory");
+        eventListenerAnnotations.put(OnSaveInstanceState.class, "onSaveInstanceState");
+        eventListenerAnnotations.put(OnRestoreInstanceState.class, "onRestoreInstanceState");
+        eventListenerAnnotations.put(OnBackPressed.class, "onBackPressed");
         //application
-        methodAnnotations.put(OnTerminate.class, "onTerminate");
-        methodAnnotations.put(OnConfigurationChanged.class, "onConfigurationChanged");
+        eventListenerAnnotations.put(OnTerminate.class, "onTerminate");
+        eventListenerAnnotations.put(OnConfigurationChanged.class, "onConfigurationChanged");
         //List Activity
-        methodAnnotations.put(OnListItemClick.class, "onListItemClick");
+        eventListenerAnnotations.put(OnListItemClick.class, "onListItemClick");
         //BroadcastReceiver
-        methodAnnotations.put(OnReceive.class, "onReceive");
+        eventListenerAnnotations.put(OnReceive.class, "onReceive");
         //Service
-        methodAnnotations.put(OnRebind.class, "onRebind");
+        eventListenerAnnotations.put(OnRebind.class, "onRebind");
         //Fragment
-        methodAnnotations.put(OnActivityCreated.class, "onActivityCreated");
-        methodAnnotations.put(OnDestroyView.class, "onDestroyView");
-        methodAnnotations.put(OnDetach.class, "onDetach");
+        eventListenerAnnotations.put(OnActivityCreated.class, "onActivityCreated");
+        eventListenerAnnotations.put(OnDestroyView.class, "onDestroyView");
+        eventListenerAnnotations.put(OnDetach.class, "onDetach");
+
+        this.methodAnnotations = Collections.unmodifiableMap(eventListenerAnnotations);
     }
 
     @Override

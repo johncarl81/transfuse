@@ -22,9 +22,9 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
  */
 public class IntentFilterFactory {
 
-    private Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider;
-    private Provider<Action> actionProvider;
-    private Provider<Category> categoryProvider;
+    private final Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider;
+    private final Provider<Action> actionProvider;
+    private final Provider<Category> categoryProvider;
 
     @Inject
     public IntentFilterFactory(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {

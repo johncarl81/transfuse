@@ -9,9 +9,9 @@ import javax.inject.Inject;
 
 public class BindProviderProcessor extends MethodProcessor {
 
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
 
     @Inject
     public BindProviderProcessor(InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,

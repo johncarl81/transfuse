@@ -10,14 +10,14 @@ import javax.inject.Provider;
  */
 public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
 
-    private AOPProxyAnalyzer aopProxyAnalyzer;
-    private InjectionAnalyzer injectionAnalyzer;
-    private ListenerAnalysis methodCallbackAnalysis;
-    private ScopeAnalysis scopeAnalysis;
-    private RegistrationAnalyzer registrationAnalysis;
-    private DeclareFieldAnalysis declareFieldAnalysis;
-    private ObservesAnalysis observesAnalysis;
-    private NonConfigurationAnalysis nonConfigurationAnalysis;
+    private final AOPProxyAnalyzer aopProxyAnalyzer;
+    private final InjectionAnalyzer injectionAnalyzer;
+    private final ListenerAnalysis methodCallbackAnalysis;
+    private final ScopeAnalysis scopeAnalysis;
+    private final RegistrationAnalyzer registrationAnalysis;
+    private final DeclareFieldAnalysis declareFieldAnalysis;
+    private final ObservesAnalysis observesAnalysis;
+    private final NonConfigurationAnalysis nonConfigurationAnalysis;
 
     @Inject
     public AnalysisRepositoryFactory(AOPProxyAnalyzer aopProxyAnalyzer,

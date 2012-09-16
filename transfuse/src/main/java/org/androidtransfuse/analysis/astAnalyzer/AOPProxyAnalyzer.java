@@ -17,7 +17,7 @@ import javax.inject.Inject;
  */
 public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
 
-    private InjectionPointFactory injectionPointFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public AOPProxyAnalyzer(InjectionPointFactory injectionPointFactory) {

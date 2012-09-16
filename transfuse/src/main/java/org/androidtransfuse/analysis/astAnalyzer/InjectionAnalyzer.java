@@ -17,7 +17,7 @@ import javax.inject.Inject;
  */
 public class InjectionAnalyzer implements ASTAnalysis {
 
-    private InjectionPointFactory injectionPointFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public InjectionAnalyzer(InjectionPointFactory injectionPointFactory) {

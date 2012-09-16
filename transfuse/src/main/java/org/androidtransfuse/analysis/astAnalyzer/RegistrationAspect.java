@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class RegistrationAspect {
 
-    private List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
+    private final List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
 
     public void addRegistrationbuilders(List<RegistrationGenerator> builders){
         registrationBuilders.addAll(builders);

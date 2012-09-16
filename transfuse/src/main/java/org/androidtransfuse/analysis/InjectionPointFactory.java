@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class InjectionPointFactory {
 
-    private ASTClassFactory astClassFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public InjectionPointFactory(ASTClassFactory astClassFactory) {

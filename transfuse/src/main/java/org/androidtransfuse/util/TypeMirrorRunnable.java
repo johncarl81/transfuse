@@ -5,7 +5,7 @@ package org.androidtransfuse.util;
  */
 public abstract class TypeMirrorRunnable<T> implements Runnable{
 
-    private T annotation;
+    private final T annotation;
 
     protected TypeMirrorRunnable(T annotation) {
         this.annotation = annotation;

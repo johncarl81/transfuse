@@ -40,14 +40,14 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
-    private ASTClassFactory astClassFactory;
-    private AnalysisContextFactory analysisContextFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private InjectionBindingBuilder injectionBindingBuilder;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private BindingRepositoryFactory bindingRepositoryFactory;
+    private final ASTClassFactory astClassFactory;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final InjectionBindingBuilder injectionBindingBuilder;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final BindingRepositoryFactory bindingRepositoryFactory;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,

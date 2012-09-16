@@ -18,14 +18,14 @@ import javax.inject.Provider;
  */
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
 
-    private ASTMatcherBuilder astMatcherBuilder;
-    private AnalysisGenerationFactory analysisGenerationFactory;
-    private ActivityAnalysis activityAnalysis;
-    private ComponentGenerator componentGenerator;
-    private BroadcastReceiverAnalysis broadcastReceiverAnalysis;
-    private ServiceAnalysis serviceAnalysis;
-    private FragmentAnalysis fragmentAnalysis;
-    private InjectorGenerator injectorGenerator;
+    private final ASTMatcherBuilder astMatcherBuilder;
+    private final AnalysisGenerationFactory analysisGenerationFactory;
+    private final ActivityAnalysis activityAnalysis;
+    private final ComponentGenerator componentGenerator;
+    private final BroadcastReceiverAnalysis broadcastReceiverAnalysis;
+    private final ServiceAnalysis serviceAnalysis;
+    private final FragmentAnalysis fragmentAnalysis;
+    private final InjectorGenerator injectorGenerator;
 
     @Inject
     public GeneratorRepositoryProvider(ASTMatcherBuilder astMatcherBuilder,

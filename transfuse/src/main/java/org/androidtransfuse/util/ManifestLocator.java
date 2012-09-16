@@ -36,8 +36,8 @@ public class ManifestLocator {
 
     private static final int MAX_PARENTS_FROM_SOURCE_FOLDER = 10;
 
-    private Filer filer;
-    private Logger logger;
+    private final Filer filer;
+    private final Logger logger;
 
     @Inject
     public ManifestLocator(Filer filer, Logger logger) {

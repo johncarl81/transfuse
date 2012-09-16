@@ -14,7 +14,7 @@ import javax.inject.Provider;
  */
 public class AOPRepositoryProvider implements Provider<AOPRepository> {
 
-    private ASTClassFactory astClassFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public AOPRepositoryProvider(ASTClassFactory astClassFactory) {

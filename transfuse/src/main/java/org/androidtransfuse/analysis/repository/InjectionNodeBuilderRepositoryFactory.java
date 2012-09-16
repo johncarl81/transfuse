@@ -40,10 +40,10 @@ import java.util.Map;
 @Singleton
 public class InjectionNodeBuilderRepositoryFactory {
 
-    private Map<ASTType, InjectionNodeBuilder> moduleConfiguration = new HashMap<ASTType, InjectionNodeBuilder>();
-    private Map<String, Class<?>> systemService;
-    private Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
-    private InjectionBindingBuilder injectionBindingBuilder;
+    private final Map<ASTType, InjectionNodeBuilder> moduleConfiguration = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final Map<String, Class<?>> systemService;
+    private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
+    private final InjectionBindingBuilder injectionBindingBuilder;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,

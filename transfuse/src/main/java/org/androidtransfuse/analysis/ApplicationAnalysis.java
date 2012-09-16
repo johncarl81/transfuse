@@ -31,15 +31,15 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
  */
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private ASTClassFactory astClassFactory;
-    private AnalysisContextFactory analysisContextFactory;
-    private ManifestManager manifestManager;
-    private InjectionBindingBuilder injectionBindingBuilder;
-    private ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final ASTClassFactory astClassFactory;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final ManifestManager manifestManager;
+    private final InjectionBindingBuilder injectionBindingBuilder;
+    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,

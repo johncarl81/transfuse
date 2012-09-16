@@ -12,12 +12,12 @@ import javax.inject.Inject;
  */
 public class BindingRepositoryFactory {
 
-    private ViewInjectionNodeBuilder viewVariableBuilder;
-    private ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
-    private SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
-    private ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
-    private PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
-    private FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder;
+    private final ViewInjectionNodeBuilder viewVariableBuilder;
+    private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
+    private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
+    private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
+    private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
+    private final FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder;
 
     @Inject
     public BindingRepositoryFactory(ViewInjectionNodeBuilder viewVariableBuilder,

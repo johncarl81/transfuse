@@ -18,7 +18,7 @@ import javax.inject.Inject;
  */
 public class NonConfigurationAnalysis extends ASTAnalysisAdaptor {
 
-    private InjectionPointFactory injectionPointFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public NonConfigurationAnalysis(InjectionPointFactory injectionPointFactory) {

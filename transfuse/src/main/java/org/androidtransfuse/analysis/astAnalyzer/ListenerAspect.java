@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class ListenerAspect {
 
-    private Map<String, Set<ASTMethod>> listeners = new HashMap<String, Set<ASTMethod>>();
+    private final Map<String, Set<ASTMethod>> listeners = new HashMap<String, Set<ASTMethod>>();
 
     public void addMethodCallback(String name, ASTMethod method) {
         if (!listeners.containsKey(name)) {

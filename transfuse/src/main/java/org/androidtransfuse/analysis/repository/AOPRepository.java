@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class AOPRepository {
 
-    private Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
+    private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
 
     public void put(ASTType annotationType, ASTType interceptor) {
         interceptorAnnotationMap.put(annotationType, interceptor);

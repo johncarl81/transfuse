@@ -13,7 +13,7 @@ import java.util.Map;
 @Singleton
 public class ProviderInjectionNodeBuilderRepository {
 
-    private Map<ASTType, InjectionNodeBuilder> providerInjectionNodeBuilders = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final Map<ASTType, InjectionNodeBuilder> providerInjectionNodeBuilders = new HashMap<ASTType, InjectionNodeBuilder>();
 
     public void addProvider(ASTType astType, InjectionNodeBuilder providerInjectionNodeBuilder) {
         providerInjectionNodeBuilders.put(astType, providerInjectionNodeBuilder);

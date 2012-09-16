@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class GeneratorRepository {
 
-    private Map<Matcher<ASTType>, Generator<ASTType>> repository = new HashMap<Matcher<ASTType>, Generator<ASTType>>();
+    private final Map<Matcher<ASTType>, Generator<ASTType>> repository = new HashMap<Matcher<ASTType>, Generator<ASTType>>();
 
     public void add(Matcher<ASTType> matcher, Generator<ASTType> generator) {
         repository.put(matcher, generator);

@@ -25,13 +25,13 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> {
 
-    private ASTClassFactory astClassFactory;
-    private Provider<Receiver> receiverProvider;
-    private ManifestManager manifestManager;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private IntentFilterFactory intentFilterBuilder;
-    private MetaDataBuilder metaDataBuilder;
-    private ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final ASTClassFactory astClassFactory;
+    private final Provider<Receiver> receiverProvider;
+    private final ManifestManager manifestManager;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final IntentFilterFactory intentFilterBuilder;
+    private final MetaDataBuilder metaDataBuilder;
+    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,

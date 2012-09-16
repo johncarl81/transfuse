@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class AOPProxyAspect {
 
-    private Map<MethodSignature, Set<InjectionNode>> methodInterceptors = new HashMap<MethodSignature, Set<InjectionNode>>();
+    private final Map<MethodSignature, Set<InjectionNode>> methodInterceptors = new HashMap<MethodSignature, Set<InjectionNode>>();
 
     public Map<ASTMethod, Set<InjectionNode>> getMethodInterceptors() {
         Map<ASTMethod, Set<InjectionNode>> unboxedMethodInterceptors = new HashMap<ASTMethod, Set<InjectionNode>>();

@@ -7,7 +7,8 @@ import javax.tools.Diagnostic;
  * @author John Ericksen
  */
 public class MessagerLogger implements Logger {
-    private Messager messager;
+
+    private final Messager messager;
 
     public MessagerLogger(Messager messager) {
         this.messager = messager;

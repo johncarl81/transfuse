@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 public class BindInterceptorProcessor extends MethodProcessor {
 
-    private AOPRepository aopRepository;
+    private final AOPRepository aopRepository;
 
     @Inject
     public BindInterceptorProcessor(AOPRepository aopRepository) {
