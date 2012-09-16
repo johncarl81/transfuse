@@ -14,9 +14,9 @@ import javax.inject.Inject;
  */
 public class RLayoutBuilder implements LayoutBuilder {
 
-    private Integer layout;
-    private RResourceReferenceBuilder rResourceReferenceBuilder;
-    private RResource rResource;
+    private final Integer layout;
+    private final RResourceReferenceBuilder rResourceReferenceBuilder;
+    private final RResource rResource;
 
     @Inject
     public RLayoutBuilder(@Assisted Integer layout, RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {

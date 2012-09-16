@@ -18,10 +18,10 @@ import java.util.Map;
  */
 public class ActivityDelegateRegistrationGenerator implements RegistrationGenerator {
 
-    private List<ASTMethod> methods;
-    private JCodeModel codeModel;
-    private UniqueVariableNamer namer;
-    private ActivityDelegateASTReference activityDelegateASTReference;
+    private final List<ASTMethod> methods;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final ActivityDelegateASTReference activityDelegateASTReference;
 
 
     @Inject

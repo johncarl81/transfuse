@@ -10,10 +10,10 @@ import org.androidtransfuse.model.TypedExpression;
 import javax.inject.Inject;
 
 public class MirroredMethodGenerator implements MethodGenerator {
-    private ASTMethod overrideMethod;
-    private boolean superCall;
-    private JCodeModel codeModel;
-    private UniqueVariableNamer variableNamer;
+    private final ASTMethod overrideMethod;
+    private final boolean superCall;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer variableNamer;
 
     @Inject
     public MirroredMethodGenerator(@Assisted ASTMethod overrideMethod, @Assisted boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {

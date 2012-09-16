@@ -25,16 +25,16 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private static final String FIND_VIEW_BY_ID = "findViewById";
     private static final String FIND_VIEW_BY_TAG = "findViewWithTag";
 
-    private JType viewType;
-    private Integer viewId;
-    private String viewTag;
-    private InjectionNode activityInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private RResourceReferenceBuilder rResourceReferenceBuilder;
-    private JCodeModel codeModel;
-    private UniqueVariableNamer variableNamer;
-    private InvocationBuilder injectionInvocationBuilder;
-    private RResource rResource;
+    private final JType viewType;
+    private final Integer viewId;
+    private final String viewTag;
+    private final InjectionNode activityInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final RResourceReferenceBuilder rResourceReferenceBuilder;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer variableNamer;
+    private final InvocationBuilder injectionInvocationBuilder;
+    private final RResource rResource;
 
     @Inject
     public ViewVariableBuilder(@Assisted @Nullable Integer viewId,

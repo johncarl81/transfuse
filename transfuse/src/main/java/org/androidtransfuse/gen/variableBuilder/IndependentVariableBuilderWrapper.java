@@ -13,7 +13,7 @@ import javax.inject.Inject;
  */
 public class IndependentVariableBuilderWrapper extends ConsistentTypeVariableBuilder {
 
-    private JExpression expression;
+    private final JExpression expression;
 
     @Inject
     public IndependentVariableBuilderWrapper(@Assisted ASTType astType,

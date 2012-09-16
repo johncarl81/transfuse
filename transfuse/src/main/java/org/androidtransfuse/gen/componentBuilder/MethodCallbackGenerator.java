@@ -22,9 +22,9 @@ import java.util.Set;
  */
 public class MethodCallbackGenerator implements ExpressionVariableDependentGenerator {
 
-    private String name;
-    private MethodGenerator methodGenerator;
-    private InvocationBuilder invocationBuilder;
+    private final String name;
+    private final MethodGenerator methodGenerator;
+    private final InvocationBuilder invocationBuilder;
 
     @Inject
     public MethodCallbackGenerator(@Assisted String name, @Assisted MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {

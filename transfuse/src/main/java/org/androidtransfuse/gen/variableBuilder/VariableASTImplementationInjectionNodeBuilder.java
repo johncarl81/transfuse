@@ -14,9 +14,9 @@ import javax.inject.Provider;
  */
 public class VariableASTImplementationInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
-    private Analyzer analyzer;
-    private ASTType implType;
-    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    private final Analyzer analyzer;
+    private final ASTType implType;
+    private final Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     @Inject
     public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType,

@@ -12,8 +12,9 @@ import javax.inject.Inject;
  */
 public class VariableInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
-    private Analyzer analyzer;
-    private VariableInjectionBuilder variableInjectionBuilder;
+    private final Analyzer analyzer;
+    private final VariableInjectionBuilder variableInjectionBuilder;
+
     @Inject
     public VariableInjectionNodeBuilder(Analyzer analyzer, VariableInjectionBuilder variableInjectionBuilder) {
         this.analyzer = analyzer;

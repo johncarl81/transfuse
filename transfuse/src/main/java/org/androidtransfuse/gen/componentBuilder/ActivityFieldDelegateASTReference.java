@@ -14,9 +14,9 @@ import javax.inject.Inject;
  */
 public class ActivityFieldDelegateASTReference implements ActivityDelegateASTReference{
 
-    private ASTField astField;
-    private InvocationBuilder invocationBuilder;
-    private JCodeModel codeModel;
+    private final ASTField astField;
+    private final InvocationBuilder invocationBuilder;
+    private final JCodeModel codeModel;
 
     @Inject
     public ActivityFieldDelegateASTReference(@Assisted ASTField astField, InvocationBuilder invocationBuilder, JCodeModel codeModel) {

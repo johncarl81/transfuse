@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 public class TypedExpressionFactory {
 
-    private ASTClassFactory astClassFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public TypedExpressionFactory(ASTClassFactory astClassFactory) {

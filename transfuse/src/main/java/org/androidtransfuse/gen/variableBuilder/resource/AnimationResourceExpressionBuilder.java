@@ -20,10 +20,10 @@ public class AnimationResourceExpressionBuilder implements ResourceExpressionBui
 
     private static final String LOAD_ANIMATION = "loadAnimation";
 
-    private JCodeModel codeModel;
-    private InjectionNode applicationInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final JCodeModel codeModel;
+    private final InjectionNode applicationInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public AnimationResourceExpressionBuilder(@Assisted InjectionNode applicationInjectionNode,

@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class MethodCallVariableBuilder implements DependentVariableBuilder{
 
-    private String methodName;
-    private List<String> arguments;
+    private final String methodName;
+    private final List<String> arguments;
 
     @Inject
     public MethodCallVariableBuilder(@Assisted String methodName,

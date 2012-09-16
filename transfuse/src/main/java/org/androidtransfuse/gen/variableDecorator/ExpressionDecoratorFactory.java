@@ -8,7 +8,7 @@ import javax.inject.Provider;
  */
 public class ExpressionDecoratorFactory implements Provider<VariableExpressionBuilder> {
 
-    private VariableExpressionBuilderFactory decoratorFactory;
+    private final VariableExpressionBuilderFactory decoratorFactory;
 
     @Inject
     public ExpressionDecoratorFactory(VariableExpressionBuilderFactory decoratorFactory) {

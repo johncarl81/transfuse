@@ -7,5 +7,6 @@ import com.sun.codemodel.JDefinedClass;
  * @author John Ericksen
  */
 public interface LayoutBuilder {
+
     void buildLayoutCall(JDefinedClass definedClass, JBlock block);
 }

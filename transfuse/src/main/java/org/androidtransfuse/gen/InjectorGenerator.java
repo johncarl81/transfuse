@@ -25,12 +25,12 @@ public class InjectorGenerator implements Generator<ASTType> {
 
     private static final String IMPL_EXT = "Impl";
 
-    private JCodeModel codeModel;
-    private InjectionFragmentGenerator injectionFragmentGenerator;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private AnalysisContextFactory analysisContextFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private InjectorRepositoryGenerator injectorRepositoryGenerator;
+    private final JCodeModel codeModel;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final InjectorRepositoryGenerator injectorRepositoryGenerator;
 
     @Inject
     public InjectorGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ComponentBuilderFactory componentBuilderFactory, AnalysisContextFactory analysisContextFactory, InjectionNodeBuilderRepository injectionNodeBuilderRepository, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, InjectorRepositoryGenerator injectorRepositoryGenerator) {

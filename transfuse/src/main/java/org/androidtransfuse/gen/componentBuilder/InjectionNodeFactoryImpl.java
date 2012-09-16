@@ -17,10 +17,10 @@ import java.util.Map;
  */
 public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
 
-    private ASTType astType;
-    private AnalysisContext context;
-    private InjectionPointFactory injectionPointFactory;
-    private InjectionBindingBuilder injectionBindingBuilder;
+    private final ASTType astType;
+    private final AnalysisContext context;
+    private final InjectionPointFactory injectionPointFactory;
+    private final InjectionBindingBuilder injectionBindingBuilder;
 
     @Inject
     public InjectionNodeFactoryImpl(@Assisted ASTType astType,

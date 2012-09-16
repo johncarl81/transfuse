@@ -13,10 +13,10 @@ import javax.inject.Inject;
  */
 public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpressionBuilderAdaptor {
 
-    private Class returnType;
-    private String accessMethod;
-    private MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
+    private final Class returnType;
+    private final String accessMethod;
+    private final MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public MethodBasedResourceExpressionBuilderAdaptor(@Assisted Class returnType,

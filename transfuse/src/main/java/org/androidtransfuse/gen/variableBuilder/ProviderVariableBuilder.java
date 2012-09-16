@@ -16,9 +16,9 @@ public class ProviderVariableBuilder implements VariableBuilder {
 
     private static final String PROVIDER_METHOD = "get";
 
-    private InjectionNode providerInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final InjectionNode providerInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public ProviderVariableBuilder(@Assisted InjectionNode providerInjectionNode,

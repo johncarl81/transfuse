@@ -19,10 +19,10 @@ public class ProviderGenerator {
 
     private static final String GET_METHOD = "get";
 
-    private static Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
-    private JCodeModel codeModel;
-    private InjectionFragmentGenerator injectionFragmentGenerator;
-    private GeneratedClassAnnotator generatedClassAnnotator;
+    private static final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
+    private final JCodeModel codeModel;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
     public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, GeneratedClassAnnotator generatedClassAnnotator) {

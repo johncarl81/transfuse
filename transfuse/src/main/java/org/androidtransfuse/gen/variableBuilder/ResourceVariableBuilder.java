@@ -13,10 +13,10 @@ import javax.inject.Inject;
 
 public class ResourceVariableBuilder implements VariableBuilder {
 
-    private int resourceId;
-    private ResourceExpressionBuilder resourceExpressionBuilder;
-    private RResourceReferenceBuilder rResourceReferenceBuilder;
-    private RResource rResource;
+    private final int resourceId;
+    private final ResourceExpressionBuilder resourceExpressionBuilder;
+    private final RResourceReferenceBuilder rResourceReferenceBuilder;
+    private final RResource rResource;
 
     @Inject
     public ResourceVariableBuilder(@Assisted int resourceId,

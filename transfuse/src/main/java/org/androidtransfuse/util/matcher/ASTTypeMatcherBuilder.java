@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class ASTTypeMatcherBuilder {
 
-    private Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
+    private final Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
 
     public ASTTypeMatcherBuilder annotatedWith(Class<? extends Annotation> annotationClass) {
         annotations.add(annotationClass);

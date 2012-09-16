@@ -26,10 +26,10 @@ import java.util.List;
 public class ManifestManager {
 
     private Application application;
-    private String manifestPackage;
-    private List<Activity> activities = new ArrayList<Activity>();
-    private List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
-    private List<Service> services = new ArrayList<Service>();
+    private final String manifestPackage;
+    private final List<Activity> activities = new ArrayList<Activity>();
+    private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
+    private final List<Service> services = new ArrayList<Service>();
 
     @Inject
     public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originialManifest){

@@ -17,8 +17,8 @@ import javax.inject.Inject;
  */
 public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private InjectionPointFactory injectionPointFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public ExtraInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,

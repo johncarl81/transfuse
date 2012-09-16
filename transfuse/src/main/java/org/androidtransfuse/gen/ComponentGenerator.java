@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
-    private JCodeModel codeModel;
-    private GeneratedClassAnnotator generatedClassAnnotator;
-    private InjectionFragmentGenerator injectionFragmentGenerator;
-    private ComponentBuilderFactory componentBuilderFactory;
+    private final JCodeModel codeModel;
+    private final GeneratedClassAnnotator generatedClassAnnotator;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public ComponentGenerator(JCodeModel codeModel,

@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class InvocationBuilder {
 
-    private JCodeModel codeModel;
-    private ASTClassFactory astClassFactory;
+    private final JCodeModel codeModel;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public InvocationBuilder(JCodeModel codeModel, ASTClassFactory astClassFactory) {

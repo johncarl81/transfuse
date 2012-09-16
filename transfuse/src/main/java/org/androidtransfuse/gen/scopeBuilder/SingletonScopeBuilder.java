@@ -22,9 +22,9 @@ import java.util.Map;
  */
 public class SingletonScopeBuilder implements VariableBuilder {
 
-    private ProviderGenerator providerGenerator;
-    private JCodeModel codeModel;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final ProviderGenerator providerGenerator;
+    private final JCodeModel codeModel;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public SingletonScopeBuilder(JCodeModel codeModel,

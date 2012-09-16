@@ -15,8 +15,8 @@ import javax.inject.Inject;
  */
 public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public PreferenceInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionPointFactory injectionPointFactory) {

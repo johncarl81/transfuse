@@ -17,10 +17,10 @@ import javax.inject.Inject;
  */
 public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private JCodeModel codeModel;
-    private InjectionPointFactory injectionPointFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private Analyzer analyzer;
+    private final JCodeModel codeModel;
+    private final InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Analyzer analyzer;
 
     @Inject
     public FragmentViewInjectionNodeBuilder(JCodeModel codeModel,

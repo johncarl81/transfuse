@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 public class ExpressionVariableBuilderWrapper implements VariableBuilder {
 
-    private TypedExpression expression;
+    private final TypedExpression expression;
 
     @Inject
     public ExpressionVariableBuilderWrapper(@Assisted TypedExpression expression) {

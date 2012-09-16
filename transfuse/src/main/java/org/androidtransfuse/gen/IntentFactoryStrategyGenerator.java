@@ -29,14 +29,14 @@ import java.util.*;
  */
 public class IntentFactoryStrategyGenerator implements ExpressionVariableDependentGenerator {
 
-    private Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
-    private JCodeModel codeModel;
-    private UniqueVariableNamer namer;
-    private ParcelableGenerator parcelableGenerator;
-    private ParcelableAnalysis parcelableAnalysis;
-    private GeneratedClassAnnotator generatedClassAnnotator;
-    private ASTClassFactory astClassFactory;
-    private Map<ASTPrimitiveType, String> methodMapping = new EnumMap<ASTPrimitiveType, String>(ASTPrimitiveType.class);
+    private final Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final ParcelableGenerator parcelableGenerator;
+    private final ParcelableAnalysis parcelableAnalysis;
+    private final GeneratedClassAnnotator generatedClassAnnotator;
+    private final ASTClassFactory astClassFactory;
+    private final Map<ASTPrimitiveType, String> methodMapping;
 
     @Inject
     public IntentFactoryStrategyGenerator(@Assisted Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass,
@@ -53,6 +53,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         this.generatedClassAnnotator = generatedClassAnnotator;
         this.astClassFactory = astClassFactory;
 
+        Map<ASTPrimitiveType, String> methodMapping = new EnumMap<ASTPrimitiveType, String>(ASTPrimitiveType.class);
         methodMapping.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
         methodMapping.put(ASTPrimitiveType.BYTE, "putByte");
         methodMapping.put(ASTPrimitiveType.CHAR, "putChar");
@@ -61,6 +62,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         methodMapping.put(ASTPrimitiveType.INT, "putInt");
         methodMapping.put(ASTPrimitiveType.LONG, "putLong");
         methodMapping.put(ASTPrimitiveType.SHORT, "putShort");
+
+        this.methodMapping = Collections.unmodifiableMap(methodMapping);
     }
 
     @Override

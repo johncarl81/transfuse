@@ -8,8 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public class AnalysisGeneration<T> implements Generator<ASTType> {
 
-    private Analysis<T> analysis;
-    private Generator<T> generator;
+    private final Analysis<T> analysis;
+    private final Generator<T> generator;
 
     public AnalysisGeneration(Analysis<T> analysis,
                               Generator<T> generator) {

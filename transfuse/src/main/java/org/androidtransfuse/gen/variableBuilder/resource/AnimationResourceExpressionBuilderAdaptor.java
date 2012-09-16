@@ -12,8 +12,8 @@ import javax.inject.Inject;
  */
 public class AnimationResourceExpressionBuilderAdaptor implements ResourceExpressionBuilderAdaptor {
 
-    private MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
+    private final MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public AnimationResourceExpressionBuilderAdaptor(MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory,

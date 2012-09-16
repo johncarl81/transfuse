@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class ContextScopeComponentBuilder implements ExpressionVariableDependentGenerator{
 
-    private JCodeModel codeModel;
-    private UniqueVariableNamer namer;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
 
     @Inject
     public ContextScopeComponentBuilder(JCodeModel codeModel, UniqueVariableNamer namer) {

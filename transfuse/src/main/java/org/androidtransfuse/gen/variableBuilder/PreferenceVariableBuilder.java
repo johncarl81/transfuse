@@ -19,11 +19,11 @@ import java.util.Map;
  */
 public class PreferenceVariableBuilder implements VariableBuilder {
 
-    private ASTType preferenceType;
-    private String preferenceName;
-    private InjectionNode preferenceManagerInjectionNode;
-    private TypedExpressionFactory typedExpressionFactory;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
+    private final ASTType preferenceType;
+    private final String preferenceName;
+    private final InjectionNode preferenceManagerInjectionNode;
+    private final TypedExpressionFactory typedExpressionFactory;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
 
     private Map<ASTType, PrefGetBuilder> accessorMethods = new HashMap<ASTType, PrefGetBuilder>();
 

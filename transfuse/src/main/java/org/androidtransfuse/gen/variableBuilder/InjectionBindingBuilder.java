@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class InjectionBindingBuilder {
 
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private ASTClassFactory astClassFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
     public InjectionBindingBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, ASTClassFactory astClassFactory) {

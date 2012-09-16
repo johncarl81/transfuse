@@ -17,7 +17,7 @@ public class InjectorRepositoryGenerator {
     private static final String GET_METHOD = "get";
     private static final String MAP_NAME = "injectors";
 
-    private JCodeModel codeModel;
+    private final JCodeModel codeModel;
 
     private JBlock injectorRegistrationBlock = null;
     private JVar registrationMap = null;

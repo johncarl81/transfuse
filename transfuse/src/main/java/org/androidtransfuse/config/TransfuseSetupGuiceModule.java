@@ -13,8 +13,8 @@ import javax.annotation.processing.Filer;
  */
 public class TransfuseSetupGuiceModule extends AbstractModule {
 
-    private Logger logger;
-    private Filer filer;
+    private final Logger logger;
+    private final Filer filer;
 
     public TransfuseSetupGuiceModule(Logger logger, Filer filer) {
         this.logger = logger;

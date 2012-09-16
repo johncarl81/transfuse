@@ -24,11 +24,11 @@ import java.util.Map;
  */
 public class ContextScopeVariableBuilder implements VariableBuilder {
 
-    private ProviderGenerator providerGenerator;
-    private JCodeModel codeModel;
-    private TypedExpressionFactory typedExpressionFactory;
-    private InjectionNode contextScopeHolder;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
+    private final ProviderGenerator providerGenerator;
+    private final JCodeModel codeModel;
+    private final TypedExpressionFactory typedExpressionFactory;
+    private final InjectionNode contextScopeHolder;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
     public ContextScopeVariableBuilder(@Assisted InjectionNode contextScopeHolder,

@@ -14,7 +14,7 @@ import java.util.Map;
 @Singleton
 public class UniqueVariableNamer {
 
-    private Map<String, Integer> nameMap = new HashMap<String, Integer>();
+    private final Map<String, Integer> nameMap = new HashMap<String, Integer>();
 
     public String generateName(Class clazz) {
         return generateName(clazz.getName(), true);

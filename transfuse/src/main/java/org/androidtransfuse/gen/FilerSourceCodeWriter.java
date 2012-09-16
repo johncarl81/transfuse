@@ -19,8 +19,8 @@ import java.util.HashSet;
  */
 public class FilerSourceCodeWriter extends CodeWriter {
 
-    private Filer filer;
-    private Collection<OutputStream> openStreams = new HashSet<OutputStream>();
+    private final Filer filer;
+    private final Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
     public FilerSourceCodeWriter(Filer filer) {

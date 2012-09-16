@@ -17,9 +17,9 @@ import javax.inject.Provider;
  */
 public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuilder {
 
-    private ProviderGenerator providerGenerator;
-    private UniqueVariableNamer variableNamer;
-    private InjectionNode providerTypeInjectionNode;
+    private final ProviderGenerator providerGenerator;
+    private final UniqueVariableNamer variableNamer;
+    private final InjectionNode providerTypeInjectionNode;
 
     @Inject
     public GeneratedProviderVariableBuilder(@Assisted InjectionNode providerTypeInjectionNode,

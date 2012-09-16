@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public class IndependentInjectionNodeBuilder implements InjectionNodeBuilder {
 
-    private VariableBuilder variableBuilder;
+    private final VariableBuilder variableBuilder;
 
     @Inject
     public IndependentInjectionNodeBuilder(@Assisted VariableBuilder variableBuilder) {

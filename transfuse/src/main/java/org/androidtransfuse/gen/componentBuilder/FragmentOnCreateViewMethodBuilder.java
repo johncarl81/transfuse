@@ -21,12 +21,12 @@ import javax.inject.Inject;
  */
 public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
-    private JCodeModel codeModel;
-    private ASTMethod onCreateViewMethod;
-    private UniqueVariableNamer namer;
-    private ASTClassFactory astClassFactory;
-    private Integer layout;
-    private RResourceReferenceBuilder rResourceReferenceBuilder;
+    private final JCodeModel codeModel;
+    private final ASTMethod onCreateViewMethod;
+    private final UniqueVariableNamer namer;
+    private final ASTClassFactory astClassFactory;
+    private final Integer layout;
+    private final RResourceReferenceBuilder rResourceReferenceBuilder;
 
     @Inject
     public FragmentOnCreateViewMethodBuilder(@Assisted @Nullable Integer layout,
@@ -45,7 +45,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(View.class), "onCreateView");
+        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(View.class), "onCreateView");
         MethodDescriptor onCreateMethodDescriptor = new MethodDescriptor(onCreateMethod, onCreateViewMethod);
 
         for (ASTParameter methodArgument : onCreateViewMethod.getParameters()) {

@@ -25,10 +25,10 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
 
     private static final String SUPER_REF = "super";
 
-    private JCodeModel codeModel;
-    private UniqueVariableNamer namer;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public ObservesExpressionDecorator(@Assisted VariableExpressionBuilder decorated,

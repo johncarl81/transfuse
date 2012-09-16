@@ -19,9 +19,9 @@ import java.util.Map;
  */
 public class InjectionFragmentGenerator {
 
-    private InjectionBuilderContextFactory injectionBuilderContextFactory;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private VirtualProxyGenerator virtualProxyGenerator;
+    private final InjectionBuilderContextFactory injectionBuilderContextFactory;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final VirtualProxyGenerator virtualProxyGenerator;
 
     @Inject
     public InjectionFragmentGenerator(InjectionBuilderContextFactory injectionBuilderContextFactory,

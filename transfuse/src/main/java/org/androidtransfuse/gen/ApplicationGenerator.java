@@ -14,10 +14,10 @@ import javax.inject.Provider;
  */
 public class ApplicationGenerator implements Generator<ASTType> {
 
-    private ApplicationAnalysis applicationAnalysis;
-    private Provider<ComponentProcessor> componentProcessorProvider;
-    private Provider<TransfuseAssembler> transfuseAssemblerProvider;
-    private AnalysisGeneration<ComponentDescriptor> analysisGeneration;
+    private final ApplicationAnalysis applicationAnalysis;
+    private final Provider<ComponentProcessor> componentProcessorProvider;
+    private final Provider<TransfuseAssembler> transfuseAssemblerProvider;
+    private final AnalysisGeneration<ComponentDescriptor> analysisGeneration;
 
     @Inject
     public ApplicationGenerator(ApplicationAnalysis applicationAnalysis,

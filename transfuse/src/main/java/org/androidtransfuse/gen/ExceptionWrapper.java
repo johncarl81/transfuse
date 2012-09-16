@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ExceptionWrapper {
 
-    private JCodeModel codeModel;
+    private final JCodeModel codeModel;
 
     @Inject
     public ExceptionWrapper(JCodeModel codeModel) {

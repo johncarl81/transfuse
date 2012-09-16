@@ -15,7 +15,7 @@ import java.util.HashSet;
 public class ResourceCodeWriter extends CodeWriter {
 
     private final Filer filer;
-    private Collection<OutputStream> openStreams = new HashSet<OutputStream>();
+    private final Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
     public ResourceCodeWriter(Filer filer) {

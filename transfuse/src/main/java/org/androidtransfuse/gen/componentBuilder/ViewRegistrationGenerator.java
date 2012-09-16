@@ -18,11 +18,11 @@ import java.util.Map;
  */
 public class ViewRegistrationGenerator implements RegistrationGenerator {
 
-    private InjectionNode viewInjectionNode;
-    private String method;
-    private InjectionNode injectionNode;
-    private ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder;
-    private InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InjectionNode viewInjectionNode;
+    private final String method;
+    private final InjectionNode injectionNode;
+    private final ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
 
     @Inject
     public ViewRegistrationGenerator(@Assisted("viewInjectionNode") InjectionNode viewInjectionNode,

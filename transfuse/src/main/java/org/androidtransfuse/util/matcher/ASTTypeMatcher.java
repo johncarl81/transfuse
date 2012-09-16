@@ -3,6 +3,7 @@ package org.androidtransfuse.util.matcher;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,10 +14,10 @@ import java.util.Set;
  */
 public class ASTTypeMatcher implements Matcher<ASTType> {
 
-    private Set<Class<? extends Annotation>> annotations;
+    private final Set<Class<? extends Annotation>> annotations;
 
     public ASTTypeMatcher(Set<Class<? extends Annotation>> annotations) {
-        this.annotations = new HashSet<Class<? extends Annotation>>(annotations);
+        this.annotations = Collections.unmodifiableSet(new HashSet<Class<? extends Annotation>>(annotations));
     }
 
     public boolean matches(ASTType astType) {

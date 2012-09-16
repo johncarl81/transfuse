@@ -18,9 +18,9 @@ import javax.inject.Inject;
  */
 public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private JCodeModel codeModel;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private ResourceExpressionBuilderFactory resourceExpressionBuilderFactory;
+    private final JCodeModel codeModel;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final ResourceExpressionBuilderFactory resourceExpressionBuilderFactory;
 
     @Inject
     public ResourceInjectionNodeBuilder(JCodeModel codeModel, VariableInjectionBuilderFactory variableInjectionBuilderFactory, ResourceExpressionBuilderFactory resourceExpressionBuilderFactory) {

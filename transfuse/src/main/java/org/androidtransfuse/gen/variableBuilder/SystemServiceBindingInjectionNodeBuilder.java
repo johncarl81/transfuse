@@ -15,8 +15,8 @@ import javax.inject.Inject;
  */
 public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private InjectionPointFactory injectionPointFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public SystemServiceBindingInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,

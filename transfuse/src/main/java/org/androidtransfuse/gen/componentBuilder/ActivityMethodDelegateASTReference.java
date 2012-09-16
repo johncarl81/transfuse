@@ -16,8 +16,8 @@ import java.util.Collections;
  */
 public class ActivityMethodDelegateASTReference implements ActivityDelegateASTReference {
 
-    private ASTMethod method;
-    private InvocationBuilder invocationBuilder;
+    private final ASTMethod method;
+    private final InvocationBuilder invocationBuilder;
 
     @Inject
     public ActivityMethodDelegateASTReference(@Assisted ASTMethod method, InvocationBuilder invocationBuilder) {

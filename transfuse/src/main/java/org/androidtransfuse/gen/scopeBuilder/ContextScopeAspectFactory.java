@@ -15,8 +15,8 @@ import javax.inject.Inject;
  */
 public class ContextScopeAspectFactory implements ScopeAspectFactory{
 
-    private VariableInjectionBuilderFactory injectionBuilderFactory;
-    private InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory injectionBuilderFactory;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public ContextScopeAspectFactory(VariableInjectionBuilderFactory injectionBuilderFactory,

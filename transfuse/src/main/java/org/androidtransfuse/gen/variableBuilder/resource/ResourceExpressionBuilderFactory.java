@@ -28,9 +28,9 @@ public class ResourceExpressionBuilderFactory {
     private static final String GET_INTARRAY = "getIntArray";
     private static final String GET_MOVIE = "getMovie";
 
-    private JCodeModel codeModel;
-    private Map<JType, ResourceExpressionBuilderAdaptor> resourceExpressionBuilderMap = new HashMap<JType, ResourceExpressionBuilderAdaptor>();
-    private MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory;
+    private final JCodeModel codeModel;
+    private final Map<JType, ResourceExpressionBuilderAdaptor> resourceExpressionBuilderMap = new HashMap<JType, ResourceExpressionBuilderAdaptor>();
+    private final MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory;
 
     @Inject
     public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, JCodeModel codeModel) {

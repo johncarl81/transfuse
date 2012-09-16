@@ -17,9 +17,9 @@ public class SystemServiceVariableBuilder extends ConsistentTypeVariableBuilder 
 
     private static final String GET_SYSTEM_SERVICE = "getSystemService";
 
-    private String systemService;
-    private InjectionNode contextInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
+    private final String systemService;
+    private final InjectionNode contextInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
     public SystemServiceVariableBuilder(@Assisted String systemService,

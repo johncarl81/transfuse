@@ -19,9 +19,9 @@ import java.util.Map;
  */
 public class LayoutHandlerBuilder implements LayoutBuilder {
 
-    private InjectionFragmentGenerator injectionFragmentGenerator;
-    private InjectionNode layoutHandlerInjectionNode;
-    private Logger logger;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InjectionNode layoutHandlerInjectionNode;
+    private final Logger logger;
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,

@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 public class SingletonScopeAspectFactory implements ScopeAspectFactory {
 
-    private SingletonScopeBuilder singletonScopeBuilder;
+    private final SingletonScopeBuilder singletonScopeBuilder;
 
     @Inject
     public SingletonScopeAspectFactory(SingletonScopeBuilder singletonScopeBuilder) {

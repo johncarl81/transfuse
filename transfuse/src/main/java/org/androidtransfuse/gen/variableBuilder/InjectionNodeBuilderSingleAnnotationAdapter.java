@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public abstract class InjectionNodeBuilderSingleAnnotationAdapter implements InjectionNodeBuilder {
 
-    private Class<? extends Annotation> annotationClass;
+    private final Class<? extends Annotation> annotationClass;
 
     public InjectionNodeBuilderSingleAnnotationAdapter(Class<? extends Annotation> annotationClass) {
         this.annotationClass = annotationClass;

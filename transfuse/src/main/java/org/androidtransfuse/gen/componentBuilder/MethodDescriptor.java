@@ -14,10 +14,10 @@ import java.util.Map;
  */
 public class MethodDescriptor {
 
-    private JMethod method;
-    private Map<ASTParameter, TypedExpression> parameterMap = new HashMap<ASTParameter, TypedExpression>();
-    private Map<ASTType, TypedExpression> typeMap = new HashMap<ASTType, TypedExpression>();
-    private ASTMethod astMethod;
+    private final JMethod method;
+    private final Map<ASTParameter, TypedExpression> parameterMap = new HashMap<ASTParameter, TypedExpression>();
+    private final Map<ASTType, TypedExpression> typeMap = new HashMap<ASTType, TypedExpression>();
+    private final ASTMethod astMethod;
 
     public MethodDescriptor(JMethod method, ASTMethod astMethod) {
         this.method = method;

@@ -37,14 +37,14 @@ public class ParcelableGenerator {
     private static final String DESCRIBE_CONTENTS = "describeContents";
     private static final String GET_WRAPPED = "getWrapped";
 
-    private JCodeModel codeModel;
-    private ParcelableAnalysis parcelableAnalysis;
-    private UniqueVariableNamer namer;
-    private ASTClassFactory astClassFactory;
-    private Map<ASTType, JDefinedClass> parceableMap = new HashMap<ASTType, JDefinedClass>();
-    private Map<ASTType, ReadWritePair> arrayParceableModfier = new HashMap<ASTType, ReadWritePair>();
-    private Map<ASTType, ReadWritePair> parceableModifier = new HashMap<ASTType, ReadWritePair>();
-    private Map<ASTType, ReadWritePair> classLoaderModifier = new HashMap<ASTType, ReadWritePair>();
+    private final JCodeModel codeModel;
+    private final ParcelableAnalysis parcelableAnalysis;
+    private final UniqueVariableNamer namer;
+    private final ASTClassFactory astClassFactory;
+    private final Map<ASTType, JDefinedClass> parceableMap = new HashMap<ASTType, JDefinedClass>();
+    private final Map<ASTType, ReadWritePair> arrayParceableModfier = new HashMap<ASTType, ReadWritePair>();
+    private final Map<ASTType, ReadWritePair> parceableModifier = new HashMap<ASTType, ReadWritePair>();
+    private final Map<ASTType, ReadWritePair> classLoaderModifier = new HashMap<ASTType, ReadWritePair>();
 
     @Inject
     public ParcelableGenerator(JCodeModel codeModel, ParcelableAnalysis parcelableAnalysis, UniqueVariableNamer namer, ASTClassFactory astClassFactory) {

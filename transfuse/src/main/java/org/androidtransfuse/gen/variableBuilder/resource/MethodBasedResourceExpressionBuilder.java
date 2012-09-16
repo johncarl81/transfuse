@@ -13,11 +13,11 @@ import javax.inject.Inject;
 
 public class MethodBasedResourceExpressionBuilder implements ResourceExpressionBuilder {
 
-    private Class returnType;
-    private String accessMethod;
-    private InjectionNode resourcesInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final Class returnType;
+    private final String accessMethod;
+    private final InjectionNode resourcesInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public MethodBasedResourceExpressionBuilder(@Assisted Class returnType,

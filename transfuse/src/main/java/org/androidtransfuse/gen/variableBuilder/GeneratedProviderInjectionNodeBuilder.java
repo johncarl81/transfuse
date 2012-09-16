@@ -16,10 +16,10 @@ import java.util.Collection;
  */
 public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuilder {
 
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
-    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
-    private InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
+    private final Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    private final InjectionPointFactory injectionPointFactory;
 
     @Inject
     public GeneratedProviderInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory,

@@ -11,9 +11,9 @@ import org.androidtransfuse.model.TypedExpression;
  */
 public abstract class ConsistentTypeVariableBuilder implements VariableBuilder {
 
-    private TypedExpressionFactory typedExpressionFactory;
-    private Class clazz;
-    private ASTType astType;
+    private final TypedExpressionFactory typedExpressionFactory;
+    private final Class clazz;
+    private final ASTType astType;
 
     public ConsistentTypeVariableBuilder(Class clazz, TypedExpressionFactory typedExpressionFactory) {
         this.clazz = clazz;

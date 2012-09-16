@@ -5,7 +5,7 @@ package org.androidtransfuse.gen.variableDecorator;
  */
 public abstract class VariableExpressionBuilderDecorator implements VariableExpressionBuilder {
 
-    private VariableExpressionBuilder decorated;
+    private final VariableExpressionBuilder decorated;
 
     public VariableExpressionBuilderDecorator(VariableExpressionBuilder decorated) {
         this.decorated = decorated;

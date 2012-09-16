@@ -24,11 +24,11 @@ import java.util.Map;
  */
 public class NonConfigurationInstanceGenerator implements ExpressionVariableDependentGenerator {
 
-    private ASTClassFactory astClassFactory;
-    private UniqueVariableNamer namer;
-    private JCodeModel codeModel;
-    private InvocationBuilder invocationBuilder;
-    private TypedExpressionFactory typeExpressionFactory;
+    private final ASTClassFactory astClassFactory;
+    private final UniqueVariableNamer namer;
+    private final JCodeModel codeModel;
+    private final InvocationBuilder invocationBuilder;
+    private final TypedExpressionFactory typeExpressionFactory;
 
     @Inject
     public NonConfigurationInstanceGenerator(ASTClassFactory astClassFactory, UniqueVariableNamer namer, JCodeModel codeModel, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {

@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class OnCreateMethodBuilder implements MethodBuilder {
 
-    private JCodeModel codeModel;
-    private ASTMethod onCreateASTMethod;
-    private UniqueVariableNamer namer;
-    private LayoutBuilder layoutBuilder;
+    private final JCodeModel codeModel;
+    private final ASTMethod onCreateASTMethod;
+    private final UniqueVariableNamer namer;
+    private final LayoutBuilder layoutBuilder;
 
     @Inject
     public OnCreateMethodBuilder(@Assisted ASTMethod onCreateASTMethod, @Assisted LayoutBuilder layoutBuilder, JCodeModel codeModel, UniqueVariableNamer namer) {

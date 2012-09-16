@@ -22,13 +22,13 @@ import java.util.Map;
  */
 public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFactory {
 
-    private AnalysisContextFactory analysisContextFactory;
-    private InjectionPointFactory injectionPointFactory;
-    private InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private ASTType astType;
-    private InjectionBindingBuilder injectionBindingBuilder;
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final InjectionPointFactory injectionPointFactory;
+    private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
+    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final ASTType astType;
+    private final InjectionBindingBuilder injectionBindingBuilder;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
 
     @Inject
     public BroadcastReceiverInjectionNodeFactory(@Assisted ASTType astType,

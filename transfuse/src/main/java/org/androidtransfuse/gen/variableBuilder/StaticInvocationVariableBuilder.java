@@ -11,9 +11,9 @@ import javax.inject.Inject;
  */
 public class StaticInvocationVariableBuilder implements DependentVariableBuilder{
 
-    private Class invocationTarget;
-    private String staticInvocation;
-    private JCodeModel codeModel;
+    private final Class invocationTarget;
+    private final String staticInvocation;
+    private final JCodeModel codeModel;
 
     @Inject
     public StaticInvocationVariableBuilder(@Assisted Class invocationTarget,

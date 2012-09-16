@@ -18,13 +18,13 @@ import javax.inject.Inject;
  */
 public class VariableInjectionBuilder implements VariableBuilder {
 
-    private JCodeModel codeModel;
-    private UniqueVariableNamer variableNamer;
-    private InvocationBuilder injectionInvocationBuilder;
-    private AOPProxyGenerator aopProxyGenerator;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
-    private ExceptionWrapper exceptionWrapper;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer variableNamer;
+    private final InvocationBuilder injectionInvocationBuilder;
+    private final AOPProxyGenerator aopProxyGenerator;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
+    private final ExceptionWrapper exceptionWrapper;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,

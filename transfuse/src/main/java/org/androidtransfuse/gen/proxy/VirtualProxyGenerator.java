@@ -32,11 +32,11 @@ public class VirtualProxyGenerator {
     private static final String CHECK_DELEGATE = "checkDelegate";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
 
-    private JCodeModel codeModel;
-    private UniqueVariableNamer variableNamer;
-    private GeneratedClassAnnotator generatedClassAnnotator;
-    private ASTClassFactory astClassFactory;
-    private Map<ASTType, ProxyDescriptor> descriptorCache = new HashMap<ASTType, ProxyDescriptor>();
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer variableNamer;
+    private final GeneratedClassAnnotator generatedClassAnnotator;
+    private final ASTClassFactory astClassFactory;
+    private final Map<ASTType, ProxyDescriptor> descriptorCache = new HashMap<ASTType, ProxyDescriptor>();
 
     @Inject
     public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator, ASTClassFactory astClassFactory) {

@@ -15,6 +15,7 @@ import java.io.Writer;
  * @author John Ericksen
  */
 public class XStreamProvider implements Provider<XStream> {
+
     @Override
     public XStream get() {
         XStream xStream = new XStream(new FourSpaceTabXppDriver());

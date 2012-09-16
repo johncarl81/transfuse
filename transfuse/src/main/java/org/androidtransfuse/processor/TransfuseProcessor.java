@@ -17,8 +17,8 @@ import java.util.Collection;
 @Singleton
 public class TransfuseProcessor {
 
-    private ModuleProcessor moduleProcessor;
-    private Provider<ApplicationGenerator> applicationProcessorProvider;
+    private final ModuleProcessor moduleProcessor;
+    private final Provider<ApplicationGenerator> applicationProcessorProvider;
 
     @Inject
     public TransfuseProcessor(ModuleProcessor moduleProcessor,

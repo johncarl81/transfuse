@@ -16,10 +16,10 @@ import java.util.Map;
  */
 public class InjectionBuilderContext {
 
-    private Map<InjectionNode, TypedExpression> variableMap;
-    private JBlock block;
-    private JDefinedClass definedClass;
-    private List<InjectionNode> proxyLoad = new ArrayList<InjectionNode>();
+    private final Map<InjectionNode, TypedExpression> variableMap;
+    private final JBlock block;
+    private final JDefinedClass definedClass;
+    private final List<InjectionNode> proxyLoad = new ArrayList<InjectionNode>();
 
     @Inject
     public InjectionBuilderContext(@Assisted Map<InjectionNode, TypedExpression> variableMap,

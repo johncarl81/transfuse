@@ -19,9 +19,9 @@ import java.util.Map;
  */
 public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDecorator {
 
-    private VirtualProxyGenerator virtualProxyGenerator;
-    private ProxyVariableBuilder proxyVariableBuilder;
-    private TypedExpressionFactory typedExpressionFactory;
+    private final VirtualProxyGenerator virtualProxyGenerator;
+    private final ProxyVariableBuilder proxyVariableBuilder;
+    private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public VirtualProxyExpressionDecorator(@Assisted VariableExpressionBuilder decorated,

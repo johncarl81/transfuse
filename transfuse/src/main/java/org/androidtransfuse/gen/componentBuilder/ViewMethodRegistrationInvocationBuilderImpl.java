@@ -18,8 +18,8 @@ import java.util.Collections;
  */
 public class ViewMethodRegistrationInvocationBuilderImpl implements ViewRegistrationInvocationBuilder {
 
-    private InvocationBuilder invocationBuilder;
-    private ASTMethod getterMethod;
+    private final InvocationBuilder invocationBuilder;
+    private final ASTMethod getterMethod;
 
     @Inject
     public ViewMethodRegistrationInvocationBuilderImpl(@Assisted ASTMethod getterMethod, InvocationBuilder invocationBuilder) {

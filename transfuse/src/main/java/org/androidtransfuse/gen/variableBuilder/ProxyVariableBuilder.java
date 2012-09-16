@@ -14,7 +14,7 @@ import javax.inject.Inject;
  */
 public class ProxyVariableBuilder {
 
-    private UniqueVariableNamer variableNamer;
+    private final UniqueVariableNamer variableNamer;
 
     @Inject
     public ProxyVariableBuilder(UniqueVariableNamer variableNamer) {

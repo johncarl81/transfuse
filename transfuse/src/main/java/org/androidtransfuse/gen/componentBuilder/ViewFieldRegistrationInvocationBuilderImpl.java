@@ -16,9 +16,9 @@ import javax.inject.Inject;
  */
 public class ViewFieldRegistrationInvocationBuilderImpl implements ViewRegistrationInvocationBuilder{
 
-    private InvocationBuilder invocationBuilder;
-    private ASTField astField;
-    private JCodeModel codeModel;
+    private final InvocationBuilder invocationBuilder;
+    private final ASTField astField;
+    private final JCodeModel codeModel;
 
     @Inject
     public ViewFieldRegistrationInvocationBuilderImpl(@Assisted ASTField astField, InvocationBuilder invocationBuilder, JCodeModel codeModel) {

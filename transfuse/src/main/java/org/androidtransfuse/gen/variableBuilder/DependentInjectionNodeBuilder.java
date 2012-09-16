@@ -15,11 +15,11 @@ import java.util.Collection;
  */
 public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
 
-    private Class dependency;
-    private Class returnType;
-    private DependentVariableBuilder variableBuilder;
-    private InjectionPointFactory injectionPointFactory;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Class dependency;
+    private final Class returnType;
+    private final DependentVariableBuilder variableBuilder;
+    private final InjectionPointFactory injectionPointFactory;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public DependentInjectionNodeBuilder(@Assisted("dependency") Class dependency,

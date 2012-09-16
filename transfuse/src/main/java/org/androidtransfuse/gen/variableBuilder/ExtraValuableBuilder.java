@@ -22,12 +22,12 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     private static final String GET_INTENT = "getIntent";
     private static final String GET_EXTRAS = "getExtras";
 
-    private boolean wrapped;
-    private String extraId;
-    private InjectionNode activityInjectionNode;
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private boolean nullable;
-    private JCodeModel codeModel;
+    private final boolean wrapped;
+    private final String extraId;
+    private final InjectionNode activityInjectionNode;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final boolean nullable;
+    private final JCodeModel codeModel;
 
     @Inject
     public ExtraValuableBuilder(@Assisted String extraId,

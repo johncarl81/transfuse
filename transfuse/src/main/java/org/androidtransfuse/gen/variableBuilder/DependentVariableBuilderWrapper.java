@@ -14,9 +14,9 @@ import javax.inject.Inject;
  */
 public class DependentVariableBuilderWrapper extends ConsistentTypeVariableBuilder {
 
-    private InjectionExpressionBuilder injectionExpressionBuilder;
-    private InjectionNode dependency;
-    private DependentVariableBuilder dependentVariableBuilder;
+    private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final InjectionNode dependency;
+    private final DependentVariableBuilder dependentVariableBuilder;
 
     @Inject
     public DependentVariableBuilderWrapper(@Assisted InjectionNode dependency,

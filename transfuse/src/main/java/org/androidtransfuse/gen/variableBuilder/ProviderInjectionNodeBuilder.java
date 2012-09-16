@@ -13,9 +13,9 @@ import javax.inject.Inject;
  */
 public class ProviderInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
 
-    private ASTType providerType;
-    private Analyzer analyzer;
-    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final ASTType providerType;
+    private final Analyzer analyzer;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public ProviderInjectionNodeBuilder(@Assisted ASTType providerType,

@@ -7,7 +7,7 @@ import com.sun.codemodel.JDefinedClass;
  */
 public class ExistingMethod implements MethodGenerator {
 
-    private MethodDescriptor methodDescriptor;
+    private final MethodDescriptor methodDescriptor;
 
     public ExistingMethod(MethodDescriptor methodDescriptor) {
         this.methodDescriptor = methodDescriptor;

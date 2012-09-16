@@ -17,9 +17,9 @@ import javax.inject.Inject;
  */
 public class OnReceiveMethodBuilder implements MethodBuilder {
 
-    private JCodeModel codeModel;
-    private ASTClassFactory astClassFactory;
-    private UniqueVariableNamer namer;
+    private final JCodeModel codeModel;
+    private final ASTClassFactory astClassFactory;
+    private final UniqueVariableNamer namer;
 
     @Inject
     public OnReceiveMethodBuilder(JCodeModel codeModel, ASTClassFactory astClassFactory, UniqueVariableNamer namer) {

@@ -28,8 +28,8 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String DEFAULT_BINDING = "defaultBinding";
 
-    private RResource rResource;
-    private Manifest manifest;
+    private final RResource rResource;
+    private final Manifest manifest;
 
     public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest) {
         this.rResource = rResource;

@@ -17,11 +17,11 @@ import java.util.Collections;
  */
 public class TransfuseAssembler {
 
-    private JCodeModel codeModel;
-    private Logger logger;
-    private Merger merger;
-    private Manifest originalManifest;
-    private ManifestManager manifestManager;
+    private final JCodeModel codeModel;
+    private final Logger logger;
+    private final Merger merger;
+    private final Manifest originalManifest;
+    private final ManifestManager manifestManager;
 
     @Inject
     public TransfuseAssembler(JCodeModel codeModel, Logger logger, Merger merger,

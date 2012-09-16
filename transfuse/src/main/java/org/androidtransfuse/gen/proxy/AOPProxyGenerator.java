@@ -26,11 +26,11 @@ public class AOPProxyGenerator {
     private static final String SUPER_REF = "super";
     private static final String CLASS_GET_METHOD = "getMethod";
 
-    private JCodeModel codeModel;
-    private UniqueVariableNamer namer;
-    private Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
-    private Logger logger;
-    private GeneratedClassAnnotator generatedClassAnnotator;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
+    private final Logger logger;
+    private final GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
     public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, GeneratedClassAnnotator generatedClassAnnotator) {

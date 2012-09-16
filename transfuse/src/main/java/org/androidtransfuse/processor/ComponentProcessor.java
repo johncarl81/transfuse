@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ComponentProcessor {
 
-    private GeneratorRepository generatorRepository;
+    private final GeneratorRepository generatorRepository;
 
     @Inject
     public ComponentProcessor(GeneratorRepository generatorRepository) {
