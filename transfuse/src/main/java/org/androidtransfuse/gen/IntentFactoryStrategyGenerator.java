@@ -50,17 +50,17 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         this.parcelableAnalysis = parcelableAnalysis;
         this.astClassFactory = astClassFactory;
 
-        ImmutableMap.Builder<ASTPrimitiveType, String> methodMapping = ImmutableMap.builder();
-        methodMapping.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
-        methodMapping.put(ASTPrimitiveType.BYTE, "putByte");
-        methodMapping.put(ASTPrimitiveType.CHAR, "putChar");
-        methodMapping.put(ASTPrimitiveType.DOUBLE, "putDouble");
-        methodMapping.put(ASTPrimitiveType.FLOAT, "putFloat");
-        methodMapping.put(ASTPrimitiveType.INT, "putInt");
-        methodMapping.put(ASTPrimitiveType.LONG, "putLong");
-        methodMapping.put(ASTPrimitiveType.SHORT, "putShort");
+        ImmutableMap.Builder<ASTPrimitiveType, String> methodMappingBuilder = ImmutableMap.builder();
+        methodMappingBuilder.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
+        methodMappingBuilder.put(ASTPrimitiveType.BYTE, "putByte");
+        methodMappingBuilder.put(ASTPrimitiveType.CHAR, "putChar");
+        methodMappingBuilder.put(ASTPrimitiveType.DOUBLE, "putDouble");
+        methodMappingBuilder.put(ASTPrimitiveType.FLOAT, "putFloat");
+        methodMappingBuilder.put(ASTPrimitiveType.INT, "putInt");
+        methodMappingBuilder.put(ASTPrimitiveType.LONG, "putLong");
+        methodMappingBuilder.put(ASTPrimitiveType.SHORT, "putShort");
 
-        this.methodMapping = methodMapping.build();
+        this.methodMapping = methodMappingBuilder.build();
     }
 
     @Override

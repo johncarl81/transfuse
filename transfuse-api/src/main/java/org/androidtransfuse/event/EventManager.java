@@ -129,7 +129,7 @@ public class EventManager {
         }
     }
 
-    private class ExecutionQueueThreadLocal extends ThreadLocal<ConcurrentLinkedQueue<EventExecution>> {
+    private static class ExecutionQueueThreadLocal extends ThreadLocal<ConcurrentLinkedQueue<EventExecution>> {
         @Override
         protected ConcurrentLinkedQueue<EventExecution> initialValue() {
             return new ConcurrentLinkedQueue<EventExecution>();

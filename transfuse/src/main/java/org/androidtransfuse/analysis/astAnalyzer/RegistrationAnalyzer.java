@@ -90,7 +90,6 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     private final class CallthroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory>{
-
         @Override
         public RegistrationGeneratorFactory apply(ASTType astType) {
             return buildActivityDelegateRegistrationGeneratorFactory(astType);

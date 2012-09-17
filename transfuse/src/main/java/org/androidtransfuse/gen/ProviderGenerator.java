@@ -21,7 +21,7 @@ public class ProviderGenerator {
 
     private static final String GET_METHOD = "get";
 
-    private static final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
+    private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
 

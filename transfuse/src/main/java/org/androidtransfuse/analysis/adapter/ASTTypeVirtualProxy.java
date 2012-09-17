@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -111,12 +112,16 @@ public class ASTTypeVirtualProxy implements ASTType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ASTType)) return false;
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof ASTType)){
+            return false;
+        }
 
         ASTType that = (ASTType) o;
 
-        return !(proxy == null || !proxy.equals(that));
+        return new EqualsBuilder().append(proxy, that).isEquals();
     }
 
     @Override
