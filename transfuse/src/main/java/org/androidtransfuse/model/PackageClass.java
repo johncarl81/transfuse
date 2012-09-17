@@ -13,8 +13,8 @@ public class PackageClass {
 
     private static final String DOT_JAVA = ".java";
 
-    private String pkg;
-    private String fileName;
+    private final String pkg;
+    private final String fileName;
 
     /**
      * Constructor taking a fully qualified class name, including optional package and filename.
@@ -27,10 +27,11 @@ public class PackageClass {
         String processedName = removeDotJava(fullyQualifiedName);
         int dotIndex = processedName.lastIndexOf('.');
         if (dotIndex == -1) {
-            updateVariables(null, processedName);
+            this.pkg = null;
+            this.fileName = removeDotJava(processedName);
         } else {
-            updateVariables(processedName.substring(0, dotIndex),
-                    processedName.substring(dotIndex + 1));
+            this.pkg = processedName.substring(0, dotIndex);
+            this.fileName = removeDotJava(processedName.substring(dotIndex + 1));
         }
     }
 
@@ -41,7 +42,8 @@ public class PackageClass {
      * @param fileName file name
      */
     public PackageClass(String pkg, String fileName) {
-        updateVariables(pkg, fileName);
+        this.pkg = pkg;
+        this.fileName = removeDotJava(fileName);
     }
 
     /**
@@ -51,11 +53,6 @@ public class PackageClass {
      */
     public PackageClass(Class<?> inputClass) {
         this(inputClass.getPackage().getName(), inputClass.getSimpleName());
-    }
-
-    private void updateVariables(String pkg, String fileName){
-        this.pkg = pkg;
-        this.fileName = removeDotJava(fileName);
     }
 
     private String removeDotJava(String input){

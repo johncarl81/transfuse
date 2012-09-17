@@ -7,8 +7,8 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
  */
 public class GetterSetterMethodPair {
 
-    private ASTMethod getter;
-    private ASTMethod setter;
+    private final ASTMethod getter;
+    private final ASTMethod setter;
 
     public GetterSetterMethodPair(ASTMethod getter, ASTMethod setter) {
         this.getter = getter;

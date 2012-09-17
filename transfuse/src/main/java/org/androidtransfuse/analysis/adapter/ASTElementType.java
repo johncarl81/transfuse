@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -16,13 +17,19 @@ import java.util.List;
 public class ASTElementType extends ASTElementBase implements ASTType {
 
     private final TypeElement typeElement;
-    private final Collection<ASTMethod> methods;
-    private final Collection<ASTConstructor> constructors;
-    private final Collection<ASTField> fields;
-    private final Collection<ASTType> interfaces;
+    private final ImmutableCollection<ASTMethod> methods;
+    private final ImmutableCollection<ASTConstructor> constructors;
+    private final ImmutableCollection<ASTField> fields;
+    private final ImmutableCollection<ASTType> interfaces;
     private final ASTType superClass;
 
-    public ASTElementType(TypeElement typeElement, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces, Collection<ASTAnnotation> annotations) {
+    public ASTElementType(TypeElement typeElement,
+                          ImmutableCollection<ASTConstructor> constructors,
+                          ImmutableCollection<ASTMethod> methods,
+                          ImmutableCollection<ASTField> fields,
+                          ASTType superClass,
+                          ImmutableCollection<ASTType> interfaces,
+                          ImmutableCollection<ASTAnnotation> annotations) {
         super(typeElement, annotations);
         this.typeElement = typeElement;
         this.constructors = constructors;

@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableList;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
@@ -13,12 +15,12 @@ import java.util.List;
 public class ASTClassConstructor implements ASTConstructor {
 
     private final Constructor constructor;
-    private final List<ASTParameter> parameters;
+    private final ImmutableList<ASTParameter> parameters;
     private final ASTAccessModifier modifier;
-    private final List<ASTAnnotation> annotations;
-    private final List<ASTType> throwsTypes;
+    private final ImmutableList<ASTAnnotation> annotations;
+    private final ImmutableList<ASTType> throwsTypes;
 
-    public ASTClassConstructor(List<ASTAnnotation> annotations, Constructor<?> constructor, List<ASTParameter> parameters, ASTAccessModifier modifier, List<ASTType> throwsTypes) {
+    public ASTClassConstructor(ImmutableList<ASTAnnotation> annotations, Constructor<?> constructor, ImmutableList<ASTParameter> parameters, ASTAccessModifier modifier, ImmutableList<ASTType> throwsTypes) {
         this.annotations = annotations;
         this.constructor = constructor;
         this.parameters = parameters;

@@ -110,6 +110,11 @@
             <version>1.9.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>13.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

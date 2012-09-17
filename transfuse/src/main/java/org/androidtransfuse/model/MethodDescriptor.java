@@ -1,12 +1,11 @@
-package org.androidtransfuse.gen.componentBuilder;
+package org.androidtransfuse.model;
 
+import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.JMethod;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.model.TypedExpression;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,13 +14,15 @@ import java.util.Map;
 public class MethodDescriptor {
 
     private final JMethod method;
-    private final Map<ASTParameter, TypedExpression> parameterMap = new HashMap<ASTParameter, TypedExpression>();
-    private final Map<ASTType, TypedExpression> typeMap = new HashMap<ASTType, TypedExpression>();
+    private final ImmutableMap<ASTParameter, TypedExpression> parameterMap;
+    private final ImmutableMap<ASTType, TypedExpression> typeMap;
     private final ASTMethod astMethod;
 
-    public MethodDescriptor(JMethod method, ASTMethod astMethod) {
+    public MethodDescriptor(JMethod method, ASTMethod astMethod, ImmutableMap<ASTParameter, TypedExpression> parameterMap, ImmutableMap<ASTType, TypedExpression> typeMap) {
         this.method = method;
         this.astMethod = astMethod;
+        this.parameterMap = parameterMap;
+        this.typeMap = typeMap;
     }
 
     public JMethod getMethod() {
@@ -30,11 +31,6 @@ public class MethodDescriptor {
 
     public TypedExpression getParameter(ASTParameter astParameter) {
         return parameterMap.get(astParameter);
-    }
-
-    public void putParameter(ASTParameter astParameter, TypedExpression expression) {
-        parameterMap.put(astParameter, expression);
-        typeMap.put(astParameter.getASTType(), expression);
     }
 
     public ASTMethod getASTMethod() {
@@ -47,10 +43,6 @@ public class MethodDescriptor {
 
     public Map<ASTType, TypedExpression> getTypeMap() {
         return typeMap;
-    }
-
-    public void putType(ASTType astType, TypedExpression expression) {
-        typeMap.put(astType, expression);
     }
 
     public TypedExpression getExpression(ASTType astType) {

@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.util.AccessibleElementPrivilegedAction;
 
@@ -19,9 +20,9 @@ public class ASTClassField implements ASTField {
     private final Field field;
     private final ASTType astType;
     private final ASTAccessModifier modifier;
-    private final Collection<ASTAnnotation> annotations;
+    private final ImmutableCollection<ASTAnnotation> annotations;
 
-    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, ImmutableCollection<ASTAnnotation> annotations) {
         this.field = field;
         this.astType = astType;
         this.modifier = modifier;

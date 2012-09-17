@@ -11,6 +11,8 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
+
 /**
  * @author John Ericksen
  */
@@ -22,13 +24,11 @@ public class ProviderGenerator {
     private static final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
-    private final GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, GeneratedClassAnnotator generatedClassAnnotator) {
+    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
-        this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode) {
@@ -48,7 +48,7 @@ public class ProviderGenerator {
 
             JDefinedClass providerClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Provider", ClassType.CLASS);
 
-            generatedClassAnnotator.annotateClass(providerClass);
+            annotateGeneratedClass(providerClass);
 
             providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 

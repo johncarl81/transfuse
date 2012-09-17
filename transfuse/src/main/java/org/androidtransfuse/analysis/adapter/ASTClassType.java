@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -16,14 +17,20 @@ import java.util.List;
 public class ASTClassType implements ASTType {
 
     private final Class<?> clazz;
-    private final Collection<ASTAnnotation> annotationList;
-    private final Collection<ASTMethod> methods;
-    private final Collection<ASTConstructor> constructors;
-    private final Collection<ASTField> fields;
+    private final ImmutableCollection<ASTAnnotation> annotationList;
+    private final ImmutableCollection<ASTMethod> methods;
+    private final ImmutableCollection<ASTConstructor> constructors;
+    private final ImmutableCollection<ASTField> fields;
     private final ASTType superClass;
-    private final Collection<ASTType> interfaces;
+    private final ImmutableCollection<ASTType> interfaces;
 
-    public ASTClassType(Class<?> clazz, Collection<ASTAnnotation> annotationList, Collection<ASTConstructor> constructors, Collection<ASTMethod> methods, Collection<ASTField> fields, ASTType superClass, Collection<ASTType> interfaces) {
+    public ASTClassType(Class<?> clazz,
+                        ImmutableCollection<ASTAnnotation> annotationList,
+                        ImmutableCollection<ASTConstructor> constructors,
+                        ImmutableCollection<ASTMethod> methods,
+                        ImmutableCollection<ASTField> fields,
+                        ASTType superClass,
+                        ImmutableCollection<ASTType> interfaces) {
         this.clazz = clazz;
         this.annotationList = annotationList;
         this.constructors = constructors;

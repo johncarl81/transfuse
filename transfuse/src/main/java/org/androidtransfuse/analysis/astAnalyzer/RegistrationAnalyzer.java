@@ -2,6 +2,11 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import android.app.Activity;
 import android.view.View;
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -16,7 +21,6 @@ import org.androidtransfuse.listeners.*;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -24,7 +28,7 @@ import java.util.*;
  */
 public class RegistrationAnalyzer implements ASTAnalysis {
 
-    private final Map<ASTType, RegistrationGeneratorFactory> generatorFactories = new HashMap<ASTType, RegistrationGeneratorFactory>();
+    private final ImmutableMap<ASTType, RegistrationGeneratorFactory> generatorFactories;
     private final ASTClassFactory astClassFactory;
     private final Analyzer analyzer;
     private final JCodeModel codeModel;
@@ -45,19 +49,52 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.componentBuilderFactory = componentBuilderFactory;
-        addListenerBuilder(View.OnClickListener.class, new ViewRegistrationGeneratorFactory("setOnClickListener"));
-        addListenerBuilder(View.OnLongClickListener.class, new ViewRegistrationGeneratorFactory("setOnLongClickListener"));
-        addListenerBuilder(View.OnCreateContextMenuListener.class, new ViewRegistrationGeneratorFactory("setOnCreateContextMenuListener"));
-        addListenerBuilder(View.OnKeyListener.class, new ViewRegistrationGeneratorFactory("setOnKeyListener"));
-        addListenerBuilder(View.OnTouchListener.class, new ViewRegistrationGeneratorFactory("setOnTouchListener"));
-        addListenerBuilder(View.OnFocusChangeListener.class, new ViewRegistrationGeneratorFactory("setOnFocusChangeListener"));
-        addListenerBuilder(ActivityOnKeyDownListener.class);
-        addListenerBuilder(ActivityOnKeyLongPressListener.class);
-        addListenerBuilder(ActivityOnKeyUpListener.class);
-        addListenerBuilder(ActivityOnKeyMultipleListener.class);
-        addListenerBuilder(ActivityOnTouchEventListener.class);
-        addListenerBuilder(ActivityOnTrackballEventListener.class);
-        addListenerBuilder(ActivityMenuComponent.class);
+
+        Map<ASTType, String> listenerMethodMapping = new HashMap<ASTType, String>();
+
+        listenerMethodMapping.put(astType(View.OnClickListener.class), "setOnClickListener");
+        listenerMethodMapping.put(astType(View.OnLongClickListener.class), "setOnLongClickListener");
+        listenerMethodMapping.put(astType(View.OnCreateContextMenuListener.class), "setOnCreateContextMenuListener");
+        listenerMethodMapping.put(astType(View.OnKeyListener.class), "setOnKeyListener");
+        listenerMethodMapping.put(astType(View.OnTouchListener.class), "setOnTouchListener");
+        listenerMethodMapping.put(astType(View.OnFocusChangeListener.class), "setOnFocusChangeListener");
+
+        Set<ASTType> callthroughMapping = new HashSet<ASTType>();
+
+        callthroughMapping.add(astType(ActivityOnKeyDownListener.class));
+        callthroughMapping.add(astType(ActivityOnKeyLongPressListener.class));
+        callthroughMapping.add(astType(ActivityOnKeyUpListener.class));
+        callthroughMapping.add(astType(ActivityOnKeyMultipleListener.class));
+        callthroughMapping.add(astType(ActivityOnTouchEventListener.class));
+        callthroughMapping.add(astType(ActivityOnTrackballEventListener.class));
+        callthroughMapping.add(astType(ActivityMenuComponent.class));
+
+        ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorbuilder = ImmutableMap.builder();
+
+        generatorbuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
+        generatorbuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callthroughMapping, Functions.<ASTType>identity()),
+                new CallthroughMethodMappingFunction()));
+
+        generatorFactories = generatorbuilder.build();
+    }
+
+    private ASTType astType(Class<?> clazz) {
+        return astClassFactory.buildASTClassType(clazz);
+    }
+
+    private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory>{
+        @Override
+        public RegistrationGeneratorFactory apply(String value) {
+            return new ViewRegistrationGeneratorFactory(value) ;
+        }
+    }
+
+    private final class CallthroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory>{
+
+        @Override
+        public RegistrationGeneratorFactory apply(ASTType astType) {
+            return buildActivityDelegateRegistrationGeneratorFactory(astType);
+        }
     }
 
     private interface RegistrationGeneratorFactory{
@@ -100,9 +137,9 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private final class ActivityDelegateRegistrationGeneratorFactory implements RegistrationGeneratorFactory {
 
-        private List<ASTMethod> methods;
+        private ImmutableList<ASTMethod> methods;
 
-        private ActivityDelegateRegistrationGeneratorFactory(List<ASTMethod> methods) {
+        private ActivityDelegateRegistrationGeneratorFactory(ImmutableList<ASTMethod> methods) {
             this.methods = methods;
         }
 
@@ -134,26 +171,16 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
     }
 
-    private RegistrationGeneratorFactory buildActivityDelegateRegistrationGeneratorFactory(Class<?> listenerInterface) {
+    private RegistrationGeneratorFactory buildActivityDelegateRegistrationGeneratorFactory(ASTType listenerInterface) {
 
-        List<ASTMethod> delegateMethods = new ArrayList<ASTMethod>();
-        for (Method method : listenerInterface.getMethods()) {
-            if(method.isAnnotationPresent(Listener.class)){
-                ASTMethod astMethod = astClassFactory.buildASTClassMethod(method);
-                delegateMethods.add(astMethod);
+        ImmutableList.Builder<ASTMethod> delegateMethods = ImmutableList.builder();
+        for (ASTMethod method : listenerInterface.getMethods()) {
+            if(method.isAnnotated(Listener.class)){
+                delegateMethods.add(method);
             }
         }
 
-        return new ActivityDelegateRegistrationGeneratorFactory(delegateMethods);
-    }
-
-    private void addListenerBuilder(Class listenerType){
-        addListenerBuilder(listenerType, buildActivityDelegateRegistrationGeneratorFactory(listenerType));
-    }
-
-    private void addListenerBuilder(Class listenerType, RegistrationGeneratorFactory generatorFactory){
-        ASTType listenerASTType = astClassFactory.buildASTClassType(listenerType);
-        generatorFactories.put(listenerASTType, generatorFactory);
+        return new ActivityDelegateRegistrationGeneratorFactory(delegateMethods.build());
     }
 
     @Override
@@ -191,9 +218,9 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
     }
 
-    private List<RegistrationGenerator> getGeneratorFactories(InjectionNode injectionNode, ASTBase astBase, ASTType astType, List<ASTType> interfaceList, ASTAnnotation registerAnnotation, AnalysisContext context) {
+    private ImmutableList<RegistrationGenerator> getGeneratorFactories(InjectionNode injectionNode, ASTBase astBase, ASTType astType, List<ASTType> interfaceList, ASTAnnotation registerAnnotation, AnalysisContext context) {
 
-        List<RegistrationGenerator> generators = new ArrayList<RegistrationGenerator>();
+        ImmutableList.Builder<RegistrationGenerator> generators = ImmutableList.builder();
 
         for (Map.Entry<ASTType, RegistrationGeneratorFactory> generatorFactoryEntry : generatorFactories.entrySet()) {
             if ((interfaceList.isEmpty() || interfaceList.contains(generatorFactoryEntry.getKey()))
@@ -202,7 +229,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
             }
         }
 
-        return generators;
+        return generators.build();
     }
 
     private InjectionNode buildViewInjectionNode(Integer viewId, String viewTag, AnalysisContext context) {

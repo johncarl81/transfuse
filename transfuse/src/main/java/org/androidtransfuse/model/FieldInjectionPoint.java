@@ -8,10 +8,10 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public class FieldInjectionPoint {
 
-    private ASTType containingType;
-    private InjectionNode injectionNode;
-    private String name;
-    private ASTAccessModifier modifier;
+    private final ASTType containingType;
+    private final InjectionNode injectionNode;
+    private final String name;
+    private final ASTAccessModifier modifier;
 
     public FieldInjectionPoint(ASTType containingType, ASTAccessModifier modifier, String name, InjectionNode injectionNode) {
         this.modifier = modifier;

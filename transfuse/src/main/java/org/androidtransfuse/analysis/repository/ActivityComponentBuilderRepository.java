@@ -1,8 +1,9 @@
 package org.androidtransfuse.analysis.repository;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -10,9 +11,9 @@ import java.util.Set;
  */
 public class ActivityComponentBuilderRepository {
 
-    private final Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators;
+    private final ImmutableMap<String, ImmutableSet<ExpressionVariableDependentGenerator>> activityGenerators;
 
-    public ActivityComponentBuilderRepository(Map<String, Set<ExpressionVariableDependentGenerator>> activityGenerators) {
+    public ActivityComponentBuilderRepository(ImmutableMap<String, ImmutableSet<ExpressionVariableDependentGenerator>> activityGenerators) {
         this.activityGenerators = activityGenerators;
     }
 

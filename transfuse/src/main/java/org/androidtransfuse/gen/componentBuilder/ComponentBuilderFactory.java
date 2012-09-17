@@ -1,13 +1,12 @@
 package org.androidtransfuse.gen.componentBuilder;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
-
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -38,7 +37,7 @@ public interface ComponentBuilderFactory {
 
     ViewFieldRegistrationInvocationBuilderImpl buildViewFieldRegistrationInvocationBuilder(ASTField field);
 
-    ActivityDelegateRegistrationGenerator buildActivityRegistrationGenerator(ActivityDelegateASTReference activityDelegateASTReference, List<ASTMethod> methods);
+    ActivityDelegateRegistrationGenerator buildActivityRegistrationGenerator(ActivityDelegateASTReference activityDelegateASTReference, ImmutableList<ASTMethod> methods);
 
     ActivityTypeDelegateASTReference buildActivityTypeDelegateASTReference();
 

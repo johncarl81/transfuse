@@ -1,5 +1,8 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -13,13 +16,18 @@ import java.util.List;
 public class ASTClassMethod implements ASTMethod {
 
     private final Method method;
-    private final List<ASTParameter> parameters;
+    private final ImmutableList<ASTParameter> parameters;
     private final ASTType returnType;
     private final ASTAccessModifier modifier;
-    private final Collection<ASTAnnotation> annotations;
-    private final List<ASTType> throwTypes;
+    private final ImmutableCollection<ASTAnnotation> annotations;
+    private final ImmutableList<ASTType> throwTypes;
 
-    public ASTClassMethod(Method method, ASTType returnType, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwTypes) {
+    public ASTClassMethod(Method method,
+                          ASTType returnType,
+                          ImmutableList<ASTParameter> parameters,
+                          ASTAccessModifier modifier,
+                          ImmutableCollection<ASTAnnotation> annotations,
+                          ImmutableList<ASTType> throwTypes) {
         this.method = method;
         this.parameters = parameters;
         this.returnType = returnType;

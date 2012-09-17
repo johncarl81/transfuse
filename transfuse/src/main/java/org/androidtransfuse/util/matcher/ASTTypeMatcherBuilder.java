@@ -1,17 +1,16 @@
 package org.androidtransfuse.util.matcher;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author John Ericksen
  */
 public class ASTTypeMatcherBuilder {
 
-    private final Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
+    private final ImmutableSet.Builder<Class<? extends Annotation>> annotations = ImmutableSet.builder();
 
     public ASTTypeMatcherBuilder annotatedWith(Class<? extends Annotation> annotationClass) {
         annotations.add(annotationClass);
@@ -19,6 +18,6 @@ public class ASTTypeMatcherBuilder {
     }
 
     public Matcher<ASTType> build() {
-        return new ASTTypeMatcher(annotations);
+        return new ASTTypeMatcher(annotations.build());
     }
 }

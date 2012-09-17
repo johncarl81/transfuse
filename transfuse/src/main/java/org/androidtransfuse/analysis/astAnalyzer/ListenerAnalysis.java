@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.collect.ImmutableMap;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -7,9 +8,6 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Analyzes the given class for listener annotations.  Addes these annotated methods to a ListenerAspect for
@@ -19,10 +17,10 @@ import java.util.Map;
  */
 public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
-    private final Map<Class<?>, String> methodAnnotations;
+    private final ImmutableMap<Class<?>, String> methodAnnotations;
 
     public ListenerAnalysis() {
-        Map<Class<?>, String> eventListenerAnnotations = new HashMap<Class<?>, String>();
+        ImmutableMap.Builder<Class<?>, String> eventListenerAnnotations = ImmutableMap.builder();
         eventListenerAnnotations.put(OnCreate.class, "onCreate");
         eventListenerAnnotations.put(OnDestroy.class, "onDestroy");
         eventListenerAnnotations.put(OnPause.class, "onPause");
@@ -48,7 +46,7 @@ public class ListenerAnalysis extends ASTAnalysisAdaptor {
         eventListenerAnnotations.put(OnDestroyView.class, "onDestroyView");
         eventListenerAnnotations.put(OnDetach.class, "onDetach");
 
-        this.methodAnnotations = Collections.unmodifiableMap(eventListenerAnnotations);
+        this.methodAnnotations = eventListenerAnnotations.build();
     }
 
     @Override

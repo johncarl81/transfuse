@@ -2,6 +2,7 @@ package org.androidtransfuse.gen;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
@@ -12,17 +13,15 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
-import org.androidtransfuse.gen.componentBuilder.MethodDescriptor;
 import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
-import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.ParcelableDescriptor;
-import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.model.*;
 
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.*;
+
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -34,26 +33,24 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private final UniqueVariableNamer namer;
     private final ParcelableGenerator parcelableGenerator;
     private final ParcelableAnalysis parcelableAnalysis;
-    private final GeneratedClassAnnotator generatedClassAnnotator;
     private final ASTClassFactory astClassFactory;
-    private final Map<ASTPrimitiveType, String> methodMapping;
+    private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
 
     @Inject
     public IntentFactoryStrategyGenerator(@Assisted Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass,
                                           JCodeModel codeModel,
                                           UniqueVariableNamer namer,
                                           ParcelableGenerator parcelableGenerator,
-                                          ParcelableAnalysis parcelableAnalysis, GeneratedClassAnnotator generatedClassAnnotator,
+                                          ParcelableAnalysis parcelableAnalysis,
                                           ASTClassFactory astClassFactory) {
         this.factoryStrategyClass = factoryStrategyClass;
         this.codeModel = codeModel;
         this.namer = namer;
         this.parcelableGenerator = parcelableGenerator;
         this.parcelableAnalysis = parcelableAnalysis;
-        this.generatedClassAnnotator = generatedClassAnnotator;
         this.astClassFactory = astClassFactory;
 
-        Map<ASTPrimitiveType, String> methodMapping = new EnumMap<ASTPrimitiveType, String>(ASTPrimitiveType.class);
+        ImmutableMap.Builder<ASTPrimitiveType, String> methodMapping = ImmutableMap.builder();
         methodMapping.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
         methodMapping.put(ASTPrimitiveType.BYTE, "putByte");
         methodMapping.put(ASTPrimitiveType.CHAR, "putChar");
@@ -63,7 +60,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         methodMapping.put(ASTPrimitiveType.LONG, "putLong");
         methodMapping.put(ASTPrimitiveType.SHORT, "putShort");
 
-        this.methodMapping = Collections.unmodifiableMap(methodMapping);
+        this.methodMapping = methodMapping.build();
     }
 
     @Override
@@ -72,7 +69,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         try {
             JDefinedClass strategyClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName() + "Strategy", ClassType.CLASS);
 
-            generatedClassAnnotator.annotateClass(strategyClass);
+            annotateGeneratedClass(strategyClass);
 
             strategyClass._extends(factoryStrategyClass);
 

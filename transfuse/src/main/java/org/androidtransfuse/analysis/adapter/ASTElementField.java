@@ -1,8 +1,9 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
-import java.util.Collection;
 
 /**
  * Element specific implementation of the AST Field
@@ -15,7 +16,10 @@ public class ASTElementField extends ASTElementBase implements ASTField {
     private final ASTAccessModifier modifier;
     private final VariableElement variableElement;
 
-    public ASTElementField(VariableElement variableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations) {
+    public ASTElementField(VariableElement variableElement,
+                           ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                           ASTAccessModifier modifier,
+                           ImmutableCollection<ASTAnnotation> annotations) {
         super(variableElement, annotations);
         this.variableElement = variableElement;
         this.modifier = modifier;

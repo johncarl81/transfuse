@@ -8,9 +8,9 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public class MethodInjectionPoint extends MethodInjectionPointBase {
 
-    private ASTType containingType;
-    private String name;
-    private ASTAccessModifier accessModifier;
+    private final ASTType containingType;
+    private final String name;
+    private final ASTAccessModifier accessModifier;
 
     public MethodInjectionPoint(ASTType containingType, ASTAccessModifier accessModifier, String name) {
         this.name = name;

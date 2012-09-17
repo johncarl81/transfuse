@@ -12,8 +12,8 @@ import javax.inject.Inject;
  */
 public class RResourceReferenceBuilder {
 
-    private JCodeModel codeModel;
-    private RResource rResource;
+    private final JCodeModel codeModel;
+    private final RResource rResource;
 
     @Inject
     public RResourceReferenceBuilder(JCodeModel codeModel, RResource rResource) {

@@ -5,6 +5,7 @@ import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import java.util.Map;

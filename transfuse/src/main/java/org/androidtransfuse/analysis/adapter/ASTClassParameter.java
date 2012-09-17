@@ -1,10 +1,10 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableMap;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class specific AST Parameter
@@ -14,19 +14,19 @@ import java.util.Map;
 public class ASTClassParameter implements ASTParameter {
 
     private final ASTType astType;
-    private final Map<Class<?>, Annotation> annotationMap;
-    private final Collection<ASTAnnotation> annotations;
+    private final ImmutableMap<Class<?>, Annotation> annotationMap;
+    private final ImmutableCollection<ASTAnnotation> annotations;
 
-    public ASTClassParameter(Annotation[] annotations, ASTType astType, Collection<ASTAnnotation> astAnnotations) {
+    public ASTClassParameter(Annotation[] annotations, ASTType astType, ImmutableCollection<ASTAnnotation> astAnnotations) {
         this.annotations = astAnnotations;
         this.astType = astType;
 
-        Map<Class<?>, Annotation> classAnnotationMap = new HashMap<Class<?>, Annotation>();
+        ImmutableMap.Builder<Class<?>, Annotation> classAnnotationBuilder = ImmutableMap.builder();
         for (Annotation annotation : annotations) {
-            classAnnotationMap.put(annotation.getClass(), annotation);
+            classAnnotationBuilder.put(annotation.getClass(), annotation);
         }
 
-        this.annotationMap = Collections.unmodifiableMap(classAnnotationMap);
+        this.annotationMap = classAnnotationBuilder.build();
     }
 
     public boolean isAnnotated(Class<? extends Annotation> annotation) {

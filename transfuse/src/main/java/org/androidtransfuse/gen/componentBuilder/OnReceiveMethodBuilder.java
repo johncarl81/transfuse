@@ -8,6 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -34,14 +36,14 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
             JMethod onReceiveMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onReceive");
             ASTMethod onReceiveASTMethod = astClassFactory.buildASTClassMethod(android.content.BroadcastReceiver.class.getDeclaredMethod("onReceive", Context.class, Intent.class));
 
-            MethodDescriptor methodDescriptor = new MethodDescriptor(onReceiveMethod, onReceiveASTMethod);
+            MethodDescriptorBuilder methodDescriptor = new MethodDescriptorBuilder(onReceiveMethod, onReceiveASTMethod);
 
             for (ASTParameter astParameter : onReceiveASTMethod.getParameters()) {
                 JVar param = onReceiveMethod.param(codeModel.ref(astParameter.getASTType().getName()), namer.generateName(astParameter.getASTType()));
                 methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
             }
 
-            return methodDescriptor;
+            return methodDescriptor.build();
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while looking up onReceive method", e);
         }

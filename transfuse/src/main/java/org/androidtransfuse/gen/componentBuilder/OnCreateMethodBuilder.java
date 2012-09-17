@@ -5,6 +5,8 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -32,14 +34,14 @@ public class OnCreateMethodBuilder implements MethodBuilder {
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
-        MethodDescriptor onCreateMethodDescriptor = new MethodDescriptor(onCreateMethod, onCreateASTMethod);
+        MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateASTMethod);
 
         List<JVar> parameters = new ArrayList<JVar>();
 
         for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
             JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), namer.generateName(methodArgument.getASTType()));
             parameters.add(param);
-            onCreateMethodDescriptor.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
+            onCreateMethodDescriptorBuilder.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
         }
 
         //super.onCreate()
@@ -52,7 +54,7 @@ public class OnCreateMethodBuilder implements MethodBuilder {
 
         layoutBuilder.buildLayoutCall(definedClass, block);
 
-        return onCreateMethodDescriptor;
+        return onCreateMethodDescriptorBuilder.build();
     }
 
     @Override

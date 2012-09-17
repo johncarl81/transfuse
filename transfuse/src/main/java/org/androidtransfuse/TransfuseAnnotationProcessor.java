@@ -17,6 +17,7 @@ import org.androidtransfuse.processor.ComponentProcessor;
 import org.androidtransfuse.processor.TransfuseAssembler;
 import org.androidtransfuse.processor.TransfuseInjector;
 import org.androidtransfuse.processor.TransfuseProcessor;
+import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
 
@@ -32,7 +33,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.androidtransfuse.util.CollectionConverterUtil.transform;
+import static com.google.common.collect.Collections2.transform;
 
 /**
  * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
@@ -70,6 +71,8 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     private FilerSourceCodeWriter codeWriter;
     @Inject
     private ResourceCodeWriter resourceWriter;
+    @Inject
+    private Logger logger;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -82,6 +85,8 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
         if (!processorRan) {
+
+            long start = System.currentTimeMillis();
 
             //setup transfuse processor with manifest and R classes
             File manifestFile = manifestLocator.findManifest();
@@ -131,8 +136,6 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             //assembling generated code
             TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
 
-            Filer filer = processingEnv.getFiler();
-
             transfuseAssembler.writeSource(codeWriter, resourceWriter);
 
             Manifest updatedManifest = transfuseAssembler.buildManifest();
@@ -141,6 +144,9 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             manifestParser.writeManifest(updatedManifest, manifestFile);
 
             processorRan = true;
+
+            logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
+
             return true;
         }
         return false;

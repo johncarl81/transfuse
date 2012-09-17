@@ -7,7 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
  */
 public class ConstructorInjectionPoint extends MethodInjectionPointBase {
 
-    private ASTAccessModifier modifier;
+    private final ASTAccessModifier modifier;
 
     public ConstructorInjectionPoint(ASTAccessModifier modifier) {
         this.modifier = modifier;

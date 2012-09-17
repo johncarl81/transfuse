@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Map;
 
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
+
 /**
  * @author John Ericksen
  */
@@ -18,15 +20,13 @@ public class InjectionFragmentGeneratorHarness {
     private JCodeModel codeModel;
     @Inject
     private InjectionFragmentGenerator injectionFragmentGenerator;
-    @Inject
-    private GeneratedClassAnnotator generatedClassAnnotater;
 
     public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
         JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, providerPackageClass.getFullyQualifiedName(), ClassType.CLASS);
 
         JType providedType = codeModel.parseType(injectionNode.getUsageType().getName());
 
-        generatedClassAnnotater.annotateClass(definedClass);
+        annotateGeneratedClass(definedClass);
 
         definedClass._implements(codeModel.ref(Provider.class).narrow(providedType));
 

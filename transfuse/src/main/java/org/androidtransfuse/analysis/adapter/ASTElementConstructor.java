@@ -1,7 +1,9 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+
 import javax.lang.model.element.ExecutableElement;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,11 +13,15 @@ import java.util.List;
  */
 public class ASTElementConstructor extends ASTElementBase implements ASTConstructor {
 
-    private final List<ASTParameter> parameters;
+    private final ImmutableList<ASTParameter> parameters;
     private final ASTAccessModifier modifier;
-    private final List<ASTType> throwsTypes;
+    private final ImmutableList<ASTType> throwsTypes;
 
-    public ASTElementConstructor(ExecutableElement executableElement, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
+    public ASTElementConstructor(ExecutableElement executableElement,
+                                 ImmutableList<ASTParameter> parameters,
+                                 ASTAccessModifier modifier,
+                                 ImmutableCollection<ASTAnnotation> annotations,
+                                 ImmutableList<ASTType> throwsTypes) {
         super(executableElement, annotations);
         this.parameters = parameters;
         this.modifier = modifier;

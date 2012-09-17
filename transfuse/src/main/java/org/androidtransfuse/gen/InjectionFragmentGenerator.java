@@ -10,7 +10,6 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +33,7 @@ public class InjectionFragmentGenerator {
 
     public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        Map<InjectionNode, TypedExpression> nodeVariableMap = new HashMap<InjectionNode, TypedExpression>();
-        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(nodeVariableMap, block, definedClass);
+        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, definedClass);
 
         injectionExpressionBuilder.buildVariable(injectionBuilderContext, injectionNode);
 
@@ -49,7 +47,7 @@ public class InjectionFragmentGenerator {
                 VirtualProxyAspect virtualProxyAspect = node.getAspect(VirtualProxyAspect.class);
                 virtualProxyAspect.setProxyDefined(true); //signals the injection expression builder to avoid buliding a proxy
                 TypedExpression proxyExpression = virtualProxyAspect.getProxyExpression();
-                nodeVariableMap.remove(node);
+                injectionBuilderContext.getVariableMap().remove(node);
 
                 TypedExpression delegateVariable = injectionExpressionBuilder.buildVariable(injectionBuilderContext, node);
 
@@ -58,6 +56,6 @@ public class InjectionFragmentGenerator {
             }
         }
 
-        return nodeVariableMap;
+        return injectionBuilderContext.getVariableMap();
     }
 }

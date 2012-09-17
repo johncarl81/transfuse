@@ -11,8 +11,8 @@ import java.util.List;
  */
 public abstract class MethodInjectionPointBase {
 
-    private List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
-    private List<ASTType> throwsTypes = new ArrayList<ASTType>();
+    private final List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
+    private final List<ASTType> throwsTypes = new ArrayList<ASTType>();
 
     public void addInjectionNode(InjectionNode injectionNode) {
         this.injectionNodes.add(injectionNode);

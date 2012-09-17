@@ -10,10 +10,11 @@ import java.util.List;
  */
 public class ParcelableDescriptor {
 
-    private List<GetterSetterMethodPair> getterSetterPairs = new ArrayList<GetterSetterMethodPair>();
-    private ASTType parcelableConverterType;
+    private final List<GetterSetterMethodPair> getterSetterPairs = new ArrayList<GetterSetterMethodPair>();
+    private final ASTType parcelableConverterType;
 
     public ParcelableDescriptor() {
+        parcelableConverterType = null;
     }
 
     public ParcelableDescriptor(ASTType parcelableConverterType) {

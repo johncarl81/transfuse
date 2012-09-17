@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.base.Function;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 
 import javax.inject.Inject;
@@ -12,7 +13,7 @@ import javax.lang.model.util.SimpleTypeVisitor6;
  *
  * @author John Ericksen
  */
-public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
+public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> implements Function<TypeMirror, ASTType> {
 
     private ASTElementFactory astElementFactory;
 
@@ -77,5 +78,10 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> {
     @Inject
     public void setAstElementFactory(ASTElementFactory astElementFactory) {
         this.astElementFactory = astElementFactory;
+    }
+
+    @Override
+    public ASTType apply(TypeMirror input) {
+        return input.accept(this, null);
     }
 }

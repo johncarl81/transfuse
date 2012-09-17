@@ -8,6 +8,7 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,16 +17,14 @@ import java.util.Map;
  */
 public class InjectionBuilderContext {
 
-    private final Map<InjectionNode, TypedExpression> variableMap;
+    private final Map<InjectionNode, TypedExpression> variableMap = new HashMap<InjectionNode, TypedExpression>();
     private final JBlock block;
     private final JDefinedClass definedClass;
     private final List<InjectionNode> proxyLoad = new ArrayList<InjectionNode>();
 
     @Inject
-    public InjectionBuilderContext(@Assisted Map<InjectionNode, TypedExpression> variableMap,
-                                   @Assisted JBlock block,
+    public InjectionBuilderContext(@Assisted JBlock block,
                                    @Assisted JDefinedClass definedClass) {
-        this.variableMap = variableMap;
         this.block = block;
         this.definedClass = definedClass;
     }

@@ -5,6 +5,8 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -27,13 +29,15 @@ public class MirroredMethodGenerator implements MethodGenerator {
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         JMethod method = definedClass.method(JMod.PUBLIC, codeModel.ref(overrideMethod.getReturnType().getName()), overrideMethod.getName());
 
-        MethodDescriptor methodDescriptor = new MethodDescriptor(method, overrideMethod);
+        MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, overrideMethod);
 
         //parameters
         for (ASTParameter astParameter : overrideMethod.getParameters()) {
             JVar param = method.param(codeModel.ref(astParameter.getASTType().getName()), variableNamer.generateName(astParameter.getASTType()));
-            methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
+            methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
         }
+
+        MethodDescriptor methodDescriptor = methodDescriptorBuilder.build();
 
         if (superCall) {
             JBlock body = method.body();

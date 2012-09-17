@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class ComponentDescriptor {
 
-    private PackageClass packageClass;
-    private String type;
+    private final PackageClass packageClass;
+    private final String type;
     private MethodBuilder methodBuilder;
     private List<ExpressionVariableDependentGenerator> generators = new ArrayList<ExpressionVariableDependentGenerator>();
     private InjectionNodeFactory injectionNodeFactory;

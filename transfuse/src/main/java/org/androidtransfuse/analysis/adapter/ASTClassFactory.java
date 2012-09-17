@@ -1,10 +1,14 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Factory building AST objects from the relevant class attributes
@@ -14,8 +18,8 @@ import java.util.*;
 @Singleton
 public class ASTClassFactory {
 
-    private Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
-    private ASTFactory astFactory;
+    private final Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
+    private final ASTFactory astFactory;
 
     @Inject
     public ASTClassFactory(ASTFactory astFactory) {
@@ -41,44 +45,56 @@ public class ASTClassFactory {
         if (!typeCache.containsKey(clazz.getName())) {
             //adds a new ASTType to the cache if one does not exist yet
 
-            Collection<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
-            Collection<ASTMethod> methods = new ArrayList<ASTMethod>();
-            Collection<ASTField> fields = new ArrayList<ASTField>();
+            ImmutableList.Builder<ASTConstructor> constructorBuilder = ImmutableList.builder();
+            ImmutableList.Builder<ASTMethod> methodBuilder = ImmutableList.builder();
+            ImmutableList.Builder<ASTField> fieldBuilder = ImmutableList.builder();
 
             ASTType superClass = null;
             if (clazz.getSuperclass() != null) {
                 superClass = buildASTClassType(clazz.getSuperclass(), clazz.getGenericSuperclass());
             }
 
-            Collection<ASTType> interfaces = new HashSet<ASTType>();
+            ImmutableSet.Builder<ASTType> interfaceBuilder = ImmutableSet.builder();
 
-            Collection<ASTAnnotation> annotations = new HashSet<ASTAnnotation>();
+            ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
-            typeCache.put(clazz.getName(), new ASTClassType(clazz, annotations, constructors, methods, fields, superClass, interfaces));
+            ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(clazz.getCanonicalName());
+
+            typeCache.put(clazz.getName(), astClassTypeProxy);
 
             Class<?>[] classInterfaces = clazz.getInterfaces();
             Type[] classGenericInterfaces = clazz.getGenericInterfaces();
 
             for (int i = 0; i < classInterfaces.length; i++) {
-                interfaces.add(buildASTClassType(classInterfaces[i], classGenericInterfaces[i]));
+                interfaceBuilder.add(buildASTClassType(classInterfaces[i], classGenericInterfaces[i]));
             }
 
             //fill in the guts after building the class tree
             //building after the class types have been defined avoids an infinite loop between
             //defining classes and their attributes
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                constructors.add(buildASTClassConstructor(constructor));
+                constructorBuilder.add(buildASTClassConstructor(constructor));
             }
 
             for (Method method : clazz.getDeclaredMethods()) {
-                methods.add(buildASTClassMethod(method));
+                methodBuilder.add(buildASTClassMethod(method));
             }
 
             for (Field field : clazz.getDeclaredFields()) {
-                fields.add(buildASTClassField(field));
+                fieldBuilder.add(buildASTClassField(field));
             }
 
-            annotations.addAll(buildAnnotations(clazz));
+            annotationBuilder.addAll(buildAnnotations(clazz));
+
+            ASTType astType = new ASTClassType(clazz, annotationBuilder.build(),
+                    constructorBuilder.build(),
+                    methodBuilder.build(),
+                    fieldBuilder.build(),
+                    superClass,
+                    interfaceBuilder.build());
+
+            astClassTypeProxy.load(astType);
+            typeCache.put(clazz.getName(), astType);
         }
 
         ASTType astType = typeCache.get(clazz.getName());
@@ -97,8 +113,7 @@ public class ASTClassFactory {
      * @param method
      * @return AST parameters
      */
-    public List<ASTParameter> buildASTTypeParameters(Method method) {
-
+    public ImmutableList<ASTParameter> buildASTTypeParameters(Method method) {
         return buildASTTypeParameters(method.getParameterTypes(), method.getGenericParameterTypes(), method.getParameterAnnotations());
     }
 
@@ -109,19 +124,19 @@ public class ASTClassFactory {
      * @param genericParameterTypes
      * @param parameterAnnotations  @return AST Parameters
      */
-    public List<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Type[] genericParameterTypes, Annotation[][] parameterAnnotations) {
+    public ImmutableList<ASTParameter> buildASTTypeParameters(Class<?>[] parameterTypes, Type[] genericParameterTypes, Annotation[][] parameterAnnotations) {
 
-        List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
+        ImmutableList.Builder<ASTParameter> astParameterBuilder = ImmutableList.builder();
 
         for (int i = 0; i < parameterTypes.length; i++) {
-            astParameters.add(
+            astParameterBuilder.add(
                     new ASTClassParameter(
                             parameterAnnotations[i],
                             buildASTClassType(parameterTypes[i], nullSafeAccess(genericParameterTypes, i)),
                             buildAnnotations(parameterAnnotations[i])));
         }
 
-        return Collections.unmodifiableList(astParameters);
+        return astParameterBuilder.build();
     }
 
     private Type nullSafeAccess(Type[] typeArray, int i) {
@@ -139,21 +154,21 @@ public class ASTClassFactory {
      */
     public ASTMethod buildASTClassMethod(Method method) {
 
-        List<ASTParameter> astParameters = buildASTTypeParameters(method);
+        ImmutableList<ASTParameter> astParameters = buildASTTypeParameters(method);
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(method.getModifiers());
-        List<ASTType> throwsTypes = buildASTClassTypes(method.getExceptionTypes());
+        ImmutableList<ASTType> throwsTypes = buildASTClassTypes(method.getExceptionTypes());
 
         return new ASTClassMethod(method, buildASTClassType(method.getReturnType(), method.getGenericReturnType()), astParameters, modifier, buildAnnotations(method), throwsTypes);
     }
 
-    private List<ASTType> buildASTClassTypes(Class<?>[] inputClasses) {
-        List<ASTType> types = new ArrayList<ASTType>();
+    private ImmutableList<ASTType> buildASTClassTypes(Class<?>[] inputClasses) {
+        ImmutableList.Builder<ASTType> typesBuilder = ImmutableList.builder();
 
         for (Class<?> inputClass : inputClasses) {
-            types.add(buildASTClassType(inputClass));
+            typesBuilder.add(buildASTClassType(inputClass));
         }
 
-        return types;
+        return typesBuilder.build();
     }
 
     /**
@@ -177,13 +192,13 @@ public class ASTClassFactory {
     public ASTConstructor buildASTClassConstructor(Constructor constructor) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
-        List<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
-        List<ASTType> throwsTypes = buildASTClassTypes(constructor.getExceptionTypes());
+        ImmutableList<ASTParameter> constructorParameters = buildASTTypeParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
+        ImmutableList<ASTType> throwsTypes = buildASTClassTypes(constructor.getExceptionTypes());
 
         return new ASTClassConstructor(buildAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);
     }
 
-    private List<ASTAnnotation> buildAnnotations(AnnotatedElement element) {
+    private ImmutableList<ASTAnnotation> buildAnnotations(AnnotatedElement element) {
         return buildAnnotations(element.getAnnotations());
     }
 
@@ -193,15 +208,15 @@ public class ASTClassFactory {
      * @param annotations
      * @return List of AST Annotations
      */
-    private List<ASTAnnotation> buildAnnotations(Annotation[] annotations) {
+    private ImmutableList<ASTAnnotation> buildAnnotations(Annotation[] annotations) {
 
-        List<ASTAnnotation> astAnnotations = new ArrayList<ASTAnnotation>();
+        ImmutableList.Builder<ASTAnnotation> astAnnotationBuilder = ImmutableList.builder();
 
         for (Annotation annotation : annotations) {
-            astAnnotations.add(buildAnnotation(annotation));
+            astAnnotationBuilder.add(buildAnnotation(annotation));
         }
 
-        return astAnnotations;
+        return astAnnotationBuilder.build();
     }
 
     public ASTAnnotation buildAnnotation(Annotation annotation) {

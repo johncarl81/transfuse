@@ -1,20 +1,22 @@
 package org.androidtransfuse.model.r;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
+
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author John Ericksen
  */
 public class RResourceComposite implements RResource {
 
-    private List<RResource> resources = new ArrayList<RResource>();
+    private final ImmutableList<RResource> resources;
 
     public RResourceComposite(RResource... resources) {
+        ImmutableList.Builder<RResource> resourceBuilder = ImmutableList.builder();
         if (resources != null) {
-            this.resources.addAll(Arrays.asList(resources));
+            resourceBuilder.addAll(Arrays.asList(resources)).build();
         }
+        this.resources = resourceBuilder.build();
     }
 
     @Override

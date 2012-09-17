@@ -11,6 +11,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;

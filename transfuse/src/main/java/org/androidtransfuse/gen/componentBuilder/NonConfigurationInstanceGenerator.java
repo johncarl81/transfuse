@@ -8,10 +8,7 @@ import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
-import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.model.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

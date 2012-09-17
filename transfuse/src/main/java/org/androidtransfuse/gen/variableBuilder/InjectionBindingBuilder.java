@@ -2,14 +2,13 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import com.google.common.collect.ImmutableList;
 import com.sun.codemodel.JExpr;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -50,9 +49,9 @@ public class InjectionBindingBuilder {
 
     public final class StaticInvocationBindingBuilder {
 
-        private Class invocationTarget;
-        private Class returnType;
-        private String method;
+        private final Class invocationTarget;
+        private final Class returnType;
+        private final String method;
 
         private StaticInvocationBindingBuilder(Class invocationTarget, Class returnType, String method) {
             this.invocationTarget = invocationTarget;
@@ -67,8 +66,8 @@ public class InjectionBindingBuilder {
 
     public final class StaticInvocationBindingBuilderArgument {
 
-        private StaticInvocationBindingBuilder parent;
-        private Class dependency;
+        private final StaticInvocationBindingBuilder parent;
+        private final Class dependency;
 
         private StaticInvocationBindingBuilderArgument(StaticInvocationBindingBuilder parent, Class dependency) {
             this.parent = parent;
@@ -85,7 +84,7 @@ public class InjectionBindingBuilder {
 
     public final class DependencyBindingBuilder {
 
-        private Class clazz;
+        private final Class clazz;
 
         private DependencyBindingBuilder(Class clazz) {
             this.clazz = clazz;
@@ -101,10 +100,10 @@ public class InjectionBindingBuilder {
 
         public final class DependencyArgumentBindingBuilder {
 
-            private Class clazz;
-            private Class returnType;
-            private String methodName;
-            private List<String> arguments = new ArrayList<String>();
+            private final Class clazz;
+            private final Class returnType;
+            private final String methodName;
+            private final ImmutableList.Builder<String> arguments = ImmutableList.builder();
 
             private DependencyArgumentBindingBuilder(Class clazz, Class returnType, String methodName) {
                 this.clazz = clazz;
@@ -121,13 +120,13 @@ public class InjectionBindingBuilder {
                 return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
                         clazz,
                         returnType,
-                        variableInjectionBuilderFactory.buildMethodCallVariableBuilder(methodName, arguments));
+                        variableInjectionBuilderFactory.buildMethodCallVariableBuilder(methodName, arguments.build()));
             }
         }
 
         public final class DepenentVariableBuilderWrapper {
-            private DependentVariableBuilder dependentVariableBuilder;
-            private Class returnType;
+            private final DependentVariableBuilder dependentVariableBuilder;
+            private final Class returnType;
 
             private DepenentVariableBuilderWrapper(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
                 this.returnType = returnType;

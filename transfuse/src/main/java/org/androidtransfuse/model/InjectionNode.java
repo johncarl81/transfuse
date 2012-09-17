@@ -10,9 +10,9 @@ import java.util.Map;
  */
 public class InjectionNode {
 
-    private ASTType usageType;
-    private ASTType astType;
-    private Map<Class, Object> aspects = new HashMap<Class, Object>();
+    private final ASTType usageType;
+    private final ASTType astType;
+    private final Map<Class, Object> aspects = new HashMap<Class, Object>();
 
     public InjectionNode(ASTType astType) {
         this(astType, astType);

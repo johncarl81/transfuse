@@ -10,9 +10,9 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory;
-import org.androidtransfuse.gen.componentBuilder.MethodDescriptor;
 import org.androidtransfuse.gen.componentBuilder.MirroredMethodGenerator;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;

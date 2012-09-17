@@ -4,6 +4,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 import org.androidtransfuse.scope.ContextScopeHolder;

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.ListView;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
@@ -16,9 +18,6 @@ import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -47,19 +46,19 @@ public class ActivityComponentBuilderRepositoryFactory {
 
     public ActivityComponentBuilderRepository build(AnalysisContext context) {
 
-        Map<String, Set<ExpressionVariableDependentGenerator>> methodCallbackGenerators = new HashMap<String, Set<ExpressionVariableDependentGenerator>>();
+        ImmutableMap.Builder<String, ImmutableSet<ExpressionVariableDependentGenerator>> methodCallbackGenerators = ImmutableMap.builder();
 
-        Set<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators();
+        ImmutableSet<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators();
         methodCallbackGenerators.put(Activity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ListActivity.class.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
         methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(ActivityGroup.class.getName(), activityMethodGenerators);
 
-        return new ActivityComponentBuilderRepository(methodCallbackGenerators);
+        return new ActivityComponentBuilderRepository(methodCallbackGenerators.build());
     }
 
-    private Set<ExpressionVariableDependentGenerator> buildListActivityMethodCallbackGenerators(Set<ExpressionVariableDependentGenerator> activityMethodGenerators) {
-        Set<ExpressionVariableDependentGenerator> listActivityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
+    private ImmutableSet<ExpressionVariableDependentGenerator> buildListActivityMethodCallbackGenerators(Set<ExpressionVariableDependentGenerator> activityMethodGenerators) {
+        ImmutableSet.Builder<ExpressionVariableDependentGenerator> listActivityCallbackGenerators = ImmutableSet.builder();
         listActivityCallbackGenerators.addAll(activityMethodGenerators);
 
         //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
@@ -68,11 +67,11 @@ public class ActivityComponentBuilderRepositoryFactory {
                 componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
                         componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
 
-        return listActivityCallbackGenerators;
+        return listActivityCallbackGenerators.build();
     }
 
-    private Set<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
-        Set<ExpressionVariableDependentGenerator> activityCallbackGenerators = new HashSet<ExpressionVariableDependentGenerator>();
+    private ImmutableSet<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
+        ImmutableSet.Builder<ExpressionVariableDependentGenerator> activityCallbackGenerators = ImmutableSet.builder();
         // onDestroy
         activityCallbackGenerators.add(buildEventMethod("onDestroy"));
         // onPause
@@ -109,7 +108,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         //non configuration instance update
         activityCallbackGenerators.add(nonConfigurationInstanceGenerator);
 
-        return activityCallbackGenerators;
+        return activityCallbackGenerators.build();
     }
 
 

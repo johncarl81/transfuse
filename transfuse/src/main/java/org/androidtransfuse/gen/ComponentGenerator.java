@@ -5,10 +5,13 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.Map;
+
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -16,17 +19,14 @@ import java.util.Map;
 public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
     private final JCodeModel codeModel;
-    private final GeneratedClassAnnotator generatedClassAnnotator;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public ComponentGenerator(JCodeModel codeModel,
-                              GeneratedClassAnnotator generatedClassAnnotator,
                               InjectionFragmentGenerator injectionFragmentGenerator,
                               ComponentBuilderFactory componentBuilderFactory) {
         this.codeModel = codeModel;
-        this.generatedClassAnnotator = generatedClassAnnotator;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
     }
@@ -39,7 +39,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
         try {
             final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
 
-            generatedClassAnnotator.annotateClass(definedClass);
+            annotateGeneratedClass(definedClass);
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 

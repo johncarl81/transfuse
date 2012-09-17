@@ -4,11 +4,9 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
-import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.DelayedLoad;
 import org.androidtransfuse.util.VirtualProxyException;
@@ -20,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -34,32 +34,30 @@ public class VirtualProxyGenerator {
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;
-    private final GeneratedClassAnnotator generatedClassAnnotator;
     private final ASTClassFactory astClassFactory;
-    private final Map<ASTType, ProxyDescriptor> descriptorCache = new HashMap<ASTType, ProxyDescriptor>();
+    private final Map<ASTType, JDefinedClass> descriptorCache = new HashMap<ASTType, JDefinedClass>();
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, GeneratedClassAnnotator generatedClassAnnotator, ASTClassFactory astClassFactory) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
-        this.generatedClassAnnotator = generatedClassAnnotator;
         this.astClassFactory = astClassFactory;
     }
 
-    public ProxyDescriptor generateProxy(InjectionNode injectionNode) {
+    public JDefinedClass generateProxy(InjectionNode injectionNode) {
         if(!descriptorCache.containsKey(injectionNode.getASTType())){
             descriptorCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
         }
         return descriptorCache.get(injectionNode.getASTType());
     }
 
-    public ProxyDescriptor innerGenerateProxy(InjectionNode injectionNode) {
+    public JDefinedClass innerGenerateProxy(InjectionNode injectionNode) {
 
         try {
 
             JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
 
-            generatedClassAnnotator.annotateClass(definedClass);
+            annotateGeneratedClass(definedClass);
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());
@@ -115,7 +113,7 @@ public class VirtualProxyGenerator {
 
             }
 
-            return new ProxyDescriptor(definedClass);
+            return definedClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Error while trying to build new class", e);
         } catch (NoSuchMethodException e) {

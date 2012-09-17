@@ -1,5 +1,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
@@ -8,8 +9,6 @@ import org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -36,7 +35,7 @@ public interface VariableInjectionBuilderFactory {
 
     StaticInvocationVariableBuilder buildStaticInvocationVariableBuilder(Class invocationTarget, String staticInvocation);
 
-    MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, List<String> arguments);
+    MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<String> arguments);
 
     DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") Class dependency, @Assisted("returnType") Class returnType, DependentVariableBuilder variableBuilder);
 

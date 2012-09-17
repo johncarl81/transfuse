@@ -1,7 +1,11 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Element specific primitive AST type
@@ -19,15 +23,18 @@ public enum ASTPrimitiveType implements ASTType {
     LONG("long", Long.class),
     DOUBLE("double", Double.class);
 
-    private static final Map<String, ASTPrimitiveType> AUTOBOX_TYPE_MAP = new HashMap<String, ASTPrimitiveType>();
+    private static final ImmutableMap<String, ASTPrimitiveType> AUTOBOX_TYPE_MAP;
 
     private final Class clazz;
     private final String label;
 
     static {
+        ImmutableMap.Builder<String, ASTPrimitiveType> autoboxTypeMapBuilder = ImmutableMap.builder();
         for (ASTPrimitiveType astPrimitive : ASTPrimitiveType.values()) {
-            AUTOBOX_TYPE_MAP.put(astPrimitive.getObjectClass().getName(), astPrimitive);
+            autoboxTypeMapBuilder.put(astPrimitive.getObjectClass().getName(), astPrimitive);
         }
+
+        AUTOBOX_TYPE_MAP = autoboxTypeMapBuilder.build();
     }
 
     private ASTPrimitiveType(String label, Class clazz) {

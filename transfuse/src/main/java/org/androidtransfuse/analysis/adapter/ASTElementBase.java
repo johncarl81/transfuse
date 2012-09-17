@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+
 import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -12,9 +14,9 @@ import java.util.Collection;
 public class ASTElementBase implements ASTBase {
 
     private final Element element;
-    private final Collection<ASTAnnotation> annotations;
+    private final ImmutableCollection<ASTAnnotation> annotations;
 
-    public ASTElementBase(Element element, Collection<ASTAnnotation> annotations) {
+    public ASTElementBase(Element element, ImmutableCollection<ASTAnnotation> annotations) {
         this.element = element;
         this.annotations = annotations;
     }

@@ -6,7 +6,6 @@ import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;
-import org.androidtransfuse.gen.GeneratedClassAnnotator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -16,6 +15,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.reflect.Method;
 import java.util.*;
+
+import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -30,14 +31,12 @@ public class AOPProxyGenerator {
     private final UniqueVariableNamer namer;
     private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
     private final Logger logger;
-    private final GeneratedClassAnnotator generatedClassAnnotator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, GeneratedClassAnnotator generatedClassAnnotator) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.logger = logger;
-        this.generatedClassAnnotator = generatedClassAnnotator;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
@@ -61,7 +60,7 @@ public class AOPProxyGenerator {
 
             definedClass = codeModel._class(JMod.PUBLIC, proxyClassName, ClassType.CLASS);
 
-            generatedClassAnnotator.annotateClass(definedClass);
+            annotateGeneratedClass(definedClass);
 
             //extending injectionNode
             definedClass._extends(codeModel.ref(injectionNode.getClassName()));

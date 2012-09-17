@@ -1,5 +1,9 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 
 import javax.inject.Inject;
@@ -7,18 +11,17 @@ import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author John Ericksen
  */
-public class LazyClassParameterBuilder implements LazyTypeParameterBuilder {
+public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Function<Type, ASTType> {
 
     private final ParameterizedType parameterizedType;
     private final ASTClassFactory astClassFactory;
-    private List<ASTType> genericParameters = null;
+    private ImmutableList<ASTType> genericParameters = null;
 
     @Inject
     public LazyClassParameterBuilder(@Assisted ParameterizedType parameterizedType,
@@ -34,27 +37,16 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder {
         return genericParameters;
     }
 
-    private List<ASTType> innerBuildGenericParameters() {
-
-        List<ASTType> typeParameters = new ArrayList<ASTType>();
-
-        for (Type type : parameterizedType.getActualTypeArguments()) {
-            ASTType parameterType = buildGenericParameterType(type);
-
-            if (parameterType == null) {
-                //unaable to resolve concrete type
-                return Collections.emptyList();
-            }
-
-            typeParameters.add(parameterType);
-        }
-
-        return typeParameters;
-
+    private ImmutableList<ASTType> innerBuildGenericParameters() {
+        return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
+                .transform(this)
+                .filter(Predicates.notNull())
+                .toImmutableList();
     }
 
-    private ASTType buildGenericParameterType(Type type) {
-        Class clazz = getClass(type);
+    @Override
+    public ASTType apply(Type input) {
+        Class clazz = getClass(input);
 
         if (clazz != null) {
             return astClassFactory.buildASTClassType(clazz);

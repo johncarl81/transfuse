@@ -1,11 +1,9 @@
 package org.androidtransfuse.util.matcher;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Determines matching based on the input set of annotations.  All annotations must be present to match the given type.
@@ -14,10 +12,10 @@ import java.util.Set;
  */
 public class ASTTypeMatcher implements Matcher<ASTType> {
 
-    private final Set<Class<? extends Annotation>> annotations;
+    private final ImmutableSet<Class<? extends Annotation>> annotations;
 
-    public ASTTypeMatcher(Set<Class<? extends Annotation>> annotations) {
-        this.annotations = Collections.unmodifiableSet(new HashSet<Class<? extends Annotation>>(annotations));
+    public ASTTypeMatcher(ImmutableSet<Class<? extends Annotation>> annotations) {
+        this.annotations = annotations;
     }
 
     public boolean matches(ASTType astType) {

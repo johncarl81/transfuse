@@ -8,8 +8,8 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public class TypedExpression {
 
-    private JExpression expression;
-    private ASTType type;
+    private final JExpression expression;
+    private final ASTType type;
 
     public TypedExpression(ASTType type, JExpression expression) {
         this.expression = expression;

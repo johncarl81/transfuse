@@ -11,6 +11,8 @@ import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 
@@ -46,17 +48,22 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(View.class), "onCreateView");
-        MethodDescriptor onCreateMethodDescriptor = new MethodDescriptor(onCreateMethod, onCreateViewMethod);
+        MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateViewMethod);
 
         for (ASTParameter methodArgument : onCreateViewMethod.getParameters()) {
             JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), namer.generateName(methodArgument.getASTType()));
-            onCreateMethodDescriptor.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
+            onCreateMethodDescriptorBuilder.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
         }
 
         //layoutInflater_0 .inflate(layout.details, viewGroup_0, false);
         JBlock body = onCreateMethod.body();
 
         JVar viewDeclaration = body.decl(codeModel.ref(View.class), namer.generateName(View.class));
+
+        ASTType viewType = astClassFactory.buildASTClassType(View.class);
+        onCreateMethodDescriptorBuilder.putType(viewType, new TypedExpression(viewType, viewDeclaration));
+
+        MethodDescriptor onCreateMethodDescriptor = onCreateMethodDescriptorBuilder.build();
 
         if (layout == null) {
             JInvocation onCreateView = JExpr._super().invoke("onCreateView");
@@ -74,10 +81,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
                     .arg(rResourceReferenceBuilder.buildReference(layout))
                     .arg(onCreateMethodDescriptor.getExpression(viewGroupType).getExpression())
                     .arg(JExpr.lit(false)));
-
         }
-        ASTType viewType = astClassFactory.buildASTClassType(View.class);
-        onCreateMethodDescriptor.putType(viewType, new TypedExpression(viewType, viewDeclaration));
 
         return onCreateMethodDescriptor;
     }

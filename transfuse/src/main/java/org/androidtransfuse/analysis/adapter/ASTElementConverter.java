@@ -1,6 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
-import org.androidtransfuse.util.Conversion;
+import com.google.common.base.Function;
 
 import javax.lang.model.element.Element;
 
@@ -10,7 +10,7 @@ import javax.lang.model.element.Element;
  *
  * @author John Ericksen
  */
-public class ASTElementConverter<T> implements Conversion<Element, T> {
+public class ASTElementConverter<T> implements Function<Element, T> {
 
     private final Class<T> astTypeClass;
     private final ElementConverterFactory elementConverterFactory;
@@ -21,7 +21,7 @@ public class ASTElementConverter<T> implements Conversion<Element, T> {
     }
 
     @Override
-    public T convert(Element element) {
+    public T apply( Element element) {
         //visit the given element to determine its type, feed it into the appropriate
         //ASTElementFactory method and return the result
         return element.accept(elementConverterFactory.buildTypeConverter(astTypeClass), null);

@@ -1,6 +1,7 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
@@ -9,7 +10,6 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.CodeGenerationUtil;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.ProxyDescriptor;
 import org.androidtransfuse.util.DelayedLoad;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,11 +60,11 @@ public class VirtualProxyGeneratorTest {
 
     @Test
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        ProxyDescriptor proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
+        JDefinedClass proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.getClassDefinition().fullName());
+        Class<?> proxyClass = classLoader.loadClass(proxyDescriptor.fullName());
 
         MockDelegate delegate = new MockDelegate();
 

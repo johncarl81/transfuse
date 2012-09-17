@@ -13,14 +13,18 @@ import java.util.Date;
  *
  * @author John Ericksen
  */
-public class GeneratedClassAnnotator {
+public final class GeneratedClassAnnotator {
+
+    private GeneratedClassAnnotator(){
+        //noop utility class constructor
+    }
 
     /**
      * Annotates the input class with the {@code @Generated} annotation
      *
      * @param definedClass input codemodel class
      */
-    public void annotateClass(JDefinedClass definedClass) {
+    public static void annotateGeneratedClass(JDefinedClass definedClass) {
         definedClass.annotate(Generated.class)
                 .param("value", TransfuseAnnotationProcessor.class.getName())
                 .param("date", DateFormat.getInstance().format(new Date()));

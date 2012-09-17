@@ -1,7 +1,9 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+
 import javax.lang.model.element.ExecutableElement;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,11 +14,16 @@ import java.util.List;
 public class ASTElementMethod extends ASTElementBase implements ASTMethod {
 
     private final ASTTypeLazyLoader<ExecutableElement> astTypeLoader;
-    private final List<ASTParameter> parameters;
+    private final ImmutableList<ASTParameter> parameters;
     private final ASTAccessModifier modifier;
-    private final List<ASTType> throwsTypes;
+    private final ImmutableList<ASTType> throwsTypes;
 
-    public ASTElementMethod(ExecutableElement executableElement, ASTTypeBuilderVisitor astTypeBuilderVisitor, List<ASTParameter> parameters, ASTAccessModifier modifier, Collection<ASTAnnotation> annotations, List<ASTType> throwsTypes) {
+    public ASTElementMethod(ExecutableElement executableElement,
+                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                            ImmutableList<ASTParameter> parameters,
+                            ASTAccessModifier modifier,
+                            ImmutableCollection<ASTAnnotation> annotations,
+                            ImmutableList<ASTType> throwsTypes) {
         super(executableElement, annotations);
         this.modifier = modifier;
         this.throwsTypes = throwsTypes;

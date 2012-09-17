@@ -9,8 +9,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class ResourceIdentifier {
 
-    private ASTType rInnerType;
-    private String name;
+    private final ASTType rInnerType;
+    private final String name;
 
     public ResourceIdentifier(ASTType rInnerType, String name) {
         this.name = name;

@@ -1,13 +1,18 @@
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
-import java.util.*;
-
-import static org.androidtransfuse.util.CollectionConverterUtil.transform;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -47,41 +52,52 @@ public class ASTElementFactory {
 
             //build placeholder for ASTElementType and contained data structures to allow for children population
             //while avoiding back link loops
-            List<ASTConstructor> constructors = new ArrayList<ASTConstructor>();
-            List<ASTField> fields = new ArrayList<ASTField>();
-            List<ASTMethod> methods = new ArrayList<ASTMethod>();
+            ImmutableList.Builder<ASTConstructor> constructors = ImmutableList.builder();
+            ImmutableList.Builder<ASTField> fields = ImmutableList.builder();
+            ImmutableList.Builder<ASTMethod> methods = ImmutableList.builder();
 
             ASTType superClass = null;
             if (typeElement.getSuperclass() != null) {
                 superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
             }
 
-            Collection<ASTType> interfaces = new HashSet<ASTType>();
+            ImmutableList<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
+                    .transform(astTypeBuilderVisitor)
+                    .toImmutableList();
 
-            for (TypeMirror interfaceTypeMirror : typeElement.getInterfaces()) {
-                ASTType interfaceType = interfaceTypeMirror.accept(astTypeBuilderVisitor, null);
-                interfaces.add(interfaceType);
-            }
+            ImmutableList.Builder<ASTAnnotation> annotations =  ImmutableList.builder();
 
-            List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
-
-            typeCache.put(typeElement, new ASTElementType(typeElement, constructors, methods, fields, superClass, interfaces, annotations));
+            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(typeElement.getSimpleName().toString());
+            typeCache.put(typeElement, astTypeProxy );
 
             //iterate and build the contained elements within this TypeElement
-            constructors.addAll(transform(typeElement.getEnclosedElements(),
-                    astElementConverterFactory.buildASTElementConverter(ASTConstructor.class)));
-
-            fields.addAll(transform(typeElement.getEnclosedElements(),
-                    astElementConverterFactory.buildASTElementConverter(ASTField.class)));
-
-            methods.addAll(transform(typeElement.getEnclosedElements(),
-                    astElementConverterFactory.buildASTElementConverter(ASTMethod.class)));
+            constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
+            fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
+            methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
 
             annotations.addAll(buildAnnotations(typeElement));
 
+            ASTType astType = new ASTElementType(typeElement,
+                    constructors.build(),
+                    methods.build(),
+                    fields.build(),
+                    superClass,
+                    interfaces,
+                    annotations.build());
+
+            astTypeProxy.load(astType);
+            typeCache.put(typeElement, astType);
         }
 
         return typeCache.get(typeElement);
+    }
+
+    private <T extends ASTBase>  List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType){
+        return FluentIterable
+                .from(enclosedElements)
+                .transform(astElementConverterFactory.buildASTElementConverter(astType))
+                .filter(Predicates.notNull())
+                .toImmutableList();
     }
 
     /**
@@ -119,21 +135,17 @@ public class ASTElementFactory {
      */
     public ASTMethod buildASTElementMethod(ExecutableElement executableElement) {
 
-        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
+        ImmutableList<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        List<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
+        ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
         return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
     }
 
-    private List<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
-        List<ASTType> types = new ArrayList<ASTType>();
-
-        for (TypeMirror mirrorType : mirrorTypes) {
-            types.add(mirrorType.accept(astTypeBuilderVisitor, null));
-        }
-
-        return types;
+    private ImmutableList<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
+        return FluentIterable.from(mirrorTypes)
+                .transform(astTypeBuilderVisitor)
+                .toImmutableList();
     }
 
     /**
@@ -142,14 +154,14 @@ public class ASTElementFactory {
      * @param variableElements required input element
      * @return list of ASTParameters
      */
-    private List<ASTParameter> buildASTElementParameters(List<? extends VariableElement> variableElements) {
-        List<ASTParameter> astParameters = new ArrayList<ASTParameter>();
+    private ImmutableList<ASTParameter> buildASTElementParameters(List<? extends VariableElement> variableElements) {
+        ImmutableList.Builder<ASTParameter> astParameterBuilder = ImmutableList.builder();
 
         for (VariableElement variables : variableElements) {
-            astParameters.add(buildASTElementParameter(variables));
+            astParameterBuilder.add(buildASTElementParameter(variables));
         }
 
-        return astParameters;
+        return astParameterBuilder.build();
     }
 
     /**
@@ -179,22 +191,22 @@ public class ASTElementFactory {
      * @return ASTConstructor
      */
     public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
-        List<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
+        ImmutableList<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        List<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
+        ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
         return new ASTElementConstructor(executableElement, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
     }
 
-    private Collection<ASTAnnotation> buildAnnotations(Element element) {
-        List<ASTAnnotation> annotations = new ArrayList<ASTAnnotation>();
+    private ImmutableCollection<ASTAnnotation> buildAnnotations(Element element) {
+        ImmutableList.Builder<ASTAnnotation> annotationBuilder = ImmutableList.builder();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
             ASTType type = buildASTElementType((TypeElement) annotationMirror.getAnnotationType().asElement());
 
-            annotations.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
+            annotationBuilder.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
         }
 
-        return annotations;
+        return annotationBuilder.build();
     }
 }
