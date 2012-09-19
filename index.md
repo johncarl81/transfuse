@@ -12,7 +12,7 @@ There are several key features that differentiate Transfuse from other DI and in
 
 
 <ul class="square">
-<li>The code supporting a Transfuse application is generated at compile time, rather than at runtime.  This allows the library to avoid overhead associated with runtime reflection and bytecode generation.  In addition, using this compile time code generation technique Transfuse puts a variety of AOP features within reach. >/li>
+<li>The code supporting a Transfuse application is generated at compile time, rather than at runtime.  This allows the library to avoid overhead associated with runtime reflection and bytecode generation.  In addition, using this compile time code generation technique Transfuse puts a variety of AOP features within reach. </li>
 <li>Transfuse is also extremely easy to use.  All that is needed is the Transfuse API and core library on the classpath during compilation.  The Java Annotation Processor handles the rest. </li>
 <li> The Java DI and integration library allows the user more freedom with coding and with the framework. It removes much of the boiler plate code, and streamlines the coding. 
 </li> </ul>
