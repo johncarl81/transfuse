@@ -5,23 +5,16 @@ title: Transfuse
 
 ### Documentation
 
-#### Motivation
-
-The Android API has a common theme throughout its components.  Each component must be extended to implement your application's specific functionality.  Although this approach works, it has subtle side effects.  If your component implements many separate features your component classes quickly becomes a mismatch of behavior.  This results in hard to read and hard to tests classes.  Also, any 3rd party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these 3rd party libraries that leverage context components incomparable with each other.
-
-Additionally, each component must be registered individually in the AndroidManifest.xml file.  How many times have you forgotten to register a new component only to find out after it is deployed to your emulator or device?  This duplication of registration and declaration violates the Do Not Repeat Yourself principle.
-
-These are just a couple of issues resolved by Transfuse.  Transfuse changes the model of Android components into POJOs, allowing you to develop your components the way you want.  No more extending Activity, Service, etc in order to implement the corresponding component.  You simply need to annotate the component classes to register them in your Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
-
-Transfuse also offers a compile time dependency injection framework based on JSR-330.  This is the same standard implemneted by the leading DI frameworks Guice, Spring, Seam, etc.  Dependency injection allows you to eliminate boilerplate plumbing code in your application further, as well as encourages well formed application architecture.  Transfuse implements dependency injection differently than the mentioned frameworks, it performs all analysis and code generation during compile time.  This reduces the critical startup time of your application, especially any lag based on runtime startup of Transfuse.
-
-It is Transfuse's mission to make Android a better API using performance sensitive techniques.
-
+#### Introduction
+It is Transfuse’s mission to make Android a better API using performance- sensitive techniques.  The Android API has a common theme throughout its components; each component must be extended to implement the application’s specific functionality.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component classes quickly becomes a mismatch of behavior. This results in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java’s single extension policy, this action makes these third party libraries that leverage Context components incomparable with each other.
+Additionally, each component must be registered individually in the AndroidManifest.xml file.  It is easy to overlook the need to register a new component, only to remember after it is already deployed to a emulator or device.  This duplication of registration and declaration violates the Do Not Repeat Yourself principle.
+Transfuse resolves these issues. The DI changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
+Transfuse also offers a compile time DI framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 #### High level
 
 A Transfuse application is built using a series of components analogous to the set of Android components.  These components are declared using the Transfuse API annotations on the class type level.
 
-Transfuse moves the declaration of Manifest metadata to the class level.  This combines declaration of the Transfuse component with registration as an application Component.  Transfuse writes and manages the AndroidManifest.xml for you.
+Transfuse moves the declaration of Manifest metadata to the class level.  This combines declaration of the Transfuse component with registration as an application Component.  Transfuse writes and manages the AndroidManifest.xml for the user.
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component or any instance injected into it.
 
@@ -45,7 +38,7 @@ These annotations tell Transfuse to use the class as an Android Component.  This
 
 ##### @Activity
 
-Annotating your Activity class begins the process of developing your Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android this is done by defining the layout in the onCreate() method.  Transfuse allows you to define the layout by annotating your @Activity class like so:
+Annotating an Activity class begins the process of developing a Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android this is done by defining the layout in the onCreate() method.  Transfuse allows the user to define the layout by annotating the @Activity class like so:
 
 {% highlight java %}
 @Activity
@@ -53,9 +46,9 @@ Annotating your Activity class begins the process of developing your Transfuse a
 public class Example {}
 {% endhighlight %}
 
-A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the Don't-Repeat-Yourself principle, keeping the declaration and configuration of your Activity in one place.
+A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the Don't-Repeat-Yourself principle, keeping the declaration and configuration of the Activity in one place.
 
-As an example, we can set the label to our example Activity as follows:
+As an example, the label can be set to an Activity as follows:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -63,14 +56,14 @@ As an example, we can set the label to our example Activity as follows:
 public class Example {}
 {% endhighlight %}
 
-Transfuse will add this property to the AndroidManifest.xml for you, resulting in the following entry in the AndroidManifest.xml:
+Transfuse adds this property to the AndroidManifest.xml, resulting in the following entry in the AndroidManifest.xml:
 
 {% highlight xml %}
 <activity t:tag="+,l,n" android:label="Transfuse Example" android:name=".ExampleActivity">
 </activity>
 {% endhighlight %}
 
-In addition to the manifest activity properties you are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
+In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -84,13 +77,12 @@ public class Example {}
 
 This sets up the Activity as the home screen and adds it to the list of applications on the phone.
 
-So far we have seen how to set up a basic Activity and have it declared in the Manifest, lets now take a look at wiring the components up through the events raised by the Android system.
 
 ##### Lifecycle Events
 
-Transfuse makes the entire Activity lifecycle available through a set of annotations.  You may annotate zero, one or many methods in your class.  In turn these will be called during that lifecycle event.
+Transfuse makes the entire Activity lifecycle available through a set of annotations.  Users may annotate zero, one, or many methods in the class.  In turn ,these will be called during that lifecycle event.
 
-For instance, if we annotate the log() method in the Example class as follows:
+In the Example class below, the log() method is used as the annotation method:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -107,7 +99,10 @@ public class Example {
 }
 {% endhighlight %}
 
-During the on create lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  Please note, these lifecycle events will not be called in any predefined order.
+NOTE: These lifecycle events will not be called in any predefined order.
+
+
+During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
 
 The following are lifecycle events supported by @Activity components:
 
@@ -123,7 +118,7 @@ The following are lifecycle events supported by @Activity components:
 @onRestoreInstanceState
 {% endhighlight %}
 
-Optionally, you may add parameters to the annotated lifecycle event methods that match the mapped event method.  For instance, the onCreate() method has a Bundle parameter.  If you add this parameter to the annotated method the bundle from the original onCreate() method will be passed in like the following:
+Optionally, parameters may be added to the annotated lifecycle event methods that match the mapped event method.  For instance, the onCreate() method has a Bundle parameter.  If this parameter is added to the annotated method the bundle from the original onCreate() method will be passed in like the following:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -143,7 +138,7 @@ public class Example {
 
 ##### Listener Registration
 
-Another common event to be raised by the Android system are by listeners on view components.  Transfuse allows you to easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
+Another common event to be raised by the Android system are by listeners on view components.  Transfuse allows users to easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
 
 {% highlight java %}
 @Activity
@@ -161,11 +156,17 @@ public class Example{
 <hr/>
 #### Legacy Support
 
-It is nice when you are able to start developing an application from a blank slate, but often we are stuck with a legacy code base.  It is expected that you may start a Transfuse application from an existing Android application.  Therefore, the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
+In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
 
-You may define your Android components as normal, and register them in the AndroidManifest.xml yourself.  You will not be able to use a majority of Transfuse's features and Transfuse will not register your component in the AndroidManifest.xml file.  However, if you manually add a component to the AndroidManifest.xml file Transfuse will detect your additions, preserve them and work around them.
+<ul class="square">
+<li>
+ Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them. </li>
 
-You may define your Android component as normal and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so it will add it to the manifest.  Please note that these components are still Android components and dependency injection and the other code generation features will not be available.  This looks like the following:
+<li> Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.
+
+NOTE: These components are still Android components and DI and the other code generation features will not be available. </li></ul>
+
+The second option looks like the following:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
