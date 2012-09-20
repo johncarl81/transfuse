@@ -13,7 +13,7 @@ Additionally, each component must be registered individually in the AndroidManif
 
 These are just a couple of issues resolved by Transfuse.  Transfuse changes the model of Android components into POJOs, allowing you to develop your components the way you want.  No more extending Activity, Service, etc in order to implement the corresponding component.  You simply need to annotate the component classes to register them in your Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
-Transfuse also offers a compile time dependency injection framework based on JSR-330.  This is the same standard implemneted by the leading DI frameworks Guice, Spring, Seam, etc.  Dependency injection allows you to eliminate boilerplate plumbing code in your application further, as well as encourages well formed application architecture.  Transfuse implements dependency injection differently than the mentioned frameworks, it performs all analysis and code generation during compile time.  This reduces the critical startup time of your application, especially any lag based on runtime startup of Transfuse.
+Transfuse also offers a compile time dependency injection framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc.  Dependency injection allows you to eliminate boilerplate plumbing code in your application further, as well as encourages well formed application architecture.  Transfuse implements dependency injection differently than the mentioned frameworks, it performs all analysis and code generation during compile time.  This reduces the critical startup time of your application, especially any lag based on runtime startup of Transfuse.
 
 It is Transfuse's mission to make Android a better API using performance sensitive techniques.
 
@@ -201,7 +201,7 @@ The most important event handled by the Broadcast Receiver is onReceieve.  Trans
 {% highlight java %}
 @BroadcastReceiver
 @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_BOOT_COMPLETED)
-public class Startup{s
+public class Startup{
 	@OnReceive
 	public void bootup(){
 	}
@@ -212,11 +212,11 @@ public class Startup{s
 
 #### Dependency Injection
 
-Transfuse implements JSR330, the same standard many of the leading depedency injection framworks implement.  The following annotations are available:
+Transfuse implements JSR330, the same standard many of the leading dependency injection frameworks implement.  The following annotations are available:
 
 ##### @Inject
 
-Transfuse allows you to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  You should prefer constructor injection, then method then field injection.  Likewise, for performance reasons, you should prefer public, package private or protected injections over private.  Private injections requires Tansfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+Transfuse allows you to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  You should prefer constructor injection, then method then field injection.  Likewise, for performance reasons, you should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
 
 ##### Provider
 
@@ -252,6 +252,85 @@ public interface Module{
 	Example mapExampleProvider();
 }
 {% endhighlight %}
+
+
+##### @Singleton
+
+Any class annotated with @Singleton will, when injected, reference a single instance in the runtime.  This makes it easy to define singletons in your application, eliminating the boilerplate of defining the singleton behavior:
+
+{% highlight java %}
+@Singleton
+public class SingletonExample{
+	private String singletonData;
+}
+{% endhighlight %}
+
+##### @Named
+
+Named support is pending
+
+<hr/>
+
+#### Events
+Transfuse offers an additional global event bus in addition to the mapping of the Android lifecycle and callthrough events.
+
+Any type may be used as an event.  Event observer methods may be defined by either annotating the method or the parameter of a method in a component or injected class with the @Observes annotation:
+
+{% highlight java %}
+public class Event{}
+
+public class ListenerExample{
+	@Observes
+	public void observeEvent(Event event){}
+
+	public void observeEvent2(@Observes Event event){}
+}
+{% endhighlight %}
+
+Events are triggered by using the EventManager.trigger() method.  Simply call this method with the given event and all the available annotated methods will be triggered.
+
+{% highlight java %}
+public class Trigger{
+	@Inject
+	private EventManager event Manager;
+
+	public void trigger(){
+		eventManager.trigger(new Event());
+	}
+}
+{% endhighlight %}
+
+Keep in mind that events may contain any relevant data and behavior.  Is it, after all, completely definable by the developer.  Also, the Observing methods are not called in any particular order, so make sure that their operations are not dependent on each other.
+
+<hr/>
+#### Parcels
+Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do you have to define the serialization manually, but you must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this for you.  You simply have to annotate the class with the @Parcel. annotation.  Transfuse will detect all getter/setter pairs in your class, map it to the designated Bundle serialization method, and produce a Parcelable class for you:
+
+{% highlight java %}
+@Parcel
+public void CleanParcel{
+	public String name;
+	public int age;
+	public String getName(){
+		return name;
+	}
+	public void setName(String name){
+		this.name = name;
+	}
+	@Transient //don't serialize in parcelable
+	public int getAge(){
+		return age;
+	}
+	public void setAge(int age){
+		this.age = age;
+	}
+}
+{% endhighlight %}
+
+
+If there is a parameter that you do not want serialized, annotate the getter or setter with @Transient.
+
+Parcels are useful when passing data between Android components.  Therefore, when you use the IntentFactory, Transfuse will automatically detect if a class is annotated with @Parcel and wrap it with the appropriate Parcelable implementation.
 
 <hr/>
 #### Legacy Support
