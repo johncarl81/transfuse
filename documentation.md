@@ -36,7 +36,6 @@ public class ExampleActivity {}
 public class ExampleService {}
 @BroadcastReceiver
 public class ExampleBroadcastReceiver {}
-
 {% endhighlight %} 
 
 These annotations tell Transfuse to use the class as an Android Component.  This turns on a number of features, such as dependency injection and event mapping.
@@ -152,9 +151,105 @@ public class Example{
     @RegisterListener(value = R.id.button5)
     private View.OnClickListener listener = new View.OnClickListener() {
         public void onClick(View v) {
-            Log.("Example Info", "Button Clicked");
+            Log.i("Example Info", "Button Clicked");
         }
     };
+}
+{% endhighlight %}
+
+<hr/>
+
+##### @Service
+
+Annotating your class with the Service annotation Tells Transfuse to use the class as an Android Service.  As with the Activity annotaiton, annotating a Service class will allow you to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
+
+{% highlight java %}
+@Service
+@IntentFilter
+public class ExampleService {}
+{% endhighlight %}
+
+Transfuse Service classes have the following lifecycle events defined, analogous to the Android lifecycle events:
+
+{% highlight java %}
+@OnCreate
+@OnStart
+@OnDestroy
+
+{% endhighlight %}
+
+Service may be injected into using JSR330 injections as described in the Injection section:
+
+{% highlight java %}
+@Service
+public class ExampleService {
+	@Inject
+	public ExampleService(ADependency dependency) {
+        ...
+	}
+}
+{% endhighlight %}
+
+<hr/>
+
+##### @BroadcastReceiver
+
+Annotating your class with the BroadcastReceiver annotaiton activates the class as an Android Broadcast Receiver.
+
+The most important event handled by the Broadcast Receiver is onReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, you may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
+
+{% highlight java %}
+@BroadcastReceiver
+@Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_BOOT_COMPLETED)
+public class Startup{s
+	@OnReceive
+	public void bootup(){
+	}
+}
+{% endhighlight %}
+
+<hr/>
+
+#### Dependency Injection
+
+Transfuse implements JSR330, the same standard many of the leading depedency injection framworks implement.  The following annotations are available:
+
+##### @Inject
+
+Transfuse allows you to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  You should prefer constructor injection, then method then field injection.  Likewise, for performance reasons, you should prefer public, package private or protected injections over private.  Private injections requires Tansfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+
+##### Provider
+
+Providers may be used when you want to manually resolve the dependencies of a class.  The Provider will be used to resolve both the injection of the provider and the injection of the type the provider returns:
+
+Provider:
+{% highlight java %}
+public void ExampleProvider implements Provider<Example>
+	public Example get(){
+		return new Example();
+	}
+}
+{% endhighlight %}
+
+Injections:
+{% highlight java %}
+public void TestInjections{
+	@Inject
+	private Example example; //calls .get() to resolve example
+	@Inject
+	private Provider<Example> exampleProvider; // determines the provider type by generics
+	@Inject
+	private ExampleProvider concreteInjection;
+}
+{% endhighlight %}
+
+To map a Provider to a type, define the provider binding in the TransfuseModule:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+	@BindProvider(ExampleProvider.class)
+	Example mapExampleProvider();
 }
 {% endhighlight %}
 
