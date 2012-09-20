@@ -6,9 +6,9 @@ title: Transfuse
 
 ### About
 
-Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.  Transfuse gives users the ability to develop Android components in a Point of Java Object (POJO) method, allowing the Android code to be more testable, decoupled and flexible.  
+Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.  Transfuse gives users the ability to develop Android components in a Plain old Java Object (POJO) style, allowing the Android code to be more testable, decoupled and flexible.  
 
-There are several key features that differentiate Transfuse from other DI and integration libraries:
+There are several key features that make Transfuse a great framework to use with Android:
 
 
 <ul class="square">
@@ -18,11 +18,8 @@ There are several key features that differentiate Transfuse from other DI and in
 </li> </ul>
 
 ### Example
-An example of an Activity built using another Java DI normally looks like this:
 
-
-
-Using Transfuse, that same Activity now looks like the following:
+Using Transfuse, an Android Activity looks like the following:
 
 
 {% highlight java %}
