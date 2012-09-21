@@ -29,7 +29,7 @@ mvn archetype:generate \
 NOTE:  Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step below is not required, but some manual merging may be needed.
 
 Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml.
- 
+
 
 The AndroidManifest.xml should look like this:
 
