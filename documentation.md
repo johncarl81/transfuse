@@ -52,6 +52,32 @@ Annotating an Activity class begins the process of developing a Transfuse applic
 public class Example {}
 {% endhighlight %}
 
+Transfuse follows the convention of delcaring the layout directly after the super.onCreate() call in the root Activity.
+
+If your use cases require a more advanced layout declaration, like defining the layout programatically, you may use the @LayoutHandler annotation and LayoutHandlerDelegate interface:
+
+{% highlight java %}
+@Activity
+@LayoutHandler(LunchTimeLayoutDelegate.class)
+public class Example{}
+{% endhighlight %}
+
+{% highlight java %}
+public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
+	@Inject private Activity activity;
+
+	public void invokeLayout(){
+		if(isLunchTime()){
+			activity.setContentView(R.id.lunchLayout);
+		}
+		else{
+			activity.setContentView(R.ld.regularLayout);
+		}
+	}
+	...
+}
+{% endhighlight %}
+
 A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the Don't-Repeat-Yourself principle, keeping the declaration and configuration of the Activity in one place.
 
 As an example, the label can be set to an Activity as follows:
