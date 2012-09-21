@@ -361,6 +361,35 @@ If there is a parameter that the user does not want serialized, annotate the get
 Parcels are useful when passing data between Android components.  Therefore, when using the IntentFactory, Transfuse will automatically detect if a class is annotated with @Parcel and wrap it with the appropriate Parcelable implementation.
 
 <hr/>
+#### Injector
+
+There may arise a need to build a dependency graph of a given type outside of a Transfuse dependecy graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an inerface, including methods that return the type of the values you require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropraite injections.
+
+For instance, the following interface returns an Example type:
+
+{% highlight java %}
+@Injector
+public interface TransfuseInjector{
+	Example getExample();
+}
+{% endhighlight %}
+
+To use it, you may inject the Injector or reference the built Injector directly:
+
+{% highlight java %}
+public class ExampleUsage{
+
+	@Inject TransfuseInjector injector;
+
+	public void use(){
+		Example example = injector.getExample();
+	}
+
+	public void staticUsage(){
+		Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
+	}
+}
+{% endhighlight %}
 #### Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
