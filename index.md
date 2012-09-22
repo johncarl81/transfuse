@@ -6,21 +6,22 @@ title: Transfuse
 
 ### About
 
-Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.  Transfuse gives users the ability to develop Android components in a Plain Old Java Object (POJO) style, allowing the Android code to be more testable, decoupled and flexible.
+Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.
 
 There are several key features that make Transfuse a great framework to use with Android:
 
-
 <ul class="square">
-<li>The code supporting a Transfuse application is generated at compile time, rather than at runtime.  This allows the library to avoid overhead associated with runtime reflection and bytecode generation.  In addition, using this compile time code generation technique Transfuse puts a variety of AOP features within reach. </li>
-<li>Transfuse is extremely easy to use.  All that is needed is the Transfuse API and core library on the classpath during compilation.  The Java Annotation Processor handles the rest. </li>
-<li> The Java DI and integration library allows the user more freedom with coding and with the framework. It removes much of the boilerplate plumbing code, and streamlines the coding.
-</li> </ul>
+<li>Dependency Injection - Transfuse implements the JSR330 standard annotations</li>
+<li>POJO Components - Transfuse gives users the ability to develop Android components in Plain Old Java Objects (POJO), enabling a testable, decoupled and flexible style.</li>
+<li>Compile Time Code Generation - Transfuse is remarkably small, lightweight and fast due to the technique of generating supporting code at compile time.</li>
+<li>Manifest Management - Transfuse manages the Android Manifest, eliminating the duplicated effort of declaring and registering components.</li>
+</ul>
+
+All of these features help eliminate boilerplate and make Android applications much easier to write.
 
 ### Example
 
 Using Transfuse, an Android Activity looks like the following:
-
 
 {% highlight java %}
 // Example Transfuse Activity

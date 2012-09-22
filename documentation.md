@@ -6,11 +6,11 @@ title: Transfuse
 ### Documentation
 
 #### Introduction
-The Android API has a common theme throughout its components; each component must be extended to implement the application's specific functionality.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component classes quickly becomes a mismatch of behavior. This results in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatable with each other.
+The Android API has a common theme throughout its components; each component must be implemented as an extension of a base component.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component class quickly becomes a mismatch of behavior. This results in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatable with each other.
 
 Additionally, each component must be registered individually in the AndroidManifest.xml file.  It is easy to overlook the need to register a new component, only to remember after it is already deployed to a emulator or device.  This duplication of registration and declaration violates the Do Not Repeat Yourself principle.
 
-Transfuse resolves these issues. The DI changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
+Transfuse resolves these issues in a number of different ways. First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
 Transfuse also offers a compile time DI framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 
@@ -95,6 +95,8 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 </activity>
 {% endhighlight %}
 
+Note:  In order to track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
+
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
 {% highlight java %}
@@ -115,7 +117,7 @@ Now that the basic Activity has been set up and declared in the Manifest, let's 
 
 Transfuse makes the entire Activity lifecycle available through a set of annotations.  Users may annotate zero, one, or many methods in the class.  In turn, these will be called during that lifecycle event.
 
-In the Example class below, the log() method is used as the annotation method:
+In the Example class below, the log() method is executed during the onCreate phase of the Activity lifecycle:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -238,13 +240,48 @@ public class Startup{
 
 <hr/>
 
+#### Intent Factory
+
+Both Service and Activities may be started with a set of named Extras.  These Extras represent a contract on the intent used to start the given component.  To enforce this contract, Transfuse offers an Intent Factory to build intents based on a structured parameter; the Intent Strategy.  An Intent Strategy is generated for each component defined in Transfuse.
+
+The following Activity has two types of Extras, required and optional:
+
+{% highlight java %}
+@Activity
+public class ExtraActivity{
+	@Inject @Extra("name") 
+	private String name;
+	@Inject @Extra(value="age", optional=true)
+	private Integer age;
+}
+{% endhighlight %}
+
+You may build and start the ExtraActivity with the IntentFactory:
+
+{% highlight java %}
+@Activity
+public class CallingActivity{
+	@Inject
+	private IntentFactory intentFactory;
+	public void openExtraActivity() {
+		intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
+	}
+}
+{% endhighlight %}
+
+Required injections are given using the IntentStrategy constructor as optional parameters are given using setters.
+
+<hr/>
+
 #### Dependency Injection (DI)
 
 Transfuse implements JSR330, the same standard many of the leading DI frameworks implement.  The following annotations are available:
 
 ##### @Inject
 
-Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  As a best practice, users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer(in order) public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  As a best practice, users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+
+Note:  This documentation highlights using private field injection because it is the most sucinct.  Please avoid this type of injection if possible.
 
 ##### Provider
 
@@ -295,7 +332,11 @@ public class SingletonExample{
 
 ##### @Named
 
-<i> Named support is pending. </i>
+Named support is pending.
+
+##### Advanced
+
+For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected based on an interface.
 
 <hr/>
 
@@ -320,7 +361,7 @@ Events are triggered by using the EventManager.trigger() method.  Simply call th
 {% highlight java %}
 public class Trigger{
 	@Inject
-	private EventManager event Manager;
+	private EventManager eventManager;
 
 	public void trigger(){
 		eventManager.trigger(new Event());
