@@ -6,11 +6,11 @@ title: Transfuse
 ### Documentation
 
 #### Introduction
-It is Transfuse's mission to make Android a better API using performance- sensitive techniques.  The Android API has a common theme throughout its components; each component must be extended to implement the application's specific functionality.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component classes quickly becomes a mismatch of behavior. This results in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatable with each other.
+The Android API has a common theme throughout its components; each component must be implemented as an extension of a base component.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component class quickly becomes a mismatch of behavior. This results in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatable with each other.
 
 Additionally, each component must be registered individually in the AndroidManifest.xml file.  It is easy to overlook the need to register a new component, only to remember after it is already deployed to a emulator or device.  This duplication of registration and declaration violates the Do Not Repeat Yourself principle.
 
-Transfuse resolves these issues. The DI changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
+Transfuse resolves these issues in a number of different ways. First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
 Transfuse also offers a compile time DI framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 
@@ -52,6 +52,32 @@ Annotating an Activity class begins the process of developing a Transfuse applic
 public class Example {}
 {% endhighlight %}
 
+Transfuse follows the convention of delcaring the layout directly after the super.onCreate() call in the root Activity.
+
+If your use cases require a more advanced layout declaration, like defining the layout programatically, you may use the @LayoutHandler annotation and LayoutHandlerDelegate interface:
+
+{% highlight java %}
+@Activity
+@LayoutHandler(LunchTimeLayoutDelegate.class)
+public class Example{}
+{% endhighlight %}
+
+{% highlight java %}
+public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
+	@Inject private Activity activity;
+
+	public void invokeLayout(){
+		if(isLunchTime()){
+			activity.setContentView(R.id.lunchLayout);
+		}
+		else{
+			activity.setContentView(R.ld.regularLayout);
+		}
+	}
+	...
+}
+{% endhighlight %}
+
 A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the Don't-Repeat-Yourself principle, keeping the declaration and configuration of the Activity in one place.
 
 As an example, the label can be set to an Activity as follows:
@@ -68,6 +94,8 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 <activity t:tag="+,l,n" android:label="Transfuse Example" android:name=".ExampleActivity">
 </activity>
 {% endhighlight %}
+
+Note:  In order to track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
@@ -89,7 +117,7 @@ Now that the basic Activity has been set up and declared in the Manifest, let's 
 
 Transfuse makes the entire Activity lifecycle available through a set of annotations.  Users may annotate zero, one, or many methods in the class.  In turn, these will be called during that lifecycle event.
 
-In the Example class below, the log() method is used as the annotation method:
+In the Example class below, the log() method is executed during the onCreate phase of the Activity lifecycle:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -180,7 +208,7 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 
 {% endhighlight %}
 
-Service may be injected into JSR330 injections as described in the Injection section:
+Service may be injected as described in the Injection section:
 
 {% highlight java %}
 @Service
@@ -212,13 +240,48 @@ public class Startup{
 
 <hr/>
 
+#### Intent Factory
+
+Both Service and Activities may be started with a set of named Extras.  These Extras represent a contract on the intent used to start the given component.  To enforce this contract, Transfuse offers an Intent Factory to build intents based on a structured parameter; the Intent Strategy.  An Intent Strategy is generated for each component defined in Transfuse.
+
+The following Activity has two types of Extras, required and optional:
+
+{% highlight java %}
+@Activity
+public class ExtraActivity{
+	@Inject @Extra("name") 
+	private String name;
+	@Inject @Extra(value="age", optional=true)
+	private Integer age;
+}
+{% endhighlight %}
+
+You may build and start the ExtraActivity with the IntentFactory:
+
+{% highlight java %}
+@Activity
+public class CallingActivity{
+	@Inject
+	private IntentFactory intentFactory;
+	public void openExtraActivity() {
+		intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
+	}
+}
+{% endhighlight %}
+
+Required injections are given using the IntentStrategy constructor as optional parameters are given using setters.
+
+<hr/>
+
 #### Dependency Injection (DI)
 
 Transfuse implements JSR330, the same standard many of the leading DI frameworks implement.  The following annotations are available:
 
 ##### @Inject
 
-Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  As a best practice, users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer(in order) public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  As a best practice, users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+
+Note:  This documentation highlights using private field injection because it is the most sucinct.  Please avoid this type of injection if possible.
 
 ##### Provider
 
@@ -269,7 +332,11 @@ public class SingletonExample{
 
 ##### @Named
 
-<i> Named support is pending. </i>
+Named support is pending.
+
+##### Advanced
+
+For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected based on an interface.
 
 <hr/>
 
@@ -294,7 +361,7 @@ Events are triggered by using the EventManager.trigger() method.  Simply call th
 {% highlight java %}
 public class Trigger{
 	@Inject
-	private EventManager event Manager;
+	private EventManager eventManager;
 
 	public void trigger(){
 		eventManager.trigger(new Event());
@@ -306,7 +373,7 @@ Keep in mind that events may contain any relevant data and behavior.  Is it comp
 
 <hr/>
 #### Parcels
-Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this for the user.  Simply annotate the class with the @Parcel. annotation.  Transfuse will detect all getter/setter pairs in the class, map it to the designated Bundle serialization method, and produce a Parcelable class:
+Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel. annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
 
 {% highlight java %}
 @Parcel
@@ -335,6 +402,35 @@ If there is a parameter that the user does not want serialized, annotate the get
 Parcels are useful when passing data between Android components.  Therefore, when using the IntentFactory, Transfuse will automatically detect if a class is annotated with @Parcel and wrap it with the appropriate Parcelable implementation.
 
 <hr/>
+#### Injector
+
+There may arise a need to build a dependency graph of a given type outside of a Transfuse dependecy graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an inerface, including methods that return the type of the values you require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropraite injections.
+
+For instance, the following interface returns an Example type:
+
+{% highlight java %}
+@Injector
+public interface TransfuseInjector{
+	Example getExample();
+}
+{% endhighlight %}
+
+To use it, you may inject the Injector or reference the built Injector directly:
+
+{% highlight java %}
+public class ExampleUsage{
+
+	@Inject TransfuseInjector injector;
+
+	public void use(){
+		Example example = injector.getExample();
+	}
+
+	public void staticUsage(){
+		Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
+	}
+}
+{% endhighlight %}
 #### Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
