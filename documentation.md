@@ -206,7 +206,7 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 
 {% endhighlight %}
 
-Service may be injected into JSR330 injections as described in the Injection section:
+Service may be injected as described in the Injection section:
 
 {% highlight java %}
 @Service
@@ -332,7 +332,7 @@ Keep in mind that events may contain any relevant data and behavior.  Is it comp
 
 <hr/>
 #### Parcels
-Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this for the user.  Simply annotate the class with the @Parcel. annotation.  Transfuse will detect all getter/setter pairs in the class, map it to the designated Bundle serialization method, and produce a Parcelable class:
+Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel. annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
 
 {% highlight java %}
 @Parcel

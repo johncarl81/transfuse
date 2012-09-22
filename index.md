@@ -46,18 +46,17 @@ public class HelloTransfuse {
 
 <li>Now, Activities no longer extend the android.app.Activity class.</li>
 <li>The Android Activity lifecycle is handled via lightweight events.  Any component within the injection graph may define event methods to be called during those phases of the lifecycle.</li>
-<li>DI is implemented using the standard Java JSR 330 injection annotation library.  All specialty injections, such as injecting View elements, are designated with qualifier injections (@View, @Resource, etc.).</li>
+<li>All specialty injections, such as injecting View elements, are designated with qualifier injections (@View, @Resource, etc.).</li>
 <li>Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.  This puts all the relevant information regarding the Activity in one place.  Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.</li>
 </ul>
 
-### Download
 Read more about the features in the [[Documentation](documentation.html)] and [[Motivation](motivation.html)] sections.
 
 New to the library or Android? Visit the [[Getting Started](getting_started.html)] section.
 
+### Download
+
 Try Transfuse by downloading from the [Download page][1],
-
-
 
 via git:
 
