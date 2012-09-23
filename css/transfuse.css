@@ -23,3 +23,9 @@ img {
    height: 200px;
 }
 
+div.note  { 
+	border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 3px 3px 3px 3px; 
+	margin: 0 0 9px; 
+	padding: 10px 10px 10px 56px;
+	background: url("../images/note.png") no-repeat scroll 10px 10px lightyellow;
+}

@@ -95,7 +95,10 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 </activity>
 {% endhighlight %}
 
-NOTE:  In order to track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
+<div class="note">
+<h5>Note</h5>
+To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
+</div>
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
@@ -134,7 +137,10 @@ public class Example {
 }
 {% endhighlight %}
 
-NOTE: These lifecycle events will not be called in any predefined order.
+<div class="note">
+<h5>Note</h5>
+Lifecycle events will not be called in any predefined order.
+</div>
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
 
@@ -398,7 +404,10 @@ Transfuse implements JSR330, the same standard many of the leading DI frameworks
 
 Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
 
-NOTE:  This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be prefered.
+<div class="note">
+<h5>Note</h5>
+This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be prefered.
+</div>
 
 ##### Provider
 
@@ -475,8 +484,10 @@ Annotating a method with @Asynchronous tells Transfuse to proxy the execution of
 ##### @UIThread
 Annotating a method with @UIthread will execute the given method through an Android Handler.  This puts the execution of the method back on the UI thread.
 
-Note: If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
-
+<div class="note">
+<h5>Note</h5>
+If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
+</div>
 ##### Configuration
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  These are assocaited in the TransfuseModule with the @BindInterceptor annotation.
@@ -615,11 +626,6 @@ public class ExampleUsage{
 {% endhighlight %}
 
 <hr/>
-
-#### 
-
-
-<hr/>
 #### Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
@@ -628,9 +634,12 @@ In an ideal world, users are able to develop a new application.  Realistically h
 <li>
  Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them. </li>
 
-<li> Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.
+<li> Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.</li></ul>
 
-NOTE: These components are still Android components and DI and the other code generation features will not be available. </li></ul>
+<div class="note">
+<h5>Note</h5>
+These components are still Android components and DI and the other code generation features will not be available.
+</div>
 
 The second option looks like the following:
 
