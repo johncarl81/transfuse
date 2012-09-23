@@ -187,6 +187,10 @@ public class Example{
 }
 {% endhighlight %}
 
+##### Injection Qualifiers
+
+
+
 <hr/>
 
 ##### @Service
@@ -224,7 +228,7 @@ public class ExampleService {
 
 ##### @BroadcastReceiver
 
-Annotating the class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver.
+Annotating the class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
 
 The most important event handled by the Broadcast Receiver is onReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, users may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
 
@@ -237,6 +241,23 @@ public class Startup{
 	}
 }
 {% endhighlight %}
+
+<hr/>
+
+##### @Application
+
+Annotating the class with the Activity annotation activates the class as an Android Application component.  There may be only one of these components through a Transfuse application.
+
+The annotated application class has the following lifecycle events available via the lifecycle event annotations:
+
+{% highlight java %}
+@OnCreate
+@OnLowMemory
+@OnTerminate
+@OnConfigurationChanged
+{% endhighlight %}
+
+These annotations correspond to the similarly named lifecycle events available on the Application class.
 
 <hr/>
 
