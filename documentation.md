@@ -193,6 +193,10 @@ public class Example{
 }
 {% endhighlight %}
 
+Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to intellegently register listeners by type depending upon the view referenced.
+
+Optionally the specific listener type may be specified in the RegisterListner annotation.  This is useful for listeners that implement multiple types.
+
 ##### Injection Qualifiers
 
 There are a number of qualified injections available within the Activity injection graph.  Each qualifier designates a different source to draw the injection from.
