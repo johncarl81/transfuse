@@ -64,7 +64,7 @@ public class Example{}
 
 {% highlight java %}
 public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
-	@Inject private Activity activity;
+	@Inject Activity activity;
 
 	public void invokeLayout(){
 		if(isLunchTime()){
@@ -189,7 +189,103 @@ public class Example{
 
 ##### Injection Qualifiers
 
+There are a number of qualified injections available within the Activity injection graph.  Each qualifier designates a different source to draw the injection from.
 
+###### @Extra
+
+Extras are defined by a string name and the given type and may be declared optional if applicable.  Using this qualifier along with the Intent Factory helps enforce the contract specified on the Intent.
+
+The following Extra injection:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @Extra("one")
+	String one;
+	@Inject @Extra(value = "two", optional = true)
+	String two;
+}
+{% endhighlight %}
+
+First, requires a string value named one to be provided in the Bundle while starting the Example Activity.  Secondarily has the option to inject an extra String value named two.  If the Extra two is not provided in the Intent starting the Example Activity, two will be null.
+
+###### @Resource
+
+The Resource qualifier specifies the given injection draws from the Application's Resources found on the Context.getResources() method call.  Each resource is looked up by name and by type.  For instance, the following injection:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @Resource(R.string.app_name)
+	String appName;
+}
+{% endhighlight %}
+ 
+looks up the appName resource by String type:
+
+{% highlight java %}
+getApplication().getResources().getString(R.string.app_name);
+{% endhighlight  %}
+
+###### @View
+
+The View qualifier identifies the widget to inject from the view higherarchy set up during the onCreate phase.  As an example, we may look up an TextView by id with the following:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @View(R.id.viewText)
+	ViewText viewText;
+}
+{% endhighlight %}
+
+optionally the view may be injected by tag value:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @View(tag = "taggedView")
+	ViewText viewText;
+}
+{% endhighlight %}
+
+The View qualifier does perform the necessary casting from the getViewById() method, but makes the assumption that the type declared is correct.  This may cause issues when the type is incorrectly assocaited with the given View widget.
+
+##### @Preference
+
+The Preference qualifier draws a value by type and name from the application's shared preferences.  The following example highlights injecting a preferenced named "favorite_color" and String type:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @Preference(value = "favorite_color", default = "green")
+	String favColor;
+}
+{% endhighlight %}
+
+A default value must be provided with each preference injection.  These defaults will only be used if the preference is not specified.
+
+###### @SystemService
+
+All system services are mapped into the injection context by type:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject
+	LocationManager locationManager;
+}
+{% endhighlight %}
+
+Optionally you may inject into a base type of the given system service, but the system service type must be specified.  This may be helpful if the given system service is not mapped by Transfuse by type:
+
+{% highlight java %}
+@Activity
+public class Example{
+	@Inject @SystemService(Context.LOCATION_SERVICE)
+	LocationManager locationManager;
+}
+{% endhighlight %}
 
 <hr/>
 
@@ -271,9 +367,9 @@ The following Activity has two types of Extras, required and optional:
 @Activity
 public class ExtraActivity{
 	@Inject @Extra("name") 
-	private String name;
+	String name;
 	@Inject @Extra(value="age", optional=true)
-	private Integer age;
+	Integer age;
 }
 {% endhighlight %}
 
@@ -283,7 +379,7 @@ You may build and start the ExtraActivity with the IntentFactory:
 @Activity
 public class CallingActivity{
 	@Inject
-	private IntentFactory intentFactory;
+	IntentFactory intentFactory;
 	public void openExtraActivity() {
 		intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
 	}
@@ -302,7 +398,7 @@ Transfuse implements JSR330, the same standard many of the leading DI frameworks
 
 Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
 
-NOTE:  This documentation highlights using private field injection because it is the most sucinct.  Please avoid this type of injection if possible.
+NOTE:  This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be prefered.
 
 ##### Provider
 
@@ -321,11 +417,11 @@ Injections:
 {% highlight java %}
 public void TestInjections{
 	@Inject
-	private Example example; //calls .get() to resolve example
+	Example example; //calls .get() to resolve example
 	@Inject
-	private Provider<Example> exampleProvider; // determines the provider type by generics
+	Provider<Example> exampleProvider; // determines the provider type by generics
 	@Inject
-	private ExampleProvider concreteInjection;
+	ExampleProvider concreteInjection;
 }
 {% endhighlight %}
 
@@ -347,7 +443,7 @@ Any class annotated with @Singleton will, when injected, reference a single inst
 {% highlight java %}
 @Singleton
 public class SingletonExample{
-	private String singletonData;
+	...
 }
 {% endhighlight %}
 
@@ -360,6 +456,61 @@ Named support is pending.
 For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected based on an interface.
 
 <hr/>
+
+#### Method Interceptors
+
+Transfuse offers a basic AOP facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  A couple useful method interceptors are defined by transfuse:
+
+##### @Asynchronous
+Annotating a method with @Asynchronous tells Transfuse to proxy the execution of the method and execute it within its own thread.  The method will execute and the calling thread will return immediately.
+
+##### @UIThread
+Annotating a method with @UIthread will execute the given method through an Android Handler.  This puts the execution of the method back on the UI thread.
+
+Note: If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
+
+##### Configuration
+
+Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  These are assocaited in the TransfuseModule with the @BindInterceptor annotation.
+
+Example:
+
+{% highlight java %}
+@Target(METHOD)
+public @interface Log {}
+{% endhighlight %}
+
+{% highlight java %}
+public class LogInterceptor implements MethodInterceptor {
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        Log.i("Interception", "start");
+        Object ret = invocation.proceed();
+        Log.i("Interception", "finish");
+
+        return ret;
+    }
+}
+{% endhighlight %}
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+	@BindInterceptor(Log.class)
+	LogInterceptor getLogInterceptor();
+}
+{% endhighlight %}
+
+This example shows an interceptor that logs the starting and ending points of a method call.  All that is needed to use this method is to annotated a method like so:
+
+{% highlight java %}
+public class Example{
+	@Log
+	public void methodCall() {
+	}
+}
+{% endhighlight %}
+
 
 #### Events
 
@@ -383,7 +534,7 @@ Events are triggered by using the EventManager.trigger() method.  Simply call th
 {% highlight java %}
 public class Trigger{
 	@Inject
-	private EventManager eventManager;
+	EventManager eventManager;
 
 	public void trigger(){
 		eventManager.trigger(new Event());
@@ -401,8 +552,8 @@ Transfuse offers a new way of defining Parcelable classes.  The typical implemen
 {% highlight java %}
 @Parcel
 public void CleanParcel{
-	public String name;
-	public int age;
+	private String name;
+	private int age;
 	public String getName(){
 		return name;
 	}
