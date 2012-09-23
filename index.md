@@ -51,7 +51,7 @@ public class HelloTransfuse {
 <li>Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.  This puts all the relevant information regarding the Activity in one place.  Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.</li>
 </ul>
 
-Read more about the features in the [[Documentation](documentation.html)] and [[Motivation](motivation.html)] sections.
+Read more about the features in the [[Documentation](documentation.html)] and [[Introduction](motivation.html)] sections.
 
 New to the library or Android? Visit the [[Getting Started](getting_started.html)] section.
 
