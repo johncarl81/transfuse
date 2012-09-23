@@ -108,7 +108,7 @@ public class HelloAndroid {
 
 {% endhighlight %}
 
-Although syntactically different than the standard Android Activity, this should seem familiar to the seasoned Android developer.  With Transfuse, the properties previously defined in the AndroidManifest.xml file are now defined and associated directly with the Activity code.  This follows the DRY principle, keeping the Activity definition in one place instead of split between class files and xml resources.  There is no longer a requirement to extend Activity (or one of its extension classes) and define the typical boilerplate.  Transfuse allows development of Android components in a POJO way, unrestricted by the extension-based API of Android.
+Although syntactically different than the standard Android Activity, this should seem familiar to the seasoned Android developer.  With Transfuse, the properties previously defined in the AndroidManifest.xml file are now defined and associated directly with the Activity code.  This follows the Don't Repeat Yourself (DRY) principle, keeping the Activity definition in one place instead of split between class files and xml resources.  There is no longer a requirement to extend Activity (or one of its extension classes) and define the typical boilerplate.  Transfuse allows development of Android components in a POJO way, unrestricted by the extension-based API of Android.
 
 #### Build and Deploy
 
