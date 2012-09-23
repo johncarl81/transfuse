@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c90565" href="./NoOpLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" alt="" coords="16,118,149,143"/>
-<area shape="rect" id="c90568" href="./LayoutHandlerBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" alt="" coords="194,118,339,143"/>
-<area shape="rect" id="c90579" href="./RLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" alt="" coords="384,118,493,143"/>
-<area shape="rect" id="c90582" href="./FragmentSimpleLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.FragmentSimpleLayoutBuilder" alt="" coords="539,118,733,143"/>
-<area shape="rect" id="c90584" href="./LayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" alt="" coords="302,11,402,53"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c68534" href="./DependentVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder" alt="" coords="133,11,304,53"/>
-<area shape="rect" id="c68549" href="./MethodCallVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.MethodCallVariableBuilder" alt="" coords="16,118,189,143"/>
-<area shape="rect" id="c68550" href="./StaticInvocationVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.StaticInvocationVariableBuilder" alt="" coords="234,118,435,143"/>
-</map>

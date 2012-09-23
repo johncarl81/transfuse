@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c87559" href="../IntentFactoryStrategyGenerator.html" title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" alt="" coords="15,118,219,143"/>
-<area shape="rect" id="c87634" href="./ContextScopeComponentBuilder.html" title="org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder" alt="" coords="264,118,475,143"/>
-<area shape="rect" id="c87637" href="./NonConfigurationInstanceGenerator.html" title="org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator" alt="" coords="520,118,749,143"/>
-<area shape="rect" id="c87639" href="./ListenerRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" alt="" coords="794,118,987,143"/>
-<area shape="rect" id="c87642" href="./MethodCallbackGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" alt="" coords="1031,118,1203,143"/>
-<area shape="rect" id="c87644" href="./ExpressionVariableDependentGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" alt="" coords="508,11,761,53"/>
-</map>

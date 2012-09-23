@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c33231" href="./InjectionAnalyzer.html" title="org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer" alt="" coords="15,118,137,143"/>
-<area shape="rect" id="c33235" href="./ASTAnalysis.html" title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" alt="" coords="203,11,301,53"/>
-<area shape="rect" id="c33242" href="./RegistrationAnalyzer.html" title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" alt="" coords="181,118,323,143"/>
-<area shape="rect" id="c33244" href="./ASTAnalysisAdaptor.html" title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" alt="" coords="368,118,509,143"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c44113" href="./ASTElementBase.html" title="org.androidtransfuse.analysis.adapter.ASTElementBase" alt="" coords="16,121,141,146"/>
-<area shape="rect" id="c44115" href="./ASTConstructor.html" title="org.androidtransfuse.analysis.adapter.ASTConstructor" alt="" coords="187,113,301,154"/>
-<area shape="rect" id="c44117" href="./ASTBase.html" title="org.androidtransfuse.analysis.adapter.ASTBase" alt="" coords="412,11,497,53"/>
-<area shape="rect" id="c44118" href="./ASTType.html" title="org.androidtransfuse.analysis.adapter.ASTType" alt="" coords="347,113,432,154"/>
-<area shape="rect" id="c44120" href="./ASTMethod.html" title="org.androidtransfuse.analysis.adapter.ASTMethod" alt="" coords="477,113,566,154"/>
-<area shape="rect" id="c44126" href="./ASTParameter.html" title="org.androidtransfuse.analysis.adapter.ASTParameter" alt="" coords="611,113,717,154"/>
-<area shape="rect" id="c44132" href="./ASTField.html" title="org.androidtransfuse.analysis.adapter.ASTField" alt="" coords="763,113,848,154"/>
-</map>
