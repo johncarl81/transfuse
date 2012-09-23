@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="c10301" href="./Mergeable.html" title="org.androidtransfuse.model.Mergeable" alt="" coords="489,17,570,42"/>
+<area shape="rect" id="c10312" href="./manifest/MetaData.html" title="org.androidtransfuse.model.manifest.MetaData" alt="" coords="16,113,93,138"/>
+<area shape="rect" id="c10314" href="./manifest/Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="139,113,224,138"/>
+<area shape="rect" id="c10317" href="./manifest/Category.html" title="org.androidtransfuse.model.manifest.Category" alt="" coords="269,113,342,138"/>
+<area shape="rect" id="c10318" href="./manifest/Manifest.html" title="org.androidtransfuse.model.manifest.Manifest" alt="" coords="386,113,457,138"/>
+<area shape="rect" id="c10325" href="./manifest/Action.html" title="org.androidtransfuse.model.manifest.Action" alt="" coords="501,113,558,138"/>
+<area shape="rect" id="c10330" href="./manifest/Service.html" title="org.androidtransfuse.model.manifest.Service" alt="" coords="602,113,667,138"/>
+<area shape="rect" id="c10334" href="./manifest/Receiver.html" title="org.androidtransfuse.model.manifest.Receiver" alt="" coords="711,113,785,138"/>
+<area shape="rect" id="c10339" href="./manifest/Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="829,113,894,138"/>
+<area shape="rect" id="c10341" href="./manifest/IntentFilter.html" title="org.androidtransfuse.model.manifest.IntentFilter" alt="" coords="939,113,1021,138"/>
+</map>

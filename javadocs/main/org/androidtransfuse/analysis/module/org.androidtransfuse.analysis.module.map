@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="c2569" href="./BindProviderProcessor.html" title="org.androidtransfuse.analysis.module.BindProviderProcessor" alt="" coords="15,113,169,138"/>
+<area shape="rect" id="c2570" href="./MethodProcessor.html" title="org.androidtransfuse.analysis.module.MethodProcessor" alt="" coords="236,17,359,42"/>
+<area shape="rect" id="c2571" href="./BindInterceptorProcessor.html" title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" alt="" coords="213,113,381,138"/>
+<area shape="rect" id="c2573" href="./BindProcessor.html" title="org.androidtransfuse.analysis.module.BindProcessor" alt="" coords="426,113,531,138"/>
+<area shape="rect" id="c2572" href="./ModuleProcessor.html" title="org.androidtransfuse.analysis.module.ModuleProcessor" alt="" coords="403,17,525,42"/>
+</map>

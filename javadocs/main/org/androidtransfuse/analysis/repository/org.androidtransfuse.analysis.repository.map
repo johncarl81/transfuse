@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="c1585" href="./BindingRepositoryFactory.html" title="org.androidtransfuse.analysis.repository.BindingRepositoryFactory" alt="" coords="16,17,187,42"/>
+<area shape="rect" id="c1586" href="./ProviderInjectionNodeBuilderRepository.html" title="org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository" alt="" coords="231,17,483,42"/>
+<area shape="rect" id="c1587" href="./ActivityComponentBuilderRepositoryFactory.html" title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory" alt="" coords="527,17,806,42"/>
+<area shape="rect" id="c1588" href="./GeneratorRepository.html" title="org.androidtransfuse.analysis.repository.GeneratorRepository" alt="" coords="851,17,992,42"/>
+<area shape="rect" id="c1589" href="./AnalysisRepository.html" title="org.androidtransfuse.analysis.repository.AnalysisRepository" alt="" coords="1037,17,1171,42"/>
+<area shape="rect" id="c1590" href="./AOPRepository.html" title="org.androidtransfuse.analysis.repository.AOPRepository" alt="" coords="1216,17,1328,42"/>
+<area shape="rect" id="c1591" href="./GeneratorRepositoryProvider.html" title="org.androidtransfuse.analysis.repository.GeneratorRepositoryProvider" alt="" coords="1373,17,1563,42"/>
+<area shape="rect" id="c1592" href="./InjectionNodeBuilderRepository.html" title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository" alt="" coords="1607,17,1811,42"/>
+<area shape="rect" id="c1593" href="./AOPRepositoryProvider.html" title="org.androidtransfuse.analysis.repository.AOPRepositoryProvider" alt="" coords="1856,17,2016,42"/>
+<area shape="rect" id="c1594" href="./AnalysisRepositoryFactory.html" title="org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory" alt="" coords="2061,17,2238,42"/>
+<area shape="rect" id="c1595" href="./ScopeAspectFactoryRepository.html" title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository" alt="" coords="2283,17,2488,42"/>
+<area shape="rect" id="c1596" href="./InjectionNodeBuilderRepositoryFactory.html" title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory" alt="" coords="2533,17,2781,42"/>
+<area shape="rect" id="c1597" href="./ActivityComponentBuilderRepository.html" title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository" alt="" coords="2827,17,3061,42"/>
+<area shape="rect" id="c1598" href="./ScopeAspectFactoryRepositoryProvider.html" title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepositoryProvider" alt="" coords="3107,17,3360,42"/>
+</map>

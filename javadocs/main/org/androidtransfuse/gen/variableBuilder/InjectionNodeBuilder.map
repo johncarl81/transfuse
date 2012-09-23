@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="c75168" href="./IndependentInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.IndependentInjectionNodeBuilder" alt="" coords="15,118,227,143"/>
+<area shape="rect" id="c75170" href="./GeneratedProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder" alt="" coords="271,118,521,143"/>
+<area shape="rect" id="c75177" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="565,118,830,143"/>
+<area shape="rect" id="c75180" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="627,11,768,53"/>
+<area shape="rect" id="c75190" href="./InjectionNodeBuilderSingleAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" alt="" coords="874,118,1158,143"/>
+<area shape="rect" id="c75207" href="./DependentInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder" alt="" coords="1202,118,1406,143"/>
+</map>

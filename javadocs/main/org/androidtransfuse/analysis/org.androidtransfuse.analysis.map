@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="c1269" href="./Analysis.html" title="org.androidtransfuse.analysis.Analysis" alt="" coords="515,11,610,53"/>
+<area shape="rect" id="c1270" href="./FragmentAnalysis.html" title="org.androidtransfuse.analysis.FragmentAnalysis" alt="" coords="16,118,141,143"/>
+<area shape="rect" id="c1271" href="./BroadcastReceiverAnalysis.html" title="org.androidtransfuse.analysis.BroadcastReceiverAnalysis" alt="" coords="187,118,368,143"/>
+<area shape="rect" id="c1274" href="./ParcelableAnalysis.html" title="org.androidtransfuse.analysis.ParcelableAnalysis" alt="" coords="413,118,545,143"/>
+<area shape="rect" id="c1275" href="./ActivityAnalysis.html" title="org.androidtransfuse.analysis.ActivityAnalysis" alt="" coords="589,118,704,143"/>
+<area shape="rect" id="c1279" href="./ApplicationAnalysis.html" title="org.androidtransfuse.analysis.ApplicationAnalysis" alt="" coords="749,118,883,143"/>
+<area shape="rect" id="c1281" href="./ServiceAnalysis.html" title="org.androidtransfuse.analysis.ServiceAnalysis" alt="" coords="928,118,1043,143"/>
+<area shape="rect" id="c1272" href="./IntentFilterFactory.html" title="org.androidtransfuse.analysis.IntentFilterFactory" alt="" coords="654,19,781,45"/>
+<area shape="rect" id="c1273" href="./AnalysisContext.html" title="org.androidtransfuse.analysis.AnalysisContext" alt="" coords="825,19,943,45"/>
+<area shape="rect" id="c1276" href="./AnalysisContextFactory.html" title="org.androidtransfuse.analysis.AnalysisContextFactory" alt="" coords="987,11,1149,53"/>
+<area shape="rect" id="c1277" href="./TransfuseAnalysisException.html" title="org.androidtransfuse.analysis.TransfuseAnalysisException" alt="" coords="1193,19,1380,45"/>
+<area shape="rect" id="c1278" href="./MetaDataBuilder.html" title="org.androidtransfuse.analysis.MetaDataBuilder" alt="" coords="1425,19,1543,45"/>
+<area shape="rect" id="c1280" href="./InjectionPointFactory.html" title="org.androidtransfuse.analysis.InjectionPointFactory" alt="" coords="1588,19,1732,45"/>
+<area shape="rect" id="c1282" href="./Analyzer.html" title="org.androidtransfuse.analysis.Analyzer" alt="" coords="1777,19,1849,45"/>
+</map>

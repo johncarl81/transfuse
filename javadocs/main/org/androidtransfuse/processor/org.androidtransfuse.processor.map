@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="c3795" href="./TransfuseAssembler.html" title="org.androidtransfuse.processor.TransfuseAssembler" alt="" coords="16,17,157,42"/>
+<area shape="rect" id="c3796" href="./ComponentProcessor.html" title="org.androidtransfuse.processor.ComponentProcessor" alt="" coords="203,17,349,42"/>
+<area shape="rect" id="c3797" href="./MergeableTagConverter.html" title="org.androidtransfuse.processor.MergeableTagConverter" alt="" coords="395,17,555,42"/>
+<area shape="rect" id="c3798" href="./Merger.html" title="org.androidtransfuse.processor.Merger" alt="" coords="600,17,661,42"/>
+<area shape="rect" id="c3799" href="./MergerException.html" title="org.androidtransfuse.processor.MergerException" alt="" coords="706,17,825,42"/>
+<area shape="rect" id="c3800" href="./ManifestManager.html" title="org.androidtransfuse.processor.ManifestManager" alt="" coords="869,17,990,42"/>
+<area shape="rect" id="c3801" href="./MergeCollection.html" title="org.androidtransfuse.processor.MergeCollection" alt="" coords="1035,17,1149,42"/>
+<area shape="rect" id="c3802" href="./TransfuseProcessor.html" title="org.androidtransfuse.processor.TransfuseProcessor" alt="" coords="1194,17,1331,42"/>
+<area shape="rect" id="c3803" href="./TransfuseInjector.html" title="org.androidtransfuse.processor.TransfuseInjector" alt="" coords="1375,17,1497,42"/>
+<area shape="rect" id="c3804" href="./Merge.html" title="org.androidtransfuse.processor.Merge" alt="" coords="1541,17,1598,42"/>
+<area shape="rect" id="c3805" href="./MergeableTags.html" title="org.androidtransfuse.processor.MergeableTags" alt="" coords="1643,17,1752,42"/>
+</map>

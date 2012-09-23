@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="c3179" href="./Logger.html" title="org.androidtransfuse.util.Logger" alt="" coords="32,11,117,53"/>
+<area shape="rect" id="c3186" href="./MessagerLogger.html" title="org.androidtransfuse.util.MessagerLogger" alt="" coords="16,118,133,143"/>
+<area shape="rect" id="c3180" href="./AnnotationUtil.html" title="org.androidtransfuse.util.AnnotationUtil" alt="" coords="162,19,265,45"/>
+<area shape="rect" id="c3181" href="./ElementVisitorAdaptor.html" title="org.androidtransfuse.util.ElementVisitorAdaptor" alt="" coords="309,19,502,45"/>
+<area shape="rect" id="c3182" href="./ManifestLocator.html" title="org.androidtransfuse.util.ManifestLocator" alt="" coords="546,19,659,45"/>
+<area shape="rect" id="c3183" href="./TypeMirrorRunnable.html" title="org.androidtransfuse.util.TypeMirrorRunnable" alt="" coords="703,19,865,45"/>
+<area shape="rect" id="c3184" href="./TypeMirrorUtil.html" title="org.androidtransfuse.util.TypeMirrorUtil" alt="" coords="909,19,1011,45"/>
+<area shape="rect" id="c3185" href="./ManifestSerializer.html" title="org.androidtransfuse.util.ManifestSerializer" alt="" coords="1056,19,1181,45"/>
+</map>

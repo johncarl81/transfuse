@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="c78191" href="./FragmentViewInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.FragmentViewInjectionNodeBuilder" alt="" coords="15,214,241,239"/>
+<area shape="rect" id="c78198" href="./ResourceInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder" alt="" coords="285,214,483,239"/>
+<area shape="rect" id="c78200" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="673,11,815,53"/>
+<area shape="rect" id="c78210" href="./InjectionNodeBuilderSingleAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" alt="" coords="602,118,886,143"/>
+<area shape="rect" id="c78207" href="./ViewInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder" alt="" coords="527,214,697,239"/>
+<area shape="rect" id="c78209" href="./SystemServiceBindingInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder" alt="" coords="741,214,1014,239"/>
+<area shape="rect" id="c78211" href="./PreferenceInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.PreferenceInjectionNodeBuilder" alt="" coords="1058,214,1262,239"/>
+<area shape="rect" id="c78225" href="./ExtraInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder" alt="" coords="1306,214,1478,239"/>
+</map>

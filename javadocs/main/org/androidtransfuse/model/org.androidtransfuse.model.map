@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="c307" href="./FieldInjectionPoint.html" title="org.androidtransfuse.model.FieldInjectionPoint" alt="" coords="16,19,144,45"/>
+<area shape="rect" id="c308" href="./PackageClass.html" title="org.androidtransfuse.model.PackageClass" alt="" coords="189,19,294,45"/>
+<area shape="rect" id="c309" href="./MethodInjectionPoint.html" title="org.androidtransfuse.model.MethodInjectionPoint" alt="" coords="254,118,397,143"/>
+<area shape="rect" id="c310" href="./ComponentDescriptor.html" title="org.androidtransfuse.model.ComponentDescriptor" alt="" coords="557,19,705,45"/>
+<area shape="rect" id="c311" href="./MethodInjectionPointBase.html" title="org.androidtransfuse.model.MethodInjectionPointBase" alt="" coords="339,19,512,45"/>
+<area shape="rect" id="c314" href="./ConstructorInjectionPoint.html" title="org.androidtransfuse.model.ConstructorInjectionPoint" alt="" coords="441,118,609,143"/>
+<area shape="rect" id="c312" href="./InjectionNode.html" title="org.androidtransfuse.model.InjectionNode" alt="" coords="749,19,851,45"/>
+<area shape="rect" id="c313" href="./TypedExpression.html" title="org.androidtransfuse.model.TypedExpression" alt="" coords="895,19,1017,45"/>
+<area shape="rect" id="c315" href="./Mergeable.html" title="org.androidtransfuse.model.Mergeable" alt="" coords="1061,19,1142,45"/>
+<area shape="rect" id="c316" href="./ParcelableDescriptor.html" title="org.androidtransfuse.model.ParcelableDescriptor" alt="" coords="1187,19,1328,45"/>
+<area shape="rect" id="c317" href="./MethodDescriptorBuilder.html" title="org.androidtransfuse.model.MethodDescriptorBuilder" alt="" coords="1373,19,1537,45"/>
+<area shape="rect" id="c318" href="./Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="1581,11,1667,53"/>
+<area shape="rect" id="c319" href="./GetterSetterMethodPair.html" title="org.androidtransfuse.model.GetterSetterMethodPair" alt="" coords="1712,19,1869,45"/>
+<area shape="rect" id="c320" href="./MethodDescriptor.html" title="org.androidtransfuse.model.MethodDescriptor" alt="" coords="1914,19,2038,45"/>
+</map>

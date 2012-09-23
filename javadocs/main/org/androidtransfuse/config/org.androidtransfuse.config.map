@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="c0" href="./XStreamProvider.html" title="org.androidtransfuse.config.XStreamProvider" alt="" coords="16,19,136,45"/>
+<area shape="rect" id="c1" href="./TransfuseSetupGuiceModule.html" title="org.androidtransfuse.config.TransfuseSetupGuiceModule" alt="" coords="181,19,371,45"/>
+<area shape="rect" id="c2" href="./Nullable.html" title="org.androidtransfuse.config.Nullable" alt="" coords="415,19,483,45"/>
+<area shape="rect" id="c3" href="./TransfuseGenerateGuiceModule.html" title="org.androidtransfuse.config.TransfuseGenerateGuiceModule" alt="" coords="528,19,736,45"/>
+<area shape="rect" id="c4" href="./TransfuseAndroidModule.html" title="org.androidtransfuse.config.TransfuseAndroidModule" alt="" coords="781,11,947,53"/>
+</map>

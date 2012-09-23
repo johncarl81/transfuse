@@ -1,0 +1,25 @@
+<map id="G" name="G">
+<area shape="rect" id="c4108" href="./FilerSourceCodeWriter.html" title="org.androidtransfuse.gen.FilerSourceCodeWriter" alt="" coords="15,19,169,45"/>
+<area shape="rect" id="c4109" href="./AnalysisGenerationFactory.html" title="org.androidtransfuse.gen.AnalysisGenerationFactory" alt="" coords="213,19,390,45"/>
+<area shape="rect" id="c4110" href="./GeneratorFactory.html" title="org.androidtransfuse.gen.GeneratorFactory" alt="" coords="434,11,555,53"/>
+<area shape="rect" id="c4111" href="./UniqueVariableNamer.html" title="org.androidtransfuse.gen.UniqueVariableNamer" alt="" coords="599,19,747,45"/>
+<area shape="rect" id="c4112" href="./ComponentGenerator.html" title="org.androidtransfuse.gen.ComponentGenerator" alt="" coords="485,118,630,143"/>
+<area shape="rect" id="c4113" href="./ApplicationGenerator.html" title="org.androidtransfuse.gen.ApplicationGenerator" alt="" coords="675,118,816,143"/>
+<area shape="rect" id="c4114" href="./InjectionBuilderContextFactory.html" title="org.androidtransfuse.gen.InjectionBuilderContextFactory" alt="" coords="939,11,1139,53"/>
+<area shape="rect" id="c4115" href="./ResourceCodeWriter.html" title="org.androidtransfuse.gen.ResourceCodeWriter" alt="" coords="1183,19,1326,45"/>
+<area shape="rect" id="c4116" href="./AnalysisGeneration.html" title="org.androidtransfuse.gen.AnalysisGeneration" alt="" coords="861,118,1019,143"/>
+<area shape="rect" id="c4117" href="./IntentFactoryStrategyGenerator.html" title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" alt="" coords="1370,19,1574,45"/>
+<area shape="rect" id="c4118" href="./Generator.html" title="org.androidtransfuse.gen.Generator" alt="" coords="792,11,893,53"/>
+<area shape="rect" id="c4119" href="./InjectorGenerator.html" title="org.androidtransfuse.gen.InjectorGenerator" alt="" coords="1063,118,1185,143"/>
+<area shape="rect" id="c4120" href="./InjectorRepositoryGenerator.html" title="org.androidtransfuse.gen.InjectorRepositoryGenerator" alt="" coords="1619,19,1803,45"/>
+<area shape="rect" id="c4121" href="./ProviderGenerator.html" title="org.androidtransfuse.gen.ProviderGenerator" alt="" coords="1848,19,1973,45"/>
+<area shape="rect" id="c4122" href="./GeneratedClassAnnotator.html" title="org.androidtransfuse.gen.GeneratedClassAnnotator" alt="" coords="2019,19,2189,45"/>
+<area shape="rect" id="c4123" href="./InjectionBuilderContext.html" title="org.androidtransfuse.gen.InjectionBuilderContext" alt="" coords="2234,19,2390,45"/>
+<area shape="rect" id="c4124" href="./InjectionFragmentGenerator.html" title="org.androidtransfuse.gen.InjectionFragmentGenerator" alt="" coords="2435,19,2616,45"/>
+<area shape="rect" id="c4125" href="./InjectionExpressionBuilder.html" title="org.androidtransfuse.gen.InjectionExpressionBuilder" alt="" coords="2661,19,2835,45"/>
+<area shape="rect" id="c4126" href="./ParcelableGenerator.html" title="org.androidtransfuse.gen.ParcelableGenerator" alt="" coords="2880,19,3019,45"/>
+<area shape="rect" id="c4127" href="./ParcelableGenerator.ReadWritePair.html" title="org.androidtransfuse.gen.ParcelableGenerator.ReadWritePair" alt="" coords="3063,19,3169,45"/>
+<area shape="rect" id="c4128" href="./InvocationBuilder.html" title="org.androidtransfuse.gen.InvocationBuilder" alt="" coords="3213,19,3334,45"/>
+<area shape="rect" id="c4129" href="./ExceptionWrapper.html" title="org.androidtransfuse.gen.ExceptionWrapper" alt="" coords="3379,19,3507,45"/>
+<area shape="rect" id="c4130" href="./ExceptionWrapper.BlockWriter.html" title="org.androidtransfuse.gen.ExceptionWrapper.BlockWriter" alt="" coords="3551,11,3665,53"/>
+</map>
