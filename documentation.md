@@ -453,7 +453,15 @@ Named support is pending.
 
 ##### Advanced
 
-For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected based on an interface.
+For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected via an interface.
+
+###### @ImplementedBy
+
+ImplementedBy support is pending
+
+###### @ContextScope
+
+With the need to instantiate one, and only one, instance of a class per Context, Transfuse allows the declaration of a Context singleton.
 
 <hr/>
 
@@ -605,6 +613,13 @@ public class ExampleUsage{
 	}
 }
 {% endhighlight %}
+
+<hr/>
+
+#### 
+
+
+<hr/>
 #### Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
