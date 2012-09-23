@@ -638,7 +638,7 @@ In an ideal world, users are able to develop a new application.  Realistically h
 
 <div class="note">
 <h5>Note</h5>
-These components are still Android components and DI and the other code generation features will not be available.
+Dependency Injection and the other code generation features are not available on legacy Android components
 </div>
 
 The second option looks like the following:
