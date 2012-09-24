@@ -64,17 +64,17 @@ public class Example{}
 
 {% highlight java %}
 public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
-	@Inject Activity activity;
+    @Inject Activity activity;
 
-	public void invokeLayout(){
-		if(isLunchTime()){
-			activity.setContentView(R.id.lunchLayout);
-		}
-		else{
-			activity.setContentView(R.ld.regularLayout);
-		}
-	}
-	...
+    public void invokeLayout(){
+        if(isLunchTime()){
+            activity.setContentView(R.id.lunchLayout);
+        }
+        else{
+            activity.setContentView(R.ld.regularLayout);
+        }
+    }
+    ...
 }
 {% endhighlight %}
 
@@ -84,7 +84,6 @@ As an example, the label can be set to an Activity as follows:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
-@Layout(R.id.example_layout)
 public class Example {}
 {% endhighlight %}
 
@@ -103,8 +102,7 @@ To track changes to the manifest, Transfuse adds to the managed xml tags the t:t
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
 {% highlight java %}
-@Activity(label = "Transfuse Example")
-@Layout(R.id.example_layout)
+@Activity
 @IntentFilter({
     @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
     @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
@@ -170,7 +168,7 @@ Optionally, parameters may be added to the annotated lifecycle event methods tha
 public class Example {
     @OnCreate
     public void log(Bundle bundle){
-        Log.i("Example Info", "OnCreate called with value: " + bundle);
+        Log.i("Example Info", "OnCreate called with value: " + bundle.get("value"));
     }
 }
 {% endhighlight %}
@@ -178,14 +176,14 @@ public class Example {
 
 ##### Listener Registration
 
-Another common event to be raised by the Android system are by listeners on view components.  Transfuse allows users to easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
+Another common event to be raised by the Android system are by listeners on view components.  Users can easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
 
 {% highlight java %}
 @Activity
 @Layout(R.id.example_layout)
 public class Example{
-    @RegisterListener(value = R.id.button5)
-    private View.OnClickListener listener = new View.OnClickListener() {
+    @RegisterListener(R.id.button5)
+    View.OnClickListener listener = new View.OnClickListener() {
         public void onClick(View v) {
             Log.i("Example Info", "Button Clicked");
         }
@@ -197,23 +195,33 @@ Transfuse contains a mapping of Listener type to registration method.  This allo
 
 Optionally the specific listener type may be specified in the RegisterListner annotation.  This is useful for listeners that implement multiple types.
 
+{% highlight java %}
+@Activity
+@Layout(R.id.example_layout)
+public class Example{
+    @Inject
+    @RegisterListener(value = R.id.button5, interfaces = View.OnLongClickListener.class)
+    MultipleListener listener;
+}
+{% endhighlight %}
+
 ##### Injection Qualifiers
 
 There are a number of qualified injections available within the Activity injection graph.  Each qualifier designates a different source to draw the injection from.
 
 ###### @Extra
 
-Extras are defined by a string name and the given type and may be declared optional if applicable.  Using this qualifier along with the Intent Factory helps enforce the contract specified on the Intent.
+Extras are defined by a string name and the given type and may be declared optional.  Using this qualifier along with the IntentFactory helps enforce the contract specified on the Intent.
 
 The following Extra injection:
 
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @Extra("one")
-	String one;
-	@Inject @Extra(value = "two", optional = true)
-	String two;
+    @Inject @Extra("one")
+    String one;
+    @Inject @Extra(value = "two", optional = true)
+    String two;
 }
 {% endhighlight %}
 
@@ -226,8 +234,8 @@ The Resource qualifier specifies the given injection draws from the Application'
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @Resource(R.string.app_name)
-	String appName;
+    @Inject @Resource(R.string.app_name)
+    String appName;
 }
 {% endhighlight %}
  
@@ -244,8 +252,8 @@ The View qualifier identifies the widget to inject from the view higherarchy set
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @View(R.id.viewText)
-	ViewText viewText;
+    @Inject @View(R.id.viewText)
+    ViewText viewText;
 }
 {% endhighlight %}
 
@@ -254,8 +262,8 @@ optionally the view may be injected by tag value:
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @View(tag = "taggedView")
-	ViewText viewText;
+    @Inject @View(tag = "taggedView")
+    ViewText viewText;
 }
 {% endhighlight %}
 
@@ -268,8 +276,8 @@ The Preference qualifier draws a value by type and name from the application's s
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @Preference(value = "favorite_color", default = "green")
-	String favColor;
+    @Inject @Preference(value = "favorite_color", default = "green")
+    String favColor;
 }
 {% endhighlight %}
 
@@ -282,8 +290,8 @@ All system services are mapped into the injection context by type:
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject
-	LocationManager locationManager;
+    @Inject
+    LocationManager locationManager;
 }
 {% endhighlight %}
 
@@ -292,8 +300,8 @@ Optionally you may inject into a base type of the given system service, but the 
 {% highlight java %}
 @Activity
 public class Example{
-	@Inject @SystemService(Context.LOCATION_SERVICE)
-	LocationManager locationManager;
+    @Inject @SystemService(Context.LOCATION_SERVICE)
+    LocationManager locationManager;
 }
 {% endhighlight %}
 
@@ -323,10 +331,10 @@ Service may be injected as described in the Injection section:
 {% highlight java %}
 @Service
 public class ExampleService {
-	@Inject
-	public ExampleService(ADependency dependency) {
+    @Inject
+    public ExampleService(ADependency dependency) {
         ...
-	}
+    }
 }
 {% endhighlight %}
 
@@ -342,9 +350,9 @@ The most important event handled by the Broadcast Receiver is onReceieve.  Trans
 @BroadcastReceiver
 @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_BOOT_COMPLETED)
 public class Startup{
-	@OnReceive
-	public void bootup(){
-	}
+    @OnReceive
+    public void bootup(){
+    }
 }
 {% endhighlight %}
 
@@ -376,10 +384,10 @@ The following Activity has two types of Extras, required and optional:
 {% highlight java %}
 @Activity
 public class ExtraActivity{
-	@Inject @Extra("name") 
-	String name;
-	@Inject @Extra(value="age", optional=true)
-	Integer age;
+    @Inject @Extra("name") 
+    String name;
+    @Inject @Extra(value="age", optional=true)
+    Integer age;
 }
 {% endhighlight %}
 
@@ -388,11 +396,11 @@ You may build and start the ExtraActivity with the IntentFactory:
 {% highlight java %}
 @Activity
 public class CallingActivity{
-	@Inject
-	IntentFactory intentFactory;
-	public void openExtraActivity() {
-		intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
-	}
+    @Inject
+    IntentFactory intentFactory;
+    public void openExtraActivity() {
+        intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
+    }
 }
 {% endhighlight %}
 
@@ -420,21 +428,21 @@ Providers may be used to manually resolve the dependencies of a class.  The Prov
 Provider:
 {% highlight java %}
 public void ExampleProvider implements Provider<Example>
-	public Example get(){
-		return new Example();
-	}
+    public Example get(){
+        return new Example();
+    }
 }
 {% endhighlight %}
 
 Injections:
 {% highlight java %}
 public void TestInjections{
-	@Inject
-	Example example; //calls .get() to resolve example
-	@Inject
-	Provider<Example> exampleProvider; // determines the provider type by generics
-	@Inject
-	ExampleProvider concreteInjection;
+    @Inject
+    Example example; //calls .get() to resolve example
+    @Inject
+    Provider<Example> exampleProvider; // determines the provider type by generics
+    @Inject
+    ExampleProvider concreteInjection;
 }
 {% endhighlight %}
 
@@ -443,8 +451,8 @@ To map a Provider to a type, define the provider binding in the TransfuseModule:
 {% highlight java %}
 @TransfuseModule
 public interface Module{
-	@BindProvider(ExampleProvider.class)
-	Example mapExampleProvider();
+    @BindProvider(ExampleProvider.class)
+    Example mapExampleProvider();
 }
 {% endhighlight %}
 
@@ -456,7 +464,7 @@ Any class annotated with @Singleton will, when injected, reference a single inst
 {% highlight java %}
 @Singleton
 public class SingletonExample{
-	...
+    ...
 }
 {% endhighlight %}
 
@@ -519,8 +527,8 @@ public class LogInterceptor implements MethodInterceptor {
 {% highlight java %}
 @TransfuseModule
 public interface Module{
-	@BindInterceptor(Log.class)
-	LogInterceptor getLogInterceptor();
+    @BindInterceptor(Log.class)
+    LogInterceptor getLogInterceptor();
 }
 {% endhighlight %}
 
@@ -528,9 +536,9 @@ This example shows an interceptor that logs the starting and ending points of a 
 
 {% highlight java %}
 public class Example{
-	@Log
-	public void methodCall() {
-	}
+    @Log
+    public void methodCall() {
+    }
 }
 {% endhighlight %}
 
@@ -545,10 +553,10 @@ Any type may be used as an event.  Event observer methods may be defined by eith
 public class Event{}
 
 public class ListenerExample{
-	@Observes
-	public void observeEvent(Event event){}
+    @Observes
+    public void observeEvent(Event event){}
 
-	public void observeEvent2(@Observes Event event){}
+    public void observeEvent2(@Observes Event event){}
 }
 {% endhighlight %}
 
@@ -556,12 +564,12 @@ Events are triggered by using the EventManager.trigger() method.  Simply call th
 
 {% highlight java %}
 public class Trigger{
-	@Inject
-	EventManager eventManager;
+    @Inject
+    EventManager eventManager;
 
-	public void trigger(){
-		eventManager.trigger(new Event());
-	}
+    public void trigger(){
+        eventManager.trigger(new Event());
+    }
 }
 {% endhighlight %}
 
@@ -575,21 +583,21 @@ Transfuse offers a new way of defining Parcelable classes.  The typical implemen
 {% highlight java %}
 @Parcel
 public void CleanParcel{
-	private String name;
-	private int age;
-	public String getName(){
-		return name;
-	}
-	public void setName(String name){
-		this.name = name;
-	}
-	@Transient //don't serialize in parcelable
-	public int getAge(){
-		return age;
-	}
-	public void setAge(int age){
-		this.age = age;
-	}
+    private String name;
+    private int age;
+    public String getName(){
+        return name;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+    @Transient //don't serialize in parcelable
+    public int getAge(){
+        return age;
+    }
+    public void setAge(int age){
+        this.age = age;
+    }
 }
 {% endhighlight %}
 
@@ -608,7 +616,7 @@ For instance, the following interface returns an Example type:
 {% highlight java %}
 @Injector
 public interface TransfuseInjector{
-	Example getExample();
+    Example getExample();
 }
 {% endhighlight %}
 
@@ -617,15 +625,15 @@ To use it, inject the Injector or reference the built Injector directly:
 {% highlight java %}
 public class ExampleUsage{
 
-	@Inject TransfuseInjector injector;
+    @Inject TransfuseInjector injector;
 
-	public void use(){
-		Example example = injector.getExample();
-	}
+    public void use(){
+        Example example = injector.getExample();
+    }
 
-	public void staticUsage(){
-		Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
-	}
+    public void staticUsage(){
+        Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
+    }
 }
 {% endhighlight %}
 
