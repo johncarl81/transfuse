@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>{{ page.title }}</title>
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+	<link rel="stylesheet" type="text/css" href="css/layout.css">
+	<link rel="stylesheet" type="text/css" href="css/transfuse.css"/>
+	<link rel="stylesheet" type="text/css" href="css/pygments.css"/>
+	
+</head>
+<body>
+<a href="https://github.com/johncarl81/transfuse"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub" /></a>
+
+<div class="container">
+
+	<h2 class="remove-bottom" style="margin-top: 10px"><img src="images/icon.png"/><a class="title" href="index.html">Transfuse</a></h2>
+	for Google Android 
+	<br/>
+	Version {{site.currentVersion}}
+	<hr />
+	
+	<div class="three columns">
+		<nav>
+			<ul>
+				<li><a href="index.html">About</a></li>
+				<li><a href="getting_started.html">Getting Started</a></li>
+				<li><a href="documentation.html">Documentation</a>
+					<ul>
+						<li><a href="documentation.html#introduction">Introduction</a></li>
+						<li><a href="documentation.html#activity">@Activity</a></li>
+						<li><a href="documentation.html#service">@Service</a></li>
+						<li><a href="documentation.html#broadcastreceiver">@BroadcastReceiver</a></li>
+						<li><a href="documentation.html#application">@Application</a></li>
+						<li><a href="documentation.html#intent_factory">Intent Factory</a></li>
+						<li><a href="documentation.html#dependency_injection_di">Dependency Injection</a></li>
+						<li><a href="documentation.html#method_interceptors">Method Interceptors</a></li>
+						<li><a href="documentation.html#events">Events</a></li>
+						<li><a href="documentation.html#parcels">Parcels</a></li>
+						<li><a href="documentation.html#injector">Injector</a></li>
+						<li><a href="documentation.html#legacy_support">Legacy Support</a></li>
+						<li></li>
+					</ul>	
+				</li>
+				<li><a href="https://github.com/johncarl81/transfuse/downloads">Download</a></li>
+			</ul>
+		</nav>
+	</div>
+	
+	<div class="thirteen columns content">
+
+		{{content}}
+	
+	</div>
+
+</div>
+
+<div id="footer">
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11587475-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: docs_expanded
 title: Transfuse
 ---
 
@@ -309,7 +309,7 @@ public class Example{
 
 ##### @Service
 
-Annotating the class with the Service annotation tells Transfuse to use the class as an Android Service.  As with the Activity annotation, annotating a Service class will allow users to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
+Annotating a class with the Service annotation tells Transfuse to use the class as an Android Service.  As with the Activity annotation, annotating a Service class will allow users to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
 
 {% highlight java %}
 @Service
@@ -342,7 +342,7 @@ public class ExampleService {
 
 ##### @BroadcastReceiver
 
-Annotating the class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
+Annotating a class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
 
 The most important event handled by the Broadcast Receiver is onReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, users may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
 
@@ -360,7 +360,7 @@ public class Startup{
 
 ##### @Application
 
-Annotating the class with the Activity annotation activates the class as an Android Application component.  There may be only one of these components through a Transfuse application.
+Annotating a class with the Activity annotation activates the class as an Android Application component.  There may be only one of these components through a Transfuse application.
 
 The annotated application class has the following lifecycle events available via the lifecycle event annotations:
 
