@@ -12,7 +12,7 @@ Additionally, each component must be registered individually in the AndroidManif
 
 Transfuse resolves these issues in a number of different ways.  First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component.  Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
-Transfuse also offers a compile time DI framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
+Transfuse also offers a compile time Dependency Injection (DI) framework based on [JSR-330][1].  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 
 It is Transfuse's mission to make Android a better API using performance sensitive techniques.
 
@@ -153,7 +153,7 @@ The following are lifecycle events supported by @Activity components:
 @OnDestory
 @OnBackPressed
 @OnSaveInstanceState
-@onRestoreInstanceState
+@OnRestoreInstanceState
 {% endhighlight %}
 
 Optionally, parameters may be added to the annotated lifecycle event methods that match the mapped event method.  For instance, the onCreate() method has a Bundle parameter.  If this parameter is added to the annotated method, the bundle from the original onCreate() method will be passed in like the following:
@@ -211,7 +211,7 @@ There are a number of qualified injections available within the Activity injecti
 
 ###### @Extra
 
-Extras are defined by a string name and the given type and may be declared optional.  Using this qualifier along with the IntentFactory helps enforce the contract specified on the Intent.
+Extras are defined by a string name and the given type and may be declared optional.  Using this qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
 
 The following Extra injection:
 
@@ -247,7 +247,7 @@ getApplication().getResources().getString(R.string.app_name);
 
 ###### @View
 
-The View qualifier identifies the widget to inject from the view higherarchy set up during the onCreate phase.  As an example, look up an TextView by id with the following:
+The View qualifier identifies the widget to inject from the view hierarchy set up during the onCreate phase.  As an example, look up a TextView by id with the following:
 
 {% highlight java %}
 @Activity
@@ -344,7 +344,7 @@ public class ExampleService {
 
 Annotating a class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
 
-The most important event handled by the Broadcast Receiver is onReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, users may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
+The most important event handled by the Broadcast Receiver is OnReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, users may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
 
 {% highlight java %}
 @BroadcastReceiver
@@ -410,7 +410,7 @@ Required injections are given using the IntentStrategy constructor as optional p
 
 #### Dependency Injection (DI)
 
-Transfuse implements JSR330, the same standard many of the leading DI frameworks implement.  The following annotations are available:
+Transfuse implements [JSR-330][1], the same standard many of the leading DI frameworks implement.  The following annotations are available:
 
 ##### @Inject
 
@@ -488,7 +488,7 @@ With the need to instantiate one, and only one, instance of a class per Context,
 
 #### Method Interceptors
 
-Transfuse offers a basic AOP facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  A couple useful method interceptors are defined by transfuse:
+Transfuse offers a basic Aspect Oriented Programming (AOP) facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  A couple useful method interceptors are defined by transfuse:
 
 ##### @Asynchronous
 Annotating a method with @Asynchronous tells Transfuse to proxy the execution of the method and execute it within its own thread.  The method will execute and the calling thread will return immediately.
@@ -532,7 +532,7 @@ public interface Module{
 }
 {% endhighlight %}
 
-This example shows an interceptor that logs the starting and ending points of a method call.  All that is needed to use this method is to annotated a method like so:
+This example shows an interceptor that logs the starting and ending points of a method call.  All that is needed to use this method is to annotate a method like so:
 
 {% highlight java %}
 public class Example{
@@ -573,12 +573,12 @@ public class Trigger{
 }
 {% endhighlight %}
 
-Keep in mind that events may contain any relevant data and behavior.  Is it completely definable by the user.  Also, the Observing methods are not called in any particular order, so make sure that the operations are not dependent on each other.
+Keep in mind that events may contain any relevant data and behavior.  It is completely definable by the user.  Also, the Observing methods are not called in any particular order, so make sure that the operations are not dependent on each other.
 
 <hr/>
 #### Parcels
 
-Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel. annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
+Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
 
 {% highlight java %}
 @Parcel
@@ -609,7 +609,7 @@ Parcels are useful when passing data between Android components.  Therefore, whe
 <hr/>
 #### Injector
 
-There may be a need to build a dependency graph of a given type outside of a Transfuse dependecy graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an inerface, including methods that return the type of the values users require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropriate injections.
+There may be a need to build a dependency graph of a given type outside of a Transfuse dependency graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an interface, including methods that return the type of the values users require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropriate injections.
 
 For instance, the following interface returns an Example type:
 
@@ -671,4 +671,6 @@ public class Example extends Activity {
 <a href="javadocs/api/index.html">API Javadocs</a>
 <br/><br/>
 <a href="javadocs/main/index.html">Main Javadocs</a>
+
+[1]: http://www.jcp.org/en/jsr/detail?id=330
 

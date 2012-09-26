@@ -11,7 +11,7 @@ Transfuse is a Java Dependency Injection (DI) and integration library geared spe
 There are several key features that make Transfuse a great framework to use with Android:
 
 <ul class="square">
-<li>Dependency Injection - Transfuse implements the JSR330 standard annotations</li>
+<li>Dependency Injection - Transfuse implements the <a href="http://www.jcp.org/en/jsr/detail?id=330">JSR-330</a> standard annotations</li>
 <li>POJO Components - Transfuse gives users the ability to develop Android components in Plain Old Java Objects (POJO), enabling a testable, decoupled and flexible style.</li>
 <li>Compile Time Code Generation - Transfuse is remarkably small, lightweight and fast due to the technique of generating supporting code at compile time.</li>
 <li>Manifest Management - Transfuse manages the Android Manifest, eliminating the duplicated effort of declaring and registering components.</li>
@@ -51,9 +51,9 @@ public class HelloTransfuse {
 <li>Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.  This puts all the relevant information regarding the Activity in one place.  Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.</li>
 </ul>
 
-Read more about the features in the [[Documentation](documentation.html)] section.
+Read more about the features in the [Documentation][3] section.
 
-New to the library or Android? Visit the [[Getting Started](getting_started.html)] section.
+New to the library or Android? Visit the [Getting Started][2] section.
 
 ### Download
 
@@ -86,3 +86,5 @@ or via Maven:
 {% endhighlight %}
 
 [1]: https://github.com/johncarl81/transfuse/downloads
+[2]: getting_started.html
+[3]: documentation.html
