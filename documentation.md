@@ -10,7 +10,7 @@ The Android API has a common theme throughout its components; each component mus
 
 Additionally, each component must be registered individually in the AndroidManifest.xml file.  It is easy to overlook the need to register a new component, only to remember after it is already deployed to a emulator or device.  This duplication of registration and declaration violates the Don't-Repeat-Yourself (DRY) principle.
 
-Transfuse resolves these issues in a number of different ways. First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component. Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
+Transfuse resolves these issues in a number of different ways.  First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component.  Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
 Transfuse also offers a compile time DI framework based on JSR-330.  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 
@@ -176,7 +176,7 @@ public class Example {
 
 ##### Listener Registration
 
-Another common event to be raised by the Android system are by listeners on view components.  Users can easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button view object:
+Another common event to be raised by the Android system are by listeners on View components.  Users can easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button View object:
 
 {% highlight java %}
 @Activity
@@ -191,9 +191,9 @@ public class Example{
 }
 {% endhighlight %}
 
-Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to intellegently register listeners by type depending upon the view referenced.
+Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to register listeners by type depending upon the view referenced.
 
-Optionally the specific listener type may be specified in the RegisterListner annotation.  This is useful for listeners that implement multiple types.
+Optionally, the specific listener type may be specified in the RegisterListner annotation.  This is useful for listeners that implement multiple types.
 
 {% highlight java %}
 @Activity
@@ -225,7 +225,7 @@ public class Example{
 }
 {% endhighlight %}
 
-First, requires a string value named one to be provided in the Bundle while starting the Example Activity.  Secondarily has the option to inject an extra String value named two.  If the Extra two is not provided in the Intent starting the Example Activity, two will be null.
+Firstly, requires a string value named one to be provided in the Bundle while starting the Example Activity, and secondly has the option to inject an extra String value named two.  If the Extra two is not provided in the Intent starting the Example Activity, two will be null.
 
 ###### @Resource
 
@@ -247,7 +247,7 @@ getApplication().getResources().getString(R.string.app_name);
 
 ###### @View
 
-The View qualifier identifies the widget to inject from the view higherarchy set up during the onCreate phase.  As an example, we may look up an TextView by id with the following:
+The View qualifier identifies the widget to inject from the view higherarchy set up during the onCreate phase.  As an example, look up an TextView by id with the following:
 
 {% highlight java %}
 @Activity
@@ -295,7 +295,7 @@ public class Example{
 }
 {% endhighlight %}
 
-Optionally you may inject into a base type of the given system service, but the system service type must be specified.  This may be helpful if the given system service is not mapped by Transfuse by type:
+Optionally users may inject into a base type of the given system service, but the system service type must be specified.  This may be helpful if the given system service is not mapped by Transfuse by type:
 
 {% highlight java %}
 @Activity
@@ -391,7 +391,7 @@ public class ExtraActivity{
 }
 {% endhighlight %}
 
-You may build and start the ExtraActivity with the IntentFactory:
+Users may build and start the ExtraActivity with the IntentFactory:
 
 {% highlight java %}
 @Activity
@@ -414,7 +414,7 @@ Transfuse implements JSR330, the same standard many of the leading DI frameworks
 
 ##### @Inject
 
-Transfuse allows user to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
 
 <div class="note">
 <h5>Note</h5>
@@ -423,7 +423,7 @@ This documentation highlights using package private field injection because it i
 
 ##### Provider
 
-Providers may be used to manually resolve the dependencies of a class.  The Provider will be used to resolve both the injection of the provider and the injection of the type the provider returns:
+Providers may be used to manually resolve the dependencies of a class.  The Provider will be used to resolve both the injection of the Provider and the injection of the type the Provider returns:
 
 Provider:
 {% highlight java %}
@@ -609,7 +609,7 @@ Parcels are useful when passing data between Android components.  Therefore, whe
 <hr/>
 #### Injector
 
-There may arise a need to build a dependency graph of a given type outside of a Transfuse dependecy graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an inerface, including methods that return the type of the values users require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropraite injections.
+There may be a need to build a dependency graph of a given type outside of a Transfuse dependecy graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an inerface, including methods that return the type of the values users require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropriate injections.
 
 For instance, the following interface returns an Example type:
 
@@ -650,7 +650,7 @@ In an ideal world, users are able to develop a new application.  Realistically h
 
 <div class="note">
 <h5>Note</h5>
-Dependency Injection and the other code generation features are not available on legacy Android components
+DI and the other code generation features are not available on legacy Android components.
 </div>
 
 The second option looks like the following:
