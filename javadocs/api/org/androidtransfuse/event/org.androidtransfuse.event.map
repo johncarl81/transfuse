@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="c575" href="./EventManagerProvider.html" title="org.androidtransfuse.event.EventManagerProvider" alt="" coords="15,19,169,45"/>
+<area shape="rect" id="c576" href="./EventObserver.html" title="org.androidtransfuse.event.EventObserver" alt="" coords="213,11,345,53"/>
+<area shape="rect" id="c578" href="./WeakObserver.html" title="org.androidtransfuse.event.WeakObserver" alt="" coords="204,118,353,143"/>
+<area shape="rect" id="c577" href="./EventTending.html" title="org.androidtransfuse.event.EventTending" alt="" coords="389,19,515,45"/>
+<area shape="rect" id="c579" href="./EventManager.html" title="org.androidtransfuse.event.EventManager" alt="" coords="559,19,665,45"/>
+</map>

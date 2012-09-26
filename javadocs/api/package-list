@@ -3,5 +3,6 @@ org.androidtransfuse.aop
 org.androidtransfuse.event
 org.androidtransfuse.intentFactory
 org.androidtransfuse.layout
+org.androidtransfuse.listeners
 org.androidtransfuse.scope
 org.androidtransfuse.util

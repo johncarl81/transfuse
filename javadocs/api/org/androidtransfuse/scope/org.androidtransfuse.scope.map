@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c678" href="./Scope.html" title="org.androidtransfuse.scope.Scope" alt="" coords="77,11,163,53"/>
+<area shape="rect" id="c681" href="./ConcurrentDoubleLockingScope.html" title="org.androidtransfuse.scope.ConcurrentDoubleLockingScope" alt="" coords="16,118,224,143"/>
+<area shape="rect" id="c679" href="./ContextScopeHolder.html" title="org.androidtransfuse.scope.ContextScopeHolder" alt="" coords="208,11,349,53"/>
+<area shape="rect" id="c680" href="./SingletonScope.html" title="org.androidtransfuse.scope.SingletonScope" alt="" coords="395,19,507,45"/>
+</map>
