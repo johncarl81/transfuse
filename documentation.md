@@ -474,7 +474,7 @@ Named support is pending.
 
 ##### Advanced
 
-For completeness, Transfuse allows the declaration of dependency loops.  For Transfuse to instantiate depenency loops, at least one depenency in the loop must be injected via an interface.
+For completeness, Transfuse allows the declaration of dependency cycles.  For Transfuse to instantiate dependency cycles, at least one dependency in the loop must be injected via an interface.
 
 ###### @ImplementedBy
 
