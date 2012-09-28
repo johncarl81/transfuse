@@ -306,7 +306,35 @@ public class Example{
 {% endhighlight %}
 
 <hr/>
+##### @Fragment
 
+Annotating a class with the Fragment annotation tells Transfuse to use the class as an Android Fragment.  Fragments are unique out of the Transfuse components because they almost always need to be referenced by class.  To use the generated Fragment one needs to know the class name of the generated Fragment.  If a name is not specified in the Fragment annotaton, then Transfuse will default the generated class name to the name of th annotated class concatentaed with "Fragment."  Otherwise, the class may be named anything that does not colide with any existing class name.
+
+Fragments map lifecycle events associated with the following annotations:
+
+{% highlight java %}
+@OnCreateView
+@OnActivityCreated
+@OnStart
+@OnResume
+@OnPause
+@OnStop
+@OnDestroyView
+@OnDestroy
+@OnDetach
+@OnLowMemory
+@OnConfigurationChanged
+{% endhighlight %}
+
+<div class="note">
+<h5>Note</h5>
+Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragmnet until that phase and does not map the onCreate lifecycle phase.
+</div>
+
+All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
+
+
+<hr/>
 ##### @Service
 
 Annotating a class with the Service annotation tells Transfuse to use the class as an Android Service.  As with the Activity annotation, annotating a Service class will allow users to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
@@ -332,7 +360,7 @@ Service may be injected as described in the Injection section:
 @Service
 public class ExampleService {
     @Inject
-    public ExampleService(ADependency dependency) {
+    public ExampleService(Dependency dependency) {
         ...
     }
 }
