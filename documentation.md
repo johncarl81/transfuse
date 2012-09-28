@@ -44,7 +44,7 @@ These annotations tell Transfuse to use the class as an Android component.  This
 
 <hr/>
 
-##### @Activity
+#### @Activity
 
 Annotating an Activity class begins the process of developing a Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android this is done by defining the layout in the onCreate() method.  Transfuse allows the user to define the layout by annotating the @Activity class like so:
 
@@ -213,7 +213,7 @@ There are a number of qualified injections available within the Activity injecti
 
 ###### @Extra
 
-Extras are defined by a string name and the given type and may be declared optional.  Using this qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
+Android defines Extras as data points in a Bundle.  Extras are used to communicate from Context to Context across the Intent.  Transfuse allows you to define Extras as injection qualifiers and takes care of the deserialization from the Bundle in the onCreate() method.  Extras are defined by a String name, the Type and may be declared optional.  Using the @Extra qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
 
 The following Extra injection:
 
@@ -227,7 +227,7 @@ public class Example{
 }
 {% endhighlight %}
 
-Firstly, requires a string value named one to be provided in the Bundle while starting the Example Activity, and secondly has the option to inject an extra String value named two.  If the Extra two is not provided in the Intent starting the Example Activity, two will be null.
+Firstly, requires a string value named "one" to be provided in the Bundle while starting the Example Activity, and secondly has the option to inject an extra String value named "two."  If the Extra "two" is not provided in the Intent starting the Example Activity, "two" will be null.
 
 ###### @Resource
 
@@ -307,8 +307,12 @@ public class Example{
 }
 {% endhighlight %}
 
+##### @NonConfigurationInstance
+
+Annotating a field with NonConfigurationInstance will enable Activity persistence on the field value.  Specifically, this retains the given field instance by serializing it into a bundle in the onSaveInstanceState() method call and deserializes it from the Bundle in the onCreate() method call.  If the field is a <a href="#parcel">Parcel</a> Transfuse will wrap it with the appropriate generated parcelable object.
+
 <hr/>
-##### @Fragment
+#### @Fragment
 
 Annotating a class with the Fragment annotation tells Transfuse to use the class as an Android Fragment.  Fragments are unique out of the Transfuse components because they almost always need to be referenced by class.  To use the generated Fragment one needs to know the class name of the generated Fragment.  If a name is not specified in the Fragment annotaton, then Transfuse will default the generated class name to the name of th annotated class concatentaed with "Fragment."  Otherwise, the class may be named anything that does not colide with any existing class name.
 
@@ -337,7 +341,7 @@ All of the injections available on the Activity are available on the Fragment co
 
 
 <hr/>
-##### @Service
+#### @Service
 
 Annotating a class with the Service annotation tells Transfuse to use the class as an Android Service.  As with the Activity annotation, annotating a Service class will allow users to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
 
@@ -370,7 +374,7 @@ public class ExampleService {
 
 <hr/>
 
-##### @BroadcastReceiver
+#### @BroadcastReceiver
 
 Annotating a class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
 
@@ -388,7 +392,7 @@ public class Startup{
 
 <hr/>
 
-##### @Application
+#### @Application
 
 Annotating a class with the Activity annotation activates the class as an Android Application component.  There may be only one of these components through a Transfuse application.
 
@@ -530,9 +534,8 @@ Annotating a method with @UIthread will execute the given method through an Andr
 <h5>Note</h5>
 If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
 </div>
-##### Configuration
 
-Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  These are assocaited in the TransfuseModule with the @BindInterceptor annotation.
+Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
 
 Example:
 
@@ -554,14 +557,6 @@ public class LogInterceptor implements MethodInterceptor {
 }
 {% endhighlight %}
 
-{% highlight java %}
-@TransfuseModule
-public interface Module{
-    @BindInterceptor(Log.class)
-    LogInterceptor getLogInterceptor();
-}
-{% endhighlight %}
-
 This example shows an interceptor that logs the starting and ending points of a method call.  All that is needed to use this method is to annotate a method like so:
 
 {% highlight java %}
@@ -572,6 +567,47 @@ public class Example{
 }
 {% endhighlight %}
 
+These are assocaited in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
+
+##### Configuration
+
+Transfuse's DI and Method Interception may be configured by defining a Transfuse Module.  This entails annotating a interface with @TransfuseModule and specifying one of the configuration options.
+
+To specify a specific binding from one injection type to a concrete type use the @Bind annotation:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+    @Bind(Example.class)
+    ExampleImpl getImp();
+}
+{% endhighlight %}
+
+This tells Transfuse to instantiate an instance of ExampleImpl and inject it every time a Example type is requested for injection.
+
+To specify a provider to be used as a source for a binding use the @BindProvider annotation:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+    @BindProvider(ExampleProvider.class)
+    Example getExample();
+}
+{% endhighlight %}
+
+Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection
+
+To associate a method interceptor with an annotation use the @BindInterceptor annotation:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+    @BindInterceptor(Log.class)
+    LogInterceptor getLogInterceptor();
+}
+{% endhighlight %}
+
+This is requred to use the given method interceptor each time the corresponding annotation is used.
 
 #### Events
 
@@ -606,7 +642,7 @@ public class Trigger{
 Keep in mind that events may contain any relevant data and behavior.  It is completely definable by the user.  Also, the Observing methods are not called in any particular order, so make sure that the operations are not dependent on each other.
 
 <hr/>
-#### Parcels
+#### @Parcel
 
 Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
 
@@ -668,6 +704,7 @@ public class ExampleUsage{
 {% endhighlight %}
 
 <hr/>
+
 #### Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
