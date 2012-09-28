@@ -207,6 +207,33 @@ public class Example{
 }
 {% endhighlight %}
 
+
+##### Call-Through Events
+
+Transfuse offers the concept of Call-Through events, for circumstances where either a return value is expected from an event or multiple event methods are closely associated.  Call-Through events are defined by an interface and mirrors the Activity event method.  For instance, to handle the onKeyDown event from an Activity an injected component (or the root annotated Activity) must implement the ActivityOnKeyDownListener interface and be annotated with the @RegisterListener annotation:
+
+{% highlight java %}
+@Activity
+@RegisterListener
+public class Example implements ActivityOnKeyDownListener{
+    public boolean onKeyDown(int keyCode, android.view.KeyEvent event){
+        Log.i("Key Pressed", keycode);
+    }
+}
+{% endhighlight %}
+
+The following interfaces are available to handle Call-Through Events:
+
+{% highlight java %}
+ActivityMenuComponent
+ActivityOnKeyDownListener
+ActivityOnKeyLongPressListener
+ActivityOnKeyMultipleListener
+ActivityOnKeyUpListener
+ActivityOnTouchEventListener
+ActivityOnTrackballEventListener
+{% endhighlight %}
+
 ##### Injection Qualifiers
 
 There are a number of qualified injections available within the Activity injection graph.  Each qualifier designates a different source to draw the injection from.
