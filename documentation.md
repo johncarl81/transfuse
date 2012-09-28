@@ -20,9 +20,11 @@ It is Transfuse's mission to make Android a better API using performance sensiti
 
 A Transfuse application is built using a series of components analogous to the set of Android components.  These components are declared using the Transfuse API annotations on the class type level.
 
-Transfuse moves the declaration of Manifest metadata to the class level.  This combines declaration of the Transfuse component with registration as an application Component.  Transfuse writes and manages the AndroidManifest.xml for the user.
+Transfuse moves the declaration of Manifest metadata to the component class level.  This combines declaration of the Transfuse component with registration as an application Component.  Effectively, Transfuse will write and manage the AndroidManifest.xml file.  Additions can still be made to the AndroidManifest.xml file manually.  Transfuse will perform an intelegent merge of these manual changes with the managed elements.
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
+
+Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
 
 #### Components
 
