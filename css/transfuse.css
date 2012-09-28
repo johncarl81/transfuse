@@ -3,7 +3,7 @@ body {
 }
 
 code {
-  font-family: 'Source Sans Pro', courier new, monspace;
+  font-family: 'Source Sans Pro', sans-serif, courier new, monspace;
 }
 
 nav ul li a, nav ul li a:visited, nav ul li a:active {
