@@ -20,7 +20,7 @@ It is Transfuse's mission to make Android a better API using performance sensiti
 
 A Transfuse application is built using a series of components analogous to the set of Android components.  These components are declared using the Transfuse API annotations on the class type level.
 
-Transfuse moves the declaration of Manifest metadata to the component class level.  This combines declaration of the Transfuse component with registration as an application Component.  Effectively, Transfuse will write and manage the AndroidManifest.xml file.  Additions can still be made to the AndroidManifest.xml file manually.  Transfuse will perform an intelegent merge of these manual changes with the managed elements.
+Transfuse moves the declaration of Manifest metadata to the component class level.  This combines declaration of the Transfuse component with registration as an application Component.  Effectively, Transfuse will write and manage the AndroidManifest.xml file.  Additions can still be made to the AndroidManifest.xml file manually.  Transfuse will perform an intelligent merge of these manual changes with the managed elements.
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
@@ -56,7 +56,7 @@ public class Example {}
 
 Transfuse follows the convention of declaring the layout directly after the super.onCreate() call in the root Activity.
 
-If the use cases require a more advanced layout declaration, like defining the layout programatically, use the @LayoutHandler annotation and LayoutHandlerDelegate interface:
+If the use cases require a more advanced layout declaration, like defining the layout programmatically, use the @LayoutHandler annotation and LayoutHandlerDelegate interface:
 
 {% highlight java %}
 @Activity
@@ -296,11 +296,11 @@ public class Example{
 }
 {% endhighlight %}
 
-The View qualifier does perform the necessary casting from the getViewById() method, but makes the assumption that the type declared is correct.  This may cause issues when the type is incorrectly assocaited with the given View widget.
+The View qualifier does perform the necessary casting from the getViewById() method, but makes the assumption that the type declared is correct.  This may cause issues when the type is incorrectly associated with the given View widget.
 
 ##### @Preference
 
-The Preference qualifier draws a value by type and name from the application's shared preferences.  The following example highlights injecting a preferenced named "favorite_color" and String type:
+The Preference qualifier draws a value by type and name from the application's shared preferences.  The following example highlights injecting a preference named "favorite_color" and String type:
 
 {% highlight java %}
 @Activity
@@ -341,7 +341,7 @@ Annotating a field with NonConfigurationInstance will enable Activity persistenc
 <hr/>
 #### @Fragment
 
-Annotating a class with the Fragment annotation tells Transfuse to use the class as an Android Fragment.  Fragments are unique out of the Transfuse components because they almost always need to be referenced by class.  To use the generated Fragment one needs to know the class name of the generated Fragment.  If a name is not specified in the Fragment annotaton, then Transfuse will default the generated class name to the name of th annotated class concatentaed with "Fragment."  Otherwise, the class may be named anything that does not colide with any existing class name.
+Annotating a class with the Fragment annotation tells Transfuse to use the class as an Android Fragment.  Fragments are unique out of the Transfuse components because they almost always need to be referenced by class.  To use the generated Fragment one needs to know the class name of the generated Fragment.  If a name is not specified in the Fragment annotation, then Transfuse will default the generated class name to the name of the annotated class concatenated with "Fragment."  Otherwise, the class may be named anything that does not collide with any existing class name.
 
 Fragments map lifecycle events associated with the following annotations:
 
@@ -361,7 +361,7 @@ Fragments map lifecycle events associated with the following annotations:
 
 <div class="note">
 <h5>Note</h5>
-Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragmnet until that phase and does not map the onCreate lifecycle phase.
+Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
 </div>
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
@@ -479,7 +479,7 @@ Transfuse allows users to inject into the constructor, methods and fields of a c
 
 <div class="note">
 <h5>Note</h5>
-This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be prefered.
+This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
 </div>
 
 ##### Provider
@@ -594,7 +594,7 @@ public class Example{
 }
 {% endhighlight %}
 
-These are assocaited in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
+These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
 
 ##### Configuration
 
@@ -638,7 +638,7 @@ This is requred to use the given method interceptor each time the corresponding 
 
 #### Events
 
-Transfuse offers a global event bus in addition to the mapping of the Android lifecycle and callthrough events.
+Transfuse offers a global event bus in addition to the mapping of the Android lifecycle and call-through events.
 
 Any type may be used as an event.  Event observer methods may be defined by either annotating the method or the parameter of a method in a component or injected class with the @Observes annotation:
 
