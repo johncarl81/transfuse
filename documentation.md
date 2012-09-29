@@ -6,6 +6,7 @@ title: Transfuse
 ### Documentation
 
 #### Introduction
+
 The Android API has a common theme throughout its components; each component must be implemented as an extension of a base component.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component class quickly becomes a mismatch of behavior, resulting in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatible with each other.
 
 Additionally, each component must be registered individually in the AndroidManifest.xml file.  It is easy to overlook the need to register a new component, only to remember after it is already deployed to a emulator or device.  This duplication of registration and declaration violates the Don't-Repeat-Yourself (DRY) principle.
@@ -24,7 +25,7 @@ Transfuse moves the declaration of Manifest metadata to the component class leve
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
-Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
+Available to each component is DI generated at compile time.  This feature is covered in-depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
 
 #### Components
 
@@ -46,7 +47,7 @@ These annotations tell Transfuse to use the class as an Android component.  This
 
 #### @Activity
 
-Annotating an Activity class begins the process of developing a Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android this is done by defining the layout in the onCreate() method.  Transfuse allows the user to define the layout by annotating the @Activity class like so:
+Annotating an Activity class begins the process of developing a Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android, this is done by defining the layout in the onCreate() method.  Transfuse allows the user to define the layout by annotating the @Activity class like so:
 
 {% highlight java %}
 @Activity
@@ -98,7 +99,9 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 
 <div class="note">
 <h5>Note</h5>
+
 To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
+
 </div>
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
@@ -120,7 +123,7 @@ Now that the basic Activity has been set up and declared in the Manifest, let's 
 
 Transfuse makes the entire Activity lifecycle available through a set of annotations.  Users may annotate zero, one, or many methods in the class.  In turn, these will be called during that lifecycle event.
 
-In the Example class below, the log() method is executed during the onCreate phase of the Activity lifecycle:
+In the example class below, the log() method is executed during the onCreate phase of the Activity lifecycle:
 
 {% highlight java %}
 @Activity(label = "Transfuse Example")
@@ -139,7 +142,9 @@ public class Example {
 
 <div class="note">
 <h5>Note</h5>
+
 Lifecycle events will not be called in any predefined order.
+
 </div>
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
@@ -193,9 +198,9 @@ public class Example{
 }
 {% endhighlight %}
 
-Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to register listeners by type depending upon the view referenced.
+Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to register Listeners by type depending upon the view referenced.
 
-Optionally, the specific listener type may be specified in the RegisterListner annotation.  This is useful for listeners that implement multiple types.
+Optionally, the specific Listener type may be specified in the RegisterListner annotation.  This is useful for Listeners that implement multiple types.
 
 {% highlight java %}
 @Activity
@@ -240,9 +245,9 @@ There are a number of qualified injections available within the Activity injecti
 
 ###### @Extra
 
-Android defines Extras as data points in a Bundle.  Extras are used to communicate from Context to Context across the Intent.  Transfuse allows you to define Extras as injection qualifiers and takes care of the deserialization from the Bundle in the onCreate() method.  Extras are defined by a String name, the Type and may be declared optional.  Using the @Extra qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
+Android defines Extras as data points in a Bundle.  Extras are used to communicate from Context to Context across the Intent.  Transfuse allows users to define Extras as injection qualifiers and takes care of the deserialization from the Bundle in the onCreate() method.  Extras are defined by a String name, the Type, and may be declared optional.  Using the @Extra qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
 
-The following Extra injection:
+The following Extra injection;
 
 {% highlight java %}
 @Activity
@@ -258,7 +263,7 @@ Firstly, requires a string value named "one" to be provided in the Bundle while 
 
 ###### @Resource
 
-The Resource qualifier specifies the given injection draws from the Application's Resources found on the Context.getResources() method call.  Each resource is looked up by name and by type.  For instance, the following injection:
+The Resource qualifier specifies the given injection draws from the Application's Resources found on the Context.getResources() method call.  Each resource is looked up by name and by type.  For instance, the following injection
 
 {% highlight java %}
 @Activity
@@ -268,7 +273,7 @@ public class Example{
 }
 {% endhighlight %}
  
-looks up the appName resource by String type:
+looks up the appName resource by String type
 
 {% highlight java %}
 getApplication().getResources().getString(R.string.app_name);
@@ -286,7 +291,7 @@ public class Example{
 }
 {% endhighlight %}
 
-optionally the view may be injected by tag value:
+Optionally the view may be injected by tag value:
 
 {% highlight java %}
 @Activity
@@ -361,7 +366,9 @@ Fragments map lifecycle events associated with the following annotations:
 
 <div class="note">
 <h5>Note</h5>
+
 Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
+
 </div>
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
@@ -475,16 +482,18 @@ Transfuse implements [JSR-330][1], the same standard many of the leading DI fram
 
 ##### @Inject
 
-Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs may significantly affect performance.
+Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs, it may significantly affect performance.
 
 <div class="note">
 <h5>Note</h5>
+
 This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
+
 </div>
 
 ##### Provider
 
-Providers may be used to manually resolve the dependencies of a class.  The Provider will be used to resolve both the injection of the Provider and the injection of the type the Provider returns:
+Providers may be used to manually resolve the dependencies of a class. The Provider will be used to resolve both the injection of the Provider and the injection of the type the Provider returns:
 
 Provider:
 {% highlight java %}
@@ -507,7 +516,7 @@ public void TestInjections{
 }
 {% endhighlight %}
 
-To map a Provider to a type, define the provider binding in the TransfuseModule:
+To map a Provider to a type, define the Provider binding in the TransfuseModule:
 
 {% highlight java %}
 @TransfuseModule
@@ -539,7 +548,7 @@ For completeness, Transfuse allows the declaration of dependency cycles.  For Tr
 
 ###### @ImplementedBy
 
-ImplementedBy support is pending
+ImplementedBy support is pending.
 
 ###### @ContextScope
 
@@ -549,17 +558,21 @@ With the need to instantiate one, and only one, instance of a class per Context,
 
 #### Method Interceptors
 
-Transfuse offers a basic Aspect Oriented Programming (AOP) facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  A couple useful method interceptors are defined by transfuse:
+Transfuse offers a basic Aspect Oriented Programming (AOP) facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  There are several useful method interceptors defined by Transfuse:
 
 ##### @Asynchronous
-Annotating a method with @Asynchronous tells Transfuse to proxy the execution of the method and execute it within its own thread.  The method will execute and the calling thread will return immediately.
+
+Annotating a method with @Asynchronous tells Transfuse to proxy the execution of the method and to execute it within its own thread.  The method will execute and the calling thread will return immediately.
 
 ##### @UIThread
+
 Annotating a method with @UIthread will execute the given method through an Android Handler.  This puts the execution of the method back on the UI thread.
 
 <div class="note">
 <h5>Note</h5>
+
 If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
+
 </div>
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
@@ -600,7 +613,7 @@ These are associated in the TransfuseModule with the @BindInterceptor annotation
 
 Transfuse's DI and Method Interception may be configured by defining a Transfuse Module.  This entails annotating a interface with @TransfuseModule and specifying one of the configuration options.
 
-To specify a specific binding from one injection type to a concrete type use the @Bind annotation:
+To specify a specific binding from one injection type to a concrete type, use the @Bind annotation:
 
 {% highlight java %}
 @TransfuseModule
@@ -612,7 +625,7 @@ public interface Module{
 
 This tells Transfuse to instantiate an instance of ExampleImpl and inject it every time a Example type is requested for injection.
 
-To specify a provider to be used as a source for a binding use the @BindProvider annotation:
+To specify a Provider to be used as a source for a binding, use the @BindProvider annotation:
 
 {% highlight java %}
 @TransfuseModule
@@ -622,7 +635,7 @@ public interface Module{
 }
 {% endhighlight %}
 
-Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection
+Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection.
 
 To associate a method interceptor with an annotation use the @BindInterceptor annotation:
 
@@ -738,13 +751,16 @@ In an ideal world, users are able to develop a new application.  Realistically h
 
 <ul class="square">
 <li>
- Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them. </li>
+
+Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them. </li>
 
 <li> Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.</li></ul>
 
 <div class="note">
 <h5>Note</h5>
+
 DI and the other code generation features are not available on legacy Android components.
+
 </div>
 
 The second option looks like the following:
