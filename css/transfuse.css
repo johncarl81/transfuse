@@ -1,9 +1,5 @@
-body {
-  font-family: helvetica, arial, sans-serif;
-}
-
-code {
-  font-family: 'Source Sans Pro', sans-serif, courier new, monspace;
+code *{
+  font-family: 'Source Sans Pro', monspace, courier new;
 }
 
 nav ul li a, nav ul li a:visited, nav ul li a:active {

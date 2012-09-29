@@ -762,9 +762,11 @@ public class Example extends Activity {
 
 
 #### Reference
-<a href="javadocs/api/index.html">API Javadocs</a>
-<br/><br/>
-<a href="javadocs/main/index.html">Main Javadocs</a>
+[API Javadocs][2]
+
+[Main Javadocs][3]
 
 [1]: http://www.jcp.org/en/jsr/detail?id=330
+[2]: javadocs/api/index.html
+[3]: javadocs/main/index.html
 
