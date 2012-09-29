@@ -1,27 +1,27 @@
-code *{
-  font-family: 'Source Sans Pro', monspace, courier new;
+code {
+    font-family: 'Source Code Pro', monspace, courier new; !important
 }
 
 nav ul li a, nav ul li a:visited, nav ul li a:active {
-  font-size: 14px;
-  text-decoration: none;
+    font-size: 14px;
+    text-decoration: none;
 }
 
 .title {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 img {
-  vertical-align:text-bottom;
+    vertical-align:text-bottom;
 } 
 
 #footer {
-   height: 200px;
+    height: 200px;
 }
 
 div.note  { 
-	border: 1px solid #D9D9BF; border-radius: 3px 3px 3px 3px; 
-	margin: 0 0 9px; 
-	padding: 10px 10px 10px 56px;
-	background: url("../images/note.png") no-repeat scroll 10px 10px #FFFFE0;
+    border: 1px solid #D9D9BF; border-radius: 3px 3px 3px 3px; 
+    margin: 0 0 9px; 
+    padding: 10px 10px 10px 56px;
+    background: url("../images/note.png") no-repeat scroll 10px 10px #FFFFE0;
 }
