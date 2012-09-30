@@ -117,7 +117,7 @@ Transfuse requires a full build to generate the necessary class files and resour
 
 {% highlight bash %}
 
-> mvn clean package android:deploy
+mvn clean package android:deploy
 
 {% endhighlight %}
 
