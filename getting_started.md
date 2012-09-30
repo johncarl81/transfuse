@@ -26,13 +26,6 @@ mvn archetype:generate \
 
 {% endhighlight %}
 
-<div class="note">
-<h5>Note</h5>
-
-Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step below is not required, but some manual merging may be needed.
-
-</div>
-
 Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml.
 
 The AndroidManifest.xml should look like this:
@@ -44,7 +37,7 @@ package="org.androidtransfuse" android:versionCode="1" android:versionName="1.0-
 </manifest>
 {% endhighlight %}
 
-
+Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step above is not required, but some manual merging may be needed.
 
 #### Download Transfuse
 
