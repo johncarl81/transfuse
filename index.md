@@ -17,7 +17,7 @@ There are several key features that make Transfuse a great framework to use with
 <li>Manifest Management - Transfuse manages the Android Manifest, eliminating the duplicated effort of declaring and registering components.</li>
 </ul>
 
-All of these features help eliminate boilerplate and make Android applications much easier to write.
+All of these features help eliminate boilerplate plumbing code and make Android applications much easier to write.
 
 ### Example
 
