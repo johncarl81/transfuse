@@ -25,3 +25,8 @@ div.note  {
     padding: 10px 10px 10px 56px;
     background: url("../images/note.png") no-repeat scroll 10px 10px #FFFFE0;
 }
+
+#socialwidget {
+    float: right;
+}
+
