@@ -6,7 +6,7 @@ title: Transfuse
 
 ### About
 
-Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.
+<span itemprop="description">Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.</span>
 
 There are several key features that make Transfuse a great framework to use with Android:
 

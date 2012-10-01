@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Transfuse
+title: Transfuse Getting Started
 ---
 
 ### Getting Started

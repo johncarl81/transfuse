@@ -1,6 +1,6 @@
 ---
 layout: docs_expanded
-title: Transfuse
+title: Transfuse Documentation
 ---
 
 ### Documentation
