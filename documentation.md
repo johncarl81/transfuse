@@ -24,7 +24,7 @@ Transfuse moves the declaration of Manifest metadata to the component class leve
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
-Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
+Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection section</a>.
 
 #### Components
 
@@ -385,9 +385,13 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 @OnDestroy
 {% endhighlight %}
 
-Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event..  Transfuse support this by mapping the onStartCommand method through a call-through event on the ServiceOnStartCommand interface.
+Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event..  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
 
-Service may be injected as described in the Injection section:
+{% highlight java %}
+ServiceOnStartCommand
+{% endhighlight %}
+
+Service may be injected as described in the <a href="#dependency_injection_di">Injection section</a>:
 
 {% highlight java %}
 @Service
@@ -594,7 +598,7 @@ public class Example{
 }
 {% endhighlight %}
 
-These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
+These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
 
 ##### Configuration
 
