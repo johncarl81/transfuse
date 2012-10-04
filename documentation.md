@@ -382,10 +382,10 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 
 {% highlight java %}
 @OnCreate
-@OnStart
 @OnDestroy
-
 {% endhighlight %}
+
+Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event..  Transfuse support this by mapping the onStartCommand method through a call-through event on the ServiceOnStartCommand interface.
 
 Service may be injected as described in the Injection section:
 
