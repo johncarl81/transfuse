@@ -1,27 +1,37 @@
 package org.androidtransfuse.integrationTest.service;
 
+import android.content.Intent;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.listeners.ServiceOnStartCommand;
+import org.androidtransfuse.listeners.ServiceOnUnbind;
 
 /**
  * @author John Ericksen
  */
 @Service
-public class Example {
+@RegisterListener
+public class Example implements ServiceOnStartCommand, ServiceOnUnbind {
 
-    private boolean onStartCalled = false;
+    private boolean onStartCommandCalled = false;
     private boolean onDestroyCalled = false;
     private boolean onLowMemoryCalled = false;
     private boolean onRebindCalled = false;
     private boolean onCreateCalled = false;
+    private boolean onConfigurationChangedCalled = false;
+    private boolean onTrimMemoryCalled = false;
+    private boolean onTaskRemoved = false;
+    private boolean onUnbindCalled = false;
 
     @OnCreate
     public void onCreate() {
         onCreateCalled = true;
     }
 
-    @OnStart
-    public void onStart() {
-        onStartCalled = true;
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        onStartCommandCalled = true;
+        return 0;
     }
 
     @OnDestroy
@@ -39,8 +49,25 @@ public class Example {
         onRebindCalled = true;
     }
 
-    public boolean isOnStartCalled() {
-        return onStartCalled;
+    @OnConfigurationChanged
+    public void onConfigurationChangd(){
+        onConfigurationChangedCalled = true;
+    }
+
+    @OnTrimMemory
+    public void onTrimMemory(){
+        onTrimMemoryCalled = true;
+    }
+
+    @OnTaskRemoved
+    public void onTaskRemoved(){
+        onTaskRemoved = true;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        onUnbindCalled = true;
+        return false;
     }
 
     public boolean isOnDestroyCalled() {
@@ -57,5 +84,25 @@ public class Example {
 
     public boolean isOnCreateCalled() {
         return onCreateCalled;
+    }
+
+    public boolean isOnStartCommandCalled() {
+        return onStartCommandCalled;
+    }
+
+    public boolean isOnConfigurationChangedCalled() {
+        return onConfigurationChangedCalled;
+    }
+
+    public boolean isOnTrimMemoryCalled() {
+        return onTrimMemoryCalled;
+    }
+
+    public boolean isOnTaskRemoved() {
+        return onTaskRemoved;
+    }
+
+    public boolean isOnUnbindCalled() {
+        return onUnbindCalled;
     }
 }

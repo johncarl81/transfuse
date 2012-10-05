@@ -68,14 +68,16 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         callthroughMapping.add(astType(ActivityOnTouchEventListener.class));
         callthroughMapping.add(astType(ActivityOnTrackballEventListener.class));
         callthroughMapping.add(astType(ActivityMenuComponent.class));
+        callthroughMapping.add(astType(ServiceOnStartCommand.class));
+        callthroughMapping.add(astType(ServiceOnUnbind.class));
 
-        ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorbuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorBuilder = ImmutableMap.builder();
 
-        generatorbuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
-        generatorbuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callthroughMapping, Functions.<ASTType>identity()),
+        generatorBuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
+        generatorBuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callthroughMapping, Functions.<ASTType>identity()),
                 new CallthroughMethodMappingFunction()));
 
-        generatorFactories = generatorbuilder.build();
+        generatorFactories = generatorBuilder.build();
     }
 
     private ASTType astType(Class<?> clazz) {
