@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Transfuse
+title: Transfuse Getting Started
 ---
 
 ### Getting Started
@@ -26,10 +26,7 @@ mvn archetype:generate \
 
 {% endhighlight %}
 
-NOTE:  Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step below is not required, but some manual merging may be needed.
-
 Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml.
-
 
 The AndroidManifest.xml should look like this:
 
@@ -40,7 +37,7 @@ package="org.androidtransfuse" android:versionCode="1" android:versionName="1.0-
 </manifest>
 {% endhighlight %}
 
-
+Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step above is not required, but some manual merging may be needed.
 
 #### Download Transfuse
 
@@ -62,9 +59,13 @@ Add the transfuse dependencies into the Maven pom:
 
 {% endhighlight %}
 
-Transfuse also can be downloaded directly from the [[Download page.](download.html)]
+Transfuse also can be downloaded directly from the [Download page.][4]
 
-NOTE: The only runtime requirement for Transfuse is the api library.
+<div class="note">
+<h5>Note</h5>
+The only runtime requirement for Transfuse is the API library.
+
+</div>
 
 #### Code
 
@@ -108,7 +109,7 @@ public class HelloAndroid {
 
 {% endhighlight %}
 
-Although syntactically different than the standard Android Activity, this should seem familiar to the seasoned Android developer.  With Transfuse, the properties previously defined in the AndroidManifest.xml file are now defined and associated directly with the Activity code.  This follows the Don't Repeat Yourself (DRY) principle, keeping the Activity definition in one place instead of split between class files and xml resources.  There is no longer a requirement to extend Activity (or one of its extension classes) and define the typical boilerplate.  Transfuse allows development of Android components in a POJO way, unrestricted by the extension-based API of Android.
+Although syntactically different than the standard Android Activity, this should seem familiar to the seasoned Android developer.  With Transfuse, the properties previously defined in the AndroidManifest.xml file are now defined and associated directly with the Activity code.  This follows the Don't Repeat Yourself (DRY) principle, keeping the Activity definition in one place instead of split between class files and xml resources.  There is no longer a requirement to extend Activity (or one of its extension classes) and define the typical boilerplate plumbing code.  Transfuse allows development of Android components in a POJO way, unrestricted by the extension-based API of Android.
 
 #### Build and Deploy
 
@@ -116,7 +117,7 @@ Transfuse requires a full build to generate the necessary class files and resour
 
 {% highlight bash %}
 
-> mvn clean package android:deploy
+mvn clean package android:deploy
 
 {% endhighlight %}
 
@@ -125,3 +126,4 @@ A fully functional Android application has now been built using Transfuse.
 [1]: http://developer.android.com/training/index.html
 [2]: https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid
 [3]: http://developer.android.com/sdk/index.html
+[4]: https://github.com/johncarl81/transfuse/downloads
