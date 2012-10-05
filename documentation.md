@@ -374,7 +374,7 @@ Annotating a class with the Service annotation tells Transfuse to use the class 
 
 {% highlight java %}
 @Service
-@IntentFilter
+@IntentFilter(@Intent(type=IntentType.ACTION, name="arbitraryIntent"))
 public class ExampleService {}
 {% endhighlight %}
 
@@ -385,7 +385,7 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 @OnDestroy
 {% endhighlight %}
 
-Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event..  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
+Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event.  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
 
 {% highlight java %}
 ServiceOnStartCommand
