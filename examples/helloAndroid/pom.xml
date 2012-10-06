@@ -9,6 +9,13 @@
     <packaging>apk</packaging>
     <name>Android Transfuse Hello Android Example</name>
 
+    <parent>
+        <groupId>org.androidtransfuse</groupId>
+        <artifactId>transfuse-examples</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <dependencies>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
