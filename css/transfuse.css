@@ -30,3 +30,24 @@ div.note  {
     float: right;
 }
 
+.arrow {
+	background: url("../images/arrows.png");
+	height: 12px;
+	width: 12px;
+	position: absolute;
+	left: -6px;
+	margin-top: 3px;
+	cursor: pointer;
+}
+
+.arrowright {
+	background-position: 24px;
+}
+
+.arrowdiag {
+	background-position: 12px;
+}
+
+.arrowdown {
+	background-position: 0;
+}

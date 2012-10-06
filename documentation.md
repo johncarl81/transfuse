@@ -1,6 +1,7 @@
 ---
-layout: docs_expanded
+layout: default
 title: Transfuse Documentation
+documentationExpanded: true
 ---
 
 ### Documentation

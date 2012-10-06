@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Transfuse Getting Started
+documentationExpanded: false
 ---
 
 ### Getting Started
