@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.IBinder;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
@@ -54,6 +55,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private ContextScopeComponentBuilder contextScopeComponentBuilder;
     private GeneratorFactory generatorFactory;
+    private ListenerRegistrationGenerator listenerRegistrationGenerator;
 
     @Inject
     public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
@@ -67,7 +69,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            InjectionBindingBuilder injectionBindingBuilder,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            ContextScopeComponentBuilder contextScopeComponentBuilder,
-                           GeneratorFactory generatorFactory) {
+                           GeneratorFactory generatorFactory,
+                           ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.injectionNodeRepository = injectionNodeRepository;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -81,6 +84,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.generatorFactory = generatorFactory;
+        this.listenerRegistrationGenerator = listenerRegistrationGenerator;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -150,8 +154,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         serviceDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-        //onStart onStart(android.content.Intent intent, int startId)
-        serviceDescriptor.addGenerators(buildEventMethod("onStart", Intent.class, int.class));
+        serviceDescriptor.addGenerators(buildEventMethod("onConfigurationChanged", Configuration.class));
         //onDestroy
         serviceDescriptor.addGenerators(buildEventMethod("onDestroy"));
         //onLowMemory
@@ -169,6 +172,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 onBind.body()._return(JExpr._null());
             }
         });
+
+        serviceDescriptor.addGenerators(listenerRegistrationGenerator);
 
         serviceDescriptor.addGenerators(contextScopeComponentBuilder);
 
