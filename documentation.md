@@ -25,7 +25,7 @@ Transfuse moves the declaration of Manifest metadata to the component class leve
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
-Available to each component is DI generated at compile time.  This feature is covered in-depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
+Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection section</a>.
 
 #### Components
 
@@ -99,9 +99,7 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 
 <div class="note">
 <h5>Note</h5>
-
 To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
-
 </div>
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
@@ -142,9 +140,7 @@ public class Example {
 
 <div class="note">
 <h5>Note</h5>
-
 Lifecycle events will not be called in any predefined order.
-
 </div>
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
@@ -366,9 +362,7 @@ Fragments map lifecycle events associated with the following annotations:
 
 <div class="note">
 <h5>Note</h5>
-
 Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
-
 </div>
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
@@ -381,7 +375,7 @@ Annotating a class with the Service annotation tells Transfuse to use the class 
 
 {% highlight java %}
 @Service
-@IntentFilter
+@IntentFilter(@Intent(type=IntentType.ACTION, name="arbitraryIntent"))
 public class ExampleService {}
 {% endhighlight %}
 
@@ -389,12 +383,16 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 
 {% highlight java %}
 @OnCreate
-@OnStart
 @OnDestroy
-
 {% endhighlight %}
 
-Service may be injected as described in the Injection section:
+Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event.  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
+
+{% highlight java %}
+ServiceOnStartCommand
+{% endhighlight %}
+
+Service may be injected as described in the <a href="#dependency_injection_di">Injection section</a>:
 
 {% highlight java %}
 @Service
@@ -486,9 +484,7 @@ Transfuse allows users to inject into the constructor, methods and fields of a c
 
 <div class="note">
 <h5>Note</h5>
-
 This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
-
 </div>
 
 ##### Provider
@@ -570,9 +566,7 @@ Annotating a method with @UIthread will execute the given method through an Andr
 
 <div class="note">
 <h5>Note</h5>
-
 If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
-
 </div>
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
@@ -607,7 +601,7 @@ public class Example{
 }
 {% endhighlight %}
 
-These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
+These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
 
 ##### Configuration
 
@@ -758,9 +752,7 @@ Define Android components as normal, and register them in the AndroidManifest.xm
 
 <div class="note">
 <h5>Note</h5>
-
 DI and the other code generation features are not available on legacy Android components.
-
 </div>
 
 The second option looks like the following:
