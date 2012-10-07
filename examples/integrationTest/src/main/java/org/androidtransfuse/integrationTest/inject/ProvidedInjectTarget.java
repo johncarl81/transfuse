@@ -10,7 +10,7 @@ public class ProvidedInjectTarget {
     private InjectTarget injectTarget;
 
     @Inject
-    public ProvidedInjectTarget(InjectTarget injectTarget) {
+    protected ProvidedInjectTarget(InjectTarget injectTarget) {
         this.injectTarget = injectTarget;
     }
 

@@ -11,8 +11,13 @@ import java.util.List;
  */
 public abstract class MethodInjectionPointBase {
 
+    private final ASTType containingType;
     private final List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
     private final List<ASTType> throwsTypes = new ArrayList<ASTType>();
+
+    protected MethodInjectionPointBase(ASTType containingType) {
+        this.containingType = containingType;
+    }
 
     public void addInjectionNode(InjectionNode injectionNode) {
         this.injectionNodes.add(injectionNode);
@@ -28,5 +33,9 @@ public abstract class MethodInjectionPointBase {
 
     public List<ASTType> getThrowsTypes() {
         return throwsTypes;
+    }
+
+    public ASTType getContainingType() {
+        return containingType;
     }
 }

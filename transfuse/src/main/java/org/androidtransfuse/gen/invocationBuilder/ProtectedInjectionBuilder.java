@@ -25,22 +25,57 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     private static final String PACKAGE_HELPER_NAME = "Transfuse$PackageHelper";
 
     private final JCodeModel codeModel;
-    private final PrivateInjectionBuilder delegate;
     private final UniqueVariableNamer namer;
     private final Map<FieldInjectionPoint, ProtectedAccessorMethod> fieldSetterMapping = new HashMap<FieldInjectionPoint, ProtectedAccessorMethod>();
+    private final Map<ConstructorInjectionPoint, ProtectedAccessorMethod> constructorMapping = new HashMap<ConstructorInjectionPoint, ProtectedAccessorMethod>();
     private final Map<FieldGetter, ProtectedAccessorMethod> fieldGetterMapping = new HashMap<FieldGetter, ProtectedAccessorMethod>();
     private final Map<PackageClass, JDefinedClass> packageHelpers = new HashMap<PackageClass, JDefinedClass>();
 
     @Inject
-    public ProtectedInjectionBuilder(JCodeModel codeModel, PrivateInjectionBuilder delegate, UniqueVariableNamer namer) {
+    public ProtectedInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
-        this.delegate = delegate;
         this.namer = namer;
     }
 
     @Override
     public JExpression buildConstructorCall(Map<InjectionNode, TypedExpression> expressionMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) {
-        return delegate.buildConstructorCall(expressionMap, constructorInjectionPoint, type);
+        ProtectedAccessorMethod accessorMethod = getConstructorCall(constructorInjectionPoint);
+
+        JInvocation invocation = accessorMethod.invoke();
+
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
+            invocation.arg(expressionMap.get(injectionNode).getExpression());
+        }
+
+        return invocation;
+    }
+
+    private ProtectedAccessorMethod getConstructorCall(ConstructorInjectionPoint constructorInjectionPoint) {
+        if(!constructorMapping.containsKey(constructorInjectionPoint)){
+            constructorMapping.put(constructorInjectionPoint, buildConstructorCall(constructorInjectionPoint));
+        }
+        return constructorMapping.get(constructorInjectionPoint);
+    }
+
+    private ProtectedAccessorMethod buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint) {
+        PackageClass containedPackageClass = new PackageClass(constructorInjectionPoint.getContainingType().getName());
+        JDefinedClass helperClass = getPackageHelper(containedPackageClass);
+
+        JClass returnTypeRef = codeModel.ref(constructorInjectionPoint.getContainingType().getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef,
+                "get" + containedPackageClass.getClassName() + "$INIT");
+
+        JInvocation constructorInvocation = JExpr._new(returnTypeRef);
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
+            JClass paramRef = codeModel.ref(injectionNode.getASTType().getName());
+            JVar param = accessorMethod.param(paramRef, namer.generateName(paramRef));
+            constructorInvocation.arg(param);
+        }
+
+        accessorMethod.body()._return(constructorInvocation);
+
+        return new ProtectedAccessorMethod(helperClass, accessorMethod);
     }
 
     @Override

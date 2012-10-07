@@ -35,7 +35,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
             for (ASTConstructor astConstructor : concreteType.getConstructors()) {
                 if (astConstructor.isAnnotated(Inject.class)) {
                     annotatedConstructor = astConstructor;
-                    getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(astConstructor, context));
+                    getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, astConstructor, context));
                 }
                 if (astConstructor.getParameters().size() == 0) {
                     noArgConstructor = astConstructor;
@@ -44,7 +44,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
 
             //only allow zero or one annotated constructors.
             if (annotatedConstructor == null && noArgConstructor != null) {
-                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(noArgConstructor, context));
+                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, noArgConstructor, context));
             }
         }
     }

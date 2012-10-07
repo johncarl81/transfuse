@@ -8,14 +8,13 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public class MethodInjectionPoint extends MethodInjectionPointBase {
 
-    private final ASTType containingType;
     private final String name;
     private final ASTAccessModifier accessModifier;
 
     public MethodInjectionPoint(ASTType containingType, ASTAccessModifier accessModifier, String name) {
+        super(containingType);
         this.name = name;
         this.accessModifier = accessModifier;
-        this.containingType = containingType;
     }
 
     public String getName() {
@@ -24,9 +23,5 @@ public class MethodInjectionPoint extends MethodInjectionPointBase {
 
     public ASTAccessModifier getAccessModifier() {
         return accessModifier;
-    }
-
-    public ASTType getContainingType() {
-        return containingType;
     }
 }

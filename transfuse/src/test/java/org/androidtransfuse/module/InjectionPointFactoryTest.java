@@ -50,7 +50,7 @@ public class InjectionPointFactoryTest {
         Constructor<?>[] constructors = MockAnalysisClass.class.getConstructors();
         Constructor constructor = constructors[0];
 
-        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassConstructor(constructor), emptyContext);
+        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassType(MockAnalysisClass.class), astClassFactory.buildASTClassConstructor(constructor), emptyContext);
 
         TypeVariable[] typeParameters = constructor.getTypeParameters();
         List<InjectionNode> injectionNodes = constructorInjectionPoint.getInjectionNodes();

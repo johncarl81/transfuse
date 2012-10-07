@@ -35,9 +35,9 @@ public class InjectionPointFactory {
      * @param context        required AnalysisContext
      * @return ConstructorInjectionPoint
      */
-    public ConstructorInjectionPoint buildInjectionPoint(ASTConstructor astConstructor, AnalysisContext context) {
+    public ConstructorInjectionPoint buildInjectionPoint(ASTType concreteType, ASTConstructor astConstructor, AnalysisContext context) {
 
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astConstructor.getAccessModifier());
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astConstructor.getAccessModifier(), concreteType);
         constructorInjectionPoint.addThrows(astConstructor.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
