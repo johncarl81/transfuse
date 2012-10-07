@@ -4,6 +4,7 @@ _site/*
 *.iml
 build.sh
 target
-gen
+examples/helloAndroid/gen/
+examples/integrationTest/gen/
 tmp
 out
