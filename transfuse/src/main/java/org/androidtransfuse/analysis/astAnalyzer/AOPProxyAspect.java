@@ -18,12 +18,14 @@ import java.util.Set;
 public class AOPProxyAspect {
 
     private final Map<MethodSignature, Set<InjectionNode>> methodInterceptors = new HashMap<MethodSignature, Set<InjectionNode>>();
+    private final Map<MethodSignature, ASTMethod> methodMapping = new HashMap<MethodSignature, ASTMethod>();
 
     public Map<ASTMethod, Set<InjectionNode>> getMethodInterceptors() {
         Map<ASTMethod, Set<InjectionNode>> unboxedMethodInterceptors = new HashMap<ASTMethod, Set<InjectionNode>>();
 
         for (Map.Entry<MethodSignature, Set<InjectionNode>> methodSignatureSetEntry : methodInterceptors.entrySet()) {
-            unboxedMethodInterceptors.put(methodSignatureSetEntry.getKey().getMethod(), methodSignatureSetEntry.getValue());
+            ASTMethod astMethod = methodMapping.get(methodSignatureSetEntry.getKey());
+            unboxedMethodInterceptors.put(astMethod, methodSignatureSetEntry.getValue());
         }
 
         return unboxedMethodInterceptors;
@@ -35,6 +37,7 @@ public class AOPProxyAspect {
             methodInterceptors.put(methodSignature, new HashSet<InjectionNode>());
         }
 
+        methodMapping.put(methodSignature, astMethod);
         methodInterceptors.get(methodSignature).add(interceptorInjectionNode);
     }
 }

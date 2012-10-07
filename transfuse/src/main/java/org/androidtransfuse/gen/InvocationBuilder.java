@@ -1,18 +1,18 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.*;
+import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.invocationBuilder.ModifierInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.PrivateInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.ProtectedInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.PublicInjectionBuilder;
 import org.androidtransfuse.model.*;
-import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,7 +104,7 @@ public class InvocationBuilder {
         return injectionBuilder.buildFieldSet(expression, fieldInjectionPoint, variable);
     }
 
-    public JExpression buildFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
+    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
 
         return injectionBuilder.buildFieldGet(returnType, variableType, variable, name);

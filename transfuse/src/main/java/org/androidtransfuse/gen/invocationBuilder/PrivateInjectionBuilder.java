@@ -1,7 +1,6 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -10,7 +9,6 @@ import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,10 +73,10 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name) {
+    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
         return codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.GET_FIELD_METHOD)
                 .arg(codeModel.ref(returnType.getName()).dotclass())
-                .arg(variableType.dotclass())
+                .arg(codeModel.ref(variableType.getName()).dotclass())
                 .arg(variable)
                 .arg(name);
     }

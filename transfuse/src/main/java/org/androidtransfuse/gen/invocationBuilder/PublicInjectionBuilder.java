@@ -1,13 +1,11 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -51,7 +49,7 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name) {
+    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
         return variable.ref(name);
     }
 

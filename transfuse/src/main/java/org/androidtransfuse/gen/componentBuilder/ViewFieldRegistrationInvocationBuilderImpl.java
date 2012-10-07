@@ -31,7 +31,7 @@ public class ViewFieldRegistrationInvocationBuilderImpl implements ViewRegistrat
     public void buildInvocation(JBlock block, TypedExpression expression, JExpression viewExpression, String method, InjectionNode injectionNode) {
         block.invoke(viewExpression, method)
                 .arg(invocationBuilder.buildFieldGet(astField.getASTType(),
-                        codeModel.ref(expression.getType().getName()),
+                        expression.getType(),
                         expression.getExpression(),
                         astField.getName(),
                         astField.getAccessModifier()));

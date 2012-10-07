@@ -90,7 +90,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                     for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                         construction.arg(invocationBuilder.buildFieldGet(
                                 fieldInjectionPoint.getInjectionNode().getASTType(),
-                                codeModel.ref(expressionMap.get(injectionNode).getType().getName()),
+                                expressionMap.get(injectionNode).getType(),
                                 expressionMap.get(injectionNode).getExpression(),
                                 fieldInjectionPoint.getName(),
                                 fieldInjectionPoint.getAccessModifier()));

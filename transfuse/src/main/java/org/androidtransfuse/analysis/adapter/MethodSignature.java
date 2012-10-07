@@ -11,15 +11,9 @@ import java.util.List;
 public class MethodSignature {
 
     private final String methodSignature;
-    private final ASTMethod method;
 
     public MethodSignature(ASTMethod method) {
         this.methodSignature = makeDescriptor(method);
-        this.method = method;
-    }
-
-    public ASTMethod getMethod() {
-        return method;
     }
 
     /**

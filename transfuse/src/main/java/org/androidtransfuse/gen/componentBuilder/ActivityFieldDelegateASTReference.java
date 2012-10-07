@@ -1,7 +1,6 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -16,20 +15,18 @@ public class ActivityFieldDelegateASTReference implements ActivityDelegateASTRef
 
     private final ASTField astField;
     private final InvocationBuilder invocationBuilder;
-    private final JCodeModel codeModel;
 
     @Inject
-    public ActivityFieldDelegateASTReference(@Assisted ASTField astField, InvocationBuilder invocationBuilder, JCodeModel codeModel) {
+    public ActivityFieldDelegateASTReference(@Assisted ASTField astField, InvocationBuilder invocationBuilder) {
         this.astField = astField;
         this.invocationBuilder = invocationBuilder;
-        this.codeModel = codeModel;
     }
 
     @Override
     public JExpression buildReference(TypedExpression rootExpression) {
 
         return invocationBuilder.buildFieldGet(astField.getASTType(),
-                codeModel.ref(rootExpression.getType().getName()),
+                rootExpression.getType(),
                 rootExpression.getExpression(),
                 astField.getName(),
                 astField.getAccessModifier());

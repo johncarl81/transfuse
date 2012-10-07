@@ -20,12 +20,13 @@ import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGenerated
 @Singleton
 public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
-    private static final String PACKAGE_HELPER_NAME = "TransfusePackageHelper";
+    private static final String PACKAGE_HELPER_NAME = "Transfuse$PackageHelper";
 
     private final JCodeModel codeModel;
     private final PrivateInjectionBuilder delegate;
     private final UniqueVariableNamer namer;
-    private final Map<FieldInjectionPoint, ProtectedAccessorMethod> fieldMapping = new HashMap<FieldInjectionPoint, ProtectedAccessorMethod>();
+    private final Map<FieldInjectionPoint, ProtectedAccessorMethod> fieldSetterMapping = new HashMap<FieldInjectionPoint, ProtectedAccessorMethod>();
+    private final Map<FieldGetter, ProtectedAccessorMethod> fieldGetterMapping = new HashMap<FieldGetter, ProtectedAccessorMethod>();
     private final Map<PackageClass, JDefinedClass> packageHelpers = new HashMap<PackageClass, JDefinedClass>();
 
     @Inject
@@ -46,8 +47,67 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildFieldGet(ASTType returnType, JClass variableType, JExpression variable, String name) {
-        return delegate.buildFieldGet(returnType, variableType, variable, name);
+    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
+        ProtectedAccessorMethod accessorMethod = getFieldGetter(returnType, variableType, name);
+
+        return accessorMethod.invoke().arg(variable);
+    }
+
+    private ProtectedAccessorMethod getFieldGetter(ASTType returnType, ASTType variableType, String name){
+        FieldGetter fieldGetter = new FieldGetter(variableType, name);
+        if(!fieldGetterMapping.containsKey(fieldGetter)){
+            fieldGetterMapping.put(fieldGetter, buildFieldGetter(returnType, variableType, name));
+        }
+        return fieldGetterMapping.get(fieldGetter);
+    }
+
+    private ProtectedAccessorMethod buildFieldGetter(ASTType returnType, ASTType variableType, String name) {
+        PackageClass containedPackageClass = new PackageClass(variableType.getName());
+        JDefinedClass helperClass = getPackageHelper(containedPackageClass);
+
+        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef,
+                "get" + containedPackageClass.getClassName() + "$FG$" + name);
+
+        JClass variableTypeRef = codeModel.ref(variableType.getName());
+        JVar variableParam = accessorMethod.param(variableTypeRef, namer.generateName(variableTypeRef));
+        JBlock body = accessorMethod.body();
+
+        body._return(variableParam.ref(name));
+
+        return new ProtectedAccessorMethod(helperClass, accessorMethod);
+    }
+
+    private final class FieldGetter{
+        private ASTType variableType;
+        private String name;
+
+        private FieldGetter(ASTType variableType, String name) {
+            this.variableType = variableType;
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof FieldGetter)) return false;
+
+            FieldGetter that = (FieldGetter) o;
+
+            if (name != null ? !name.equals(that.name) : that.name != null) return false;
+            if (variableType != null ? !variableType.equals(that.variableType) : that.variableType != null)
+                return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = variableType != null ? variableType.hashCode() : 0;
+            result = 31 * result + (name != null ? name.hashCode() : 0);
+            return result;
+        }
     }
 
     @Override
@@ -62,10 +122,10 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     private ProtectedAccessorMethod getFieldSetter(FieldInjectionPoint fieldInjectionPoint) {
-        if(!fieldMapping.containsKey(fieldInjectionPoint)){
-            fieldMapping.put(fieldInjectionPoint, buildFieldSet(fieldInjectionPoint));
+        if(!fieldSetterMapping.containsKey(fieldInjectionPoint)){
+            fieldSetterMapping.put(fieldInjectionPoint, buildFieldSet(fieldInjectionPoint));
         }
-        return fieldMapping.get(fieldInjectionPoint);
+        return fieldSetterMapping.get(fieldInjectionPoint);
     }
 
     private ProtectedAccessorMethod buildFieldSet(FieldInjectionPoint fieldInjectionPoint) {
@@ -73,9 +133,9 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         PackageClass containedPackageClass = new PackageClass(fieldInjectionPoint.getContainingType().getName());
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
-        //get, ClassName, F, fieldName
-        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID ,
-                "get" + containedPackageClass.getClassName() + "F" + fieldInjectionPoint.getName());
+        //get, ClassName, FS, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID,
+                "get" + containedPackageClass.getClassName() + "$FS$" + fieldInjectionPoint.getName());
 
         JClass containerType = codeModel.ref(fieldInjectionPoint.getContainingType().getName());
         JVar containerParam = accessorMethod.param(containerType, namer.generateName(containerType));
