@@ -4,6 +4,7 @@ import android.view.View;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -118,7 +119,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
         for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
             block.add(
                     injectionInvocationBuilder.buildMethodCall(
-                            Object.class.getName(),
+                            ASTVoidType.VOID,
                             injectionBuilderContext.getVariableMap(),
                             methodInjectionPoint,
                             variableRef));

@@ -3,11 +3,13 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +44,51 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public <T> JInvocation buildMethodCall(String returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
-        return delegate.buildMethodCall(returnType, expressionMap, methodName, injectionNodes, injectionNodeType, targetExpressionType, targetExpression);
+    public <T> JInvocation buildMethodCall(ASTType returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
+        List<TypedExpression> paramExpressions = new ArrayList<TypedExpression>();
+
+        for (T injectionNode : injectionNodes) {
+            paramExpressions.add(expressionMap.get(injectionNode));
+        }
+
+        ProtectedAccessorMethod accessorMethod = getMethodCall(returnType, targetExpressionType, methodName, paramExpressions);
+
+        JInvocation invocation = accessorMethod.invoke().arg(targetExpression);
+
+        for(TypedExpression expression : paramExpressions){
+            invocation.arg(expression.getExpression());
+        }
+
+        return invocation;
+    }
+
+    public <T> ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
+        PackageClass containedPackageClass = new PackageClass(targetExpressionsType.getName());
+        JDefinedClass helperClass = getPackageHelper(containedPackageClass);
+
+        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef,
+                "get" + containedPackageClass.getClassName() + "$M$" + methodName);
+
+        JClass targetRef = codeModel.ref(targetExpressionsType.getName());
+        JVar targetParam = accessorMethod.param(targetRef, namer.generateName(targetRef));
+        JInvocation invocation = targetParam.invoke(methodName);
+
+        for (TypedExpression expression : argExpressions) {
+            JClass ref = codeModel.ref(expression.getType().getName());
+            JVar param = accessorMethod.param(ref, namer.generateName(ref));
+            invocation.arg(param);
+        }
+
+        if(returnType.equals(ASTVoidType.VOID)){
+            accessorMethod.body().add(invocation);
+        }
+        else{
+            accessorMethod.body()._return(invocation);
+        }
+
+        return new ProtectedAccessorMethod(helperClass, accessorMethod);
     }
 
     @Override

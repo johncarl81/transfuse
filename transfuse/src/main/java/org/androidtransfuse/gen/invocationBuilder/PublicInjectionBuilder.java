@@ -37,7 +37,7 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public <T> JInvocation buildMethodCall(String returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> parameters, List<ASTType> types, ASTType targetExpressionType, JExpression targetExpression) {
+    public <T> JInvocation buildMethodCall(ASTType returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> parameters, List<ASTType> types, ASTType targetExpressionType, JExpression targetExpression) {
         //public case:
         JInvocation methodInvocation = targetExpression.invoke(methodName);
 

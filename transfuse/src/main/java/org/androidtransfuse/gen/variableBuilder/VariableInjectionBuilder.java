@@ -2,6 +2,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
@@ -107,7 +108,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                             public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
                                 block.add(
                                         injectionInvocationBuilder.buildMethodCall(
-                                                Object.class.getName(),
+                                                ASTVoidType.VOID,
                                                 injectionBuilderContext.getVariableMap(),
                                                 methodInjectionPoint,
                                                 variableRef));

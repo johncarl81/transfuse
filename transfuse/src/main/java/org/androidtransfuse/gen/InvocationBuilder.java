@@ -48,7 +48,7 @@ public class InvocationBuilder {
         }
     }
 
-    public JInvocation buildMethodCall(String returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JInvocation buildMethodCall(ASTType returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) throws ClassNotFoundException, JClassAlreadyExistsException {
         List<ASTParameter> matchedParameters = matchMethodArguments(callingParameters, methodToCall);
         List<ASTType> parameterTypes = new ArrayList<ASTType>();
 
@@ -61,7 +61,7 @@ public class InvocationBuilder {
         return injectionBuilder.buildMethodCall(returnType, parameters, methodToCall.getName(), matchedParameters, parameterTypes, targetExpressionType, targetExpression);
     }
 
-    public JStatement buildMethodCall(String returnType, Map<InjectionNode, TypedExpression> expressionMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildMethodCall(ASTType returnType, Map<InjectionNode, TypedExpression> expressionMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(methodInjectionPoint.getAccessModifier());
 
         return injectionBuilder.buildMethodCall(returnType, expressionMap, methodInjectionPoint.getName(), methodInjectionPoint.getInjectionNodes(), pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);

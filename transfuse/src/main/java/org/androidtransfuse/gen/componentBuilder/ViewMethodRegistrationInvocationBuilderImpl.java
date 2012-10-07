@@ -32,7 +32,8 @@ public class ViewMethodRegistrationInvocationBuilderImpl implements ViewRegistra
 
         try {
             block.invoke(viewExpression, method)
-                    .arg(invocationBuilder.buildMethodCall(getterMethod.getReturnType().getName(),
+                    .arg(invocationBuilder.buildMethodCall(
+                            getterMethod.getReturnType(),
                             Collections.EMPTY_LIST,
                             Collections.EMPTY_MAP,
                             expression.getType(),

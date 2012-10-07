@@ -49,12 +49,12 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public <T> JInvocation buildMethodCall(String returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
+    public <T> JInvocation buildMethodCall(ASTType returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
 
         JClass targetType = codeModel.ref(targetExpressionType.getName());
         //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)
         JInvocation methodInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.CALL_METHOD_METHOD)
-                .arg(codeModel.ref(returnType).dotclass())
+                .arg(codeModel.ref(returnType.getName()).dotclass())
                 .arg(targetType.dotclass())
                 .arg(targetExpression)
                 .arg(methodName);
