@@ -2,7 +2,6 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.adapter.ASTField;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -18,13 +17,11 @@ public class ViewFieldRegistrationInvocationBuilderImpl implements ViewRegistrat
 
     private final InvocationBuilder invocationBuilder;
     private final ASTField astField;
-    private final JCodeModel codeModel;
 
     @Inject
-    public ViewFieldRegistrationInvocationBuilderImpl(@Assisted ASTField astField, InvocationBuilder invocationBuilder, JCodeModel codeModel) {
+    public ViewFieldRegistrationInvocationBuilderImpl(@Assisted ASTField astField, InvocationBuilder invocationBuilder) {
         this.invocationBuilder = invocationBuilder;
         this.astField = astField;
-        this.codeModel = codeModel;
     }
 
     @Override

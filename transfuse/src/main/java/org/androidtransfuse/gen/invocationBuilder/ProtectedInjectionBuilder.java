@@ -25,6 +25,7 @@ import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGenerated
 @Singleton
 public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
+    private static final String PRE_METHOD = "access";
     private static final String PACKAGE_HELPER_NAME = "Transfuse$PackageHelper";
 
     private final JCodeModel codeModel;
@@ -68,7 +69,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         JClass returnTypeRef = codeModel.ref(constructorInjectionPoint.getContainingType().getName());
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef,
-                "get" + containedPackageClass.getClassName() + "$INIT");
+                PRE_METHOD + containedPackageClass.getClassName() + "$INIT");
 
         JInvocation constructorInvocation = JExpr._new(returnTypeRef);
         for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
@@ -117,7 +118,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         return methodMapping.get(methodSignature);
     }
 
-    private static class TypeMethodSignature {
+    private static final class TypeMethodSignature {
         private final ASTType type;
         private final MethodSignature methodSignature;
 
@@ -206,7 +207,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         return new ProtectedAccessorMethod(helperClass, accessorMethod);
     }
 
-    private final class FieldGetter{
+    private static final class FieldGetter{
         private final ASTType variableType;
         private final String name;
 
@@ -270,16 +271,12 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
         body.assign(containerParam.ref(fieldInjectionPoint.getName()), inputParam);
 
-        //perform set
-
-
         return new ProtectedAccessorMethod(helperClass, accessorMethod);
     }
 
     private JDefinedClass getPackageHelper(PackageClass pkg){
         PackageClass helperPackageClass = pkg.replaceName(PACKAGE_HELPER_NAME);
         if(!packageHelpers.containsKey(helperPackageClass)){
-            System.out.println("Building: " + helperPackageClass);
             packageHelpers.put(helperPackageClass, buildPackageHelper(helperPackageClass));
         }
         return packageHelpers.get(helperPackageClass);
