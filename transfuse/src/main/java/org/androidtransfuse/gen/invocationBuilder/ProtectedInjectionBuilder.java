@@ -4,8 +4,11 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTVoidType;
+import org.androidtransfuse.analysis.adapter.MethodSignature;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.*;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +31,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     private final UniqueVariableNamer namer;
     private final Map<FieldInjectionPoint, ProtectedAccessorMethod> fieldSetterMapping = new HashMap<FieldInjectionPoint, ProtectedAccessorMethod>();
     private final Map<ConstructorInjectionPoint, ProtectedAccessorMethod> constructorMapping = new HashMap<ConstructorInjectionPoint, ProtectedAccessorMethod>();
+    private final Map<TypeMethodSignature, ProtectedAccessorMethod> methodMapping = new HashMap<TypeMethodSignature, ProtectedAccessorMethod>();
     private final Map<FieldGetter, ProtectedAccessorMethod> fieldGetterMapping = new HashMap<FieldGetter, ProtectedAccessorMethod>();
     private final Map<PackageClass, JDefinedClass> packageHelpers = new HashMap<PackageClass, JDefinedClass>();
 
@@ -97,7 +101,50 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         return invocation;
     }
 
-    public <T> ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
+    private <T> ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
+
+        List<ASTType> paramTypes = new ArrayList<ASTType>();
+        for (TypedExpression argExpression : argExpressions) {
+            paramTypes.add(argExpression.getType());
+        }
+
+        TypeMethodSignature methodSignature = new TypeMethodSignature(targetExpressionsType, new MethodSignature(returnType, methodName, paramTypes));
+
+        if(!methodMapping.containsKey(methodSignature)){
+            methodMapping.put(methodSignature, buildMethodCall(returnType, targetExpressionsType, methodName, argExpressions));
+        }
+
+        return methodMapping.get(methodSignature);
+    }
+
+    private static class TypeMethodSignature {
+        private final ASTType type;
+        private final MethodSignature methodSignature;
+
+        private TypeMethodSignature(ASTType type, MethodSignature methodSignature) {
+            this.type = type;
+            this.methodSignature = methodSignature;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof TypeMethodSignature)) {
+                return false;
+            }
+            TypeMethodSignature that = (TypeMethodSignature) o;
+            return new EqualsBuilder().append(type, that.type).append(methodSignature, that.methodSignature).isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder().append(type).append(methodSignature).hashCode();
+        }
+    }
+
+    private <T> ProtectedAccessorMethod buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
         PackageClass containedPackageClass = new PackageClass(targetExpressionsType.getName());
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
@@ -160,8 +207,8 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     private final class FieldGetter{
-        private ASTType variableType;
-        private String name;
+        private final ASTType variableType;
+        private final String name;
 
         private FieldGetter(ASTType variableType, String name) {
             this.variableType = variableType;
@@ -170,23 +217,19 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof FieldGetter)) return false;
-
-            FieldGetter that = (FieldGetter) o;
-
-            if (name != null ? !name.equals(that.name) : that.name != null) return false;
-            if (variableType != null ? !variableType.equals(that.variableType) : that.variableType != null)
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof FieldGetter)) {
                 return false;
-
-            return true;
+            }
+            FieldGetter that = (FieldGetter) o;
+            return new EqualsBuilder().append(name, that.name).append(variableType, that.variableType).isEquals();
         }
 
         @Override
         public int hashCode() {
-            int result = variableType != null ? variableType.hashCode() : 0;
-            result = 31 * result + (name != null ? name.hashCode() : 0);
-            return result;
+            return new HashCodeBuilder().append(name).append(variableType).hashCode();
         }
     }
 

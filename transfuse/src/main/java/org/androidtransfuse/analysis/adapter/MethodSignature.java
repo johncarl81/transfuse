@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,10 @@ public class MethodSignature {
         this.methodSignature = makeDescriptor(method);
     }
 
+    public MethodSignature(ASTType returnType, String methodName, List<ASTType> paramTypes){
+        this.methodSignature = makeDescriptor(returnType, methodName, paramTypes);
+    }
+
     /**
      * Makes a descriptor for a given method.
      *
@@ -23,30 +28,39 @@ public class MethodSignature {
      * @return descriptor
      */
     private String makeDescriptor(ASTMethod method) {
-        List<ASTParameter> params = method.getParameters();
-        return method.getName() + ':' + makeDescriptor(params, method.getReturnType());
+        List<ASTType> paramTypes = new ArrayList<ASTType>();
+
+        for (ASTParameter parameter : method.getParameters()) {
+            paramTypes.add(parameter.getASTType());
+        }
+
+        return makeDescriptor(method.getReturnType(), method.getName(), paramTypes);
+    }
+
+    private String makeDescriptor(ASTType returnType, String methodName, List<ASTType> params){
+        return methodName + ':' + makeDescriptor(params, returnType);
     }
 
     /**
      * Makes a descriptor for a given method.
      *
-     * @param params  parameter types.
+     * @param paramTypes  parameter types.
      * @param retType return type.
      * @return method descriptor
      */
-    private String makeDescriptor(List<ASTParameter> params, ASTType retType) {
+    private String makeDescriptor(List<ASTType> paramTypes, ASTType retType) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
-        for (ASTParameter param : params) {
-            makeDesc(builder, param.getASTType());
+        for (ASTType paramType : paramTypes) {
+            makeTypeDescriptor(builder, paramType);
         }
 
         builder.append(')');
-        makeDesc(builder, retType);
+        makeTypeDescriptor(builder, retType);
         return builder.toString();
     }
 
-    private void makeDesc(StringBuilder builder, ASTType type) {
+    private void makeTypeDescriptor(StringBuilder builder, ASTType type) {
         if (type.isArray()) {
             builder.append('[');
         }
