@@ -24,9 +24,9 @@ public final class ASTUtils {
      *
      * @param astType     target
      * @param inheritable inheritance target
-     * @param implement
-     * @param extend
-     * @return
+     * @param implement flag to trigger the method to search for implements inheritance
+     * @param extend flag to trigger the method to search for extends inheritance
+     * @return true if the given astType target inherits from the inheritable type with the given rules.
      */
     public boolean inherits(ASTType astType, ASTType inheritable, boolean implement, boolean extend) {
         if (astType == null) {

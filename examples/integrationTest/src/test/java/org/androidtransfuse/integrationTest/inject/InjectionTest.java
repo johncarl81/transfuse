@@ -93,4 +93,10 @@ public class InjectionTest {
     public void testBaseClassInjection() {
         assertNotNull(injection.getBaseTarget());
     }
+
+    @Test
+    public void testLibraryDependency() {
+        assertNotNull(injection.getLibraryDependency());
+        assertNotNull(injection.getLibraryDependency().getLibraryDependency2());
+    }
 }

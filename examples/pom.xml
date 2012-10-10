@@ -17,6 +17,7 @@
     </parent>
 
     <modules>
+        <module>integrationTestDependency</module>
         <module>integrationTest</module>
     </modules>
 

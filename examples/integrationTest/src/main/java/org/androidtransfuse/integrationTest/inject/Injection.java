@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.inject;
 import org.androidtransfuse.InjectorRepository;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.inject.LibraryDependency1;
 import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.util.DeclareField;
 
@@ -36,6 +37,8 @@ public class Injection extends InjectionBase {
     private Provider<ProvidedInjectTarget> providedInjectTargetProvider;
     @Inject
     private Provider<InjectTarget> generatedProvider;
+    @Inject
+    private LibraryDependency1 libraryDependency;
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -102,5 +105,9 @@ public class Injection extends InjectionBase {
 
     public Provider<LoopThree> getStaticInjectionProvider() {
         return InjectorRepository.get(Injector.class).getLoopThreeProvider();
+    }
+
+    public LibraryDependency1 getLibraryDependency() {
+        return libraryDependency;
     }
 }
