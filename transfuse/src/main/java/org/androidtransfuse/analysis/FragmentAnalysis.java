@@ -31,6 +31,7 @@ import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
@@ -42,7 +43,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private final ASTClassFactory astClassFactory;
     private final AnalysisContextFactory analysisContextFactory;
-    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
@@ -52,7 +53,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
                             AnalysisContextFactory analysisContextFactory,
-                            InjectionNodeBuilderRepository injectionNodeBuilderRepository,
+                            Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             InjectionBindingBuilder injectionBindinBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -60,7 +61,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             BindingRepositoryFactory bindingRepositoryFactory) {
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
-        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.injectionBindingBuilder = injectionBindinBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
@@ -165,6 +166,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
 
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+
         injectionNodeBuilderRepository.putType(android.support.v4.app.Fragment.class, injectionBindingBuilder.buildThis(android.support.v4.app.Fragment.class));
         injectionNodeBuilderRepository.putType(Activity.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Activity.class, "getActivity").build());
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Context.class, "getActivity").build());
@@ -172,7 +175,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Activity.class).invoke(Application.class, "getApplication").build());
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.dependency(android.support.v4.app.Fragment.class).invoke(Activity.class, "getActivity").build());
 
-        if (type != null) {
+        if (type != null && !type.toString().equals(android.support.v4.app.Fragment.class.getName())) {
             ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);
             injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
         }

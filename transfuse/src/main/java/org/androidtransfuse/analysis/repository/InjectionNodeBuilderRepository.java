@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.repository;
 
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -59,10 +60,19 @@ public class InjectionNodeBuilderRepository {
     }
 
     public InjectionNodeBuilder getBinding(ASTType type) {
+
+        InjectionNodeBuilder builder = null;
         for (Map.Entry< Matcher<ASTType>, InjectionNodeBuilder> bindingEntry : typeBindings.entrySet()) {
             if(bindingEntry.getKey().matches(type)){
-                return bindingEntry.getValue();
+                if(builder != null){
+                    throw new TransfuseAnalysisException("Multiple types matched on type " + type.getName());
+                }
+                builder = bindingEntry.getValue();
             }
+        }
+
+        if(builder != null){
+            return builder;
         }
         return defaultBinding;
     }

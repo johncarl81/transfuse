@@ -32,7 +32,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTClassFactory astClassFactory;
@@ -43,7 +43,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                               InjectionNodeBuilderRepository injectionNodeBuilderRepository,
+                               Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                                Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
@@ -52,7 +52,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                InjectionBindingBuilder injectionBindingBuilder,
                                ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
-        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.applicationProvider = applicationProvider;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
@@ -133,6 +133,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
         injectionNodeBuilderRepository.putType(android.app.Application.class, injectionBindingBuilder.buildThis((android.app.Application.class)));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));

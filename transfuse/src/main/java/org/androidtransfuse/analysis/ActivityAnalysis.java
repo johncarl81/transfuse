@@ -42,7 +42,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private final InjectionPointFactory injectionPointFactory;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
-    private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
     private final ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository;
     private final AnalysisContextFactory analysisContextFactory;
@@ -60,7 +60,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
-                            InjectionNodeBuilderRepository injectionNodeBuilderRepository,
+                            Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
                             ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
@@ -75,7 +75,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             InjectionBindingBuilder injectionBindingBuilder, ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
-        this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.manifestActivityProvider = manifestActivityProvider;
         this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
@@ -239,12 +239,14 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
 
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+
         injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
         injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeBuilderRepository.putType(android.app.Activity.class, injectionBindingBuilder.buildThis(android.app.Activity.class));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
-        if (activityType != null) {
+        if (activityType != null && !activityType.toString().equals(android.app.Activity.class.getName())) {
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
             injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
         }

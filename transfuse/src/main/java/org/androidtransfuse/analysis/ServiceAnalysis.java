@@ -42,7 +42,7 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
-    private InjectionNodeBuilderRepository injectionNodeRepository;
+    private Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider;
     private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider;
     private ComponentBuilderFactory componentBuilderFactory;
@@ -58,7 +58,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private ListenerRegistrationGenerator listenerRegistrationGenerator;
 
     @Inject
-    public ServiceAnalysis(InjectionNodeBuilderRepository injectionNodeRepository,
+    public ServiceAnalysis(Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider,
                            InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                            Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider,
                            ComponentBuilderFactory componentBuilderFactory,
@@ -71,7 +71,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            ContextScopeComponentBuilder contextScopeComponentBuilder,
                            GeneratorFactory generatorFactory,
                            ListenerRegistrationGenerator listenerRegistrationGenerator) {
-        this.injectionNodeRepository = injectionNodeRepository;
+        this.injectionNodeRepositoryProvider = injectionNodeRepositoryProvider;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -205,12 +205,14 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
 
+        InjectionNodeBuilderRepository injectionNodeRepository = injectionNodeRepositoryProvider.get();
+
         injectionNodeRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
         injectionNodeRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
         injectionNodeRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
-        if (type != null) {
+        if (type != null && !type.toString().equals(android.app.Service.class.getName())) {
             ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
             injectionNodeRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
         }
