@@ -45,7 +45,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
     @Override
     public ASTType visitTypeVariable(TypeVariable typeVariable, Void v) {
         //throw new TransfuseAnalysisException("Encountered TypeVariable, unable to recover");
-        return null;
+        return new ASTEmptyType(typeVariable.toString());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
         if (noType.getKind().equals(TypeKind.VOID)) {
             return ASTVoidType.VOID;
         }
-        return null;
+        return new ASTEmptyType("<NOTYPE>");
     }
 
     @Override

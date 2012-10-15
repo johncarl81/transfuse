@@ -11,6 +11,15 @@ import java.lang.annotation.Annotation;
 public class ASTTypeMatcherBuilder {
 
     private final ImmutableSet.Builder<Class<? extends Annotation>> annotations = ImmutableSet.builder();
+    private ASTType astType = null;
+    private boolean ignoreGenericParameters = false;
+
+    public ASTTypeMatcherBuilder() {
+    }
+
+    public ASTTypeMatcherBuilder(ASTType astType) {
+        this.astType = astType;
+    }
 
     public ASTTypeMatcherBuilder annotatedWith(Class<? extends Annotation> annotationClass) {
         annotations.add(annotationClass);
@@ -18,6 +27,11 @@ public class ASTTypeMatcherBuilder {
     }
 
     public Matcher<ASTType> build() {
-        return new ASTTypeMatcher(annotations.build());
+        return new ASTTypeMatcher(annotations.build(), astType, ignoreGenericParameters);
+    }
+
+    public ASTTypeMatcherBuilder ignoreGenericParameters(){
+        ignoreGenericParameters = true;
+        return this;
     }
 }

@@ -14,7 +14,6 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class ToasterTest {
 
-
     private ToasterBroadcastReceiver startupReceiver;
 
     @Before

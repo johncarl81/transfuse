@@ -1,7 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
@@ -40,7 +39,6 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
     private ImmutableList<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
                 .transform(this)
-                .filter(Predicates.notNull())
                 .toImmutableList();
     }
 

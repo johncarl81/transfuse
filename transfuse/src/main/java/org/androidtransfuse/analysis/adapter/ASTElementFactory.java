@@ -35,7 +35,7 @@ public class ASTElementFactory {
 
         ASTType astType = buildASTElementType((TypeElement) declaredType.asElement());
 
-        if (declaredType.getTypeArguments().size() > 0) {
+        if (!declaredType.getTypeArguments().isEmpty()) {
             return astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder(declaredType));
         }
         return astType;
@@ -106,7 +106,7 @@ public class ASTElementFactory {
      * @param variableElement required input Element
      * @return ASTElementField
      */
-    public ASTElementField buildASTElementVariable(VariableElement variableElement) {
+    public ASTField buildASTElementVariable(VariableElement variableElement) {
         ASTAccessModifier modifier = buildAccessModifier(variableElement);
 
         return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier, buildAnnotations(variableElement));

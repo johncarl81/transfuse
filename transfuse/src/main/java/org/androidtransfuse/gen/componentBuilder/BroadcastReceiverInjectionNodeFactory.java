@@ -1,7 +1,5 @@
 package org.androidtransfuse.gen.componentBuilder;
 
-import android.app.Application;
-import android.content.Context;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
@@ -55,8 +53,6 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(MethodDescriptor methodDescriptor) {
 
-        injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
-        injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
         injectionNodeBuilderRepository.putType(android.content.BroadcastReceiver.class, injectionBindingBuilder.buildThis(android.content.BroadcastReceiver.class));
 
         for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : methodDescriptor.getParameters().entrySet()) {

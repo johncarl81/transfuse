@@ -27,7 +27,7 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     @Override
     public T visitType(TypeElement typeElement, Void aVoid) {
-        if (astTypeClass.isAssignableFrom(ASTElementType.class)) {
+        if (astTypeClass.isAssignableFrom(ASTType.class)) {
             return (T) astElementFactory.buildASTElementType(typeElement);
         }
         return null;
@@ -35,7 +35,7 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     @Override
     public T visitVariable(VariableElement variableElement, Void aVoid) {
-        if (astTypeClass.isAssignableFrom(ASTElementField.class)) {
+        if (astTypeClass.isAssignableFrom(ASTField.class)) {
             return (T) astElementFactory.buildASTElementVariable(variableElement);
         }
         return null;

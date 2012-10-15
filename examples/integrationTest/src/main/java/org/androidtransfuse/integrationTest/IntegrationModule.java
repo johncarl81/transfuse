@@ -8,10 +8,7 @@ import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
 import org.androidtransfuse.integrationTest.aop.InterceptorRecorder;
-import org.androidtransfuse.integrationTest.inject.InjectTargetProvider;
-import org.androidtransfuse.integrationTest.inject.LoopThree;
-import org.androidtransfuse.integrationTest.inject.LoopThreeImpl;
-import org.androidtransfuse.integrationTest.inject.ProvidedInjectTarget;
+import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.RandomProvider;
 
 import java.util.Random;
@@ -36,4 +33,10 @@ public interface IntegrationModule {
 
     @BindProvider(RandomProvider.class)
     Random getRandom();
+
+    @Bind(ConcreteType.class)
+    GenericType<Concrete> getTarget();
+
+    @Bind(Concrete2Type.class)
+    GenericType<Concrete2> getTarget2();
 }

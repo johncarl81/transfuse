@@ -99,4 +99,11 @@ public class InjectionTest {
         assertNotNull(injection.getLibraryDependency());
         assertNotNull(injection.getLibraryDependency().getLibraryDependency2());
     }
+
+    @Test
+    public void testGenericInjections() {
+        assertNotNull(injection.getGenericInjection());
+        assertNotNull(injection.getGenericInjection2());
+        assertNotSame(injection.getGenericInjection().getClass(), injection.getGenericInjection2().getClass());
+    }
 }

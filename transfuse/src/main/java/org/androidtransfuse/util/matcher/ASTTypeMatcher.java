@@ -13,20 +13,35 @@ import java.lang.annotation.Annotation;
 public class ASTTypeMatcher implements Matcher<ASTType> {
 
     private final ImmutableSet<Class<? extends Annotation>> annotations;
+    private final ASTType astType;
+    private final boolean ignoreGenericParameters;
 
-    public ASTTypeMatcher(ImmutableSet<Class<? extends Annotation>> annotations) {
+    public ASTTypeMatcher(ImmutableSet<Class<? extends Annotation>> annotations, ASTType astType, boolean ignoreGenericParameters) {
         this.annotations = annotations;
+        this.astType = astType;
+        this.ignoreGenericParameters = ignoreGenericParameters;
     }
 
     public boolean matches(ASTType astType) {
-        boolean matched = true;
-
         for (Class<? extends Annotation> annotation : annotations) {
             if (!astType.isAnnotated(annotation)) {
-                matched = false;
+                return false;
             }
         }
 
-        return matched;
+        if(this.astType != null){
+            if(ignoreGenericParameters){
+                if(!astType.getName().equals(this.astType.getName())){
+                    return false;
+                }
+            }
+            else{
+                if(!astType.equals(this.astType)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

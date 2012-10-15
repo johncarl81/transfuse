@@ -23,10 +23,13 @@ import android.view.MenuInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
+import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -44,12 +47,14 @@ public class InjectionNodeBuilderRepositoryFactory {
     private final Map<String, Class<?>> systemService;
     private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
     private final InjectionBindingBuilder injectionBindingBuilder;
+    private final ASTMatcherBuilder astMatcherBuilder;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
-                                                 InjectionBindingBuilder injectionBindingBuilder) {
+                                                 InjectionBindingBuilder injectionBindingBuilder, ASTClassFactory astClassFactory, ASTMatcherBuilder astMatcherBuilder) {
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
         this.injectionBindingBuilder = injectionBindingBuilder;
+        this.astMatcherBuilder = astMatcherBuilder;
 
         systemService = new HashMap<String, Class<?>>();
         systemService.put(Context.ACCESSIBILITY_SERVICE, AccessibilityManager.class);
@@ -108,10 +113,13 @@ public class InjectionNodeBuilderRepositoryFactory {
         }
 
         //provider type
-        repository.putType(Provider.class, generatedProviderInjectionNodeBuilderProvider.get());
+        repository.putMatcher(astMatcherBuilder.type(Provider.class).ignoreGenericParameters().build(), generatedProviderInjectionNodeBuilderProvider.get());
     }
 
     public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
+        if(moduleConfiguration.containsKey(type)){
+            throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
+        }
         moduleConfiguration.put(type, injectionNodeBuilder);
     }
 }

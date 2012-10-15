@@ -39,6 +39,10 @@ public class Injection extends InjectionBase {
     private Provider<InjectTarget> generatedProvider;
     @Inject
     private LibraryDependency1 libraryDependency;
+    @Inject
+    private GenericType<Concrete> genericInjection;
+    @Inject
+    private GenericType<Concrete2> genericInjection2;
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -109,5 +113,13 @@ public class Injection extends InjectionBase {
 
     public LibraryDependency1 getLibraryDependency() {
         return libraryDependency;
+    }
+
+    public GenericType<Concrete> getGenericInjection() {
+        return genericInjection;
+    }
+
+    public GenericType<Concrete2> getGenericInjection2() {
+        return genericInjection2;
     }
 }

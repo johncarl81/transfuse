@@ -4,6 +4,8 @@ import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
+import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
+import org.androidtransfuse.util.matcher.Matcher;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,14 +18,16 @@ import java.util.Map;
 public class InjectionNodeBuilderRepository {
 
     private final Map<ASTType, InjectionNodeBuilder> bindingAnnotations = new HashMap<ASTType, InjectionNodeBuilder>();
-    private final Map<ASTType, InjectionNodeBuilder> typeBindings = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final Map<Matcher<ASTType>, InjectionNodeBuilder> typeBindings = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
     private final InjectionNodeBuilder defaultBinding;
     private final ASTClassFactory astClassFactory;
+    private final ASTMatcherBuilder astMatcherBuilder;
 
     @Inject
-    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory){
+    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory, ASTMatcherBuilder astMatcherBuilder){
         this.defaultBinding = defaultBinding;
         this.astClassFactory = astClassFactory;
+        this.astMatcherBuilder = astMatcherBuilder;
     }
 
     public void putAnnotation(ASTType annotationType, InjectionNodeBuilder annotatedVariableBuilder){
@@ -35,11 +39,15 @@ public class InjectionNodeBuilderRepository {
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        typeBindings.put(type, variableBuilder);
+        putMatcher(astMatcherBuilder.type(type).build(), variableBuilder);
     }
 
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
-        putType(astClassFactory.buildASTClassType(clazz), variableBuilder);
+        putMatcher(astMatcherBuilder.type(clazz).build(), variableBuilder);
+    }
+
+    public void putMatcher(Matcher<ASTType> matcher, InjectionNodeBuilder variableBuilder) {
+        this.typeBindings.put(matcher, variableBuilder);
     }
 
     public boolean containsBinding(ASTAnnotation bindingAnnotation) {
@@ -51,8 +59,10 @@ public class InjectionNodeBuilderRepository {
     }
 
     public InjectionNodeBuilder getBinding(ASTType type) {
-        if(typeBindings.containsKey(type)){
-            return typeBindings.get(type);
+        for (Map.Entry< Matcher<ASTType>, InjectionNodeBuilder> bindingEntry : typeBindings.entrySet()) {
+            if(bindingEntry.getKey().matches(type)){
+                return bindingEntry.getValue();
+            }
         }
         return defaultBinding;
     }
