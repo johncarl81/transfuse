@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author John Ericksen
@@ -17,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 //todo: fix @Singleton with provider
 public class EventManager {
 
+    private final ReadWriteLock observersLock = new ReentrantReadWriteLock();
     private final ConcurrentMap<Class, Set<EventObserver>> observers = new ConcurrentHashMap<Class, java.util.Set<EventObserver>>();
     private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue = new ExecutionQueueThreadLocal();
     private final ThreadLocal<Boolean> executing = new BooleanThreadLocal();
@@ -41,7 +44,9 @@ public class EventManager {
     }
 
     public <T> void register(Class<T> event, EventObserver<T> observer){
+        observersLock.writeLock().lock();
         nullSafeGet(event).add(observer);
+        observersLock.writeLock().unlock();
     }
 
     private Set<EventObserver> nullSafeGet(Class<?> clazz) {
@@ -61,6 +66,7 @@ public class EventManager {
 
         Set<Class> eventTypes = getAllInheritedClasses(event.getClass());
 
+        observersLock.readLock().lock();
         for (Class eventType : eventTypes) {
             if(observers.containsKey(eventType)){
                 for (EventObserver eventObserver : observers.get(eventType)) {
@@ -70,6 +76,7 @@ public class EventManager {
         }
 
         triggerQueue();
+        observersLock.readLock().unlock();
     }
 
     private void triggerQueue(){
@@ -114,11 +121,13 @@ public class EventManager {
     }
 
     public void unregister(EventObserver<?> observer){
+        observersLock.writeLock().lock();
         Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
         while(entryIterator.hasNext()){
             Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();
             entry.getValue().remove(observer);
         }
+        observersLock.writeLock().unlock();
 
     }
 
