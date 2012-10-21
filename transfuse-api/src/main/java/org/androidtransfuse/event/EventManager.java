@@ -51,8 +51,12 @@ public class EventManager {
             throw new IllegalArgumentException("Null observer passed to register");
         }
         observersLock.writeLock().lock();
-        nullSafeGet(event).add(observer);
-        observersLock.writeLock().unlock();
+        try{
+            nullSafeGet(event).add(observer);
+        }
+        finally {
+            observersLock.writeLock().unlock();
+        }
     }
 
     private Set<EventObserver> nullSafeGet(Class<?> clazz) {
@@ -73,16 +77,20 @@ public class EventManager {
         Set<Class> eventTypes = getAllInheritedClasses(event.getClass());
 
         observersLock.readLock().lock();
-        for (Class eventType : eventTypes) {
-            if(observers.containsKey(eventType)){
-                for (EventObserver eventObserver : observers.get(eventType)) {
-                    executionQueue.get().add(new EventExecution(event, eventObserver));
+        try{
+            for (Class eventType : eventTypes) {
+                if(observers.containsKey(eventType)){
+                    for (EventObserver eventObserver : observers.get(eventType)) {
+                        executionQueue.get().add(new EventExecution(event, eventObserver));
+                    }
                 }
             }
-        }
 
-        triggerQueue();
-        observersLock.readLock().unlock();
+            triggerQueue();
+        }
+        finally{
+            observersLock.readLock().unlock();
+        }
     }
 
     private void triggerQueue(){
@@ -128,12 +136,16 @@ public class EventManager {
 
     public void unregister(EventObserver<?> observer){
         observersLock.writeLock().lock();
-        Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
-        while(entryIterator.hasNext()){
-            Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();
-            entry.getValue().remove(observer);
+        try{
+            Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
+            while(entryIterator.hasNext()){
+                Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();
+                entry.getValue().remove(observer);
+            }
         }
-        observersLock.writeLock().unlock();
+        finally{
+            observersLock.writeLock().unlock();
+        }
 
     }
 
