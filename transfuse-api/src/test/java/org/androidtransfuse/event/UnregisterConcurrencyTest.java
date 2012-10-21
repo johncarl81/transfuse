@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Test cases highlighting concurrency when registering, unregistering and triggering on events.
@@ -19,105 +20,170 @@ import static junit.framework.Assert.assertFalse;
  */
 public class UnregisterConcurrencyTest {
 
-  private static final String EVENT = "event";
+    private static final String EVENT = "event";
 
-  private EventManager eventManager;
+    private EventManager eventManager;
+    private ExecutorService executorService;
 
-  public class EventWatcher{
-    private boolean registered = false;
-    private boolean unregistered = false;
-    private boolean calledAfterUnregister = false;
-    private EventObserver eventObserver = new WeakObserver<String, EventWatcher>(this) {
-      @Override
-      public void trigger(String event, EventWatcher handle) {
-        handle.event(event);
-      }
-    };
+    public abstract class RegisterableBase {
+        private boolean registered = false;
+        private boolean unregistered = false;
 
-    public void event(@Observes String event) {
-      try {
-        // Adding some time to allow unregisters to happen often.
-        Thread.sleep(1);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      calledAfterUnregister = unregistered;
+        public synchronized void register() {
+            registered = true;
+            eventManager.register(String.class, getEventObserver());
+        }
+
+        public synchronized void unregister() {
+            if (registered) {
+                eventManager.unregister(getEventObserver());
+                unregistered = true;
+            }
+        }
+
+        public boolean isUnregistered() {
+            return unregistered;
+        }
+
+        public abstract EventObserver<String> getEventObserver();
     }
 
-    public synchronized void register() {
-        registered = true;
-        eventManager.register(String.class, eventObserver);
+    public class DeadlockTrigger extends RegisterableBase {
+        private int count = 0;
+        private EventObserver eventObserver = new WeakObserver<String, DeadlockTrigger>(this) {
+            @Override
+            public void trigger(String event, DeadlockTrigger handle) {
+                handle.deadlock(event);
+            }
+        };
+
+        @Observes
+        public void deadlock(String event) {
+            if (count < 2) {
+                eventManager.trigger(event);
+            }
+            count++;
+        }
+
+        @Override
+        public EventObserver<String> getEventObserver() {
+            return eventObserver;
+        }
     }
 
-    public synchronized void unregister() {
-      if(registered) {
-        eventManager.unregister(eventObserver);
-        unregistered = true;
-      }
+    public class EventWatcher extends RegisterableBase {
+
+        private boolean calledAfterUnregister = false;
+
+        private EventObserver eventObserver = new WeakObserver<String, EventWatcher>(this) {
+            @Override
+            public void trigger(String event, EventWatcher handle) {
+                handle.event(event);
+            }
+        };
+
+
+        public void event(@Observes String event) {
+            try {
+                // Adding some time to allow unregisters to happen often.
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            calledAfterUnregister = isUnregistered();
+        }
+
+        public boolean isCalledAfterUnregister() {
+            return calledAfterUnregister;
+        }
+
+        @Override
+        public EventObserver<String> getEventObserver() {
+            return eventObserver;
+        }
     }
 
-    public boolean isCalledAfterUnregister() {
-      return calledAfterUnregister;
-    }
-  }
+    public class EventRegistration implements Runnable {
 
-  public class EventRegistration implements Runnable {
+        private RegisterableBase watcher;
 
-    private EventWatcher watcher;
+        public EventRegistration(RegisterableBase watcher) {
+            this.watcher = watcher;
+        }
 
-    public EventRegistration(EventWatcher watcher) {
-      this.watcher = watcher;
-    }
-
-    @Override public void run() {
-      watcher.register();
-    }
-  }
-
-  public class EventUnregistration implements Runnable {
-
-    private EventWatcher watcher;
-
-    public EventUnregistration(EventWatcher watcher) {
-      this.watcher = watcher;
+        @Override
+        public void run() {
+            watcher.register();
+        }
     }
 
-    @Override public void run() {
-      watcher.unregister();
-    }
-  }
+    public class EventUnregistration implements Runnable {
 
-  public class EventTrigger implements Runnable {
-    @Override public void run() {
-      eventManager.trigger(EVENT);
-    }
-  }
+        private RegisterableBase watcher;
 
-  @Before
-  public void setup() {
-    eventManager = new EventManager();
-  }
+        public EventUnregistration(RegisterableBase watcher) {
+            this.watcher = watcher;
+        }
 
-  @Test
-  public void hammerLifecycleTest() throws InterruptedException {
-
-    ExecutorService executorService = Executors.newFixedThreadPool(4);
-
-    List<EventWatcher> registrations = new ArrayList<EventWatcher>();
-
-    for(int i = 0; i < 100; i++) {
-      EventWatcher eventWatcher = new EventWatcher();
-      registrations.add(eventWatcher);
-      executorService.execute(new EventRegistration(eventWatcher));
-      executorService.execute(new EventUnregistration(eventWatcher));
-      executorService.execute(new EventTrigger());
+        @Override
+        public void run() {
+            watcher.unregister();
+        }
     }
 
-    executorService.shutdown();
-    while (!executorService.awaitTermination(10, TimeUnit.MILLISECONDS)) {}
-
-    for (EventWatcher registration : registrations) {
-      assertFalse(registration.isCalledAfterUnregister());
+    public class EventTrigger implements Runnable {
+        @Override
+        public void run() {
+            eventManager.trigger(EVENT);
+        }
     }
-  }
+
+    @Before
+    public void setup() {
+        eventManager = new EventManager();
+        executorService = Executors.newFixedThreadPool(4);
+    }
+
+    @Test
+    public void hammerLifecycleTest() throws InterruptedException {
+
+        List<EventWatcher> registrations = new ArrayList<EventWatcher>();
+
+        for (int i = 0; i < 100; i++) {
+            EventWatcher eventWatcher = new EventWatcher();
+            registrations.add(eventWatcher);
+            executorService.execute(new EventRegistration(eventWatcher));
+            executorService.execute(new EventUnregistration(eventWatcher));
+            executorService.execute(new EventTrigger());
+        }
+
+        executorService.shutdown();
+        while (!executorService.awaitTermination(10, TimeUnit.MILLISECONDS)) {
+        }
+
+        for (EventWatcher registration : registrations) {
+            assertFalse(registration.isCalledAfterUnregister());
+        }
+    }
+
+    /**
+     * Exercises possible deadlock conditions where an event triggers itself, both during registration and during
+     * event posting.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void deadlockTest() throws InterruptedException {
+
+        for (int i = 0; i < 100; i++) {
+            final DeadlockTrigger deadlockTrigger = new DeadlockTrigger();
+            executorService.execute(new EventRegistration(deadlockTrigger));
+            executorService.execute(new EventUnregistration(deadlockTrigger));
+            executorService.execute(new EventTrigger());
+        }
+
+        // Wait 100ms for threads to finish.  If not finished, assume deadlock.
+        executorService.shutdown();
+        assertTrue(executorService.awaitTermination(100, TimeUnit.MILLISECONDS));
+    }
 }

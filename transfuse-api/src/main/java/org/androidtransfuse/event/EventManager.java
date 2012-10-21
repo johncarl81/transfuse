@@ -44,6 +44,12 @@ public class EventManager {
     }
 
     public <T> void register(Class<T> event, EventObserver<T> observer){
+        if(event == null){
+            throw new IllegalArgumentException("Null Event type passed to register");
+        }
+        if(observer == null){
+            throw new IllegalArgumentException("Null observer passed to register");
+        }
         observersLock.writeLock().lock();
         nullSafeGet(event).add(observer);
         observersLock.writeLock().unlock();
