@@ -2,6 +2,7 @@ package org.androidtransfuse.integrationTest.saveState;
 
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import org.androidtransfuse.annotations.UIThread;
 import org.androidtransfuse.event.EventManager;
 
 import javax.inject.Inject;
@@ -15,16 +16,17 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
     private EventManager eventManager;
     private boolean running = false;
     private volatile boolean paused = false;
+    private int progress = 0;
 
     @Override
     protected ResetEvent doInBackground(Object... params) {
-        int progress = 0;
+        progress = 0;
         running = true;
         broadcastUpdate();
         while (progress < SLEEP_STEPS) {
             if(!paused){
                 progress++;
-                eventManager.trigger(new ProgressEvent(progress));
+                broadcastProgress();
             }
             SystemClock.sleep(SLEEP_TIME);
             if(isCancelled()){
@@ -51,7 +53,13 @@ public class BackgroundAsyncTask extends AsyncTask<Object, Integer, ResetEvent> 
         broadcastUpdate();
     }
 
-    private void broadcastUpdate(){
+    @UIThread
+    protected void broadcastProgress(){
+        eventManager.trigger(new ProgressEvent(progress));
+    }
+
+    @UIThread
+    protected void broadcastUpdate(){
         eventManager.trigger(new UpdateEvent(paused));
     }
 }

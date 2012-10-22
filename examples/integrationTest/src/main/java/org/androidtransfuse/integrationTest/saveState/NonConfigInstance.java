@@ -56,12 +56,10 @@ public class NonConfigInstance {
         updateButton(!asyncTask.isRunning());
     }
 
-    @UIThread
     public void updateProgress(@Observes ProgressEvent progressEvent){
         progressBar.setProgress(progressEvent.getProgress());
     }
 
-    @UIThread
     public void resetProgress(@Observes ResetEvent resetEvent){
         asyncTask = taskProvider.get();
         updateButton(true);
@@ -72,7 +70,6 @@ public class NonConfigInstance {
         asyncTask.cancel(true);
     }
 
-    @UIThread
     public void pauseTriggered(@Observes UpdateEvent updateEvent){
         updateButton(updateEvent.isPaused());
     }

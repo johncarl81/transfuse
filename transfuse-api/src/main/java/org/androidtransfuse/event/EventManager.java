@@ -71,7 +71,6 @@ public class EventManager {
         return result;
     }
 
-
     public void trigger(Object event){
 
         Set<Class> eventTypes = getAllInheritedClasses(event.getClass());
