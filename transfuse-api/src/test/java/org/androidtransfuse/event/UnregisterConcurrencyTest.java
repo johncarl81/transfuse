@@ -2,7 +2,6 @@ package org.androidtransfuse.event;
 
 import org.androidtransfuse.annotations.Observes;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,6 +21,8 @@ import static junit.framework.Assert.assertTrue;
 public class UnregisterConcurrencyTest {
 
     private static final String EVENT = "event";
+    private static final int INPUT_COUNT = 100;
+    private static final int WAIT_PERIOD = 1000;
 
     private EventManager eventManager;
     private ExecutorService executorService;
@@ -61,6 +62,7 @@ public class UnregisterConcurrencyTest {
         @Observes
         public void deadlock(String event) {
             if (count < 2) {
+                sleep();
                 eventManager.trigger(event);
             }
             count++;
@@ -85,12 +87,7 @@ public class UnregisterConcurrencyTest {
 
 
         public void event(@Observes String event) {
-            try {
-                // Adding some time to allow unregisters to happen often.
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            sleep();
             calledAfterUnregister = isUnregistered();
         }
 
@@ -150,7 +147,7 @@ public class UnregisterConcurrencyTest {
 
         List<EventWatcher> registrations = new ArrayList<EventWatcher>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < INPUT_COUNT; i++) {
             EventWatcher eventWatcher = new EventWatcher();
             registrations.add(eventWatcher);
             executorService.execute(new EventRegistration(eventWatcher));
@@ -176,7 +173,7 @@ public class UnregisterConcurrencyTest {
     @Test
     public void deadlockTest() throws InterruptedException {
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < INPUT_COUNT; i++) {
             final DeadlockTrigger deadlockTrigger = new DeadlockTrigger();
             executorService.execute(new EventRegistration(deadlockTrigger));
             executorService.execute(new EventUnregistration(deadlockTrigger));
@@ -185,7 +182,7 @@ public class UnregisterConcurrencyTest {
 
         // Wait 100ms for threads to finish.  If not finished, assume deadlock.
         executorService.shutdown();
-        assertTrue(executorService.awaitTermination(100, TimeUnit.MILLISECONDS));
+        assertTrue(executorService.awaitTermination(WAIT_PERIOD, TimeUnit.MILLISECONDS));
     }
 
     public class DeadlockPair extends RegisterableBase {
@@ -201,10 +198,10 @@ public class UnregisterConcurrencyTest {
 
         @Observes
         public void event(String event) {
-            /*if (deadlockPair != null) {
+            if (deadlockPair != null) {
+                sleep();
                 deadlockPair.unregister();
-            }*/
-            unregister();
+            }
         }
 
         public void setDeadlockPair(DeadlockPair deadlockPair) {
@@ -218,10 +215,9 @@ public class UnregisterConcurrencyTest {
     }
 
     @Test
-    @Ignore
     public void deadlockPairTest() throws InterruptedException {
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < INPUT_COUNT; i++) {
             DeadlockPair pair1 = new DeadlockPair();
             DeadlockPair pair2 = new DeadlockPair();
 
@@ -229,14 +225,20 @@ public class UnregisterConcurrencyTest {
             pair2.setDeadlockPair(pair1);
 
             executorService.execute(new EventRegistration(pair1));
-            //executorService.execute(new EventRegistration(pair2));
-            //executorService.execute(new EventUnregistration(pair1));
-            //executorService.execute(new EventUnregistration(pair2));
             executorService.execute(new EventTrigger());
         }
 
         // Wait 100ms for threads to finish.  If not finished, assume deadlock.
         executorService.shutdown();
-        assertTrue(executorService.awaitTermination(10000, TimeUnit.MILLISECONDS));
+        assertTrue(executorService.awaitTermination(WAIT_PERIOD, TimeUnit.MILLISECONDS));
+    }
+
+    private static void sleep(){
+        // Adding some time to allow unregisters to happen often.
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

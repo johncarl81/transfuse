@@ -3,7 +3,6 @@ package org.androidtransfuse.event;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,11 +23,11 @@ public class EventManager {
     private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue = new ExecutionQueueThreadLocal();
     private final ThreadLocal<Boolean> executing = new BooleanThreadLocal();
 
-    private static final class EventExecution{
-        private final Object event;
-        private final EventObserver observer;
+    private static final class EventExecution<T>{
+        private final T event;
+        private final EventObserver<T> observer;
 
-        private EventExecution(Object event, EventObserver observer) {
+        private EventExecution(T event, EventObserver<T> observer) {
             this.event = event;
             this.observer = observer;
         }
@@ -136,9 +135,7 @@ public class EventManager {
     public void unregister(EventObserver<?> observer){
         observersLock.writeLock().lock();
         try{
-            Iterator<Map.Entry<Class,Set<EventObserver>>> entryIterator = observers.entrySet().iterator();
-            while(entryIterator.hasNext()){
-                Map.Entry<Class, Set<EventObserver>> entry = entryIterator.next();
+            for (Map.Entry<Class, Set<EventObserver>> entry : observers.entrySet()) {
                 entry.getValue().remove(observer);
             }
         }
