@@ -2,6 +2,7 @@ package org.androidtransfuse.event;
 
 import org.androidtransfuse.annotations.Observes;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -185,5 +186,57 @@ public class UnregisterConcurrencyTest {
         // Wait 100ms for threads to finish.  If not finished, assume deadlock.
         executorService.shutdown();
         assertTrue(executorService.awaitTermination(100, TimeUnit.MILLISECONDS));
+    }
+
+    public class DeadlockPair extends RegisterableBase {
+
+        private DeadlockPair deadlockPair = null;
+
+        private EventObserver eventObserver = new WeakObserver<String, DeadlockPair>(this) {
+            @Override
+            public void trigger(String event, DeadlockPair handle) {
+                handle.event(event);
+            }
+        };
+
+        @Observes
+        public void event(String event) {
+            /*if (deadlockPair != null) {
+                deadlockPair.unregister();
+            }*/
+            unregister();
+        }
+
+        public void setDeadlockPair(DeadlockPair deadlockPair) {
+            this.deadlockPair = deadlockPair;
+        }
+
+        @Override
+        public EventObserver<String> getEventObserver() {
+            return eventObserver;
+        }
+    }
+
+    @Test
+    @Ignore
+    public void deadlockPairTest() throws InterruptedException {
+
+        for (int i = 0; i < 100; i++) {
+            DeadlockPair pair1 = new DeadlockPair();
+            DeadlockPair pair2 = new DeadlockPair();
+
+            pair1.setDeadlockPair(pair2);
+            pair2.setDeadlockPair(pair1);
+
+            executorService.execute(new EventRegistration(pair1));
+            //executorService.execute(new EventRegistration(pair2));
+            //executorService.execute(new EventUnregistration(pair1));
+            //executorService.execute(new EventUnregistration(pair2));
+            executorService.execute(new EventTrigger());
+        }
+
+        // Wait 100ms for threads to finish.  If not finished, assume deadlock.
+        executorService.shutdown();
+        assertTrue(executorService.awaitTermination(10000, TimeUnit.MILLISECONDS));
     }
 }
