@@ -52,7 +52,7 @@ public class UnregisterConcurrencyTest {
 
     public class DeadlockTrigger extends RegisterableBase {
         private int count = 0;
-        private EventObserver eventObserver = new WeakObserver<String, DeadlockTrigger>(this) {
+        private EventObserver<String> eventObserver = new WeakObserver<String, DeadlockTrigger>(this) {
             @Override
             public void trigger(String event, DeadlockTrigger handle) {
                 handle.deadlock(event);
@@ -78,7 +78,7 @@ public class UnregisterConcurrencyTest {
 
         private boolean calledAfterUnregister = false;
 
-        private EventObserver eventObserver = new WeakObserver<String, EventWatcher>(this) {
+        private EventObserver<String> eventObserver = new WeakObserver<String, EventWatcher>(this) {
             @Override
             public void trigger(String event, EventWatcher handle) {
                 handle.event(event);
@@ -189,7 +189,7 @@ public class UnregisterConcurrencyTest {
 
         private DeadlockPair deadlockPair = null;
 
-        private EventObserver eventObserver = new WeakObserver<String, DeadlockPair>(this) {
+        private EventObserver<String> eventObserver = new WeakObserver<String, DeadlockPair>(this) {
             @Override
             public void trigger(String event, DeadlockPair handle) {
                 handle.event(event);
