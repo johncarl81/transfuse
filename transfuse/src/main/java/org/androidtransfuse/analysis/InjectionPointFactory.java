@@ -112,7 +112,7 @@ public class InjectionPointFactory {
         return buildInjectionNode(astClassFactory.buildASTClassType(type), context);
     }
 
-    private InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
         int bindingCount = 0;
         InjectionNodeBuilder injectionNodeBuilder = null;

@@ -1,6 +1,5 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import android.app.Activity;
 import android.view.View;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
@@ -15,7 +14,6 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.gen.componentBuilder.*;
-import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.listeners.*;
 import org.androidtransfuse.model.InjectionNode;
@@ -113,10 +111,8 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         @Override
         public RegistrationGenerator buildRegistrationGenerator(InjectionNode injectionNode, ASTBase astBase, ASTAnnotation registerAnnotation, AnalysisContext context) {
-            Integer viewId = registerAnnotation.getProperty("value", Integer.class);
-            String viewTag = registerAnnotation.getProperty("tag", String.class);
 
-            InjectionNode viewInjectionNode = buildViewInjectionNode(viewId, viewTag, context);
+            InjectionNode viewInjectionNode = buildViewInjectionNode(registerAnnotation, context);
 
             ViewRegistrationInvocationBuilder invocationBuilder;
             if(astBase instanceof ASTType){
@@ -233,25 +229,23 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         return generators.build();
     }
 
-    private InjectionNode buildViewInjectionNode(Integer viewId, String viewTag, AnalysisContext context) {
+    private InjectionNode buildViewInjectionNode(final ASTAnnotation registerAnnotation, AnalysisContext context) {
 
-        InjectionNode activityInjectionNode = buildActivityInjectionNode(context);
+        ASTType viewType = astClassFactory.buildASTClassType(View.class);
+        final ASTType atViewType = astClassFactory.buildASTClassType(org.androidtransfuse.annotations.View.class);
+        ASTAnnotation viewRegistrationAnnotation = new ASTAnnotation() {
+            @Override
+            public <T> T getProperty(String name, Class<T> type) {
+                return registerAnnotation.getProperty(name, type);
+            }
 
-        ASTType viewAstType = astClassFactory.buildASTClassType(View.class);
-        InjectionNode viewInjectionNode = analyzer.analyze(viewAstType, viewAstType, context);
+            @Override
+            public ASTType getASTType() {
+                return atViewType;
+            }
+        };
 
-        try {
-            viewInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, codeModel.parseType(viewAstType.getName())));
-
-            return viewInjectionNode;
-
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + viewAstType.getName(), e);
-        }
-    }
-
-    private InjectionNode buildActivityInjectionNode(AnalysisContext context){
-        return injectionPointFactory.buildInjectionNode(Activity.class, context);
+        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), viewType, context);
     }
 
     private RegistrationAspect getRegistrationAspect(InjectionNode injectionNode) {
