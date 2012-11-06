@@ -35,11 +35,13 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     private final Map<TypeMethodSignature, ProtectedAccessorMethod> methodMapping = new HashMap<TypeMethodSignature, ProtectedAccessorMethod>();
     private final Map<FieldGetter, ProtectedAccessorMethod> fieldGetterMapping = new HashMap<FieldGetter, ProtectedAccessorMethod>();
     private final Map<PackageClass, JDefinedClass> packageHelpers = new HashMap<PackageClass, JDefinedClass>();
+    private final TypeInvocationHelper invocationHelper;
 
     @Inject
-    public ProtectedInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer namer) {
+    public ProtectedInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer namer, TypeInvocationHelper invocationHelper) {
         this.codeModel = codeModel;
         this.namer = namer;
+        this.invocationHelper = invocationHelper;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         JInvocation invocation = accessorMethod.invoke();
 
         for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
-            invocation.arg(expressionMap.get(injectionNode).getExpression());
+            invocation.arg(invocationHelper.coerceType(injectionNode.getASTType(), expressionMap.get(injectionNode)));
         }
 
         return invocation;
@@ -85,34 +87,31 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
     @Override
     public <T> JInvocation buildMethodCall(ASTType returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
-        List<TypedExpression> paramExpressions = new ArrayList<TypedExpression>();
 
-        for (T injectionNode : injectionNodes) {
-            paramExpressions.add(expressionMap.get(injectionNode));
-        }
-
-        ProtectedAccessorMethod accessorMethod = getMethodCall(returnType, targetExpressionType, methodName, paramExpressions);
+        ProtectedAccessorMethod accessorMethod = getMethodCall(returnType, targetExpressionType, methodName, injectionNodeType);
 
         JInvocation invocation = accessorMethod.invoke().arg(targetExpression);
 
-        for(TypedExpression expression : paramExpressions){
-            invocation.arg(expression.getExpression());
+        for(int i = 0; i < injectionNodeType.size(); i++){
+            ASTType type = injectionNodeType.get(i);
+            T injectionNode = injectionNodes.get(i);
+            invocation.arg(invocationHelper.getExpression(type, expressionMap, injectionNode));
         }
 
         return invocation;
     }
 
-    private <T> ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
+    private <T> ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes) {
 
         List<ASTType> paramTypes = new ArrayList<ASTType>();
-        for (TypedExpression argExpression : argExpressions) {
-            paramTypes.add(argExpression.getType());
+        for (ASTType argType : argTypes) {
+            paramTypes.add(argType);
         }
 
         TypeMethodSignature methodSignature = new TypeMethodSignature(targetExpressionsType, new MethodSignature(returnType, methodName, paramTypes));
 
         if(!methodMapping.containsKey(methodSignature)){
-            methodMapping.put(methodSignature, buildMethodCall(returnType, targetExpressionsType, methodName, argExpressions));
+            methodMapping.put(methodSignature, buildMethodCall(returnType, targetExpressionsType, methodName, argTypes));
         }
 
         return methodMapping.get(methodSignature);
@@ -145,7 +144,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         }
     }
 
-    private <T> ProtectedAccessorMethod buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<TypedExpression> argExpressions) {
+    private <T> ProtectedAccessorMethod buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes) {
         PackageClass containedPackageClass = new PackageClass(targetExpressionsType.getName());
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
@@ -158,8 +157,8 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
         JVar targetParam = accessorMethod.param(targetRef, namer.generateName(targetRef));
         JInvocation invocation = targetParam.invoke(methodName);
 
-        for (TypedExpression expression : argExpressions) {
-            JClass ref = codeModel.ref(expression.getType().getName());
+        for (ASTType argType : argTypes) {
+            JClass ref = codeModel.ref(argType.getName());
             JVar param = accessorMethod.param(ref, namer.generateName(ref));
             invocation.arg(param);
         }
@@ -242,7 +241,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
         return accessorMethod.invoke()
                 .arg(variable)
-                .arg(expression.getExpression());
+                .arg(invocationHelper.coerceType(fieldInjectionPoint.getInjectionNode().getASTType(), expression));
     }
 
     private ProtectedAccessorMethod getFieldSetter(FieldInjectionPoint fieldInjectionPoint) {
