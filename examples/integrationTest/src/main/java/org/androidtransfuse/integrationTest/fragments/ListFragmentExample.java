@@ -39,12 +39,11 @@ public class ListFragmentExample {
 
     @OnListItemClick
     public void onListItemClick(int position) {
-        String item = (String) listFragment.getListAdapter().getItem(position);
         android.support.v4.app.Fragment fragment = fragmentManager.findFragmentById(R.id.detailFragment);
         if (fragment != null && fragment.isInLayout()) {
-            eventManager.trigger(new TextChange(item));
+            eventManager.trigger(new TextChange(VALUES[position]));
         } else {
-            intentFactory.start(new DetailActivityStrategy().setValue(item));
+            intentFactory.start(new DetailActivityStrategy().setValue(VALUES[position]));
         }
     }
 }

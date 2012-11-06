@@ -219,7 +219,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-        activityDescriptor.addGenerators(activityComponentBuilderRepository.build(context).getGenerators(activityType));
+        activityDescriptor.addGenerators(activityComponentBuilderRepository.build().getGenerators(activityType));
 
         activityDescriptor.addGenerators(contextScopeComponentBuilder);
 

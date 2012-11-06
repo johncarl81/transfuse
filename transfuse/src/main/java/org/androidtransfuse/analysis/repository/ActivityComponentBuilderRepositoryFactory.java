@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
@@ -44,7 +43,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         this.nonConfigurationInstanceGenerator = nonConfigurationInstanceGenerator;
     }
 
-    public ActivityComponentBuilderRepository build(AnalysisContext context) {
+    public ActivityComponentBuilderRepository build() {
 
         ImmutableMap.Builder<String, ImmutableSet<ExpressionVariableDependentGenerator>> methodCallbackGenerators = ImmutableMap.builder();
 

@@ -22,6 +22,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.annotations.Fragment;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -49,6 +50,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final BindingRepositoryFactory bindingRepositoryFactory;
+    private final ListenerRegistrationGenerator listenerRegistrationGenerator;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -58,7 +60,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             ComponentBuilderFactory componentBuilderFactory,
-                            BindingRepositoryFactory bindingRepositoryFactory) {
+                            BindingRepositoryFactory bindingRepositoryFactory, ListenerRegistrationGenerator listenerRegistrationGenerator) {
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -67,6 +69,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.bindingRepositoryFactory = bindingRepositoryFactory;
+        this.listenerRegistrationGenerator = listenerRegistrationGenerator;
     }
 
     @Override
@@ -139,6 +142,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                     componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
+
+        fragmentDescriptor.addGenerators(listenerRegistrationGenerator);
 
     }
 
