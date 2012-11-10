@@ -23,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
+import com.sun.codemodel.JExpr;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -99,7 +100,7 @@ public class InjectionNodeBuilderRepositoryFactory {
         //system services
         for (Map.Entry<String, Class<?>> systemServiceEntry : systemService.entrySet()) {
             repository.putType(systemServiceEntry.getValue(),
-                    injectionBindingBuilder.dependency(Context.class).invoke(Object.class, "getSystemService").arg(systemServiceEntry.getKey()).build());
+                    injectionBindingBuilder.dependency(Context.class).invoke(Object.class, "getSystemService").arg(JExpr.lit(systemServiceEntry.getKey())).build());
         }
 
         repository.putType(SharedPreferences.class,

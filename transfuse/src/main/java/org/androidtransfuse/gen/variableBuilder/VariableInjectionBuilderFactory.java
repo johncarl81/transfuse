@@ -35,7 +35,7 @@ public interface VariableInjectionBuilderFactory {
 
     StaticInvocationVariableBuilder buildStaticInvocationVariableBuilder(Class invocationTarget, String staticInvocation);
 
-    MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<String> arguments);
+    MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<JExpression> arguments);
 
     DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") Class dependency, @Assisted("returnType") Class returnType, DependentVariableBuilder variableBuilder);
 

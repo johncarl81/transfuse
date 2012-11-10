@@ -13,11 +13,11 @@ import javax.inject.Inject;
 public class MethodCallVariableBuilder implements DependentVariableBuilder{
 
     private final String methodName;
-    private final ImmutableList<String> arguments;
+    private final ImmutableList<JExpression> arguments;
 
     @Inject
     public MethodCallVariableBuilder(@Assisted String methodName,
-                                     @Assisted ImmutableList<String> arguments) {
+                                     @Assisted ImmutableList<JExpression> arguments) {
         this.methodName = methodName;
         this.arguments = arguments;
     }
@@ -26,7 +26,7 @@ public class MethodCallVariableBuilder implements DependentVariableBuilder{
     public JExpression buildVariable(JExpression dependencyExpression) {
         JInvocation invocation = dependencyExpression.invoke(methodName);
 
-        for (String argument : arguments) {
+        for (JExpression argument : arguments) {
             invocation.arg(argument);
         }
 

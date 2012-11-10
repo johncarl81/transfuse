@@ -4,6 +4,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import com.google.common.collect.ImmutableList;
 import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.TypedExpression;
@@ -103,7 +104,7 @@ public class InjectionBindingBuilder {
             private final Class clazz;
             private final Class returnType;
             private final String methodName;
-            private final ImmutableList.Builder<String> arguments = ImmutableList.builder();
+            private final ImmutableList.Builder<JExpression> arguments = ImmutableList.builder();
 
             private DependencyArgumentBindingBuilder(Class clazz, Class returnType, String methodName) {
                 this.clazz = clazz;
@@ -111,7 +112,7 @@ public class InjectionBindingBuilder {
                 this.methodName = methodName;
             }
 
-            public DependencyArgumentBindingBuilder arg(String value) {
+            public DependencyArgumentBindingBuilder arg(JExpression value) {
                 arguments.add(value);
                 return this;
             }
