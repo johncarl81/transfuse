@@ -18,7 +18,9 @@ import java.util.Map;
 public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
 
     private static final String GET = "get";
+    private static final String IS = "is";
     private static final String SET = "set";
+    private static final String[] PREPENDS = {GET, IS, SET};
     private final Map<ASTType, ParcelableDescriptor> parcelableCache = new HashMap<ASTType, ParcelableDescriptor>();
     private final ASTClassFactory astClassFactory;
 
@@ -66,17 +68,15 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
             for (ASTMethod astMethod : astType.getMethods()) {
                 if (isGetter(astMethod) && !astMethod.isAnnotated(Transient.class)) {
                     String setterName = SET + astMethod.getName().substring(GET.length());
-                    if (!methodNameMap.containsKey(setterName)) {
-                        throw new TransfuseAnalysisException("Unable to find setter " + setterName + " to match getter " + astMethod.getName());
-                    }
-
                     ASTMethod setterMethod = methodNameMap.get(setterName);
 
-                    if (setterMethod.getParameters().size() != 1 || !setterMethod.getParameters().get(0).getASTType().equals(astMethod.getReturnType())) {
-                        throw new TransfuseAnalysisException("Setter " + setterName + " has incorrect parameters.");
-                    }
+                    if(setterMethod != null && !setterMethod.isAnnotated(Transient.class)){
+                        if (setterMethod.getParameters().size() != 1 || !setterMethod.getParameters().get(0).getASTType().equals(astMethod.getReturnType())) {
+                            throw new TransfuseAnalysisException("Setter " + setterName + " has incorrect parameters.");
+                        }
 
-                    parcelableDescriptor.getGetterSetterPairs().add(new GetterSetterMethodPair(astMethod, setterMethod));
+                        parcelableDescriptor.getGetterSetterPairs().add(new GetterSetterMethodPair(getPropertyName(astMethod), astMethod, setterMethod));
+                    }
                 }
             }
         }
@@ -97,10 +97,23 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
     }
 
     private boolean isGetter(ASTMethod astMethod) {
-        boolean isGetter = astMethod.getParameters().size() == 0 && astMethod.getName().startsWith(GET);
+        boolean isGetter = astMethod.getParameters().size() == 0 &&
+                (astMethod.getName().startsWith(GET) || astMethod.getName().startsWith(IS));
         if (isGetter && astMethod.getReturnType().equals(ASTVoidType.VOID)) {
             throw new TransfuseAnalysisException("Getter cannot return type void");
         }
         return isGetter;
+    }
+
+    private String getPropertyName(ASTMethod astMethod){
+        String methodName = astMethod.getName();
+
+        for (String prepend : PREPENDS) {
+            if(methodName.startsWith(prepend)){
+                String name = methodName.substring(prepend.length());
+                return name.substring(0, 1).toLowerCase() + name.substring(1);
+            }
+        }
+        throw new TransfuseAnalysisException("Unable to convert Method name " + methodName);
     }
 }

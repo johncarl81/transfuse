@@ -87,7 +87,7 @@ public class ParcelableGenerator {
             JVar wtParcelParam = writeToParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
             JVar flags = writeToParcelMethod.param(codeModel.INT, "flags");
 
-            if (parcelableDescriptor.getParcelableConverterType() == null) {
+            if (parcelableDescriptor.getParcelConverterType() == null) {
 
                 parcelConstructorBody.assign(wrapped, JExpr._new(inputType));
 
@@ -101,9 +101,9 @@ public class ParcelableGenerator {
                 }
             } else {
                 //todo: inject ParcelConverter?
-                JClass converterType = codeModel.ref(parcelableDescriptor.getParcelableConverterType().getName());
+                JClass converterType = codeModel.ref(parcelableDescriptor.getParcelConverterType().getName());
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
-                        namer.generateName(parcelableDescriptor.getParcelableConverterType()), JExpr._new(converterType));
+                        namer.generateName(parcelableDescriptor.getParcelConverterType()), JExpr._new(converterType));
 
                 parcelConstructorBody.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam);
 

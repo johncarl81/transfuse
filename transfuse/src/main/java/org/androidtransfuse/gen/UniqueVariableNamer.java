@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Generates a unique name for the given type.
+ *
  * @author John Ericksen
  */
 @Singleton

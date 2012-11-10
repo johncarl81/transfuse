@@ -11,21 +11,21 @@ import java.util.List;
 public class ParcelableDescriptor {
 
     private final List<GetterSetterMethodPair> getterSetterPairs = new ArrayList<GetterSetterMethodPair>();
-    private final ASTType parcelableConverterType;
+    private final ASTType parcelConverterType;
 
     public ParcelableDescriptor() {
-        parcelableConverterType = null;
+        parcelConverterType = null;
     }
 
-    public ParcelableDescriptor(ASTType parcelableConverterType) {
-        this.parcelableConverterType = parcelableConverterType;
+    public ParcelableDescriptor(ASTType parcelConverterType) {
+        this.parcelConverterType = parcelConverterType;
     }
 
     public List<GetterSetterMethodPair> getGetterSetterPairs() {
         return getterSetterPairs;
     }
 
-    public ASTType getParcelableConverterType() {
-        return parcelableConverterType;
+    public ASTType getParcelConverterType() {
+        return parcelConverterType;
     }
 }

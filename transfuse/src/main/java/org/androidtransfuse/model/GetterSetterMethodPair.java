@@ -7,10 +7,12 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
  */
 public class GetterSetterMethodPair {
 
+    private final String name;
     private final ASTMethod getter;
     private final ASTMethod setter;
 
-    public GetterSetterMethodPair(ASTMethod getter, ASTMethod setter) {
+    public GetterSetterMethodPair(String name, ASTMethod getter, ASTMethod setter) {
+        this.name = name;
         this.getter = getter;
         this.setter = setter;
     }
@@ -21,5 +23,9 @@ public class GetterSetterMethodPair {
 
     public ASTMethod getSetter() {
         return setter;
+    }
+
+    public String getName() {
+        return name;
     }
 }
