@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Builds the invocations of constructors, methods and field get/set.
+ *
  * @author John Ericksen
  */
 public class InvocationBuilder {
@@ -100,19 +102,16 @@ public class InvocationBuilder {
 
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(fieldInjectionPoint.getAccessModifier());
-
         return injectionBuilder.buildFieldSet(expression, fieldInjectionPoint, variable);
     }
 
     public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
-
         return injectionBuilder.buildFieldGet(returnType, variableType, variable, name);
     }
 
     public JExpression buildConstructorCall(Map<InjectionNode, TypedExpression> expressionMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(constructorInjectionPoint.getAccessModifier());
-
         return injectionBuilder.buildConstructorCall(expressionMap, constructorInjectionPoint, type);
     }
 }
