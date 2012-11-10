@@ -43,7 +43,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 
-            MethodDescriptor methodDescriptor = descriptor.getMethodBuilder().buildMethod(definedClass);
+            MethodDescriptor methodDescriptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
 
             JBlock block = methodDescriptor.getMethod().body();
 
@@ -57,7 +57,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
             //Method Callbacks
             MethodGenerator onCreateMethodGenerator = new ExistingMethod(methodDescriptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(
-                    methodDescriptor.getASTMethod().getName(), onCreateMethodGenerator);
+                    descriptor.getInitMethodEventAnnotation(), onCreateMethodGenerator);
 
             onCreateCallbackGenerator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
 
@@ -66,7 +66,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
                 generator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
             }
 
-            descriptor.getMethodBuilder().closeMethod(methodDescriptor);
+            descriptor.getInitMethodBuilder().closeMethod(methodDescriptor);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {

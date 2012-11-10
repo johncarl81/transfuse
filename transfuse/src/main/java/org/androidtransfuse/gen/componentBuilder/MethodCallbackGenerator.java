@@ -15,6 +15,7 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,13 +24,13 @@ import java.util.Set;
  */
 public class MethodCallbackGenerator implements ExpressionVariableDependentGenerator {
 
-    private final String name;
+    private final Class<? extends Annotation> eventAnnotation;
     private final MethodGenerator methodGenerator;
     private final InvocationBuilder invocationBuilder;
 
     @Inject
-    public MethodCallbackGenerator(@Assisted String name, @Assisted MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {
-        this.name = name;
+    public MethodCallbackGenerator(@Assisted Class<? extends Annotation> eventAnnotation, @Assisted MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {
+        this.eventAnnotation = eventAnnotation;
         this.methodGenerator = methodGenerator;
         this.invocationBuilder = invocationBuilder;
     }
@@ -40,8 +41,8 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
             for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
                 ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
 
-                if (methodCallbackAspect != null && methodCallbackAspect.contains(name)) {
-                    Set<ASTMethod> methods = methodCallbackAspect.getListeners(name);
+                if (methodCallbackAspect != null && methodCallbackAspect.contains(eventAnnotation)) {
+                    Set<ASTMethod> methods = methodCallbackAspect.getListeners(eventAnnotation);
 
                     //define method on demand for possible lazy init
                     if (methodDescriptor == null) {

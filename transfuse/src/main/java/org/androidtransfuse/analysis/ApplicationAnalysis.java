@@ -7,8 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.Application;
-import org.androidtransfuse.annotations.UIOptions;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
@@ -22,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.lang.annotation.Annotation;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
 import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
@@ -96,31 +96,27 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
         //onCreate
-        applicationDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        applicationDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
         applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
         //onLowMemory
-        applicationDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        applicationDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onTerminate
-        applicationDescriptor.addGenerators(buildEventMethod("onTerminate"));
+        applicationDescriptor.addGenerators(buildEventMethod(OnTerminate.class, "onTerminate"));
         //onConfigurationChanged
         ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", Configuration.class);
         applicationDescriptor.addGenerators(
-                componentBuilderFactory.buildMethodCallbackGenerator("onConfigurationChanged",
+                componentBuilderFactory.buildMethodCallbackGenerator(OnConfigurationChanged.class,
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
 
         applicationDescriptor.addGenerators(contextScopeComponentBuilder);
     }
 
-    private MethodCallbackGenerator buildEventMethod(String name) {
-        return buildEventMethod(name, name);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName) {
         ASTMethod method = getASTMethod(methodName);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 

@@ -4,6 +4,7 @@ import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGene
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodBuilder;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,9 +17,10 @@ public class ComponentDescriptor {
 
     private final PackageClass packageClass;
     private final String type;
-    private MethodBuilder methodBuilder;
+    private MethodBuilder initMethodBuilder;
     private List<ExpressionVariableDependentGenerator> generators = new ArrayList<ExpressionVariableDependentGenerator>();
     private InjectionNodeFactory injectionNodeFactory;
+    private Class<? extends Annotation> initMethodEventAnnotation;
 
     public ComponentDescriptor(String type, PackageClass packageClass) {
         this.type = type;
@@ -33,8 +35,8 @@ public class ComponentDescriptor {
         return type;
     }
 
-    public MethodBuilder getMethodBuilder() {
-        return methodBuilder;
+    public MethodBuilder getInitMethodBuilder() {
+        return initMethodBuilder;
     }
 
     public List<ExpressionVariableDependentGenerator> getGenerators() {
@@ -51,8 +53,9 @@ public class ComponentDescriptor {
         }
     }
 
-    public void setMethodBuilder(MethodBuilder methodBuilder) {
-        this.methodBuilder = methodBuilder;
+    public void setInitMethodBuilder(Class<? extends Annotation> initEventAnnotation, MethodBuilder initMethodBuilder) {
+        this.initMethodBuilder = initMethodBuilder;
+        this.initMethodEventAnnotation = initEventAnnotation;
     }
 
     public InjectionNodeFactory getInjectionNodeFactory() {
@@ -61,5 +64,9 @@ public class ComponentDescriptor {
 
     public void setInjectionNodeFactory(InjectionNodeFactory injectionNodeFactory) {
         this.injectionNodeFactory = injectionNodeFactory;
+    }
+
+    public Class<? extends Annotation> getInitMethodEventAnnotation() {
+        return initMethodEventAnnotation;
     }
 }

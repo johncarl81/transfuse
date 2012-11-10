@@ -19,8 +19,7 @@ import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.Fragment;
-import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
@@ -34,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
+import java.lang.annotation.Annotation;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
@@ -110,36 +110,36 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateViewMethod = getASTMethod("onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
 
-        fragmentDescriptor.setMethodBuilder(componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
+        fragmentDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
 
         fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
         //onActivityCreated
-        fragmentDescriptor.addGenerators(buildEventMethod("onActivityCreated", Bundle.class));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnActivityCreated.class, "onActivityCreated", Bundle.class));
         //onStart
-        fragmentDescriptor.addGenerators(buildEventMethod("onStart"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnStart.class, "onStart"));
         //onResume
-        fragmentDescriptor.addGenerators(buildEventMethod("onResume"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnResume.class, "onResume"));
         //onPause
-        fragmentDescriptor.addGenerators(buildEventMethod("onPause"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnPause.class, "onPause"));
         //onStop
-        fragmentDescriptor.addGenerators(buildEventMethod("onStop"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnStop.class, "onStop"));
         //onDestroyView
-        fragmentDescriptor.addGenerators(buildEventMethod("onDestroyView"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnDestroyView.class, "onDestroyView"));
         //onDestroy
-        fragmentDescriptor.addGenerators(buildEventMethod("onDestroy"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnDestroy.class, "onDestroy"));
         //onDetach
-        fragmentDescriptor.addGenerators(buildEventMethod("onDetach"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnDetach.class, "onDetach"));
         //onLowMemory
-        fragmentDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
 
         //onConfigurationChanged
-        fragmentDescriptor.addGenerators(buildEventMethod("onConfigurationChanged", "onConfigurationChanged", Configuration.class));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", Configuration.class));
 
         if (fragmentType.extendsFrom(astClassFactory.buildASTClassType(ListFragment.class))) {
             ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE);
             fragmentDescriptor.addGenerators(
-                    componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
+                    componentBuilderFactory.buildMethodCallbackGenerator(OnListItemClick.class,
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
 
@@ -147,14 +147,10 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private MethodCallbackGenerator buildEventMethod(String name, Class... args) {
-        return buildEventMethod(name, name, args);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName, Class... args) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName, Class... args) {
         ASTMethod method = getASTMethod(methodName, args);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventName, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
     private ASTMethod getASTMethod(String methodName, Class... args) {

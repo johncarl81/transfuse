@@ -15,7 +15,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.annotations.Service;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
@@ -150,17 +151,17 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
 
-        serviceDescriptor.setMethodBuilder(componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        serviceDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
         serviceDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
-        serviceDescriptor.addGenerators(buildEventMethod("onConfigurationChanged", Configuration.class));
+        serviceDescriptor.addGenerators(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", Configuration.class));
         //onDestroy
-        serviceDescriptor.addGenerators(buildEventMethod("onDestroy"));
+        serviceDescriptor.addGenerators(buildEventMethod(OnDestroy.class, "onDestroy"));
         //onLowMemory
-        serviceDescriptor.addGenerators(buildEventMethod("onLowMemory"));
+        serviceDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onRebind onRebind(android.content.Intent intent)
-        serviceDescriptor.addGenerators(buildEventMethod("onRebind", Intent.class));
+        serviceDescriptor.addGenerators(buildEventMethod(OnRebind.class, "onRebind", Intent.class));
 
         //todo: move this somewhere else
         serviceDescriptor.addGenerators(new ExpressionVariableDependentGenerator() {
@@ -180,14 +181,10 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }
 
-    private MethodCallbackGenerator buildEventMethod(String name, Class... args) {
-        return buildEventMethod(name, name, args);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName, Class... args) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName, Class... args) {
         ASTMethod method = getASTMethod(methodName, args);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 

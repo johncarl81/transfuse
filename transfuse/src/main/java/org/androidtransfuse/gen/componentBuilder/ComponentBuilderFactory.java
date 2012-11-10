@@ -8,12 +8,14 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
+import java.lang.annotation.Annotation;
+
 /**
  * @author John Ericksen
  */
 public interface ComponentBuilderFactory {
 
-    MethodCallbackGenerator buildMethodCallbackGenerator(String eventName, MethodGenerator methodGenerator);
+    MethodCallbackGenerator buildMethodCallbackGenerator(Class<? extends Annotation> eventAnnotation, MethodGenerator methodGenerator);
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 

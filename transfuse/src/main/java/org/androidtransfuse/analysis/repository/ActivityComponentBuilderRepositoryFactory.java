@@ -12,11 +12,13 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
@@ -63,7 +65,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
         ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, int.class, long.class);
         listActivityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator("onListItemClick",
+                componentBuilderFactory.buildMethodCallbackGenerator(OnListItemClick.class,
                         componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
 
         return listActivityCallbackGenerators.build();
@@ -72,30 +74,30 @@ public class ActivityComponentBuilderRepositoryFactory {
     private ImmutableSet<ExpressionVariableDependentGenerator> buildActivityMethodCallbackGenerators() {
         ImmutableSet.Builder<ExpressionVariableDependentGenerator> activityCallbackGenerators = ImmutableSet.builder();
         // onDestroy
-        activityCallbackGenerators.add(buildEventMethod("onDestroy"));
+        activityCallbackGenerators.add(buildEventMethod(OnDestroy.class, "onDestroy"));
         // onPause
-        activityCallbackGenerators.add(buildEventMethod("onPause"));
+        activityCallbackGenerators.add(buildEventMethod(OnPause.class, "onPause"));
         // onRestart
-        activityCallbackGenerators.add(buildEventMethod("onRestart"));
+        activityCallbackGenerators.add(buildEventMethod(OnRestart.class, "onRestart"));
         // onResume
-        activityCallbackGenerators.add(buildEventMethod("onResume"));
+        activityCallbackGenerators.add(buildEventMethod(OnResume.class, "onResume"));
         // onStart
-        activityCallbackGenerators.add(buildEventMethod("onStart"));
+        activityCallbackGenerators.add(buildEventMethod(OnStart.class, "onStart"));
         // onStop
-        activityCallbackGenerators.add(buildEventMethod("onStop"));
+        activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
         // onBackPressed
-        activityCallbackGenerators.add(buildEventMethod("onBackPressed"));
+        activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
 
         // onSaveInstanceState
         ASTMethod onSaveIntanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
         activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator("onSaveInstanceState",
+                componentBuilderFactory.buildMethodCallbackGenerator(OnSaveInstanceState.class,
                         componentBuilderFactory.buildMirroredMethodGenerator(onSaveIntanceStateMethod, true)));
 
         // onRestoreInstanceState
         ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", Bundle.class);
         activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator("onRestoreInstanceState",
+                componentBuilderFactory.buildMethodCallbackGenerator(OnRestoreInstanceState.class,
                         componentBuilderFactory.buildMirroredMethodGenerator(onRestoreInstanceState, true)));
 
         //extra intent factory
@@ -110,16 +112,11 @@ public class ActivityComponentBuilderRepositoryFactory {
         return activityCallbackGenerators.build();
     }
 
-
-    private MethodCallbackGenerator buildEventMethod(String name) {
-        return buildEventMethod(name, name);
-    }
-
-    private MethodCallbackGenerator buildEventMethod(String eventName, String methodName) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName) {
 
         ASTMethod method = getASTMethod(methodName);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventName,
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 

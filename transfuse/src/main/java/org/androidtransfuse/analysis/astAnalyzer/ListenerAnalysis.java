@@ -1,6 +1,6 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -17,55 +17,50 @@ import java.lang.annotation.Annotation;
  */
 public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
-    private final ImmutableMap<Class<?>, String> methodAnnotations;
+    private final ImmutableSet<Class<? extends Annotation>> methodAnnotations;
 
     public ListenerAnalysis() {
-        ImmutableMap.Builder<Class<?>, String> eventListenerAnnotations = ImmutableMap.builder();
-        eventListenerAnnotations.put(OnCreate.class, "onCreate");
-        eventListenerAnnotations.put(OnDestroy.class, "onDestroy");
-        eventListenerAnnotations.put(OnPause.class, "onPause");
-        eventListenerAnnotations.put(OnRestart.class, "onRestart");
-        eventListenerAnnotations.put(OnResume.class, "onResume");
-        eventListenerAnnotations.put(OnStart.class, "onStart");
-        eventListenerAnnotations.put(OnStop.class, "onStop");
-        eventListenerAnnotations.put(OnLowMemory.class, "onLowMemory");
-        eventListenerAnnotations.put(OnSaveInstanceState.class, "onSaveInstanceState");
-        eventListenerAnnotations.put(OnRestoreInstanceState.class, "onRestoreInstanceState");
-        eventListenerAnnotations.put(OnBackPressed.class, "onBackPressed");
-        //application
-        eventListenerAnnotations.put(OnTerminate.class, "onTerminate");
-        eventListenerAnnotations.put(OnConfigurationChanged.class, "onConfigurationChanged");
-        //List Activity
-        eventListenerAnnotations.put(OnListItemClick.class, "onListItemClick");
-        //BroadcastReceiver
-        eventListenerAnnotations.put(OnReceive.class, "onReceive");
-        //Service
-        eventListenerAnnotations.put(OnRebind.class, "onRebind");
-        //Fragment
-        eventListenerAnnotations.put(OnActivityCreated.class, "onActivityCreated");
-        eventListenerAnnotations.put(OnDestroyView.class, "onDestroyView");
-        eventListenerAnnotations.put(OnDetach.class, "onDetach");
+        ImmutableSet.Builder<Class<? extends Annotation>> eventListenerAnnotations = ImmutableSet.builder();
+        eventListenerAnnotations.add(OnCreate.class);
+        eventListenerAnnotations.add(OnDestroy.class);
+        eventListenerAnnotations.add(OnPause.class);
+        eventListenerAnnotations.add(OnRestart.class);
+        eventListenerAnnotations.add(OnResume.class);
+        eventListenerAnnotations.add(OnStart.class);
+        eventListenerAnnotations.add(OnStop.class);
+        eventListenerAnnotations.add(OnLowMemory.class);
+        eventListenerAnnotations.add(OnSaveInstanceState.class);
+        eventListenerAnnotations.add(OnRestoreInstanceState.class);
+        eventListenerAnnotations.add(OnBackPressed.class);
+        eventListenerAnnotations.add(OnTerminate.class);
+        eventListenerAnnotations.add(OnConfigurationChanged.class);
+        eventListenerAnnotations.add(OnListItemClick.class);
+        eventListenerAnnotations.add(OnReceive.class);
+        eventListenerAnnotations.add(OnRebind.class);
+        eventListenerAnnotations.add(OnActivityCreated.class);
+        eventListenerAnnotations.add(OnDestroyView.class);
+        eventListenerAnnotations.add(OnDetach.class);
 
         this.methodAnnotations = eventListenerAnnotations.build();
     }
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
-        for (Class<?> annotation : methodAnnotations.keySet()) {
-            if (astMethod.isAnnotated((Class<Annotation>) annotation)) {
+        for (Class<? extends Annotation> annotation : methodAnnotations) {
+            if (astMethod.isAnnotated(annotation)) {
                 addMethod(injectionNode, annotation, astMethod);
             }
         }
     }
 
-    private void addMethod(InjectionNode injectionNode, Class<?> annotation, ASTMethod astMethod) {
+    private void addMethod(InjectionNode injectionNode, Class<? extends Annotation> annotation, ASTMethod astMethod) {
 
         if (!injectionNode.containsAspect(ListenerAspect.class)) {
             injectionNode.addAspect(new ListenerAspect());
         }
         ListenerAspect methodCallbackToken = injectionNode.getAspect(ListenerAspect.class);
 
-        methodCallbackToken.addMethodCallback(methodAnnotations.get(annotation), astMethod);
+        methodCallbackToken.addMethodCallback(annotation, astMethod);
 
         if (!annotation.equals(OnCreate.class)) {
             ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);

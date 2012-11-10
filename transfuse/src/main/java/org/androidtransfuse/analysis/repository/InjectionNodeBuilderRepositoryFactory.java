@@ -113,7 +113,7 @@ public class InjectionNodeBuilderRepositoryFactory {
         }
 
         //provider type
-        repository.putMatcher(astMatcherBuilder.type(Provider.class).ignoreGenericParameters().build(), generatedProviderInjectionNodeBuilderProvider.get());
+        repository.putMatcher(astMatcherBuilder.type(Provider.class).ignoreGenerics().build(), generatedProviderInjectionNodeBuilderProvider.get());
     }
 
     public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {

@@ -12,7 +12,7 @@ public class ASTTypeMatcherBuilder {
 
     private final ImmutableSet.Builder<Class<? extends Annotation>> annotations = ImmutableSet.builder();
     private ASTType astType = null;
-    private boolean ignoreGenericParameters = false;
+    private boolean ignoreGenerics = false;
 
     public ASTTypeMatcherBuilder() {
     }
@@ -27,11 +27,11 @@ public class ASTTypeMatcherBuilder {
     }
 
     public Matcher<ASTType> build() {
-        return new ASTTypeMatcher(annotations.build(), astType, ignoreGenericParameters);
+        return new ASTTypeMatcher(annotations.build(), astType, ignoreGenerics);
     }
 
-    public ASTTypeMatcherBuilder ignoreGenericParameters(){
-        ignoreGenericParameters = true;
+    public ASTTypeMatcherBuilder ignoreGenerics(){
+        ignoreGenerics = true;
         return this;
     }
 }
