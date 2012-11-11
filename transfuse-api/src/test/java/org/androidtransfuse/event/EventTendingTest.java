@@ -3,6 +3,9 @@ package org.androidtransfuse.event;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Method;
+
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -19,23 +22,30 @@ public class EventTendingTest {
         mockEventManager = mock(EventManager.class);
         mockEventObserver = mock(EventObserver.class);
 
-        eventTending = new EventTending(new EventObserverTuple[]{
-                new EventObserverTuple<Object>(Object.class, mockEventObserver)},
-                mockEventManager);
+        eventTending = new EventTending(mockEventManager);
+
+        eventTending.register(Object.class, mockEventObserver);
+
     }
 
     @Test
     public void testRegister(){
         eventTending.register();
 
-        verify(mockEventManager, times(2)).register(any(Class.class), eq(mockEventObserver));
+        verify(mockEventManager).register(any(Class.class), eq(mockEventObserver));
     }
 
     @Test
     public void testUnregister(){
         eventTending.unregister();
 
-        verify(mockEventManager).register(any(Class.class), eq(mockEventObserver));
         verify(mockEventManager).unregister(mockEventObserver);
+    }
+
+    @Test
+    public void testRegisterMethod() throws NoSuchMethodException {
+
+        Method registerMethod = EventTending.class.getMethod(EventTending.REGISTER_METHOD, Class.class, EventObserver.class);
+        assertNotNull(registerMethod);
     }
 }

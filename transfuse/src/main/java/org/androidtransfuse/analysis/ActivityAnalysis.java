@@ -12,10 +12,7 @@ import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
-import org.androidtransfuse.gen.componentBuilder.LayoutBuilder;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -56,6 +53,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final ObservesRegistrationGenerator observesExpressionDecorator;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -73,7 +71,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             BindingRepositoryFactory bindingRepositoryFactory,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
-                            ContextScopeComponentBuilder contextScopeComponentBuilder) {
+                            ContextScopeComponentBuilder contextScopeComponentBuilder, ObservesRegistrationGenerator observesExpressionDecorator) {
         this.injectionPointFactory = injectionPointFactory;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -90,6 +88,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
+        this.observesExpressionDecorator = observesExpressionDecorator;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -223,6 +222,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         activityDescriptor.addGenerators(activityComponentBuilderRepository.build().getGenerators(activityType));
 
         activityDescriptor.addGenerators(contextScopeComponentBuilder);
+
+        activityDescriptor.addRegistration(observesExpressionDecorator);
 
     }
 

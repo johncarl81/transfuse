@@ -23,6 +23,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
+import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
@@ -51,6 +52,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final BindingRepositoryFactory bindingRepositoryFactory;
     private final ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final ObservesRegistrationGenerator observesExpressionDecorator;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -60,7 +62,9 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             ComponentBuilderFactory componentBuilderFactory,
-                            BindingRepositoryFactory bindingRepositoryFactory, ListenerRegistrationGenerator listenerRegistrationGenerator) {
+                            BindingRepositoryFactory bindingRepositoryFactory,
+                            ListenerRegistrationGenerator listenerRegistrationGenerator,
+                            ObservesRegistrationGenerator observesExpressionDecorator) {
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -70,6 +74,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.componentBuilderFactory = componentBuilderFactory;
         this.bindingRepositoryFactory = bindingRepositoryFactory;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
+        this.observesExpressionDecorator = observesExpressionDecorator;
     }
 
     @Override
@@ -144,6 +149,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         fragmentDescriptor.addGenerators(listenerRegistrationGenerator);
+
+        fragmentDescriptor.addRegistration(observesExpressionDecorator);
 
     }
 

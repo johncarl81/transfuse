@@ -10,6 +10,7 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,12 @@ public class InjectionFragmentGenerator {
     }
 
     public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode) throws ClassNotFoundException, JClassAlreadyExistsException {
+        return buildFragment(block, definedClass, injectionNode, new HashMap<InjectionNode, TypedExpression>());
+    }
 
-        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, definedClass);
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+
+        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, definedClass, expressionMap);
 
         injectionExpressionBuilder.buildVariable(injectionBuilderContext, injectionNode);
 

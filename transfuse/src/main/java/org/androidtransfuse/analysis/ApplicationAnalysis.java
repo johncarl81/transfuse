@@ -8,10 +8,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
-import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
-import org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder;
+import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
@@ -40,6 +37,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final ManifestManager manifestManager;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final ObservesRegistrationGenerator observesExpressionDecorator;
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
@@ -50,7 +48,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager,
                                InjectionBindingBuilder injectionBindingBuilder,
-                               ContextScopeComponentBuilder contextScopeComponentBuilder) {
+                               ContextScopeComponentBuilder contextScopeComponentBuilder, ObservesRegistrationGenerator observesExpressionDecorator) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.applicationProvider = applicationProvider;
@@ -60,6 +58,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.manifestManager = manifestManager;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
+        this.observesExpressionDecorator = observesExpressionDecorator;
     }
 
     public void emptyApplication() {
@@ -111,6 +110,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
 
         applicationDescriptor.addGenerators(contextScopeComponentBuilder);
+
+        applicationDescriptor.addRegistration(observesExpressionDecorator);
     }
 
     private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName) {

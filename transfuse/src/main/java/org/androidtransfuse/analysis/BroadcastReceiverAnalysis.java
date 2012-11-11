@@ -6,6 +6,7 @@ import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.OnReceive;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
+import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
@@ -33,6 +34,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private final IntentFilterFactory intentFilterBuilder;
     private final MetaDataBuilder metaDataBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final ObservesRegistrationGenerator observesExpressionDecorator;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
@@ -41,7 +43,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ComponentBuilderFactory componentBuilderFactory,
                                      IntentFilterFactory intentFilterBuilder,
                                      MetaDataBuilder metaDataBuilder,
-                                     ContextScopeComponentBuilder contextScopeComponentBuilder) {
+                                     ContextScopeComponentBuilder contextScopeComponentBuilder,
+                                     ObservesRegistrationGenerator observesExpressionDecorator) {
         this.astClassFactory = astClassFactory;
         this.receiverProvider = receiverProvider;
         this.manifestManager = manifestManager;
@@ -49,6 +52,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         this.intentFilterBuilder = intentFilterBuilder;
         this.metaDataBuilder = metaDataBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
+        this.observesExpressionDecorator = observesExpressionDecorator;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -76,6 +80,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             receiverDescriptor.setInitMethodBuilder(OnReceive.class, componentBuilderFactory.buildOnReceiveMethodBuilder());
 
             receiverDescriptor.addGenerators(contextScopeComponentBuilder);
+
+            receiverDescriptor.addRegistration(observesExpressionDecorator);
         }
 
         setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);

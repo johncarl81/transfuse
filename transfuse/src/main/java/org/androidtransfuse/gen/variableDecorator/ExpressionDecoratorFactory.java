@@ -19,7 +19,6 @@ public class ExpressionDecoratorFactory implements Provider<VariableExpressionBu
         return decoratorFactory.buildCachedExpressionDecorator(
                decoratorFactory.buildScopedExpressionDecorator(
                decoratorFactory.buildVirtualProxyExpressionDecorator(
-               decoratorFactory.buildObserverExpressionDecorator(
-               decoratorFactory.buildVariableBuilderExpressionDecorator()))));
+               decoratorFactory.buildVariableBuilderExpressionDecorator())));
     }
 }

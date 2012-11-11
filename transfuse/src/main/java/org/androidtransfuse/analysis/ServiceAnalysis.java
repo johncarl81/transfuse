@@ -43,20 +43,21 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
-    private Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider;
-    private InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
-    private Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider;
-    private ComponentBuilderFactory componentBuilderFactory;
-    private AnalysisContextFactory analysisContextFactory;
-    private ASTClassFactory astClassFactory;
-    private ManifestManager manifestManager;
-    private IntentFilterFactory intentFilterBuilder;
-    private MetaDataBuilder metadataBuilder;
-    private InjectionBindingBuilder injectionBindingBuilder;
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private ContextScopeComponentBuilder contextScopeComponentBuilder;
-    private GeneratorFactory generatorFactory;
-    private ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
+    private final Provider<org.androidtransfuse.model.manifest.Service> manifestServiceProvider;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final AnalysisContextFactory analysisContextFactory;
+    private final ASTClassFactory astClassFactory;
+    private final ManifestManager manifestManager;
+    private final IntentFilterFactory intentFilterBuilder;
+    private final MetaDataBuilder metadataBuilder;
+    private final InjectionBindingBuilder injectionBindingBuilder;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
+    private final GeneratorFactory generatorFactory;
+    private final ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final ObservesRegistrationGenerator observesExpressionDecorator;
 
     @Inject
     public ServiceAnalysis(Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider,
@@ -71,7 +72,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            ContextScopeComponentBuilder contextScopeComponentBuilder,
                            GeneratorFactory generatorFactory,
-                           ListenerRegistrationGenerator listenerRegistrationGenerator) {
+                           ListenerRegistrationGenerator listenerRegistrationGenerator, ObservesRegistrationGenerator observesExpressionDecorator) {
         this.injectionNodeRepositoryProvider = injectionNodeRepositoryProvider;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -86,6 +87,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.generatorFactory = generatorFactory;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
+        this.observesExpressionDecorator = observesExpressionDecorator;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -177,6 +179,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addGenerators(listenerRegistrationGenerator);
 
         serviceDescriptor.addGenerators(contextScopeComponentBuilder);
+
+        serviceDescriptor.addRegistration(observesExpressionDecorator);
 
         serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }

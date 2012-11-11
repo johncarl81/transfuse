@@ -19,6 +19,7 @@ public class ComponentDescriptor {
     private final String type;
     private MethodBuilder initMethodBuilder;
     private List<ExpressionVariableDependentGenerator> generators = new ArrayList<ExpressionVariableDependentGenerator>();
+    private List<ExpressionVariableDependentGenerator> registrations = new ArrayList<ExpressionVariableDependentGenerator>();
     private InjectionNodeFactory injectionNodeFactory;
     private Class<? extends Annotation> initMethodEventAnnotation;
 
@@ -68,5 +69,13 @@ public class ComponentDescriptor {
 
     public Class<? extends Annotation> getInitMethodEventAnnotation() {
         return initMethodEventAnnotation;
+    }
+
+    public List<ExpressionVariableDependentGenerator> getRegistrations() {
+        return registrations;
+    }
+
+    public void addRegistration(ExpressionVariableDependentGenerator generator){
+        registrations.add(generator);
     }
 }

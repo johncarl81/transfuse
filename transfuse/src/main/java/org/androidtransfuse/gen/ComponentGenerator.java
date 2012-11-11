@@ -54,6 +54,11 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
                         definedClass,
                         descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescrptor));
 
+            //Registrations
+            for (ExpressionVariableDependentGenerator registrationGenerator : descriptor.getRegistrations()) {
+                registrationGenerator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
+            }
+
             //Method Callbacks
             MethodGenerator onCreateMethodGenerator = new ExistingMethod(initMethodDescrptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(

@@ -13,11 +13,9 @@ import java.util.*;
 public class ObservesAspect {
 
     private final Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
-    private final InjectionNode eventManagerInjectionNode;
     private final InjectionNode observerTendingInjectionNode;
 
-    public ObservesAspect(InjectionNode eventManagerInjectionNode, InjectionNode observerTendingInjectionNode) {
-        this.eventManagerInjectionNode = eventManagerInjectionNode;
+    public ObservesAspect(InjectionNode observerTendingInjectionNode) {
         this.observerTendingInjectionNode = observerTendingInjectionNode;
     }
 
@@ -39,10 +37,6 @@ public class ObservesAspect {
         }
 
         return Collections.emptySet();
-    }
-
-    public InjectionNode getEventManagerInjectionNode() {
-        return eventManagerInjectionNode;
     }
 
     public InjectionNode getObserverTendingInjectionNode() {

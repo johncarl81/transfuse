@@ -1,7 +1,12 @@
 package org.androidtransfuse.event;
 
+import org.androidtransfuse.annotations.OnCreate;
 import org.androidtransfuse.annotations.OnPause;
 import org.androidtransfuse.annotations.OnRestart;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Coordinates registration/unregistration of observers to events based on Android lifecycle
@@ -10,26 +15,32 @@ import org.androidtransfuse.annotations.OnRestart;
  */
 public class EventTending {
 
-    private final EventObserverTuple[] observerTuples;
+    public static final String REGISTER_METHOD = "register";
+
+    private final Map<Class, EventObserver> eventObservers = new HashMap<Class, EventObserver>();
     private final EventManager eventManager;
 
-    public EventTending(EventObserverTuple[] observerTuples, EventManager eventManager) {
-        this.observerTuples = observerTuples;
+    @Inject
+    public EventTending(EventManager eventManager) {
         this.eventManager = eventManager;
-        register();
     }
 
-    @OnPause
-    public void unregister(){
-        for (EventObserverTuple observerTuple : observerTuples) {
-            eventManager.unregister(observerTuple.getObserver());
-        }
+    public final <T> void register(Class<T> event, EventObserver<T> observer){
+        eventObservers.put(event, observer);
     }
 
     @OnRestart
+    @OnCreate
     public final void register(){
-        for (EventObserverTuple observerTuple : observerTuples) {
-            eventManager.register(observerTuple.getEvent(), observerTuple.getObserver());
+        for (Map.Entry<Class, EventObserver> observerEntry : eventObservers.entrySet()) {
+            eventManager.register(observerEntry.getKey(), observerEntry.getValue());
+        }
+    }
+
+    @OnPause
+    public final void unregister(){
+        for (Map.Entry<Class, EventObserver> observerEntry : eventObservers.entrySet()) {
+            eventManager.unregister(observerEntry.getValue());
         }
     }
 }

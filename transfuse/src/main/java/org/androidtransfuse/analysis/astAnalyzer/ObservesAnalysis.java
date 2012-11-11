@@ -2,14 +2,12 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
-import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Observes;
-import org.androidtransfuse.event.EventManager;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -23,13 +21,11 @@ import javax.inject.Inject;
  */
 public class ObservesAnalysis extends ASTAnalysisAdaptor {
 
-    private final InjectionPointFactory injectionNodeFactory;
     private final Analyzer analyzer;
     private final ASTClassFactory astClassFactory;
 
     @Inject
-    public ObservesAnalysis(InjectionPointFactory injectionNodeFactory, Analyzer analyzer, ASTClassFactory astClassFactory) {
-        this.injectionNodeFactory = injectionNodeFactory;
+    public ObservesAnalysis(Analyzer analyzer, ASTClassFactory astClassFactory) {
         this.analyzer = analyzer;
         this.astClassFactory = astClassFactory;
     }
@@ -55,10 +51,9 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
             }
 
             if(!injectionNode.containsAspect(ObservesAspect.class)){
-                InjectionNode eventManagerInjectionNode = injectionNodeFactory.buildInjectionNode(EventManager.class, context);
                 ASTType observerTestingASType = astClassFactory.buildASTClassType(EventTending.class);
                 InjectionNode observerTendingInjectionNode = analyzer.analyze(observerTestingASType, observerTestingASType, context);
-                injectionNode.addAspect(new ObservesAspect(eventManagerInjectionNode, observerTendingInjectionNode));
+                injectionNode.addAspect(new ObservesAspect(observerTendingInjectionNode));
             }
             ObservesAspect aspect = injectionNode.getAspect(ObservesAspect.class);
 

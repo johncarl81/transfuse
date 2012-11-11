@@ -12,6 +12,4 @@ public interface VariableExpressionBuilderFactory {
     VariableBuilderExpressionDecorator buildVariableBuilderExpressionDecorator();
 
     VirtualProxyExpressionDecorator buildVirtualProxyExpressionDecorator(VariableExpressionBuilder decorator);
-
-    ObservesExpressionDecorator buildObserverExpressionDecorator(VariableExpressionBuilder decorator);
 }
