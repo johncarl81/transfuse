@@ -106,4 +106,10 @@ public class InjectionTest {
         assertNotNull(injection.getGenericInjection2());
         assertNotSame(injection.getGenericInjection().getClass(), injection.getGenericInjection2().getClass());
     }
+
+    @Test
+    public void testImplementedByInjection(){
+        assertNotNull(injection.getImplBy());
+        assertEquals(ImplByImpl.class, injection.getImplBy().getClass());
+    }
 }

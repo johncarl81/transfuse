@@ -1,5 +1,6 @@
 package org.androidtransfuse;
 
+import com.google.inject.ImplementedBy;
 import com.google.inject.Injector;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
@@ -54,7 +55,8 @@ import static com.google.common.collect.Collections2.transform;
         "org.androidtransfuse.annotations.Service",
         "org.androidtransfuse.annotations.Fragment",
         "org.androidtransfuse.annotations.TransfuseModule",
-        "org.androidtransfuse.annotations.Injector"})
+        "org.androidtransfuse.annotations.Injector",
+        "com.google.inject.ImplementedBy"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
@@ -104,6 +106,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
             moduleElements.addAll(roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class));
             moduleElements.add(processingEnv.getElementUtils().getTypeElement(TransfuseAndroidModule.class.getName()));
             transfuseProcessor.processModule(wrapASTCollection(moduleElements));
+            transfuseProcessor.processImplementedBy(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(ImplementedBy.class)));
 
             //process Application
             ApplicationGenerator applicationProcessor = transfuseProcessor.getApplicationProcessor();

@@ -43,6 +43,8 @@ public class Injection extends InjectionBase {
     private GenericType<Concrete> genericInjection;
     @Inject
     private GenericType<Concrete2> genericInjection2;
+    @Inject
+    private ImplBy implBy;
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -121,5 +123,9 @@ public class Injection extends InjectionBase {
 
     public GenericType<Concrete2> getGenericInjection2() {
         return genericInjection2;
+    }
+
+    public ImplBy getImplBy() {
+        return implBy;
     }
 }
