@@ -43,30 +43,30 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 
-            MethodDescriptor methodDescriptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
+            MethodDescriptor initMethodDescrptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
 
-            JBlock block = methodDescriptor.getMethod().body();
+            JBlock block = initMethodDescrptor.getMethod().body();
 
             //Injections
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
                         block,
                         definedClass,
-                        descriptor.getInjectionNodeFactory().buildInjectionNode(methodDescriptor));
+                        descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescrptor));
 
             //Method Callbacks
-            MethodGenerator onCreateMethodGenerator = new ExistingMethod(methodDescriptor);
+            MethodGenerator onCreateMethodGenerator = new ExistingMethod(initMethodDescrptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(
                     descriptor.getInitMethodEventAnnotation(), onCreateMethodGenerator);
 
-            onCreateCallbackGenerator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
+            onCreateCallbackGenerator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
 
             //... and other listeners
             for (ExpressionVariableDependentGenerator generator : descriptor.getGenerators()) {
-                generator.generate(definedClass, methodDescriptor, expressionMap, descriptor);
+                generator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
             }
 
-            descriptor.getInitMethodBuilder().closeMethod(methodDescriptor);
+            descriptor.getInitMethodBuilder().closeMethod(initMethodDescrptor);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {
