@@ -7,6 +7,7 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
+import org.androidtransfuse.event.EventObserverTuple;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.event.WeakObserver;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -17,6 +18,8 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -54,6 +57,9 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
                 ObservesAspect aspect = injectionNode.getAspect(ObservesAspect.class);
                 InjectionNode observerTendingInjectionNode = aspect.getObserverTendingInjectionNode();
 
+                //mapping from event type -> observer
+                Map<JClass, JVar> observerTuples = new HashMap<JClass, JVar>();
+
                 for (ASTType event : aspect.getEvents()) {
 
                     //generate WeakObserver<E, T> (E = event, T = target injection node)
@@ -84,26 +90,32 @@ public class ObservesExpressionDecorator extends VariableExpressionBuilderDecora
 
                     JVar observer = block.decl(observerClass, namer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
 
-                    //register
-                    JClass tendingClass = codeModel.ref(observerTendingInjectionNode.getClassName()).narrow(eventRef);
-                    JFieldVar observerTending = definedClass.field(JMod.PRIVATE, tendingClass, namer.generateName(observerTendingInjectionNode));
-
-                    block.assign(observerTending, JExpr._new(tendingClass).arg(eventRef.dotclass()).arg(observer).arg(getEventManager(injectionBuilderContext, aspect)));
-
-                    injectionBuilderContext.getVariableMap().put(copy(observerTendingInjectionNode), typedExpressionFactory.build(EventTending.class, observerTending));
+                    observerTuples.put(eventRef, observer);
                 }
+
+                //build observer tuple array and observer tending class
+                JClass tendingClass = codeModel.ref(observerTendingInjectionNode.getClassName());
+                JFieldVar observerTending = definedClass.field(JMod.PRIVATE, tendingClass, namer.generateName(observerTendingInjectionNode));
+
+                JClass tupleRef = codeModel.ref(EventObserverTuple.class);
+                JArray observerTupleArray = JExpr.newArray(tupleRef);
+
+                for (Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
+                    observerTupleArray.add(
+                            JExpr._new(tupleRef.narrow(tupleEntry.getKey()))
+                                    .arg(tupleEntry.getKey().dotclass())
+                                    .arg(tupleEntry.getValue()));
+                }
+
+                block.assign(observerTending, JExpr._new(tendingClass).arg(observerTupleArray).arg(getEventManager(injectionBuilderContext, aspect)));
+
+                injectionBuilderContext.getVariableMap().put(observerTendingInjectionNode, typedExpressionFactory.build(EventTending.class, observerTending));
+
             } catch (JClassAlreadyExistsException e) {
                 throw new TransfuseAnalysisException("Tried to generate a class that alread exists", e);
             }
         }
         return typedExpression;
-    }
-
-    private InjectionNode copy(InjectionNode injectionNode) {
-        InjectionNode injectionNodeCopy = new InjectionNode(injectionNode.getASTType(), injectionNode.getUsageType());
-        injectionNodeCopy.getAspects().putAll(injectionNode.getAspects());
-
-        return injectionNodeCopy;
     }
 
     private JExpression getEventManager(InjectionBuilderContext injectionBuilderContext, ObservesAspect aspect) {

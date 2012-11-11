@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
  */
 public class EventTendingTest {
 
-    private EventTending<Object> eventTending;
+    private EventTending eventTending;
     private EventObserver<Object> mockEventObserver;
     private EventManager mockEventManager;
 
@@ -19,7 +19,9 @@ public class EventTendingTest {
         mockEventManager = mock(EventManager.class);
         mockEventObserver = mock(EventObserver.class);
 
-        eventTending = new EventTending<Object>(Object.class, mockEventObserver, mockEventManager);
+        eventTending = new EventTending(new EventObserverTuple[]{
+                new EventObserverTuple<Object>(Object.class, mockEventObserver)},
+                mockEventManager);
     }
 
     @Test

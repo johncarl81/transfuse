@@ -8,27 +8,29 @@ import org.androidtransfuse.annotations.OnRestart;
  *
  * @author John Ericksen
  */
-public class EventTending<T> {
+public class EventTending {
 
-    private final Class<T> event;
-    private final EventObserver<T> observer;
+    private final EventObserverTuple[] observerTuples;
     private final EventManager eventManager;
 
-    public EventTending(Class<T> event, EventObserver<T> observer, EventManager eventManager) {
-        this.event = event;
-        this.observer = observer;
+    public EventTending(EventObserverTuple[] observerTuples, EventManager eventManager) {
+        this.observerTuples = observerTuples;
         this.eventManager = eventManager;
         register();
     }
 
     @OnPause
     public void unregister(){
-        eventManager.unregister(observer);
+        for (EventObserverTuple observerTuple : observerTuples) {
+            eventManager.unregister(observerTuple.getObserver());
+        }
     }
 
     @OnRestart
     public final void register(){
-        eventManager.register(event, observer);
+        for (EventObserverTuple observerTuple : observerTuples) {
+            eventManager.register(observerTuple.getEvent(), observerTuple.getObserver());
+        }
     }
 }
 
