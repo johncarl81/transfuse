@@ -72,7 +72,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             MetaDataBuilder metadataBuilder,
                             BindingRepositoryFactory bindingRepositoryFactory,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                            InjectionBindingBuilder injectionBindingBuilder, ContextScopeComponentBuilder contextScopeComponentBuilder) {
+                            InjectionBindingBuilder injectionBindingBuilder,
+                            ContextScopeComponentBuilder contextScopeComponentBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
