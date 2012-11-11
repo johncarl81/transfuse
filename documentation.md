@@ -535,6 +535,29 @@ public class SingletonExample{
 }
 {% endhighlight %}
 
+##### @ImplementedBy
+
+Annotating a class with @ImplementedBy configures Transfuse to inject the given annotation type whenever the annotated type is injected.  This is much like the @Bind module configuration, but @ImplemnetedBy is located on the type instead of within the @TransfuseModule class.
+
+An example of this is as follows:
+
+{% highlight java %}
+@ImplementedBy(Andy.class)
+public interface Android {}
+{% endhighlight %}
+
+{% highlight java %}
+public class Andy implements Android {}
+{% endhighlight %}
+
+The following injection would inject Andy in place of Android:
+
+{% highlight java %}
+@Inject
+Android andoid // injected Andy
+{% endhighlight %}
+
+
 ##### @Named
 
 Named support is pending.
@@ -543,9 +566,7 @@ Named support is pending.
 
 For completeness, Transfuse allows the declaration of dependency cycles.  For Transfuse to instantiate dependency cycles, at least one dependency in the loop must be injected via an interface.
 
-###### @ImplementedBy
 
-ImplementedBy support is pending.
 
 ###### @ContextScope
 
