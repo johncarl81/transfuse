@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.List;
+
 /**
  * @author John Ericksen
  */
@@ -118,5 +120,32 @@ public class InvocationBuilderTest {
         invocationBuilder.buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
         Mockito.verify(privateInjectionBuilder).buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
         Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
+    }
+
+    @Test
+    public void testMethodInvocation() {
+
+        ASTType returnType = Mockito.mock(ASTType.class);
+        String name = "test";
+        Iterable parameters = Mockito.mock(Iterable.class);
+        List<ASTType> parameterTypes = Mockito.mock(List.class);
+        ASTType targetExpressionType = Mockito.mock(ASTType.class);
+        JExpression targetExpression = Mockito.mock(JExpression.class);
+
+        invocationBuilder.buildMethodCall(ASTAccessModifier.PUBLIC, returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.verify(publicInjectionBuilder).buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.reset(returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
+
+        invocationBuilder.buildMethodCall(ASTAccessModifier.PACKAGE_PRIVATE, returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.verify(protectedInjectionBuilder).buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.reset(returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
+
+        invocationBuilder.buildMethodCall(ASTAccessModifier.PROTECTED, returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.verify(protectedInjectionBuilder).buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.reset(returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
+
+        invocationBuilder.buildMethodCall(ASTAccessModifier.PRIVATE, returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.verify(privateInjectionBuilder).buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
+        Mockito.reset(returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
     }
 }

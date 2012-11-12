@@ -3,8 +3,11 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -14,8 +17,7 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -50,13 +52,24 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
 
                 for (ASTMethod methodCallback : methods) {
 
+                    List<ASTParameter> matchedParameters = matchMethodArguments(methodDescriptor.getASTMethod().getParameters(), methodCallback);
+                    List<ASTType> parameterTypes = new ArrayList<ASTType>();
+                    List<JExpression> parameters = new ArrayList<JExpression>();
+
+                    for (ASTParameter matchedParameter : matchedParameters) {
+                        parameterTypes.add(matchedParameter.getASTType());
+                        parameters.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
+                    }
+
                     JStatement methodCall = invocationBuilder.buildMethodCall(
+                            methodCallback.getAccessModifier(),
                             methodDescriptor.getASTMethod().getReturnType(),
-                            methodDescriptor.getASTMethod().getParameters(),
-                            methodDescriptor.getParameters(),
+                            methodCallback.getName(),
+                            parameters,
+                            parameterTypes,
                             injectionNodeJExpressionEntry.getValue().getType(),
-                            injectionNodeJExpressionEntry.getValue().getExpression(),
-                            methodCallback);
+                            injectionNodeJExpressionEntry.getValue().getExpression()
+                    );
 
                     body.add(methodCall);
                 }
@@ -64,5 +77,26 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         }
 
         methodGenerator.closeMethod(methodDescriptor);
+    }
+
+    private List<ASTParameter> matchMethodArguments(List<ASTParameter> parametersToMatch, ASTMethod methodToCall) {
+        List<ASTParameter> arguments = new ArrayList<ASTParameter>();
+
+        List<ASTParameter> overrideParameters = new ArrayList<ASTParameter>(parametersToMatch);
+
+        for (ASTParameter callParameter : methodToCall.getParameters()) {
+            Iterator<ASTParameter> overrideParameterIterator = overrideParameters.iterator();
+
+            while (overrideParameterIterator.hasNext()) {
+                ASTParameter overrideParameter = overrideParameterIterator.next();
+                if (overrideParameter.getASTType().equals(callParameter.getASTType())) {
+                    arguments.add(overrideParameter);
+                    overrideParameterIterator.remove();
+                    break;
+                }
+            }
+        }
+
+        return arguments;
     }
 }

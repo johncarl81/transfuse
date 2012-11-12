@@ -5,8 +5,6 @@ import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.invocationBuilder.ModifierInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.PrivateInjectionBuilder;
@@ -17,9 +15,7 @@ import org.androidtransfuse.model.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Builds the invocations of constructors, methods and field get/set.
@@ -53,19 +49,6 @@ public class InvocationBuilder {
         }
     }
 
-    public JInvocation buildMethodCall(ASTType returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) {
-        List<ASTParameter> matchedParameters = matchMethodArguments(callingParameters, methodToCall);
-        List<ASTType> parameterTypes = new ArrayList<ASTType>();
-        List<JExpression> expressionParameters = new ArrayList<JExpression>();
-
-        for (ASTParameter matchedParameter : matchedParameters) {
-            parameterTypes.add(matchedParameter.getASTType());
-            expressionParameters.add(parameters.get(matchedParameter).getExpression());
-        }
-
-        return buildMethodCall(methodToCall.getAccessModifier(), returnType, methodToCall.getName(), expressionParameters, parameterTypes, targetExpressionType, targetExpression);
-    }
-
     public JInvocation buildMethodCall(ASTType returnType, MethodInjectionPoint methodInjectionPoint, Iterable<JExpression> parameters, JExpression variable) {
         return buildMethodCall(methodInjectionPoint.getAccessModifier(), returnType, methodInjectionPoint.getName(), parameters, pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);
     }
@@ -74,27 +57,6 @@ public class InvocationBuilder {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
 
         return injectionBuilder.buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
-    }
-
-    private List<ASTParameter> matchMethodArguments(List<ASTParameter> parametersToMatch, ASTMethod methodToCall) {
-        List<ASTParameter> arguments = new ArrayList<ASTParameter>();
-
-        List<ASTParameter> overrideParameters = new ArrayList<ASTParameter>(parametersToMatch);
-
-        for (ASTParameter callParameter : methodToCall.getParameters()) {
-            Iterator<ASTParameter> overrideParameterIterator = overrideParameters.iterator();
-
-            while (overrideParameterIterator.hasNext()) {
-                ASTParameter overrideParameter = overrideParameterIterator.next();
-                if (overrideParameter.getASTType().equals(callParameter.getASTType())) {
-                    arguments.add(overrideParameter);
-                    overrideParameterIterator.remove();
-                    break;
-                }
-            }
-        }
-
-        return arguments;
     }
 
     private List<ASTType> pullASTTypes(List<InjectionNode> injectionNodes) {
