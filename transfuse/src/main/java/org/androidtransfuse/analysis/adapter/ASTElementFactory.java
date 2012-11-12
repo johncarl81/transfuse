@@ -71,6 +71,7 @@ public class ASTElementFactory {
 
             ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
 
+            //todo: parse class name from package to accomodate inner classes
             PackageClass packageClass = new PackageClass(elements.getPackageOf(typeElement).toString(), typeElement.getSimpleName().toString());
 
             ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(typeElement.getSimpleName().toString(), packageClass);

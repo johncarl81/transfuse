@@ -55,7 +55,13 @@ public class PackageClass {
      * @param inputClass input
      */
     public PackageClass(Class<?> inputClass) {
-        this(inputClass.getPackage() == null ? null : inputClass.getPackage().getName(), inputClass.getSimpleName());
+        if (inputClass.getPackage() != null) {
+            this.fileName = inputClass.getName().substring(inputClass.getPackage().getName().length() + 1);
+            this.pkg = inputClass.getPackage().getName();
+        } else {
+            this.fileName = inputClass.getCanonicalName();
+            this.pkg = null;
+        }
     }
 
     private String removeDotJava(String input) {
