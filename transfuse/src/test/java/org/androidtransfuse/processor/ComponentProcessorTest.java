@@ -8,10 +8,12 @@ import org.androidtransfuse.gen.Generator;
 import org.androidtransfuse.util.matcher.AlwaysMatch;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import javax.inject.Inject;
 import java.util.Collections;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author John Ericksen
@@ -27,7 +29,7 @@ public class ComponentProcessorTest {
     public void setUp() throws Exception {
         TransfuseTestInjector.inject(this);
 
-        mockGenerator = Mockito.mock(Generator.class);
+        mockGenerator = mock(Generator.class);
 
         GeneratorRepository repository = new GeneratorRepository();
         repository.add(new AlwaysMatch(), mockGenerator);
@@ -35,10 +37,10 @@ public class ComponentProcessorTest {
     }
 
     @Test
-    public void testProcess(){
+    public void testProcess() {
         ASTType astType = astClassFactory.buildASTClassType(ComponentProcessorTest.class);
         componentProcessor.process(Collections.singleton(astType));
 
-        Mockito.verify(mockGenerator).generate(astType);
+        verify(mockGenerator).generate(astType);
     }
 }
