@@ -1,6 +1,9 @@
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JInvocation;
+import com.sun.codemodel.JStatement;
+import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
@@ -38,8 +41,8 @@ public class InvocationBuilder {
         this.privateProvider = privateProvider;
     }
 
-    private ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier){
-        switch (modifier){
+    private ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
+        switch (modifier) {
             case PUBLIC:
                 return publicProvider.get();
             case PACKAGE_PRIVATE:
@@ -50,23 +53,27 @@ public class InvocationBuilder {
         }
     }
 
-    public JInvocation buildMethodCall(ASTType returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JInvocation buildMethodCall(ASTType returnType, List<ASTParameter> callingParameters, Map<ASTParameter, TypedExpression> parameters, ASTType targetExpressionType, JExpression targetExpression, ASTMethod methodToCall) {
         List<ASTParameter> matchedParameters = matchMethodArguments(callingParameters, methodToCall);
         List<ASTType> parameterTypes = new ArrayList<ASTType>();
+        List<JExpression> expressionParameters = new ArrayList<JExpression>();
 
         for (ASTParameter matchedParameter : matchedParameters) {
             parameterTypes.add(matchedParameter.getASTType());
+            expressionParameters.add(parameters.get(matchedParameter).getExpression());
         }
 
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(methodToCall.getAccessModifier());
-
-        return injectionBuilder.buildMethodCall(returnType, parameters, methodToCall.getName(), matchedParameters, parameterTypes, targetExpressionType, targetExpression);
+        return buildMethodCall(methodToCall.getAccessModifier(), returnType, methodToCall.getName(), expressionParameters, parameterTypes, targetExpressionType, targetExpression);
     }
 
-    public JStatement buildMethodCall(ASTType returnType, Map<InjectionNode, TypedExpression> expressionMap, MethodInjectionPoint methodInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(methodInjectionPoint.getAccessModifier());
+    public JInvocation buildMethodCall(ASTType returnType, MethodInjectionPoint methodInjectionPoint, Iterable<JExpression> parameters, JExpression variable) {
+        return buildMethodCall(methodInjectionPoint.getAccessModifier(), returnType, methodInjectionPoint.getName(), parameters, pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);
+    }
 
-        return injectionBuilder.buildMethodCall(returnType, expressionMap, methodInjectionPoint.getName(), methodInjectionPoint.getInjectionNodes(), pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);
+    public JInvocation buildMethodCall(ASTAccessModifier accessModifier, ASTType returnType, String name, Iterable<JExpression> parameters, List<ASTType> parameterTypes, ASTType targetExpressionType, JExpression targetExpression) {
+        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
+
+        return injectionBuilder.buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
     }
 
     private List<ASTParameter> matchMethodArguments(List<ASTParameter> parametersToMatch, ASTMethod methodToCall) {
@@ -100,7 +107,7 @@ public class InvocationBuilder {
         return astTypes;
     }
 
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(fieldInjectionPoint.getAccessModifier());
         return injectionBuilder.buildFieldSet(expression, fieldInjectionPoint, variable);
     }
@@ -110,8 +117,8 @@ public class InvocationBuilder {
         return injectionBuilder.buildFieldGet(returnType, variableType, variable, name);
     }
 
-    public JExpression buildConstructorCall(Map<InjectionNode, TypedExpression> expressionMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) throws ClassNotFoundException {
+    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, JType type) {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(constructorInjectionPoint.getAccessModifier());
-        return injectionBuilder.buildConstructorCall(expressionMap, constructorInjectionPoint, type);
+        return injectionBuilder.buildConstructorCall(constructorInjectionPoint, parameters, type);
     }
 }

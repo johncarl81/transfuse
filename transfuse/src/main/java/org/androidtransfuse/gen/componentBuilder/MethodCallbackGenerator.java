@@ -2,10 +2,8 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JStatement;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -36,41 +34,35 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
     }
 
     public void generate(JDefinedClass definedClass, MethodDescriptor creationMethodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
-        try {
-            MethodDescriptor methodDescriptor = null;
-            for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-                ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
 
-                if (methodCallbackAspect != null && methodCallbackAspect.contains(eventAnnotation)) {
-                    Set<ASTMethod> methods = methodCallbackAspect.getListeners(eventAnnotation);
+        MethodDescriptor methodDescriptor = null;
+        for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
+            ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
 
-                    //define method on demand for possible lazy init
-                    if (methodDescriptor == null) {
-                        methodDescriptor = methodGenerator.buildMethod(definedClass);
-                    }
-                    JBlock body = methodDescriptor.getMethod().body();
+            if (methodCallbackAspect != null && methodCallbackAspect.contains(eventAnnotation)) {
+                Set<ASTMethod> methods = methodCallbackAspect.getListeners(eventAnnotation);
 
-                    for (ASTMethod methodCallback : methods) {
+                //define method on demand for possible lazy init
+                if (methodDescriptor == null) {
+                    methodDescriptor = methodGenerator.buildMethod(definedClass);
+                }
+                JBlock body = methodDescriptor.getMethod().body();
 
-                        JStatement methodCall = invocationBuilder.buildMethodCall(
-                                methodDescriptor.getASTMethod().getReturnType(),
-                                methodDescriptor.getASTMethod().getParameters(),
-                                methodDescriptor.getParameters(),
-                                injectionNodeJExpressionEntry.getValue().getType(),
-                                injectionNodeJExpressionEntry.getValue().getExpression(),
-                                methodCallback);
+                for (ASTMethod methodCallback : methods) {
 
-                        body.add(methodCall);
-                    }
+                    JStatement methodCall = invocationBuilder.buildMethodCall(
+                            methodDescriptor.getASTMethod().getReturnType(),
+                            methodDescriptor.getASTMethod().getParameters(),
+                            methodDescriptor.getParameters(),
+                            injectionNodeJExpressionEntry.getValue().getType(),
+                            injectionNodeJExpressionEntry.getValue().getExpression(),
+                            methodCallback);
+
+                    body.add(methodCall);
                 }
             }
-
-            methodGenerator.closeMethod(methodDescriptor);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("ClassNotFoundException while building method call", e);
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("JClassAlreadyExistsException while generating method call.", e);
         }
 
+        methodGenerator.closeMethod(methodDescriptor);
     }
 }

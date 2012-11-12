@@ -26,6 +26,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
+    private final GeneratorFactory generatorFactory;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
@@ -34,7 +35,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     AOPProxyGenerator aopProxyGenerator,
                                     InjectionExpressionBuilder injectionExpressionBuilder,
                                     TypedExpressionFactory typedExpressionFactory,
-                                    ExceptionWrapper exceptionWrapper) {
+                                    ExceptionWrapper exceptionWrapper, GeneratorFactory generatorFactory) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
@@ -42,6 +43,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.typedExpressionFactory = typedExpressionFactory;
         this.exceptionWrapper = exceptionWrapper;
+        this.generatorFactory = generatorFactory;
     }
 
     @Override
@@ -62,11 +64,9 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             if (injectionAspect == null) {
                 throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
-            }
-            else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
+            } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
-            }
-            else {
+            } else {
                 variableRef = exceptionWrapper.wrapException(block,
                         injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
                         new ExceptionWrapper.BlockWriter<JVar>() {
@@ -75,8 +75,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
                                 //constructor injection
                                 JExpression constructionExpression = injectionInvocationBuilder.buildConstructorCall(
-                                        injectionBuilderContext.getVariableMap(),
                                         injectionAspect.getConstructorInjectionPoint(),
+                                        generatorFactory.buildExpressionMatchingIterable(
+                                                injectionBuilderContext.getVariableMap(),
+                                                injectionAspect.getConstructorInjectionPoint().getInjectionNodes()),
                                         nodeType);
 
                                 if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
@@ -109,8 +111,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 block.add(
                                         injectionInvocationBuilder.buildMethodCall(
                                                 ASTVoidType.VOID,
-                                                injectionBuilderContext.getVariableMap(),
                                                 methodInjectionPoint,
+                                                generatorFactory.buildExpressionMatchingIterable(
+                                                        injectionBuilderContext.getVariableMap(),
+                                                        methodInjectionPoint.getInjectionNodes()),
                                                 variableRef));
                                 return null;
                             }

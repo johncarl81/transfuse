@@ -39,10 +39,10 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
     @Override
     public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
-        try{
+        try {
             List<InjectionNode> nonConfigurationComponents = buildNonConfigurationComponents(expressionMap);
 
-            if(!nonConfigurationComponents.isEmpty()){
+            if (!nonConfigurationComponents.isEmpty()) {
 
                 //generate holder type
                 JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, namer.generateClassName("NonConfigurationInstance"));
@@ -70,14 +70,12 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                 }
 
 
-
                 methodDescriptor.getTypeMap().get(astClassFactory.buildASTClassType(Bundle.class));
 
                 //add to onRetainNonConfigurationInstance
                 JMethod onNonConfigInst = definedClass.method(JMod.PUBLIC, Object.class, "onRetainNonConfigurationInstance");
 
                 JBlock methodBody = onNonConfigInst.body();
-
 
 
                 JInvocation construction = JExpr._new(nonConfigurationInstance);
@@ -103,8 +101,6 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
             }
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already defined", e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to file class", e);
         }
     }
 
@@ -128,7 +124,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
         List<InjectionNode> nonConfigurationComponents = new ArrayList<InjectionNode>();
         for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
 
-            if(expressionEntry.getKey().containsAspect(NonConfigurationAspect.class)){
+            if (expressionEntry.getKey().containsAspect(NonConfigurationAspect.class)) {
                 nonConfigurationComponents.add(expressionEntry.getKey());
             }
 

@@ -7,10 +7,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.config.Nullable;
-import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
@@ -36,6 +33,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final RResource rResource;
+    private final GeneratorFactory generatorFactory;
 
     @Inject
     public FragmentViewVariableBuilder(@Assisted @Nullable Integer viewId,
@@ -48,7 +46,8 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                        InvocationBuilder injectionInvocationBuilder,
                                        UniqueVariableNamer variableNamer,
                                        RResource rResource,
-                                       TypedExpressionFactory typedExpressionFactory) {
+                                       TypedExpressionFactory typedExpressionFactory,
+                                       GeneratorFactory generatorFactory) {
         super(View.class, typedExpressionFactory);
         this.viewId = viewId;
         this.viewTag = viewTag;
@@ -60,6 +59,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.variableNamer = variableNamer;
         this.rResource = rResource;
+        this.generatorFactory = generatorFactory;
     }
 
     @Override
@@ -120,8 +120,8 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
             block.add(
                     injectionInvocationBuilder.buildMethodCall(
                             ASTVoidType.VOID,
-                            injectionBuilderContext.getVariableMap(),
                             methodInjectionPoint,
+                            generatorFactory.buildExpressionMatchingIterable(injectionBuilderContext.getVariableMap(), methodInjectionPoint.getInjectionNodes()),
                             variableRef));
         }
 

@@ -1,9 +1,7 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.TypedExpression;
@@ -27,18 +25,13 @@ public class ActivityMethodDelegateASTReference implements ActivityDelegateASTRe
 
     @Override
     public JExpression buildReference(TypedExpression rootExpression) {
-        try {
-            return invocationBuilder.buildMethodCall(
-                    method.getReturnType(),
-                    Collections.EMPTY_LIST,
-                    Collections.EMPTY_MAP,
-                    rootExpression.getType(),
-                    rootExpression.getExpression(),
-                    method);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to find class", e);
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Class already exists", e);
-        }
+        return invocationBuilder.buildMethodCall(
+                method.getAccessModifier(),
+                method.getReturnType(),
+                method.getName(),
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST,
+                rootExpression.getType(),
+                rootExpression.getExpression());
     }
 }

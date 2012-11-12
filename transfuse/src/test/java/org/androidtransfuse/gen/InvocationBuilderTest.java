@@ -17,9 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author John Ericksen
  */
@@ -31,7 +28,7 @@ public class InvocationBuilderTest {
     private InvocationBuilder invocationBuilder;
 
     @Before
-    public void setup(){
+    public void setup() {
 
         publicInjectionBuilder = Mockito.mock(PublicInjectionBuilder.class);
         protectedInjectionBuilder = Mockito.mock(ProtectedInjectionBuilder.class);
@@ -45,7 +42,7 @@ public class InvocationBuilderTest {
     }
 
     @Test
-    public void testFieldGet(){
+    public void testFieldGet() {
         ASTType returnType = Mockito.mock(ASTType.class);
         ASTType variableType = Mockito.mock(ASTType.class);
         JExpression variable = Mockito.mock(JExpression.class);
@@ -100,26 +97,26 @@ public class InvocationBuilderTest {
         JType type = Mockito.mock(JType.class);
         ASTType containingType = Mockito.mock(ASTType.class);
         JExpression variable = Mockito.mock(JExpression.class);
-        Map<InjectionNode, TypedExpression> expressionMap = new HashMap<InjectionNode, TypedExpression>();
+        Iterable parmeters = Mockito.mock(Iterable.class);
 
         ConstructorInjectionPoint publicConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, containingType);
-        invocationBuilder.buildConstructorCall(expressionMap, publicConstructorInjectionPoint, type);
-        Mockito.verify(publicInjectionBuilder).buildConstructorCall(expressionMap, publicConstructorInjectionPoint, type);
-        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable);
+        invocationBuilder.buildConstructorCall(publicConstructorInjectionPoint, parmeters, type);
+        Mockito.verify(publicInjectionBuilder).buildConstructorCall(publicConstructorInjectionPoint, parmeters, type);
+        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
 
         ConstructorInjectionPoint protectedConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PROTECTED, containingType);
-        invocationBuilder.buildConstructorCall(expressionMap, protectedConstructorInjectionPoint, type);
-        Mockito.verify(protectedInjectionBuilder).buildConstructorCall(expressionMap, protectedConstructorInjectionPoint, type);
-        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable);
+        invocationBuilder.buildConstructorCall(protectedConstructorInjectionPoint, parmeters, type);
+        Mockito.verify(protectedInjectionBuilder).buildConstructorCall(protectedConstructorInjectionPoint, parmeters, type);
+        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
 
         ConstructorInjectionPoint pacakgePrivateConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PACKAGE_PRIVATE, containingType);
-        invocationBuilder.buildConstructorCall(expressionMap, pacakgePrivateConstructorInjectionPoint, type);
-        Mockito.verify(protectedInjectionBuilder).buildConstructorCall(expressionMap, pacakgePrivateConstructorInjectionPoint, type);
-        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable);
+        invocationBuilder.buildConstructorCall(pacakgePrivateConstructorInjectionPoint, parmeters, type);
+        Mockito.verify(protectedInjectionBuilder).buildConstructorCall(pacakgePrivateConstructorInjectionPoint, parmeters, type);
+        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
 
         ConstructorInjectionPoint privateConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PRIVATE, containingType);
-        invocationBuilder.buildConstructorCall(expressionMap, privateConstructorInjectionPoint, type);
-        Mockito.verify(privateInjectionBuilder).buildConstructorCall(expressionMap, privateConstructorInjectionPoint, type);
-        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable);
+        invocationBuilder.buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
+        Mockito.verify(privateInjectionBuilder).buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
+        Mockito.reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
     }
 }

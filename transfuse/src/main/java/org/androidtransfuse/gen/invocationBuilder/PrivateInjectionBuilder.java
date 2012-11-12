@@ -10,7 +10,6 @@ import org.androidtransfuse.util.InjectionUtil;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Injection Builder for building privately scoped elements.
@@ -20,16 +19,14 @@ import java.util.Map;
 public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
 
     private JCodeModel codeModel;
-    private TypeInvocationHelper invocationHelper;
 
     @Inject
-    public PrivateInjectionBuilder(JCodeModel codeModel, TypeInvocationHelper invocationHelper) {
+    public PrivateInjectionBuilder(JCodeModel codeModel) {
         this.codeModel = codeModel;
-        this.invocationHelper = invocationHelper;
     }
 
     @Override
-    public JExpression buildConstructorCall(Map<InjectionNode, TypedExpression> expressionMap, ConstructorInjectionPoint constructorInjectionPoint, JType type) {
+    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, JType type) {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
         JInvocation constructorInvocation = codeModel.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.CALL_CONSTRUCTOR_METHOD)
@@ -43,13 +40,13 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
         constructorInvocation.arg(classArray);
 
         //add args
-        constructorInvocation.arg(buildArgs(expressionMap, constructorInjectionPoint.getInjectionNodes()));
+        constructorInvocation.arg(buildArgsArray(parameters));
 
         return constructorInvocation;
     }
 
     @Override
-    public <T> JInvocation buildMethodCall(ASTType returnType, Map<T, TypedExpression> expressionMap, String methodName, List<T> injectionNodes, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
+    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
 
         JClass targetType = codeModel.ref(targetExpressionType.getName());
         //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)
@@ -67,7 +64,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
         methodInvocation.arg(classArray);
 
         //add args
-        methodInvocation.arg(buildArgs(expressionMap, injectionNodes));
+        methodInvocation.arg(buildArgsArray(parameters));
 
         return methodInvocation;
     }
@@ -92,10 +89,10 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
                 .arg(expression.getExpression());
     }
 
-    private <T> JArray buildArgs(Map<T, TypedExpression> expressionMap, List<T> keys){
+    private JExpression buildArgsArray(Iterable<JExpression> parameters) {
         JArray argArray = JExpr.newArray(codeModel.ref(Object.class));
-        for (T key : keys) {
-            argArray.add(invocationHelper.getExpression(null, expressionMap, key));
+        for (JExpression parameter : parameters) {
+            argArray.add(parameter);
         }
         return argArray;
     }

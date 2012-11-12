@@ -4,11 +4,13 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.event.WeakObserver;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -16,8 +18,7 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -29,14 +30,16 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InvocationBuilder invocationBuilder;
 
     @Inject
     public ObservesRegistrationGenerator(JCodeModel codeModel,
                                          UniqueVariableNamer namer,
-                                         InjectionFragmentGenerator injectionFragmentGenerator) {
+                                         InjectionFragmentGenerator injectionFragmentGenerator, InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.invocationBuilder = invocationBuilder;
     }
 
     @Override
@@ -82,8 +85,18 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                         JVar targetParam = triggerMethod.param(targetRef, namer.generateName(typedExpression.getType()));
                         JBlock triggerBody = triggerMethod.body();
 
+                        Set<JExpression> parameters = new HashSet<JExpression>();
+                        parameters.add(eventParam);
+
                         for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
-                            triggerBody.invoke(targetParam, observerMethod.getName()).arg(eventParam);
+                            triggerBody.add(invocationBuilder.buildMethodCall(
+                                    observerMethod.getAccessModifier(),
+                                    ASTVoidType.VOID,
+                                    observerMethod.getName(),
+                                    parameters,
+                                    Collections.singletonList(event),
+                                    typedExpression.getType(),
+                                    targetParam));
                         }
 
                         JVar observer = block.decl(observerClass, namer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
