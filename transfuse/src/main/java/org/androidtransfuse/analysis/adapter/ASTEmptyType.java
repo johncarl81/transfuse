@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -100,11 +101,16 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public PackageClass getPackageClass() {
+        return new PackageClass(null, name);
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ASTEmptyType)){
+        if (!(o instanceof ASTEmptyType)) {
             return false;
         }
 

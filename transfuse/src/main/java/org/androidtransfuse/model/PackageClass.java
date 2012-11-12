@@ -18,12 +18,15 @@ public class PackageClass {
 
     /**
      * Constructor taking a fully qualified class name, including optional package and filename.
-     *
+     * <p/>
      * This fully qualified name must not end with .java, as this will be interpreted as the class name.
-     * 
+     * <p/>
+     * This constructor does not work with inner classes as it assumes the last substring is the Class name and
+     * everything else is the package name.
+     *
      * @param fullyQualifiedName class name
      */
-    public PackageClass(String fullyQualifiedName) {
+    protected PackageClass(String fullyQualifiedName) {
         String processedName = removeDotJava(fullyQualifiedName);
         int dotIndex = processedName.lastIndexOf('.');
         if (dotIndex == -1) {
@@ -38,7 +41,7 @@ public class PackageClass {
     /**
      * Constructor taking the package and file names.  This constructor defaults the output to not end with .java.
      *
-     * @param pkg pacakge name
+     * @param pkg      package name
      * @param fileName file name
      */
     public PackageClass(String pkg, String fileName) {
@@ -52,11 +55,11 @@ public class PackageClass {
      * @param inputClass input
      */
     public PackageClass(Class<?> inputClass) {
-        this(inputClass.getPackage().getName(), inputClass.getSimpleName());
+        this(inputClass.getPackage() == null ? null : inputClass.getPackage().getName(), inputClass.getSimpleName());
     }
 
-    private String removeDotJava(String input){
-        if(input.endsWith(DOT_JAVA)){
+    private String removeDotJava(String input) {
+        if (input.endsWith(DOT_JAVA)) {
             return input.substring(0, input.length() - DOT_JAVA.length());
         }
         return input;
@@ -73,11 +76,11 @@ public class PackageClass {
 
     /**
      * Builds and returns the fully qualified class name represented by this class
-     * 
+     *
      * @return fully qualified class name
      */
     public String getFullyQualifiedName() {
-        if(StringUtils.isEmpty(pkg)){
+        if (StringUtils.isEmpty(pkg)) {
             return getClassName();
         }
         return pkg + "." + getClassName();

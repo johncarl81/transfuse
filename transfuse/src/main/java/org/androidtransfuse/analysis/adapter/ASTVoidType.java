@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.model.PackageClass;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -85,6 +87,11 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
+    public PackageClass getPackageClass() {
+        return new PackageClass(null, label);
+    }
+
+    @Override
     public boolean isAnnotated(Class<? extends Annotation> annotation) {
         return false;
     }
@@ -110,7 +117,7 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

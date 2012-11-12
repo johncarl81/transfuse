@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.model.PackageClass;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -58,7 +59,7 @@ public class ASTClassFactory {
 
             ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
-            ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(clazz.getCanonicalName());
+            ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(clazz.getCanonicalName(), new PackageClass(clazz));
 
             typeCache.put(clazz.getName(), astClassTypeProxy);
 

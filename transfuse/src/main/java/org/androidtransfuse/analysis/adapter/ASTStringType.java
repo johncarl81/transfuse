@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -22,6 +23,11 @@ public class ASTStringType implements ASTType {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public PackageClass getPackageClass() {
+        return new PackageClass(null, name);
     }
 
     @Override
@@ -119,7 +125,7 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

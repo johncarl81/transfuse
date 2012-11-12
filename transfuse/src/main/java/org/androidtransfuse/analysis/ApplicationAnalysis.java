@@ -68,7 +68,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     public ComponentDescriptor analyze(ASTType astType) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
-        PackageClass inputType = new PackageClass(astType.getName());
+        PackageClass inputType = astType.getPackageClass();
         PackageClass applicationClassName;
 
         if (StringUtils.isBlank(applicationAnnotation.name())) {

@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -126,7 +127,12 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public String toString(){
+    public PackageClass getPackageClass() {
+        return proxyASTType.getPackageClass();
+    }
+
+    @Override
+    public String toString() {
         return getName();
     }
 }

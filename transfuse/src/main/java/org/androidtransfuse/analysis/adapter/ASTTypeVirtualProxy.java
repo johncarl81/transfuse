@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.lang.annotation.Annotation;
@@ -13,18 +14,20 @@ import java.util.List;
 public class ASTTypeVirtualProxy implements ASTType {
 
     private final String name;
+    private final PackageClass packageClass;
     private ASTType proxy;
 
-    public ASTTypeVirtualProxy(String name) {
+    public ASTTypeVirtualProxy(String name, PackageClass packageClass) {
         this.name = name;
+        this.packageClass = packageClass;
     }
 
-    public void load(ASTType proxy){
+    public void load(ASTType proxy) {
         this.proxy = proxy;
     }
 
-    private ASTType getProxy(){
-        if(proxy != null){
+    private ASTType getProxy() {
+        if (proxy != null) {
             return proxy;
         }
         throw new TransfuseAnalysisException("Proxy not initialized prior to use");
@@ -111,11 +114,16 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public PackageClass getPackageClass() {
+        return packageClass;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof ASTType)){
+        if (!(o instanceof ASTType)) {
             return false;
         }
 

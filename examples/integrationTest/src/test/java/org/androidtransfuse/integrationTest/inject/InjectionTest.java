@@ -108,8 +108,13 @@ public class InjectionTest {
     }
 
     @Test
-    public void testImplementedByInjection(){
+    public void testImplementedByInjection() {
         assertNotNull(injection.getImplBy());
         assertEquals(ImplByImpl.class, injection.getImplBy().getClass());
+    }
+
+    @Test
+    public void testInnerClassInjection() {
+        assertNotNull(injection.innerClass.getActivity());
     }
 }

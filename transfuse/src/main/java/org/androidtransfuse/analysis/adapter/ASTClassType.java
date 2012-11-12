@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.collect.ImmutableCollection;
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -96,6 +97,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public PackageClass getPackageClass() {
+        return new PackageClass(clazz);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -140,7 +146,7 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

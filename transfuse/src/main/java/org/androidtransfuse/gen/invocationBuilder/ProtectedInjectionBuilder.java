@@ -65,7 +65,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     private ProtectedAccessorMethod buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint) {
-        PackageClass containedPackageClass = new PackageClass(constructorInjectionPoint.getContainingType().getName());
+        PackageClass containedPackageClass = constructorInjectionPoint.getContainingType().getPackageClass();
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
         JClass returnTypeRef = codeModel.ref(constructorInjectionPoint.getContainingType().getName());
@@ -143,7 +143,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     private <T> ProtectedAccessorMethod buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes) {
-        PackageClass containedPackageClass = new PackageClass(targetExpressionsType.getName());
+        PackageClass containedPackageClass = targetExpressionsType.getPackageClass();
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
         JClass returnTypeRef = codeModel.ref(returnType.getName());
@@ -186,7 +186,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     private ProtectedAccessorMethod buildFieldGetter(ASTType returnType, ASTType variableType, String name) {
-        PackageClass containedPackageClass = new PackageClass(variableType.getName());
+        PackageClass containedPackageClass = variableType.getPackageClass();
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
         JClass returnTypeRef = codeModel.ref(returnType.getName());
@@ -250,7 +250,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
     private ProtectedAccessorMethod buildFieldSet(FieldInjectionPoint fieldInjectionPoint) {
 
-        PackageClass containedPackageClass = new PackageClass(fieldInjectionPoint.getContainingType().getName());
+        PackageClass containedPackageClass = fieldInjectionPoint.getContainingType().getPackageClass();
         JDefinedClass helperClass = getPackageHelper(containedPackageClass);
 
         //get, ClassName, FS, fieldName

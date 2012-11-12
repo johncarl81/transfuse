@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.collect.ImmutableCollection;
+import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -17,13 +18,15 @@ import java.util.List;
 public class ASTElementType extends ASTElementBase implements ASTType {
 
     private final TypeElement typeElement;
+    private final PackageClass packageClass;
     private final ImmutableCollection<ASTMethod> methods;
     private final ImmutableCollection<ASTConstructor> constructors;
     private final ImmutableCollection<ASTField> fields;
     private final ImmutableCollection<ASTType> interfaces;
     private final ASTType superClass;
 
-    public ASTElementType(TypeElement typeElement,
+    public ASTElementType(PackageClass packageClass,
+                          TypeElement typeElement,
                           ImmutableCollection<ASTConstructor> constructors,
                           ImmutableCollection<ASTMethod> methods,
                           ImmutableCollection<ASTField> fields,
@@ -31,6 +34,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
                           ImmutableCollection<ASTType> interfaces,
                           ImmutableCollection<ASTAnnotation> annotations) {
         super(typeElement, annotations);
+        this.packageClass = packageClass;
         this.typeElement = typeElement;
         this.constructors = constructors;
         this.methods = methods;
@@ -44,6 +48,10 @@ public class ASTElementType extends ASTElementBase implements ASTType {
         return typeElement.getQualifiedName().toString();
     }
 
+    @Override
+    public PackageClass getPackageClass() {
+        return packageClass;
+    }
 
     @Override
     public Collection<ASTMethod> getMethods() {
@@ -125,7 +133,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

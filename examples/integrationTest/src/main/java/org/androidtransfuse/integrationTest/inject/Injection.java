@@ -47,6 +47,19 @@ public class Injection extends InjectionBase {
     private ImplBy implBy;
 
     @Inject
+    protected InnerClass innerClass;
+
+    public static class InnerClass {
+        @Inject
+        android.app.Activity activity;
+
+        public android.app.Activity getActivity() {
+            return activity;
+        }
+    }
+
+
+    @Inject
     public Injection(InjectTarget constructorInjection) {
         this.constructorInjection = constructorInjection;
     }

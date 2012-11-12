@@ -27,7 +27,7 @@ public final class TransfuseInjector {
     }
 
     public Injector buildSetupInjector(ProcessingEnvironment environment) {
-        setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(new MessagerLogger(environment.getMessager()), environment.getFiler()));
+        setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(new MessagerLogger(environment.getMessager()), environment.getFiler(), environment.getElementUtils()));
         return setupInjector;
     }
 

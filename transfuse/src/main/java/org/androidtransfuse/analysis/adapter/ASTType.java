@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.model.PackageClass;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -89,4 +91,11 @@ public interface ASTType extends ASTBase {
      * @return inheritance
      */
     boolean implementsFrom(ASTType type);
+
+    /**
+     * Returns a parsed package and class for this type
+     *
+     * @return package class.
+     */
+    PackageClass getPackageClass();
 }

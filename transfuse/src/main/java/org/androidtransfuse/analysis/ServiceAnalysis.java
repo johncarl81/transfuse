@@ -98,7 +98,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         if (input.extendsFrom(astClassFactory.buildASTClassType(android.app.Service.class))) {
             //vanilla Android Service
-            PackageClass activityPackageClass = new PackageClass(input.getName());
+            PackageClass activityPackageClass = input.getPackageClass();
             serviceClassName = buildPackageClass(input, activityPackageClass.getClassName());
         } else {
             //generated Android Service
@@ -124,7 +124,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private PackageClass buildPackageClass(ASTType input, String activityName) {
 
-        PackageClass inputPackageClass = new PackageClass(input.getName());
+        PackageClass inputPackageClass = input.getPackageClass();
 
         if (StringUtils.isBlank(activityName)) {
             return inputPackageClass.append("Service");

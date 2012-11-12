@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.collect.ImmutableMap;
+import org.androidtransfuse.model.PackageClass;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -126,12 +127,17 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public PackageClass getPackageClass() {
+        return new PackageClass(null, label);
+    }
+
+    @Override
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getName();
     }
 }

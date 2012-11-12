@@ -65,7 +65,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
         if (astType.extendsFrom(astClassFactory.buildASTClassType(android.content.BroadcastReceiver.class))) {
             //vanilla Android broadcast receiver
-            PackageClass activityPackageClass = new PackageClass(astType.getName());
+            PackageClass activityPackageClass = astType.getPackageClass();
             receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
         } else {
             receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
@@ -116,7 +116,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     }
 
     private PackageClass buildPackageClass(ASTType astType, String className) {
-        PackageClass inputPackageClass = new PackageClass(astType.getName());
+        PackageClass inputPackageClass = astType.getPackageClass();
 
         if (StringUtils.isBlank(className)) {
             return inputPackageClass.append("BroadcastReceiver");

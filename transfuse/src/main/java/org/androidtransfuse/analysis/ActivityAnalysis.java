@@ -99,7 +99,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         if (input.extendsFrom(astClassFactory.buildASTClassType(android.app.Activity.class))) {
             //vanilla Android activity
-            PackageClass activityPackageClass = new PackageClass(input.getName());
+            PackageClass activityPackageClass = input.getPackageClass();
             activityClassName = buildPackageClass(input, activityPackageClass.getClassName());
         } else {
             //generated Android activity
@@ -144,7 +144,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private PackageClass buildPackageClass(ASTType input, String activityName) {
 
-        PackageClass inputPackageClass = new PackageClass(input.getName());
+        PackageClass inputPackageClass = input.getPackageClass();
 
         if (StringUtils.isBlank(activityName)) {
             return inputPackageClass.append("Activity");

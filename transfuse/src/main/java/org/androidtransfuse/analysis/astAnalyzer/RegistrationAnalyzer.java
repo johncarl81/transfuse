@@ -6,15 +6,12 @@ import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.gen.componentBuilder.*;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.listeners.*;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -28,23 +25,14 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private final ImmutableMap<ASTType, RegistrationGeneratorFactory> generatorFactories;
     private final ASTClassFactory astClassFactory;
-    private final Analyzer analyzer;
-    private final JCodeModel codeModel;
-    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final InjectionPointFactory injectionPointFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
-    public RegistrationAnalyzer(Analyzer analyzer,
-                                ASTClassFactory astClassFactory,
-                                JCodeModel codeModel,
-                                VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+    public RegistrationAnalyzer(ASTClassFactory astClassFactory,
                                 InjectionPointFactory injectionPointFactory,
                                 ComponentBuilderFactory componentBuilderFactory) throws NoSuchMethodException {
-        this.analyzer = analyzer;
         this.astClassFactory = astClassFactory;
-        this.codeModel = codeModel;
-        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.componentBuilderFactory = componentBuilderFactory;
 
@@ -82,21 +70,21 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         return astClassFactory.buildASTClassType(clazz);
     }
 
-    private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory>{
+    private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory> {
         @Override
         public RegistrationGeneratorFactory apply(String value) {
-            return new ViewRegistrationGeneratorFactory(value) ;
+            return new ViewRegistrationGeneratorFactory(value);
         }
     }
 
-    private final class CallthroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory>{
+    private final class CallthroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory> {
         @Override
         public RegistrationGeneratorFactory apply(ASTType astType) {
             return buildActivityDelegateRegistrationGeneratorFactory(astType);
         }
     }
 
-    private interface RegistrationGeneratorFactory{
+    private interface RegistrationGeneratorFactory {
 
         RegistrationGenerator buildRegistrationGenerator(InjectionNode injectionNode, ASTBase astBase, ASTAnnotation registerAnnotation, AnalysisContext context);
     }
@@ -115,16 +103,13 @@ public class RegistrationAnalyzer implements ASTAnalysis {
             InjectionNode viewInjectionNode = buildViewInjectionNode(registerAnnotation, context);
 
             ViewRegistrationInvocationBuilder invocationBuilder;
-            if(astBase instanceof ASTType){
+            if (astBase instanceof ASTType) {
                 invocationBuilder = new ViewTypeRegistrationInvocationBuilderImpl();
-            }
-            else if(astBase instanceof ASTMethod){
+            } else if (astBase instanceof ASTMethod) {
                 invocationBuilder = componentBuilderFactory.buildViewMethodRegistrationInvocationBuilder((ASTMethod) astBase);
-            }
-            else if(astBase instanceof ASTField){
+            } else if (astBase instanceof ASTField) {
                 invocationBuilder = componentBuilderFactory.buildViewFieldRegistrationInvocationBuilder((ASTField) astBase);
-            }
-            else{
+            } else {
                 throw new TransfuseAnalysisException("ASTBase type not mapped");
             }
 
@@ -145,21 +130,18 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
             ActivityDelegateASTReference delegateASTReference;
 
-            if(astBase instanceof ASTType){
+            if (astBase instanceof ASTType) {
                 delegateASTReference = componentBuilderFactory.buildActivityTypeDelegateASTReference();
-            }
-            else if(astBase instanceof ASTMethod){
+            } else if (astBase instanceof ASTMethod) {
                 delegateASTReference = componentBuilderFactory.buildActivityMethodDelegateASTReference((ASTMethod) astBase);
-            }
-            else if(astBase instanceof ASTField){
+            } else if (astBase instanceof ASTField) {
                 delegateASTReference = componentBuilderFactory.buildActivityFieldDelegateASTReference((ASTField) astBase);
-            }
-            else{
+            } else {
                 throw new TransfuseAnalysisException("ASTBase type not mapped");
             }
 
             //set injection node to field
-            if(!injectionNode.containsAspect(ASTInjectionAspect.class)){
+            if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
                 injectionNode.addAspect(new ASTInjectionAspect());
             }
             injectionNode.getAspect(ASTInjectionAspect.class).setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
@@ -172,7 +154,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         ImmutableList.Builder<ASTMethod> delegateMethods = ImmutableList.builder();
         for (ASTMethod method : listenerInterface.getMethods()) {
-            if(method.isAnnotated(Listener.class)){
+            if (method.isAnnotated(Listener.class)) {
                 delegateMethods.add(method);
             }
         }

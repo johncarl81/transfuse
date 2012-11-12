@@ -4,12 +4,14 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
+import org.androidtransfuse.model.PackageClass;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,8 @@ public class ASTElementFactory {
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
     @Inject
     private ASTFactory astFactory;
+    @Inject
+    private Elements elements;
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
 
@@ -65,10 +69,12 @@ public class ASTElementFactory {
                     .transform(astTypeBuilderVisitor)
                     .toImmutableList();
 
-            ImmutableList.Builder<ASTAnnotation> annotations =  ImmutableList.builder();
+            ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
 
-            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(typeElement.getSimpleName().toString());
-            typeCache.put(typeElement, astTypeProxy );
+            PackageClass packageClass = new PackageClass(elements.getPackageOf(typeElement).toString(), typeElement.getSimpleName().toString());
+
+            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(typeElement.getSimpleName().toString(), packageClass);
+            typeCache.put(typeElement, astTypeProxy);
 
             //iterate and build the contained elements within this TypeElement
             constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
@@ -77,7 +83,8 @@ public class ASTElementFactory {
 
             annotations.addAll(buildAnnotations(typeElement));
 
-            ASTType astType = new ASTElementType(typeElement,
+            ASTType astType = new ASTElementType(packageClass,
+                    typeElement,
                     constructors.build(),
                     methods.build(),
                     fields.build(),
@@ -92,7 +99,7 @@ public class ASTElementFactory {
         return typeCache.get(typeElement);
     }
 
-    private <T extends ASTBase>  List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType){
+    private <T extends ASTBase> List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType) {
         return FluentIterable
                 .from(enclosedElements)
                 .transform(astElementConverterFactory.buildASTElementConverter(astType))

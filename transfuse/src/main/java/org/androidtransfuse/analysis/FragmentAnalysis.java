@@ -201,7 +201,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private PackageClass buildPackageClass(ASTType input, String fragmentName) {
 
-        PackageClass inputPackageClass = new PackageClass(input.getName());
+        PackageClass inputPackageClass = input.getPackageClass();
 
         if (StringUtils.isBlank(fragmentName)) {
             return inputPackageClass.append("Fragment");
