@@ -15,7 +15,7 @@ public class PackageClassTest {
     private static final String DOT_JAVA = ".java";
     private static final String TEST_NAME = "Name";
 
-    public static class Inner {
+    public static class Inner$Stuff {
     }
 
     @Test
@@ -30,12 +30,12 @@ public class PackageClassTest {
 
     @Test
     public void testInnerClassInput() {
-        PackageClass packageClass = new PackageClass(Inner.class);
+        PackageClass packageClass = new PackageClass(Inner$Stuff.class);
 
-        assertEquals("org.androidtransfuse.model.PackageClassTest$Inner", packageClass.getFullyQualifiedName());
-        assertEquals("PackageClassTest$Inner", packageClass.getClassName());
+        assertEquals("org.androidtransfuse.model.PackageClassTest$Inner$Stuff", packageClass.getFullyQualifiedName());
+        assertEquals("PackageClassTest$Inner$Stuff", packageClass.getClassName());
         assertEquals("org.androidtransfuse.model", packageClass.getPackage());
-        assertEquals("org.androidtransfuse.model.PackageClassTest.Inner", packageClass.getCanonicalName());
+        assertEquals("org.androidtransfuse.model.PackageClassTest.Inner$Stuff", packageClass.getCanonicalName());
     }
 
     @Test

@@ -55,11 +55,16 @@ public class PackageClass {
      * @param inputClass input
      */
     public PackageClass(Class<?> inputClass) {
+        String canonicalName = inputClass.getCanonicalName();
         if (inputClass.getPackage() != null) {
-            this.fileName = inputClass.getName().substring(inputClass.getPackage().getName().length() + 1).replace('$', '.');
             this.pkg = inputClass.getPackage().getName();
+            if (canonicalName != null) {
+                this.fileName = canonicalName.substring(this.pkg.length() + 1);
+            } else {
+                this.fileName = inputClass.getName().substring(inputClass.getPackage().getName().length() + 1).replace('$', '.');
+            }
         } else {
-            this.fileName = inputClass.getName().replace('$', '.');
+            this.fileName = canonicalName;
             this.pkg = null;
         }
     }
