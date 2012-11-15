@@ -28,6 +28,8 @@ import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGenerated
  */
 public class IntentFactoryStrategyGenerator implements ExpressionVariableDependentGenerator {
 
+    private static final String STRATEGY_EXT = "Strategy";
+
     private final Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
@@ -67,7 +69,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
         try {
-            JDefinedClass strategyClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName() + "Strategy", ClassType.CLASS);
+            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
+            JDefinedClass strategyClass = jPackage._class(descriptor.getPackageClass().append(STRATEGY_EXT).getClassName());
 
             annotateGeneratedClass(strategyClass);
 

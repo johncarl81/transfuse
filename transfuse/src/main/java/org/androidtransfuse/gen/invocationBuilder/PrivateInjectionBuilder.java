@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
 
-    private JCodeModel codeModel;
+    private final JCodeModel codeModel;
 
     @Inject
     public PrivateInjectionBuilder(JCodeModel codeModel) {

@@ -36,6 +36,7 @@ public class ParcelableGenerator {
     private static final String WRITE_TO_PARCEL = "writeToParcel";
     private static final String DESCRIBE_CONTENTS = "describeContents";
     private static final String GET_WRAPPED = "getWrapped";
+    private static final String PARCELABLE_EXT = "_Parcelable";
 
     private final JCodeModel codeModel;
     private final ParcelableAnalysis parcelableAnalysis;
@@ -70,7 +71,8 @@ public class ParcelableGenerator {
         try {
             JType inputType = codeModel.ref(type.getName());
 
-            JDefinedClass parcelableClass = codeModel._class(JMod.PUBLIC, type.getName() + "_Parcelable", ClassType.CLASS);
+            JPackage jPackage = codeModel._package(type.getPackageClass().getPackage());
+            JDefinedClass parcelableClass = jPackage._class(type.getPackageClass().append(PARCELABLE_EXT).getClassName());
             parcelableClass._implements(Parcelable.class)
                     ._implements(codeModel.ref(ParcelableWrapper.class).narrow(inputType));
 

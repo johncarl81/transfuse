@@ -255,7 +255,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
         //get, ClassName, FS, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID,
-                "get" + containedPackageClass.getClassName() + "$FS$" + fieldInjectionPoint.getName());
+                "get" + containedPackageClass.getClassName().replace('.', '$') + "$FS$" + fieldInjectionPoint.getName());
 
         JClass containerType = codeModel.ref(fieldInjectionPoint.getContainingType().getName());
         JVar containerParam = accessorMethod.param(containerType, namer.generateName(containerType));
@@ -280,7 +280,8 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
     private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
         try {
-            JDefinedClass helperClass = codeModel._class(JMod.PUBLIC, helperClassName.getFullyQualifiedName(), ClassType.CLASS);
+            JPackage jPackage = codeModel._package(helperClassName.getPackage());
+            JDefinedClass helperClass = jPackage._class(helperClassName.getClassName());
 
             annotateGeneratedClass(helperClass);
 

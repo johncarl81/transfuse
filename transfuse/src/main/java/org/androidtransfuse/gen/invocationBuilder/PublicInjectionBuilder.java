@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class PublicInjectionBuilder implements ModifierInjectionBuilder {
 
-    private TypeInvocationHelper invocationHelper;
+    private final TypeInvocationHelper invocationHelper;
 
     @Inject
     public PublicInjectionBuilder(TypeInvocationHelper invocationHelper) {

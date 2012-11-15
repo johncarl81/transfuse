@@ -31,6 +31,7 @@ public class VirtualProxyGenerator {
     private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
     private static final String CHECK_DELEGATE = "checkDelegate";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
+    private static final String VPROXY_EXT = "_VProxy";
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;
@@ -45,7 +46,7 @@ public class VirtualProxyGenerator {
     }
 
     public JDefinedClass generateProxy(InjectionNode injectionNode) {
-        if(!descriptorCache.containsKey(injectionNode.getASTType())){
+        if (!descriptorCache.containsKey(injectionNode.getASTType())) {
             descriptorCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
         }
         return descriptorCache.get(injectionNode.getASTType());
@@ -55,7 +56,8 @@ public class VirtualProxyGenerator {
 
         try {
 
-            JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_VProxy", ClassType.CLASS);
+            JPackage jPackage = codeModel._package(injectionNode.getASTType().getPackageClass().getPackage());
+            JDefinedClass definedClass = jPackage._class(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT).getClassName());
 
             annotateGeneratedClass(definedClass);
 
@@ -99,15 +101,15 @@ public class VirtualProxyGenerator {
                 ASTMethod equals = getASTMethod("equals", Object.class);
                 ASTMethod hashCode = getASTMethod("hashCode");
                 ASTMethod toString = getASTMethod("toString");
-                if(methodSignatures.add(new MethodSignature(equals))){
+                if (methodSignatures.add(new MethodSignature(equals))) {
                     buildProxyMethod(definedClass, delegateField, delegateCheckMethod, equals);
                 }
 
-                if(methodSignatures.add(new MethodSignature(hashCode))){
+                if (methodSignatures.add(new MethodSignature(hashCode))) {
                     buildProxyMethod(definedClass, delegateField, delegateCheckMethod, hashCode);
                 }
 
-                if(methodSignatures.add(new MethodSignature(toString))){
+                if (methodSignatures.add(new MethodSignature(toString))) {
                     buildProxyMethod(definedClass, delegateField, delegateCheckMethod, toString);
                 }
 

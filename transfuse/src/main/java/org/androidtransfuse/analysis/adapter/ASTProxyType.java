@@ -18,11 +18,11 @@ import java.util.List;
 public class ASTProxyType implements ASTType {
 
     private final ASTType proxyASTType;
-    private final String name;
+    private final PackageClass packageClass;
 
-    public ASTProxyType(ASTType proxyASTType, String name) {
+    public ASTProxyType(ASTType proxyASTType, PackageClass packageClass) {
         this.proxyASTType = proxyASTType;
-        this.name = name;
+        this.packageClass = packageClass;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ASTProxyType implements ASTType {
     @Override
     public String getName() {
         //proxy name
-        return name;
+        return packageClass.getFullyQualifiedName();
     }
 
     @Override
@@ -91,14 +91,14 @@ public class ASTProxyType implements ASTType {
         }
         ASTProxyType rhs = (ASTProxyType) obj;
         return new EqualsBuilder()
-                .append(name, rhs.name)
+                .append(packageClass, rhs.packageClass)
                 .append(proxyASTType, rhs.proxyASTType)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(proxyASTType).hashCode();
+        return new HashCodeBuilder().append(packageClass).append(proxyASTType).hashCode();
     }
 
     @Override

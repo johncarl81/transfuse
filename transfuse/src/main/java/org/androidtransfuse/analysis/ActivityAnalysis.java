@@ -125,7 +125,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation, input);
+        setupManifest(activityClassName.getClassName(), activityAnnotation, input);
 
         return activityDescriptor;
     }

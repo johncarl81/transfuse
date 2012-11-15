@@ -20,6 +20,7 @@ import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGenerated
 public class ProviderGenerator {
 
     private static final String GET_METHOD = "get";
+    private static final String PROVIDER_EXT = "_Provider";
 
     private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
     private final JCodeModel codeModel;
@@ -46,7 +47,8 @@ public class ProviderGenerator {
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
-            JDefinedClass providerClass = codeModel._class(JMod.PUBLIC, injectionNode.getClassName() + "_Provider", ClassType.CLASS);
+            JPackage jPackage = codeModel._package(injectionNode.getASTType().getPackageClass().getPackage());
+            JDefinedClass providerClass = jPackage._class(injectionNode.getASTType().getPackageClass().append(PROVIDER_EXT).getClassName());
 
             annotateGeneratedClass(providerClass);
 

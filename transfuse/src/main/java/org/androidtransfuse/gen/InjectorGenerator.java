@@ -51,7 +51,8 @@ public class InjectorGenerator implements Generator<ASTType> {
         }
 
         try {
-            JDefinedClass implClass = codeModel._class(JMod.PUBLIC, descriptor.getName() + IMPL_EXT, ClassType.CLASS);
+            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
+            JDefinedClass implClass = jPackage._class(descriptor.getPackageClass().append(IMPL_EXT).getClassName());
             JClass interfaceClass = codeModel.ref(descriptor.getName());
 
             implClass._implements(interfaceClass);

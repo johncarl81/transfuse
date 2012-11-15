@@ -59,7 +59,9 @@ public class ASTClassFactory {
 
             ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
-            ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(clazz.getCanonicalName(), new PackageClass(clazz));
+            PackageClass packageClass = new PackageClass(clazz);
+
+            ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(packageClass);
 
             typeCache.put(clazz.getName(), astClassTypeProxy);
 
@@ -87,7 +89,7 @@ public class ASTClassFactory {
 
             annotationBuilder.addAll(buildAnnotations(clazz));
 
-            ASTType astType = new ASTClassType(clazz, annotationBuilder.build(),
+            ASTType astType = new ASTClassType(clazz, packageClass, annotationBuilder.build(),
                     constructorBuilder.build(),
                     methodBuilder.build(),
                     fieldBuilder.build(),

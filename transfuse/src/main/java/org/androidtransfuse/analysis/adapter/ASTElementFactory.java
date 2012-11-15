@@ -71,10 +71,9 @@ public class ASTElementFactory {
 
             ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
 
-            //todo: parse class name from package to accomodate inner classes
-            PackageClass packageClass = new PackageClass(elements.getPackageOf(typeElement).toString(), typeElement.getSimpleName().toString());
+            PackageClass packageClass = buildPackageClass(typeElement);
 
-            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(typeElement.getSimpleName().toString(), packageClass);
+            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
             typeCache.put(typeElement, astTypeProxy);
 
             //iterate and build the contained elements within this TypeElement
@@ -98,6 +97,16 @@ public class ASTElementFactory {
         }
 
         return typeCache.get(typeElement);
+    }
+
+    private PackageClass buildPackageClass(TypeElement typeElement) {
+
+        PackageElement packageElement = elements.getPackageOf(typeElement);
+
+        String pkg = packageElement.getQualifiedName().toString();
+        String name = typeElement.getQualifiedName().toString().substring(pkg.length() + 1);
+
+        return new PackageClass(pkg, name);
     }
 
     private <T extends ASTBase> List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType) {

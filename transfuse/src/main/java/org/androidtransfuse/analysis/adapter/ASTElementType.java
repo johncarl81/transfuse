@@ -45,7 +45,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     @Override
     public String getName() {
-        return typeElement.getQualifiedName().toString();
+        return packageClass.getCanonicalName();
     }
 
     @Override

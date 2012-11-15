@@ -18,6 +18,7 @@ import java.util.List;
 public class ASTClassType implements ASTType {
 
     private final Class<?> clazz;
+    private final PackageClass packageClass;
     private final ImmutableCollection<ASTAnnotation> annotationList;
     private final ImmutableCollection<ASTMethod> methods;
     private final ImmutableCollection<ASTConstructor> constructors;
@@ -26,6 +27,7 @@ public class ASTClassType implements ASTType {
     private final ImmutableCollection<ASTType> interfaces;
 
     public ASTClassType(Class<?> clazz,
+                        PackageClass packageClass,
                         ImmutableCollection<ASTAnnotation> annotationList,
                         ImmutableCollection<ASTConstructor> constructors,
                         ImmutableCollection<ASTMethod> methods,
@@ -33,6 +35,7 @@ public class ASTClassType implements ASTType {
                         ASTType superClass,
                         ImmutableCollection<ASTType> interfaces) {
         this.clazz = clazz;
+        this.packageClass = packageClass;
         this.annotationList = annotationList;
         this.constructors = constructors;
         this.methods = methods;
@@ -68,7 +71,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public String getName() {
-        return clazz.getCanonicalName();
+        return packageClass.getCanonicalName();
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public PackageClass getPackageClass() {
-        return new PackageClass(clazz);
+        return packageClass;
     }
 
     @Override

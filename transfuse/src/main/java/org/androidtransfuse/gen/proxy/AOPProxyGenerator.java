@@ -9,6 +9,7 @@ import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -26,6 +27,7 @@ public class AOPProxyGenerator {
 
     private static final String SUPER_REF = "super";
     private static final String CLASS_GET_METHOD = "getMethod";
+    private static final String AOPPROXY_EXT = "_AOPProxy";
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
@@ -51,14 +53,16 @@ public class AOPProxyGenerator {
     private InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
-        String proxyClassName = injectionNode.getClassName() + "_AOPProxy";
+
+        PackageClass proxyClassName = injectionNode.getASTType().getPackageClass().append(AOPPROXY_EXT);
+
         ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
         ConstructorInjectionPoint constructorInjectionPoint = injectionAspect.getConstructorInjectionPoint();
         ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, injectionNode.getASTType());
 
         try {
-
-            definedClass = codeModel._class(JMod.PUBLIC, proxyClassName, ClassType.CLASS);
+            JPackage generatedPackage = codeModel._package(proxyClassName.getPackage());
+            definedClass = generatedPackage._class(proxyClassName.getClassName());
 
             annotateGeneratedClass(definedClass);
 
@@ -106,7 +110,7 @@ public class AOPProxyGenerator {
         return buildProxyInjectionNode(injectionNode, proxyClassName, injectionAspect, proxyConstructorInjectionPoint);
     }
 
-    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, String proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
+    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, PackageClass proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
         InjectionNode proxyInjectionNode = new InjectionNode(
                 new ASTProxyType(injectionNode.getASTType(), proxyClassName));
 
@@ -187,7 +191,7 @@ public class AOPProxyGenerator {
 
     private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
 
-        try{
+        try {
             JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, namer.generateClassName(MethodInterceptorChain.MethodExecution.class));
             methodExecutionClass._implements(MethodInterceptorChain.MethodExecution.class);
 

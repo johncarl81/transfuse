@@ -13,12 +13,10 @@ import java.util.List;
  */
 public class ASTTypeVirtualProxy implements ASTType {
 
-    private final String name;
     private final PackageClass packageClass;
     private ASTType proxy;
 
-    public ASTTypeVirtualProxy(String name, PackageClass packageClass) {
-        this.name = name;
+    public ASTTypeVirtualProxy(PackageClass packageClass) {
         this.packageClass = packageClass;
     }
 
@@ -110,7 +108,7 @@ public class ASTTypeVirtualProxy implements ASTType {
 
     @Override
     public String getName() {
-        return name;
+        return packageClass.getCanonicalName();
     }
 
     @Override

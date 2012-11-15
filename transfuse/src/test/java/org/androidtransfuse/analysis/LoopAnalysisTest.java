@@ -108,7 +108,7 @@ public class LoopAnalysisTest {
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        Class<Provider<C>> providerClass = (Class<Provider<C>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+        Class<Provider<C>> providerClass = (Class<Provider<C>>) classLoader.loadClass(providerPC.getCanonicalName());
 
         Provider<C> testProvider = providerClass.newInstance();
 
@@ -132,7 +132,7 @@ public class LoopAnalysisTest {
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        Class<Provider<B>> providerClass = (Class<Provider<B>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+        Class<Provider<B>> providerClass = (Class<Provider<B>>) classLoader.loadClass(providerPC.getCanonicalName());
 
         Provider<B> testProvider = providerClass.newInstance();
 
@@ -155,7 +155,7 @@ public class LoopAnalysisTest {
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        Class<Provider<A>> providerClass = (Class<Provider<A>>)classLoader.loadClass(providerPC.getFullyQualifiedName());
+        Class<Provider<A>> providerClass = (Class<Provider<A>>) classLoader.loadClass(providerPC.getCanonicalName());
 
         Provider<A> testProvider = providerClass.newInstance();
 

@@ -56,10 +56,10 @@ public class PackageClass {
      */
     public PackageClass(Class<?> inputClass) {
         if (inputClass.getPackage() != null) {
-            this.fileName = inputClass.getName().substring(inputClass.getPackage().getName().length() + 1);
+            this.fileName = inputClass.getName().substring(inputClass.getPackage().getName().length() + 1).replace('$', '.');
             this.pkg = inputClass.getPackage().getName();
         } else {
-            this.fileName = inputClass.getCanonicalName();
+            this.fileName = inputClass.getName().replace('$', '.');
             this.pkg = null;
         }
     }
@@ -77,7 +77,7 @@ public class PackageClass {
      * @return class name
      */
     public String getClassName() {
-        return fileName;
+        return removeDotJava(fileName).replace('.', '$');
     }
 
     /**
@@ -90,6 +90,10 @@ public class PackageClass {
             return getClassName();
         }
         return pkg + "." + getClassName();
+    }
+
+    public String getPackage() {
+        return pkg;
     }
 
     /**
@@ -113,7 +117,7 @@ public class PackageClass {
     }
 
     public String toString() {
-        return getFullyQualifiedName();
+        return getCanonicalName();
     }
 
     @Override
@@ -134,5 +138,12 @@ public class PackageClass {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().append(fileName).append(fileName).hashCode();
+    }
+
+    public String getCanonicalName() {
+        if (pkg == null) {
+            return fileName;
+        }
+        return pkg + "." + fileName;
     }
 }

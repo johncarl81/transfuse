@@ -28,13 +28,13 @@ public class InjectorRepositoryGenerator {
     }
 
     public void generateInjectorRepository(JClass interfaceClass, JDefinedClass implClass) throws JClassAlreadyExistsException {
-        if(injectorRegistrationBlock == null){
-            JDefinedClass injectorRepsoitoryClass = codeModel._class(JMod.PUBLIC, REPOSITORY_NAME, ClassType.CLASS);
+        if (injectorRegistrationBlock == null) {
+            JDefinedClass injectorRepsoitoryClass = codeModel._class(REPOSITORY_NAME);
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Object.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Object.class);
-            registrationMap = injectorRepsoitoryClass.field(JMod.PRIVATE | JMod.STATIC, mapType , MAP_NAME);
+            registrationMap = injectorRepsoitoryClass.field(JMod.PRIVATE | JMod.STATIC, mapType, MAP_NAME);
 
             //getter
             JMethod getMethod = injectorRepsoitoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);

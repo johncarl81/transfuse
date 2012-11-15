@@ -22,56 +22,62 @@ public class PackageClassTest {
     public void testClassInput() {
         PackageClass packageClass = new PackageClass(PackageClassTest.class);
 
-        assertEquals(PackageClassTest.class.getName(), packageClass.getFullyQualifiedName());
+        assertEquals("org.androidtransfuse.model.PackageClassTest", packageClass.getFullyQualifiedName());
+        assertEquals("PackageClassTest", packageClass.getClassName());
+        assertEquals("org.androidtransfuse.model", packageClass.getPackage());
+        assertEquals("org.androidtransfuse.model.PackageClassTest", packageClass.getCanonicalName());
     }
 
     @Test
     public void testInnerClassInput() {
         PackageClass packageClass = new PackageClass(Inner.class);
 
-        assertEquals(Inner.class.getName(), packageClass.getFullyQualifiedName());
+        assertEquals("org.androidtransfuse.model.PackageClassTest$Inner", packageClass.getFullyQualifiedName());
+        assertEquals("PackageClassTest$Inner", packageClass.getClassName());
+        assertEquals("org.androidtransfuse.model", packageClass.getPackage());
+        assertEquals("org.androidtransfuse.model.PackageClassTest.Inner", packageClass.getCanonicalName());
     }
 
     @Test
     public void testClassNameParsing() {
         PackageClass packageClass = new PackageClass(FULLY_QUALIFIED_NAME);
 
-        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getCanonicalName());
     }
 
     @Test
     public void testSeparateClassPackage() {
         PackageClass packageClass = new PackageClass(PACKAGE_NAME, CLASS_NAME);
 
-        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getCanonicalName());
     }
 
     @Test
     public void testDotJavaRemoval() {
         PackageClass packageClass = new PackageClass(FULLY_QUALIFIED_NAME + DOT_JAVA);
 
-        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(FULLY_QUALIFIED_NAME, packageClass.getCanonicalName());
     }
 
     @Test
     public void testAppend() {
         PackageClass packageClass = new PackageClass(FULLY_QUALIFIED_NAME).append(TEST_NAME);
 
-        assertEquals(FULLY_QUALIFIED_NAME + TEST_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(FULLY_QUALIFIED_NAME + TEST_NAME, packageClass.getCanonicalName());
     }
 
     @Test
     public void testNoPackage() {
         PackageClass packageClass = new PackageClass(CLASS_NAME);
 
-        assertEquals(CLASS_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(CLASS_NAME, packageClass.getCanonicalName());
     }
 
     @Test
     public void testReplace() {
         PackageClass packageClass = new PackageClass(FULLY_QUALIFIED_NAME).replaceName(TEST_NAME);
 
-        assertEquals(PACKAGE_NAME + "." + TEST_NAME, packageClass.getFullyQualifiedName());
+        assertEquals(PACKAGE_NAME + "." + TEST_NAME, packageClass.getCanonicalName());
     }
 
     @Test

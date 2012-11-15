@@ -44,7 +44,7 @@ public class StringCodeWriter extends CodeWriter {
 
         for (Map.Entry<PackageClass, ByteArrayOutputStream> byteStreamEntry : streams.entrySet()) {
             outputMap.put(byteStreamEntry.getKey()
-                    .getFullyQualifiedName(),
+                    .getCanonicalName(),
                     new String(byteStreamEntry.getValue().toByteArray()));
         }
 

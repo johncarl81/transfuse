@@ -37,7 +37,8 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
         }
 
         try {
-            final JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, descriptor.getPackageClass().getFullyQualifiedName(), ClassType.CLASS);
+            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
+            final JDefinedClass definedClass = jPackage._class(descriptor.getPackageClass().getClassName());
 
             annotateGeneratedClass(definedClass);
 
@@ -50,9 +51,9 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
             //Injections
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
-                        block,
-                        definedClass,
-                        descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescrptor));
+                            block,
+                            definedClass,
+                            descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescrptor));
 
             //Registrations
             for (ExpressionVariableDependentGenerator registrationGenerator : descriptor.getRegistrations()) {

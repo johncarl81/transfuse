@@ -124,7 +124,7 @@ public class AOPProxyGeneratorTest {
         fragmentGeneratorHarness.buildProvider(delegateInjectionNode, TEST_PACKAGE_FILENAME);
 
         ClassLoader classLoader = codeGenerationUtil.build();
-        Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getFullyQualifiedName());
+        Class<Provider<MockDelegate>> generatedFactoryClass = (Class<Provider<MockDelegate>>) classLoader.loadClass(TEST_PACKAGE_FILENAME.getCanonicalName());
 
         assertNotNull(generatedFactoryClass);
         Provider<MockDelegate> provider = generatedFactoryClass.newInstance();
