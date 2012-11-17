@@ -1,7 +1,8 @@
 package org.androidtransfuse;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.inject.ImplementedBy;
-import com.google.inject.Injector;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -21,8 +22,12 @@ import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
+import org.androidtransfuse.util.SupportedAnnotations;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
@@ -30,6 +35,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,14 +55,15 @@ import static com.google.common.collect.Collections2.transform;
  *
  * @author John Ericksen
  */
-@SupportedAnnotationTypes({"org.androidtransfuse.annotations.Activity",
-        "org.androidtransfuse.annotations.Application",
-        "org.androidtransfuse.annotations.BroadcastReceiver",
-        "org.androidtransfuse.annotations.Service",
-        "org.androidtransfuse.annotations.Fragment",
-        "org.androidtransfuse.annotations.TransfuseModule",
-        "org.androidtransfuse.annotations.Injector",
-        "com.google.inject.ImplementedBy"})
+@SupportedAnnotations({
+        Activity.class,
+        Application.class,
+        BroadcastReceiver.class,
+        Service.class,
+        Fragment.class,
+        TransfuseModule.class,
+        Injector.class,
+        ImplementedBy.class})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
@@ -79,8 +86,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        Injector injector = TransfuseInjector.getInstance().buildSetupInjector(processingEnv);
-        injector.injectMembers(this);
+        TransfuseInjector.getInstance().buildSetupInjector(processingEnv).injectMembers(this);
     }
 
     @Override
@@ -98,7 +104,7 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
                     buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
                     buildR(rBuilder, "android.R"));
 
-            Injector injector = TransfuseInjector.getInstance().buildProcessingInjector(r, manifest);
+            com.google.inject.Injector injector = TransfuseInjector.getInstance().buildProcessingInjector(r, manifest);
 
             TransfuseProcessor transfuseProcessor = injector.getInstance(TransfuseProcessor.class);
 
@@ -172,5 +178,25 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
         return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
+    }
+
+    /**
+     * Gets the supported annotations from the @SupportedAnnotations annotation, which deals with classes instead of
+     * strings.
+     *
+     * @return Set of supported annotation names
+     */
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        Class<? extends Annotation>[] supportedAnnotations = getClass().getAnnotation(SupportedAnnotations.class).value();
+
+        return FluentIterable
+                .from(Arrays.asList(supportedAnnotations))
+                .transform(new Function<Class<? extends Annotation>, String>() {
+                    @Override
+                    public String apply(Class<? extends Annotation> input) {
+                        return input.getName();
+                    }
+                }).toImmutableSet();
     }
 }
