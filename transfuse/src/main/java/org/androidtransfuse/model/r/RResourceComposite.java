@@ -1,5 +1,7 @@
 package org.androidtransfuse.model.r;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Arrays;
@@ -12,11 +14,10 @@ public class RResourceComposite implements RResource {
     private final ImmutableList<RResource> resources;
 
     public RResourceComposite(RResource... resources) {
-        ImmutableList.Builder<RResource> resourceBuilder = ImmutableList.builder();
-        if (resources != null) {
-            resourceBuilder.addAll(Arrays.asList(resources)).build();
-        }
-        this.resources = resourceBuilder.build();
+        this.resources = FluentIterable
+                .from(Arrays.asList(resources))
+                .filter(Predicates.notNull())
+                .toImmutableList();
     }
 
     @Override

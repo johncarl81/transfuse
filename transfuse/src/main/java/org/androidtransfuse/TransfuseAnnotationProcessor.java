@@ -39,12 +39,12 @@ import static com.google.common.collect.Collections2.transform;
 /**
  * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
  * codebase.
- *
+ * <p/>
  * To use this class, you simply have to annotate your classes with the proper root components (Activity,
  * Application, etc) and have this annotation processor on the classpath during a full compilation.
- *
+ * <p/>
  * This approach is compatible with Java 6 and above.
- *
+ * <p/>
  * See http://androidtransfuse.org for more details
  *
  * @author John Ericksen
@@ -161,9 +161,11 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
     private RResource buildR(RBuilder rBuilder, String className) {
         TypeElement rTypeElement = processingEnv.getElementUtils().getTypeElement(className);
-        Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
-
-        return rBuilder.buildR(rInnerTypes);
+        if (rTypeElement != null) {
+            Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
+            return rBuilder.buildR(rInnerTypes);
+        }
+        return null;
     }
 
     private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {

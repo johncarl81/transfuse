@@ -55,4 +55,20 @@ public class RResourceCompositeTest {
         assertEquals(resourceTwo.getResourceIdentifier(RTest.two.id2), resourceIdTwo);
         assertNull(resourceComposite.getResourceIdentifier(RESOURCE_THAT_DOESNT_EXIST));
     }
+
+    @Test
+    public void testNullInput() {
+        RResourceComposite rResourceComposite = new RResourceComposite(null, resourceOne);
+
+        ResourceIdentifier resourceIdOne = rResourceComposite.getResourceIdentifier(RTest.one.id1);
+        assertEquals(resourceOne.getResourceIdentifier(RTest.one.id1), resourceIdOne);
+        assertNull(rResourceComposite.getResourceIdentifier(RTest.two.id2));
+    }
+
+    @Test
+    public void testEmptyResourceComposite() {
+        RResourceComposite nullResourceComposite = new RResourceComposite();
+
+        assertNull(nullResourceComposite.getResourceIdentifier(RTest.one.id1));
+    }
 }
