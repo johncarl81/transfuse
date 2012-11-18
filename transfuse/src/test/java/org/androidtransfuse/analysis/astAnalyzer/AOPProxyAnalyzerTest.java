@@ -49,7 +49,7 @@ public class AOPProxyAnalyzerTest {
 
     public class AOPAnnotationMethodInterceptor implements MethodInterceptor {
         @Override
-        public Object invoke(MethodInvocation invocation) throws Throwable {
+        public Object invoke(MethodInvocation invocation) {
             return null;
         }
     }

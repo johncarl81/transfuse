@@ -1,11 +1,13 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.model.PackageClass;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * @author John Ericksen
@@ -13,23 +15,25 @@ import java.util.Map;
 @Singleton
 public class InjectorRepositoryGenerator {
 
-    private static final String REPOSITORY_NAME = "org.androidtransfuse.InjectorRepository";
+    private static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "InjectorRepository");
     private static final String GET_METHOD = "get";
     private static final String MAP_NAME = "injectors";
 
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     private JBlock injectorRegistrationBlock = null;
     private JVar registrationMap = null;
 
     @Inject
-    public InjectorRepositoryGenerator(JCodeModel codeModel) {
+    public InjectorRepositoryGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     public void generateInjectorRepository(JClass interfaceClass, JDefinedClass implClass) throws JClassAlreadyExistsException {
         if (injectorRegistrationBlock == null) {
-            JDefinedClass injectorRepsoitoryClass = codeModel._class(REPOSITORY_NAME);
+            JDefinedClass injectorRepsoitoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Object.class);

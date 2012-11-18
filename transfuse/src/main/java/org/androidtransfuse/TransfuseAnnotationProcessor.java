@@ -192,11 +192,14 @@ public class TransfuseAnnotationProcessor extends AbstractProcessor {
 
         return FluentIterable
                 .from(Arrays.asList(supportedAnnotations))
-                .transform(new Function<Class<? extends Annotation>, String>() {
-                    @Override
-                    public String apply(Class<? extends Annotation> input) {
-                        return input.getName();
-                    }
-                }).toImmutableSet();
+                .transform(new ClassToNameTransform())
+                .toImmutableSet();
+    }
+
+    private static class ClassToNameTransform implements Function<Class, String> {
+        @Override
+        public String apply(Class input) {
+            return input.getName();
+        }
     }
 }

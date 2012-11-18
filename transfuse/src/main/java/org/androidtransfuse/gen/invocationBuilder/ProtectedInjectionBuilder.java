@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.adapter.MethodSignature;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -30,6 +30,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
+    private final ClassGenerationUtil generationUtil;
     private final Map<FieldInjectionPoint, ProtectedAccessorMethod> fieldSetterMapping = new HashMap<FieldInjectionPoint, ProtectedAccessorMethod>();
     private final Map<ConstructorInjectionPoint, ProtectedAccessorMethod> constructorMapping = new HashMap<ConstructorInjectionPoint, ProtectedAccessorMethod>();
     private final Map<TypeMethodSignature, ProtectedAccessorMethod> methodMapping = new HashMap<TypeMethodSignature, ProtectedAccessorMethod>();
@@ -38,9 +39,10 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     private final TypeInvocationHelper invocationHelper;
 
     @Inject
-    public ProtectedInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer namer, TypeInvocationHelper invocationHelper) {
+    public ProtectedInjectionBuilder(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil, TypeInvocationHelper invocationHelper) {
         this.codeModel = codeModel;
         this.namer = namer;
+        this.generationUtil = generationUtil;
         this.invocationHelper = invocationHelper;
     }
 
@@ -280,12 +282,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
     private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
         try {
-            JPackage jPackage = codeModel._package(helperClassName.getPackage());
-            JDefinedClass helperClass = jPackage._class(helperClassName.getClassName());
-
-            annotateGeneratedClass(helperClass);
-
-            return helperClass;
+            return generationUtil.defineClass(helperClassName);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Unable to create helper", e);

@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.*;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -36,6 +35,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private final ParcelableGenerator parcelableGenerator;
     private final ParcelableAnalysis parcelableAnalysis;
     private final ASTClassFactory astClassFactory;
+    private final ClassGenerationUtil generationUtil;
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
 
     @Inject
@@ -44,13 +44,14 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                                           UniqueVariableNamer namer,
                                           ParcelableGenerator parcelableGenerator,
                                           ParcelableAnalysis parcelableAnalysis,
-                                          ASTClassFactory astClassFactory) {
+                                          ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.factoryStrategyClass = factoryStrategyClass;
         this.codeModel = codeModel;
         this.namer = namer;
         this.parcelableGenerator = parcelableGenerator;
         this.parcelableAnalysis = parcelableAnalysis;
         this.astClassFactory = astClassFactory;
+        this.generationUtil = generationUtil;
 
         ImmutableMap.Builder<ASTPrimitiveType, String> methodMappingBuilder = ImmutableMap.builder();
         methodMappingBuilder.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
@@ -69,10 +70,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
 
         try {
-            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
-            JDefinedClass strategyClass = jPackage._class(descriptor.getPackageClass().append(STRATEGY_EXT).getClassName());
-
-            annotateGeneratedClass(strategyClass);
+            JDefinedClass strategyClass = generationUtil.defineClass(descriptor.getPackageClass().append(STRATEGY_EXT));
 
             strategyClass._extends(factoryStrategyClass);
 

@@ -1,6 +1,9 @@
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -11,8 +14,6 @@ import org.androidtransfuse.model.TypedExpression;
 import javax.inject.Inject;
 import java.util.Map;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
-
 /**
  * @author John Ericksen
  */
@@ -21,14 +22,17 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ComponentBuilderFactory componentBuilderFactory;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public ComponentGenerator(JCodeModel codeModel,
                               InjectionFragmentGenerator injectionFragmentGenerator,
-                              ComponentBuilderFactory componentBuilderFactory) {
+                              ComponentBuilderFactory componentBuilderFactory,
+                              ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.generationUtil = generationUtil;
     }
 
     public void generate(ComponentDescriptor descriptor) {
@@ -37,10 +41,7 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
         }
 
         try {
-            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
-            final JDefinedClass definedClass = jPackage._class(descriptor.getPackageClass().getClassName());
-
-            annotateGeneratedClass(definedClass);
+            final JDefinedClass definedClass = generationUtil.defineClass(descriptor.getPackageClass());
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 

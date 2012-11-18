@@ -15,12 +15,13 @@ import java.util.Date;
  */
 public final class GeneratedClassAnnotator {
 
-    private GeneratedClassAnnotator(){
+    private GeneratedClassAnnotator() {
         //noop utility class constructor
     }
 
     /**
      * Annotates the input class with the {@code @Generated} annotation
+     * defineClass
      *
      * @param definedClass input codemodel class
      */

@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * @author John Ericksen
  */
@@ -42,17 +43,19 @@ public class ParcelableGenerator {
     private final ParcelableAnalysis parcelableAnalysis;
     private final UniqueVariableNamer namer;
     private final ASTClassFactory astClassFactory;
+    private final ClassGenerationUtil generationUtil;
     private final Map<ASTType, JDefinedClass> parceableMap = new HashMap<ASTType, JDefinedClass>();
     private final Map<ASTType, ReadWritePair> arrayParceableModfier = new HashMap<ASTType, ReadWritePair>();
     private final Map<ASTType, ReadWritePair> parceableModifier = new HashMap<ASTType, ReadWritePair>();
     private final Map<ASTType, ReadWritePair> classLoaderModifier = new HashMap<ASTType, ReadWritePair>();
 
     @Inject
-    public ParcelableGenerator(JCodeModel codeModel, ParcelableAnalysis parcelableAnalysis, UniqueVariableNamer namer, ASTClassFactory astClassFactory) {
+    public ParcelableGenerator(JCodeModel codeModel, ParcelableAnalysis parcelableAnalysis, UniqueVariableNamer namer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.parcelableAnalysis = parcelableAnalysis;
         this.namer = namer;
         this.astClassFactory = astClassFactory;
+        this.generationUtil = generationUtil;
 
         setup();
     }
@@ -71,8 +74,7 @@ public class ParcelableGenerator {
         try {
             JType inputType = codeModel.ref(type.getName());
 
-            JPackage jPackage = codeModel._package(type.getPackageClass().getPackage());
-            JDefinedClass parcelableClass = jPackage._class(type.getPackageClass().append(PARCELABLE_EXT).getClassName());
+            JDefinedClass parcelableClass = generationUtil.defineClass(type.getPackageClass().append(PARCELABLE_EXT));
             parcelableClass._implements(Parcelable.class)
                     ._implements(codeModel.ref(ParcelableWrapper.class).narrow(inputType));
 

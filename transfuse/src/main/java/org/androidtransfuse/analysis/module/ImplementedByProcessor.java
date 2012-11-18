@@ -33,12 +33,12 @@ public class ImplementedByProcessor {
     public void processType(ASTType astType) {
         ImplementedBy annotation = astType.getAnnotation(ImplementedBy.class);
 
-        if(annotation != null){
+        if (annotation != null) {
             TypeMirror implementedClass = getTypeMirror(new ImplementedByClassTypeMirrorRunnable(annotation));
 
             ASTType implAstType = implementedClass.accept(astTypeBuilderVisitor, null);
 
-            if(!implAstType.inheritsFrom(astType)){
+            if (!implAstType.inheritsFrom(astType)) {
                 throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
 
@@ -47,7 +47,7 @@ public class ImplementedByProcessor {
         }
     }
 
-    private class ImplementedByClassTypeMirrorRunnable extends TypeMirrorRunnable<ImplementedBy> {
+    private static class ImplementedByClassTypeMirrorRunnable extends TypeMirrorRunnable<ImplementedBy> {
 
         protected ImplementedByClassTypeMirrorRunnable(ImplementedBy annotation) {
             super(annotation);

@@ -6,6 +6,7 @@ import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -17,7 +18,6 @@ import javax.inject.Singleton;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -33,12 +33,14 @@ public class AOPProxyGenerator {
     private final UniqueVariableNamer namer;
     private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
     private final Logger logger;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.logger = logger;
+        this.generationUtil = generationUtil;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
@@ -61,10 +63,7 @@ public class AOPProxyGenerator {
         ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, injectionNode.getASTType());
 
         try {
-            JPackage generatedPackage = codeModel._package(proxyClassName.getPackage());
-            definedClass = generatedPackage._class(proxyClassName.getClassName());
-
-            annotateGeneratedClass(definedClass);
+            definedClass = generationUtil.defineClass(proxyClassName);
 
             //extending injectionNode
             definedClass._extends(codeModel.ref(injectionNode.getClassName()));

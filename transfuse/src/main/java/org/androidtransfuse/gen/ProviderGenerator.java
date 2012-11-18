@@ -11,7 +11,6 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -25,11 +24,13 @@ public class ProviderGenerator {
     private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator) {
+    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.generationUtil = generationUtil;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode) {
@@ -47,10 +48,7 @@ public class ProviderGenerator {
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
-            JPackage jPackage = codeModel._package(injectionNode.getASTType().getPackageClass().getPackage());
-            JDefinedClass providerClass = jPackage._class(injectionNode.getASTType().getPackageClass().append(PROVIDER_EXT).getClassName());
-
-            annotateGeneratedClass(providerClass);
+            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(PROVIDER_EXT));
 
             providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 

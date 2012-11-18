@@ -31,15 +31,24 @@ public class InjectorGenerator implements Generator<ASTType> {
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private final InjectorRepositoryGenerator injectorRepositoryGenerator;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public InjectorGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ComponentBuilderFactory componentBuilderFactory, AnalysisContextFactory analysisContextFactory, InjectionNodeBuilderRepository injectionNodeBuilderRepository, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory, InjectorRepositoryGenerator injectorRepositoryGenerator) {
+    public InjectorGenerator(JCodeModel codeModel,
+                             InjectionFragmentGenerator injectionFragmentGenerator,
+                             ComponentBuilderFactory componentBuilderFactory,
+                             AnalysisContextFactory analysisContextFactory,
+                             InjectionNodeBuilderRepository injectionNodeBuilderRepository,
+                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+                             InjectorRepositoryGenerator injectorRepositoryGenerator,
+                             ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.injectorRepositoryGenerator = injectorRepositoryGenerator;
+        this.generationUtil = generationUtil;
         injectionNodeBuilderRepositoryFactory.addModuleConfiguration(this.injectionNodeBuilderRepository);
     }
 
@@ -51,8 +60,7 @@ public class InjectorGenerator implements Generator<ASTType> {
         }
 
         try {
-            JPackage jPackage = codeModel._package(descriptor.getPackageClass().getPackage());
-            JDefinedClass implClass = jPackage._class(descriptor.getPackageClass().append(IMPL_EXT).getClassName());
+            JDefinedClass implClass = generationUtil.defineClass(descriptor.getPackageClass().append(IMPL_EXT));
             JClass interfaceClass = codeModel.ref(descriptor.getName());
 
             implClass._implements(interfaceClass);

@@ -4,6 +4,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
@@ -19,7 +20,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGeneratedClass;
 
 /**
  * @author John Ericksen
@@ -36,13 +36,15 @@ public class VirtualProxyGenerator {
     private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;
     private final ASTClassFactory astClassFactory;
+    private final ClassGenerationUtil generationUtil;
     private final Map<ASTType, JDefinedClass> descriptorCache = new HashMap<ASTType, JDefinedClass>();
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.astClassFactory = astClassFactory;
+        this.generationUtil = generationUtil;
     }
 
     public JDefinedClass generateProxy(InjectionNode injectionNode) {
@@ -56,10 +58,7 @@ public class VirtualProxyGenerator {
 
         try {
 
-            JPackage jPackage = codeModel._package(injectionNode.getASTType().getPackageClass().getPackage());
-            JDefinedClass definedClass = jPackage._class(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT).getClassName());
-
-            annotateGeneratedClass(definedClass);
+            JDefinedClass definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT));
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());
