@@ -9,14 +9,12 @@ import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.AnalysisContext;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-@Singleton
 public class ResourceExpressionBuilderFactory {
 
     private static final String GET_STRING = "getString";

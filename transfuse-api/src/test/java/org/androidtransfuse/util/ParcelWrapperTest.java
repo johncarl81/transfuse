@@ -9,12 +9,12 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-public class ParcelableWrapperTest {
+public class ParcelWrapperTest {
 
     @Test
     public void verifyMethodNames() throws NoSuchMethodException {
 
-        Method getWrappedMethod = ParcelableWrapper.class.getMethod(ParcelableWrapper.GET_WRAPPED);
+        Method getWrappedMethod = ParcelWrapper.class.getMethod(ParcelWrapper.GET_PARCEL);
         assertNotNull(getWrappedMethod);
     }
 }

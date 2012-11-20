@@ -3,6 +3,7 @@ package org.androidtransfuse;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
 import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 import org.androidtransfuse.model.manifest.Application;
@@ -27,6 +28,6 @@ public class TransfuseTestInjector {
 
         return Guice.createInjector(Stage.DEVELOPMENT,
                 new TransfuseSetupGuiceModule(new JavaUtilLogger(input), new NoOpFiler(), new NoOpElements()),
-                new TransfuseGenerateGuiceModule(new EmptyRResource(), manifest));
+                new TransfuseGenerateGuiceModule(new EmptyRResource(), manifest, new JCodeModel()));
     }
 }

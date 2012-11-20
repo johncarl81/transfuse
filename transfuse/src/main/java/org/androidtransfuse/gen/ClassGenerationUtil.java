@@ -18,8 +18,8 @@ import static org.androidtransfuse.gen.GeneratedClassAnnotator.annotateGenerated
  */
 public class ClassGenerationUtil {
 
-    private JCodeModel codeModel;
-    private Logger log;
+    private final JCodeModel codeModel;
+    private final Logger log;
 
     @Inject
     public ClassGenerationUtil(JCodeModel codeModel, Logger log) {

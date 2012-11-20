@@ -2,12 +2,13 @@ package org.androidtransfuse.gen;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ParcelableDescriptor;
-import org.androidtransfuse.util.ParcelableWrapper;
+import org.androidtransfuse.util.ParcelWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
@@ -16,6 +17,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -35,6 +38,8 @@ public class ParcelableGeneratorTest {
     @Inject
     private ParcelableGenerator parcelableGenerator;
     @Inject
+    private ParcelsGenerator parcelsGenerator;
+    @Inject
     private ParcelableAnalysis parcelableAnalysis;
 
     private ParcelTarget parcelTarget;
@@ -51,8 +56,16 @@ public class ParcelableGeneratorTest {
         ASTType mockParcelTwoASTType = astClassFactory.buildASTClassType(ParcelSecondTarget.class);
 
         ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(mockParcelASTType);
+        ParcelableDescriptor parcelableTwoDescriptor = parcelableAnalysis.analyze(mockParcelTwoASTType);
 
-        parcelableGenerator.generateParcelable(mockParcelASTType, parcelableDescriptor);
+        JDefinedClass parcelableDefinedClass = parcelableGenerator.generateParcelable(mockParcelASTType, parcelableDescriptor);
+        JDefinedClass parcelableTwoDefinedClass = parcelableGenerator.generateParcelable(mockParcelTwoASTType, parcelableTwoDescriptor);
+
+        Map<ASTType, JDefinedClass> generated = new HashMap<ASTType, JDefinedClass>();
+        generated.put(mockParcelASTType, parcelableDefinedClass);
+        generated.put(mockParcelTwoASTType, parcelableTwoDefinedClass);
+
+        parcelsGenerator.generate(generated);
 
         ClassLoader classLoader = codeGenerationUtil.build();
         parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType).fullName());
@@ -76,7 +89,7 @@ public class ParcelableGeneratorTest {
         when(mockParcel.readString()).thenReturn(TEST_VALUE);
         when(mockParcel.readDouble()).thenReturn(Math.PI);
         when(mockParcel.readParcelable(any(ClassLoader.class))).thenReturn(mockSecondParcel);
-        when(((ParcelableWrapper) mockSecondParcel).getWrapped()).thenReturn(parcelSecondTarget);
+        when(((ParcelWrapper) mockSecondParcel).getParcel()).thenReturn(parcelSecondTarget);
 
         Parcelable outputParcelable = parcelableClass.getConstructor(ParcelTarget.class).newInstance(parcelTarget);
 
@@ -84,7 +97,7 @@ public class ParcelableGeneratorTest {
 
         Parcelable inputParcelable = parcelableClass.getConstructor(Parcel.class).newInstance(mockParcel);
 
-        ParcelTarget wrapped = ((ParcelableWrapper<ParcelTarget>) inputParcelable).getWrapped();
+        ParcelTarget wrapped = ((ParcelWrapper<ParcelTarget>) inputParcelable).getParcel();
 
         assertEquals(parcelTarget, wrapped);
 

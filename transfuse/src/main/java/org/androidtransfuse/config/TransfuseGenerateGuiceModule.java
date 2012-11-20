@@ -30,10 +30,12 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
     private final RResource rResource;
     private final Manifest manifest;
+    private final JCodeModel codeModel;
 
-    public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest) {
+    public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest, JCodeModel codeModel) {
         this.rResource = rResource;
         this.manifest = manifest;
+        this.codeModel = codeModel;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(InjectionBuilderContextFactory.class));
         install(factoryModuleBuilder.build(GeneratorFactory.class));
 
-        bind(JCodeModel.class).asEagerSingleton();
+        bind(JCodeModel.class).toInstance(codeModel);
         bind(InjectionNodeBuilder.class).annotatedWith(Names.named(DEFAULT_BINDING)).to(VariableInjectionNodeBuilder.class);
 
         bind(VariableExpressionBuilder.class).toProvider(ExpressionDecoratorFactory.class);

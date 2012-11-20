@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public class CodeGenerationUtil {
 
-    private JCodeModel codeModel;
-    private StringCodeWriter stringCodeWriter;
-    private MemoryClassLoader classLoader;
+    private final JCodeModel codeModel;
+    private final StringCodeWriter stringCodeWriter;
+    private final MemoryClassLoader classLoader;
 
     @Inject
     public CodeGenerationUtil(JCodeModel codeModel, StringCodeWriter stringCodeWriter, MemoryClassLoader classLoader) {

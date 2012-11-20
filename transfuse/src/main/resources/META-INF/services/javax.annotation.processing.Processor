@@ -1,1 +1,2 @@
 org.androidtransfuse.TransfuseAnnotationProcessor
+org.androidtransfuse.ParcelAnnotationProcessor

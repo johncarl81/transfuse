@@ -10,7 +10,7 @@ import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.ExtraUtil;
-import org.androidtransfuse.util.ParcelableWrapper;
+import org.androidtransfuse.util.ParcelWrapper;
 
 import javax.inject.Inject;
 
@@ -57,8 +57,8 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
                 .arg(JExpr.lit(nullable));
 
         if (wrapped) {
-            getExtraInvocation = ((JExpression) JExpr.cast(codeModel.ref(ParcelableWrapper.class),
-                    getExtraInvocation)).invoke(ParcelableWrapper.GET_WRAPPED);
+            getExtraInvocation = ((JExpression) JExpr.cast(codeModel.ref(ParcelWrapper.class),
+                    getExtraInvocation)).invoke(ParcelWrapper.GET_PARCEL);
         }
 
         return getExtraInvocation;

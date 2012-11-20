@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
@@ -15,7 +14,10 @@ import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
-import org.androidtransfuse.model.*;
+import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -31,9 +33,6 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
     private final Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
     private final JCodeModel codeModel;
-    private final UniqueVariableNamer namer;
-    private final ParcelableGenerator parcelableGenerator;
-    private final ParcelableAnalysis parcelableAnalysis;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
@@ -41,15 +40,9 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     @Inject
     public IntentFactoryStrategyGenerator(@Assisted Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass,
                                           JCodeModel codeModel,
-                                          UniqueVariableNamer namer,
-                                          ParcelableGenerator parcelableGenerator,
-                                          ParcelableAnalysis parcelableAnalysis,
                                           ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.factoryStrategyClass = factoryStrategyClass;
         this.codeModel = codeModel;
-        this.namer = namer;
-        this.parcelableGenerator = parcelableGenerator;
-        this.parcelableAnalysis = parcelableAnalysis;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
 
@@ -140,13 +133,10 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {
-            ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(type);
-            JDefinedClass parcelableClass = parcelableGenerator.generateParcelable(type, parcelableDescriptor);
+            JInvocation wrappedParcel = codeModel.ref(ParcelsGenerator.PARCELS_NAME.toString())
+                    .staticInvoke(ParcelsGenerator.WRAP_METHOD).arg(extraParam);
 
-            JVar parcelable = block.decl(parcelableClass, namer.generateName(parcelableClass),
-                    JExpr._new(parcelableClass).arg(extraParam));
-
-            return extras.invoke("putParcelable").arg(name).arg(parcelable);
+            return extras.invoke("putParcelable").arg(name).arg(wrappedParcel);
         }
 
         throw new TransfuseAnalysisException("Unable to find appropriate type to build intent factory strategy: " + type.getName());
