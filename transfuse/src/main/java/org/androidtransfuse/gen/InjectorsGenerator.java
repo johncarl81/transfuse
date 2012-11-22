@@ -13,9 +13,9 @@ import java.util.Map;
  * @author John Ericksen
  */
 @Singleton
-public class InjectorRepositoryGenerator {
+public class InjectorsGenerator {
 
-    private static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "InjectorRepository");
+    private static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "Injectors");
     private static final String GET_METHOD = "get";
     private static final String MAP_NAME = "injectors";
 
@@ -26,7 +26,7 @@ public class InjectorRepositoryGenerator {
     private JVar registrationMap = null;
 
     @Inject
-    public InjectorRepositoryGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil) {
+    public InjectorsGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
     }

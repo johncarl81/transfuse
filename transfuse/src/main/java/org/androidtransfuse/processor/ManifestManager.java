@@ -32,7 +32,7 @@ public class ManifestManager {
     private final List<Service> services = new ArrayList<Service>();
 
     @Inject
-    public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originialManifest){
+    public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originialManifest) {
         this.manifestPackage = originialManifest.getApplicationPackage();
     }
 
@@ -47,7 +47,7 @@ public class ManifestManager {
             updateMergeTags(MetaData.class, activity.getMetaData());
             this.activities.add(activity);
         } catch (MergerException e) {
-            throw new TransfuseAnalysisException("Unable to Merge Service", e);
+            throw new TransfuseAnalysisException("Unable to Merge Activity", e);
         }
     }
 
@@ -58,7 +58,7 @@ public class ManifestManager {
             updateMergeTags(MetaData.class, broadcastReceiver.getMetaData());
             this.broadcastReceivers.add(broadcastReceiver);
         } catch (MergerException e) {
-            throw new TransfuseAnalysisException("Unable to Merge Service", e);
+            throw new TransfuseAnalysisException("Unable to Merge Broadcast Receiver", e);
         }
     }
 

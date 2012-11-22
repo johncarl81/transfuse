@@ -30,7 +30,7 @@ public class InjectorGenerator implements Generator<ASTType> {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private final InjectorRepositoryGenerator injectorRepositoryGenerator;
+    private final InjectorsGenerator injectorsGenerator;
     private final ClassGenerationUtil generationUtil;
 
     @Inject
@@ -40,14 +40,14 @@ public class InjectorGenerator implements Generator<ASTType> {
                              AnalysisContextFactory analysisContextFactory,
                              InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                              InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
-                             InjectorRepositoryGenerator injectorRepositoryGenerator,
+                             InjectorsGenerator injectorsGenerator,
                              ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
-        this.injectorRepositoryGenerator = injectorRepositoryGenerator;
+        this.injectorsGenerator = injectorsGenerator;
         this.generationUtil = generationUtil;
         injectionNodeBuilderRepositoryFactory.addModuleConfiguration(this.injectionNodeBuilderRepository);
     }
@@ -85,7 +85,7 @@ public class InjectorGenerator implements Generator<ASTType> {
 
             }
 
-            injectorRepositoryGenerator.generateInjectorRepository(interfaceClass, implClass);
+            injectorsGenerator.generateInjectorRepository(interfaceClass, implClass);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);
