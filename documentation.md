@@ -754,7 +754,7 @@ public class ExampleUsage{
     }
 
     public void staticUsage(){
-        Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
+        Example example = Injectors.get(TransfuseInjector.class).getExample();
     }
 }
 {% endhighlight %}
