@@ -1,11 +1,9 @@
-package org.androidtransfuse.processor;
+package org.androidtransfuse.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
-import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.MessagerLogger;

@@ -1,18 +1,29 @@
 package org.androidtransfuse.config;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.processor.ParcelsTransaction;
+import org.androidtransfuse.processor.ScopedTransactionWorker;
+import org.androidtransfuse.processor.TransactionProcessor;
 import org.androidtransfuse.util.Logger;
 
 import javax.annotation.processing.Filer;
+import javax.inject.Named;
 import javax.lang.model.util.Elements;
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
 public class TransfuseSetupGuiceModule extends AbstractModule {
+
+
+    public static final String PARCEL_TRANSACTION_PROCESSOR = "parcelTransactionProcessor";
 
     private final Logger logger;
     private final Filer filer;
@@ -34,5 +45,13 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         bind(XStream.class).toProvider(XStreamProvider.class);
         bind(Filer.class).toInstance(filer);
         bind(Elements.class).toInstance(elements);
+    }
+
+    @Provides
+    @Named(PARCEL_TRANSACTION_PROCESSOR)
+    public TransactionProcessor<ASTType, JDefinedClass> getParcelTransactionProcessor() {
+        return new TransactionProcessor<ASTType, JDefinedClass>(
+                new ScopedTransactionWorker<ParcelsTransaction, Map<ASTType, JDefinedClass>, Void>(
+                        ParcelsTransaction.class));
     }
 }

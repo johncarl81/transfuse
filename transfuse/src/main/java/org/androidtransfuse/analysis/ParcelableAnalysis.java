@@ -50,7 +50,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
         }
     }
 
-    public ParcelableDescriptor innerAnalyze(ASTType astType) {
+    private ParcelableDescriptor innerAnalyze(ASTType astType) {
 
         ParcelableDescriptor parcelableDescriptor;
 
@@ -70,7 +70,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
                     String setterName = SET + astMethod.getName().substring(GET.length());
                     ASTMethod setterMethod = methodNameMap.get(setterName);
 
-                    if(setterMethod != null && !setterMethod.isAnnotated(Transient.class)){
+                    if (setterMethod != null && !setterMethod.isAnnotated(Transient.class)) {
                         if (setterMethod.getParameters().size() != 1 || !setterMethod.getParameters().get(0).getASTType().equals(astMethod.getReturnType())) {
                             throw new TransfuseAnalysisException("Setter " + setterName + " has incorrect parameters.");
                         }
@@ -105,11 +105,11 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
         return isGetter;
     }
 
-    private String getPropertyName(ASTMethod astMethod){
+    private String getPropertyName(ASTMethod astMethod) {
         String methodName = astMethod.getName();
 
         for (String prepend : PREPENDS) {
-            if(methodName.startsWith(prepend)){
+            if (methodName.startsWith(prepend)) {
                 String name = methodName.substring(prepend.length());
                 return name.substring(0, 1).toLowerCase() + name.substring(1);
             }

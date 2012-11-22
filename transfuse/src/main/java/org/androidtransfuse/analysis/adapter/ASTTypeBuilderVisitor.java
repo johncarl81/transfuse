@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.adapter;
 
 import com.google.common.base.Function;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.processor.TransactionRuntimeException;
 
 import javax.inject.Inject;
 import javax.lang.model.element.TypeElement;
@@ -39,7 +40,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitError(ErrorType errorType, Void v) {
-        throw new TransfuseAnalysisException("Encountered ErrorType, unable to recover");
+        throw new TransactionRuntimeException("Encountered ErrorType, unable to recover");
     }
 
     @Override
