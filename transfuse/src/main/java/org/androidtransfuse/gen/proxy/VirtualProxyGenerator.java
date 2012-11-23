@@ -24,6 +24,7 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
+//todo: move away from singleton
 @Singleton
 public class VirtualProxyGenerator {
 

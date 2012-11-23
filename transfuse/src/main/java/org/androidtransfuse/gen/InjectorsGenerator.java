@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
+//todo: move away from singleton
 @Singleton
 public class InjectorsGenerator {
 
@@ -33,15 +34,15 @@ public class InjectorsGenerator {
 
     public void generateInjectors(JClass interfaceClass, JDefinedClass implClass) throws JClassAlreadyExistsException {
         if (injectorRegistrationBlock == null) {
-            JDefinedClass injectorRepsoitoryClass = generationUtil.defineClass(REPOSITORY_NAME);
+            JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Object.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Object.class);
-            registrationMap = injectorRepsoitoryClass.field(JMod.PRIVATE | JMod.STATIC, mapType, MAP_NAME);
+            registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.STATIC, mapType, MAP_NAME);
 
             //getter
-            JMethod getMethod = injectorRepsoitoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
+            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(t);
             JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(t), "type");
@@ -49,7 +50,7 @@ public class InjectorsGenerator {
             getMethod.body()._return(JExpr.cast(t, registrationMap.invoke("get").arg(typeParam)));
 
             //static registration block
-            injectorRegistrationBlock = injectorRepsoitoryClass.init();
+            injectorRegistrationBlock = injectorRepositoryClass.init();
             injectorRegistrationBlock.assign(registrationMap, JExpr._new(hashMapType));
         }
 

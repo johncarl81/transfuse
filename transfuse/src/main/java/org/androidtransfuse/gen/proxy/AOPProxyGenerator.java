@@ -22,6 +22,7 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
+//todo: move away from singleton
 @Singleton
 public class AOPProxyGenerator {
 
