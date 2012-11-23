@@ -1,9 +1,7 @@
 package org.androidtransfuse.config;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.util.MessagerLogger;
@@ -28,20 +26,15 @@ public final class TransfuseInjector {
 
     public Injector buildSetupInjector(ProcessingEnvironment environment) {
         setupInjector = Guice.createInjector(new TransfuseSetupGuiceModule(
-                new MessagerLogger(environment.getMessager()), environment.getFiler(), environment.getElementUtils()));
+                new MessagerLogger(
+                        environment.getMessager()),
+                environment.getFiler(),
+                environment.getElementUtils(),
+                new ThreadLocalScope()));
         return setupInjector;
     }
 
-    public Injector buildProcessingInjector(RResource rResource, Manifest manifest, JCodeModel codeModel) {
-        return setupInjector.createChildInjector(new TransfuseGenerateGuiceModule(rResource, manifest, codeModel));
-    }
-
-    public Injector buildInjector(final JCodeModel codeModel) {
-        return setupInjector.createChildInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(JCodeModel.class).toInstance(codeModel);
-            }
-        });
+    public Injector buildProcessingInjector(RResource rResource, Manifest manifest) {
+        return setupInjector.createChildInjector(new TransfuseGenerateGuiceModule(rResource, manifest));
     }
 }

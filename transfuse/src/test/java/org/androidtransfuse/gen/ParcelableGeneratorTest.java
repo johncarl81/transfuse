@@ -68,8 +68,8 @@ public class ParcelableGeneratorTest {
         parcelsGenerator.generate(generated);
 
         ClassLoader classLoader = codeGenerationUtil.build();
-        parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelASTType).fullName());
-        Class parcelableTwoClass = classLoader.loadClass(parcelableGenerator.getParcelable(mockParcelTwoASTType).fullName());
+        parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableDefinedClass.fullName());
+        Class parcelableTwoClass = classLoader.loadClass(parcelableTwoDefinedClass.fullName());
 
         parcelTarget = new ParcelTarget();
         parcelSecondTarget = new ParcelSecondTarget();

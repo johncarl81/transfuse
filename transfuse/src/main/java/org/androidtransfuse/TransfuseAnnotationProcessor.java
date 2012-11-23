@@ -1,12 +1,13 @@
 package org.androidtransfuse;
 
 import com.google.inject.ImplementedBy;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.config.TransfuseInjector;
+import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
 import org.androidtransfuse.gen.ResourceCodeWriter;
@@ -26,6 +27,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -73,6 +75,9 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private ResourceCodeWriter resourceWriter;
     @Inject
     private Logger logger;
+    @Inject
+    @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE)
+    private EnterableScope codeGenerationScope;
 
     @Override
     public void init(ProcessingEnvironment processingEnv) {
@@ -85,6 +90,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         if (!processorRan) {
 
+            codeGenerationScope.enter();
+
             long start = System.currentTimeMillis();
 
             //setup transfuse processor with manifest and R classes
@@ -95,7 +102,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
                     buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
                     buildR(rBuilder, "android.R"));
 
-            com.google.inject.Injector injector = TransfuseInjector.getInstance().buildProcessingInjector(r, manifest, new JCodeModel());
+            com.google.inject.Injector injector = TransfuseInjector.getInstance().buildProcessingInjector(r, manifest);
 
             TransfuseProcessor transfuseProcessor = injector.getInstance(TransfuseProcessor.class);
 
@@ -146,6 +153,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             processorRan = true;
 
             logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
+
+            codeGenerationScope.exit();
 
             return true;
         }

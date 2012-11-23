@@ -3,7 +3,6 @@ package org.androidtransfuse.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.repository.*;
 import org.androidtransfuse.gen.GeneratorFactory;
@@ -30,12 +29,10 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
     private final RResource rResource;
     private final Manifest manifest;
-    private final JCodeModel codeModel;
 
-    public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest, JCodeModel codeModel) {
+    public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest) {
         this.rResource = rResource;
         this.manifest = manifest;
-        this.codeModel = codeModel;
     }
 
     @Override
@@ -55,7 +52,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         install(factoryModuleBuilder.build(InjectionBuilderContextFactory.class));
         install(factoryModuleBuilder.build(GeneratorFactory.class));
 
-        bind(JCodeModel.class).toInstance(codeModel);
         bind(InjectionNodeBuilder.class).annotatedWith(Names.named(DEFAULT_BINDING)).to(VariableInjectionNodeBuilder.class);
 
         bind(VariableExpressionBuilder.class).toProvider(ExpressionDecoratorFactory.class);

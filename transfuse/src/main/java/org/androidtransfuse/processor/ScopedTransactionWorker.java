@@ -1,13 +1,8 @@
 package org.androidtransfuse.processor;
 
-import com.google.inject.Injector;
-import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.config.TransfuseInjector;
-import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
-import org.androidtransfuse.util.TransfuseRuntimeException;
+import org.androidtransfuse.config.EnterableScope;
 
-import java.io.IOException;
+import javax.inject.Provider;
 
 /**
  * Executes the given instance of a TransactionWorker with in a code generation scoped transaction.  A unique instance
@@ -19,12 +14,14 @@ import java.io.IOException;
  */
 public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> implements TransactionWorker<V, R> {
 
-    private final Class<T> scopedClass;
+    private final EnterableScope simpleScope;
+    private final Provider<T> workerProvider;
     private T scoped = null;
     private boolean complete = false;
 
-    public ScopedTransactionWorker(Class<T> scopedClass) {
-        this.scopedClass = scopedClass;
+    public ScopedTransactionWorker(EnterableScope simpleScope, Provider<T> workerProvider) {
+        this.simpleScope = simpleScope;
+        this.workerProvider = workerProvider;
     }
 
     @Override
@@ -39,27 +36,19 @@ public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> im
     public R runScoped(V value) {
 
         try {
-            JCodeModel codeModel = new JCodeModel();
+            simpleScope.enter();
 
-            Injector injector = TransfuseInjector.getInstance().buildInjector(codeModel);
-
-            scoped = injector.getInstance(scopedClass);
-
+            scoped = workerProvider.get();
             R result = scoped.runScoped(value);
-
-            FilerSourceCodeWriter codeWriter = injector.getInstance(FilerSourceCodeWriter.class);
-            ResourceCodeWriter resourceWriter = injector.getInstance(ResourceCodeWriter.class);
-
-            codeModel.build(codeWriter, resourceWriter);
 
             complete = true;
             return result;
 
-        } catch (IOException e) {
-            throw new TransfuseRuntimeException("Unable to perform code generation", e);
         } catch (TransactionRuntimeException re) {
             //retry later
             complete = false;
+        } finally {
+            simpleScope.exit();
         }
         return null;
     }

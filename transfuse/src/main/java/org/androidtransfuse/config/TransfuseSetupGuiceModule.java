@@ -3,17 +3,20 @@ package org.androidtransfuse.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.name.Names;
+import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.processor.ParcelsTransactionWorker;
-import org.androidtransfuse.processor.ScopedTransactionWorker;
-import org.androidtransfuse.processor.TransactionProcessor;
+import org.androidtransfuse.gen.FilerSourceCodeWriter;
+import org.androidtransfuse.gen.ResourceCodeWriter;
+import org.androidtransfuse.processor.*;
 import org.androidtransfuse.util.Logger;
 
 import javax.annotation.processing.Filer;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.lang.model.util.Elements;
 import java.util.Map;
 
@@ -23,16 +26,21 @@ import java.util.Map;
 public class TransfuseSetupGuiceModule extends AbstractModule {
 
 
-    public static final String PARCEL_TRANSACTION_PROCESSOR = "parcelTransactionProcessor";
+    public static final String PARCELS_TRANSACTION_PROCESSOR = "parcelsTransactionProcessor";
+    public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
+    public static final String PARCEL_TRANSACTION_WORKER = "parcelTransactionWorker";
+    public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
 
     private final Logger logger;
     private final Filer filer;
     private final Elements elements;
+    private final EnterableScope codeGenerationScope;
 
-    public TransfuseSetupGuiceModule(Logger logger, Filer filer, Elements elementUtils) {
+    public TransfuseSetupGuiceModule(Logger logger, Filer filer, Elements elementUtils, EnterableScope codeGenerationScope) {
         this.logger = logger;
         this.filer = filer;
         this.elements = elementUtils;
+        this.codeGenerationScope = codeGenerationScope;
     }
 
     @Override
@@ -45,13 +53,40 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         bind(XStream.class).toProvider(XStreamProvider.class);
         bind(Filer.class).toInstance(filer);
         bind(Elements.class).toInstance(elements);
+
+
+        bindScope(CodeGenerationScope.class, codeGenerationScope);
+        bind(EnterableScope.class).annotatedWith(Names.named(CODE_GENERATION_SCOPE)).toInstance(codeGenerationScope);
+
+        bind(JCodeModel.class).in(CodeGenerationScope.class);
     }
 
     @Provides
-    @Named(PARCEL_TRANSACTION_PROCESSOR)
-    public TransactionProcessor<ASTType, JDefinedClass> getParcelTransactionProcessor() {
+    @Named(PARCELS_TRANSACTION_WORKER)
+    public TransactionWorker<Map<ASTType, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
+                                                                                            FilerSourceCodeWriter codeWriter,
+                                                                                            ResourceCodeWriter resourceWriter,
+                                                                                            ParcelsTransactionWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<Map<ASTType, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(PARCEL_TRANSACTION_WORKER)
+    public TransactionWorker<ASTType, JDefinedClass> getParcelTransactionWorker(JCodeModel codeModel,
+                                                                                FilerSourceCodeWriter codeWriter,
+                                                                                ResourceCodeWriter resourceWriter,
+                                                                                ParcelTransactionWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<ASTType, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(PARCELS_TRANSACTION_PROCESSOR)
+    public TransactionProcessor<ASTType, JDefinedClass> getParcelTransactionProcessor(
+            @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
+            @Named(PARCELS_TRANSACTION_WORKER) Provider<TransactionWorker<Map<ASTType, JDefinedClass>, Void>> worker) {
+
         return new TransactionProcessor<ASTType, JDefinedClass>(
-                new ScopedTransactionWorker<ParcelsTransactionWorker, Map<ASTType, JDefinedClass>, Void>(
-                        ParcelsTransactionWorker.class));
+                new ScopedTransactionWorker<TransactionWorker<Map<ASTType, JDefinedClass>, Void>, Map<ASTType, JDefinedClass>, Void>
+                        (scope, worker));
     }
 }

@@ -18,7 +18,6 @@ import org.androidtransfuse.model.ParcelableDescriptor;
 import org.androidtransfuse.util.ParcelWrapper;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +26,6 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-@Singleton
 public class ParcelableGenerator {
 
     private static final String CREATOR_CLASS_NAME = "CREATOR";
@@ -41,7 +39,6 @@ public class ParcelableGenerator {
     private final UniqueVariableNamer namer;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
-    private final Map<ASTType, JDefinedClass> parceableMap = new HashMap<ASTType, JDefinedClass>();
     private final Map<ASTType, ReadWritePair> arrayParceableModfier = new HashMap<ASTType, ReadWritePair>();
     private final Map<ASTType, ReadWritePair> parceableModifier = new HashMap<ASTType, ReadWritePair>();
     private final Map<ASTType, ReadWritePair> classLoaderModifier = new HashMap<ASTType, ReadWritePair>();
@@ -57,16 +54,6 @@ public class ParcelableGenerator {
     }
 
     public JDefinedClass generateParcelable(ASTType type, ParcelableDescriptor parcelableDescriptor) {
-        if (!parceableMap.containsKey(type)) {
-            JDefinedClass definedClass = generateParcelableDefinedClass(type, parcelableDescriptor);
-            if (definedClass != null) {
-                parceableMap.put(type, definedClass);
-            }
-        }
-        return parceableMap.get(type);
-    }
-
-    private JDefinedClass generateParcelableDefinedClass(ASTType type, ParcelableDescriptor parcelableDescriptor) {
         try {
             JType inputType = codeModel.ref(type.getName());
 
@@ -214,13 +201,6 @@ public class ParcelableGenerator {
         } else {
             throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to write " + returnType.getName());
         }
-    }
-
-    protected JDefinedClass getParcelable(ASTType type) {
-        if (parceableMap.containsKey(type)) {
-            return parceableMap.get(type);
-        }
-        throw new TransfuseAnalysisException("Unable to find appropriate Parcel method to write " + type.getName());
     }
 
     public static final class ReadWritePair {

@@ -18,7 +18,7 @@ public class ParcelProcessor {
     private final ParcelTransactionFactory parcelTransactionFactory;
 
     @Inject
-    public ParcelProcessor(@Named(TransfuseSetupGuiceModule.PARCEL_TRANSACTION_PROCESSOR)
+    public ParcelProcessor(@Named(TransfuseSetupGuiceModule.PARCELS_TRANSACTION_PROCESSOR)
                            TransactionProcessor<ASTType, JDefinedClass> transactionProcessor,
                            ParcelTransactionFactory parcelTransactionFactory) {
         this.transactionProcessor = transactionProcessor;
