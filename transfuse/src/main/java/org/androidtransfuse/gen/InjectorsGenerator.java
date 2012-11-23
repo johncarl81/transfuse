@@ -31,7 +31,7 @@ public class InjectorsGenerator {
         this.generationUtil = generationUtil;
     }
 
-    public void generateInjectorRepository(JClass interfaceClass, JDefinedClass implClass) throws JClassAlreadyExistsException {
+    public void generateInjectors(JClass interfaceClass, JDefinedClass implClass) throws JClassAlreadyExistsException {
         if (injectorRegistrationBlock == null) {
             JDefinedClass injectorRepsoitoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 

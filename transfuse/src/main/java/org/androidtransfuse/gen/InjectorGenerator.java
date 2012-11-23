@@ -85,7 +85,7 @@ public class InjectorGenerator implements Generator<ASTType> {
 
             }
 
-            injectorsGenerator.generateInjectorRepository(interfaceClass, implClass);
+            injectorsGenerator.generateInjectors(interfaceClass, implClass);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);
