@@ -15,9 +15,9 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 /**
  * @author John Ericksen
  */
-public class ParcelsTransactionTest {
+public class ParcelsTransactionWorkerTest {
 
-    private ParcelsTransaction parcelsTransaction;
+    private ParcelsTransactionWorker parcelsTransaction;
     private ParcelsGenerator mockGenerator;
     private Map input;
 
@@ -25,7 +25,7 @@ public class ParcelsTransactionTest {
     public void setup() {
         mockGenerator = mock(ParcelsGenerator.class);
         input = mock(Map.class);
-        parcelsTransaction = new ParcelsTransaction(mockGenerator);
+        parcelsTransaction = new ParcelsTransactionWorker(mockGenerator);
     }
 
     @Test

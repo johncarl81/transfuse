@@ -7,7 +7,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.processor.ParcelsTransaction;
+import org.androidtransfuse.processor.ParcelsTransactionWorker;
 import org.androidtransfuse.processor.ScopedTransactionWorker;
 import org.androidtransfuse.processor.TransactionProcessor;
 import org.androidtransfuse.util.Logger;
@@ -51,7 +51,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(PARCEL_TRANSACTION_PROCESSOR)
     public TransactionProcessor<ASTType, JDefinedClass> getParcelTransactionProcessor() {
         return new TransactionProcessor<ASTType, JDefinedClass>(
-                new ScopedTransactionWorker<ParcelsTransaction, Map<ASTType, JDefinedClass>, Void>(
-                        ParcelsTransaction.class));
+                new ScopedTransactionWorker<ParcelsTransactionWorker, Map<ASTType, JDefinedClass>, Void>(
+                        ParcelsTransactionWorker.class));
     }
 }

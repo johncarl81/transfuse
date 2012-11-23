@@ -37,7 +37,7 @@ public class ParcelProcessor {
 
     public void checkForErrors() {
         if (!transactionProcessor.isComplete()) {
-            throw new TransfuseAnalysisException("Transactions incomplete");
+            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.");
         }
     }
 }

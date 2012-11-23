@@ -8,16 +8,18 @@ import javax.inject.Inject;
 import java.util.Map;
 
 /**
+ * Executes the generation of the Parcels utility class in a Transaction Worker.
+ *
  * @author John Ericksen
  */
-public class ParcelsTransaction implements TransactionWorker<Map<ASTType, JDefinedClass>, Void> {
+public class ParcelsTransactionWorker implements TransactionWorker<Map<ASTType, JDefinedClass>, Void> {
 
     private ParcelsGenerator parcelsGenerator;
 
     private boolean complete = false;
 
     @Inject
-    public ParcelsTransaction(ParcelsGenerator parcelsGenerator) {
+    public ParcelsTransactionWorker(ParcelsGenerator parcelsGenerator) {
         this.parcelsGenerator = parcelsGenerator;
     }
 

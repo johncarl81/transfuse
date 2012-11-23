@@ -15,9 +15,9 @@ import static org.mockito.Mockito.when;
 /**
  * @author John Ericksen
  */
-public class ParcelTransactionTest {
+public class ParcelTransactionWorkerTest {
 
-    private ParcelTransaction parcelTransaction;
+    private ParcelTransactionWorker parcelTransaction;
     private ParcelableAnalysis mockAnalysis;
     private ParcelableGenerator mockGenerator;
     private ParcelableDescriptor mockDescriptor;
@@ -32,7 +32,7 @@ public class ParcelTransactionTest {
         input = mock(ASTType.class);
         output = mock(JDefinedClass.class);
 
-        parcelTransaction = new ParcelTransaction(mockAnalysis, mockGenerator);
+        parcelTransaction = new ParcelTransactionWorker(mockAnalysis, mockGenerator);
     }
 
     @Test

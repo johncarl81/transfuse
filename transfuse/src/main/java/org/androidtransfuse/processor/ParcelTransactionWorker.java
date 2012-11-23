@@ -9,16 +9,18 @@ import org.androidtransfuse.model.ParcelableDescriptor;
 import javax.inject.Inject;
 
 /**
+ * Executes the analysis and generation of an annotated @Parcel class.
+ *
  * @author John Ericksen
  */
-public class ParcelTransaction implements TransactionWorker<ASTType, JDefinedClass> {
+public class ParcelTransactionWorker implements TransactionWorker<ASTType, JDefinedClass> {
 
     private final ParcelableAnalysis parcelableAnalysis;
     private final ParcelableGenerator parcelableGenerator;
     private boolean complete = false;
 
     @Inject
-    public ParcelTransaction(ParcelableAnalysis parcelableAnalysis, ParcelableGenerator parcelableGenerator) {
+    public ParcelTransactionWorker(ParcelableAnalysis parcelableAnalysis, ParcelableGenerator parcelableGenerator) {
         this.parcelableAnalysis = parcelableAnalysis;
         this.parcelableGenerator = parcelableGenerator;
     }

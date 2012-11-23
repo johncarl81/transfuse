@@ -9,7 +9,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 public class ParcelTransactionFactory {
 
     public Transaction<ASTType, JDefinedClass> buildTransaction(ASTType parcel) {
-        return new ScopedTransaction<ParcelTransaction, ASTType, JDefinedClass>(parcel,
-                new ScopedTransactionWorker<ParcelTransaction, ASTType, JDefinedClass>(ParcelTransaction.class));
+        return new ScopedTransaction<ParcelTransactionWorker, ASTType, JDefinedClass>(parcel,
+                new ScopedTransactionWorker<ParcelTransactionWorker, ASTType, JDefinedClass>(ParcelTransactionWorker.class));
     }
 }

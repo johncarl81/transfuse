@@ -5,10 +5,16 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.config.TransfuseInjector;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
 import org.androidtransfuse.gen.ResourceCodeWriter;
+import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.io.IOException;
 
 /**
+ * Executes the given instance of a TransactionWorker with in a code generation scoped transaction.  A unique instance
+ * of CodeModel is supplied in this scope which is used to generate code at the end of the transaction.  If a
+ * TransactionRuntimeException is thrown this transaction will effectively reset and allow the TransactionWorker
+ * to be retried at a later code generation round.
+ *
  * @author John Ericksen
  */
 public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> implements TransactionWorker<V, R> {
@@ -50,7 +56,7 @@ public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> im
             return result;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new TransfuseRuntimeException("Unable to perform code generation", e);
         } catch (TransactionRuntimeException re) {
             //retry later
             complete = false;

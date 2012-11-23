@@ -14,6 +14,11 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
 /**
+ * Annotation processor which generates for classes annotated with @Parcel, Android Parcelable wrapper classes.
+ * <p/>
+ * In addition this processor will generate the org.androidtransfuse.Parcels class.  This utility defines a mapping
+ * of annotated @Parcel class with the Parcelable wrapper and allows for wasy wrapping of any processed @Parcel.
+ *
  * @author John Ericksen
  */
 @SupportedAnnotations(Parcel.class)

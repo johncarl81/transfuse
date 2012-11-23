@@ -1,6 +1,8 @@
 package org.androidtransfuse.processor;
 
 /**
+ * Wrapper class to run a ScopedTransactionWorker within a Transaction and Runnable.
+ *
  * @author John Ericksen
  */
 public class ScopedTransaction<T extends TransactionWorker<V, R>, V, R> implements Transaction<V, R> {
