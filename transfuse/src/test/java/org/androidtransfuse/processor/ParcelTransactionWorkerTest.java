@@ -8,6 +8,8 @@ import org.androidtransfuse.model.ParcelableDescriptor;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Provider;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -21,6 +23,7 @@ public class ParcelTransactionWorkerTest {
     private ParcelableAnalysis mockAnalysis;
     private ParcelableGenerator mockGenerator;
     private ParcelableDescriptor mockDescriptor;
+    private Provider inputProvider;
     private ASTType input;
     private JDefinedClass output;
 
@@ -29,6 +32,7 @@ public class ParcelTransactionWorkerTest {
         mockAnalysis = mock(ParcelableAnalysis.class);
         mockGenerator = mock(ParcelableGenerator.class);
         mockDescriptor = mock(ParcelableDescriptor.class);
+        inputProvider = mock(Provider.class);
         input = mock(ASTType.class);
         output = mock(JDefinedClass.class);
 
@@ -37,13 +41,13 @@ public class ParcelTransactionWorkerTest {
 
     @Test
     public void test() {
-
+        when(inputProvider.get()).thenReturn(input);
         when(mockAnalysis.analyze(input)).thenReturn(mockDescriptor);
         when(mockGenerator.generateParcelable(input, mockDescriptor)).thenReturn(output);
 
         assertFalse(parcelTransaction.isComplete());
 
-        assertEquals(output, parcelTransaction.runScoped(input));
+        assertEquals(output, parcelTransaction.runScoped(inputProvider));
 
         assertTrue(parcelTransaction.isComplete());
     }

@@ -7,13 +7,14 @@ import org.androidtransfuse.gen.ParcelableGenerator;
 import org.androidtransfuse.model.ParcelableDescriptor;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Executes the analysis and generation of an annotated @Parcel class.
  *
  * @author John Ericksen
  */
-public class ParcelTransactionWorker implements TransactionWorker<ASTType, JDefinedClass> {
+public class ParcelTransactionWorker implements TransactionWorker<Provider<ASTType>, JDefinedClass> {
 
     private final ParcelableAnalysis parcelableAnalysis;
     private final ParcelableGenerator parcelableGenerator;
@@ -31,7 +32,10 @@ public class ParcelTransactionWorker implements TransactionWorker<ASTType, JDefi
     }
 
     @Override
-    public JDefinedClass runScoped(ASTType value) {
+    public JDefinedClass runScoped(Provider<ASTType> valueProvider) {
+
+        ASTType value = valueProvider.get();
+
         ParcelableDescriptor analysis = parcelableAnalysis.analyze(value);
         JDefinedClass definedClass = parcelableGenerator.generateParcelable(value, analysis);
 

@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Provider;
 import java.util.Collections;
 
 import static org.junit.Assert.assertFalse;
@@ -19,14 +20,14 @@ public class ParcelProcessorTest {
     private ParcelProcessor parcelProcessor;
     private TransactionProcessor mockProcessor;
     private ParcelTransactionFactory mockTransactionFactory;
-    private ASTType input;
+    private Provider<ASTType> input;
     private Transaction mockTransaction;
 
     @Before
     public void setup() {
         mockProcessor = mock(TransactionProcessor.class);
         mockTransactionFactory = mock(ParcelTransactionFactory.class);
-        input = mock(ASTType.class);
+        input = mock(Provider.class);
         mockTransaction = mock(Transaction.class);
 
         parcelProcessor = new ParcelProcessor(mockProcessor, mockTransactionFactory);

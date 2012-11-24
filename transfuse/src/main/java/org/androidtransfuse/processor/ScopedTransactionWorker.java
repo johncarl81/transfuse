@@ -18,6 +18,7 @@ public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> im
     private final Provider<T> workerProvider;
     private T scoped = null;
     private boolean complete = false;
+    private Exception error;
 
     public ScopedTransactionWorker(EnterableScope simpleScope, Provider<T> workerProvider) {
         this.simpleScope = simpleScope;
@@ -26,10 +27,7 @@ public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> im
 
     @Override
     public boolean isComplete() {
-        if (complete && scoped != null) {
-            return scoped.isComplete();
-        }
-        return complete;
+        return complete && scoped != null && scoped.isComplete();
     }
 
     @Override
@@ -46,10 +44,15 @@ public class ScopedTransactionWorker<T extends TransactionWorker<V, R>, V, R> im
 
         } catch (TransactionRuntimeException re) {
             //retry later
+            error = re;
             complete = false;
         } finally {
             simpleScope.exit();
         }
         return null;
+    }
+
+    public Exception getError() {
+        return error;
     }
 }

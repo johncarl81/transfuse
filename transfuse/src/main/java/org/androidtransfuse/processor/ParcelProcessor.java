@@ -7,6 +7,7 @@ import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.Collection;
 
 /**
@@ -14,19 +15,19 @@ import java.util.Collection;
  */
 public class ParcelProcessor {
 
-    private final TransactionProcessor<ASTType, JDefinedClass> transactionProcessor;
+    private final TransactionProcessor<Provider<ASTType>, JDefinedClass> transactionProcessor;
     private final ParcelTransactionFactory parcelTransactionFactory;
 
     @Inject
     public ParcelProcessor(@Named(TransfuseSetupGuiceModule.PARCELS_TRANSACTION_PROCESSOR)
-                           TransactionProcessor<ASTType, JDefinedClass> transactionProcessor,
+                           TransactionProcessor<Provider<ASTType>, JDefinedClass> transactionProcessor,
                            ParcelTransactionFactory parcelTransactionFactory) {
         this.transactionProcessor = transactionProcessor;
         this.parcelTransactionFactory = parcelTransactionFactory;
     }
 
-    public void submit(Collection<? extends ASTType> parcels) {
-        for (ASTType parcel : parcels) {
+    public void submit(Collection<Provider<ASTType>> parcels) {
+        for (Provider<ASTType> parcel : parcels) {
             transactionProcessor.submit(parcelTransactionFactory.buildTransaction(parcel));
         }
     }
@@ -37,7 +38,8 @@ public class ParcelProcessor {
 
     public void checkForErrors() {
         if (!transactionProcessor.isComplete()) {
-            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.");
+            Exception error = transactionProcessor.getError();
+            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.", error);
         }
     }
 }

@@ -15,18 +15,18 @@ import javax.inject.Provider;
 public class ParcelTransactionFactory {
 
     private final EnterableScope scope;
-    private final Provider<TransactionWorker<ASTType, JDefinedClass>> workerProvider;
+    private final Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;
 
     @Inject
     public ParcelTransactionFactory(@Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
                                     @Named(TransfuseSetupGuiceModule.PARCEL_TRANSACTION_WORKER)
-                                    Provider<TransactionWorker<ASTType, JDefinedClass>> workerProvider) {
+                                    Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider) {
         this.scope = scope;
         this.workerProvider = workerProvider;
     }
 
-    public Transaction<ASTType, JDefinedClass> buildTransaction(ASTType parcel) {
-        return new ScopedTransaction<TransactionWorker<ASTType, JDefinedClass>, ASTType, JDefinedClass>(parcel,
-                new ScopedTransactionWorker<TransactionWorker<ASTType, JDefinedClass>, ASTType, JDefinedClass>(scope, workerProvider));
+    public Transaction<Provider<ASTType>, JDefinedClass> buildTransaction(Provider<ASTType> parcel) {
+        return new ScopedTransaction<TransactionWorker<Provider<ASTType>, JDefinedClass>, Provider<ASTType>, JDefinedClass>(parcel,
+                new ScopedTransactionWorker<TransactionWorker<Provider<ASTType>, JDefinedClass>, Provider<ASTType>, JDefinedClass>(scope, workerProvider));
     }
 }

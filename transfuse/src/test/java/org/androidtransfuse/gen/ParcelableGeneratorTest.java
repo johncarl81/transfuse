@@ -2,6 +2,7 @@ package org.androidtransfuse.gen;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.inject.util.Providers;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
@@ -15,6 +16,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -61,9 +63,9 @@ public class ParcelableGeneratorTest {
         JDefinedClass parcelableDefinedClass = parcelableGenerator.generateParcelable(mockParcelASTType, parcelableDescriptor);
         JDefinedClass parcelableTwoDefinedClass = parcelableGenerator.generateParcelable(mockParcelTwoASTType, parcelableTwoDescriptor);
 
-        Map<ASTType, JDefinedClass> generated = new HashMap<ASTType, JDefinedClass>();
-        generated.put(mockParcelASTType, parcelableDefinedClass);
-        generated.put(mockParcelTwoASTType, parcelableTwoDefinedClass);
+        Map<Provider<ASTType>, JDefinedClass> generated = new HashMap<Provider<ASTType>, JDefinedClass>();
+        generated.put(Providers.of(mockParcelASTType), parcelableDefinedClass);
+        generated.put(Providers.of(mockParcelTwoASTType), parcelableTwoDefinedClass);
 
         parcelsGenerator.generate(generated);
 

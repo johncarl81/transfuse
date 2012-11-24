@@ -90,4 +90,14 @@ public class TransactionProcessor<V, R> {
 
         return complete;
     }
+
+    public Exception getError() {
+        for (Transaction<V, R> transaction : transactions) {
+            if (!transaction.isComplete()) {
+                return transaction.getError();
+            }
+        }
+
+        return null;
+    }
 }

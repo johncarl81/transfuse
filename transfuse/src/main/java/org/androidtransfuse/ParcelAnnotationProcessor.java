@@ -3,6 +3,7 @@ package org.androidtransfuse;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.config.TransfuseInjector;
 import org.androidtransfuse.processor.ParcelProcessor;
+import org.androidtransfuse.processor.ReloadableASTElementFactory;
 import org.androidtransfuse.util.SupportedAnnotations;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -27,6 +28,8 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
     private ParcelProcessor parcelProcessor;
+    @Inject
+    private ReloadableASTElementFactory reloadableASTElementFactory;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -37,7 +40,7 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
-        parcelProcessor.submit(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Parcel.class)));
+        parcelProcessor.submit(reloadableASTElementFactory.buildProviders(roundEnvironment.getElementsAnnotatedWith(Parcel.class)));
 
         parcelProcessor.execute();
 

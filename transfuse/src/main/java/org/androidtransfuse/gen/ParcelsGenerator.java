@@ -7,6 +7,7 @@ import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.ParcelableFactory;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class ParcelsGenerator {
         this.codeModel = codeModel;
     }
 
-    public void generate(Map<ASTType, JDefinedClass> generated) {
+    public void generate(Map<Provider<ASTType>, JDefinedClass> generated) {
 
         try {
             JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(PARCELS_NAME);
@@ -39,9 +40,9 @@ public class ParcelsGenerator {
 
             JBlock staticInit = parcelsDefinedClass.init();
 
-            for (Map.Entry<ASTType, JDefinedClass> astTypeJDefinedClassEntry : generated.entrySet()) {
+            for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : generated.entrySet()) {
 
-                JClass type = codeModel.ref(astTypeJDefinedClassEntry.getKey().getName());
+                JClass type = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
 
                 JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC, astTypeJDefinedClassEntry.getValue().name() + "Factory");
 

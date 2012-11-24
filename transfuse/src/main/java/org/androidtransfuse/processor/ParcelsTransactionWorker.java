@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.ParcelsGenerator;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Map;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
-public class ParcelsTransactionWorker implements TransactionWorker<Map<ASTType, JDefinedClass>, Void> {
+public class ParcelsTransactionWorker implements TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
     private ParcelsGenerator parcelsGenerator;
 
@@ -29,7 +30,7 @@ public class ParcelsTransactionWorker implements TransactionWorker<Map<ASTType, 
     }
 
     @Override
-    public Void runScoped(Map<ASTType, JDefinedClass> value) {
+    public Void runScoped(Map<Provider<ASTType>, JDefinedClass> value) {
         parcelsGenerator.generate(value);
         complete = true;
         return null;

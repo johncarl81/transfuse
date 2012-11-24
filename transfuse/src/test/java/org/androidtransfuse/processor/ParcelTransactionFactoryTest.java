@@ -1,7 +1,6 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.analysis.adapter.ASTEmptyType;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.config.ThreadLocalScope;
 import org.junit.Before;
@@ -18,13 +17,13 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 public class ParcelTransactionFactoryTest {
 
     private ParcelTransactionFactory factory;
-    private ASTType input;
+    private Provider input;
 
     @Before
     public void setup() {
-        input = new ASTEmptyType("Test");
+        input = mock(Provider.class);
         ThreadLocalScope simpleScope = new ThreadLocalScope();
-        Provider<TransactionWorker<ASTType, JDefinedClass>> workerProvider = mock(Provider.class);
+        Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider = mock(Provider.class);
         factory = new ParcelTransactionFactory(simpleScope, workerProvider);
     }
 

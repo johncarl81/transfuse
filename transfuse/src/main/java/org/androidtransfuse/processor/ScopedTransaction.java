@@ -33,6 +33,11 @@ public class ScopedTransaction<T extends TransactionWorker<V, R>, V, R> implemen
     }
 
     @Override
+    public Exception getError() {
+        return worker == null ? null : worker.getError();
+    }
+
+    @Override
     public void run() {
         result = worker.runScoped(value);
         complete = true;

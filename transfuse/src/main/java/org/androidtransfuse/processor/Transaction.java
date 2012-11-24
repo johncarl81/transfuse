@@ -27,4 +27,11 @@ public interface Transaction<V, R> extends Runnable {
      * @return result
      */
     R getResult();
+
+    /**
+     * Returns the exception the caused the transaction to abort
+     *
+     * @return exception
+     */
+    Exception getError();
 }
