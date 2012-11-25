@@ -24,6 +24,15 @@ public class ThreadLocalScope implements EnterableScope {
         values.remove();
     }
 
+    public <T> void seed(Key<T> key, T value) {
+        Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+        scopedObjects.put(key, value);
+    }
+
+    public <T> void seed(Class<T> clazz, T value) {
+        seed(Key.get(clazz), value);
+    }
+
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {

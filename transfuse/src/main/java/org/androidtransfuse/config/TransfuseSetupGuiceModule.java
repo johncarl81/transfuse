@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
+import com.google.inject.util.Providers;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
@@ -24,7 +25,6 @@ import java.util.Map;
  * @author John Ericksen
  */
 public class TransfuseSetupGuiceModule extends AbstractModule {
-
 
     public static final String PARCELS_TRANSACTION_PROCESSOR = "parcelsTransactionProcessor";
     public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
@@ -54,11 +54,17 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         bind(Filer.class).toInstance(filer);
         bind(Elements.class).toInstance(elements);
 
-
         bindScope(CodeGenerationScope.class, codeGenerationScope);
         bind(EnterableScope.class).annotatedWith(Names.named(CODE_GENERATION_SCOPE)).toInstance(codeGenerationScope);
 
-        bind(JCodeModel.class).in(CodeGenerationScope.class);
+        bind(JCodeModel.class).toProvider(Providers.guicify(new JCodeModelProvider())).in(CodeGenerationScope.class);
+    }
+
+    private static class JCodeModelProvider implements Provider<JCodeModel> {
+        @Override
+        public JCodeModel get() {
+            return new JCodeModel();
+        }
     }
 
     @Provides

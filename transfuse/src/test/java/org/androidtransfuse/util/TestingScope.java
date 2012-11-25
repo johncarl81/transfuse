@@ -16,6 +16,14 @@ public class TestingScope implements EnterableScope {
     public void exit() {//noop
     }
 
+    public <T> void seed(Key<T> key, T value) {
+        values.put(key, value);
+    }
+
+    public <T> void seed(Class<T> clazz, T value) {
+        seed(Key.get(clazz), value);
+    }
+
     @Override
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {

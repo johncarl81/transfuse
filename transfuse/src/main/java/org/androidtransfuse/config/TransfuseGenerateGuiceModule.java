@@ -1,6 +1,7 @@
 package org.androidtransfuse.config;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
@@ -24,22 +25,18 @@ import org.androidtransfuse.model.r.RResource;
  */
 public class TransfuseGenerateGuiceModule extends AbstractModule {
 
+    public static final String CONFIGURATION_SCOPE = "configurationScope";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String DEFAULT_BINDING = "defaultBinding";
 
-    private final RResource rResource;
-    private final Manifest manifest;
+    private final EnterableScope configurationScope;
 
-    public TransfuseGenerateGuiceModule(RResource rResource, Manifest manifest) {
-        this.rResource = rResource;
-        this.manifest = manifest;
+    public TransfuseGenerateGuiceModule(EnterableScope configurationScope) {
+        this.configurationScope = configurationScope;
     }
 
     @Override
     protected void configure() {
-
-        bind(Manifest.class).annotatedWith(Names.named(ORIGINAL_MANIFEST)).toInstance(manifest);
-        bind(RResource.class).toInstance(rResource);
 
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
@@ -56,9 +53,17 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
         bind(VariableExpressionBuilder.class).toProvider(ExpressionDecoratorFactory.class);
         bind(ScopeAspectFactoryRepository.class).toProvider(ScopeAspectFactoryRepositoryProvider.class);
-        bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).asEagerSingleton();
-        bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).asEagerSingleton();
+        bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).in(ConfigurationScope.class);
+        bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).in(ConfigurationScope.class);
 
         bind(GeneratorRepository.class).toProvider(GeneratorRepositoryProvider.class);
+
+        bindScope(ConfigurationScope.class, configurationScope);
+        bind(EnterableScope.class).annotatedWith(Names.named(CONFIGURATION_SCOPE)).toInstance(configurationScope);
+
+        bind(Key.get(Manifest.class, Names.named(ORIGINAL_MANIFEST))).toProvider(new ThrowingProvider<Manifest>()).in(ConfigurationScope.class);
+        bind(RResource.class).toProvider(new ThrowingProvider<RResource>()).in(ConfigurationScope.class);
     }
+
+
 }
