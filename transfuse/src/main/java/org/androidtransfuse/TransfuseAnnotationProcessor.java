@@ -4,6 +4,7 @@ import com.google.inject.ImplementedBy;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.config.*;
@@ -33,9 +34,12 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.google.common.collect.Collections2.transform;
 
 /**
  * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
@@ -63,6 +67,8 @@ import java.util.Set;
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     private boolean processorRan = false;
+    @Inject
+    private ASTElementConverterFactory astElementConverterFactory;
     @Inject
     private ManifestSerializer manifestParser;
     @Inject
@@ -176,5 +182,15 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             return rBuilder.buildR(rInnerTypes);
         }
         return null;
+    }
+
+    private Collection<? extends ASTType> getASTTypesAnnotatedWith(RoundEnvironment roundEnvironment, Class<? extends Annotation> annotation) {
+        return wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(annotation));
+    }
+
+    private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
+        return transform(elementCollection,
+                astElementConverterFactory.buildASTElementConverter(ASTType.class)
+        );
     }
 }
