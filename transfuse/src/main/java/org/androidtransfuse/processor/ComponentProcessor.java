@@ -1,13 +1,13 @@
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.GeneratorRepository;
-import org.androidtransfuse.gen.Generator;
-import org.androidtransfuse.util.matcher.Matcher;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -21,12 +21,28 @@ public class ComponentProcessor {
         this.generatorRepository = generatorRepository;
     }
 
-    public void process(Collection<? extends ASTType> astTypes) {
-        for (ASTType astType : astTypes) {
-            for (Map.Entry<Matcher<ASTType>, Generator<ASTType>> generatorEntry : generatorRepository.getRepository().entrySet()) {
-                if (generatorEntry.getKey().matches(astType)) {
-                    generatorEntry.getValue().generate(astType);
-                }
+    public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {
+        for (Provider<ASTType> astProvider : astProviders) {
+            TransactionProcessorBuilder builder = generatorRepository.getBuilder(componentAnnotation);
+            if (builder == null) {
+                throw new TransfuseAnalysisException("Builder for type " + componentAnnotation.getName() + " not found");
+            }
+
+            builder.submit(astProvider);
+        }
+    }
+
+    public void execute() {
+        for (TransactionProcessorBuilder transactionProcessor : generatorRepository.getRepository().values()) {
+            transactionProcessor.getTransactionProcessor().execute();
+        }
+    }
+
+    public void getError() {
+        for (TransactionProcessorBuilder transactionProcessor : generatorRepository.getRepository().values()) {
+            if (!transactionProcessor.getTransactionProcessor().isComplete()) {
+                Exception error = transactionProcessor.getTransactionProcessor().getError();
+                throw new TransfuseAnalysisException("Code generation did not complete successfully.", error);
             }
         }
     }

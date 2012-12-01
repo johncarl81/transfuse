@@ -1,15 +1,12 @@
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.TransfuseTestInjector;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.GeneratorRepository;
-import org.androidtransfuse.gen.Generator;
-import org.androidtransfuse.util.matcher.AlwaysMatch;
+import org.androidtransfuse.annotations.Injector;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Collections;
 
 import static org.mockito.Mockito.mock;
@@ -20,27 +17,23 @@ import static org.mockito.Mockito.verify;
  */
 public class ComponentProcessorTest {
 
-    @Inject
-    private ASTClassFactory astClassFactory;
-    private Generator<ASTType> mockGenerator;
+    private TransactionProcessorBuilder mockGenerator;
     private ComponentProcessor componentProcessor;
 
     @Before
-    public void setUp() throws Exception {
-        TransfuseTestInjector.inject(this);
-
-        mockGenerator = mock(Generator.class);
+    public void setUp() {
+        mockGenerator = mock(TransactionProcessorBuilder.class);
 
         GeneratorRepository repository = new GeneratorRepository();
-        repository.add(new AlwaysMatch(), mockGenerator);
+        repository.add(Injector.class, mockGenerator);
         componentProcessor = new ComponentProcessor(repository);
     }
 
     @Test
     public void testProcess() {
-        ASTType astType = astClassFactory.getType(ComponentProcessorTest.class);
-        componentProcessor.process(Collections.singleton(astType));
+        Provider<ASTType> astTypeProvider = mock(Provider.class);
+        componentProcessor.submit(Injector.class, Collections.singleton(astTypeProvider));
 
-        verify(mockGenerator).generate(astType);
+        verify(mockGenerator).submit(astTypeProvider);
     }
 }

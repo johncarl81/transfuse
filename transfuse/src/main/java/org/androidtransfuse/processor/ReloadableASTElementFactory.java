@@ -46,7 +46,7 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
 
         @Override
         public ASTType get() {
-            TypeElement typeElement = elements.getTypeElement(element.toString());
+            TypeElement typeElement = elements.getTypeElement(element.asType().toString());
 
             return astElementFactory.getType(typeElement);
         }

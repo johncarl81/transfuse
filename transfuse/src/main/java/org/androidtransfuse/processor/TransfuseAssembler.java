@@ -1,7 +1,5 @@
 package org.androidtransfuse.processor;
 
-import com.sun.codemodel.CodeWriter;
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
@@ -9,7 +7,6 @@ import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.util.Collections;
 
 /**
@@ -17,33 +14,19 @@ import java.util.Collections;
  */
 public class TransfuseAssembler {
 
-    private final JCodeModel codeModel;
     private final Logger logger;
     private final Merger merger;
     private final Manifest originalManifest;
     private final ManifestManager manifestManager;
 
     @Inject
-    public TransfuseAssembler(JCodeModel codeModel, Logger logger, Merger merger,
+    public TransfuseAssembler(Logger logger, Merger merger,
                               @Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originalManifest,
                               ManifestManager manifestManager) {
-        this.codeModel = codeModel;
         this.logger = logger;
         this.merger = merger;
         this.originalManifest = originalManifest;
         this.manifestManager = manifestManager;
-    }
-
-    public void writeSource(CodeWriter codeWriter, CodeWriter resourceWriter) {
-
-        try {
-            codeModel.build(
-                    codeWriter,
-                    resourceWriter);
-
-        } catch (IOException e) {
-            logger.error("IOException while writing source files", e);
-        }
     }
 
     public Manifest buildManifest() {

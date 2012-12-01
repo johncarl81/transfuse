@@ -1,37 +1,61 @@
 package org.androidtransfuse.processor;
 
 /**
- * Transaction interface used to encapsulate a set of work.  Encapsulating
+ * Transaction used to encapsulate work.
  *
  * @author John Ericksen
  */
-public interface Transaction<V, R> extends Runnable {
+public class Transaction<V, R> implements Runnable {
+
+    private final TransactionWorker<V, R> worker;
+    private final V value;
+    private R result = null;
+    private boolean complete = false;
+
+    public Transaction(V value, TransactionWorker<V, R> worker) {
+        this.value = value;
+        this.worker = worker;
+    }
 
     /**
      * Determines the status of the given work.
      *
      * @return complete
      */
-    boolean isComplete();
+    public boolean isComplete() {
+        return complete && worker != null && worker.isComplete();
+    }
 
     /**
      * Gets the value provided to this Transaction to run on.
      *
      * @return value
      */
-    V getValue();
+    public V getValue() {
+        return value;
+    }
 
     /**
      * Gets the result (once complete) generated during the call to run().
      *
      * @return result
      */
-    R getResult();
+    public R getResult() {
+        return result;
+    }
 
     /**
      * Returns the exception the caused the transaction to abort
      *
      * @return exception
      */
-    Exception getError();
+    public Exception getError() {
+        return worker == null ? null : worker.getError();
+    }
+
+    @Override
+    public void run() {
+        result = worker.run(value);
+        complete = true;
+    }
 }

@@ -47,7 +47,7 @@ public class ParcelTransactionWorkerTest {
 
         assertFalse(parcelTransaction.isComplete());
 
-        assertEquals(output, parcelTransaction.runScoped(inputProvider));
+        assertEquals(output, parcelTransaction.run(inputProvider));
 
         assertTrue(parcelTransaction.isComplete());
     }

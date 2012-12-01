@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class InjectorGenerator implements Generator<ASTType> {
+public class InjectorGenerator {
 
     private static final String IMPL_EXT = "Impl";
 
@@ -30,7 +30,6 @@ public class InjectorGenerator implements Generator<ASTType> {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
-    private final InjectorsGenerator injectorsGenerator;
     private final ClassGenerationUtil generationUtil;
 
     @Inject
@@ -40,20 +39,17 @@ public class InjectorGenerator implements Generator<ASTType> {
                              AnalysisContextFactory analysisContextFactory,
                              InjectionNodeBuilderRepository injectionNodeBuilderRepository,
                              InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
-                             InjectorsGenerator injectorsGenerator,
                              ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
-        this.injectorsGenerator = injectorsGenerator;
         this.generationUtil = generationUtil;
         injectionNodeBuilderRepositoryFactory.addModuleConfiguration(this.injectionNodeBuilderRepository);
     }
 
-    @Override
-    public void generate(ASTType descriptor) {
+    public JDefinedClass generate(ASTType descriptor) {
 
         if (descriptor.isConcreteClass()) {
             throw new TransfuseAnalysisException("Unable to build injector from concrete class");
@@ -85,7 +81,7 @@ public class InjectorGenerator implements Generator<ASTType> {
 
             }
 
-            injectorsGenerator.generateInjectors(interfaceClass, implClass);
+            return implClass;
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);

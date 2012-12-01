@@ -33,7 +33,7 @@ public class ParcelsTransactionWorkerTest {
 
         assertFalse(parcelsTransaction.isComplete());
 
-        assertNull(parcelsTransaction.runScoped(input));
+        assertNull(parcelsTransaction.run(input));
 
         assertTrue(parcelsTransaction.isComplete());
         verify(mockGenerator).generate(input);

@@ -1,7 +1,6 @@
 package org.androidtransfuse;
 
 import org.androidtransfuse.annotations.Parcel;
-import org.androidtransfuse.config.TransfuseInjector;
 import org.androidtransfuse.processor.ParcelProcessor;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
 import org.androidtransfuse.util.SupportedAnnotations;
@@ -13,6 +12,8 @@ import javax.inject.Inject;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
+
+import static org.androidtransfuse.config.TransfuseInjector.buildInjector;
 
 /**
  * Annotation processor which generates for classes annotated with @Parcel, Android Parcelable wrapper classes.
@@ -34,7 +35,7 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        TransfuseInjector.getInstance().buildSetupInjector(processingEnv).injectMembers(this);
+        buildInjector(processingEnv).injectMembers(this);
     }
 
     @Override

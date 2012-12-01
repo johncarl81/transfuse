@@ -11,23 +11,16 @@ import javax.annotation.processing.ProcessingEnvironment;
  */
 public final class TransfuseInjector {
 
-    private static final TransfuseInjector INSTANCE = new TransfuseInjector();
-
     private TransfuseInjector() {
         //private singleton constructor
     }
 
-    public static TransfuseInjector getInstance() {
-        return INSTANCE;
-    }
-
-    public Injector buildSetupInjector(ProcessingEnvironment environment) {
+    public static Injector buildInjector(ProcessingEnvironment environment) {
         return Guice.createInjector(new TransfuseSetupGuiceModule(
-                new MessagerLogger(
-                        environment.getMessager()),
-                environment.getFiler(),
-                environment.getElementUtils(),
+                new MessagerLogger(environment.getMessager()),
+                new SynchronizedFiler(environment.getFiler()),
+                new SynchronizedElements(environment.getElementUtils()),
                 new ThreadLocalScope()),
-                new TransfuseGenerateGuiceModule(new ThreadLocalScope()));
+                new TransfuseGenerateGuiceModule(new MapScope()));
     }
 }

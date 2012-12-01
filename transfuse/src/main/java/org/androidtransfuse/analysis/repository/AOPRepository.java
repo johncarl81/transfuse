@@ -3,12 +3,14 @@ package org.androidtransfuse.analysis.repository;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
+@Singleton
 public class AOPRepository {
 
     private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();

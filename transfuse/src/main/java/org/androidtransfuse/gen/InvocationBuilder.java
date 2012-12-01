@@ -43,7 +43,7 @@ public class InvocationBuilder {
                 return publicProvider.get();
             case PACKAGE_PRIVATE:
             case PROTECTED:
-                return protectedProvider.get();
+                //todo:return protectedProvider.get();
             default:
                 return privateProvider.get();
         }

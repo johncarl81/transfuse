@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class TransactionProcessor<V, R> {
 
-    private List<Transaction<V, R>> transactions = new ArrayList<Transaction<V, R>>();
-    private TransactionWorker<Map<V, R>, Void> aggregateWorker;
+    private final List<Transaction<V, R>> transactions = new ArrayList<Transaction<V, R>>();
+    private final TransactionWorker<Map<V, R>, Void> aggregateWorker;
 
     public TransactionProcessor(TransactionWorker<Map<V, R>, Void> aggregateWorker) {
         this.aggregateWorker = aggregateWorker;
@@ -42,6 +42,7 @@ public class TransactionProcessor<V, R> {
     public void execute() {
 
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        boolean workFound = !isComplete();
 
         for (Transaction<V, R> transaction : transactions) {
             if (!transaction.isComplete()) {
@@ -58,6 +59,12 @@ public class TransactionProcessor<V, R> {
             e.printStackTrace();
         }
 
+        if (aggregateWorker != null && workFound) {
+            processAggregate();
+        }
+    }
+
+    private void processAggregate() {
         Map<V, R> aggregate = new HashMap<V, R>();
         boolean complete = true;
 
@@ -71,7 +78,7 @@ public class TransactionProcessor<V, R> {
         }
 
         if (complete && !aggregateWorker.isComplete()) {
-            aggregateWorker.runScoped(aggregate);
+            aggregateWorker.run(aggregate);
         }
     }
 

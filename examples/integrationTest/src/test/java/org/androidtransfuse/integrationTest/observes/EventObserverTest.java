@@ -21,6 +21,7 @@ public class EventObserverTest {
     private EventObserver eventObserver;
     private EventManager eventManager;
     private EventObserverActivity eventObserverActivity;
+    private SingletonObserver singletonObserver;
 
     @Before
     public void setup() {
@@ -30,33 +31,42 @@ public class EventObserverTest {
         eventManager = SingletonScope.getInstance().getScopedObject(EventManager.class, new EventManagerProvider());
 
         eventObserver = DelegateUtil.getDelegate(eventObserverActivity, EventObserver.class);
+
+        singletonObserver = SingletonScope.getInstance().getScopedObject(SingletonObserver.class, new SingletonObserver_Provider());
+        singletonObserver.reset();
     }
 
     @Test
-    public void testEventOne(){
+    public void testEventOne() {
         assertFalse(eventObserver.isEventOneTriggered());
+        assertFalse(singletonObserver.isObservedAll());
         eventManager.trigger(new EventOne("test"));
         assertTrue(eventObserver.isEventOneTriggered());
+        assertTrue(singletonObserver.isObservedAll());
     }
 
     @Test
-    public void testEventTwo(){
+    public void testEventTwo() {
         assertFalse(eventObserver.isEventTwoTriggered());
+        assertFalse(singletonObserver.isObservedAll());
         eventManager.trigger(new EventTwo());
         assertTrue(eventObserver.isEventTwoTriggered());
+        assertTrue(singletonObserver.isObservedAll());
     }
 
     @Test
-    public void testSingletonObserver(){
-        SingletonObserver singletonObserver = SingletonScope.getInstance().getScopedObject(SingletonObserver.class, new SingletonObserver_Provider());
+    public void testSingletonObserver() {
         assertFalse(singletonObserver.isObservedEventThree());
+        assertFalse(singletonObserver.isObservedAll());
         eventManager.trigger(new EventThree());
         assertTrue(singletonObserver.isObservedEventThree());
+        assertTrue(singletonObserver.isObservedAll());
     }
 
     @Test
-    public void testReregister(){
+    public void testReregister() {
         eventObserverActivity.onPause();
+        assertFalse(singletonObserver.isObservedAll());
         assertFalse(eventObserver.isEventTwoTriggered());
         eventManager.trigger(new EventTwo());
         assertFalse(eventObserver.isEventTwoTriggered());
@@ -64,6 +74,7 @@ public class EventObserverTest {
         assertFalse(eventObserver.isEventTwoTriggered());
         eventManager.trigger(new EventTwo());
         assertTrue(eventObserver.isEventTwoTriggered());
+        assertTrue(singletonObserver.isObservedAll());
     }
 
 

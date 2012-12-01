@@ -32,7 +32,7 @@ public class ParcelTransactionWorker implements TransactionWorker<Provider<ASTTy
     }
 
     @Override
-    public JDefinedClass runScoped(Provider<ASTType> valueProvider) {
+    public JDefinedClass run(Provider<ASTType> valueProvider) {
 
         ASTType value = valueProvider.get();
 
@@ -42,5 +42,10 @@ public class ParcelTransactionWorker implements TransactionWorker<Provider<ASTTy
         complete = true;
 
         return definedClass;
+    }
+
+    @Override
+    public Exception getError() {
+        return null;
     }
 }

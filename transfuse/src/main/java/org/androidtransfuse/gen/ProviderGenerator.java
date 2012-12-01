@@ -15,36 +15,43 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-//todo: move away from singleton
-@Singleton
 public class ProviderGenerator {
 
     private static final String GET_METHOD = "get";
     private static final String PROVIDER_EXT = "_Provider";
 
-    private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
+    private final ProviderCache cache;
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ClassGenerationUtil generationUtil;
 
+    @Singleton
+    public static class ProviderCache {
+        private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
+
+        public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator) {
+            if (!providerClasses.containsKey(injectionNode.getClassName())) {
+                JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode);
+                providerClasses.put(injectionNode.getClassName(), providerClass);
+            }
+
+            return providerClasses.get(injectionNode.getClassName());
+        }
+    }
+
     @Inject
-    public ProviderGenerator(JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil) {
+    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil) {
+        this.cache = cache;
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.generationUtil = generationUtil;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode) {
-
-        if (!providerClasses.containsKey(injectionNode.getClassName())) {
-            JDefinedClass providerClass = innerGenerateProvider(injectionNode);
-            providerClasses.put(injectionNode.getClassName(), providerClass);
-        }
-
-        return providerClasses.get(injectionNode.getClassName());
+        return cache.getCached(injectionNode, this);
     }
 
-    private JDefinedClass innerGenerateProvider(InjectionNode injectionNode) {
+    protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode) {
 
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());

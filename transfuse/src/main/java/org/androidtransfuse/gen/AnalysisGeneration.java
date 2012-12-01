@@ -2,25 +2,46 @@ package org.androidtransfuse.gen;
 
 import org.androidtransfuse.analysis.Analysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.processor.TransactionWorker;
+
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
-public class AnalysisGeneration<T> implements Generator<ASTType> {
+public class AnalysisGeneration implements TransactionWorker<Provider<ASTType>, Void> {
 
-    private final Analysis<T> analysis;
-    private final Generator<T> generator;
+    private final Provider<? extends Analysis<ComponentDescriptor>> analysis;
+    private final Provider<ComponentGenerator> generatorProvider;
+    private boolean complete = false;
 
-    public AnalysisGeneration(Analysis<T> analysis,
-                              Generator<T> generator) {
+    public AnalysisGeneration(Provider<? extends Analysis<ComponentDescriptor>> analysis,
+                              Provider<ComponentGenerator> generatorProvider) {
         this.analysis = analysis;
-        this.generator = generator;
+        this.generatorProvider = generatorProvider;
     }
 
     @Override
-    public void generate(ASTType astType) {
-        T descriptor = analysis.analyze(astType);
+    public Void run(Provider<ASTType> astTypeProvider) {
 
-        generator.generate(descriptor);
+        ASTType astType = astTypeProvider.get();
+
+        ComponentDescriptor descriptor = analysis.get().analyze(astType);
+
+        generatorProvider.get().generate(descriptor);
+
+        complete = true;
+        return null;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return complete;
+    }
+
+    @Override
+    public Exception getError() {
+        return null;
     }
 }

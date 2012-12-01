@@ -35,7 +35,8 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     @Inject
     public ObservesRegistrationGenerator(JCodeModel codeModel,
                                          UniqueVariableNamer namer,
-                                         InjectionFragmentGenerator injectionFragmentGenerator, InvocationBuilder invocationBuilder) {
+                                         InjectionFragmentGenerator injectionFragmentGenerator,
+                                         InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.injectionFragmentGenerator = injectionFragmentGenerator;

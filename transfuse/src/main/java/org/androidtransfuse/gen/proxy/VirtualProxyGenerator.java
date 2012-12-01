@@ -24,8 +24,6 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-//todo: move away from singleton
-@Singleton
 public class VirtualProxyGenerator {
 
     private static final String DELEGATE_NAME = "delegate";
@@ -38,21 +36,32 @@ public class VirtualProxyGenerator {
     private final UniqueVariableNamer variableNamer;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
-    private final Map<ASTType, JDefinedClass> descriptorCache = new HashMap<ASTType, JDefinedClass>();
+    private final VirtualProxyGeneratorCache cache;
+
+    @Singleton
+    public static class VirtualProxyGeneratorCache {
+
+        private final Map<ASTType, JDefinedClass> descriptorCache = new HashMap<ASTType, JDefinedClass>();
+
+        public synchronized JDefinedClass getCached(InjectionNode injectionNode, VirtualProxyGenerator generator) {
+            if (!descriptorCache.containsKey(injectionNode.getASTType())) {
+                descriptorCache.put(injectionNode.getASTType(), generator.innerGenerateProxy(injectionNode));
+            }
+            return descriptorCache.get(injectionNode.getASTType());
+        }
+    }
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil, VirtualProxyGeneratorCache cache) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
+        this.cache = cache;
     }
 
     public JDefinedClass generateProxy(InjectionNode injectionNode) {
-        if (!descriptorCache.containsKey(injectionNode.getASTType())) {
-            descriptorCache.put(injectionNode.getASTType(), innerGenerateProxy(injectionNode));
-        }
-        return descriptorCache.get(injectionNode.getASTType());
+        return cache.getCached(injectionNode, this);
     }
 
     public JDefinedClass innerGenerateProxy(InjectionNode injectionNode) {

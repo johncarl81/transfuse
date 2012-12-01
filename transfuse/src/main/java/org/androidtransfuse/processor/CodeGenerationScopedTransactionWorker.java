@@ -28,16 +28,15 @@ public class CodeGenerationScopedTransactionWorker<V, R> implements TransactionW
         this.worker = worker;
     }
 
-
     @Override
     public boolean isComplete() {
         return complete;
     }
 
     @Override
-    public R runScoped(V value) {
+    public R run(V value) {
         try {
-            R result = worker.runScoped(value);
+            R result = worker.run(value);
 
             codeModel.build(codeWriter, resourceWriter);
 
@@ -47,5 +46,10 @@ public class CodeGenerationScopedTransactionWorker<V, R> implements TransactionW
         } catch (IOException e) {
             throw new TransfuseRuntimeException("Unable to perform code generation", e);
         }
+    }
+
+    @Override
+    public Exception getError() {
+        return null;
     }
 }

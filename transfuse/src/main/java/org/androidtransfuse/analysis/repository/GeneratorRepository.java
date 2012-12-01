@@ -1,9 +1,8 @@
 package org.androidtransfuse.analysis.repository;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.Generator;
-import org.androidtransfuse.util.matcher.Matcher;
+import org.androidtransfuse.processor.TransactionProcessorBuilder;
 
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,13 +11,17 @@ import java.util.Map;
  */
 public class GeneratorRepository {
 
-    private final Map<Matcher<ASTType>, Generator<ASTType>> repository = new HashMap<Matcher<ASTType>, Generator<ASTType>>();
+    private final Map<Class<? extends Annotation>, TransactionProcessorBuilder> repository = new HashMap<Class<? extends Annotation>, TransactionProcessorBuilder>();
 
-    public void add(Matcher<ASTType> matcher, Generator<ASTType> generator) {
-        repository.put(matcher, generator);
+    public void add(Class<? extends Annotation> componentAnnotation, TransactionProcessorBuilder generator) {
+        repository.put(componentAnnotation, generator);
     }
 
-    public Map<Matcher<ASTType>, Generator<ASTType>> getRepository() {
+    public TransactionProcessorBuilder getBuilder(Class<? extends Annotation> componentAnnotation) {
+        return repository.get(componentAnnotation);
+    }
+
+    public Map<Class<? extends Annotation>, TransactionProcessorBuilder> getRepository() {
         return repository;
     }
 }

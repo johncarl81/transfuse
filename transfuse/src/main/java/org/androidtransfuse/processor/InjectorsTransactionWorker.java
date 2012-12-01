@@ -2,26 +2,23 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.gen.ParcelsGenerator;
+import org.androidtransfuse.gen.InjectorsGenerator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Map;
 
 /**
- * Executes the generation of the Parcels utility class in a Transaction Worker.
- *
  * @author John Ericksen
  */
-public class ParcelsTransactionWorker implements TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
+public class InjectorsTransactionWorker implements TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
-    private ParcelsGenerator parcelsGenerator;
-
+    private final InjectorsGenerator injectorsGenerator;
     private boolean complete = false;
 
     @Inject
-    public ParcelsTransactionWorker(ParcelsGenerator parcelsGenerator) {
-        this.parcelsGenerator = parcelsGenerator;
+    public InjectorsTransactionWorker(InjectorsGenerator injectorsGenerator) {
+        this.injectorsGenerator = injectorsGenerator;
     }
 
     @Override
@@ -30,9 +27,12 @@ public class ParcelsTransactionWorker implements TransactionWorker<Map<Provider<
     }
 
     @Override
-    public Void run(Map<Provider<ASTType>, JDefinedClass> value) {
-        parcelsGenerator.generate(value);
+    public Void run(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+
+        injectorsGenerator.generateInjectors(aggregate);
+
         complete = true;
+
         return null;
     }
 

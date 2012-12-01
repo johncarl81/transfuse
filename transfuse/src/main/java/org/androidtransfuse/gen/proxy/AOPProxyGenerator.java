@@ -22,22 +22,38 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
-//todo: move away from singleton
-@Singleton
 public class AOPProxyGenerator {
 
     private static final String SUPER_REF = "super";
     private static final String CLASS_GET_METHOD = "getMethod";
     private static final String AOPPROXY_EXT = "_AOPProxy";
 
+    private final AOPProxyCache cache;
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
-    private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
     private final Logger logger;
     private final ClassGenerationUtil generationUtil;
 
+    @Singleton
+    public static class AOPProxyCache {
+
+        private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
+
+
+        public synchronized InjectionNode getCached(InjectionNode injectionNode, AOPProxyGenerator aopProxyGenerator) {
+
+            if (!aopProxiesGenerated.containsKey(injectionNode.getClassName())) {
+                InjectionNode proxyInjectionNode = aopProxyGenerator.innerGenerateProxyCode(injectionNode);
+                aopProxiesGenerated.put(injectionNode.getClassName(), proxyInjectionNode);
+            }
+
+            return aopProxiesGenerated.get(injectionNode.getClassName());
+        }
+    }
+
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, ClassGenerationUtil generationUtil) {
+    public AOPProxyGenerator(AOPProxyCache cache, JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, ClassGenerationUtil generationUtil) {
+        this.cache = cache;
         this.codeModel = codeModel;
         this.namer = namer;
         this.logger = logger;
@@ -45,15 +61,10 @@ public class AOPProxyGenerator {
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
-        if (!aopProxiesGenerated.containsKey(injectionNode.getClassName())) {
-            InjectionNode proxyInjectionNode = innerGenerateProxyCode(injectionNode);
-            aopProxiesGenerated.put(injectionNode.getClassName(), proxyInjectionNode);
-        }
-
-        return aopProxiesGenerated.get(injectionNode.getClassName());
+        return cache.getCached(injectionNode, this);
     }
 
-    private InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
+    protected InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
 

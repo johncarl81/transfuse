@@ -27,8 +27,11 @@ import java.util.Map;
 public class TransfuseSetupGuiceModule extends AbstractModule {
 
     public static final String PARCELS_TRANSACTION_PROCESSOR = "parcelsTransactionProcessor";
-    public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
+    private static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
     public static final String PARCEL_TRANSACTION_WORKER = "parcelTransactionWorker";
+    public static final String INJECTOR_TRANSACTION_WORKER = "injectorTransactionWorker";
+    private static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
+    public static final String INJECTORS_TRANSACTION_PROCESSOR = "injectorsTransactionProcessor";
     public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
 
     private final Logger logger;
@@ -48,6 +51,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
         install(factoryModuleBuilder.build(ASTFactory.class));
+        install(factoryModuleBuilder.build(AnalysisGenerationTransactionProcessorBuilderFactory.class));
 
         bind(Logger.class).toInstance(logger);
         bind(XStream.class).toProvider(XStreamProvider.class);
@@ -58,6 +62,9 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         bind(EnterableScope.class).annotatedWith(Names.named(CODE_GENERATION_SCOPE)).toInstance(codeGenerationScope);
 
         bind(JCodeModel.class).toProvider(Providers.guicify(new JCodeModelProvider())).in(CodeGenerationScope.class);
+
+        bind(FilerSourceCodeWriter.class).in(CodeGenerationScope.class);
+        bind(ResourceCodeWriter.class).in(CodeGenerationScope.class);
     }
 
     private static class JCodeModelProvider implements Provider<JCodeModel> {
@@ -65,15 +72,6 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         public JCodeModel get() {
             return new JCodeModel();
         }
-    }
-
-    @Provides
-    @Named(PARCELS_TRANSACTION_WORKER)
-    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
-                                                                                                      FilerSourceCodeWriter codeWriter,
-                                                                                                      ResourceCodeWriter resourceWriter,
-                                                                                                      ParcelsTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
     @Provides
@@ -86,13 +84,51 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     }
 
     @Provides
+    @Named(INJECTOR_TRANSACTION_WORKER)
+    public TransactionWorker<Provider<ASTType>, JDefinedClass> getInjectorTransactionWorker(JCodeModel codeModel,
+                                                                                            FilerSourceCodeWriter codeWriter,
+                                                                                            ResourceCodeWriter resourceWriter,
+                                                                                            InjectorTransactionWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(INJECTORS_TRANSACTION_WORKER)
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getInjectorsTransactionWorker(JCodeModel codeModel,
+                                                                                                        FilerSourceCodeWriter codeWriter,
+                                                                                                        ResourceCodeWriter resourceWriter,
+                                                                                                        InjectorsTransactionWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(INJECTORS_TRANSACTION_PROCESSOR)
+    public TransactionProcessor<Provider<ASTType>, JDefinedClass> getInjectorsTransactionProcessor(
+            @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
+            @Named(INJECTORS_TRANSACTION_WORKER) Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> worker) {
+
+        return new TransactionProcessor<Provider<ASTType>, JDefinedClass>(
+                new ScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>
+                        (scope, worker));
+    }
+
+    @Provides
+    @Named(PARCELS_TRANSACTION_WORKER)
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
+                                                                                                      FilerSourceCodeWriter codeWriter,
+                                                                                                      ResourceCodeWriter resourceWriter,
+                                                                                                      ParcelsTransactionWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
     @Named(PARCELS_TRANSACTION_PROCESSOR)
     public TransactionProcessor<Provider<ASTType>, JDefinedClass> getParcelTransactionProcessor(
             @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
             @Named(PARCELS_TRANSACTION_WORKER) Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> worker) {
 
         return new TransactionProcessor<Provider<ASTType>, JDefinedClass>(
-                new ScopedTransactionWorker<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>, Map<Provider<ASTType>, JDefinedClass>, Void>
+                new ScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>
                         (scope, worker));
     }
 }

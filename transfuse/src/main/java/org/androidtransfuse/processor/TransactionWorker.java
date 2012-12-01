@@ -7,5 +7,7 @@ public interface TransactionWorker<V, R> {
 
     boolean isComplete();
 
-    R runScoped(V value);
+    R run(V value);
+
+    Exception getError();
 }

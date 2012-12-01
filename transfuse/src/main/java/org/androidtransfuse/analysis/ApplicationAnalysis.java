@@ -8,6 +8,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -30,7 +31,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
-    private final Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTClassFactory astClassFactory;
     private final AnalysisContextFactory analysisContextFactory;
@@ -38,20 +38,21 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final ManifestBuilder manifestBuilder;
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                               Provider<org.androidtransfuse.model.manifest.Application> applicationProvider,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager,
                                InjectionBindingBuilder injectionBindingBuilder,
-                               ContextScopeComponentBuilder contextScopeComponentBuilder, ObservesRegistrationGenerator observesExpressionDecorator) {
+                               ContextScopeComponentBuilder contextScopeComponentBuilder,
+                               ObservesRegistrationGenerator observesExpressionDecorator,
+                               ManifestBuilder manifestBuilder) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
-        this.applicationProvider = applicationProvider;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -59,10 +60,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.observesExpressionDecorator = observesExpressionDecorator;
-    }
-
-    public void emptyApplication() {
-        setupManifest(android.app.Application.class.getName());
+        this.manifestBuilder = manifestBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -144,15 +142,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private void setupManifest(String name) {
-        org.androidtransfuse.model.manifest.Application manifestApplication = buildManifest(name);
-
-        manifestManager.setApplication(manifestApplication);
-    }
-
     private void setupManifest(Application annotation, String name, String label) {
 
-        org.androidtransfuse.model.manifest.Application manifestApplication = buildManifest(name);
+        org.androidtransfuse.model.manifest.Application manifestApplication = manifestBuilder.setupManifestApplication(name);
 
         manifestApplication.setLabel(checkBlank(label));
         manifestApplication.setAllowTaskReparenting(checkDefault(annotation.allowTaskReparenting(), false));
@@ -174,12 +166,5 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestApplication.setTheme(checkBlank(annotation.theme()));
         manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
         manifestManager.setApplication(manifestApplication);
-    }
-
-    private org.androidtransfuse.model.manifest.Application buildManifest(String name) {
-        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
-
-        manifestApplication.setName(name);
-        return manifestApplication;
     }
 }

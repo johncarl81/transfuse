@@ -1,8 +1,6 @@
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.analysis.ApplicationAnalysis;
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory;
 import org.androidtransfuse.processor.ComponentProcessor;
 import org.androidtransfuse.processor.TransfuseAssembler;
 
@@ -12,31 +10,24 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class ApplicationGenerator implements Generator<ASTType> {
+public class ApplicationGenerator {
 
-    private final ApplicationAnalysis applicationAnalysis;
     private final Provider<ComponentProcessor> componentProcessorProvider;
     private final Provider<TransfuseAssembler> transfuseAssemblerProvider;
-    private final AnalysisGeneration<ComponentDescriptor> analysisGeneration;
+    private final ManifestBuilder manifestBuilder;
 
     @Inject
-    public ApplicationGenerator(ApplicationAnalysis applicationAnalysis,
-                                ComponentGenerator generator,
-                                AnalysisGenerationFactory analysisGenerationFactory,
-                                Provider<TransfuseAssembler> transfuseAssemblerProvider,
-                                Provider<ComponentProcessor> componentProcessorProvider) {
-        this.analysisGeneration = analysisGenerationFactory.buildAnalysisGeneration(applicationAnalysis, generator);
-        this.applicationAnalysis = applicationAnalysis;
+    public ApplicationGenerator(Provider<TransfuseAssembler> transfuseAssemblerProvider,
+                                Provider<ComponentProcessor> componentProcessorProvider,
+                                AnalysisGenerationTransactionProcessorBuilderFactory processorFactory,
+                                ManifestBuilder manifestBuilder) {
         this.transfuseAssemblerProvider = transfuseAssemblerProvider;
         this.componentProcessorProvider = componentProcessorProvider;
+        this.manifestBuilder = manifestBuilder;
     }
 
-    public void generate() {
-        applicationAnalysis.emptyApplication();
-    }
-
-    public void generate(ASTType astType) {
-        analysisGeneration.generate(astType);
+    public void generateEmptyApplication() {
+        manifestBuilder.setupManifestApplication(android.app.Application.class.getName());
     }
 
     public ComponentProcessor getComponentProcessor() {

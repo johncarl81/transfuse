@@ -1,13 +1,10 @@
 package org.androidtransfuse.analysis.repository;
 
-import org.androidtransfuse.analysis.ActivityAnalysis;
-import org.androidtransfuse.analysis.BroadcastReceiverAnalysis;
-import org.androidtransfuse.analysis.FragmentAnalysis;
-import org.androidtransfuse.analysis.ServiceAnalysis;
+import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
-import org.androidtransfuse.gen.ComponentGenerator;
-import org.androidtransfuse.gen.InjectorGenerator;
+import org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory;
+import org.androidtransfuse.processor.InjectorTransactionProcessorBuilder;
 import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
 
 import javax.inject.Inject;
@@ -19,47 +16,57 @@ import javax.inject.Provider;
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
 
     private final ASTMatcherBuilder astMatcherBuilder;
+    private final InjectorTransactionProcessorBuilder injectorTransactionProcessorBuilder;
     private final AnalysisGenerationFactory analysisGenerationFactory;
-    private final ActivityAnalysis activityAnalysis;
-    private final ComponentGenerator componentGenerator;
-    private final BroadcastReceiverAnalysis broadcastReceiverAnalysis;
-    private final ServiceAnalysis serviceAnalysis;
-    private final FragmentAnalysis fragmentAnalysis;
-    private final InjectorGenerator injectorGenerator;
+    private final Provider<ActivityAnalysis> activityAnalysisProvider;
+    private final Provider<BroadcastReceiverAnalysis> broadcastReceiverAnalysisProvider;
+    private final Provider<ServiceAnalysis> serviceAnalysisProvider;
+    private final Provider<FragmentAnalysis> fragmentAnalysisProvider;
+    private final Provider<ApplicationAnalysis> applicationAnalysisProvider;
+    private final AnalysisGenerationTransactionProcessorBuilderFactory processorFactory;
 
     @Inject
     public GeneratorRepositoryProvider(ASTMatcherBuilder astMatcherBuilder,
+                                       InjectorTransactionProcessorBuilder injectorTransactionProcessorBuilder,
                                        AnalysisGenerationFactory analysisGenerationFactory,
-                                       ActivityAnalysis activityAnalysis,
-                                       ComponentGenerator componentGenerator,
-                                       BroadcastReceiverAnalysis broadcastReceiverAnalysis,
-                                       ServiceAnalysis serviceAnalysis,
-                                       FragmentAnalysis fragmentAnalysis,
-                                       InjectorGenerator injectorGenerator) {
+                                       Provider<ActivityAnalysis> activityAnalysisProvider,
+                                       Provider<BroadcastReceiverAnalysis> broadcastReceiverAnalysisProvider,
+                                       Provider<ServiceAnalysis> serviceAnalysisProvider,
+                                       Provider<FragmentAnalysis> fragmentAnalysisProvider,
+                                       Provider<ApplicationAnalysis> applicationAnalysisProvider,
+                                       AnalysisGenerationTransactionProcessorBuilderFactory processorFactory) {
         this.astMatcherBuilder = astMatcherBuilder;
+        this.injectorTransactionProcessorBuilder = injectorTransactionProcessorBuilder;
         this.analysisGenerationFactory = analysisGenerationFactory;
-        this.activityAnalysis = activityAnalysis;
-        this.componentGenerator = componentGenerator;
-        this.broadcastReceiverAnalysis = broadcastReceiverAnalysis;
-        this.serviceAnalysis = serviceAnalysis;
-        this.fragmentAnalysis = fragmentAnalysis;
-        this.injectorGenerator = injectorGenerator;
+        this.activityAnalysisProvider = activityAnalysisProvider;
+        this.broadcastReceiverAnalysisProvider = broadcastReceiverAnalysisProvider;
+        this.serviceAnalysisProvider = serviceAnalysisProvider;
+        this.fragmentAnalysisProvider = fragmentAnalysisProvider;
+        this.applicationAnalysisProvider = applicationAnalysisProvider;
+        this.processorFactory = processorFactory;
     }
 
     @Override
     public GeneratorRepository get() {
         GeneratorRepository repository = new GeneratorRepository();
 
-        repository.add(astMatcherBuilder.type().annotatedWith(Injector.class).build(),
-                injectorGenerator);
-        repository.add(astMatcherBuilder.type().annotatedWith(Activity.class).build(),
-                analysisGenerationFactory.buildAnalysisGeneration(activityAnalysis, componentGenerator));
-        repository.add(astMatcherBuilder.type().annotatedWith(BroadcastReceiver.class).build(),
-                analysisGenerationFactory.buildAnalysisGeneration(broadcastReceiverAnalysis, componentGenerator));
-        repository.add(astMatcherBuilder.type().annotatedWith(Service.class).build(),
-                analysisGenerationFactory.buildAnalysisGeneration(serviceAnalysis, componentGenerator));
-        repository.add(astMatcherBuilder.type().annotatedWith(Fragment.class).build(),
-                analysisGenerationFactory.buildAnalysisGeneration(fragmentAnalysis, componentGenerator));
+
+        repository.add(Injector.class, injectorTransactionProcessorBuilder);
+        repository.add(Application.class,
+                processorFactory.buildBuilder(
+                        analysisGenerationFactory.buildAnalysisGenerationProvider(applicationAnalysisProvider)));
+        repository.add(Activity.class,
+                processorFactory.buildBuilder(
+                        analysisGenerationFactory.buildAnalysisGenerationProvider(activityAnalysisProvider)));
+        repository.add(BroadcastReceiver.class,
+                processorFactory.buildBuilder(
+                        analysisGenerationFactory.buildAnalysisGenerationProvider(broadcastReceiverAnalysisProvider)));
+        repository.add(Service.class,
+                processorFactory.buildBuilder(
+                        analysisGenerationFactory.buildAnalysisGenerationProvider(serviceAnalysisProvider)));
+        repository.add(Fragment.class,
+                processorFactory.buildBuilder(
+                        analysisGenerationFactory.buildAnalysisGenerationProvider(fragmentAnalysisProvider)));
 
         return repository;
     }
