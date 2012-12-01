@@ -126,10 +126,10 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             return extras.invoke(methodMapping.get(primitiveType)).arg(name).arg(extraParam);
         } else if (type.getName().equals(String.class.getName())) {
             return extras.invoke("putString").arg(name).arg(extraParam);
-        } else if (type.implementsFrom(astClassFactory.buildASTClassType(Serializable.class))) {
+        } else if (type.implementsFrom(astClassFactory.getType(Serializable.class))) {
             return extras.invoke("putSerializable").arg(name).arg(extraParam);
         }
-        if (type.inheritsFrom(astClassFactory.buildASTClassType(Parcelable.class))) {
+        if (type.inheritsFrom(astClassFactory.getType(Parcelable.class))) {
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {

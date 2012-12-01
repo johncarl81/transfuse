@@ -48,7 +48,7 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
         public ASTType get() {
             TypeElement typeElement = elements.getTypeElement(element.toString());
 
-            return astElementFactory.buildASTElementType(typeElement);
+            return astElementFactory.getType(typeElement);
         }
     }
 }

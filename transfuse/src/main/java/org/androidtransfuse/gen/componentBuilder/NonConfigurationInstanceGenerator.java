@@ -70,7 +70,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                 }
 
 
-                methodDescriptor.getTypeMap().get(astClassFactory.buildASTClassType(Bundle.class));
+                methodDescriptor.getTypeMap().get(astClassFactory.getType(Bundle.class));
 
                 //add to onRetainNonConfigurationInstance
                 JMethod onNonConfigInst = definedClass.method(JMod.PUBLIC, Object.class, "onRetainNonConfigurationInstance");

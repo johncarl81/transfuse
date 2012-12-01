@@ -28,7 +28,7 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
     @Override
     public T visitType(TypeElement typeElement, Void aVoid) {
         if (astTypeClass.isAssignableFrom(ASTType.class)) {
-            return (T) astElementFactory.buildASTElementType(typeElement);
+            return (T) astElementFactory.getType(typeElement);
         }
         return null;
     }
@@ -36,7 +36,7 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
     @Override
     public T visitVariable(VariableElement variableElement, Void aVoid) {
         if (astTypeClass.isAssignableFrom(ASTField.class)) {
-            return (T) astElementFactory.buildASTElementVariable(variableElement);
+            return (T) astElementFactory.getField(variableElement);
         }
         return null;
     }
@@ -47,10 +47,10 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
         //is that it is named <init>
         if (executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
             if (astTypeClass.isAssignableFrom(ASTConstructor.class)) {
-                return (T) astElementFactory.buildASTElementConstructor(executableElement);
+                return (T) astElementFactory.getConstructor(executableElement);
             }
         } else if (astTypeClass.isAssignableFrom(ASTMethod.class)) {
-            return (T) astElementFactory.buildASTElementMethod(executableElement);
+            return (T) astElementFactory.getMethod(executableElement);
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
     @Override
     public T visitTypeParameter(TypeParameterElement typeParameterElement, Void aVoid) {
         if (astTypeClass.isAssignableFrom(ASTParameter.class)) {
-            return (T) astElementFactory.buildASTElementParameter(typeParameterElement);
+            return (T) astElementFactory.getParameter(typeParameterElement);
         }
         return null;
     }

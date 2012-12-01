@@ -47,7 +47,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
         Class clazz = getClass(input);
 
         if (clazz != null) {
-            return astClassFactory.buildASTClassType(clazz);
+            return astClassFactory.getType(clazz);
         }
 
         return null;

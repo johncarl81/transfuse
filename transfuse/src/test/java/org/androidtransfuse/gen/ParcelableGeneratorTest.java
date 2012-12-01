@@ -54,8 +54,8 @@ public class ParcelableGeneratorTest {
     public void setup() throws ClassNotFoundException, IOException {
         TransfuseTestInjector.inject(this);
 
-        ASTType mockParcelASTType = astClassFactory.buildASTClassType(ParcelTarget.class);
-        ASTType mockParcelTwoASTType = astClassFactory.buildASTClassType(ParcelSecondTarget.class);
+        ASTType mockParcelASTType = astClassFactory.getType(ParcelTarget.class);
+        ASTType mockParcelTwoASTType = astClassFactory.getType(ParcelSecondTarget.class);
 
         ParcelableDescriptor parcelableDescriptor = parcelableAnalysis.analyze(mockParcelASTType);
         ParcelableDescriptor parcelableTwoDescriptor = parcelableAnalysis.analyze(mockParcelTwoASTType);

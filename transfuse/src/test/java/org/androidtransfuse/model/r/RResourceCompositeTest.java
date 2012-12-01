@@ -38,10 +38,10 @@ public class RResourceCompositeTest {
         TransfuseTestInjector.inject(this);
 
         resourceOne = new RResourceMapping();
-        resourceOne.addResource(astClassFactory.buildASTClassType(RTest.one.class), "id1", RTest.one.id1);
+        resourceOne.addResource(astClassFactory.getType(RTest.one.class), "id1", RTest.one.id1);
 
         resourceTwo = new RResourceMapping();
-        resourceTwo.addResource(astClassFactory.buildASTClassType(RTest.two.class), "id2", RTest.two.id2);
+        resourceTwo.addResource(astClassFactory.getType(RTest.two.class), "id2", RTest.two.id2);
 
         resourceComposite = new RResourceComposite(resourceOne, resourceTwo);
     }

@@ -27,35 +27,41 @@ public class ASTMatcherBuilderTest {
 
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
-    @interface TestAnnotation{}
+    @interface TestAnnotation {
+    }
+
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
-    @interface TestAnnotationTwo{}
+    @interface TestAnnotationTwo {
+    }
 
-    public class ZeroMatcherTarget{}
+    public class ZeroMatcherTarget {
+    }
 
     @TestAnnotation
-    public class SingleMatcherTarget{}
+    public class SingleMatcherTarget {
+    }
 
     @TestAnnotationTwo
     @TestAnnotation
-    public class DoubleMatcherTarget{}
+    public class DoubleMatcherTarget {
+    }
 
     private ASTType zeroMatcherASTType;
     private ASTType singleMatcherASTType;
     private ASTType doubleMatcherASTType;
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
 
-        zeroMatcherASTType = astClassFactory.buildASTClassType(ZeroMatcherTarget.class);
-        singleMatcherASTType = astClassFactory.buildASTClassType(SingleMatcherTarget.class);
-        doubleMatcherASTType = astClassFactory.buildASTClassType(DoubleMatcherTarget.class);
+        zeroMatcherASTType = astClassFactory.getType(ZeroMatcherTarget.class);
+        singleMatcherASTType = astClassFactory.getType(SingleMatcherTarget.class);
+        doubleMatcherASTType = astClassFactory.getType(DoubleMatcherTarget.class);
     }
 
     @Test
-    public void testZeroMatch(){
+    public void testZeroMatch() {
         ASTTypeMatcherBuilder typeMatcher = matcherBuilder.type();
 
         //zero matches
@@ -68,7 +74,7 @@ public class ASTMatcherBuilderTest {
     }
 
     @Test
-    public void testMatch(){
+    public void testMatch() {
         ASTTypeMatcherBuilder typeMatcher = matcherBuilder.type();
 
         typeMatcher.annotatedWith(TestAnnotation.class);
@@ -81,7 +87,7 @@ public class ASTMatcherBuilderTest {
     }
 
     @Test
-    public void testMultiMatch(){
+    public void testMultiMatch() {
         ASTTypeMatcherBuilder typeMatcher = matcherBuilder.type();
 
         typeMatcher.annotatedWith(TestAnnotation.class)

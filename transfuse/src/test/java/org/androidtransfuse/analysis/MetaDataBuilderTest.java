@@ -18,18 +18,20 @@ import static junit.framework.Assert.assertEquals;
  */
 public class MetaDataBuilderTest {
 
-    private static final String TEST_NAME ="testName";
+    private static final String TEST_NAME = "testName";
     private static final String TEST_RESOURCE = "testResource";
     private static final String TEST_VALUE = "testValue";
 
     @MetaData(name = TEST_NAME, resource = TEST_RESOURCE, value = TEST_VALUE)
-    public class MetaDataTarget{}
+    public class MetaDataTarget {
+    }
 
     @MetaDataSet({
             @MetaData(name = TEST_NAME, resource = TEST_RESOURCE, value = TEST_VALUE),
             @MetaData(name = TEST_NAME, resource = TEST_RESOURCE, value = TEST_VALUE)
     })
-    public class MetaDataSetTarget{}
+    public class MetaDataSetTarget {
+    }
 
     @Inject
     private MetaDataBuilder metaDataBuilder;
@@ -39,17 +41,17 @@ public class MetaDataBuilderTest {
     private ASTType metaDataSetTargetASTType;
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
         metaDataBuilder = new MetaDataBuilder();
 
-        metaDataTargetASTType = astClassFactory.buildASTClassType(MetaDataTarget.class);
-        metaDataSetTargetASTType = astClassFactory.buildASTClassType(MetaDataSetTarget.class);
+        metaDataTargetASTType = astClassFactory.getType(MetaDataTarget.class);
+        metaDataSetTargetASTType = astClassFactory.getType(MetaDataSetTarget.class);
 
     }
 
     @Test
-    public void testMetaData(){
+    public void testMetaData() {
         List<org.androidtransfuse.model.manifest.MetaData> metaDataList = metaDataBuilder.buildMetaData(metaDataTargetASTType);
 
         assertEquals(1, metaDataList.size());
@@ -60,7 +62,7 @@ public class MetaDataBuilderTest {
     }
 
     @Test
-    public void testMetaDataSet(){
+    public void testMetaDataSet() {
         List<org.androidtransfuse.model.manifest.MetaData> metaDataList = metaDataBuilder.buildMetaData(metaDataSetTargetASTType);
 
         assertEquals(2, metaDataList.size());

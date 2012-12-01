@@ -96,7 +96,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass serviceClassName;
         ComponentDescriptor activityDescriptor = null;
 
-        if (input.extendsFrom(astClassFactory.buildASTClassType(android.app.Service.class))) {
+        if (input.extendsFrom(astClassFactory.getType(android.app.Service.class))) {
             //vanilla Android Service
             PackageClass activityPackageClass = input.getPackageClass();
             serviceClassName = buildPackageClass(input, activityPackageClass.getClassName());
@@ -198,7 +198,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
         try {
-            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+            return astClassFactory.getMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
         }

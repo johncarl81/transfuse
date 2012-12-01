@@ -62,18 +62,18 @@ public class LoopAnalysisTest {
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
         analysisContext.getInjectionNodeBuilders().putType(B.class,
-                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
+                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.getType(BImpl.class)));
 
         analysisContext.getInjectionNodeBuilders().putType(F.class,
-                variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(astClassFactory.buildASTClassType(FProvider.class)));
+                variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(astClassFactory.getType(FProvider.class)));
 
         analysisContext.getInjectionNodeBuilders().putType(E.class,
-                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(EImpl.class)));
+                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.getType(EImpl.class)));
     }
 
     @Test
     public void testProviderLoop() {
-        ASTType astType = astClassFactory.buildASTClassType(D.class);
+        ASTType astType = astClassFactory.getType(D.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
@@ -100,7 +100,7 @@ public class LoopAnalysisTest {
 
     @Test
     public void testLoopGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
-        ASTType astType = astClassFactory.buildASTClassType(C.class);
+        ASTType astType = astClassFactory.getType(C.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
@@ -123,8 +123,8 @@ public class LoopAnalysisTest {
 
     @Test
     public void testLoopRootGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
-        ASTType astType = astClassFactory.buildASTClassType(B.class);
-        ASTType astImplType = astClassFactory.buildASTClassType(BImpl.class);
+        ASTType astType = astClassFactory.getType(B.class);
+        ASTType astImplType = astClassFactory.getType(BImpl.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astImplType, analysisContext);
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
@@ -147,7 +147,7 @@ public class LoopAnalysisTest {
 
     @Test
     public void testLoopWithPostDependenciesGeneration() throws JClassAlreadyExistsException, ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
-        ASTType astType = astClassFactory.buildASTClassType(A.class);
+        ASTType astType = astClassFactory.getType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
         PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
@@ -170,7 +170,7 @@ public class LoopAnalysisTest {
 
     @Test
     public void testBackLinkAnalysis() {
-        ASTType astType = astClassFactory.buildASTClassType(A.class);
+        ASTType astType = astClassFactory.getType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());

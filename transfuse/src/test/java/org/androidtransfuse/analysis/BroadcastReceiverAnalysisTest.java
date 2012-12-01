@@ -22,17 +22,18 @@ public class BroadcastReceiverAnalysisTest {
     private ASTType broadcastReceiverType;
 
     @BroadcastReceiver
-    public class BroadcastReceiverTarget{}
+    public class BroadcastReceiverTarget {
+    }
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
 
-        broadcastReceiverType = astClassFactory.buildASTClassType(BroadcastReceiverTarget.class);
+        broadcastReceiverType = astClassFactory.getType(BroadcastReceiverTarget.class);
     }
 
     @Test
-    public void testAnalysis(){
+    public void testAnalysis() {
         ComponentDescriptor analyze = analysis.analyze(broadcastReceiverType);
 
         //todo:fill in

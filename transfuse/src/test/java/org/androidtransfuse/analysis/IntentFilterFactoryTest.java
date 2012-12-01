@@ -23,24 +23,27 @@ public class IntentFilterFactoryTest {
     protected static final String TEST_INTENT = "test";
 
     @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT)
-    public class IntentTarget {}
+    public class IntentTarget {
+    }
 
     @IntentFilter({
             @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT),
             @Intent(type = IntentType.CATEGORY, name = IntentFilterFactoryTest.TEST_INTENT)
     })
-    public class IntentFilerTarget{}
+    public class IntentFilerTarget {
+    }
 
 
-    @IntentFilters ({
+    @IntentFilters({
             @IntentFilter(
-                @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT)
+                    @Intent(type = IntentType.ACTION, name = IntentFilterFactoryTest.TEST_INTENT)
             ),
             @IntentFilter(
                     @Intent(type = IntentType.CATEGORY, name = IntentFilterFactoryTest.TEST_INTENT)
             )
     })
-    public class IntentFiltersTarget {}
+    public class IntentFiltersTarget {
+    }
 
     @Inject
     private ASTClassFactory astClassFactory;
@@ -48,13 +51,13 @@ public class IntentFilterFactoryTest {
     private IntentFilterFactory intentFilterBuilder;
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
     }
 
     @Test
-    public void testIntent(){
-        ASTType intentAstType = astClassFactory.buildASTClassType(IntentTarget.class);
+    public void testIntent() {
+        ASTType intentAstType = astClassFactory.getType(IntentTarget.class);
 
         List<org.androidtransfuse.model.manifest.IntentFilter> intentFilters = intentFilterBuilder.buildIntentFilters(intentAstType);
 
@@ -63,8 +66,8 @@ public class IntentFilterFactoryTest {
     }
 
     @Test
-    public void testIntentFilter(){
-        ASTType intentAstType = astClassFactory.buildASTClassType(IntentFilerTarget.class);
+    public void testIntentFilter() {
+        ASTType intentAstType = astClassFactory.getType(IntentFilerTarget.class);
 
         List<org.androidtransfuse.model.manifest.IntentFilter> intentFilters = intentFilterBuilder.buildIntentFilters(intentAstType);
 
@@ -74,8 +77,8 @@ public class IntentFilterFactoryTest {
     }
 
     @Test
-    public void testIntentFilters(){
-        ASTType intentAstType = astClassFactory.buildASTClassType(IntentFiltersTarget.class);
+    public void testIntentFilters() {
+        ASTType intentAstType = astClassFactory.getType(IntentFiltersTarget.class);
 
         List<org.androidtransfuse.model.manifest.IntentFilter> intentFilters = intentFilterBuilder.buildIntentFilters(intentAstType);
 

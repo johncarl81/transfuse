@@ -67,7 +67,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     private ASTType astType(Class<?> clazz) {
-        return astClassFactory.buildASTClassType(clazz);
+        return astClassFactory.getType(clazz);
     }
 
     private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory> {
@@ -213,8 +213,8 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private InjectionNode buildViewInjectionNode(final ASTAnnotation registerAnnotation, AnalysisContext context) {
 
-        ASTType viewType = astClassFactory.buildASTClassType(View.class);
-        ASTType atViewType = astClassFactory.buildASTClassType(org.androidtransfuse.annotations.View.class);
+        ASTType viewType = astClassFactory.getType(View.class);
+        ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
         ASTAnnotation viewRegistrationAnnotation = new AST(registerAnnotation, atViewType);
 
         return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), viewType, context);

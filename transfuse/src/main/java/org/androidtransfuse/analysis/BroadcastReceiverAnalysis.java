@@ -63,7 +63,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
         ComponentDescriptor receiverDescriptor = null;
 
-        if (astType.extendsFrom(astClassFactory.buildASTClassType(android.content.BroadcastReceiver.class))) {
+        if (astType.extendsFrom(astClassFactory.getType(android.content.BroadcastReceiver.class))) {
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
             receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());

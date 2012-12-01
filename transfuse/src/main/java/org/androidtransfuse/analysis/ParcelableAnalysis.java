@@ -87,7 +87,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
     private boolean converterDefined(ASTType astType) {
 
         ASTType converterType = getConverterType(astType);
-        ASTType emptyConverterType = astClassFactory.buildASTClassType(ParcelConverter.EmptyConverter.class);
+        ASTType emptyConverterType = astClassFactory.getType(ParcelConverter.EmptyConverter.class);
         return converterType != null && !converterType.equals(emptyConverterType);
     }
 

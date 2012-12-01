@@ -60,7 +60,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
         JVar viewDeclaration = body.decl(codeModel.ref(View.class), namer.generateName(View.class));
 
-        ASTType viewType = astClassFactory.buildASTClassType(View.class);
+        ASTType viewType = astClassFactory.getType(View.class);
         onCreateMethodDescriptorBuilder.putType(viewType, new TypedExpression(viewType, viewDeclaration));
 
         MethodDescriptor onCreateMethodDescriptor = onCreateMethodDescriptorBuilder.build();
@@ -74,8 +74,8 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
             body.assign(viewDeclaration, onCreateView);
         } else {
-            ASTType viewGroupType = astClassFactory.buildASTClassType(ViewGroup.class);
-            ASTType layoutInflaterType = astClassFactory.buildASTClassType(LayoutInflater.class);
+            ASTType viewGroupType = astClassFactory.getType(ViewGroup.class);
+            ASTType layoutInflaterType = astClassFactory.getType(LayoutInflater.class);
             body.assign(viewDeclaration, onCreateMethodDescriptor.getExpression(layoutInflaterType).getExpression()
                     .invoke("inflate")
                     .arg(rResourceReferenceBuilder.buildReference(layout))
@@ -89,7 +89,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     public void closeMethod(MethodDescriptor descriptor) {
         JMethod method = descriptor.getMethod();
 
-        ASTType viewType = astClassFactory.buildASTClassType(View.class);
+        ASTType viewType = astClassFactory.getType(View.class);
         method.body()._return(descriptor.getExpression(viewType).getExpression());
     }
 }

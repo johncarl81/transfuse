@@ -34,7 +34,7 @@ public class InjectionBindingBuilder {
     }
 
     public InjectionNodeBuilder buildThis(Class targetClass) {
-        ASTType astType = astClassFactory.buildASTClassType(targetClass);
+        ASTType astType = astClassFactory.getType(targetClass);
         return buildThis(astType);
     }
 

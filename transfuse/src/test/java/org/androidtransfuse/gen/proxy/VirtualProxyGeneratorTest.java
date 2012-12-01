@@ -46,9 +46,9 @@ public class VirtualProxyGeneratorTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        ASTType interfaceAST = astClassFactory.buildASTClassType(MockInterface.class);
-        ASTType secondInterfaceAST = astClassFactory.buildASTClassType(SecondMockInteface.class);
-        ASTType delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
+        ASTType interfaceAST = astClassFactory.getType(MockInterface.class);
+        ASTType secondInterfaceAST = astClassFactory.getType(SecondMockInteface.class);
+        ASTType delegateAST = astClassFactory.getType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
 
         VirtualProxyAspect proxyAspect = new VirtualProxyAspect();

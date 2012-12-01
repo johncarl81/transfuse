@@ -66,11 +66,11 @@ public class AOPProxyGeneratorTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        delegateAST = astClassFactory.buildASTClassType(MockDelegate.class);
+        delegateAST = astClassFactory.getType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());
         delegateInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
-        mockMethdInterceptorAST = astClassFactory.buildASTClassType(MockMethodInterceptor.class);
+        mockMethdInterceptorAST = astClassFactory.getType(MockMethodInterceptor.class);
     }
 
     private InjectionNode buildMethodInterceptorInjectionNode() {

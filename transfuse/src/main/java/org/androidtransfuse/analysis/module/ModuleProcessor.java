@@ -14,18 +14,16 @@ import javax.inject.Inject;
 /**
  * Central module processor class.  Scanns the input AST elements for the appropriate annotations and registers
  * the results with the given processor.  For instance:
- *
+ * <p/>
  * {@code
- * @TransfuseModule
- * public interface IntegrationModule {
- *     @Bind(LoopThreeImpl.class)
- *     LoopThree getThree();
- * }
- * }
- *
- * associates teh LoopThreeImpl class to be used when a LoopThree is injected.
  *
  * @author John Ericksen
+ * @TransfuseModule public interface IntegrationModule {
+ * @Bind(LoopThreeImpl.class) LoopThree getThree();
+ * }
+ * }
+ * <p/>
+ * associates teh LoopThreeImpl class to be used when a LoopThree is injected.
  */
 public class ModuleProcessor {
 
@@ -37,9 +35,9 @@ public class ModuleProcessor {
                            BindInterceptorProcessor bindInterceptorProcessor,
                            ASTClassFactory astClassFactory) {
         ImmutableMap.Builder<ASTType, MethodProcessor> moduleBindings = ImmutableMap.builder();
-        moduleBindings.put(astClassFactory.buildASTClassType(Bind.class), bindProcessor);
-        moduleBindings.put(astClassFactory.buildASTClassType(BindInterceptor.class), bindInterceptorProcessor);
-        moduleBindings.put(astClassFactory.buildASTClassType(BindProvider.class), bindProviderProcessor);
+        moduleBindings.put(astClassFactory.getType(Bind.class), bindProcessor);
+        moduleBindings.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
+        moduleBindings.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
 
         this.bindingProcessors = moduleBindings.build();
     }

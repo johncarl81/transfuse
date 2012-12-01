@@ -25,18 +25,18 @@ public class InjectionNodeBuilderRepository {
     private final ASTMatcherBuilder astMatcherBuilder;
 
     @Inject
-    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory, ASTMatcherBuilder astMatcherBuilder){
+    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory, ASTMatcherBuilder astMatcherBuilder) {
         this.defaultBinding = defaultBinding;
         this.astClassFactory = astClassFactory;
         this.astMatcherBuilder = astMatcherBuilder;
     }
 
-    public void putAnnotation(ASTType annotationType, InjectionNodeBuilder annotatedVariableBuilder){
+    public void putAnnotation(ASTType annotationType, InjectionNodeBuilder annotatedVariableBuilder) {
         bindingAnnotations.put(annotationType, annotatedVariableBuilder);
     }
 
     public void putAnnotation(Class<?> viewClass, InjectionNodeBuilder viewVariableBuilder) {
-        putAnnotation(astClassFactory.buildASTClassType(viewClass), viewVariableBuilder);
+        putAnnotation(astClassFactory.getType(viewClass), viewVariableBuilder);
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
@@ -62,16 +62,16 @@ public class InjectionNodeBuilderRepository {
     public InjectionNodeBuilder getBinding(ASTType type) {
 
         InjectionNodeBuilder builder = null;
-        for (Map.Entry< Matcher<ASTType>, InjectionNodeBuilder> bindingEntry : typeBindings.entrySet()) {
-            if(bindingEntry.getKey().matches(type)){
-                if(builder != null){
+        for (Map.Entry<Matcher<ASTType>, InjectionNodeBuilder> bindingEntry : typeBindings.entrySet()) {
+            if (bindingEntry.getKey().matches(type)) {
+                if (builder != null) {
                     throw new TransfuseAnalysisException("Multiple types matched on type " + type.getName());
                 }
                 builder = bindingEntry.getValue();
             }
         }
 
-        if(builder != null){
+        if (builder != null) {
             return builder;
         }
         return defaultBinding;

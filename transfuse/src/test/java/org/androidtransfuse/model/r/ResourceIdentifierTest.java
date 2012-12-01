@@ -30,8 +30,8 @@ public class ResourceIdentifierTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        rInnerType = astClassFactory.buildASTClassType(RInnerType.class);
-        otherInnerType = astClassFactory.buildASTClassType(OtherInnerType.class);
+        rInnerType = astClassFactory.getType(RInnerType.class);
+        otherInnerType = astClassFactory.getType(OtherInnerType.class);
     }
 
     @Test

@@ -106,12 +106,12 @@ public class AnalyzerTest {
         variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
         analysisContext.getInjectionNodeBuilders().putType(B.class,
-                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.buildASTClassType(BImpl.class)));
+                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.getType(BImpl.class)));
     }
 
     @Test
     public void testBackLinkAnalysis() {
-        ASTType astType = astClassFactory.buildASTClassType(A.class);
+        ASTType astType = astClassFactory.getType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());

@@ -34,24 +34,24 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
 
         ASTParameter firstParameter = null;
-        if(astMethod.getParameters().size() > 0){
+        if (astMethod.getParameters().size() > 0) {
             firstParameter = astMethod.getParameters().get(0);
         }
-        for(int i = 1; i < astMethod.getParameters().size(); i++){
-            if(astMethod.getParameters().get(i).isAnnotated(Observes.class)){
+        for (int i = 1; i < astMethod.getParameters().size(); i++) {
+            if (astMethod.getParameters().get(i).isAnnotated(Observes.class)) {
                 //don't accept @Observes outside of the first parameter
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }
         }
 
-        if(firstParameter != null && (firstParameter.isAnnotated(Observes.class) || astMethod.isAnnotated(Observes.class))){
+        if (firstParameter != null && (firstParameter.isAnnotated(Observes.class) || astMethod.isAnnotated(Observes.class))) {
             //don't accept @Observes with more than one parameter
-            if(astMethod.getParameters().size() != 1){
+            if (astMethod.getParameters().size() != 1) {
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }
 
-            if(!injectionNode.containsAspect(ObservesAspect.class)){
-                ASTType observerTestingASType = astClassFactory.buildASTClassType(EventTending.class);
+            if (!injectionNode.containsAspect(ObservesAspect.class)) {
+                ASTType observerTestingASType = astClassFactory.getType(EventTending.class);
                 InjectionNode observerTendingInjectionNode = analyzer.analyze(observerTestingASType, observerTestingASType, context);
                 injectionNode.addAspect(new ObservesAspect(observerTendingInjectionNode));
             }

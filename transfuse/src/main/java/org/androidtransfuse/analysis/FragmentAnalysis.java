@@ -83,7 +83,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass fragmentClassName;
         ComponentDescriptor fragmentDescriptor = null;
 
-        if (!astType.extendsFrom(astClassFactory.buildASTClassType(android.support.v4.app.Fragment.class))) {
+        if (!astType.extendsFrom(astClassFactory.getType(android.support.v4.app.Fragment.class))) {
             //generated Android fragment
             fragmentClassName = buildPackageClass(astType, fragmentAnnotation.name());
 
@@ -92,7 +92,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
             TypeMirror type = getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
 
-            ASTType fragmentType = type == null ? astClassFactory.buildASTClassType(android.support.v4.app.Fragment.class)
+            ASTType fragmentType = type == null ? astClassFactory.getType(android.support.v4.app.Fragment.class)
                     : type.accept(astTypeBuilderVisitor, null);
 
 
@@ -141,7 +141,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         //onConfigurationChanged
         fragmentDescriptor.addGenerators(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", Configuration.class));
 
-        if (fragmentType.extendsFrom(astClassFactory.buildASTClassType(ListFragment.class))) {
+        if (fragmentType.extendsFrom(astClassFactory.getType(ListFragment.class))) {
             ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE);
             fragmentDescriptor.addGenerators(
                     componentBuilderFactory.buildMethodCallbackGenerator(OnListItemClick.class,
@@ -166,7 +166,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
         try {
-            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+            return astClassFactory.getMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
         }

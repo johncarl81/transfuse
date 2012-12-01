@@ -153,10 +153,10 @@ public class ParcelableGenerator {
             ReadWritePair readWritePair = classLoaderModifier.get(returnType);
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(parcelParam.invoke(readWritePair.getReadMethod()).arg(returnJClassRef.dotclass().invoke("getClassLoader")));
-        } else if (returnType.implementsFrom(astClassFactory.buildASTClassType(Parcelable.class))) {
+        } else if (returnType.implementsFrom(astClassFactory.getType(Parcelable.class))) {
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(JExpr.cast(returnJClassRef, parcelParam.invoke("readParcelable").arg(returnJClassRef.dotclass().invoke("getClassLoader"))));
-        } else if (returnType.inheritsFrom(astClassFactory.buildASTClassType(Serializable.class))) {
+        } else if (returnType.inheritsFrom(astClassFactory.getType(Serializable.class))) {
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(JExpr.cast(returnJClassRef, parcelParam.invoke("readSerializable")));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
@@ -185,10 +185,10 @@ public class ParcelableGenerator {
             body.invoke(parcel,
                     classLoaderModifier.get((propertyMutator.getGetter().getReturnType())).getWriteMethod())
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName()));
-        } else if (returnType.implementsFrom(astClassFactory.buildASTClassType(Parcelable.class))) {
+        } else if (returnType.implementsFrom(astClassFactory.getType(Parcelable.class))) {
             body.invoke(parcel, "writeParcelable")
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName())).arg(flags);
-        } else if (returnType.inheritsFrom(astClassFactory.buildASTClassType(Serializable.class))) {
+        } else if (returnType.inheritsFrom(astClassFactory.getType(Serializable.class))) {
             body.invoke(parcel, "writeSerializable")
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName()));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
@@ -245,21 +245,21 @@ public class ParcelableGenerator {
     }
 
     private void addClassloaderPair(Class clazz, String readSparseArray, String writeSparseArray) {
-        ASTType astType = astClassFactory.buildASTClassType(clazz);
+        ASTType astType = astClassFactory.getType(clazz);
         classLoaderModifier.put(astType, new ReadWritePair(readSparseArray, writeSparseArray));
     }
 
     private void addPair(Class clazz, String readMethod, String writeMethod) {
-        addPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
+        addPair(astClassFactory.getType(clazz), readMethod, writeMethod);
     }
 
     private void addPrimitiveArrayPair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
         addArrayPair(new ASTArrayType(primitiveType), readMethod, writeMethod);
-        addArrayPair(new ASTArrayType(astClassFactory.buildASTClassType(primitiveType.getObjectClass())), readMethod, writeMethod);
+        addArrayPair(new ASTArrayType(astClassFactory.getType(primitiveType.getObjectClass())), readMethod, writeMethod);
     }
 
     private void addArrayPair(Class clazz, String readMethod, String writeMethod) {
-        addArrayPair(astClassFactory.buildASTClassType(clazz), readMethod, writeMethod);
+        addArrayPair(astClassFactory.getType(clazz), readMethod, writeMethod);
     }
 
     private void addArrayPair(ASTType astArrayType, String readMethod, String writeMethod) {
@@ -268,7 +268,7 @@ public class ParcelableGenerator {
 
     private void addPrimitivePair(ASTPrimitiveType primitiveType, String readMethod, String writeMethod) {
         addPair(primitiveType, readMethod, writeMethod);
-        addPair(astClassFactory.buildASTClassType(primitiveType.getObjectClass()), readMethod, writeMethod);
+        addPair(astClassFactory.getType(primitiveType.getObjectClass()), readMethod, writeMethod);
     }
 
     private void addPair(ASTType astType, String readMethod, String writeMethod) {

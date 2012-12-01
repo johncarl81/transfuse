@@ -162,7 +162,7 @@ public class VirtualProxyGenerator {
 
     private ASTMethod getASTMethod(String name, Class... parameters) throws NoSuchMethodException {
         Method method = Object.class.getMethod(name, parameters);
-        return astClassFactory.buildASTClassMethod(method);
+        return astClassFactory.getMethod(method);
     }
 
     public TypedExpression initializeProxy(InjectionBuilderContext context, TypedExpression proxyVariable, TypedExpression variableBuilder) {

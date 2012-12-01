@@ -22,17 +22,18 @@ public class ServiceAnalysisTest {
     private ASTType serviceTargetType;
 
     @Service
-    public class ServiceAnalysisTarget{}
+    public class ServiceAnalysisTarget {
+    }
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
 
-        serviceTargetType = astClassFactory.buildASTClassType(ServiceAnalysisTarget.class);
+        serviceTargetType = astClassFactory.getType(ServiceAnalysisTarget.class);
     }
 
     @Test
-    public void testAnalysis(){
+    public void testAnalysis() {
         ComponentDescriptor componentDescriptor = serviceAnalysis.analyze(serviceTargetType);
 
         //todo:fill in

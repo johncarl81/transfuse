@@ -120,13 +120,13 @@ public class ActivityComponentBuilderRepositoryFactory {
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args){
+    private ASTMethod getASTMethod(String methodName, Class... args) {
         return getASTMethod(Activity.class, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args){
-        try{
-            return astClassFactory.buildASTClassMethod(type.getDeclaredMethod(methodName, args));
+    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
+        try {
+            return astClassFactory.getMethod(type.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
         }

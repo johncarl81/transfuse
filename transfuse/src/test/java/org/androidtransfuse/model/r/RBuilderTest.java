@@ -30,7 +30,7 @@ public class RBuilderTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        idInnerType = astClassFactory.buildASTClassType(RTest.class);
+        idInnerType = astClassFactory.getType(RTest.class);
     }
 
     @Test

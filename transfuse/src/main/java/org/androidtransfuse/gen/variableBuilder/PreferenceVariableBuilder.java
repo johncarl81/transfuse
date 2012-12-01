@@ -38,15 +38,15 @@ public class PreferenceVariableBuilder implements VariableBuilder {
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.preferenceType = preferenceType;
 
-        accessorMethods.put(astClassFactory.buildASTClassType(String.class), new PrefGetBuilder("getString", JExpr.lit("")));
-        accessorMethods.put(astClassFactory.buildASTClassType(long.class), new PrefGetBuilder("getLong", JExpr.lit(0L)));
-        accessorMethods.put(astClassFactory.buildASTClassType(int.class), new PrefGetBuilder("getInt", JExpr.lit(0)));
-        accessorMethods.put(astClassFactory.buildASTClassType(float.class), new PrefGetBuilder("getFloat", JExpr.lit(0F)));
-        accessorMethods.put(astClassFactory.buildASTClassType(boolean.class), new PrefGetBuilder("getBoolean", JExpr.lit(false)));
-        accessorMethods.put(astClassFactory.buildASTClassType(Long.class), new PrefGetBuilder("getLong", JExpr.lit(0L)));
-        accessorMethods.put(astClassFactory.buildASTClassType(Integer.class), new PrefGetBuilder("getInt", JExpr.lit(0)));
-        accessorMethods.put(astClassFactory.buildASTClassType(Float.class), new PrefGetBuilder("getFloat", JExpr.lit(0F)));
-        accessorMethods.put(astClassFactory.buildASTClassType(Boolean.class), new PrefGetBuilder("getBoolean", JExpr.lit(false)));
+        accessorMethods.put(astClassFactory.getType(String.class), new PrefGetBuilder("getString", JExpr.lit("")));
+        accessorMethods.put(astClassFactory.getType(long.class), new PrefGetBuilder("getLong", JExpr.lit(0L)));
+        accessorMethods.put(astClassFactory.getType(int.class), new PrefGetBuilder("getInt", JExpr.lit(0)));
+        accessorMethods.put(astClassFactory.getType(float.class), new PrefGetBuilder("getFloat", JExpr.lit(0F)));
+        accessorMethods.put(astClassFactory.getType(boolean.class), new PrefGetBuilder("getBoolean", JExpr.lit(false)));
+        accessorMethods.put(astClassFactory.getType(Long.class), new PrefGetBuilder("getLong", JExpr.lit(0L)));
+        accessorMethods.put(astClassFactory.getType(Integer.class), new PrefGetBuilder("getInt", JExpr.lit(0)));
+        accessorMethods.put(astClassFactory.getType(Float.class), new PrefGetBuilder("getFloat", JExpr.lit(0F)));
+        accessorMethods.put(astClassFactory.getType(Boolean.class), new PrefGetBuilder("getBoolean", JExpr.lit(false)));
     }
 
     @Override

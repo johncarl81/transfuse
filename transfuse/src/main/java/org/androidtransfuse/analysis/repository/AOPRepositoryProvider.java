@@ -25,8 +25,8 @@ public class AOPRepositoryProvider implements Provider<AOPRepository> {
     public AOPRepository get() {
         AOPRepository aopRepository = new AOPRepository();
 
-        aopRepository.put(astClassFactory.buildASTClassType(Asynchronous.class), astClassFactory.buildASTClassType(AsynchronousMethodInterceptor.class));
-        aopRepository.put(astClassFactory.buildASTClassType(UIThread.class), astClassFactory.buildASTClassType(UIThreadMethodInterceptor.class));
+        aopRepository.put(astClassFactory.getType(Asynchronous.class), astClassFactory.getType(AsynchronousMethodInterceptor.class));
+        aopRepository.put(astClassFactory.getType(UIThread.class), astClassFactory.getType(UIThreadMethodInterceptor.class));
 
         return aopRepository;
     }

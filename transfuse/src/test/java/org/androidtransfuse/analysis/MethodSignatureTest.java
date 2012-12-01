@@ -44,7 +44,7 @@ public class MethodSignatureTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        ASTType targetType = astClassFactory.buildASTClassType(MethodSignatureTarget.class);
+        ASTType targetType = astClassFactory.getType(MethodSignatureTarget.class);
 
         Iterator<ASTMethod> iterator = targetType.getMethods().iterator();
 

@@ -58,10 +58,9 @@ public class InjectionPointFactory {
     /**
      * Build a Method Injection Point from the given ASTMethod
      *
-     *
      * @param concreteType
-     * @param astMethod required ASTMethod
-     * @param context   analysis context
+     * @param astMethod    required ASTMethod
+     * @param context      analysis context
      * @return MethodInjectionPoint
      */
     public MethodInjectionPoint buildInjectionPoint(ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
@@ -87,10 +86,9 @@ public class InjectionPointFactory {
     /**
      * Build a Field InjectionPoint from the given ASTField
      *
-     *
      * @param concreteType
-     * @param astField required ASTField
-     * @param context  analysis context
+     * @param astField     required ASTField
+     * @param context      analysis context
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTType concreteType, ASTField astField, AnalysisContext context) {
@@ -109,7 +107,7 @@ public class InjectionPointFactory {
     }
 
     public InjectionNode buildInjectionNode(Class type, AnalysisContext context) {
-        return buildInjectionNode(astClassFactory.buildASTClassType(type), context);
+        return buildInjectionNode(astClassFactory.getType(type), context);
     }
 
     public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {

@@ -38,7 +38,7 @@ public class ComponentProcessorTest {
 
     @Test
     public void testProcess() {
-        ASTType astType = astClassFactory.buildASTClassType(ComponentProcessorTest.class);
+        ASTType astType = astClassFactory.getType(ComponentProcessorTest.class);
         componentProcessor.process(Collections.singleton(astType));
 
         verify(mockGenerator).generate(astType);

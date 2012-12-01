@@ -50,7 +50,7 @@ public class InjectionPointFactoryTest {
         Constructor<?>[] constructors = MockAnalysisClass.class.getConstructors();
         Constructor constructor = constructors[0];
 
-        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.buildASTClassType(MockAnalysisClass.class), astClassFactory.buildASTClassConstructor(constructor), emptyContext);
+        ConstructorInjectionPoint constructorInjectionPoint = injectionPointFactory.buildInjectionPoint(astClassFactory.getType(MockAnalysisClass.class), astClassFactory.getConstructor(constructor), emptyContext);
 
         TypeVariable[] typeParameters = constructor.getTypeParameters();
         List<InjectionNode> injectionNodes = constructorInjectionPoint.getInjectionNodes();
@@ -62,7 +62,7 @@ public class InjectionPointFactoryTest {
         }
 
         assertEquals(1, constructorInjectionPoint.getThrowsTypes().size());
-        assertEquals(astClassFactory.buildASTClassType(TransfuseInjectionException.class), constructorInjectionPoint.getThrowsTypes().get(0));
+        assertEquals(astClassFactory.getType(TransfuseInjectionException.class), constructorInjectionPoint.getThrowsTypes().get(0));
     }
 
     @Test
@@ -70,9 +70,9 @@ public class InjectionPointFactoryTest {
         Method[] methods = MockAnalysisClass.class.getDeclaredMethods();
         Method method = methods[0];
 
-        List<ASTParameter> astParameters = astClassFactory.buildASTTypeParameters(method);
-        ASTType containingType = astClassFactory.buildASTClassType(MockAnalysisClass.class);
-        ASTMethod astMethod = astClassFactory.buildASTClassMethod(method);
+        List<ASTParameter> astParameters = astClassFactory.getParameters(method);
+        ASTType containingType = astClassFactory.getType(MockAnalysisClass.class);
+        ASTMethod astMethod = astClassFactory.getMethod(method);
 
         MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astMethod, emptyContext);
 
@@ -86,7 +86,7 @@ public class InjectionPointFactoryTest {
         }
 
         assertEquals(1, methodInjectionPoint.getThrowsTypes().size());
-        assertEquals(astClassFactory.buildASTClassType(TransfuseInjectionException.class), methodInjectionPoint.getThrowsTypes().get(0));
+        assertEquals(astClassFactory.getType(TransfuseInjectionException.class), methodInjectionPoint.getThrowsTypes().get(0));
     }
 
     @Test
@@ -94,9 +94,9 @@ public class InjectionPointFactoryTest {
         Field[] fields = MockAnalysisClass.class.getDeclaredFields();
         Field field = fields[0];
 
-        ASTType containingType = astClassFactory.buildASTClassType(MockAnalysisClass.class);
+        ASTType containingType = astClassFactory.getType(MockAnalysisClass.class);
 
-        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astClassFactory.buildASTClassField(field), emptyContext);
+        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astClassFactory.getField(field), emptyContext);
 
         InjectionNode injectionNode = fieldInjectionPoint.getInjectionNode();
 

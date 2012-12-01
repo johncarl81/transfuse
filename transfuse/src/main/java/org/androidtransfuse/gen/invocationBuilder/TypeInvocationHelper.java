@@ -47,7 +47,7 @@ public class TypeInvocationHelper {
         if (targetType instanceof ASTPrimitiveType) {
             ASTPrimitiveType primitiveTargetType = (ASTPrimitiveType) targetType;
 
-            ASTType objectType = astClassFactory.buildASTClassType(primitiveTargetType.getObjectClass());
+            ASTType objectType = astClassFactory.getType(primitiveTargetType.getObjectClass());
 
             if (objectType.inheritsFrom(typedExpression.getType())) {
                 return JExpr.cast(codeModel.ref(objectType.getName()), typedExpression.getExpression());

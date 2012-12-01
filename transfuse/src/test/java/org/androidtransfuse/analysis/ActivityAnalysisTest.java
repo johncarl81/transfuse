@@ -32,7 +32,7 @@ public class ActivityAnalysisTest {
 
     @Test
     public void testActivityAnnotation() {
-        ComponentDescriptor activityDescriptor = activityAnalysis.analyze(astClassFactory.buildASTClassType(MockActivityDelegate.class));
+        ComponentDescriptor activityDescriptor = activityAnalysis.analyze(astClassFactory.getType(MockActivityDelegate.class));
         assertEquals(TEST_NAME, activityDescriptor.getPackageClass().getClassName());
 
         assertEquals(Activity.class.getName(), activityDescriptor.getType());

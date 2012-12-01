@@ -123,7 +123,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private ASTMethod getASTMethod(String methodName, Class... args) {
         try {
-            return astClassFactory.buildASTClassMethod(android.app.Application.class.getDeclaredMethod(methodName, args));
+            return astClassFactory.getMethod(android.app.Application.class.getDeclaredMethod(methodName, args));
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
         }

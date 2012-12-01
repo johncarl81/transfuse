@@ -21,17 +21,18 @@ public class ApplicationAnalysisTest {
     private ASTType applicationASTType;
 
     @Application
-    public class ApplicationAnalysisTarget{}
+    public class ApplicationAnalysisTarget {
+    }
 
     @Before
-    public void setup(){
+    public void setup() {
         TransfuseTestInjector.inject(this);
 
-        applicationASTType = astClassFactory.buildASTClassType(ApplicationAnalysisTarget.class);
+        applicationASTType = astClassFactory.getType(ApplicationAnalysisTarget.class);
     }
 
     @Test
-    public void testAnalysis(){
+    public void testAnalysis() {
         applicationAnalysis.analyze(applicationASTType);
     }
 

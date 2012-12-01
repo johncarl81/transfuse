@@ -57,7 +57,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
     @Override
     public ASTType visitExecutable(ExecutableType executableType, Void v) {
         if (executableType instanceof TypeElement) {
-            return astElementFactory.buildASTElementType((TypeElement) executableType);
+            return astElementFactory.getType((TypeElement) executableType);
         } else {
             throw new TransfuseAnalysisException("Encountered non-TypeElement");
         }

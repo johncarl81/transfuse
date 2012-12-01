@@ -44,7 +44,7 @@ public class ASTClassAnnotation implements ASTAnnotation {
             Object invocationResult = annotationParameter.invoke(annotation);
 
             if (convertToASTType) {
-                return (T) astClassFactory.buildASTClassType((Class) invocationResult);
+                return (T) astClassFactory.getType((Class) invocationResult);
             }
             return (T) invocationResult;
 

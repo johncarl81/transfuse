@@ -37,7 +37,7 @@ public class ASTElementFactory {
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
 
-        ASTType astType = buildASTElementType((TypeElement) declaredType.asElement());
+        ASTType astType = getType((TypeElement) declaredType.asElement());
 
         if (!declaredType.getTypeArguments().isEmpty()) {
             return astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder(declaredType));
@@ -51,52 +51,56 @@ public class ASTElementFactory {
      * @param typeElement required input Element
      * @return ASTType constructed using teh input Element
      */
-    public ASTType buildASTElementType(TypeElement typeElement) {
+    public synchronized ASTType getType(TypeElement typeElement) {
         if (!typeCache.containsKey(typeElement)) {
-
-            //build placeholder for ASTElementType and contained data structures to allow for children population
-            //while avoiding back link loops
-            ImmutableList.Builder<ASTConstructor> constructors = ImmutableList.builder();
-            ImmutableList.Builder<ASTField> fields = ImmutableList.builder();
-            ImmutableList.Builder<ASTMethod> methods = ImmutableList.builder();
-
-            ASTType superClass = null;
-            if (typeElement.getSuperclass() != null) {
-                superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
-            }
-
-            ImmutableList<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
-                    .transform(astTypeBuilderVisitor)
-                    .toImmutableList();
-
-            ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
-
-            PackageClass packageClass = buildPackageClass(typeElement);
-
-            ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
-            typeCache.put(typeElement, astTypeProxy);
-
-            //iterate and build the contained elements within this TypeElement
-            constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
-            fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
-            methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
-
-            annotations.addAll(buildAnnotations(typeElement));
-
-            ASTType astType = new ASTElementType(packageClass,
-                    typeElement,
-                    constructors.build(),
-                    methods.build(),
-                    fields.build(),
-                    superClass,
-                    interfaces,
-                    annotations.build());
-
-            astTypeProxy.load(astType);
-            typeCache.put(typeElement, astType);
+            typeCache.put(typeElement, buildType(typeElement));
         }
 
         return typeCache.get(typeElement);
+    }
+
+    private ASTType buildType(TypeElement typeElement) {
+        //build placeholder for ASTElementType and contained data structures to allow for children population
+        //while avoiding back link loops
+        ImmutableList.Builder<ASTConstructor> constructors = ImmutableList.builder();
+        ImmutableList.Builder<ASTField> fields = ImmutableList.builder();
+        ImmutableList.Builder<ASTMethod> methods = ImmutableList.builder();
+
+        ASTType superClass = null;
+        if (typeElement.getSuperclass() != null) {
+            superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
+        }
+
+        ImmutableList<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
+                .transform(astTypeBuilderVisitor)
+                .toImmutableList();
+
+        ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
+
+        PackageClass packageClass = buildPackageClass(typeElement);
+
+        ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
+        typeCache.put(typeElement, astTypeProxy);
+
+        //iterate and build the contained elements within this TypeElement
+        constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
+        fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
+        methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
+
+        annotations.addAll(getAnnotations(typeElement));
+
+        ASTType astType = new ASTElementType(packageClass,
+                typeElement,
+                constructors.build(),
+                methods.build(),
+                fields.build(),
+                superClass,
+                interfaces,
+                annotations.build());
+
+        astTypeProxy.load(astType);
+
+        return astType;
     }
 
     private PackageClass buildPackageClass(TypeElement typeElement) {
@@ -123,10 +127,10 @@ public class ASTElementFactory {
      * @param variableElement required input Element
      * @return ASTElementField
      */
-    public ASTField buildASTElementVariable(VariableElement variableElement) {
+    public ASTField getField(VariableElement variableElement) {
         ASTAccessModifier modifier = buildAccessModifier(variableElement);
 
-        return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier, buildAnnotations(variableElement));
+        return new ASTElementField(variableElement, astTypeBuilderVisitor, modifier, getAnnotations(variableElement));
     }
 
     private ASTAccessModifier buildAccessModifier(Element element) {
@@ -150,13 +154,13 @@ public class ASTElementFactory {
      * @param executableElement required input element
      * @return ASTMethod
      */
-    public ASTMethod buildASTElementMethod(ExecutableElement executableElement) {
+    public ASTMethod getMethod(ExecutableElement executableElement) {
 
-        ImmutableList<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
+        ImmutableList<ASTParameter> parameters = getParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
         ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
-        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
+        return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, getAnnotations(executableElement), throwsTypes);
     }
 
     private ImmutableList<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
@@ -171,11 +175,11 @@ public class ASTElementFactory {
      * @param variableElements required input element
      * @return list of ASTParameters
      */
-    private ImmutableList<ASTParameter> buildASTElementParameters(List<? extends VariableElement> variableElements) {
+    private ImmutableList<ASTParameter> getParameters(List<? extends VariableElement> variableElements) {
         ImmutableList.Builder<ASTParameter> astParameterBuilder = ImmutableList.builder();
 
         for (VariableElement variables : variableElements) {
-            astParameterBuilder.add(buildASTElementParameter(variables));
+            astParameterBuilder.add(getParameter(variables));
         }
 
         return astParameterBuilder.build();
@@ -187,18 +191,8 @@ public class ASTElementFactory {
      * @param variableElement required input element
      * @return ASTParameter
      */
-    private ASTParameter buildASTElementParameter(VariableElement variableElement) {
-        return new ASTElementParameter(variableElement, astTypeBuilderVisitor, buildAnnotations(variableElement));
-    }
-
-    /**
-     * Build an ASTParameter from the input TypeParameterElement
-     *
-     * @param typeParameterElement required input element
-     * @return ASTParameter
-     */
-    public ASTParameter buildASTElementParameter(TypeParameterElement typeParameterElement) {
-        return new ASTElementParameter(typeParameterElement, astTypeBuilderVisitor, buildAnnotations(typeParameterElement));
+    public ASTParameter getParameter(Element variableElement) {
+        return new ASTElementParameter(variableElement, astTypeBuilderVisitor, getAnnotations(variableElement));
     }
 
     /**
@@ -207,19 +201,19 @@ public class ASTElementFactory {
      * @param executableElement require input element
      * @return ASTConstructor
      */
-    public ASTConstructor buildASTElementConstructor(ExecutableElement executableElement) {
-        ImmutableList<ASTParameter> parameters = buildASTElementParameters(executableElement.getParameters());
+    public ASTConstructor getConstructor(ExecutableElement executableElement) {
+        ImmutableList<ASTParameter> parameters = getParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
         ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
-        return new ASTElementConstructor(executableElement, parameters, modifier, buildAnnotations(executableElement), throwsTypes);
+        return new ASTElementConstructor(executableElement, parameters, modifier, getAnnotations(executableElement), throwsTypes);
     }
 
-    private ImmutableCollection<ASTAnnotation> buildAnnotations(Element element) {
+    private ImmutableCollection<ASTAnnotation> getAnnotations(Element element) {
         ImmutableList.Builder<ASTAnnotation> annotationBuilder = ImmutableList.builder();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            ASTType type = buildASTElementType((TypeElement) annotationMirror.getAnnotationType().asElement());
+            ASTType type = getType((TypeElement) annotationMirror.getAnnotationType().asElement());
 
             annotationBuilder.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
         }

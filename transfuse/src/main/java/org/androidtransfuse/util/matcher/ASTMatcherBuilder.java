@@ -26,6 +26,6 @@ public class ASTMatcherBuilder {
     }
 
     public ASTTypeMatcherBuilder type(Class<?> clazz) {
-        return type(astClassFactory.buildASTClassType(clazz));
+        return type(astClassFactory.getType(clazz));
     }
 }

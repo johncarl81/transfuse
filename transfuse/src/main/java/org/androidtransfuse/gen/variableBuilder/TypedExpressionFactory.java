@@ -20,7 +20,7 @@ public class TypedExpressionFactory {
     }
 
     public TypedExpression build(Class type, JExpression expression) {
-        return build(astClassFactory.buildASTClassType(type), expression);
+        return build(astClassFactory.getType(type), expression);
     }
 
     public TypedExpression build(ASTType astType, JExpression expression) {

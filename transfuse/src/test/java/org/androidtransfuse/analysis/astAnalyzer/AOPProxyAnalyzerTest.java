@@ -64,9 +64,9 @@ public class AOPProxyAnalyzerTest {
     public void setup() {
         TransfuseTestInjector.inject(this);
 
-        methodInterceptorASTType = astClassFactory.buildASTClassType(AOPAnnotationMethodInterceptor.class);
-        aopAnnotationASTType = astClassFactory.buildASTClassType(AOPAnnotation.class);
-        proxyTargetASTType = astClassFactory.buildASTClassType(AOPProxyTarget.class);
+        methodInterceptorASTType = astClassFactory.getType(AOPAnnotationMethodInterceptor.class);
+        aopAnnotationASTType = astClassFactory.getType(AOPAnnotation.class);
+        proxyTargetASTType = astClassFactory.getType(AOPProxyTarget.class);
         proxyTargetInjectionNode = injectionPointFactory.buildInjectionNode(proxyTargetASTType, simpleAnalysisContextFactory.buildContext());
     }
 
