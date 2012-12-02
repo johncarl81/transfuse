@@ -13,13 +13,13 @@ You may download Transfuse as a Maven dependency:
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse</artifactId>
-    <version>UPDATE VERSION</version>
+    <version>${transfuse.version}</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse-api</artifactId>
-    <version>UPDATE VERSION</version>
+    <version>${transfuse.version}</version>
 </dependency>
 ```
 
