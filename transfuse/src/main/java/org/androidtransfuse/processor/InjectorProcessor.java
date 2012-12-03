@@ -5,33 +5,34 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import javax.inject.Provider;
-import java.util.Collection;
 
 /**
  * @author John Ericksen
  */
-public class ParcelProcessor {
+public class InjectorProcessor implements TransactionProcessorBuilder<Provider<ASTType>, JDefinedClass> {
 
     private final TransactionProcessor processor;
     private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor;
-    private final ParcelTransactionFactory parcelTransactionFactory;
+    private final TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory;
 
-    public ParcelProcessor(TransactionProcessor processor,
-                           TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor,
-                           ParcelTransactionFactory parcelTransactionFactory) {
+    public InjectorProcessor(TransactionProcessor processor,
+                             TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor,
+                             TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory) {
         this.processor = processor;
         this.parcelProcessor = parcelProcessor;
-        this.parcelTransactionFactory = parcelTransactionFactory;
+        this.injectorTransactionFactory = injectorTransactionFactory;
     }
 
-    public void submit(Collection<Provider<ASTType>> parcels) {
-        for (Provider<ASTType> parcel : parcels) {
-            parcelProcessor.submit(parcelTransactionFactory.buildTransaction(parcel));
-        }
+    public void submit(Provider<ASTType> parcel) {
+        parcelProcessor.submit(injectorTransactionFactory.buildTransaction(parcel));
     }
 
     public void execute() {
         processor.execute();
+    }
+
+    public TransactionProcessor getTransactionProcessor() {
+        return processor;
     }
 
     public void checkForErrors() {

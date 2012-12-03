@@ -26,12 +26,10 @@ import java.util.Map;
  */
 public class TransfuseSetupGuiceModule extends AbstractModule {
 
-    public static final String PARCELS_TRANSACTION_PROCESSOR = "parcelsTransactionProcessor";
-    private static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
+    public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
     public static final String PARCEL_TRANSACTION_WORKER = "parcelTransactionWorker";
     public static final String INJECTOR_TRANSACTION_WORKER = "injectorTransactionWorker";
-    private static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
-    public static final String INJECTORS_TRANSACTION_PROCESSOR = "injectorsTransactionProcessor";
+    public static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
     public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
 
     private final Logger logger;
@@ -102,17 +100,6 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     }
 
     @Provides
-    @Named(INJECTORS_TRANSACTION_PROCESSOR)
-    public TransactionProcessor<Provider<ASTType>, JDefinedClass> getInjectorsTransactionProcessor(
-            @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
-            @Named(INJECTORS_TRANSACTION_WORKER) Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> worker) {
-
-        return new TransactionProcessor<Provider<ASTType>, JDefinedClass>(
-                new ScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>
-                        (scope, worker));
-    }
-
-    @Provides
     @Named(PARCELS_TRANSACTION_WORKER)
     public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
                                                                                                       FilerSourceCodeWriter codeWriter,
@@ -122,13 +109,31 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     }
 
     @Provides
-    @Named(PARCELS_TRANSACTION_PROCESSOR)
-    public TransactionProcessor<Provider<ASTType>, JDefinedClass> getParcelTransactionProcessor(
-            @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
-            @Named(PARCELS_TRANSACTION_WORKER) Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> worker) {
+    public InjectorProcessor getInjectorProcessor(InjectorTransactionFactory injectorTransactionFactory,
+                                                  InjectorsTransactionFactory injectorsTransactionFactory) {
+        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor =
+                new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
+        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> parcelsProcessor =
+                new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
 
-        return new TransactionProcessor<Provider<ASTType>, JDefinedClass>(
-                new ScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>
-                        (scope, worker));
+        TransactionProcessor processor =
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(injectorProcessor, parcelsProcessor, injectorsTransactionFactory);
+
+        return new InjectorProcessor(processor, injectorProcessor, injectorTransactionFactory);
+    }
+
+    @Provides
+    public ParcelProcessor getParcelProcessor(ParcelTransactionFactory parcelTransactionFactory,
+                                              ParcelsTransactionFactory parcelsTransactionFactory) {
+
+        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor =
+                new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
+        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> parcelsProcessor =
+                new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
+
+        TransactionProcessor processor =
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(parcelProcessor, parcelsProcessor, parcelsTransactionFactory);
+
+        return new ParcelProcessor(processor, parcelProcessor, parcelTransactionFactory);
     }
 }

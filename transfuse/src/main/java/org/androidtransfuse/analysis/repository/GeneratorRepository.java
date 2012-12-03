@@ -1,9 +1,10 @@
 package org.androidtransfuse.analysis.repository;
 
+import com.google.common.collect.ImmutableMap;
+import org.androidtransfuse.processor.TransactionProcessor;
 import org.androidtransfuse.processor.TransactionProcessorBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,17 +12,23 @@ import java.util.Map;
  */
 public class GeneratorRepository {
 
-    private final Map<Class<? extends Annotation>, TransactionProcessorBuilder> repository = new HashMap<Class<? extends Annotation>, TransactionProcessorBuilder>();
+    private final ImmutableMap<Class<? extends Annotation>, TransactionProcessorBuilder> componentBuilders;
+    private final TransactionProcessor processor;
 
-    public void add(Class<? extends Annotation> componentAnnotation, TransactionProcessorBuilder generator) {
-        repository.put(componentAnnotation, generator);
+    public GeneratorRepository(ImmutableMap<Class<? extends Annotation>, TransactionProcessorBuilder> componentBuilders, TransactionProcessor processor) {
+        this.componentBuilders = componentBuilders;
+        this.processor = processor;
     }
 
-    public TransactionProcessorBuilder getBuilder(Class<? extends Annotation> componentAnnotation) {
-        return repository.get(componentAnnotation);
+    public TransactionProcessorBuilder getComponentBuilder(Class<? extends Annotation> componentAnnotation) {
+        return componentBuilders.get(componentAnnotation);
     }
 
-    public Map<Class<? extends Annotation>, TransactionProcessorBuilder> getRepository() {
-        return repository;
+    public Map<Class<? extends Annotation>, TransactionProcessorBuilder> getComponentBuilders() {
+        return componentBuilders;
+    }
+
+    public TransactionProcessor getProcessor() {
+        return processor;
     }
 }

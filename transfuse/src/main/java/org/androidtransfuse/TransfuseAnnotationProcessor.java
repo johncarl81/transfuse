@@ -10,14 +10,11 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
-import org.androidtransfuse.gen.ApplicationGenerator;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
-import org.androidtransfuse.processor.ComponentProcessor;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
-import org.androidtransfuse.processor.TransfuseAssembler;
 import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
@@ -111,6 +108,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         configurationScope.enter();
 
+        configurationScope.seed(Key.get(File.class, Names.named(TransfuseGenerateGuiceModule.MANIFEST_FILE)), manifestFile);
         configurationScope.seed(RResource.class, r);
         configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST)), manifest);
 
@@ -125,9 +123,6 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         transfuseProcessor.processModule(wrapASTCollection(moduleElements));
         transfuseProcessor.processImplementedBy(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(ImplementedBy.class)));
 
-        ApplicationGenerator applicationProcessor = transfuseProcessor.getApplicationProcessor();
-        ComponentProcessor componentProcessor = applicationProcessor.getComponentProcessor();
-
         Set<? extends Element> applicationTypes = roundEnvironment.getElementsAnnotatedWith(Application.class);
 
         if (applicationTypes.size() > 1) {
@@ -136,30 +131,22 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         //process components
         if (applicationTypes.isEmpty()) {
-            applicationProcessor.generateEmptyApplication();
+            transfuseProcessor.generateEmptyApplication();
         } else {
-            componentProcessor.submit(Application.class, reloadableASTElementFactory.buildProviders((applicationTypes)));
+            transfuseProcessor.submit(Application.class, reloadableASTElementFactory.buildProviders((applicationTypes)));
         }
 
-        componentProcessor.submit(Injector.class, buildASTCollection(roundEnvironment, Injector.class));
-        componentProcessor.submit(Activity.class, buildASTCollection(roundEnvironment, Activity.class));
-        componentProcessor.submit(BroadcastReceiver.class, buildASTCollection(roundEnvironment, BroadcastReceiver.class));
-        componentProcessor.submit(Service.class, buildASTCollection(roundEnvironment, Service.class));
-        componentProcessor.submit(Fragment.class, buildASTCollection(roundEnvironment, Fragment.class));
+        transfuseProcessor.submit(Injector.class, buildASTCollection(roundEnvironment, Injector.class));
+        transfuseProcessor.submit(Activity.class, buildASTCollection(roundEnvironment, Activity.class));
+        transfuseProcessor.submit(BroadcastReceiver.class, buildASTCollection(roundEnvironment, BroadcastReceiver.class));
+        transfuseProcessor.submit(Service.class, buildASTCollection(roundEnvironment, Service.class));
+        transfuseProcessor.submit(Fragment.class, buildASTCollection(roundEnvironment, Fragment.class));
 
-        componentProcessor.execute();
+        transfuseProcessor.execute();
 
         if (roundEnvironment.processingOver()) {
-            componentProcessor.getError();
+            transfuseProcessor.getError();
         }
-
-        //assembling generated code
-        TransfuseAssembler transfuseAssembler = applicationProcessor.getTransfuseAssembler();
-
-        Manifest updatedManifest = transfuseAssembler.buildManifest();
-
-        //write manifest back out, updating from processed classes
-        manifestParser.writeManifest(updatedManifest, manifestFile);
 
         logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
 

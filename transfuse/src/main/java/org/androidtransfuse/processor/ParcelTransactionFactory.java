@@ -12,7 +12,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class ParcelTransactionFactory {
+public class ParcelTransactionFactory implements TransactionFactory<Provider<ASTType>, JDefinedClass> {
 
     private final EnterableScope scope;
     private final Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;

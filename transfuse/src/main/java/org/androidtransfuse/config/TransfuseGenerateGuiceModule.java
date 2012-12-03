@@ -20,6 +20,8 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFacto
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 
+import java.io.File;
+
 /**
  * @author John Ericksen
  */
@@ -28,6 +30,7 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
     public static final String CONFIGURATION_SCOPE = "configurationScope";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String DEFAULT_BINDING = "defaultBinding";
+    public static final String MANIFEST_FILE = "manifestFile";
 
     private final EnterableScope configurationScope;
 
@@ -63,7 +66,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
 
         bind(Key.get(Manifest.class, Names.named(ORIGINAL_MANIFEST))).toProvider(new ThrowingProvider<Manifest>()).in(ConfigurationScope.class);
         bind(RResource.class).toProvider(new ThrowingProvider<RResource>()).in(ConfigurationScope.class);
+        bind(Key.get(File.class, Names.named(MANIFEST_FILE))).toProvider(new ThrowingProvider<File>()).in(ConfigurationScope.class);
     }
-
-
 }

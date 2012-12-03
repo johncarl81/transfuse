@@ -12,6 +12,10 @@ public class Transaction<V, R> implements Runnable {
     private R result = null;
     private boolean complete = false;
 
+    public Transaction(TransactionWorker<V, R> worker) {
+        this(null, worker);
+    }
+
     public Transaction(V value, TransactionWorker<V, R> worker) {
         this.value = value;
         this.worker = worker;

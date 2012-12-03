@@ -7,5 +7,5 @@ public interface TransactionProcessorBuilder<T, R> {
 
     void submit(T astTypeProvider);
 
-    TransactionProcessor<T, R> getTransactionProcessor();
+    TransactionProcessor getTransactionProcessor();
 }

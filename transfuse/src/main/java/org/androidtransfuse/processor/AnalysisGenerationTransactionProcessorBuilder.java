@@ -17,7 +17,7 @@ import javax.inject.Provider;
  */
 public class AnalysisGenerationTransactionProcessorBuilder implements TransactionProcessorBuilder<Provider<ASTType>, Void> {
 
-    private final TransactionProcessor<Provider<ASTType>, Void> transactionProcessor;
+    private final TransactionProcessorPool<Provider<ASTType>, Void> transactionProcessor;
     private final EnterableScope codeGenerationScope;
     private final CodeGenerationWrapperProvider<Provider<ASTType>, Void> workerProvider;
 
@@ -28,7 +28,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
             Provider<JCodeModel> codeModelProvider,
             Provider<FilerSourceCodeWriter> sourceCodeWriterProvider,
             Provider<ResourceCodeWriter> resourceCodeWriterProvider) {
-        transactionProcessor = new TransactionProcessor<Provider<ASTType>, Void>(null);
+        transactionProcessor = new TransactionProcessorPool<Provider<ASTType>, Void>();
         this.workerProvider = new CodeGenerationWrapperProvider<Provider<ASTType>, Void>(workerProvider, codeModelProvider, sourceCodeWriterProvider, resourceCodeWriterProvider);
         this.codeGenerationScope = codeGenerationScope;
     }
@@ -40,7 +40,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
     }
 
     @Override
-    public TransactionProcessor<Provider<ASTType>, Void> getTransactionProcessor() {
+    public TransactionProcessor getTransactionProcessor() {
         return transactionProcessor;
     }
 }

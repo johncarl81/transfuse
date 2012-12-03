@@ -18,19 +18,21 @@ import static org.mockito.Mockito.*;
 public class ParcelProcessorTest {
 
     private ParcelProcessor parcelProcessor;
-    private TransactionProcessor mockProcessor;
+    private TransactionProcessorPool mockGlobalProcessor;
+    private TransactionProcessorPool mockSubmitProcessor;
     private ParcelTransactionFactory mockTransactionFactory;
     private Provider<ASTType> input;
     private Transaction mockTransaction;
 
     @Before
     public void setup() {
-        mockProcessor = mock(TransactionProcessor.class);
+        mockGlobalProcessor = mock(TransactionProcessorPool.class);
+        mockSubmitProcessor = mock(TransactionProcessorPool.class);
         mockTransactionFactory = mock(ParcelTransactionFactory.class);
         input = mock(Provider.class);
         mockTransaction = mock(Transaction.class);
 
-        parcelProcessor = new ParcelProcessor(mockProcessor, mockTransactionFactory);
+        parcelProcessor = new ParcelProcessor(mockGlobalProcessor, mockSubmitProcessor, mockTransactionFactory);
     }
 
     @Test
@@ -40,7 +42,7 @@ public class ParcelProcessorTest {
 
         parcelProcessor.submit(Collections.singleton(input));
 
-        verify(mockProcessor).submit(mockTransaction);
+        verify(mockSubmitProcessor).submit(mockTransaction);
     }
 
     @Test
@@ -48,7 +50,7 @@ public class ParcelProcessorTest {
 
         parcelProcessor.execute();
 
-        verify(mockProcessor).execute();
+        verify(mockGlobalProcessor).execute();
     }
 
     @Test
@@ -63,7 +65,7 @@ public class ParcelProcessorTest {
 
     private void testCheckForErrors(boolean errored) {
         try {
-            when(mockProcessor.isComplete()).thenReturn(!errored);
+            when(mockGlobalProcessor.isComplete()).thenReturn(!errored);
 
             parcelProcessor.checkForErrors();
 
