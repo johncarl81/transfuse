@@ -21,11 +21,13 @@ public class ParcelsGenerator {
 
     private final ClassGenerationUtil classGenerationUtil;
     private final JCodeModel codeModel;
+    private final UniqueVariableNamer uniqueVariableNamer;
 
     @Inject
-    public ParcelsGenerator(ClassGenerationUtil classGenerationUtil, JCodeModel codeModel) {
+    public ParcelsGenerator(ClassGenerationUtil classGenerationUtil, JCodeModel codeModel, UniqueVariableNamer uniqueVariableNamer) {
         this.classGenerationUtil = classGenerationUtil;
         this.codeModel = codeModel;
+        this.uniqueVariableNamer = uniqueVariableNamer;
     }
 
     public void generate(Map<Provider<ASTType>, JDefinedClass> generated) {
@@ -44,7 +46,9 @@ public class ParcelsGenerator {
 
                 JClass type = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
 
-                JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC, astTypeJDefinedClassEntry.getValue().name() + "Factory");
+                String innerClassName = uniqueVariableNamer.generateClassName(astTypeJDefinedClassEntry.getValue()) + "Factory";
+
+                JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC, innerClassName);
 
                 factoryDefinedClass._implements(codeModel.ref(ParcelableFactory.class).narrow(type));
 
