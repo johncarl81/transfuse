@@ -5,15 +5,10 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ImplementedByProcessor;
 import org.androidtransfuse.analysis.module.ModuleProcessor;
-import org.androidtransfuse.analysis.repository.GeneratorRepository;
 import org.androidtransfuse.annotations.TransfuseModule;
-import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
 import org.androidtransfuse.gen.ManifestBuilder;
-import org.androidtransfuse.model.manifest.Manifest;
-import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
@@ -34,11 +29,7 @@ public class TransfuseProcessor {
     public TransfuseProcessor(ModuleProcessor moduleProcessor,
                               ImplementedByProcessor implementedByProcessor,
                               GeneratorRepository generatorRepository,
-                              ManifestBuilder manifestBuilder,
-                              ManifestManager manifestManager,
-                              Merger merger,
-                              @Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originalManifest,
-                              Logger logger) {
+                              ManifestBuilder manifestBuilder) {
         this.moduleProcessor = moduleProcessor;
         this.implementedByProcessor = implementedByProcessor;
         this.generatorRepository = generatorRepository;
@@ -68,7 +59,7 @@ public class TransfuseProcessor {
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {
         for (Provider<ASTType> astProvider : astProviders) {
-            TransactionProcessorBuilder builder = generatorRepository.getComponentBuilder(componentAnnotation);
+            TransactionProcessorBuilder<Provider<ASTType>, ?> builder = generatorRepository.getComponentBuilder(componentAnnotation);
             if (builder == null) {
                 throw new TransfuseAnalysisException("Builder for type " + componentAnnotation.getName() + " not found");
             }

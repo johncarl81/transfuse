@@ -5,12 +5,12 @@ import com.google.common.collect.ImmutableSet;
 /**
  * @author John Ericksen
  */
-public class TransactionProcessorPredefined<V, R> implements TransactionProcessor {
+public class TransactionProcessorPredefined implements TransactionProcessor {
 
-    private TransactionProcessorPool<V, R> transactionProcessor = new TransactionProcessorPool<V, R>();
+    private TransactionProcessorPool<Void, Void> transactionProcessor = new TransactionProcessorPool<Void, Void>();
 
-    public TransactionProcessorPredefined(ImmutableSet<Transaction<V, R>> transactions) {
-        for (Transaction<V, R> transaction : transactions) {
+    public TransactionProcessorPredefined(ImmutableSet<Transaction<Void, Void>> transactions) {
+        for (Transaction<Void, Void> transaction : transactions) {
             transactionProcessor.submit(transaction);
         }
     }

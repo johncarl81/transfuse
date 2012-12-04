@@ -14,7 +14,6 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.InstanceProvider;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import static org.mockito.Mockito.*;
 /**
  * @author John Ericksen
  */
-@Ignore //todo: un-ignore
 public class InvocationBuilderTest {
 
     private PublicInjectionBuilder publicInjectionBuilder;

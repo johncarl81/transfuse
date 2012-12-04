@@ -1,5 +1,7 @@
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
+
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,7 +49,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor {
             while (!executorService.awaitTermination(100, TimeUnit.MILLISECONDS)) {
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new TransfuseAnalysisException("Pool executor interrupted", e);
         }
     }
 

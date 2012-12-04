@@ -86,7 +86,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                 if (extra.isRequired()) {
                     JVar extraParam = constructor.param(codeModel.ref(extra.getType().getName()), extra.getName());
 
-                    constructorBody.add(buildBundleMethod(constructor.body(), getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                    constructorBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
 
                     javadocComments.addParam(extraParam);
                 } else {
@@ -95,7 +95,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                     JVar extraParam = setterMethod.param(codeModel.ref(extra.getType().getName()), extra.getName());
 
                     JBlock setterBody = setterMethod.body();
-                    setterBody.add(buildBundleMethod(setterBody, getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                    setterBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
                     setterMethod.javadoc().append("Optional Extra parameter");
                     setterMethod.javadoc().addParam(extraParam);
 
@@ -113,7 +113,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
     }
 
-    private JStatement buildBundleMethod(JBlock block, JInvocation extras, ASTType type, String name, JVar extraParam) {
+    private JStatement buildBundleMethod(JInvocation extras, ASTType type, String name, JVar extraParam) {
 
         //autoboxable (Long, Integer, etc)
         ASTPrimitiveType primitiveType = ASTPrimitiveType.getAutoboxType(type.getName());

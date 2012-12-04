@@ -12,6 +12,7 @@ import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
 import org.androidtransfuse.gen.ResourceCodeWriter;
+import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
 import org.androidtransfuse.processor.*;
 import org.androidtransfuse.util.Logger;
 
@@ -31,6 +32,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     public static final String INJECTOR_TRANSACTION_WORKER = "injectorTransactionWorker";
     public static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
     public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
+    public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
 
     private final Logger logger;
     private final Filer filer;
@@ -106,6 +108,15 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
                                                                                                       ResourceCodeWriter resourceWriter,
                                                                                                       ParcelsTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(PACKAGE_HELPER_TRANSACTION_WORKER)
+    public TransactionWorker<Void, Void> getPHTransactionWorker(JCodeModel codeModel,
+                                                                FilerSourceCodeWriter codeWriter,
+                                                                ResourceCodeWriter resourceWriter,
+                                                                PackageHelperGenerator worker) {
+        return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
     @Provides

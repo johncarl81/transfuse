@@ -1,12 +1,12 @@
-package org.androidtransfuse.analysis.repository;
+package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.*;
+import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.processor.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -28,6 +28,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final Provider<ApplicationAnalysis> applicationAnalysisProvider;
     private final AnalysisGenerationTransactionProcessorBuilderFactory processorFactory;
     private final GenerateModuleProcessor generateModuleProcessor;
+    private final PackageHelperTransactionFactory packageHelperTransactionFactory;
 
     @Inject
     public GeneratorRepositoryProvider(InjectorProcessor injectorProcessor,
@@ -38,7 +39,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        Provider<FragmentAnalysis> fragmentAnalysisProvider,
                                        Provider<ApplicationAnalysis> applicationAnalysisProvider,
                                        AnalysisGenerationTransactionProcessorBuilderFactory processorFactory,
-                                       GenerateModuleProcessor generateModuleProcessor) {
+                                       GenerateModuleProcessor generateModuleProcessor,
+                                       PackageHelperTransactionFactory packageHelperTransactionFactory) {
         this.injectorProcessor = injectorProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
@@ -48,12 +50,13 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.applicationAnalysisProvider = applicationAnalysisProvider;
         this.processorFactory = processorFactory;
         this.generateModuleProcessor = generateModuleProcessor;
+        this.packageHelperTransactionFactory = packageHelperTransactionFactory;
     }
 
     @Override
     public GeneratorRepository get() {
 
-        ImmutableMap.Builder<Class<? extends Annotation>, TransactionProcessorBuilder> processorMapBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Class<? extends Annotation>, TransactionProcessorBuilder<Provider<ASTType>, ?>> processorMapBuilder = ImmutableMap.builder();
         ImmutableSet.Builder<TransactionProcessor> componentProcessors = ImmutableSet.builder();
 
         Map<Class<? extends Annotation>, Provider<? extends Analysis<ComponentDescriptor>>> analyzers =
@@ -74,13 +77,15 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         }
 
         TransactionProcessor componentsProcessor = new TransactionProcessorComposite(componentProcessors.build());
-        TransactionProcessor manifestProcessor = new TransactionProcessorPredefined<Void, Void>(ImmutableSet.of(new Transaction<Void, Void>(generateModuleProcessor)));
+        TransactionProcessor manifestProcessor = new TransactionProcessorPredefined(ImmutableSet.of(new Transaction<Void, Void>(generateModuleProcessor)));
         TransactionProcessor componentProcessorCompletion = new TransactionProcessorChain(componentsProcessor, manifestProcessor);
+        TransactionProcessor pacakgeHelperProcessor = new TransactionProcessorPredefined(ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(null)));
 
         ImmutableSet.Builder<TransactionProcessor> configurationDependentBuilders = ImmutableSet.builder();
 
         configurationDependentBuilders.add(injectorProcessor.getTransactionProcessor());
         configurationDependentBuilders.add(componentProcessorCompletion);
+        configurationDependentBuilders.add(pacakgeHelperProcessor);
 
         processorMapBuilder.put(Injector.class, injectorProcessor);
 

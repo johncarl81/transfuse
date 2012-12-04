@@ -15,12 +15,12 @@ import javax.inject.Provider;
 public class ScopedTransactionWorker<V, R> implements TransactionWorker<V, R> {
 
     private final EnterableScope simpleScope;
-    private final Provider<TransactionWorker<V, R>> workerProvider;
+    private final Provider<? extends TransactionWorker<V, R>> workerProvider;
     private TransactionWorker<V, R> scoped = null;
     private boolean complete = false;
     private Exception error;
 
-    public ScopedTransactionWorker(EnterableScope simpleScope, Provider<TransactionWorker<V, R>> workerProvider) {
+    public ScopedTransactionWorker(EnterableScope simpleScope, Provider<? extends TransactionWorker<V, R>> workerProvider) {
         this.simpleScope = simpleScope;
         this.workerProvider = workerProvider;
     }

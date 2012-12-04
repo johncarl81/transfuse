@@ -1,5 +1,6 @@
 package org.androidtransfuse.test.generator;
 
+import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 
@@ -8,6 +9,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -54,8 +56,10 @@ public class ProxyGenerator extends AbstractProcessor {
 
             codeModel.build(new FilerSourceCodeWriter(filer));
             ran = true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (JClassAlreadyExistsException e) {
+            throw new ProxyGenerationRuntimeException("Class already exists", e);
+        } catch (IOException e) {
+            throw new ProxyGenerationRuntimeException("IOException while writing proxy class", e);
         }
 
         return false;

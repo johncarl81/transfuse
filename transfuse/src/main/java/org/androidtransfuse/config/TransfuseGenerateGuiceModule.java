@@ -19,6 +19,8 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.processor.GeneratorRepository;
+import org.androidtransfuse.processor.GeneratorRepositoryProvider;
 
 import java.io.File;
 

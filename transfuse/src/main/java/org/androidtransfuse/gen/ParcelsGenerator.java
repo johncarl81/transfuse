@@ -5,6 +5,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.ParcelableFactory;
+import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -70,7 +71,7 @@ public class ParcelsGenerator {
             method.body()._return(wrapper.invoke(ParcelableFactory.BUILD_PARCELABLE).arg(input));
 
         } catch (JClassAlreadyExistsException e) {
-            e.printStackTrace();
+            throw new TransfuseRuntimeException("Class already exists", e);
         }
 
 

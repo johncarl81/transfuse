@@ -7,7 +7,7 @@ public interface TransactionProcessor {
 
     void execute();
 
-    public boolean isComplete();
+    boolean isComplete();
 
     Exception getError();
 }

@@ -1,0 +1,165 @@
+package org.androidtransfuse.gen.invocationBuilder;
+
+import com.sun.codemodel.*;
+import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.adapter.ASTVoidType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.ConstructorInjectionPoint;
+import org.androidtransfuse.model.FieldInjectionPoint;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.processor.TransactionWorker;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author John Ericksen
+ */
+public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
+
+    private final PackageHelperRepository repository;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final ClassGenerationUtil generationUtil;
+    private boolean complete = false;
+
+    @Inject
+    public PackageHelperGenerator(PackageHelperRepository repository,
+                                  JCodeModel codeModel,
+                                  UniqueVariableNamer namer,
+                                  ClassGenerationUtil generationUtil) {
+        this.repository = repository;
+        this.codeModel = codeModel;
+        this.namer = namer;
+        this.generationUtil = generationUtil;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return complete;
+    }
+
+    @Override
+    public Void run(Void value) {
+        for (PackageHelperDescriptor packageHelper : repository.getPackageHelpers()) {
+            JDefinedClass packageHelperClass = buildPackageHelper(packageHelper.getName());
+
+            //constructor
+            for (Map.Entry<ConstructorInjectionPoint, String> constructorEntry : packageHelper.getConstructorMapping().entrySet()) {
+                buildConstructorCall(constructorEntry.getKey(), constructorEntry.getValue(), packageHelperClass);
+            }
+
+            //method
+            for (Map.Entry<MethodCall, String> methodCallEntry : packageHelper.getMethodCallMapping().entrySet()) {
+                ASTType type = methodCallEntry.getKey().getType();
+                ASTType returnType = methodCallEntry.getKey().getReturnType();
+                String methodName = methodCallEntry.getKey().getMethodName();
+                List<ASTType> paramTypes = methodCallEntry.getKey().getParamTypes();
+
+                buildMethodCall(returnType, type, methodName, paramTypes, methodCallEntry.getValue(), packageHelperClass);
+            }
+
+            //field get
+            for (Map.Entry<FieldGetter, String> fieldGetEntry : packageHelper.getFieldGetMapping().entrySet()) {
+                ASTType returnType = fieldGetEntry.getKey().getReturnType();
+                ASTType variableType = fieldGetEntry.getKey().getVariableType();
+                String name = fieldGetEntry.getKey().getName();
+
+                buildFieldGet(returnType, variableType, name, fieldGetEntry.getValue(), packageHelperClass);
+            }
+
+            //field set
+            for (Map.Entry<FieldInjectionPoint, String> fieldSetEntry : packageHelper.getFieldSetMapping().entrySet()) {
+                buildFieldSet(fieldSetEntry.getKey(), fieldSetEntry.getValue(), packageHelperClass);
+            }
+        }
+
+        complete = true;
+        return null;
+    }
+
+    @Override
+    public Exception getError() {
+        return null;
+    }
+
+    private void buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
+        JClass returnTypeRef = codeModel.ref(constructorInjectionPoint.getContainingType().getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
+
+        JInvocation constructorInvocation = JExpr._new(returnTypeRef);
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
+            JClass paramRef = codeModel.ref(injectionNode.getASTType().getName());
+            JVar param = accessorMethod.param(paramRef, namer.generateName(paramRef));
+            constructorInvocation.arg(param);
+        }
+
+        accessorMethod.body()._return(constructorInvocation);
+    }
+
+
+    private void buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes, String accessorMethodName, JDefinedClass helperClass) {
+        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
+
+        JClass targetRef = codeModel.ref(targetExpressionsType.getName());
+        JVar targetParam = accessorMethod.param(targetRef, namer.generateName(targetRef));
+        JInvocation invocation = targetParam.invoke(methodName);
+
+        for (ASTType argType : argTypes) {
+            JClass ref = codeModel.ref(argType.getName());
+            JVar param = accessorMethod.param(ref, namer.generateName(ref));
+            invocation.arg(param);
+        }
+
+        if (returnType.equals(ASTVoidType.VOID)) {
+            accessorMethod.body().add(invocation);
+        } else {
+            accessorMethod.body()._return(invocation);
+        }
+    }
+
+    private void buildFieldGet(ASTType returnType, ASTType variableType, String name, String accessorMethodName, JDefinedClass helperClass) {
+        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        //get, ClassName, FG, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
+
+        JClass variableTypeRef = codeModel.ref(variableType.getName());
+        JVar variableParam = accessorMethod.param(variableTypeRef, namer.generateName(variableTypeRef));
+        JBlock body = accessorMethod.body();
+
+        body._return(variableParam.ref(name));
+    }
+
+    private ProtectedAccessorMethod buildFieldSet(FieldInjectionPoint fieldInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
+        //get, ClassName, FS, fieldName
+        JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID, accessorMethodName);
+
+        JClass containerType = codeModel.ref(fieldInjectionPoint.getContainingType().getName());
+        JVar containerParam = accessorMethod.param(containerType, namer.generateName(containerType));
+
+        JClass inputType = codeModel.ref(fieldInjectionPoint.getInjectionNode().getASTType().getName());
+        JVar inputParam = accessorMethod.param(inputType, namer.generateName(inputType));
+
+        JBlock body = accessorMethod.body();
+
+        body.assign(containerParam.ref(fieldInjectionPoint.getName()), inputParam);
+
+        return null;//new ProtectedAccessorMethod(helperClass, accessorMethod);
+    }
+
+    private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
+        try {
+            return generationUtil.defineClass(helperClassName);
+
+        } catch (JClassAlreadyExistsException e) {
+            throw new TransfuseAnalysisException("Unable to create helper", e);
+        }
+    }
+}

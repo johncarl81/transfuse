@@ -1,23 +1,23 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
-import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JInvocation;
-import com.sun.codemodel.JMethod;
+import org.androidtransfuse.model.PackageClass;
 
 /**
  * @author John Ericksen
  */
 public class ProtectedAccessorMethod {
 
-    private final JDefinedClass definedClass;
-    private final JMethod method;
+    private final PackageClass helperClass;
+    private final String method;
 
-    public ProtectedAccessorMethod(JDefinedClass definedClass, JMethod method) {
-        this.definedClass = definedClass;
+    public ProtectedAccessorMethod(PackageClass helperClass, String method) {
+        this.helperClass = helperClass;
         this.method = method;
     }
 
-    public JInvocation invoke() {
-        return definedClass.staticInvoke(method);
+    public JInvocation invoke(JCodeModel codeModel) {
+        return codeModel.ref(helperClass.getFullyQualifiedName()).staticInvoke(method);
     }
 }
