@@ -23,6 +23,7 @@ public class ProxyGenerator extends AbstractProcessor {
     private Filer filer;
     private Messager messager;
     private JCodeModel codeModel = new JCodeModel();
+    private boolean ran = false;
 
     @Override
     public synchronized void init(final ProcessingEnvironment processingEnv) {
@@ -35,6 +36,9 @@ public class ProxyGenerator extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
+        if (ran) {
+            return false;
+        }
         try {
 
             Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(Proxy.class);
@@ -46,9 +50,10 @@ public class ProxyGenerator extends AbstractProcessor {
                 jDefinedClass._implements(Serializable.class);
 
                 messager.printMessage(Diagnostic.Kind.NOTE, "Wrote " + jDefinedClass.fullName());
-
-                codeModel.build(new FilerSourceCodeWriter(filer));
             }
+
+            codeModel.build(new FilerSourceCodeWriter(filer));
+            ran = true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
