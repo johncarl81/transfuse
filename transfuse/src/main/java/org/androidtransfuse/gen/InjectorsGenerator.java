@@ -29,7 +29,7 @@ public class InjectorsGenerator {
         this.generationUtil = generationUtil;
     }
 
-    public void generateInjectors(Map<Provider<ASTType>, JDefinedClass> processedAggregate) {
+    public JDefinedClass generateInjectors(Map<Provider<ASTType>, JDefinedClass> processedAggregate) {
         try {
             JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
@@ -58,6 +58,7 @@ public class InjectorsGenerator {
                         .arg(interfaceClass.dotclass())
                         .arg(JExpr._new(astTypeJDefinedClassEntry.getValue())));
             }
+            return injectorRepositoryClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Already generated Injectors class", e);
         }

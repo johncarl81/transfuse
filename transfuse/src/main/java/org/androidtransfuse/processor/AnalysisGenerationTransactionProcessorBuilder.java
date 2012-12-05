@@ -5,8 +5,8 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseSetupGuiceModule;
+import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,7 +27,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
             @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope codeGenerationScope,
             Provider<JCodeModel> codeModelProvider,
             Provider<FilerSourceCodeWriter> sourceCodeWriterProvider,
-            Provider<ResourceCodeWriter> resourceCodeWriterProvider) {
+            Provider<FilerResourceWriter> resourceCodeWriterProvider) {
         transactionProcessor = new TransactionProcessorPool<Provider<ASTType>, Void>();
         this.workerProvider = new CodeGenerationWrapperProvider<Provider<ASTType>, Void>(workerProvider, codeModelProvider, sourceCodeWriterProvider, resourceCodeWriterProvider);
         this.codeGenerationScope = codeGenerationScope;

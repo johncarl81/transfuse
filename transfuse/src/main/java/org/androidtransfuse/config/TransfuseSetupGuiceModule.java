@@ -10,8 +10,8 @@ import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
 import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
 import org.androidtransfuse.processor.*;
 import org.androidtransfuse.util.Logger;
@@ -64,7 +64,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
         bind(JCodeModel.class).toProvider(Providers.guicify(new JCodeModelProvider())).in(CodeGenerationScope.class);
 
         bind(FilerSourceCodeWriter.class).in(CodeGenerationScope.class);
-        bind(ResourceCodeWriter.class).in(CodeGenerationScope.class);
+        bind(FilerResourceWriter.class).in(CodeGenerationScope.class);
     }
 
     private static class JCodeModelProvider implements Provider<JCodeModel> {
@@ -78,7 +78,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(PARCEL_TRANSACTION_WORKER)
     public TransactionWorker<Provider<ASTType>, JDefinedClass> getParcelTransactionWorker(JCodeModel codeModel,
                                                                                           FilerSourceCodeWriter codeWriter,
-                                                                                          ResourceCodeWriter resourceWriter,
+                                                                                          FilerResourceWriter resourceWriter,
                                                                                           ParcelTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
@@ -87,7 +87,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(INJECTOR_TRANSACTION_WORKER)
     public TransactionWorker<Provider<ASTType>, JDefinedClass> getInjectorTransactionWorker(JCodeModel codeModel,
                                                                                             FilerSourceCodeWriter codeWriter,
-                                                                                            ResourceCodeWriter resourceWriter,
+                                                                                            FilerResourceWriter resourceWriter,
                                                                                             InjectorTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
@@ -96,7 +96,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(INJECTORS_TRANSACTION_WORKER)
     public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getInjectorsTransactionWorker(JCodeModel codeModel,
                                                                                                         FilerSourceCodeWriter codeWriter,
-                                                                                                        ResourceCodeWriter resourceWriter,
+                                                                                                        FilerResourceWriter resourceWriter,
                                                                                                         InjectorsTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
@@ -105,7 +105,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(PARCELS_TRANSACTION_WORKER)
     public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
                                                                                                       FilerSourceCodeWriter codeWriter,
-                                                                                                      ResourceCodeWriter resourceWriter,
+                                                                                                      FilerResourceWriter resourceWriter,
                                                                                                       ParcelsTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
@@ -114,7 +114,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     @Named(PACKAGE_HELPER_TRANSACTION_WORKER)
     public TransactionWorker<Void, Void> getPHTransactionWorker(JCodeModel codeModel,
                                                                 FilerSourceCodeWriter codeWriter,
-                                                                ResourceCodeWriter resourceWriter,
+                                                                FilerResourceWriter resourceWriter,
                                                                 PackageHelperGenerator worker) {
         return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
     }

@@ -1,8 +1,8 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JCodeModel;
+import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.io.IOException;
@@ -14,13 +14,13 @@ public class CodeGenerationScopedTransactionWorker<V, R> implements TransactionW
 
     private final JCodeModel codeModel;
     private final FilerSourceCodeWriter codeWriter;
-    private final ResourceCodeWriter resourceWriter;
+    private final FilerResourceWriter resourceWriter;
     private final TransactionWorker<V, R> worker;
     private boolean complete = false;
 
     public CodeGenerationScopedTransactionWorker(JCodeModel codeModel,
                                                  FilerSourceCodeWriter codeWriter,
-                                                 ResourceCodeWriter resourceWriter,
+                                                 FilerResourceWriter resourceWriter,
                                                  TransactionWorker<V, R> worker) {
         this.codeModel = codeModel;
         this.codeWriter = codeWriter;

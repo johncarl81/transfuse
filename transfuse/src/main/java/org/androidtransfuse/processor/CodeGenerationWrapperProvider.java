@@ -1,8 +1,8 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JCodeModel;
+import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
-import org.androidtransfuse.gen.ResourceCodeWriter;
 
 import javax.inject.Provider;
 
@@ -13,13 +13,13 @@ public class CodeGenerationWrapperProvider<V, R> implements Provider<Transaction
 
     private final Provider<JCodeModel> codeModelProvider;
     private final Provider<FilerSourceCodeWriter> sourceCodeWriterProvider;
-    private final Provider<ResourceCodeWriter> resourceCodeWriterProvider;
+    private final Provider<FilerResourceWriter> resourceCodeWriterProvider;
     private final Provider<? extends TransactionWorker<V, R>> workerProvider;
 
     public CodeGenerationWrapperProvider(Provider<? extends TransactionWorker<V, R>> workerProvider,
                                          Provider<JCodeModel> codeModelProvider,
                                          Provider<FilerSourceCodeWriter> sourceCodeWriterProvider,
-                                         Provider<ResourceCodeWriter> resourceCodeWriterProvider) {
+                                         Provider<FilerResourceWriter> resourceCodeWriterProvider) {
         this.codeModelProvider = codeModelProvider;
         this.sourceCodeWriterProvider = sourceCodeWriterProvider;
         this.resourceCodeWriterProvider = resourceCodeWriterProvider;
