@@ -14,7 +14,7 @@ import java.util.Collections;
 /**
  * @author John Ericksen
  */
-public class GenerateModuleProcessor implements TransactionWorker<Void, Void> {
+public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker<Void, Void> {
 
     private final ManifestManager manifestManager;
     private final Merger merger;
@@ -22,7 +22,6 @@ public class GenerateModuleProcessor implements TransactionWorker<Void, Void> {
     private final Logger logger;
     private final File manifestFile;
     private ManifestSerializer manifestParser;
-    private boolean complete = false;
 
     @Inject
     public GenerateModuleProcessor(ManifestManager manifestManager,
@@ -41,12 +40,7 @@ public class GenerateModuleProcessor implements TransactionWorker<Void, Void> {
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public Void run(Void value) {
+    public Void innerRun(Void value) {
 
         //assembling generated code
         Manifest updatedManifest = buildManifest();
@@ -54,7 +48,6 @@ public class GenerateModuleProcessor implements TransactionWorker<Void, Void> {
         //write manifest back out, updating from processed classes
         manifestParser.writeManifest(updatedManifest, manifestFile);
 
-        complete = true;
         return null;
     }
 
@@ -77,10 +70,5 @@ public class GenerateModuleProcessor implements TransactionWorker<Void, Void> {
             logger.error("InstantiationException while merging manifest", e);
             return originalManifest;
         }
-    }
-
-    @Override
-    public Exception getError() {
-        return null;
     }
 }

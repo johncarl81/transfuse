@@ -23,8 +23,9 @@ public class ParcelTransactionFactoryTest {
     public void setup() {
         input = mock(Provider.class);
         ThreadLocalScope simpleScope = new ThreadLocalScope();
+        ScopedTransactionFactory scopedTransactionFactory = new ScopedTransactionFactory(simpleScope);
         Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider = mock(Provider.class);
-        factory = new ParcelTransactionFactory(simpleScope, workerProvider);
+        factory = new ParcelTransactionFactory(scopedTransactionFactory, workerProvider);
     }
 
     @Test

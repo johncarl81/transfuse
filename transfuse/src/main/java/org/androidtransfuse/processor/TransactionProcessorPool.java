@@ -33,6 +33,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor {
     /**
      * Executes the submitted work and if all transactions complete, executes the aggregate on the aggregateWorker.
      */
+    @SuppressWarnings("StatementWithEmptyBody")
     public void execute() {
 
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -46,8 +47,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor {
         executorService.shutdown();
 
         try {
-            while (!executorService.awaitTermination(100, TimeUnit.MILLISECONDS)) {
-            }
+            while (!executorService.awaitTermination(100, TimeUnit.MILLISECONDS)) ;
         } catch (InterruptedException e) {
             throw new TransfuseAnalysisException("Pool executor interrupted", e);
         }

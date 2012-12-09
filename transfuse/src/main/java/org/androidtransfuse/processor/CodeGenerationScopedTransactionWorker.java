@@ -10,13 +10,12 @@ import java.io.IOException;
 /**
  * @author John Ericksen
  */
-public class CodeGenerationScopedTransactionWorker<V, R> implements TransactionWorker<V, R> {
+public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R> {
 
     private final JCodeModel codeModel;
     private final FilerSourceCodeWriter codeWriter;
     private final FilerResourceWriter resourceWriter;
     private final TransactionWorker<V, R> worker;
-    private boolean complete = false;
 
     public CodeGenerationScopedTransactionWorker(JCodeModel codeModel,
                                                  FilerSourceCodeWriter codeWriter,
@@ -29,18 +28,11 @@ public class CodeGenerationScopedTransactionWorker<V, R> implements TransactionW
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public R run(V value) {
+    public R innerRun(V value) {
         try {
             R result = worker.run(value);
 
             codeModel.build(codeWriter, resourceWriter);
-
-            complete = true;
 
             return result;
         } catch (IOException e) {

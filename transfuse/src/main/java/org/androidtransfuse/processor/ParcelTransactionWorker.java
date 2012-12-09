@@ -14,11 +14,10 @@ import javax.inject.Provider;
  *
  * @author John Ericksen
  */
-public class ParcelTransactionWorker implements TransactionWorker<Provider<ASTType>, JDefinedClass> {
+public class ParcelTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, JDefinedClass> {
 
     private final ParcelableAnalysis parcelableAnalysis;
     private final ParcelableGenerator parcelableGenerator;
-    private boolean complete = false;
 
     @Inject
     public ParcelTransactionWorker(ParcelableAnalysis parcelableAnalysis, ParcelableGenerator parcelableGenerator) {
@@ -27,25 +26,12 @@ public class ParcelTransactionWorker implements TransactionWorker<Provider<ASTTy
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public JDefinedClass run(Provider<ASTType> valueProvider) {
+    public JDefinedClass innerRun(Provider<ASTType> valueProvider) {
 
         ASTType value = valueProvider.get();
 
         ParcelableDescriptor analysis = parcelableAnalysis.analyze(value);
-        JDefinedClass definedClass = parcelableGenerator.generateParcelable(value, analysis);
 
-        complete = true;
-
-        return definedClass;
-    }
-
-    @Override
-    public Exception getError() {
-        return null;
+        return parcelableGenerator.generateParcelable(value, analysis);
     }
 }

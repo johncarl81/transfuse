@@ -13,11 +13,9 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
-public class ParcelsTransactionWorker implements TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
+public class ParcelsTransactionWorker extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
     private ParcelsGenerator parcelsGenerator;
-
-    private boolean complete = false;
 
     @Inject
     public ParcelsTransactionWorker(ParcelsGenerator parcelsGenerator) {
@@ -25,19 +23,8 @@ public class ParcelsTransactionWorker implements TransactionWorker<Map<Provider<
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public Void run(Map<Provider<ASTType>, JDefinedClass> value) {
+    public Void innerRun(Map<Provider<ASTType>, JDefinedClass> value) {
         parcelsGenerator.generate(value);
-        complete = true;
-        return null;
-    }
-
-    @Override
-    public Exception getError() {
         return null;
     }
 }

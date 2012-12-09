@@ -2,7 +2,6 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 
 import javax.inject.Inject;
@@ -16,20 +15,19 @@ import java.util.Map;
 public class InjectorsTransactionFactory implements TransactionFactory<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
     private final Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider;
-    private final EnterableScope scope;
+    private final ScopedTransactionFactory scopedTransactionFactory;
 
     @Inject
     public InjectorsTransactionFactory(
-            @Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope scope,
             @Named(TransfuseSetupGuiceModule.INJECTORS_TRANSACTION_WORKER)
-            Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider) {
+            Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider,
+            ScopedTransactionFactory scopedTransactionFactory) {
         this.workerProvider = workerProvider;
-        this.scope = scope;
+        this.scopedTransactionFactory = scopedTransactionFactory;
     }
 
     @Override
     public Transaction<Map<Provider<ASTType>, JDefinedClass>, Void> buildTransaction(Map<Provider<ASTType>, JDefinedClass> value) {
-        return new Transaction<Map<Provider<ASTType>, JDefinedClass>, Void>(value,
-                new ScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(scope, workerProvider));
+        return scopedTransactionFactory.buildTransaction(value, workerProvider);
     }
 }

@@ -11,10 +11,9 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class InjectorsTransactionWorker implements TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
+public class InjectorsTransactionWorker extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
     private final InjectorsGenerator injectorsGenerator;
-    private boolean complete = false;
 
     @Inject
     public InjectorsTransactionWorker(InjectorsGenerator injectorsGenerator) {
@@ -22,22 +21,8 @@ public class InjectorsTransactionWorker implements TransactionWorker<Map<Provide
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public Void run(Map<Provider<ASTType>, JDefinedClass> aggregate) {
-
+    public Void innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
         injectorsGenerator.generateInjectors(aggregate);
-
-        complete = true;
-
-        return null;
-    }
-
-    @Override
-    public Exception getError() {
         return null;
     }
 }

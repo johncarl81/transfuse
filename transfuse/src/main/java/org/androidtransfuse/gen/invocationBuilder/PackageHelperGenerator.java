@@ -10,7 +10,7 @@ import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.processor.TransactionWorker;
+import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -19,13 +19,12 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
+public class PackageHelperGenerator extends AbstractCompletionTransactionWorker<Void, Void> {
 
     private final PackageHelperRepository repository;
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
-    private boolean complete = false;
 
     @Inject
     public PackageHelperGenerator(PackageHelperRepository repository,
@@ -39,12 +38,7 @@ public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
     }
 
     @Override
-    public boolean isComplete() {
-        return complete;
-    }
-
-    @Override
-    public Void run(Void value) {
+    public Void innerRun(Void value) {
         for (PackageHelperDescriptor packageHelper : repository.getPackageHelpers()) {
             JDefinedClass packageHelperClass = buildPackageHelper(packageHelper.getName());
 
@@ -78,12 +72,6 @@ public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
             }
         }
 
-        complete = true;
-        return null;
-    }
-
-    @Override
-    public Exception getError() {
         return null;
     }
 
@@ -137,7 +125,7 @@ public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
         body._return(variableParam.ref(name));
     }
 
-    private ProtectedAccessorMethod buildFieldSet(FieldInjectionPoint fieldInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
+    private void buildFieldSet(FieldInjectionPoint fieldInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
         //get, ClassName, FS, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID, accessorMethodName);
 
@@ -150,8 +138,6 @@ public class PackageHelperGenerator implements TransactionWorker<Void, Void> {
         JBlock body = accessorMethod.body();
 
         body.assign(containerParam.ref(fieldInjectionPoint.getName()), inputParam);
-
-        return null;//new ProtectedAccessorMethod(helperClass, accessorMethod);
     }
 
     private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
