@@ -1,5 +1,6 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 
 import java.util.*;
@@ -82,14 +83,13 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor {
         return true;
     }
 
-    public Exception getError() {
+    public ImmutableSet<Exception> getErrors() {
+        ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
         for (Transaction<V, R> transaction : transactions) {
             if (!transaction.isComplete()) {
-                //todo: multiple errors
-                return transaction.getError();
+                exceptions.add(transaction.getError());
             }
         }
-
-        return null;
+        return exceptions.build();
     }
 }

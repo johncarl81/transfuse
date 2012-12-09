@@ -1,5 +1,7 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Map;
 
 /**
@@ -38,10 +40,11 @@ public class TransactionProcessorChannel<V, R, R2> implements TransactionProcess
     }
 
     @Override
-    public Exception getError() {
-        if (completionProcessor.getError() == null) {
-            return afterCompletionProcessor.getError();
-        }
-        return completionProcessor.getError();
+    public ImmutableSet<Exception> getErrors() {
+        ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
+        exceptions.addAll(completionProcessor.getErrors());
+        exceptions.addAll(afterCompletionProcessor.getErrors());
+
+        return exceptions.build();
     }
 }

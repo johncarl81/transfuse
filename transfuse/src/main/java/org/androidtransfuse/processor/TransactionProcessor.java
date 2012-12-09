@@ -1,5 +1,7 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * @author John Ericksen
  */
@@ -9,5 +11,5 @@ public interface TransactionProcessor {
 
     boolean isComplete();
 
-    Exception getError();
+    ImmutableSet<Exception> getErrors();
 }

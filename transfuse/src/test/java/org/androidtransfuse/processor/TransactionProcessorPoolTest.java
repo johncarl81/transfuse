@@ -55,23 +55,10 @@ public class TransactionProcessorPoolTest {
 
     @Test
     public void testResults() {
-        Transaction<String, String> transaction = new Transaction<String, String>(TEST_INPUT, new TransactionWorker<String, String>() {
-            boolean complete = false;
-
+        Transaction<String, String> transaction = new Transaction<String, String>(TEST_INPUT, new AbstractCompletionTransactionWorker<String, String>() {
             @Override
-            public boolean isComplete() {
-                return complete;
-            }
-
-            @Override
-            public String run(String value) {
-                complete = true;
+            public String innerRun(String value) {
                 return TEST_OUTPUT;
-            }
-
-            @Override
-            public Exception getError() {
-                return null;
             }
         });
 

@@ -3,6 +3,7 @@ package org.androidtransfuse.integrationTest.externalGenerator;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
 
@@ -11,6 +12,7 @@ import javax.inject.Inject;
  */
 @Activity
 @Layout(R.layout.main)
+@DeclareField
 public class Test {
 
     private Target target;
@@ -18,5 +20,9 @@ public class Test {
     @Inject
     public Test(Target target) {
         this.target = target;
+    }
+
+    public Target getTarget() {
+        return target;
     }
 }

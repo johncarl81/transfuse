@@ -145,7 +145,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         transfuseProcessor.execute();
 
         if (roundEnvironment.processingOver()) {
-            transfuseProcessor.getError();
+            transfuseProcessor.checkForErrors();
         }
 
         logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");

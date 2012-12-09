@@ -1,6 +1,9 @@
 package org.androidtransfuse.processor;
 
 /**
+ * Base class implementing basic completion status.  If the execution of innerRun() does not throw a runtime exception
+ * the completion status is set to true.
+ *
  * @author John Ericksen
  */
 public abstract class AbstractCompletionTransactionWorker<V, R> implements TransactionWorker<V, R> {

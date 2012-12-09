@@ -37,8 +37,7 @@ public class InjectorProcessor implements TransactionProcessorBuilder<Provider<A
 
     public void checkForErrors() {
         if (!processor.isComplete()) {
-            Exception error = processor.getError();
-            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.", error);
+            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.", processor.getErrors());
         }
     }
 }

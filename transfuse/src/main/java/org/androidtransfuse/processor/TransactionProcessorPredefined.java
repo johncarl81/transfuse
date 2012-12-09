@@ -26,7 +26,7 @@ public class TransactionProcessorPredefined implements TransactionProcessor {
     }
 
     @Override
-    public Exception getError() {
-        return transactionProcessor.getError();
+    public ImmutableSet<Exception> getErrors() {
+        return transactionProcessor.getErrors();
     }
 }

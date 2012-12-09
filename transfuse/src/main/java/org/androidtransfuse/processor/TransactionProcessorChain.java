@@ -1,5 +1,7 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * @author John Ericksen
  */
@@ -28,10 +30,11 @@ public class TransactionProcessorChain implements TransactionProcessor {
     }
 
     @Override
-    public Exception getError() {
-        if (beforeProcessor.getError() != null) {
-            return beforeProcessor.getError();
-        }
-        return afterProcessor.getError();
+    public ImmutableSet<Exception> getErrors() {
+        ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
+        exceptions.addAll(beforeProcessor.getErrors());
+        exceptions.addAll(afterProcessor.getErrors());
+
+        return exceptions.build();
     }
 }

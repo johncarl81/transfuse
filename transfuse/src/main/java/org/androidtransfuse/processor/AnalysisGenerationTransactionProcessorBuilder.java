@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 /**
+ * Builds a Transaction supporting the AnalysisGeneration
+ *
  * @author John Ericksen
  */
 public class AnalysisGenerationTransactionProcessorBuilder implements TransactionProcessorBuilder<Provider<ASTType>, Void> {

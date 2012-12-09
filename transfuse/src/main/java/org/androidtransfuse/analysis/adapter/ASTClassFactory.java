@@ -58,8 +58,6 @@ public class ASTClassFactory {
     }
 
     private ASTType buildType(Class<?> clazz) {
-        //adds a new ASTType to the cache if one does not exist yet
-
         ImmutableList.Builder<ASTConstructor> constructorBuilder = ImmutableList.builder();
         ImmutableList.Builder<ASTMethod> methodBuilder = ImmutableList.builder();
         ImmutableList.Builder<ASTField> fieldBuilder = ImmutableList.builder();

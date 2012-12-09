@@ -1,5 +1,6 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -72,12 +73,19 @@ public class TransfuseProcessor {
         generatorRepository.getProcessor().execute();
     }
 
-    public void getError() {
+    public void checkForErrors() {
+        boolean errored = false;
+        ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
+
         for (TransactionProcessorBuilder transactionProcessor : generatorRepository.getComponentBuilders().values()) {
             if (!transactionProcessor.getTransactionProcessor().isComplete()) {
-                Exception error = transactionProcessor.getTransactionProcessor().getError();
-                throw new TransfuseAnalysisException("Code generation did not complete successfully.", error);
+                errored = true;
+                exceptions.addAll(transactionProcessor.getTransactionProcessor().getErrors());
             }
+        }
+
+        if (errored) {
+            throw new TransfuseAnalysisException("Code generation did not complete successfully.", exceptions.build());
         }
     }
 }

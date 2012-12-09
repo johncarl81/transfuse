@@ -87,7 +87,5 @@ public class ASTClassField implements ASTField {
         public Object run(Field classField) throws IllegalAccessException {
             return classField.get(null);
         }
-
-
     }
 }

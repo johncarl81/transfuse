@@ -39,9 +39,4 @@ public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractComplet
             throw new TransfuseRuntimeException("Unable to perform code generation", e);
         }
     }
-
-    @Override
-    public Exception getError() {
-        return null;
-    }
 }

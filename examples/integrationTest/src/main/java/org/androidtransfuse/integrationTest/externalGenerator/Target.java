@@ -13,4 +13,8 @@ public class Target {
     public Target(ProxiedProxy proxy) {
         this.proxy = proxy;
     }
+
+    public ProxiedProxy getProxy() {
+        return proxy;
+    }
 }

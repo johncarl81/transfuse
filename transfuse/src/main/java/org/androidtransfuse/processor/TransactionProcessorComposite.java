@@ -31,13 +31,11 @@ public class TransactionProcessorComposite implements TransactionProcessor {
     }
 
     @Override
-    public Exception getError() {
+    public ImmutableSet<Exception> getErrors() {
+        ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
         for (TransactionProcessor processor : processors) {
-            if (processor.getError() != null) {
-                //todo: multiple errors
-                return processor.getError();
-            }
+            exceptions.addAll(processor.getErrors());
         }
-        return null;
+        return exceptions.build();
     }
 }

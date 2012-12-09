@@ -1,5 +1,6 @@
 package org.androidtransfuse.processor;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.junit.Before;
@@ -66,6 +67,7 @@ public class ParcelProcessorTest {
     private void testCheckForErrors(boolean errored) {
         try {
             when(mockGlobalProcessor.isComplete()).thenReturn(!errored);
+            when(mockGlobalProcessor.getErrors()).thenReturn(ImmutableSet.of(new Exception()));
 
             parcelProcessor.checkForErrors();
 
