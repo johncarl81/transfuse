@@ -26,7 +26,7 @@ public class ASTClassFactory {
     public ASTClassFactory(ASTFactory astFactory) {
         this.astFactory = astFactory;
         //seed with primitives and void
-        typeCache.put("void", ASTVoidType.VOID);
+        typeCache.put(ASTVoidType.VOID.getName(), ASTVoidType.VOID);
         for (ASTPrimitiveType primitive : ASTPrimitiveType.values()) {
             typeCache.put(primitive.getName(), primitive);
         }

@@ -13,22 +13,12 @@ import java.util.List;
  * @author John Ericksen
  */
 public enum ASTVoidType implements ASTType {
-    VOID("void", Void.class);
+    VOID("void");
 
     private final String label;
-    private final Class clazz;
 
-    private ASTVoidType(String label, Class clazz) {
+    private ASTVoidType(String label) {
         this.label = label;
-        this.clazz = clazz;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public Class getClazz() {
-        return clazz;
     }
 
     @Override

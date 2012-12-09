@@ -26,14 +26,21 @@ public class ASTElementFactory {
 
     private final Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
 
+    private final ASTElementConverterFactory astElementConverterFactory;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final ASTFactory astFactory;
+    private final Elements elements;
+
     @Inject
-    private ASTElementConverterFactory astElementConverterFactory;
-    @Inject
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    @Inject
-    private ASTFactory astFactory;
-    @Inject
-    private Elements elements;
+    public ASTElementFactory(Elements elements,
+                             ASTFactory astFactory,
+                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                             ASTElementConverterFactory astElementConverterFactory) {
+        this.elements = elements;
+        this.astFactory = astFactory;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.astElementConverterFactory = astElementConverterFactory;
+    }
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
 

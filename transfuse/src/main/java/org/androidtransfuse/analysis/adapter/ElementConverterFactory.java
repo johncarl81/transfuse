@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Factory to create Element Converters
@@ -10,29 +11,20 @@ import javax.inject.Inject;
 public class ElementConverterFactory {
 
     private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private ElementConverterFactory astTypeElementConverterFactory;
-    private ASTElementFactory astElementFactory;
+    private Provider<ASTElementFactory> astElementFactoryProvider;
+
+    @Inject
+    public ElementConverterFactory(ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                                   Provider<ASTElementFactory> astElementFactoryProvider) {
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.astElementFactoryProvider = astElementFactoryProvider;
+    }
 
     public <T> ASTTypeElementConverter<T> buildTypeConverter(Class<T> clazz) {
-        return new ASTTypeElementConverter<T>(clazz, astElementFactory);
+        return new ASTTypeElementConverter<T>(clazz, astElementFactoryProvider.get());
     }
 
     public <T> AnnotationTypeValueConverterVisitor<T> buildAnnotationValueConverter(Class<T> clazz) {
-        return new AnnotationTypeValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, astTypeElementConverterFactory);
-    }
-
-    @Inject
-    public void setAstTypeBuilderVisitor(ASTTypeBuilderVisitor astTypeBuilderVisitor) {
-        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
-    }
-
-    @Inject
-    public void setAstTypeElementConverterFactory(ElementConverterFactory astTypeElementConverterFactory) {
-        this.astTypeElementConverterFactory = astTypeElementConverterFactory;
-    }
-
-    @Inject
-    public void setAstElementFactory(ASTElementFactory astElementFactory) {
-        this.astElementFactory = astElementFactory;
+        return new AnnotationTypeValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, this);
     }
 }

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest t:tag="+" xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.androidtransfuse.integrationTest" android:versionCode="1" android:versionName="1.0">
+<manifest t:tag="+" xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest" android:versionCode="1" android:versionName="1.0">
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <application t:tag="+,i,l,n" android:icon="@drawable/icon" android:label="Transfuse Integration Test"
-                 android:name=".IntegrationAppApplication">
+    <application t:tag="+,i,l,n" android:icon="@drawable/icon" android:label="Transfuse Integration Test" android:name=".IntegrationAppApplication">
         <activity t:tag="+,l,n" android:label="About" android:name=".AboutActivity"/>
         <activity t:tag="+,l,n" android:label="@string/app_name" android:name=".MainActivity">
             <intent-filter t:tag="+">
@@ -17,16 +15,14 @@
         <activity android:label="Not Managed" android:name=".activity.NotManagedActivity"/>
         <activity t:tag="+,l,n" android:label="Preferences" android:name=".activity.PreferencesActivity"/>
         <activity t:tag="+,l,n" android:label="AOP" android:name=".aop.AOPActivity"/>
-        <activity t:tag="+,l,n" android:label="Broadcast Receiver"
-                  android:name=".broadcastReceiver.ToastTriggerActivity"/>
+        <activity t:tag="+,l,n" android:label="Broadcast Receiver" android:name=".broadcastReceiver.ToastTriggerActivity"/>
         <activity t:tag="+,n" android:name=".externalGenerator.TestActivity"/>
         <activity t:tag="+,n" android:name=".fragments.DetailActivity"/>
         <activity t:tag="+,l,n" android:label="Fragments" android:name=".fragments.FragmentMainActivity"/>
         <activity t:tag="+,l,n" android:label="CustomView" android:name=".inject.CustomViewActivity"/>
         <activity t:tag="+,l,n" android:label="Extras" android:name=".inject.ExtraInjectionActivity"/>
         <activity t:tag="+,l,n" android:label="Injection" android:name=".inject.InjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="Preference Injection"
-                  android:name=".inject.PreferenceInjectionActivity"/>
+        <activity t:tag="+,l,n" android:label="Preference Injection" android:name=".inject.PreferenceInjectionActivity"/>
         <activity t:tag="+,l,n" android:label="Resources" android:name=".inject.ResourceInjectionActivity"/>
         <activity t:tag="+,l,n" android:label="System Services" android:name=".inject.SystemInjectionActivity"/>
         <activity t:tag="+,l,n" android:label="View Injection" android:name=".inject.ViewInjectionActivity"/>
@@ -37,8 +33,7 @@
         <activity t:tag="+,l,n" android:label="Observes" android:name=".observes.EventObserverActivity"/>
         <activity t:tag="+,l,n" android:label="Listener Registration" android:name=".register.RegisterActivity"/>
         <activity t:tag="+,n" android:name=".saveState.NonConfigInstanceActivity"/>
-        <activity t:tag="+,l,n" android:label="Save Instance State"
-                  android:name=".saveState.SaveInstanceStateActivity"/>
+        <activity t:tag="+,l,n" android:label="Save Instance State" android:name=".saveState.SaveInstanceStateActivity"/>
         <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeOneActivity"/>
         <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeTwoActivity"/>
         <service t:tag="+,n" android:name=".service.ExampleService"/>

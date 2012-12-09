@@ -5,6 +5,7 @@ import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.processor.TransactionRuntimeException;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleTypeVisitor6;
@@ -16,7 +17,12 @@ import javax.lang.model.util.SimpleTypeVisitor6;
  */
 public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> implements Function<TypeMirror, ASTType> {
 
-    private ASTElementFactory astElementFactory;
+    private final Provider<ASTElementFactory> astElementFactoryProvider;
+
+    @Inject
+    public ASTTypeBuilderVisitor(Provider<ASTElementFactory> astElementFactoryProvider) {
+        this.astElementFactoryProvider = astElementFactoryProvider;
+    }
 
     @Override
     public ASTType visitPrimitive(PrimitiveType primitiveType, Void v) {
@@ -35,7 +41,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitDeclared(DeclaredType declaredType, Void v) {
-        return astElementFactory.buildASTElementType(declaredType);
+        return astElementFactoryProvider.get().buildASTElementType(declaredType);
     }
 
     @Override
@@ -57,7 +63,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
     @Override
     public ASTType visitExecutable(ExecutableType executableType, Void v) {
         if (executableType instanceof TypeElement) {
-            return astElementFactory.getType((TypeElement) executableType);
+            return astElementFactoryProvider.get().getType((TypeElement) executableType);
         } else {
             throw new TransfuseAnalysisException("Encountered non-TypeElement");
         }
@@ -74,11 +80,6 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void v) {
         throw new TransfuseAnalysisException("Encountered unknown TypeMirror, unable to recover");
-    }
-
-    @Inject
-    public void setAstElementFactory(ASTElementFactory astElementFactory) {
-        this.astElementFactory = astElementFactory;
     }
 
     @Override
