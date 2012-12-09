@@ -31,6 +31,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
 public class SystemInjection {
 
     private static final int NOTIFICATION_ID = 42;
+    private static final int MIN_DISTANCE = 10;
 
     private Vibrator vibrator;
 
@@ -58,7 +59,7 @@ public class SystemInjection {
     }
 
     @RegisterListener(R.id.vibratebutton)
-    private View.OnClickListener vibrateOnClick = new View.OnClickListener(){
+    private View.OnClickListener vibrateOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             vibrator.vibrate(ONE_SECOND);
@@ -66,7 +67,7 @@ public class SystemInjection {
     };
 
     @RegisterListener(R.id.notificationbutton)
-    private View.OnClickListener notificationOnClick = new View.OnClickListener(){
+    private View.OnClickListener notificationOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Notification notification = new Notification(R.drawable.icon, "Notification", System.currentTimeMillis());
@@ -76,12 +77,12 @@ public class SystemInjection {
 
             notification.setLatestEventInfo(context, "Transfuse Integration Application", "Notification", contentIntent);
 
-            ((NotificationManager)notificationService).notify("Transfuse Notification", NOTIFICATION_ID, notification);
+            ((NotificationManager) notificationService).notify("Transfuse Notification", NOTIFICATION_ID, notification);
         }
     };
 
     @RegisterListener(R.id.locationbutton)
-    private View.OnClickListener locationOnClick = new View.OnClickListener(){
+    private View.OnClickListener locationOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Criteria criteria = new Criteria();
@@ -91,9 +92,8 @@ public class SystemInjection {
             String providerName = locationManager.getBestProvider(criteria, true);
 
             if (providerName != null) {
-                locationManager.requestLocationUpdates(providerName, 0, 10, locationToaster);
-            }
-            else{
+                locationManager.requestLocationUpdates(providerName, 0, MIN_DISTANCE, locationToaster);
+            } else {
                 Toast.makeText(context, "Could not find location provider", ONE_SECOND).show();
             }
         }

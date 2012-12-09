@@ -10,6 +10,7 @@ import org.androidtransfuse.model.ParcelableDescriptor;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -111,7 +112,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
         for (String prepend : PREPENDS) {
             if (methodName.startsWith(prepend)) {
                 String name = methodName.substring(prepend.length());
-                return name.substring(0, 1).toLowerCase() + name.substring(1);
+                return name.substring(0, 1).toLowerCase(Locale.getDefault()) + name.substring(1);
             }
         }
         throw new TransfuseAnalysisException("Unable to convert Method name " + methodName);

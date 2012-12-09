@@ -166,15 +166,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addGenerators(buildEventMethod(OnRebind.class, "onRebind", Intent.class));
 
         //todo: move this somewhere else
-        serviceDescriptor.addGenerators(new ExpressionVariableDependentGenerator() {
-            @Override
-            public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
-                JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
-                onBind.param(Intent.class, "intent");
-
-                onBind.body()._return(JExpr._null());
-            }
-        });
+        serviceDescriptor.addGenerators(new OnBindGenerator());
 
         serviceDescriptor.addGenerators(listenerRegistrationGenerator);
 
@@ -234,6 +226,16 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         @Override
         public void run(Service annotation) {
             annotation.type();
+        }
+    }
+
+    private static class OnBindGenerator implements ExpressionVariableDependentGenerator {
+        @Override
+        public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+            JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
+            onBind.param(Intent.class, "intent");
+
+            onBind.body()._return(JExpr._null());
         }
     }
 }

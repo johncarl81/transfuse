@@ -157,8 +157,7 @@ public class UnregisterConcurrencyTest {
         }
 
         executorService.shutdown();
-        while (!executorService.awaitTermination(10, TimeUnit.MILLISECONDS)) {
-        }
+        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 
         for (EventWatcher registration : registrations) {
             assertFalse(registration.isCalledAfterUnregister());
@@ -235,7 +234,7 @@ public class UnregisterConcurrencyTest {
         assertTrue(executorService.awaitTermination(WAIT_PERIOD, TimeUnit.MILLISECONDS));
     }
 
-    private static void sleep(){
+    private static void sleep() {
         // Adding some time to allow unregisters to happen often.
         try {
             Thread.sleep(1);

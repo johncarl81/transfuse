@@ -21,7 +21,7 @@ public class AnalysisGenerationFactory {
         return new AnalysisGenerationProvider(analysis, componentGeneratorProvider);
     }
 
-    private final class AnalysisGenerationProvider implements WorkerProvider {
+    private static final class AnalysisGenerationProvider implements WorkerProvider {
 
         private Provider<? extends Analysis<ComponentDescriptor>> analysis;
         private Provider<ComponentGenerator> generator;

@@ -220,7 +220,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), viewType, context);
     }
 
-    private final class AST implements ASTAnnotation {
+    private static final class AST implements ASTAnnotation {
 
         private final ASTAnnotation annotation;
         private final ASTType astType;

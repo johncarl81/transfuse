@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * @author John Ericksen
  */
-public class ThreadLocalScopeTest {
+public class MapScopeTest {
 
     private static class ScopedTarget {
     }
@@ -19,13 +19,13 @@ public class ThreadLocalScopeTest {
     private static class SeedTarget {
     }
 
-    private ThreadLocalScope scope;
+    private MapScope scope;
     private ScopedTarget target;
     private Provider<ScopedTarget> provider;
 
     @Before
     public void setup() {
-        scope = new ThreadLocalScope();
+        scope = new MapScope();
         target = new ScopedTarget();
 
         provider = scope.scope(Key.get(ScopedTarget.class), new Provider<ScopedTarget>() {

@@ -12,6 +12,8 @@ import org.androidtransfuse.integrationTest.R;
 @Layout(R.layout.main)
 public class ActivityLifecycle {
 
+    private static final String LIFECYCLE_LOG = "Lifecycle";
+
     private Bundle onCreateBundle;
     private boolean onDestroyCalled = false;
     private boolean onStopCalled = false;
@@ -22,43 +24,43 @@ public class ActivityLifecycle {
 
     @OnCreate
     public void onCreate(Bundle bundle) {
-        Log.i("Lifecycle", "onCreate");
+        Log.i(LIFECYCLE_LOG, "onCreate");
         onCreateBundle = bundle;
     }
 
     @OnDestroy
     protected void onDestroy() {
-        Log.i("Lifecycle", "onDestroy");
+        Log.i(LIFECYCLE_LOG, "onDestroy");
         onDestroyCalled = true;
     }
 
     @OnStop
     private void onStop() {
-        Log.i("Lifecycle", "onStop");
+        Log.i(LIFECYCLE_LOG, "onStop");
         onStopCalled = true;
     }
 
     @OnPause
     void onPause() {
-        Log.i("Lifecycle", "onPause");
+        Log.i(LIFECYCLE_LOG, "onPause");
         onPauseCalled = true;
     }
 
     @OnResume
     public void onResume() {
-        Log.i("Lifecycle", "onResume");
+        Log.i(LIFECYCLE_LOG, "onResume");
         onResumeCalled = true;
     }
 
     @OnStart
     public void onStart() {
-        Log.i("Lifecycle", "onStart");
+        Log.i(LIFECYCLE_LOG, "onStart");
         onStartCalled = true;
     }
 
     @OnRestart
     public void onRestart() {
-        Log.i("Lifecycle", "onRestart");
+        Log.i(LIFECYCLE_LOG, "onRestart");
         onRestartCalled = true;
     }
 

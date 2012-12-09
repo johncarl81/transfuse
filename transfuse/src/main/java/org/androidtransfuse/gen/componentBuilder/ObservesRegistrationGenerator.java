@@ -48,64 +48,9 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
         try {
             //mapping from event type -> observer
-            Map<JClass, JVar> observerTuples = new HashMap<JClass, JVar>();
-            InjectionNode tendingInjectionNode = null;
+            InjectionNode tendingInjectionNode = getTendingInjectionNode(expressionMap);
             JBlock block = methodDescriptor.getMethod().body();
-
-            for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
-
-                if (expressionEntry.getKey().containsAspect(ObservesAspect.class)) {
-                    ObservesAspect aspect = expressionEntry.getKey().getAspect(ObservesAspect.class);
-                    if (tendingInjectionNode == null) {
-                        tendingInjectionNode = aspect.getObserverTendingInjectionNode();
-                    }
-                    TypedExpression typedExpression = expressionEntry.getValue();
-
-
-                    for (ASTType event : aspect.getEvents()) {
-
-                        //generate WeakObserver<E, T> (E = event, T = target injection node)
-                        JClass eventRef = codeModel.ref(event.getName());
-                        JClass targetRef = codeModel.ref(typedExpression.getType().getName());
-
-                        JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateName(typedExpression.getType()));
-
-                        //match default constructor public WeakObserver(T target){
-                        JMethod constructor = observerClass.constructor(JMod.PUBLIC);
-                        JVar constTargetParam = constructor.param(targetRef, namer.generateClassName(targetRef));
-                        constructor.body().invoke(SUPER_REF).arg(constTargetParam);
-
-                        observerClass._extends(
-                                codeModel.ref(WeakObserver.class)
-                                        .narrow(eventRef)
-                                        .narrow(targetRef));
-
-
-                        JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
-                        JVar eventParam = triggerMethod.param(eventRef, namer.generateName(event));
-                        JVar targetParam = triggerMethod.param(targetRef, namer.generateName(typedExpression.getType()));
-                        JBlock triggerBody = triggerMethod.body();
-
-                        Set<JExpression> parameters = new HashSet<JExpression>();
-                        parameters.add(eventParam);
-
-                        for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
-                            triggerBody.add(invocationBuilder.buildMethodCall(
-                                    observerMethod.getAccessModifier(),
-                                    ASTVoidType.VOID,
-                                    observerMethod.getName(),
-                                    parameters,
-                                    Collections.singletonList(event),
-                                    typedExpression.getType(),
-                                    targetParam));
-                        }
-
-                        JVar observer = block.decl(observerClass, namer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
-
-                        observerTuples.put(eventRef, observer);
-                    }
-                }
-            }
+            Map<JClass, JVar> observerTuples = getObservers(definedClass, block, expressionMap);
 
             if (!observerTuples.isEmpty() && tendingInjectionNode != null) {
                 //build observer tuple array and observer tending class
@@ -124,6 +69,75 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
             throw new TransfuseAnalysisException("Tried to generate a class that already exists", e);
         }
 
+    }
+
+    private Map<JClass, JVar> getObservers(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap) throws JClassAlreadyExistsException {
+        Map<JClass, JVar> observerTuples = new HashMap<JClass, JVar>();
+
+        for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
+
+            if (expressionEntry.getKey().containsAspect(ObservesAspect.class)) {
+                ObservesAspect aspect = expressionEntry.getKey().getAspect(ObservesAspect.class);
+                TypedExpression typedExpression = expressionEntry.getValue();
+
+
+                for (ASTType event : aspect.getEvents()) {
+
+                    //generate WeakObserver<E, T> (E = event, T = target injection node)
+                    JClass eventRef = codeModel.ref(event.getName());
+                    JClass targetRef = codeModel.ref(typedExpression.getType().getName());
+
+                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateName(typedExpression.getType()));
+
+                    //match default constructor public WeakObserver(T target){
+                    JMethod constructor = observerClass.constructor(JMod.PUBLIC);
+                    JVar constTargetParam = constructor.param(targetRef, namer.generateClassName(targetRef));
+                    constructor.body().invoke(SUPER_REF).arg(constTargetParam);
+
+                    observerClass._extends(
+                            codeModel.ref(WeakObserver.class)
+                                    .narrow(eventRef)
+                                    .narrow(targetRef));
+
+
+                    JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
+                    JVar eventParam = triggerMethod.param(eventRef, namer.generateName(event));
+                    JVar targetParam = triggerMethod.param(targetRef, namer.generateName(typedExpression.getType()));
+                    JBlock triggerBody = triggerMethod.body();
+
+                    Set<JExpression> parameters = new HashSet<JExpression>();
+                    parameters.add(eventParam);
+
+                    for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
+                        triggerBody.add(invocationBuilder.buildMethodCall(
+                                observerMethod.getAccessModifier(),
+                                ASTVoidType.VOID,
+                                observerMethod.getName(),
+                                parameters,
+                                Collections.singletonList(event),
+                                typedExpression.getType(),
+                                targetParam));
+                    }
+
+                    JVar observer = block.decl(observerClass, namer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
+
+                    observerTuples.put(eventRef, observer);
+                }
+            }
+        }
+
+        return observerTuples;
+    }
+
+    private InjectionNode getTendingInjectionNode(Map<InjectionNode, TypedExpression> expressionMap) {
+        for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
+
+            if (expressionEntry.getKey().containsAspect(ObservesAspect.class)) {
+                ObservesAspect aspect = expressionEntry.getKey().getAspect(ObservesAspect.class);
+                return aspect.getObserverTendingInjectionNode();
+            }
+        }
+        return null;
     }
 
     private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
