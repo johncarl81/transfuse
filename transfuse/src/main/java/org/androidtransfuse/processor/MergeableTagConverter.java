@@ -3,7 +3,6 @@ package org.androidtransfuse.processor;
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,15 +48,12 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
     @Override
     public Object fromString(String input) {
 
-        String[] splitInput = input.split(SPLIT);
-
-        if (splitInput.length == 0) {
-            return Collections.emptySet();
-        }
-
         Set<String> tagValues = new HashSet<String>();
 
-        tagValues.addAll(Arrays.asList(splitInput));
+        if(input != null && !input.isEmpty()){
+            String[] splitInput = input.split(SPLIT);
+            tagValues.addAll(Arrays.asList(splitInput));
+        }
 
         return new MergeableTags(tagValues);
     }
