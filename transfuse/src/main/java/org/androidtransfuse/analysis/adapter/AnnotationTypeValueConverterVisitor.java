@@ -1,5 +1,7 @@
 package org.androidtransfuse.analysis.adapter;
 
+import org.androidtransfuse.processor.TransactionRuntimeException;
+
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -15,6 +17,8 @@ import java.util.List;
  * @author John Ericksen
  */
 public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
+
+    private static final String ERROR_TYPE = "<error>";
 
     private final Class<T> type;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -102,6 +106,11 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
     private <P> T visitSimple(Class<P> clazz, P value) {
         if (type.isAssignableFrom(clazz)) {
             return (T) value;
+        }
+        // The ErrorType is represented in annotations as a string value "<error>".  Therefore, we need to watch for
+        // this and throw an Exception if the case arises.
+        if (type.equals(ASTType.class) && value.equals(ERROR_TYPE)){
+            throw new TransactionRuntimeException("Encountered ErrorType " + value.toString() + ", unable to recover");
         }
         return null;
     }

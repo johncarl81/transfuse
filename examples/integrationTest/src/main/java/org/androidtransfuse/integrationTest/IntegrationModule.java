@@ -8,6 +8,8 @@ import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
 import org.androidtransfuse.integrationTest.aop.InterceptorRecorder;
+import org.androidtransfuse.integrationTest.externalGenerator.Proxied;
+import org.androidtransfuse.integrationTest.externalGenerator.ProxiedProxy;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.RandomProvider;
 
@@ -39,4 +41,7 @@ public interface IntegrationModule {
 
     @Bind(Concrete2Type.class)
     GenericType<Concrete2> getTarget2();
+
+    @Bind(ProxiedProxy.class)
+    Proxied getProxied();
 }

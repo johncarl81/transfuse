@@ -6,6 +6,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -28,5 +29,11 @@ public class TestTest {
     public void testGeneratedProxy() throws Exception {
         assertNotNull(test.getTarget().getProxy());
 
+    }
+
+    @org.junit.Test
+    public void testInjectedProxied() throws Exception {
+        assertNotNull(test.getProxied());
+        assertEquals(ProxiedProxy.class, test.getProxied().getClass());
     }
 }

@@ -16,13 +16,19 @@ import javax.inject.Inject;
 public class Test {
 
     private Target target;
+    private Proxied proxied;
 
     @Inject
-    public Test(Target target) {
+    public Test(Target target, Proxied proxied) {
         this.target = target;
+        this.proxied = proxied;
     }
 
     public Target getTarget() {
         return target;
+    }
+
+    public Proxied getProxied() {
+        return proxied;
     }
 }
