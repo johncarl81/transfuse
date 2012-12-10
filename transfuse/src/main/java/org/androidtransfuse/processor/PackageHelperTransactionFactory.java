@@ -10,7 +10,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class PackageHelperTransactionFactory implements TransactionFactory<Void, Void> {
+public class PackageHelperTransactionFactory {
 
     private final EnterableScope codeGenerationScope;
     private final Provider<TransactionWorker<Void, Void>> packageHelperGeneratorProvider;
@@ -24,8 +24,7 @@ public class PackageHelperTransactionFactory implements TransactionFactory<Void,
         this.codeGenerationScope = codeGenerationScope;
     }
 
-    @Override
-    public Transaction<Void, Void> buildTransaction(Void value) {
+    public Transaction<Void, Void> buildTransaction() {
         return new Transaction<Void, Void>(
                 new ScopedTransactionWorker<Void, Void>(codeGenerationScope, packageHelperGeneratorProvider)
         );

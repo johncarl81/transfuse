@@ -35,7 +35,7 @@ import javax.lang.model.util.Elements;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Collections2.transform;
@@ -114,14 +114,12 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
-        Set<Element> moduleElements = new HashSet<Element>();
-        moduleElements.addAll(roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class));
         if (!baseModuleConfiguration) {
-            moduleElements.add(elements.getTypeElement(TransfuseAndroidModule.class.getName()));
+            transfuseProcessor.submit(TransfuseModule.class, reloadableASTElementFactory.buildProviders(
+                    Collections.singleton(elements.getTypeElement(TransfuseAndroidModule.class.getName())
+                    )));
             baseModuleConfiguration = true;
         }
-        transfuseProcessor.processModule(wrapASTCollection(moduleElements));
-        transfuseProcessor.processImplementedBy(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(ImplementedBy.class)));
 
         Set<? extends Element> applicationTypes = roundEnvironment.getElementsAnnotatedWith(Application.class);
 
@@ -136,6 +134,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             transfuseProcessor.submit(Application.class, reloadableASTElementFactory.buildProviders((applicationTypes)));
         }
 
+        transfuseProcessor.submit(TransfuseModule.class, buildASTCollection(roundEnvironment, TransfuseModule.class));
+        transfuseProcessor.submit(ImplementedBy.class, buildASTCollection(roundEnvironment, ImplementedBy.class));
         transfuseProcessor.submit(Injector.class, buildASTCollection(roundEnvironment, Injector.class));
         transfuseProcessor.submit(Activity.class, buildASTCollection(roundEnvironment, Activity.class));
         transfuseProcessor.submit(BroadcastReceiver.class, buildASTCollection(roundEnvironment, BroadcastReceiver.class));

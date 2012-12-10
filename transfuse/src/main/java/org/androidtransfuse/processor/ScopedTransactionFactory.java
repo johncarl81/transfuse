@@ -19,7 +19,7 @@ public class ScopedTransactionFactory {
         this.codeGenerationScope = codeGenerationScope;
     }
 
-    public <V, R> Transaction<V, R> buildTransaction(V value, Provider<TransactionWorker<V, R>> workerProvider) {
+    public <V, R> Transaction<V, R> buildTransaction(V value, Provider<? extends TransactionWorker<V, R>> workerProvider) {
         return new Transaction<V, R>(value, new ScopedTransactionWorker<V, R>(codeGenerationScope, workerProvider));
     }
 }

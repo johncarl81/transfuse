@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.module;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
@@ -8,8 +9,10 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
+import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Central module processor class.  Scanns the input AST elements for the appropriate annotations and registers
@@ -25,15 +28,15 @@ import javax.inject.Inject;
  * <p/>
  * associates teh LoopThreeImpl class to be used when a LoopThree is injected.
  */
-public class ModuleProcessor {
+public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, Void> {
 
     private final ImmutableMap<ASTType, MethodProcessor> bindingProcessors;
 
     @Inject
-    public ModuleProcessor(BindProcessor bindProcessor,
-                           BindProviderProcessor bindProviderProcessor,
-                           BindInterceptorProcessor bindInterceptorProcessor,
-                           ASTClassFactory astClassFactory) {
+    public ModuleTransactionWorker(BindProcessor bindProcessor,
+                                   BindProviderProcessor bindProviderProcessor,
+                                   BindInterceptorProcessor bindInterceptorProcessor,
+                                   ASTClassFactory astClassFactory) {
         ImmutableMap.Builder<ASTType, MethodProcessor> moduleBindings = ImmutableMap.builder();
         moduleBindings.put(astClassFactory.getType(Bind.class), bindProcessor);
         moduleBindings.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
@@ -42,15 +45,28 @@ public class ModuleProcessor {
         this.bindingProcessors = moduleBindings.build();
     }
 
-    public void processMethod(ASTMethod astMethod) {
+    @Override
+    public Void innerRun(Provider<ASTType> astTypeProvider) {
 
-        for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
+        ASTType type = astTypeProvider.get();
 
-            if (bindingProcessors.containsKey(astAnnotation.getASTType())) {
-                MethodProcessor methodProcessor = bindingProcessors.get(astAnnotation.getASTType());
+        ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
 
-                methodProcessor.process(astMethod, astAnnotation);
+        for (ASTMethod astMethod : type.getMethods()) {
+            for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
+
+                if (bindingProcessors.containsKey(astAnnotation.getASTType())) {
+                    MethodProcessor methodProcessor = bindingProcessors.get(astAnnotation.getASTType());
+
+                    configurations.add(methodProcessor.process(astMethod, astAnnotation));
+                }
             }
         }
+
+        for (ModuleConfiguration moduleConfiguration : configurations.build()) {
+            moduleConfiguration.setConfiguration();
+        }
+
+        return null;
     }
 }

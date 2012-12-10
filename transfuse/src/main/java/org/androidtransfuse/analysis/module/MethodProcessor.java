@@ -12,12 +12,27 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public abstract class MethodProcessor {
 
-    public void process(ASTMethod astMethod, ASTAnnotation astAnnotation) {
+    public ModuleConfiguration process(ASTMethod astMethod, ASTAnnotation astAnnotation) {
         ASTType returnType = astMethod.getReturnType();
         ASTType astType = astAnnotation.getProperty("value", ASTType.class);
-        innerProcess(returnType, astType);
+        return new PostProcessingModuleConfiguration(returnType, astType);
     }
 
     public abstract void innerProcess(ASTType returnType, ASTType annotationValue);
 
+    private final class PostProcessingModuleConfiguration implements ModuleConfiguration {
+
+        private final ASTType returnType;
+        private final ASTType astType;
+
+        private PostProcessingModuleConfiguration(ASTType returnType, ASTType astType) {
+            this.returnType = returnType;
+            this.astType = astType;
+        }
+
+        @Override
+        public void setConfiguration() {
+            innerProcess(returnType, astType);
+        }
+    }
 }

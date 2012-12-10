@@ -5,7 +5,6 @@ import org.androidtransfuse.test.generator.Proxy;
 /**
  * @author John Ericksen
  */
-@Proxy
+@Proxy(round = 0)
 public class Proxied {
-
 }

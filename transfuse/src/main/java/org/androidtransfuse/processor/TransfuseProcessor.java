@@ -2,11 +2,7 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.module.ImplementedByProcessor;
-import org.androidtransfuse.analysis.module.ModuleProcessor;
-import org.androidtransfuse.annotations.TransfuseModule;
 import org.androidtransfuse.gen.ManifestBuilder;
 
 import javax.inject.Inject;
@@ -21,37 +17,14 @@ import java.util.Collection;
 @Singleton
 public class TransfuseProcessor {
 
-    private final ModuleProcessor moduleProcessor;
-    private final ImplementedByProcessor implementedByProcessor;
     private final GeneratorRepository generatorRepository;
     private final ManifestBuilder manifestBuilder;
 
     @Inject
-    public TransfuseProcessor(ModuleProcessor moduleProcessor,
-                              ImplementedByProcessor implementedByProcessor,
-                              GeneratorRepository generatorRepository,
+    public TransfuseProcessor(GeneratorRepository generatorRepository,
                               ManifestBuilder manifestBuilder) {
-        this.moduleProcessor = moduleProcessor;
-        this.implementedByProcessor = implementedByProcessor;
         this.generatorRepository = generatorRepository;
         this.manifestBuilder = manifestBuilder;
-    }
-
-    public void processModule(Collection<? extends ASTType> astTypes) {
-
-        for (ASTType astType : astTypes) {
-            if (astType.isAnnotated(TransfuseModule.class)) {
-                for (ASTMethod astMethod : astType.getMethods()) {
-                    moduleProcessor.processMethod(astMethod);
-                }
-            }
-        }
-    }
-
-    public void processImplementedBy(Collection<? extends ASTType> astTypes) {
-        for (ASTType astType : astTypes) {
-            implementedByProcessor.processType(astType);
-        }
     }
 
     public void generateEmptyApplication() {

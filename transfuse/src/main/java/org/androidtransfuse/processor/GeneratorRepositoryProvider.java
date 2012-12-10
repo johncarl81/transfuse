@@ -2,6 +2,7 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.ImplementedBy;
 import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
@@ -15,6 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Configures the Processor chain
+ *
+ *    +------------------+              +----------------------+  +--------------------+    +--------------------------+
+ * +->| Module Processor +--------+--+->| Component Processors +->| Manifest Processor |-+->| Package Helper Processor |
+ * |  +------------------+        |  |  +----------------------+  +--------------------+ |  +--------------------------+
+ * |  +-------------------------+ |  |  +---------------------+                          |
+ * +->| ImplementedBy Processor +-+  +->| Injectors Processor +--------------------------+
+ *    +-------------------------+       +---------------------+
+ *
  * @author John Ericksen
  */
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
@@ -29,6 +39,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final AnalysisGenerationTransactionProcessorBuilderFactory processorFactory;
     private final GenerateModuleProcessor generateModuleProcessor;
     private final PackageHelperTransactionFactory packageHelperTransactionFactory;
+    private final ModuleProcessorBuilder moduleProcessorBuilder;
+    private final ImplementedByProcessorBuilder implementedByProcessorBuilder;
 
     @Inject
     public GeneratorRepositoryProvider(InjectorProcessor injectorProcessor,
@@ -40,7 +52,9 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        Provider<ApplicationAnalysis> applicationAnalysisProvider,
                                        AnalysisGenerationTransactionProcessorBuilderFactory processorFactory,
                                        GenerateModuleProcessor generateModuleProcessor,
-                                       PackageHelperTransactionFactory packageHelperTransactionFactory) {
+                                       PackageHelperTransactionFactory packageHelperTransactionFactory,
+                                       ModuleProcessorBuilder moduleProcessorBuilder,
+                                       ImplementedByProcessorBuilder implementedByProcessorBuilder) {
         this.injectorProcessor = injectorProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
@@ -51,6 +65,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.processorFactory = processorFactory;
         this.generateModuleProcessor = generateModuleProcessor;
         this.packageHelperTransactionFactory = packageHelperTransactionFactory;
+        this.moduleProcessorBuilder = moduleProcessorBuilder;
+        this.implementedByProcessorBuilder = implementedByProcessorBuilder;
     }
 
     @Override
@@ -59,6 +75,15 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         ImmutableMap.Builder<Class<? extends Annotation>, TransactionProcessorBuilder<Provider<ASTType>, ?>> processorMapBuilder = ImmutableMap.builder();
         ImmutableSet.Builder<TransactionProcessor> componentProcessors = ImmutableSet.builder();
 
+        // Module and ImplementedBy configuration processing
+        processorMapBuilder.put(TransfuseModule.class, moduleProcessorBuilder);
+        processorMapBuilder.put(ImplementedBy.class, implementedByProcessorBuilder);
+
+        TransactionProcessor configurationProcessors = new TransactionProcessorComposite(
+                ImmutableSet.of(moduleProcessorBuilder.getTransactionProcessor(),
+                        implementedByProcessorBuilder.getTransactionProcessor()));
+
+        // Component processing
         Map<Class<? extends Annotation>, Provider<? extends Analysis<ComponentDescriptor>>> analyzers =
                 new HashMap<Class<? extends Annotation>, Provider<? extends Analysis<ComponentDescriptor>>>();
         analyzers.put(Application.class, applicationAnalysisProvider);
@@ -77,19 +102,26 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         }
 
         TransactionProcessor componentsProcessor = new TransactionProcessorComposite(componentProcessors.build());
+
+        // Manifest processing (depends on components)
         TransactionProcessor manifestProcessor = new TransactionProcessorPredefined(ImmutableSet.of(new Transaction<Void, Void>(generateModuleProcessor)));
         TransactionProcessor componentProcessorCompletion = new TransactionProcessorChain(componentsProcessor, manifestProcessor);
-        TransactionProcessor pacakgeHelperProcessor = new TransactionProcessorPredefined(ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(null)));
 
         ImmutableSet.Builder<TransactionProcessor> configurationDependentBuilders = ImmutableSet.builder();
 
         configurationDependentBuilders.add(injectorProcessor.getTransactionProcessor());
         configurationDependentBuilders.add(componentProcessorCompletion);
-        configurationDependentBuilders.add(pacakgeHelperProcessor);
 
         processorMapBuilder.put(Injector.class, injectorProcessor);
 
-        TransactionProcessorComposite processor = new TransactionProcessorComposite(configurationDependentBuilders.build());
+        // Package Helper processing (to be run last)
+        TransactionProcessor packageHelperProcessor = new TransactionProcessorPredefined(ImmutableSet.of(packageHelperTransactionFactory.buildTransaction()));
+
+        TransactionProcessor configurationDependentProcessors =
+                new TransactionProcessorComposite(configurationDependentBuilders.build());
+
+        TransactionProcessor processor = new TransactionProcessorChain(configurationProcessors,
+                new TransactionProcessorChain(configurationDependentProcessors, packageHelperProcessor));
 
         return new GeneratorRepository(processorMapBuilder.build(), processor);
     }
