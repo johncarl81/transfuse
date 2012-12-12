@@ -23,8 +23,8 @@ You may download Transfuse as a Maven dependency:
 </dependency>
 ```
 
-Or from the [github download page][2].
+Or from the [Maven Central][2].
 
 
 [1]: http://androidtransfuse.org/
-[2]: https://github.com/johncarl81/transfuse/downloads
+[2]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22
