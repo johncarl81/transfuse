@@ -58,7 +58,7 @@ New to the library or Android? Visit the [Getting Started][2] section.
 
 ### Download
 
-Try Transfuse by downloading from the [Download page][1],
+Try Transfuse by downloading from [Maven Central][1],
 
 via git:
 
@@ -86,6 +86,6 @@ or via Maven:
 
 {% endhighlight %}
 
-[1]: https://github.com/johncarl81/transfuse/downloads
+[1]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22
 [2]: getting_started.html
 [3]: documentation.html

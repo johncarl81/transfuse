@@ -60,7 +60,7 @@ Add the transfuse dependencies into the Maven pom:
 
 {% endhighlight %}
 
-Transfuse also can be downloaded directly from the [Download page.][4]
+Transfuse also can be downloaded directly from [Maven Central][4].
 
 <div class="note">
 <h5>Note</h5>
@@ -127,4 +127,4 @@ A fully functional Android application has now been built using Transfuse.
 [1]: http://developer.android.com/training/index.html
 [2]: https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid
 [3]: http://developer.android.com/sdk/index.html
-[4]: https://github.com/johncarl81/transfuse/downloads
+[4]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22
