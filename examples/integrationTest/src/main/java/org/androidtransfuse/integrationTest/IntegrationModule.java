@@ -24,17 +24,19 @@ import java.util.Random;
         @BindProvider(type = ProvidedInjectTarget.class, provider = InjectTargetProvider.class),
         @BindProvider(type = Random.class, provider = RandomProvider.class)
 })
-public interface IntegrationModule {
+@Bindings({
+        @Bind(type = LoopThree.class, to = LoopThreeImpl.class),
+        @Bind(type = Proxied.class, to = ProxiedProxy.class)
+})
+public class IntegrationModule {
 
-    @Bind(LoopThreeImpl.class)
-    LoopThree getThree();
+    @Provides
+    public GenericType<Concrete> buildTarget2(ConcreteType concreteType){
+        return concreteType;
+    }
 
-    @Bind(ConcreteType.class)
-    GenericType<Concrete> getTarget();
-
-    @Bind(Concrete2Type.class)
-    GenericType<Concrete2> getTarget2();
-
-    @Bind(ProxiedProxy.class)
-    Proxied getProxied();
+    @Provides
+    public GenericType<Concrete2> buildTarget(){
+        return new Concrete2Type();
+    }
 }

@@ -36,9 +36,11 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    BindProviderProcessor bindProviderProcessor,
                                    BindInterceptorProcessor bindInterceptorProcessor,
                                    BindingConfigurationFactory configurationFactory,
+                                   ProvidesProcessor providesProcessor,
                                    ASTClassFactory astClassFactory) {
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
-        methodProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
+
+        methodProcessorsBuilder.put(astClassFactory.getType(Provides.class), providesProcessor);
 
         this.methodProcessors = methodProcessorsBuilder.build();
 
@@ -49,6 +51,10 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(BindProviders.class),
                 configurationFactory.buildConfigurationComposite(bindProviderProcessor));
+        typeProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(Bindings.class),
+                configurationFactory.buildConfigurationComposite(bindProcessor));
+
 
         typeProcessors = typeProcessorsBuilder.build();
     }
@@ -60,6 +66,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
         ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
 
+        configurations.add(new SingletonModuleConfiguration(type));
+
         for (ASTAnnotation typeAnnotation : type.getAnnotations()) {
             if(typeProcessors.containsKey(typeAnnotation.getASTType())){
                 TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
@@ -70,11 +78,10 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
         for (ASTMethod astMethod : type.getMethods()) {
             for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
-
                 if (methodProcessors.containsKey(astAnnotation.getASTType())) {
                     MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
 
-                    configurations.add(methodProcessor.process(astMethod, astAnnotation));
+                    configurations.add(methodProcessor.process(type, astMethod, astAnnotation));
                 }
             }
         }
@@ -84,5 +91,19 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         }
 
         return null;
+    }
+
+    private final class SingletonModuleConfiguration implements ModuleConfiguration{
+
+        private final ASTType moduleType;
+
+        private SingletonModuleConfiguration(ASTType moduleType) {
+            this.moduleType = moduleType;
+        }
+
+        @Override
+        public void setConfiguration() {
+
+        }
     }
 }

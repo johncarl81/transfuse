@@ -84,7 +84,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor {
     public ImmutableSet<Exception> getErrors() {
         ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
         for (Transaction<V, R> transaction : transactions) {
-            if (!transaction.isComplete()) {
+            if (!transaction.isComplete() && transaction.getError() != null) {
                 exceptions.add(transaction.getError());
             }
         }

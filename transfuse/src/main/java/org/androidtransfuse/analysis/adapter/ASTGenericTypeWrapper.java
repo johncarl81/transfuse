@@ -3,6 +3,7 @@ package org.androidtransfuse.analysis.adapter;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -121,6 +122,12 @@ public class ASTGenericTypeWrapper implements ASTType {
 
     @Override
     public String toString() {
-        return getName();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append('<');
+        builder.append(StringUtils.join(getGenericParameters(), ","));
+        builder.append('>');
+
+        return getName() + builder.toString();
     }
 }

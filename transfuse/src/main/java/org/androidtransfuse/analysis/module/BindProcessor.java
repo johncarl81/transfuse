@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.module;
 
+import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -11,7 +12,7 @@ import javax.inject.Inject;
  *
  * @author John Ericksen
  */
-public class BindProcessor extends MethodProcessor {
+public class BindProcessor implements TypeProcessor {
 
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
@@ -23,8 +24,27 @@ public class BindProcessor extends MethodProcessor {
     }
 
     @Override
-    public void innerProcess(ASTType returnType, ASTType annotationValue) {
-        injectionNodeBuilders.putModuleConfig(returnType,
-                variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(annotationValue));
+    public ModuleConfiguration process(ASTAnnotation bindAnnotation) {
+        ASTType type = bindAnnotation.getProperty("type", ASTType.class);
+        ASTType to = bindAnnotation.getProperty("to", ASTType.class);
+
+        return new BindingModuleConfiguration(type, to);
+    }
+
+    private final class BindingModuleConfiguration implements ModuleConfiguration{
+
+        private final ASTType type;
+        private final ASTType to;
+
+        private BindingModuleConfiguration(ASTType type, ASTType to) {
+            this.type = type;
+            this.to = to;
+        }
+
+        @Override
+        public void setConfiguration() {
+            injectionNodeBuilders.putModuleConfig(type,
+                    variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(to));
+        }
     }
 }

@@ -4,11 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
+import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -50,4 +54,8 @@ public interface VariableInjectionBuilderFactory {
     FragmentViewVariableBuilder buildFragmentViewVariableBuilder(Integer viewId, String viewTag, InjectionNode fragmentInjectionNode, JType jType);
 
     ContextScopeVariableBuilder buildContextScopeVariableBuilder(InjectionNode contextScopeHolder);
+
+    ProvidesInjectionNodeBuilder buildProvidesInjectionNodeBuilder(ASTType moduleType, ASTMethod providesMethod);
+
+    ProvidesVariableBuilder buildProvidesVariableBuilder(InjectionNode module, ASTMethod method, Map<ASTParameter, InjectionNode> dependencyAnalysis);
 }

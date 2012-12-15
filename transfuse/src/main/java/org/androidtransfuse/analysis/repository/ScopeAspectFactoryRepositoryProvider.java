@@ -1,6 +1,7 @@
 package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.annotations.ContextScope;
+import org.androidtransfuse.annotations.TransfuseModule;
 import org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
 
@@ -28,6 +29,7 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<ScopeAspec
     public ScopeAspectFactoryRepository get() {
         ScopeAspectFactoryRepository scopedVariableBuilderRepository = new ScopeAspectFactoryRepository();
 
+        scopedVariableBuilderRepository.putAspectFactory(TransfuseModule.class, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putAspectFactory(Singleton.class, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putAspectFactory(ContextScope.class, contextScopeAspectFactory);
 

@@ -2,7 +2,6 @@ package org.androidtransfuse.gen;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.inject.util.Providers;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
@@ -10,6 +9,7 @@ import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ParcelableDescriptor;
 import org.androidtransfuse.util.ParcelWrapper;
+import org.androidtransfuse.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
