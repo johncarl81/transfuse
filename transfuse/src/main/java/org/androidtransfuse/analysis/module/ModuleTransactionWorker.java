@@ -6,10 +6,7 @@ import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.annotations.Bind;
-import org.androidtransfuse.annotations.BindInterceptor;
-import org.androidtransfuse.annotations.BindProvider;
-import org.androidtransfuse.annotations.Interceptors;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
@@ -37,18 +34,20 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
     @Inject
     public ModuleTransactionWorker(BindProcessor bindProcessor,
                                    BindProviderProcessor bindProviderProcessor,
+                                   BindProvidersProcessor bindProvidersProcessor,
                                    BindInterceptorProcessor bindInterceptorProcessor,
                                    BindInterceptorsProcessor bindInterceptorsProcessor,
                                    ASTClassFactory astClassFactory) {
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
         methodProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
-        methodProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
 
         this.methodProcessors = methodProcessorsBuilder.build();
 
         ImmutableMap.Builder<ASTType, TypeProcessor> typeProcessorsBuilder = ImmutableMap.builder();
         typeProcessorsBuilder.put(astClassFactory.getType(Interceptors.class), bindInterceptorsProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(Providers.class), bindProvidersProcessor);
 
         typeProcessors = typeProcessorsBuilder.build();
     }

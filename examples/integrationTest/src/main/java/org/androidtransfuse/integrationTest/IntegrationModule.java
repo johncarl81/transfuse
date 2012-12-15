@@ -20,16 +20,14 @@ import java.util.Random;
         @BindInterceptor(annotation = AOPInterceptor.class, interceptor = InterceptorRecorder.class),
         @BindInterceptor(annotation = DependencyInterceptor.class, interceptor = InjectedInterceptor.class)
 })
+@Providers({
+        @BindProvider(type = ProvidedInjectTarget.class, provider = InjectTargetProvider.class),
+        @BindProvider(type = Random.class, provider = RandomProvider.class)
+})
 public interface IntegrationModule {
 
     @Bind(LoopThreeImpl.class)
     LoopThree getThree();
-
-    @BindProvider(InjectTargetProvider.class)
-    ProvidedInjectTarget getInjectTarget();
-
-    @BindProvider(RandomProvider.class)
-    Random getRandom();
 
     @Bind(ConcreteType.class)
     GenericType<Concrete> getTarget();
