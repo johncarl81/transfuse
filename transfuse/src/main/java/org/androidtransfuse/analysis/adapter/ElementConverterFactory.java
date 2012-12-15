@@ -10,14 +10,17 @@ import javax.inject.Provider;
  */
 public class ElementConverterFactory {
 
-    private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private Provider<ASTElementFactory> astElementFactoryProvider;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final Provider<ASTElementFactory> astElementFactoryProvider;
+    private final ASTFactory astFactory;
 
     @Inject
     public ElementConverterFactory(ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                                   Provider<ASTElementFactory> astElementFactoryProvider) {
+                                   Provider<ASTElementFactory> astElementFactoryProvider,
+                                   ASTFactory astFactory) {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astElementFactoryProvider = astElementFactoryProvider;
+        this.astFactory = astFactory;
     }
 
     public <T> ASTTypeElementConverter<T> buildTypeConverter(Class<T> clazz) {
@@ -25,6 +28,6 @@ public class ElementConverterFactory {
     }
 
     public <T> AnnotationTypeValueConverterVisitor<T> buildAnnotationValueConverter(Class<T> clazz) {
-        return new AnnotationTypeValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, this);
+        return new AnnotationTypeValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, this, astFactory);
     }
 }

@@ -9,6 +9,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.Bind;
 import org.androidtransfuse.annotations.BindInterceptor;
 import org.androidtransfuse.annotations.BindProvider;
+import org.androidtransfuse.annotations.Interceptors;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
@@ -30,19 +31,26 @@ import javax.inject.Provider;
  */
 public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, Void> {
 
-    private final ImmutableMap<ASTType, MethodProcessor> bindingProcessors;
+    private final ImmutableMap<ASTType, MethodProcessor> methodProcessors;
+    private final ImmutableMap<ASTType, TypeProcessor> typeProcessors;
 
     @Inject
     public ModuleTransactionWorker(BindProcessor bindProcessor,
                                    BindProviderProcessor bindProviderProcessor,
                                    BindInterceptorProcessor bindInterceptorProcessor,
+                                   BindInterceptorsProcessor bindInterceptorsProcessor,
                                    ASTClassFactory astClassFactory) {
-        ImmutableMap.Builder<ASTType, MethodProcessor> moduleBindings = ImmutableMap.builder();
-        moduleBindings.put(astClassFactory.getType(Bind.class), bindProcessor);
-        moduleBindings.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
-        moduleBindings.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
+        ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
+        methodProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
+        methodProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
 
-        this.bindingProcessors = moduleBindings.build();
+        this.methodProcessors = methodProcessorsBuilder.build();
+
+        ImmutableMap.Builder<ASTType, TypeProcessor> typeProcessorsBuilder = ImmutableMap.builder();
+        typeProcessorsBuilder.put(astClassFactory.getType(Interceptors.class), bindInterceptorsProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
+
+        typeProcessors = typeProcessorsBuilder.build();
     }
 
     @Override
@@ -52,11 +60,19 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
         ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
 
+        for (ASTAnnotation typeAnnotation : type.getAnnotations()) {
+            if(typeProcessors.containsKey(typeAnnotation.getASTType())){
+                TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
+
+                configurations.add(typeProcessor.process(typeAnnotation));
+            }
+        }
+
         for (ASTMethod astMethod : type.getMethods()) {
             for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
 
-                if (bindingProcessors.containsKey(astAnnotation.getASTType())) {
-                    MethodProcessor methodProcessor = bindingProcessors.get(astAnnotation.getASTType());
+                if (methodProcessors.containsKey(astAnnotation.getASTType())) {
+                    MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
 
                     configurations.add(methodProcessor.process(astMethod, astAnnotation));
                 }

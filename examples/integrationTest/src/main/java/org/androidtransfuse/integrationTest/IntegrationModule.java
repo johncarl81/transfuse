@@ -1,9 +1,6 @@
 package org.androidtransfuse.integrationTest;
 
-import org.androidtransfuse.annotations.Bind;
-import org.androidtransfuse.annotations.BindInterceptor;
-import org.androidtransfuse.annotations.BindProvider;
-import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
@@ -19,16 +16,14 @@ import java.util.Random;
  * @author John Ericksen
  */
 @TransfuseModule
+@Interceptors({
+        @BindInterceptor(annotation = AOPInterceptor.class, interceptor = InterceptorRecorder.class),
+        @BindInterceptor(annotation = DependencyInterceptor.class, interceptor = InjectedInterceptor.class)
+})
 public interface IntegrationModule {
 
     @Bind(LoopThreeImpl.class)
     LoopThree getThree();
-
-    @BindInterceptor(AOPInterceptor.class)
-    InterceptorRecorder getInterceptor();
-
-    @BindInterceptor(DependencyInterceptor.class)
-    InjectedInterceptor getDependencyInterceptor();
 
     @BindProvider(InjectTargetProvider.class)
     ProvidedInjectTarget getInjectTarget();

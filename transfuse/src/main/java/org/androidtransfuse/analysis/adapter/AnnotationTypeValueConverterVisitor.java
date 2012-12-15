@@ -2,6 +2,7 @@ package org.androidtransfuse.analysis.adapter;
 
 import org.androidtransfuse.processor.TransactionRuntimeException;
 
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -23,13 +24,16 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
     private final Class<T> type;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final ElementConverterFactory astTypeElementConverterFactory;
+    private final ASTFactory astFactory;
 
     public AnnotationTypeValueConverterVisitor(Class<T> type,
                                                ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                                               ElementConverterFactory astTypeElementConverterFactory) {
+                                               ElementConverterFactory astTypeElementConverterFactory,
+                                               ASTFactory astFactory) {
         this.type = type;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astTypeElementConverterFactory = astTypeElementConverterFactory;
+        this.astFactory = astFactory;
     }
 
     @Override
@@ -96,7 +100,7 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
         for (AnnotationValue annotationValue : annotationValues) {
             annotationASTTypes.add(annotationValue.accept(
-                    new AnnotationTypeValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory),
+                    new AnnotationTypeValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory, astFactory),
                     null));
         }
 
@@ -112,6 +116,16 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
         if (type.equals(ASTType.class) && value.equals(ERROR_TYPE)){
             throw new TransactionRuntimeException("Encountered ErrorType " + value.toString() + ", unable to recover");
         }
+        return null;
+    }
+
+    @Override
+    public T visitAnnotation(AnnotationMirror annotationMirror, Void aVoid) {
+        if (type.equals(ASTAnnotation.class)){
+            ASTType annotationType = annotationMirror.getAnnotationType().accept(astTypeBuilderVisitor, null);
+            return (T) astFactory.buildASTElementAnnotation(annotationMirror, annotationType);
+        }
+
         return null;
     }
 }
