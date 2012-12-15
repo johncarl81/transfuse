@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Interceptors {
-    BindInterceptor[] value();
+public @interface BindProviders {
+    BindProvider[] value();
 }

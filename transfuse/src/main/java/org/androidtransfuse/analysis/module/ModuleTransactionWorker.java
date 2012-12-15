@@ -34,9 +34,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
     @Inject
     public ModuleTransactionWorker(BindProcessor bindProcessor,
                                    BindProviderProcessor bindProviderProcessor,
-                                   BindProvidersProcessor bindProvidersProcessor,
                                    BindInterceptorProcessor bindInterceptorProcessor,
-                                   BindInterceptorsProcessor bindInterceptorsProcessor,
+                                   BindingConfigurationFactory configurationFactory,
                                    ASTClassFactory astClassFactory) {
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
         methodProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
@@ -44,10 +43,12 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         this.methodProcessors = methodProcessorsBuilder.build();
 
         ImmutableMap.Builder<ASTType, TypeProcessor> typeProcessorsBuilder = ImmutableMap.builder();
-        typeProcessorsBuilder.put(astClassFactory.getType(Interceptors.class), bindInterceptorsProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptors.class),
+                configurationFactory.buildConfigurationComposite(bindInterceptorProcessor));
         typeProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(Providers.class), bindProvidersProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(BindProviders.class),
+                configurationFactory.buildConfigurationComposite(bindProviderProcessor));
 
         typeProcessors = typeProcessorsBuilder.build();
     }

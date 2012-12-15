@@ -16,11 +16,11 @@ import java.util.Random;
  * @author John Ericksen
  */
 @TransfuseModule
-@Interceptors({
+@BindInterceptors({
         @BindInterceptor(annotation = AOPInterceptor.class, interceptor = InterceptorRecorder.class),
         @BindInterceptor(annotation = DependencyInterceptor.class, interceptor = InjectedInterceptor.class)
 })
-@Providers({
+@BindProviders({
         @BindProvider(type = ProvidedInjectTarget.class, provider = InjectTargetProvider.class),
         @BindProvider(type = Random.class, provider = RandomProvider.class)
 })

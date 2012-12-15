@@ -10,6 +10,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.module.BindingConfigurationFactory;
 import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
 import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
@@ -52,6 +53,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
 
         install(factoryModuleBuilder.build(ASTFactory.class));
         install(factoryModuleBuilder.build(AnalysisGenerationTransactionProcessorBuilderFactory.class));
+        install(factoryModuleBuilder.build(BindingConfigurationFactory.class));
 
         bind(Logger.class).toInstance(logger);
         bind(XStream.class).toProvider(XStreamProvider.class);

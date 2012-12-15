@@ -1,5 +1,6 @@
 package org.androidtransfuse.analysis.module;
 
+import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 
 import javax.inject.Inject;
@@ -7,13 +8,13 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class BindInterceptorsProcessor implements TypeProcessor {
+public class BindConfigurationComposite implements TypeProcessor {
 
-    private final BindInterceptorProcessor bindInterceptorProcessor;
+    private final TypeProcessor processor;
 
     @Inject
-    public BindInterceptorsProcessor(BindInterceptorProcessor bindInterceptorProcessor) {
-        this.bindInterceptorProcessor = bindInterceptorProcessor;
+    public BindConfigurationComposite(@Assisted TypeProcessor processor) {
+        this.processor = processor;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class BindInterceptorsProcessor implements TypeProcessor {
         ModuleConfigurationComposite configurations = new ModuleConfigurationComposite();
 
         for (ASTAnnotation interceptorBinding : values) {
-            configurations.add(bindInterceptorProcessor.process(interceptorBinding));
+            configurations.add(processor.process(interceptorBinding));
         }
 
         return configurations;
