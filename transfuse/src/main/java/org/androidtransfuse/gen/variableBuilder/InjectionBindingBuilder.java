@@ -60,7 +60,7 @@ public class InjectionBindingBuilder {
             this.method = method;
         }
 
-        public StaticInvocationBindingBuilderArgument depenencyArg(Class<Context> dependency) {
+        public StaticInvocationBindingBuilderArgument dependencyArg(Class<Context> dependency) {
             return new StaticInvocationBindingBuilderArgument(this, dependency);
         }
     }
@@ -91,8 +91,8 @@ public class InjectionBindingBuilder {
             this.clazz = clazz;
         }
 
-        public DepenentVariableBuilderWrapper invoke(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
-            return new DepenentVariableBuilderWrapper(returnType, dependentVariableBuilder);
+        public DependantVariableBuilderWrapper invoke(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
+            return new DependantVariableBuilderWrapper(returnType, dependentVariableBuilder);
         }
 
         public DependencyArgumentBindingBuilder invoke(Class returnType, String methodName) {
@@ -125,11 +125,11 @@ public class InjectionBindingBuilder {
             }
         }
 
-        public final class DepenentVariableBuilderWrapper {
+        public final class DependantVariableBuilderWrapper {
             private final DependentVariableBuilder dependentVariableBuilder;
             private final Class returnType;
 
-            private DepenentVariableBuilderWrapper(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
+            private DependantVariableBuilderWrapper(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
                 this.returnType = returnType;
                 this.dependentVariableBuilder = dependentVariableBuilder;
             }

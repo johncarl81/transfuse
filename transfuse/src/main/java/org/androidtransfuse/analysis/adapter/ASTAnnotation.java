@@ -18,7 +18,7 @@ public interface ASTAnnotation {
     <T> T getProperty(String name, Class<T> type);
 
     /**
-     * Getter for the name of the current annotaion
+     * Getter for the name of the current annotation
      *
      * @return annotation name
      */

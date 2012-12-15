@@ -31,11 +31,11 @@ public class SingletonScopeTest {
             }
         };
 
-        Scope perfSrouce = SingletonScope.getInstance();
+        Scope perfSource = SingletonScope.getInstance();
 
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1; i++) {
-            perfSrouce.getScopedObject(ScopeTarget.class, perfBuilder);
+            perfSource.getScopedObject(ScopeTarget.class, perfBuilder);
         }
         System.out.println("Total time: " + (System.currentTimeMillis() - start));
     }

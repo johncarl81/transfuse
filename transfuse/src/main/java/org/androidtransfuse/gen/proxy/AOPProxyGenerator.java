@@ -208,13 +208,13 @@ public class AOPProxyGenerator {
 
             //setup constructor with needed parameters
             JMethod constructor = methodExecutionClass.constructor(JMod.PUBLIC);
-            JBlock constructorbody = constructor.body();
+            JBlock constructorBody = constructor.body();
             List<JExpression> methodParameters = new ArrayList<JExpression>();
             for (ASTParameter parameter : method.getParameters()) {
                 JType parameterType = parameterMap.get(parameter).type();
                 JVar param = constructor.param(parameterType, namer.generateName(parameterType));
                 JFieldVar field = methodExecutionClass.field(JMod.PRIVATE, parameterType, namer.generateName(parameterType));
-                constructorbody.assign(field, param);
+                constructorBody.assign(field, param);
                 methodParameters.add(field);
             }
 

@@ -45,23 +45,23 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         listenerMethodMapping.put(astType(View.OnTouchListener.class), "setOnTouchListener");
         listenerMethodMapping.put(astType(View.OnFocusChangeListener.class), "setOnFocusChangeListener");
 
-        Set<ASTType> callthroughMapping = new HashSet<ASTType>();
+        Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 
-        callthroughMapping.add(astType(ActivityOnKeyDownListener.class));
-        callthroughMapping.add(astType(ActivityOnKeyLongPressListener.class));
-        callthroughMapping.add(astType(ActivityOnKeyUpListener.class));
-        callthroughMapping.add(astType(ActivityOnKeyMultipleListener.class));
-        callthroughMapping.add(astType(ActivityOnTouchEventListener.class));
-        callthroughMapping.add(astType(ActivityOnTrackballEventListener.class));
-        callthroughMapping.add(astType(ActivityMenuComponent.class));
-        callthroughMapping.add(astType(ServiceOnStartCommand.class));
-        callthroughMapping.add(astType(ServiceOnUnbind.class));
+        callThroughMapping.add(astType(ActivityOnKeyDownListener.class));
+        callThroughMapping.add(astType(ActivityOnKeyLongPressListener.class));
+        callThroughMapping.add(astType(ActivityOnKeyUpListener.class));
+        callThroughMapping.add(astType(ActivityOnKeyMultipleListener.class));
+        callThroughMapping.add(astType(ActivityOnTouchEventListener.class));
+        callThroughMapping.add(astType(ActivityOnTrackballEventListener.class));
+        callThroughMapping.add(astType(ActivityMenuComponent.class));
+        callThroughMapping.add(astType(ServiceOnStartCommand.class));
+        callThroughMapping.add(astType(ServiceOnUnbind.class));
 
         ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorBuilder = ImmutableMap.builder();
 
         generatorBuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
-        generatorBuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callthroughMapping, Functions.<ASTType>identity()),
-                new CallthroughMethodMappingFunction()));
+        generatorBuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callThroughMapping, Functions.<ASTType>identity()),
+                new CallThroughMethodMappingFunction()));
 
         generatorFactories = generatorBuilder.build();
     }
@@ -77,7 +77,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
     }
 
-    private final class CallthroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory> {
+    private final class CallThroughMethodMappingFunction implements Function<ASTType, RegistrationGeneratorFactory> {
         @Override
         public RegistrationGeneratorFactory apply(ASTType astType) {
             return buildActivityDelegateRegistrationGeneratorFactory(astType);
@@ -192,7 +192,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
             if (!generators.isEmpty()) {
                 RegistrationAspect registrationAspect = getRegistrationAspect(injectionNode);
-                registrationAspect.addRegistrationbuilders(generators);
+                registrationAspect.addRegistrationBuilders(generators);
             }
         }
     }

@@ -14,7 +14,7 @@ public class MethodDescriptorBuilder {
     private final JMethod codeModelMethod;
     private final ASTMethod astMethod;
     private final ImmutableMap.Builder<ASTType, TypedExpression> typeMapBuilder = ImmutableMap.builder();
-    private final ImmutableMap.Builder<ASTParameter, TypedExpression> parameterMapbuilder = ImmutableMap.builder();
+    private final ImmutableMap.Builder<ASTParameter, TypedExpression> parameterMapBuilder = ImmutableMap.builder();
 
 
     public MethodDescriptorBuilder(JMethod codeModelMethod, ASTMethod astMethod) {
@@ -27,11 +27,11 @@ public class MethodDescriptorBuilder {
     }
 
     public void putParameter(ASTParameter astParameter, TypedExpression expression) {
-        parameterMapbuilder.put(astParameter, expression);
+        parameterMapBuilder.put(astParameter, expression);
         typeMapBuilder.put(astParameter.getASTType(), expression);
     }
 
     public MethodDescriptor build() {
-        return new MethodDescriptor(codeModelMethod, astMethod, parameterMapbuilder.build(), typeMapBuilder.build());
+        return new MethodDescriptor(codeModelMethod, astMethod, parameterMapBuilder.build(), typeMapBuilder.build());
     }
 }

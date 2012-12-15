@@ -66,7 +66,7 @@ public class ProxyGenerator extends AbstractProcessor {
                     TypeElement element = elements.getTypeElement(elementName);
                     JDefinedClass jDefinedClass = codeModel._class((element).getQualifiedName() + "Proxy");
 
-                    jDefinedClass._extends(codeModel.ref(((TypeElement) element).getQualifiedName().toString()));
+                    jDefinedClass._extends(codeModel.ref(element.getQualifiedName().toString()));
 
                     jDefinedClass._implements(Serializable.class);
 

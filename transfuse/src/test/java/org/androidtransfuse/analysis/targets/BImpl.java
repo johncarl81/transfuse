@@ -31,9 +31,7 @@ public class BImpl implements B {
 
         B b = (B) o;
 
-        if (c != null ? !c.equals(b.getC()) : b.getC() != null) return false;
-
-        return true;
+        return !(c != null ? !c.equals(b.getC()) : b.getC() != null);
     }
 
     @Override

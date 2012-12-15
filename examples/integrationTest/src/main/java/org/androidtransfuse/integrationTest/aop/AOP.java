@@ -23,19 +23,19 @@ public class AOP {
     public static final String INTERCEPT_VALUE = "interception";
 
     @RegisterListener(R.id.aopbutton1)
-    private View.OnClickListener aopclick1 = new View.OnClickListener() {
+    private View.OnClickListener aopClick1 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
                 interceptorWithDependency();
             } catch (InterruptedException e) {
-                Log.e("error", "InterruptedException while invoking interceptorWithDepenency()", e);
+                Log.e("error", "InterruptedException while invoking interceptorWithDependency()", e);
             }
         }
     };
 
     @RegisterListener(R.id.aopbutton2)
-    private View.OnClickListener aopclick2 = new View.OnClickListener() {
+    private View.OnClickListener aopClick2 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             interceptMeWithReturn();

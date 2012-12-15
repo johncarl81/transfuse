@@ -17,7 +17,7 @@ public class RegistrationAspect {
 
     private final List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
 
-    public void addRegistrationbuilders(List<RegistrationGenerator> builders){
+    public void addRegistrationBuilders(List<RegistrationGenerator> builders){
         registrationBuilders.addAll(builders);
     }
 

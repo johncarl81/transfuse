@@ -58,7 +58,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     public FragmentAnalysis(ASTClassFactory astClassFactory,
                             AnalysisContextFactory analysisContextFactory,
                             Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                            InjectionBindingBuilder injectionBindinBuilder,
+                            InjectionBindingBuilder injectionBindingBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             ComponentBuilderFactory componentBuilderFactory,
@@ -68,7 +68,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
-        this.injectionBindingBuilder = injectionBindinBuilder;
+        this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;

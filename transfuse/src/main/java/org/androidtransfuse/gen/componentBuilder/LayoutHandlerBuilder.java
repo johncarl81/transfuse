@@ -44,7 +44,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
             block.add(layoutHandlerDelegate.invoke(LayoutHandlerDelegate.INVOKE_LAYOUT_METHOD));
 
         } catch (ClassNotFoundException e) {
-            logger.error("ClassNotFoundExcetion while trying to generate LayoutHandler", e);
+            logger.error("ClassNotFoundException while trying to generate LayoutHandler", e);
         } catch (JClassAlreadyExistsException e) {
             logger.error("JClassAlreadyExistsException while trying to generate LayoutHandler", e);
         }

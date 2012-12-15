@@ -33,7 +33,7 @@ public class DeclareFieldAnalysisTest {
     public class DeclareFieldTarget {
     }
 
-    public class NonDecalreFieldTarget {
+    public class NonDeclareFieldTarget {
     }
 
     @Before
@@ -44,7 +44,7 @@ public class DeclareFieldAnalysisTest {
     }
 
     @Test
-    public void testLocalAssigmentType() {
+    public void testLocalAssignmentType() {
         InjectionNode declareFieldInjectionNode = injectionPointFactory.buildInjectionNode(DeclareFieldTarget.class, analysisContext);
 
         declareFieldAnalysis.analyzeType(declareFieldInjectionNode, declareFieldInjectionNode.getASTType(), analysisContext);
@@ -55,7 +55,7 @@ public class DeclareFieldAnalysisTest {
 
     @Test
     public void testFieldAssignmentType() {
-        InjectionNode nonDeclareFieldInjectionNode = injectionPointFactory.buildInjectionNode(NonDecalreFieldTarget.class, analysisContext);
+        InjectionNode nonDeclareFieldInjectionNode = injectionPointFactory.buildInjectionNode(NonDeclareFieldTarget.class, analysisContext);
 
         declareFieldAnalysis.analyzeType(nonDeclareFieldInjectionNode, nonDeclareFieldInjectionNode.getASTType(), analysisContext);
 

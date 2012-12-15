@@ -121,7 +121,7 @@ public class ASTClassFactory {
      * @return AST parameters
      */
     public ImmutableList<ASTParameter> getParameters(Method method) {
-        return getParamters(method.getParameterTypes(), method.getGenericParameterTypes(), method.getParameterAnnotations());
+        return getParameters(method.getParameterTypes(), method.getGenericParameterTypes(), method.getParameterAnnotations());
     }
 
     /**
@@ -131,7 +131,7 @@ public class ASTClassFactory {
      * @param genericParameterTypes
      * @param parameterAnnotations  @return AST Parameters
      */
-    public ImmutableList<ASTParameter> getParamters(Class<?>[] parameterTypes, Type[] genericParameterTypes, Annotation[][] parameterAnnotations) {
+    public ImmutableList<ASTParameter> getParameters(Class<?>[] parameterTypes, Type[] genericParameterTypes, Annotation[][] parameterAnnotations) {
 
         ImmutableList.Builder<ASTParameter> astParameterBuilder = ImmutableList.builder();
 
@@ -199,7 +199,7 @@ public class ASTClassFactory {
     public ASTConstructor getConstructor(Constructor constructor) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
-        ImmutableList<ASTParameter> constructorParameters = getParamters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
+        ImmutableList<ASTParameter> constructorParameters = getParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
         ImmutableList<ASTType> throwsTypes = getTypes(constructor.getExceptionTypes());
 
         return new ASTClassConstructor(getAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);

@@ -28,7 +28,7 @@ public class WeakObserverTest {
         public void setCalled(boolean called) {
             this.called = called;
         }
-    };
+    }
 
     private class WeakObserverTarget extends WeakObserver<Event, WeakObservable>{
 

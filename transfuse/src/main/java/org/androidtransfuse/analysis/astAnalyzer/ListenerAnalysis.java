@@ -10,7 +10,7 @@ import org.androidtransfuse.model.InjectionNode;
 import java.lang.annotation.Annotation;
 
 /**
- * Analyzes the given class for listener annotations.  Addes these annotated methods to a ListenerAspect for
+ * Analyzes the given class for listener annotations.  Adds these annotated methods to a ListenerAspect for
  * code generation during the generation phase.
  *
  * @author John Ericksen

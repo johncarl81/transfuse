@@ -8,9 +8,9 @@ import javax.inject.Inject;
 public class LoopTwo {
 
     @Inject
-    private LoopThree depdendencyLoopThree;
+    private LoopThree dependencyLoopThree;
 
     public LoopThree getThree() {
-        return depdendencyLoopThree;
+        return dependencyLoopThree;
     }
 }

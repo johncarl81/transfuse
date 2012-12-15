@@ -20,7 +20,7 @@ public class IntegrationApp {
     }
 
     @OnLowMemory
-    public void onLowMemroy() {
+    public void onLowMemory() {
         onLowMemory = true;
     }
 

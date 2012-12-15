@@ -15,8 +15,8 @@ public class MemoryClassLoader extends ClassLoader {
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
-    public void add(String classname, String filecontent) {
-        add(Collections.singletonMap(classname, filecontent));
+    public void add(String classname, String fileContent) {
+        add(Collections.singletonMap(classname, fileContent));
     }
 
     public void add(Map<String, String> map) {

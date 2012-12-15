@@ -126,7 +126,7 @@ public class InjectionNodeBuilderRepositoryFactory {
         }
 
         repository.putType(SharedPreferences.class,
-                injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").depenencyArg(Context.class).build());
+                injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").dependencyArg(Context.class).build());
 
     }
 

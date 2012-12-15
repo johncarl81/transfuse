@@ -161,7 +161,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         manifestActivity.setAllowTaskReparenting(checkDefault(activityAnnotation.allowTaskReparenting(), false));
         manifestActivity.setAlwaysRetainTaskState(checkDefault(activityAnnotation.alwaysRetainTaskState(), false));
         manifestActivity.setClearTaskOnLaunch(checkDefault(activityAnnotation.clearTaskOnLaunch(), false));
-        manifestActivity.setConfigChanges(concatenate(activityAnnotation.configChanges(), "|"));
+        manifestActivity.setConfigChanges(concatenate(activityAnnotation.configChanges()));
         manifestActivity.setEnabled(checkDefault(activityAnnotation.enabled(), true));
         manifestActivity.setExcludeFromRecents(checkDefault(activityAnnotation.excludeFromRecents(), false));
         manifestActivity.setExported(activityAnnotation.exported().getValue());
@@ -185,20 +185,12 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         manifestManager.addActivity(manifestActivity);
     }
 
-    private String concatenate(ConfigChanges[] configChanges, String separator) {
-        StringBuilder builder = new StringBuilder();
-
+    private String concatenate(ConfigChanges[] configChanges) {
         if (configChanges.length == 0) {
             return null;
         }
 
-        builder.append(configChanges[0].getLabel());
-        for (int i = 1; i < configChanges.length; i++) {
-            builder.append(separator);
-            builder.append(configChanges[i].getLabel());
-        }
-
-        return builder.toString();
+        return StringUtils.join(configChanges, "|");
     }
 
     private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context, Integer layout, InjectionNode layoutHandlerInjectionNode) {

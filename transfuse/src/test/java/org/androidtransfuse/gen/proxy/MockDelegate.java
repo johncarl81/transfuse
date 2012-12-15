@@ -2,14 +2,14 @@ package org.androidtransfuse.gen.proxy;
 
 public class MockDelegate implements MockInterface, SecondMockInteface {
 
-    private boolean exectuted = false;
+    private boolean executed = false;
     private String valueOne;
     private String passThroughValue;
     private int secondValue = 0;
 
     @Override
     public void execute() {
-        exectuted = true;
+        executed = true;
     }
 
     @Override
@@ -38,6 +38,6 @@ public class MockDelegate implements MockInterface, SecondMockInteface {
     }
 
     public boolean validate(String inputOne, String inputTwo, int secondValue) {
-        return exectuted && inputOne.equals(valueOne) && inputTwo.equals(passThroughValue) && this.secondValue == secondValue;
+        return executed && inputOne.equals(valueOne) && inputTwo.equals(passThroughValue) && this.secondValue == secondValue;
     }
 }

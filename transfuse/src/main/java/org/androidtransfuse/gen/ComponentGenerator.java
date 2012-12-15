@@ -45,35 +45,35 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
 
             definedClass._extends(codeModel.ref(descriptor.getType()));
 
-            MethodDescriptor initMethodDescrptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
+            MethodDescriptor initMethodDescriptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
 
-            JBlock block = initMethodDescrptor.getMethod().body();
+            JBlock block = initMethodDescriptor.getMethod().body();
 
             //Injections
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
                             block,
                             definedClass,
-                            descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescrptor));
+                            descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor));
 
             //Registrations
             for (ExpressionVariableDependentGenerator registrationGenerator : descriptor.getRegistrations()) {
-                registrationGenerator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
+                registrationGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor);
             }
 
             //Method Callbacks
-            MethodGenerator onCreateMethodGenerator = new ExistingMethod(initMethodDescrptor);
+            MethodGenerator onCreateMethodGenerator = new ExistingMethod(initMethodDescriptor);
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(
                     descriptor.getInitMethodEventAnnotation(), onCreateMethodGenerator);
 
-            onCreateCallbackGenerator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
+            onCreateCallbackGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor);
 
             //... and other listeners
             for (ExpressionVariableDependentGenerator generator : descriptor.getGenerators()) {
-                generator.generate(definedClass, initMethodDescrptor, expressionMap, descriptor);
+                generator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor);
             }
 
-            descriptor.getInitMethodBuilder().closeMethod(initMethodDescrptor);
+            descriptor.getInitMethodBuilder().closeMethod(initMethodDescriptor);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {

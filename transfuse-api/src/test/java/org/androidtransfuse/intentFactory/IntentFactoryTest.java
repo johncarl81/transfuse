@@ -15,23 +15,23 @@ public class IntentFactoryTest {
 
     private IntentFactory intentFactory;
     private IntentFactory.IntentAdapterFactory intentMockFactory;
-    private Context mockCotext;
+    private Context mockContext;
     private IntentFactoryStrategy mockStrategy;
     private Intent mockIntent;
 
     @Before
     public void setup(){
-        mockCotext = Mockito.mock(Context.class);
+        mockContext = Mockito.mock(Context.class);
         intentMockFactory = Mockito.mock(IntentFactory.IntentAdapterFactory.class);
         mockStrategy = Mockito.mock(IntentFactoryStrategy.class);
         mockIntent = Mockito.mock(Intent.class);
 
-        intentFactory = new IntentFactory(mockCotext, intentMockFactory);
+        intentFactory = new IntentFactory(mockContext, intentMockFactory);
     }
 
     @Test
     public void testBuildIntent(){
-        Mockito.when(intentMockFactory.buildIntent(mockCotext, mockStrategy.getTargetContext())).thenReturn(mockIntent);
+        Mockito.when(intentMockFactory.buildIntent(mockContext, mockStrategy.getTargetContext())).thenReturn(mockIntent);
 
         Intent outputIntent = intentFactory.buildIntent(mockStrategy);
 
@@ -41,12 +41,12 @@ public class IntentFactoryTest {
 
     @Test
     public void testStart(){
-        Mockito.when(intentMockFactory.buildIntent(mockCotext, mockStrategy.getTargetContext())).thenReturn(mockIntent);
+        Mockito.when(intentMockFactory.buildIntent(mockContext, mockStrategy.getTargetContext())).thenReturn(mockIntent);
 
         intentFactory.start(mockStrategy);
 
         Mockito.verify(mockIntent).putExtras(mockStrategy.getExtras());
-        Mockito.verify(mockStrategy).start(mockCotext, mockIntent);
+        Mockito.verify(mockStrategy).start(mockContext, mockIntent);
     }
 
 }

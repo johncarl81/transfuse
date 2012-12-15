@@ -32,8 +32,8 @@ public class ManifestManager {
     private final List<Service> services = new ArrayList<Service>();
 
     @Inject
-    public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originialManifest) {
-        this.manifestPackage = originialManifest.getApplicationPackage();
+    public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originalManifest) {
+        this.manifestPackage = originalManifest.getApplicationPackage();
     }
 
     public void setApplication(Application application) {

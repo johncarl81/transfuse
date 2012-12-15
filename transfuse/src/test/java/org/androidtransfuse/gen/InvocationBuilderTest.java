@@ -85,9 +85,9 @@ public class InvocationBuilderTest {
         verify(protectedInjectionBuilder).buildFieldSet(expression, protectedFieldInjectionPoint, variable);
         reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable, variableType);
 
-        FieldInjectionPoint pacakgePrivateFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PACKAGE_PRIVATE, name, injectionNode);
-        invocationBuilder.buildFieldSet(expression, pacakgePrivateFieldInjectionPoint, variable);
-        verify(protectedInjectionBuilder).buildFieldSet(expression, pacakgePrivateFieldInjectionPoint, variable);
+        FieldInjectionPoint packagePrivateFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PACKAGE_PRIVATE, name, injectionNode);
+        invocationBuilder.buildFieldSet(expression, packagePrivateFieldInjectionPoint, variable);
+        verify(protectedInjectionBuilder).buildFieldSet(expression, packagePrivateFieldInjectionPoint, variable);
         reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable, variableType);
 
         FieldInjectionPoint privateFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PRIVATE, name, injectionNode);
@@ -100,27 +100,27 @@ public class InvocationBuilderTest {
         JType type = mock(JType.class);
         ASTType containingType = mock(ASTType.class);
         JExpression variable = mock(JExpression.class);
-        Iterable parmeters = mock(Iterable.class);
+        Iterable parameters = mock(Iterable.class);
 
         ConstructorInjectionPoint publicConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, containingType);
-        invocationBuilder.buildConstructorCall(publicConstructorInjectionPoint, parmeters, type);
-        verify(publicInjectionBuilder).buildConstructorCall(publicConstructorInjectionPoint, parmeters, type);
-        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
+        invocationBuilder.buildConstructorCall(publicConstructorInjectionPoint, parameters, type);
+        verify(publicInjectionBuilder).buildConstructorCall(publicConstructorInjectionPoint, parameters, type);
+        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parameters, variable);
 
         ConstructorInjectionPoint protectedConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PROTECTED, containingType);
-        invocationBuilder.buildConstructorCall(protectedConstructorInjectionPoint, parmeters, type);
-        verify(protectedInjectionBuilder).buildConstructorCall(protectedConstructorInjectionPoint, parmeters, type);
-        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
+        invocationBuilder.buildConstructorCall(protectedConstructorInjectionPoint, parameters, type);
+        verify(protectedInjectionBuilder).buildConstructorCall(protectedConstructorInjectionPoint, parameters, type);
+        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parameters, variable);
 
-        ConstructorInjectionPoint pacakgePrivateConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PACKAGE_PRIVATE, containingType);
-        invocationBuilder.buildConstructorCall(pacakgePrivateConstructorInjectionPoint, parmeters, type);
-        verify(protectedInjectionBuilder).buildConstructorCall(pacakgePrivateConstructorInjectionPoint, parmeters, type);
-        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
+        ConstructorInjectionPoint packagePrivateConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PACKAGE_PRIVATE, containingType);
+        invocationBuilder.buildConstructorCall(packagePrivateConstructorInjectionPoint, parameters, type);
+        verify(protectedInjectionBuilder).buildConstructorCall(packagePrivateConstructorInjectionPoint, parameters, type);
+        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parameters, variable);
 
         ConstructorInjectionPoint privateConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PRIVATE, containingType);
-        invocationBuilder.buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
-        verify(privateInjectionBuilder).buildConstructorCall(privateConstructorInjectionPoint, parmeters, type);
-        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parmeters, variable);
+        invocationBuilder.buildConstructorCall(privateConstructorInjectionPoint, parameters, type);
+        verify(privateInjectionBuilder).buildConstructorCall(privateConstructorInjectionPoint, parameters, type);
+        reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, parameters, variable);
     }
 
     @Test

@@ -50,7 +50,7 @@ public class Example implements ServiceOnStartCommand, ServiceOnUnbind {
     }
 
     @OnConfigurationChanged
-    public void onConfigurationChangd(){
+    public void onConfigurationChanged(){
         onConfigurationChangedCalled = true;
     }
 

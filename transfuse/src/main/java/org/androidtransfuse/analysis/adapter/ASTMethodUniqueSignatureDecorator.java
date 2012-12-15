@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Class to decorate an ASTMethod with an equals and hashcode based on the method signature.  This helps enforce
+ * Class to decorate an ASTMethod with an equals and hashCode based on the method signature.  This helps enforce
  * uniqueness of a method on a class throughout the inheritance hierarchy.
  *
  */

@@ -36,12 +36,12 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
             parcelableCache.put(astType, parcelableDescriptor);
 
             //this needs to occur after adding to the cache to avoid infinite loops
-            analyzeDepedencies(parcelableDescriptor.getGetterSetterPairs());
+            analyzeDependencies(parcelableDescriptor.getGetterSetterPairs());
         }
         return parcelableCache.get(astType);
     }
 
-    private void analyzeDepedencies(List<GetterSetterMethodPair> propertyPairs) {
+    private void analyzeDependencies(List<GetterSetterMethodPair> propertyPairs) {
         for (GetterSetterMethodPair propertyPair : propertyPairs) {
             ASTType type = propertyPair.getGetter().getReturnType();
 

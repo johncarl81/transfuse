@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 /**
- * Central module processor class.  Scanns the input AST elements for the appropriate annotations and registers
+ * Central module processor class.  Scans the input AST elements for the appropriate annotations and registers
  * the results with the given processor.  For instance:
  * <p/>
  * {@code

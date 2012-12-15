@@ -89,10 +89,10 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
 
         // onSaveInstanceState
-        ASTMethod onSaveIntanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
+        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(OnSaveInstanceState.class,
-                        componentBuilderFactory.buildMirroredMethodGenerator(onSaveIntanceStateMethod, true)));
+                        componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true)));
 
         // onRestoreInstanceState
         ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", Bundle.class);

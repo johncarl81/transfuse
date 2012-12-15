@@ -8,7 +8,7 @@ import java.util.TreeSet;
  */
 public class MergeableTags {
 
-    //treeset used for tag order
+    // TreeSet used for tag order
     private final Set<String> tags = new TreeSet<String>();
 
     public MergeableTags() {

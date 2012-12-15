@@ -79,7 +79,7 @@ public class ParcelExample {
         return "ParcelExample{" +
                 "\n\tname='" + name + '\'' +
                 ", \n\tvalue=" + value +
-                ", \n\ttinnerParcel=" + innerParcel +
+                ", \n\tinnerParcel=" + innerParcel +
                 ", \n\trealParcelable=" + realParcelable +
                 ", \n\tserializableValue=" + serializableValue +
                 ", \n\tbooleans=" + printBooleans() +

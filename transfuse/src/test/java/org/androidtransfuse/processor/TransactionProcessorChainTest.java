@@ -58,7 +58,7 @@ public class TransactionProcessorChainTest {
     }
 
     @Test
-    public void testCompletationStatus() {
+    public void testCompletionStatus() {
         when(mockProcessor1.isComplete()).thenReturn(true);
         when(mockProcessor2.isComplete()).thenReturn(true);
         assertTrue(chain.isComplete());

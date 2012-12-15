@@ -37,9 +37,9 @@ public class ParcelsGenerator {
             JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(PARCELS_NAME);
 
             JClass mapRef = codeModel.ref(Map.class).narrow(Class.class, ParcelableFactory.class);
-            JClass hashmapRef = codeModel.ref(HashMap.class).narrow(Class.class, ParcelableFactory.class);
+            JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class, ParcelableFactory.class);
 
-            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapRef, "parcelWrappers", JExpr._new(hashmapRef));
+            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapRef, "parcelWrappers", JExpr._new(hashMapRef));
 
             JBlock staticInit = parcelsDefinedClass.init();
 
