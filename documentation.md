@@ -625,7 +625,9 @@ public class Example{
 
 These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
 
-##### Configuration
+<hr/>
+
+#### Configuration
 
 Transfuse's DI and Method Interception may be configured by defining a Transfuse Module.  This entails annotating a interface with @TransfuseModule and specifying one of the configuration options.
 
@@ -676,6 +678,8 @@ public interface Module{
     }
 }
 {% endhighlight %}
+
+<hr/>
 
 #### Events
 
