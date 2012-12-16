@@ -7,7 +7,7 @@
     <artifactId>transfuse-hello-android</artifactId>
     <version>0.1.0</version>
     <packaging>apk</packaging>
-    <name>Android Transfuse Hello Android Example</name>
+    <name>Transfuse Hello Android Example</name>
 
     <dependencies>
         <dependency>
