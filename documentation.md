@@ -517,10 +517,10 @@ To map a Provider to a type, define the Provider binding in the TransfuseModule:
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindProvider(ExampleProvider.class)
-    Example mapExampleProvider();
-}
+@BindProviders({
+    @BindProvider(type = Example.class, provider = ExampleProvider.class)
+})
+public class Module{}
 {% endhighlight %}
 
 
@@ -633,10 +633,10 @@ To specify a specific binding from one injection type to a concrete type, use th
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @Bind(Example.class)
-    ExampleImpl getImp();
-}
+@Bindings({
+    @Bind(type=Example.class, to=ExampleImpl.class)
+})
+public interface Module{}
 {% endhighlight %}
 
 This tells Transfuse to instantiate an instance of ExampleImpl and inject it every time a Example type is requested for injection.
@@ -645,10 +645,10 @@ To specify a Provider to be used as a source for a binding, use the @BindProvide
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindProvider(ExampleProvider.class)
-    Example getExample();
-}
+@BindProviders({
+    @BindProvider(type=Example.class, provider=ExampleProvider.class
+})
+public interface Module{}
 {% endhighlight %}
 
 Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection.
@@ -657,13 +657,25 @@ To associate a method interceptor with an annotation use the @BindInterceptor an
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindInterceptor(Log.class)
-    LogInterceptor getLogInterceptor();
-}
+@BindInterceptors({
+    @BindInterceptor(annotation = Log.class, interceptor = LogInterceptor.class)
+})
+public interface Module{}
 {% endhighlight %}
 
 This is requred to use the given method interceptor each time the corresponding annotation is used.
+
+Another flavor of configuration is available by the @Provides annotation.  @Provides configures a method in the Module to be called for the given return type:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+    @Provides 
+    public ExampleProvides buildExample(Depenendency dependency){
+        return new ExampleProvides(dependency);
+    }
+}
+{% endhighlight %}
 
 #### Events
 
