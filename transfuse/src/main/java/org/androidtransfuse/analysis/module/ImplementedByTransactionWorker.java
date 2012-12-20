@@ -23,6 +23,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.TypeMirrorRunnable;
+import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -31,6 +32,8 @@ import javax.lang.model.type.TypeMirror;
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
+ * Sets up the annotated @ImplementedBy interface to be bound to the contained class.
+ *
  * @author John Ericksen
  */
 public class ImplementedByTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, Void> {
@@ -62,7 +65,7 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
                 throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
 
-            injectionNodeBuilders.putModuleConfig(astType,
+            injectionNodeBuilders.putModuleConfig(Matchers.type(astType).build(),
                     variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
         }
         return null;

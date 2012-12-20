@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.util.matcher;
+package org.androidtransfuse.integrationTest;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import javax.inject.Qualifier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author John Ericksen
  */
-public class AlwaysMatch implements Matcher<ASTType> {
-    @Override
-    public boolean matches(ASTType astType) {
-        return true;
-    }
+@Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface ValueQualifier {
+    int value();
 }

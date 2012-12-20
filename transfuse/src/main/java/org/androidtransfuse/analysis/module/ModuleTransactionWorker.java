@@ -29,17 +29,9 @@ import javax.inject.Provider;
 
 /**
  * Central module processor class.  Scans the input AST elements for the appropriate annotations and registers
- * the results with the given processor.  For instance:
- * <p/>
- * {@code
+ * the results with the given processor.
  *
  * @author John Ericksen
- * @TransfuseModule public interface IntegrationModule {
- * @Bind(LoopThreeImpl.class) LoopThree getThree();
- * }
- * }
- * <p/>
- * associates teh LoopThreeImpl class to be used when a LoopThree is injected.
  */
 public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, Void> {
 
@@ -81,8 +73,6 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
         ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
 
-        configurations.add(new SingletonModuleConfiguration(type));
-
         for (ASTAnnotation typeAnnotation : type.getAnnotations()) {
             if(typeProcessors.containsKey(typeAnnotation.getASTType())){
                 TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
@@ -106,19 +96,5 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         }
 
         return null;
-    }
-
-    private final class SingletonModuleConfiguration implements ModuleConfiguration{
-
-        private final ASTType moduleType;
-
-        private SingletonModuleConfiguration(ASTType moduleType) {
-            this.moduleType = moduleType;
-        }
-
-        @Override
-        public void setConfiguration() {
-
-        }
     }
 }

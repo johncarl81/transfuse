@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.util.matcher;
+package org.androidtransfuse.integrationTest;
+
+import javax.inject.Qualifier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Matches an input on a predicate.
- *
  * @author John Ericksen
  */
-public interface Matcher<T> {
-
-    /**
-     * Defines a predicate to match the input on.
-     *
-     * @param input to match.
-     * @return matching boolean.
-     */
-    boolean matches(T input);
+@Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface Three {
 }

@@ -17,6 +17,7 @@ package org.androidtransfuse.integrationTest.inject;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
+import org.androidtransfuse.integrationTest.IntegrationModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,6 +131,15 @@ public class InjectionTest {
 
     @Test
     public void testInnerClassInjection() {
-        assertNotNull(injection.innerClass.getActivity());
+        assertNotNull(injection.getInnerClass().getActivity());
+    }
+
+    @Test
+    public void testQualifierInjection(){
+        assertEquals(IntegrationModule.ONE, injection.getQualifiedOne());
+        assertEquals(IntegrationModule.TWO, injection.getQualifiedTwo());
+        assertEquals(IntegrationModule.THREE, injection.getQualifiedThree());
+        assertEquals(IntegrationModule.FOUR, injection.getQualifiedFour());
+        assertEquals(IntegrationModule.FIVE, injection.getQualifierFive());
     }
 }

@@ -20,9 +20,15 @@ import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 
+/**
+ * Configured the given @BindProvider annotation parameters as Provider bindings.
+ *
+ * @author John Ericksen
+ */
 public class BindProviderProcessor implements TypeProcessor {
 
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
@@ -58,7 +64,7 @@ public class BindProviderProcessor implements TypeProcessor {
 
         @Override
         public void setConfiguration() {
-            injectionNodeBuilders.putModuleConfig(type,
+            injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
                     variableInjectionBuilderFactory.buildProviderInjectionNodeBuilder(provider));
 
             providerInjectionNodeBuilderRepository.addProvider(type,

@@ -15,6 +15,9 @@
  */
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 
 import javax.inject.Inject;
@@ -44,6 +47,20 @@ public class ASTElementAnnotation implements ASTAnnotation {
     }
 
     @Override
+    public ImmutableSet<String> getPropertyNames() {
+        return FluentIterable.from(annotationMirror.getElementValues().keySet())
+                .transform(new ExtractElementName())
+                .toImmutableSet();
+    }
+
+    private static final class ExtractElementName implements Function<ExecutableElement, String> {
+        @Override
+        public String apply(ExecutableElement property) {
+            return property.getSimpleName().toString();
+        }
+    }
+
+    @Override
     public <T> T getProperty(String value, Class<T> type) {
         for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             if (value.equals(entry.getKey().getSimpleName().toString())) {
@@ -56,5 +73,12 @@ public class ASTElementAnnotation implements ASTAnnotation {
     @Override
     public ASTType getASTType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "ASTElementAnnotation{" +
+                "type=" + type +
+                '}';
     }
 }

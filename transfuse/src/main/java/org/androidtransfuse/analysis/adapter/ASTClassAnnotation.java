@@ -15,11 +15,17 @@
  */
 package org.androidtransfuse.analysis.adapter;
 
+import com.google.common.base.Function;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+
+import static com.google.common.collect.Collections2.transform;
+
 
 /**
  * Class specific AST Annotation
@@ -38,10 +44,22 @@ public class ASTClassAnnotation implements ASTAnnotation {
         this.type = type;
     }
 
+    public Collection<String> getPropertyNames(){
+        return transform(Arrays.asList(annotation.annotationType().getDeclaredMethods()),
+                new MethodNameExtractor());
+    }
+
+    private static final class MethodNameExtractor implements Function<Method, String> {
+        @Override
+        public String apply(Method input) {
+            return input.getName();
+        }
+    }
+
     @Override
     public <T> T getProperty(String name, Class<T> type) {
         try {
-            Method annotationParameter = annotation.annotationType().getMethod(name);
+            Method annotationParameter = annotation.annotationType().getDeclaredMethod(name);
 
             Class convertedType = type;
             boolean convertToASTType = false;
@@ -52,7 +70,7 @@ public class ASTClassAnnotation implements ASTAnnotation {
                 convertToASTType = true;
             }
 
-            if (!annotationParameter.getReturnType().isAssignableFrom(convertedType)) {
+            if (!convertedType.isAssignableFrom(annotationParameter.getReturnType())) {
                 throw new TransfuseAnalysisException("Type not expected: " + convertedType);
             }
 

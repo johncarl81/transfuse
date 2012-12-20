@@ -25,6 +25,7 @@ import org.androidtransfuse.integrationTest.externalGenerator.ProxiedProxy;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.RandomProvider;
 
+import javax.inject.Named;
 import java.util.Random;
 
 /**
@@ -45,6 +46,14 @@ import java.util.Random;
 })
 public class IntegrationModule {
 
+    public static final String ONE = "one";
+    public static final String TWO = "two";
+    public static final String THREE = "three";
+    public static final String FOUR = "four";
+    public static final String FIVE = "five";
+    public static final int FOUR_QUALIFIER = 4;
+    public static final int FIVE_QUALIFIER = 5;
+
     @Provides
     public GenericType<Concrete> buildTarget2(ConcreteType concreteType){
         return concreteType;
@@ -53,5 +62,36 @@ public class IntegrationModule {
     @Provides
     public GenericType<Concrete2> buildTarget(){
         return new Concrete2Type();
+    }
+
+    @Provides
+    @Named(ONE)
+    public String getOne(){
+        return ONE;
+    }
+
+    @Provides
+    @Named(TWO)
+    public String getTwo(){
+        return TWO;
+    }
+
+    @Provides
+    @Three
+    public String getThree(){
+        return THREE;
+    }
+
+    @Provides
+    @ValueQualifier(FOUR_QUALIFIER)
+    public String getFour(){
+        return FOUR;
+    }
+
+    @Provides
+    @Named(FIVE)
+    @ValueQualifier(FIVE_QUALIFIER)
+    public String getFive(){
+        return FIVE;
     }
 }

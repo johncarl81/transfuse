@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.analysis.module;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.androidtransfuse.util.matcher;
 
 /**
- * Combines multiple configurations into a single configuration point.
+ * Noop of the Matcher.  Returns true on any match() call.
  *
  * @author John Ericksen
  */
-public class ModuleConfigurationComposite implements ModuleConfiguration {
-
-    private List<ModuleConfiguration> moduleConfigurations = new ArrayList<ModuleConfiguration>();
-
+public class MatchAny implements Matcher<Object> {
     @Override
-    public void setConfiguration() {
-        for (ModuleConfiguration moduleConfiguration : moduleConfigurations) {
-            moduleConfiguration.setConfiguration();
-        }
-    }
-
-    public void add(ModuleConfiguration configuration){
-        this.moduleConfigurations.add(configuration);
+    public boolean matches(Object astType) {
+        return true;
     }
 }

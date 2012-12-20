@@ -15,38 +15,33 @@
  */
 package org.androidtransfuse.util.matcher;
 
-import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
-import java.lang.annotation.Annotation;
-
 /**
+ * Builder for an ASTTypeMatcher
+ *
  * @author John Ericksen
  */
 public class ASTTypeMatcherBuilder {
 
-    private final ImmutableSet.Builder<Class<? extends Annotation>> annotations = ImmutableSet.builder();
-    private ASTType astType = null;
+    private final ASTType astType;
     private boolean ignoreGenerics = false;
-
-    public ASTTypeMatcherBuilder() {
-    }
+    private ASTTypeMatcher astTypeMatcher;
 
     public ASTTypeMatcherBuilder(ASTType astType) {
         this.astType = astType;
     }
 
-    public ASTTypeMatcherBuilder annotatedWith(Class<? extends Annotation> annotationClass) {
-        annotations.add(annotationClass);
-        return this;
-    }
-
     public Matcher<ASTType> build() {
-        return new ASTTypeMatcher(annotations.build(), astType, ignoreGenerics);
+        return new ASTTypeMatcher(astType, ignoreGenerics);
     }
 
-    public ASTTypeMatcherBuilder ignoreGenerics(){
+    public ASTTypeMatcherBuilder ignoreGenerics() {
         ignoreGenerics = true;
         return this;
+    }
+
+    public InjectionSignatureMatcherBuilder annotated(){
+        return new InjectionSignatureMatcherBuilder(build());
     }
 }

@@ -22,7 +22,7 @@ import org.androidtransfuse.analysis.repository.AOPRepository;
 import javax.inject.Inject;
 
 /**
- * Adds the given annotated method return type as a MethodInterceptor associated with input the annotation value.
+ * Adds the given @BindInterceptor properties as a MethodInterceptor and associated annotation.
  *
  * @author John Ericksen
  */

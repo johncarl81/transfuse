@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.analysis.adapter.*;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -37,10 +38,12 @@ import java.util.List;
 public class InjectionPointFactory {
 
     private final ASTClassFactory astClassFactory;
+    private final QualifierPredicate qualifierPredicate;
 
     @Inject
-    public InjectionPointFactory(ASTClassFactory astClassFactory) {
+    public InjectionPointFactory(ASTClassFactory astClassFactory, QualifierPredicate qualifierPredicate) {
         this.astClassFactory = astClassFactory;
+        this.qualifierPredicate = qualifierPredicate;
     }
 
     /**
@@ -127,27 +130,12 @@ public class InjectionPointFactory {
 
     public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
-        int bindingCount = 0;
-        InjectionNodeBuilder injectionNodeBuilder = null;
-        InjectionNodeBuilderRepository injectionNodeBuilders = context.getInjectionNodeBuilders();
+        InjectionNodeBuilder injectionNodeBuilders = context.getInjectionNodeBuilders();
+
+        ImmutableSet<ASTAnnotation> qualifiers =
+                FluentIterable.from(annotations).filter(qualifierPredicate).toImmutableSet();
 
         //specific binding annotation lookup
-        for (ASTAnnotation bindingAnnotation : annotations) {
-            if (injectionNodeBuilders.containsBinding(bindingAnnotation)) {
-                bindingCount++;
-                injectionNodeBuilder = injectionNodeBuilders.getBinding(bindingAnnotation);
-            }
-        }
-
-        if (bindingCount > 1) {
-            throw new TransfuseAnalysisException("More than one binding annotation is not valid.");
-        }
-
-        if (injectionNodeBuilder != null) {
-            return injectionNodeBuilder.buildInjectionNode(astType, context, annotations);
-        }
-
-        InjectionNodeBuilder noBindingInjectionNodeBuilder = injectionNodeBuilders.getBinding(astType);
-        return noBindingInjectionNodeBuilder.buildInjectionNode(astType, context, null);
+        return injectionNodeBuilders.buildInjectionNode(astType, context, qualifiers);
     }
 }

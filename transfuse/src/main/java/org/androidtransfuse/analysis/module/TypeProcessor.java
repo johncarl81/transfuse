@@ -18,9 +18,17 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 
 /**
+ * Module processing class to process all type annotation configurations.
+ *
  * @author John Ericksen
  */
 public interface TypeProcessor {
 
+    /**
+     * Processes the found annotation configuration.
+     *
+     * @param typeAnnotation input annotation
+     * @return module configuration
+     */
     ModuleConfiguration process(ASTAnnotation typeAnnotation);
 }

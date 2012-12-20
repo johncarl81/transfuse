@@ -136,7 +136,7 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
     @Override
     public T visitAnnotation(AnnotationMirror annotationMirror, Void aVoid) {
-        if (type.equals(ASTAnnotation.class)){
+        if (type.isAssignableFrom(ASTAnnotation.class)){
             ASTType annotationType = annotationMirror.getAnnotationType().accept(astTypeBuilderVisitor, null);
             return (T) astFactory.buildASTElementAnnotation(annotationMirror, annotationType);
         }

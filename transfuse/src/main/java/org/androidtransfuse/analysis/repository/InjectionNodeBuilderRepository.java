@@ -15,80 +15,96 @@
  */
 package org.androidtransfuse.analysis.repository;
 
+import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.util.matcher.ASTMatcherBuilder;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.matcher.Matcher;
+import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class InjectionNodeBuilderRepository {
+public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
 
-    private final Map<ASTType, InjectionNodeBuilder> bindingAnnotations = new HashMap<ASTType, InjectionNodeBuilder>();
+    private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> typeQualifierBindings = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
     private final Map<Matcher<ASTType>, InjectionNodeBuilder> typeBindings = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
     private final InjectionNodeBuilder defaultBinding;
     private final ASTClassFactory astClassFactory;
-    private final ASTMatcherBuilder astMatcherBuilder;
 
     @Inject
-    public InjectionNodeBuilderRepository(@Named("defaultBinding") InjectionNodeBuilder defaultBinding, ASTClassFactory astClassFactory, ASTMatcherBuilder astMatcherBuilder) {
+    public InjectionNodeBuilderRepository(
+            @Named(TransfuseGenerateGuiceModule.DEFAULT_BINDING) InjectionNodeBuilder defaultBinding,
+            ASTClassFactory astClassFactory) {
         this.defaultBinding = defaultBinding;
         this.astClassFactory = astClassFactory;
-        this.astMatcherBuilder = astMatcherBuilder;
-    }
-
-    public void putAnnotation(ASTType annotationType, InjectionNodeBuilder annotatedVariableBuilder) {
-        bindingAnnotations.put(annotationType, annotatedVariableBuilder);
     }
 
     public void putAnnotation(Class<?> viewClass, InjectionNodeBuilder viewVariableBuilder) {
-        putAnnotation(astClassFactory.getType(viewClass), viewVariableBuilder);
+        putSignatureMatcher(Matchers.annotated().byType(astClassFactory.getType(viewClass)).build(), viewVariableBuilder);
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        putMatcher(astMatcherBuilder.type(type).build(), variableBuilder);
+        putTypeMatcher(Matchers.type(type).build(), variableBuilder);
     }
 
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
-        putMatcher(astMatcherBuilder.type(clazz).build(), variableBuilder);
+        putTypeMatcher(Matchers.type(astClassFactory.getType(clazz)).build(), variableBuilder);
     }
 
-    public void putMatcher(Matcher<ASTType> matcher, InjectionNodeBuilder variableBuilder) {
+    public void putTypeMatcher(Matcher<ASTType> matcher, InjectionNodeBuilder variableBuilder) {
         this.typeBindings.put(matcher, variableBuilder);
     }
 
-    public boolean containsBinding(ASTAnnotation bindingAnnotation) {
-        return bindingAnnotations.containsKey(bindingAnnotation.getASTType());
+    public void putSignatureMatcher(Matcher<InjectionSignature> matcher, InjectionNodeBuilder variableBuilder) {
+        this.typeQualifierBindings.put(matcher, variableBuilder);
     }
 
-    public InjectionNodeBuilder getBinding(ASTAnnotation bindingAnnotation) {
-        return bindingAnnotations.get(bindingAnnotation.getASTType());
+    @Override
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> qualifiers) {
+        //check type and qualifiers
+        InjectionNodeBuilder typeQualifierBuilder = get(typeQualifierBindings, new InjectionSignature(astType, qualifiers));
+
+        if(typeQualifierBuilder != null){
+            return typeQualifierBuilder.buildInjectionNode(astType, context, qualifiers);
+        }
+
+        if(qualifiers.size() > 0){
+            throw new TransfuseAnalysisException("Type Annotation Qualifiers don't match any configuration");
+        }
+
+        //check type
+        InjectionNodeBuilder typeBindingBuilder = get(typeBindings, astType);
+
+        if (typeBindingBuilder != null) {
+            return typeBindingBuilder.buildInjectionNode(astType, context, qualifiers);
+        }
+
+        //default case
+        return defaultBinding.buildInjectionNode(astType, context, qualifiers);
     }
 
-    public InjectionNodeBuilder getBinding(ASTType type) {
-
+    private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){
         InjectionNodeBuilder builder = null;
-        for (Map.Entry<Matcher<ASTType>, InjectionNodeBuilder> bindingEntry : typeBindings.entrySet()) {
-            if (bindingEntry.getKey().matches(type)) {
+        for (Map.Entry<Matcher<T>, InjectionNodeBuilder> bindingEntry : builderMap.entrySet()) {
+            if (bindingEntry.getKey().matches(input)) {
                 if (builder != null) {
-                    throw new TransfuseAnalysisException("Multiple types matched on type " + type.getName());
+                    throw new TransfuseAnalysisException("Multiple types matched on type " + input);
                 }
                 builder = bindingEntry.getValue();
             }
         }
-
-        if (builder != null) {
-            return builder;
-        }
-        return defaultBinding;
+        return builder;
     }
 }

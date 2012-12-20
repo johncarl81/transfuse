@@ -15,32 +15,24 @@
  */
 package org.androidtransfuse.util.matcher;
 
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
-import javax.inject.Inject;
-
 /**
+ * Matcher builder utility class.
+ *
  * @author John Ericksen
  */
-public class ASTMatcherBuilder {
+public class Matchers {
 
-    private final ASTClassFactory astClassFactory;
-
-    @Inject
-    public ASTMatcherBuilder(ASTClassFactory astClassFactory) {
-        this.astClassFactory = astClassFactory;
+    private Matchers(){
+        //empty static utility class constructor
     }
 
-    public ASTTypeMatcherBuilder type() {
-        return new ASTTypeMatcherBuilder();
-    }
-
-    public ASTTypeMatcherBuilder type(ASTType astType) {
+    public static ASTTypeMatcherBuilder type(ASTType astType) {
         return new ASTTypeMatcherBuilder(astType);
     }
 
-    public ASTTypeMatcherBuilder type(Class<?> clazz) {
-        return type(astClassFactory.getType(clazz));
+    public static InjectionSignatureMatcherBuilder annotated(){
+        return new InjectionSignatureMatcherBuilder(new MatchAny());
     }
 }

@@ -19,10 +19,14 @@ import org.androidtransfuse.Injectors;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.inject.LibraryDependency1;
+import org.androidtransfuse.integrationTest.IntegrationModule;
 import org.androidtransfuse.integrationTest.R;
+import org.androidtransfuse.integrationTest.Three;
+import org.androidtransfuse.integrationTest.ValueQualifier;
 import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 
 /**
@@ -60,6 +64,22 @@ public class Injection extends InjectionBase {
     private GenericType<Concrete2> genericInjection2;
     @Inject
     private ImplBy implBy;
+    @Inject
+    @Named(IntegrationModule.ONE)
+    private String qualifiedOne;
+    @Inject
+    @Named(IntegrationModule.TWO)
+    private String qualifiedTwo;
+    @Inject
+    @Three
+    private String qualifiedThree;
+    @Inject
+    @ValueQualifier(IntegrationModule.FOUR_QUALIFIER)
+    private String qualifiedFour;
+    @Inject
+    @Named(IntegrationModule.FIVE)
+    @ValueQualifier(IntegrationModule.FIVE_QUALIFIER)
+    private String qualifierFive;
 
     @Inject
     protected InnerClass innerClass;
@@ -72,7 +92,6 @@ public class Injection extends InjectionBase {
             return activity;
         }
     }
-
 
     @Inject
     public Injection(InjectTarget constructorInjection) {
@@ -155,5 +174,29 @@ public class Injection extends InjectionBase {
 
     public ImplBy getImplBy() {
         return implBy;
+    }
+
+    public String getQualifiedOne() {
+        return qualifiedOne;
+    }
+
+    public String getQualifiedTwo() {
+        return qualifiedTwo;
+    }
+
+    public String getQualifiedThree() {
+        return qualifiedThree;
+    }
+
+    public String getQualifiedFour() {
+        return qualifiedFour;
+    }
+
+    public String getQualifierFive() {
+        return qualifierFive;
+    }
+
+    public InnerClass getInnerClass() {
+        return innerClass;
     }
 }

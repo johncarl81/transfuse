@@ -21,6 +21,9 @@ import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import javax.inject.Inject;
 
 /**
+ * Executes a TypeProcessor against the values of the input ASTAnnotation.  This consolidates the general
+ * operation of combining multiple configurations into one processor.
+ *
  * @author John Ericksen
  */
 public class BindConfigurationComposite implements TypeProcessor {

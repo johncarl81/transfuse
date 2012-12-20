@@ -15,35 +15,39 @@
  */
 package org.androidtransfuse.util.matcher;
 
+import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
+import java.util.Collection;
+
 /**
- * Matches a ASTType based on the given type.  Both ASTTypes must be equal.
- *
  * @author John Ericksen
  */
-public class ASTTypeMatcher implements Matcher<ASTType> {
+public class ASTAnnotationTypeMatcher implements Matcher<Collection<ASTAnnotation>>{
 
-    private final ASTType astType;
-    private final boolean ignoreGenerics;
+    private ImmutableSet<ASTType> types;
 
-    public ASTTypeMatcher(ASTType astType, boolean ignoreGenerics){
-        this.astType = astType;
-        this.ignoreGenerics = ignoreGenerics;
+    public ASTAnnotationTypeMatcher(ImmutableSet<ASTType> types) {
+        this.types = types;
     }
 
-    public boolean matches(ASTType astType) {
+    @Override
+    public boolean matches(Collection<ASTAnnotation> annotations) {
 
-        if(this.astType != null){
-            if(ignoreGenerics){
-                if(!astType.getName().equals(this.astType.getName())){
-                    return false;
+        if(annotations.size() != types.size()){
+            return false;
+        }
+
+        for (ASTAnnotation astAnnotation : annotations) {
+            boolean found = false;
+            for (ASTType type : types) {
+                if(astAnnotation.getASTType().equals(type)){
+                    found = true;
                 }
             }
-            else{
-                if(!astType.equals(this.astType)){
-                    return false;
-                }
+            if(!found){
+                return false;
             }
         }
 

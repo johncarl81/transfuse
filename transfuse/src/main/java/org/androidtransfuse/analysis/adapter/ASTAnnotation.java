@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis.adapter;
 
+import java.util.Collection;
+
 /**
  * Abstract Syntax Tree Annotation
  *
@@ -38,4 +40,11 @@ public interface ASTAnnotation {
      * @return annotation name
      */
     ASTType getASTType();
+
+    /**
+     * Getter for the properties contained in this annotation
+     *
+     * @return property names
+     */
+    Collection<String> getPropertyNames();
 }

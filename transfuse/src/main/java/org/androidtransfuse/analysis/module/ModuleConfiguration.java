@@ -16,9 +16,19 @@
 package org.androidtransfuse.analysis.module;
 
 /**
+ * Acts as a lazy configuration to allow all the type processing / analysis to occur.  This is required to allow for
+ * errors during processing and analysis.  When errors are found the given configuration run is rolled back and retried.
+ * If a configuration was previously set up this would result in duplicates.  By following this strategy, duplicates
+ * are eliminated.
+ *
  * @author John Ericksen
  */
 public interface ModuleConfiguration {
 
+    /**
+     * Set a configuration during the second phase of configuration processing.
+     *
+     * Should never throw a TransactionRuntimeException.
+     */
     void setConfiguration();
 }

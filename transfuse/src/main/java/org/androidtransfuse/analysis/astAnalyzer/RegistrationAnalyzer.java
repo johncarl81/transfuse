@@ -230,17 +230,17 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         ASTType viewType = astClassFactory.getType(View.class);
         ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
-        ASTAnnotation viewRegistrationAnnotation = new AST(registerAnnotation, atViewType);
+        ASTAnnotation viewRegistrationAnnotation = new ASTAnnotationPropertyReplacement(registerAnnotation, atViewType);
 
         return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), viewType, context);
     }
 
-    private static final class AST implements ASTAnnotation {
+    private static final class ASTAnnotationPropertyReplacement implements ASTAnnotation {
 
         private final ASTAnnotation annotation;
         private final ASTType astType;
 
-        private AST(ASTAnnotation annotation, ASTType astType) {
+        private ASTAnnotationPropertyReplacement(ASTAnnotation annotation, ASTType astType) {
             this.annotation = annotation;
             this.astType = astType;
         }
@@ -253,6 +253,11 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         @Override
         public ASTType getASTType() {
             return astType;
+        }
+
+        @Override
+        public Collection<String> getPropertyNames() {
+            return annotation.getPropertyNames();
         }
     }
 

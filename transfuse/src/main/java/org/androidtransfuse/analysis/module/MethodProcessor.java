@@ -27,5 +27,12 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  */
 public interface MethodProcessor {
 
+    /**
+     *
+     * @param moduleType input module.
+     * @param astMethod method executed against.
+     * @param astAnnotation annotation triggering processing.
+     * @return Module Configuration
+     */
     ModuleConfiguration process(ASTType moduleType, ASTMethod astMethod, ASTAnnotation astAnnotation);
 }
