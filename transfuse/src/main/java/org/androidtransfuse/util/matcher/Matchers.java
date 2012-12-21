@@ -22,7 +22,7 @@ import org.androidtransfuse.analysis.adapter.ASTType;
  *
  * @author John Ericksen
  */
-public class Matchers {
+public final class Matchers {
 
     private Matchers(){
         //empty static utility class constructor

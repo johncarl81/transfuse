@@ -20,9 +20,13 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class Providers {
+public final class Providers {
 
     public static final String OF_METHOD = "of";
+
+    private Providers(){
+        // private utility constructor
+    }
 
     public static <T> Provider<T> of(T instance){
         return new InstanceProvider<T>(instance);
