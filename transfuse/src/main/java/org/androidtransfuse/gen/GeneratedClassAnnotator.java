@@ -20,15 +20,18 @@ import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.util.Generated;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Generation class centralizing the addition of the Generated annotation:
- * {@code @Generated(value = "org.androidtransfuse.TransfuseAnnotationProcessor", date = "7/12/12 10:08 AM")}
+ * {@code @Generated(value = "org.androidtransfuse.TransfuseAnnotationProcessor", date = "7/12/2012 10:08 AM DST")}
  *
  * @author John Ericksen
  */
 public final class GeneratedClassAnnotator {
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss z");
 
     private GeneratedClassAnnotator() {
         //noop utility class constructor
@@ -43,6 +46,6 @@ public final class GeneratedClassAnnotator {
     public static void annotateGeneratedClass(JDefinedClass definedClass) {
         definedClass.annotate(Generated.class)
                 .param("value", TransfuseAnnotationProcessor.class.getName())
-                .param("date", DateFormat.getInstance().format(new Date()));
+                .param("date", DATE_FORMAT.format(new Date()));
     }
 }

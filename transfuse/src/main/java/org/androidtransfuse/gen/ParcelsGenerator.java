@@ -64,7 +64,7 @@ public class ParcelsGenerator {
 
                 String innerClassName = uniqueVariableNamer.generateClassName(astTypeJDefinedClassEntry.getValue()) + "Factory";
 
-                JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC, innerClassName);
+                JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, innerClassName);
 
                 factoryDefinedClass._implements(codeModel.ref(ParcelableFactory.class).narrow(type));
 
