@@ -80,6 +80,8 @@ public class Injection extends InjectionBase {
     @Named(IntegrationModule.FIVE)
     @ValueQualifier(IntegrationModule.FIVE_QUALIFIER)
     private String qualifierFive;
+    @Inject
+    private Injector injector;
 
     @Inject
     protected InnerClass innerClass;
@@ -157,7 +159,7 @@ public class Injection extends InjectionBase {
     }
 
     public Provider<LoopThree> getStaticInjectionProvider() {
-        return Injectors.get(Injector.class).getLoopThreeProvider();
+        return injector.getLoopThreeProvider();
     }
 
     public LibraryDependency1 getLibraryDependency() {

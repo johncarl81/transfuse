@@ -17,7 +17,10 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.InjectorsGenerator;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
+import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -29,15 +32,31 @@ import java.util.Map;
 public class InjectorsTransactionWorker extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
     private final InjectorsGenerator injectorsGenerator;
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
+    private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public InjectorsTransactionWorker(InjectorsGenerator injectorsGenerator) {
+    public InjectorsTransactionWorker(InjectorsGenerator injectorsGenerator,
+                                      InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
+                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.injectorsGenerator = injectorsGenerator;
+        this.injectionNodeBuilders = injectionNodeBuilders;
+        this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+
+        //setup Injectors class
         injectorsGenerator.generateInjectors(aggregate);
+
+        //register injector configuration
+        for (Provider<ASTType> typeProvider : aggregate.keySet()) {
+            ASTType type = typeProvider.get();
+
+            injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
+                    variableInjectionBuilderFactory.buildInjectorNodeBuilder(type));
+        }
         return null;
     }
 }

@@ -16,7 +16,6 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import javax.inject.Provider;
@@ -27,19 +26,19 @@ import javax.inject.Provider;
 public class InjectorProcessor implements TransactionProcessorBuilder<Provider<ASTType>, JDefinedClass> {
 
     private final TransactionProcessor processor;
-    private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor;
+    private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor;
     private final TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory;
 
     public InjectorProcessor(TransactionProcessor processor,
-                             TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor,
+                             TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor,
                              TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory) {
         this.processor = processor;
-        this.parcelProcessor = parcelProcessor;
+        this.injectorProcessor = injectorProcessor;
         this.injectorTransactionFactory = injectorTransactionFactory;
     }
 
     public void submit(Provider<ASTType> parcel) {
-        parcelProcessor.submit(injectorTransactionFactory.buildTransaction(parcel));
+        injectorProcessor.submit(injectorTransactionFactory.buildTransaction(parcel));
     }
 
     public void execute() {
@@ -48,11 +47,5 @@ public class InjectorProcessor implements TransactionProcessorBuilder<Provider<A
 
     public TransactionProcessor getTransactionProcessor() {
         return processor;
-    }
-
-    public void checkForErrors() {
-        if (!processor.isComplete()) {
-            throw new TransfuseAnalysisException("@Parcel code generation did not complete successfully.", processor.getErrors());
-        }
     }
 }

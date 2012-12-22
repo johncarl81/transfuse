@@ -73,4 +73,8 @@ public interface VariableInjectionBuilderFactory {
     ProvidesInjectionNodeBuilder buildProvidesInjectionNodeBuilder(ASTType moduleType, ASTMethod providesMethod);
 
     ProvidesVariableBuilder buildProvidesVariableBuilder(InjectionNode module, ASTMethod method, Map<ASTParameter, InjectionNode> dependencyAnalysis);
+
+    InjectorNodeBuilder buildInjectorNodeBuilder(ASTType injectorType);
+
+    InjectorVariableBuilder buildInjectorVariableBuilder(ASTType injectorType);
 }

@@ -43,7 +43,6 @@ public class MethodDescriptorBuilder {
 
     public void putParameter(ASTParameter astParameter, TypedExpression expression) {
         parameterMapBuilder.put(astParameter, expression);
-        typeMapBuilder.put(astParameter.getASTType(), expression);
     }
 
     public MethodDescriptor build() {

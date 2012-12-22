@@ -15,15 +15,21 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
+import org.androidtransfuse.analysis.QualifierPredicate;
+import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -37,16 +43,19 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     private final AnalysisContext context;
     private final InjectionPointFactory injectionPointFactory;
     private final InjectionBindingBuilder injectionBindingBuilder;
+    private final QualifierPredicate qualifierPredicate;
 
     @Inject
     public InjectionNodeFactoryImpl(@Assisted ASTType astType,
                                     @Assisted AnalysisContext context,
                                     InjectionPointFactory injectionPointFactory,
-                                    InjectionBindingBuilder injectionBindingBuilder) {
+                                    InjectionBindingBuilder injectionBindingBuilder,
+                                    QualifierPredicate qualifierPredicate) {
         this.astType = astType;
         this.context = context;
         this.injectionPointFactory = injectionPointFactory;
         this.injectionBindingBuilder = injectionBindingBuilder;
+        this.qualifierPredicate = qualifierPredicate;
     }
 
     @Override
@@ -58,8 +67,25 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
 
     private void buildVariableBuilderMap(MethodDescriptor methodDescriptor, InjectionNodeBuilderRepository injectionNodeBuilders) {
 
-        for (Map.Entry<ASTType, TypedExpression> parameterEntry : methodDescriptor.getTypeMap().entrySet()) {
-            injectionNodeBuilders.putType(parameterEntry.getKey(), injectionBindingBuilder.buildExpression(parameterEntry.getValue()));
+        for (Map.Entry<ASTType, TypedExpression> typeEntry : methodDescriptor.getTypeMap().entrySet()) {
+            injectionNodeBuilders.putType(typeEntry.getKey(), injectionBindingBuilder.buildExpression(typeEntry.getValue()));
+        }
+
+        for (Map.Entry<ASTParameter, TypedExpression> parameterTypedExpressionEntry : methodDescriptor.getParameters().entrySet()) {
+            ASTParameter parameter = parameterTypedExpressionEntry.getKey();
+            ASTType parameterType = parameterTypedExpressionEntry.getKey().getASTType();
+            TypedExpression expression = parameterTypedExpressionEntry.getValue();
+
+            ImmutableSet<ASTAnnotation> qualifiers = FluentIterable.from(parameter.getAnnotations()).filter(qualifierPredicate).toImmutableSet();
+
+            if(qualifiers.isEmpty()){
+                injectionNodeBuilders.putTypeMatcher(Matchers.type(parameterType).build(),
+                        injectionBindingBuilder.buildExpression(expression));
+            }
+            else{
+                injectionNodeBuilders.putSignatureMatcher(Matchers.type(parameterType).annotated().byAnnotation(qualifiers).build(),
+                        injectionBindingBuilder.buildExpression(expression));
+            }
         }
     }
 }

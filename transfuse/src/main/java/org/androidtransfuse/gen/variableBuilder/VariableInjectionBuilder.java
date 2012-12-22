@@ -26,6 +26,7 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.processor.TransactionRuntimeException;
 
 import javax.inject.Inject;
 
@@ -78,7 +79,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
             JBlock block = injectionBuilderContext.getBlock();
 
             if (injectionAspect == null) {
-                throw new TransfuseAnalysisException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
+                throw new TransactionRuntimeException("Injection node not mapped: " + proxyableInjectionNode.getClassName());
             } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             } else {

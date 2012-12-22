@@ -31,8 +31,8 @@ import java.util.Map;
  */
 public class InjectorsGenerator {
 
-    private static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "Injectors");
-    private static final String GET_METHOD = "get";
+    public static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "Injectors");
+    public static final String GET_METHOD = "get";
     private static final String MAP_NAME = "injectors";
 
     private final JCodeModel codeModel;

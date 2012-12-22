@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import android.os.Bundle;
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
@@ -83,9 +82,6 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                                         expressionMap.get(nonConfigurationComponent).getExpression()));
                     }
                 }
-
-
-                methodDescriptor.getTypeMap().get(astClassFactory.getType(Bundle.class));
 
                 //add to onRetainNonConfigurationInstance
                 JMethod onNonConfigInst = definedClass.method(JMod.PUBLIC, Object.class, "onRetainNonConfigurationInstance");

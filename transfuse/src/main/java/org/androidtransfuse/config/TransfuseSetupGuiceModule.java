@@ -141,11 +141,11 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
                                                   InjectorsTransactionFactory injectorsTransactionFactory) {
         TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor =
                 new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
-        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> parcelsProcessor =
+        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> injectorsProcessor =
                 new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
 
         TransactionProcessor processor =
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(injectorProcessor, parcelsProcessor, injectorsTransactionFactory);
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(injectorProcessor, injectorsProcessor, injectorsTransactionFactory);
 
         return new InjectorProcessor(processor, injectorProcessor, injectorTransactionFactory);
     }

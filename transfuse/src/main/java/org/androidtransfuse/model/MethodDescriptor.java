@@ -21,7 +21,9 @@ import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -31,6 +33,7 @@ public class MethodDescriptor {
     private final JMethod method;
     private final ImmutableMap<ASTParameter, TypedExpression> parameterMap;
     private final ImmutableMap<ASTType, TypedExpression> typeMap;
+    private final ImmutableMap<ASTType, TypedExpression> querymap;
     private final ASTMethod astMethod;
 
     public MethodDescriptor(JMethod method, ASTMethod astMethod, ImmutableMap<ASTParameter, TypedExpression> parameterMap, ImmutableMap<ASTType, TypedExpression> typeMap) {
@@ -38,6 +41,22 @@ public class MethodDescriptor {
         this.astMethod = astMethod;
         this.parameterMap = parameterMap;
         this.typeMap = typeMap;
+
+        ImmutableMap.Builder<ASTType, TypedExpression> queryBuilder = ImmutableMap.builder();
+
+        Set<ASTType> duplicateTypes = new HashSet<ASTType>();
+
+        duplicateTypes.addAll(typeMap.keySet());
+
+        queryBuilder.putAll(typeMap);
+        for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : parameterMap.entrySet()) {
+            if(!duplicateTypes.contains(parameterEntry.getKey().getASTType())){
+                queryBuilder.put(parameterEntry.getKey().getASTType(), parameterEntry.getValue());
+                duplicateTypes.add(parameterEntry.getKey().getASTType());
+            }
+        }
+
+        this.querymap = queryBuilder.build();
     }
 
     public JMethod getMethod() {
@@ -60,7 +79,8 @@ public class MethodDescriptor {
         return typeMap;
     }
 
+    //todo: move this to a properly build module repository
     public TypedExpression getExpression(ASTType astType) {
-        return typeMap.get(astType);
+        return querymap.get(astType);
     }
 }
