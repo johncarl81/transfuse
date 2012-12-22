@@ -34,6 +34,7 @@ public class ParcelsGenerator {
 
     public static final PackageClass PARCELS_NAME = new PackageClass("org.androidtransfuse", "Parcels");
     public static final String WRAP_METHOD = "wrap";
+    private static final String MAP_NAME = "PARCEL_WRAPPERS";
 
     private final ClassGenerationUtil classGenerationUtil;
     private final JCodeModel codeModel;
@@ -54,7 +55,7 @@ public class ParcelsGenerator {
             JClass mapRef = codeModel.ref(Map.class).narrow(Class.class, ParcelableFactory.class);
             JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class, ParcelableFactory.class);
 
-            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapRef, "parcelWrappers", JExpr._new(hashMapRef));
+            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapRef, MAP_NAME, JExpr._new(hashMapRef));
 
             JBlock staticInit = parcelsDefinedClass.init();
 

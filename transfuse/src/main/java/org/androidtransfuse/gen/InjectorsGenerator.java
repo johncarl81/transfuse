@@ -33,7 +33,7 @@ public class InjectorsGenerator {
 
     public static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "Injectors");
     public static final String GET_METHOD = "get";
-    private static final String MAP_NAME = "injectors";
+    private static final String MAP_NAME = "INJECTORS";
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
@@ -51,7 +51,7 @@ public class InjectorsGenerator {
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Object.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Object.class);
-            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.STATIC, mapType, MAP_NAME);
+            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
             //getter
             JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
@@ -63,7 +63,6 @@ public class InjectorsGenerator {
 
             //static registration block
             JBlock injectorRegistrationBlock = injectorRepositoryClass.init();
-            injectorRegistrationBlock.assign(registrationMap, JExpr._new(hashMapType));
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
                 JClass interfaceClass = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
