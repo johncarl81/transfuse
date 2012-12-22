@@ -102,11 +102,11 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                     JClass eventRef = codeModel.ref(event.getName());
                     JClass targetRef = codeModel.ref(typedExpression.getType().getName());
 
-                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateName(typedExpression.getType()));
+                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateClassName(typedExpression.getType()));
 
                     //match default constructor public WeakObserver(T target){
                     JMethod constructor = observerClass.constructor(JMod.PUBLIC);
-                    JVar constTargetParam = constructor.param(targetRef, namer.generateClassName(targetRef));
+                    JVar constTargetParam = constructor.param(targetRef, namer.generateName(targetRef));
                     constructor.body().invoke(SUPER_REF).arg(constTargetParam);
 
                     observerClass._extends(
