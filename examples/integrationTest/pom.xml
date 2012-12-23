@@ -32,12 +32,12 @@
         <dependency>
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse-integration-test-generator</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse-integration-test-dependency</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
