@@ -17,14 +17,17 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author John Ericksen
  */
-public class TransactionProcessorComposite implements TransactionProcessor {
+public class TransactionProcessorComposite<V, R> implements TransactionProcessor<V, R> {
 
-    private final ImmutableSet<TransactionProcessor> processors;
+    private final ImmutableSet<TransactionProcessor<V, R>> processors;
 
-    public TransactionProcessorComposite(ImmutableSet<TransactionProcessor> processors) {
+    public TransactionProcessorComposite(ImmutableSet<TransactionProcessor<V, R>> processors) {
         this.processors = processors;
     }
 
@@ -52,5 +55,16 @@ public class TransactionProcessorComposite implements TransactionProcessor {
             exceptions.addAll(processor.getErrors());
         }
         return exceptions.build();
+    }
+
+    @Override
+    public Map<V, R> getResults() {
+        Map<V, R> results = new HashMap<V, R>();
+
+        for (TransactionProcessor<V, R> processor : processors) {
+            results.putAll(processor.getResults());
+        }
+
+        return results;
     }
 }

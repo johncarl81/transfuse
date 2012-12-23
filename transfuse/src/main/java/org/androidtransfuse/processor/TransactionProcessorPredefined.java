@@ -17,10 +17,12 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Map;
+
 /**
  * @author John Ericksen
  */
-public class TransactionProcessorPredefined implements TransactionProcessor {
+public class TransactionProcessorPredefined implements TransactionProcessor<Void, Void> {
 
     private TransactionProcessorPool<Void, Void> transactionProcessor = new TransactionProcessorPool<Void, Void>();
 
@@ -43,5 +45,10 @@ public class TransactionProcessorPredefined implements TransactionProcessor {
     @Override
     public ImmutableSet<Exception> getErrors() {
         return transactionProcessor.getErrors();
+    }
+
+    @Override
+    public Map<Void, Void> getResults() {
+        return transactionProcessor.getResults();
     }
 }

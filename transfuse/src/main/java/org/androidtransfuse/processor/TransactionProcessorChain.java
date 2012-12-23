@@ -17,10 +17,13 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author John Ericksen
  */
-public class TransactionProcessorChain implements TransactionProcessor {
+public class TransactionProcessorChain implements TransactionProcessor<Void, Void> {
 
     private final TransactionProcessor beforeProcessor;
     private final TransactionProcessor afterProcessor;
@@ -51,5 +54,10 @@ public class TransactionProcessorChain implements TransactionProcessor {
         exceptions.addAll(afterProcessor.getErrors());
 
         return exceptions.build();
+    }
+
+    @Override
+    public Map<Void, Void> getResults() {
+        return new HashMap<Void, Void>();
     }
 }

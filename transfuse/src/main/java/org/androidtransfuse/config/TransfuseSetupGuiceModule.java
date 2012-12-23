@@ -26,6 +26,7 @@ import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.analysis.adapter.ASTFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.module.BindingConfigurationFactory;
+import org.androidtransfuse.gen.ComponentsGenerator;
 import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
 import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
@@ -49,6 +50,7 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
     public static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
     public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
     public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
+    public static final String COMPONENTS_TRANSACTION_WORKER = "componentsTransactionWorker";
 
     private final Logger logger;
     private final Filer filer;
@@ -134,6 +136,15 @@ public class TransfuseSetupGuiceModule extends AbstractModule {
                                                                 FilerResourceWriter resourceWriter,
                                                                 PackageHelperGenerator worker) {
         return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(COMPONENTS_TRANSACTION_WORKER)
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getComponentsWorker(JCodeModel codeModel,
+                                                                FilerSourceCodeWriter codeWriter,
+                                                                FilerResourceWriter resourceWriter,
+                                                                ComponentsGenerator worker) {
+        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
     @Provides

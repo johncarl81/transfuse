@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ComponentGenerator implements Generator<ComponentDescriptor> {
+public class ComponentGenerator  {
 
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
@@ -50,9 +50,9 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
         this.generationUtil = generationUtil;
     }
 
-    public void generate(ComponentDescriptor descriptor) {
+    public JDefinedClass generate(ComponentDescriptor descriptor) {
         if (descriptor == null) {
-            return;
+            return null;
         }
 
         try {
@@ -89,6 +89,8 @@ public class ComponentGenerator implements Generator<ComponentDescriptor> {
             }
 
             descriptor.getInitMethodBuilder().closeMethod(initMethodDescriptor);
+
+            return definedClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
         } catch (ClassNotFoundException e) {

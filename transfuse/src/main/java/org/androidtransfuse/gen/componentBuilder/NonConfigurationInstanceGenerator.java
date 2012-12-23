@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -35,15 +34,13 @@ import java.util.Map;
  */
 public class NonConfigurationInstanceGenerator implements ExpressionVariableDependentGenerator {
 
-    private final ASTClassFactory astClassFactory;
     private final UniqueVariableNamer namer;
     private final JCodeModel codeModel;
     private final InvocationBuilder invocationBuilder;
     private final TypedExpressionFactory typeExpressionFactory;
 
     @Inject
-    public NonConfigurationInstanceGenerator(ASTClassFactory astClassFactory, UniqueVariableNamer namer, JCodeModel codeModel, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
-        this.astClassFactory = astClassFactory;
+    public NonConfigurationInstanceGenerator(UniqueVariableNamer namer, JCodeModel codeModel, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
         this.namer = namer;
         this.codeModel = codeModel;
         this.invocationBuilder = invocationBuilder;

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
 
 import javax.inject.Provider;
@@ -22,6 +23,6 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public interface WorkerProvider extends Provider<TransactionWorker<Provider<ASTType>, Void>> {
+public interface WorkerProvider extends Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> {
 
 }

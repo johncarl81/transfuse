@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
@@ -32,16 +31,12 @@ public class InjectorNodeBuilder implements InjectionNodeBuilder {
 
     private final ASTType injectorType;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
-    private final Analyzer analyzer;
 
     @Inject
     public InjectorNodeBuilder(@Assisted ASTType injectorType,
-                               VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                               Analyzer analyzer) {
+                               VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.injectorType = injectorType;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-
-        this.analyzer = analyzer;
     }
 
     @Override

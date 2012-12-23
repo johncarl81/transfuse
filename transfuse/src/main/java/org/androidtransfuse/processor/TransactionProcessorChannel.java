@@ -22,13 +22,13 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class TransactionProcessorChannel<V, R, R2> implements TransactionProcessor {
+public class TransactionProcessorChannel<V, R, R2> implements TransactionProcessor<Map<V, R>, R2> {
 
-    private TransactionProcessorPool<V, R> completionProcessor;
+    private TransactionProcessor<V, R> completionProcessor;
     private TransactionProcessorPool<Map<V, R>, R2> afterCompletionProcessor;
     private TransactionFactory<Map<V, R>, R2> completionTransactionFactory;
 
-    public TransactionProcessorChannel(TransactionProcessorPool<V, R> completionProcessor,
+    public TransactionProcessorChannel(TransactionProcessor<V, R> completionProcessor,
                                        TransactionProcessorPool<Map<V, R>, R2> afterCompletionProcessor,
                                        TransactionFactory<Map<V, R>, R2> completionTransactionFactory) {
         this.completionProcessor = completionProcessor;
@@ -61,5 +61,10 @@ public class TransactionProcessorChannel<V, R, R2> implements TransactionProcess
         exceptions.addAll(afterCompletionProcessor.getErrors());
 
         return exceptions.build();
+    }
+
+    @Override
+    public Map<Map<V, R>, R2> getResults() {
+        return afterCompletionProcessor.getResults();
     }
 }

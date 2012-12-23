@@ -17,6 +17,7 @@ package org.androidtransfuse.processor;
 
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
@@ -29,11 +30,11 @@ import javax.inject.Provider;
  *
  * @author John Ericksen
  */
-public class AnalysisGenerationTransactionProcessorBuilder implements TransactionProcessorBuilder<Provider<ASTType>, Void> {
+public class AnalysisGenerationTransactionProcessorBuilder implements TransactionProcessorBuilder<Provider<ASTType>, JDefinedClass> {
 
     private final ScopedTransactionFactory scopedTransactionFactory;
-    private final TransactionProcessorPool<Provider<ASTType>, Void> transactionProcessor;
-    private final CodeGenerationWrapperProvider<Provider<ASTType>, Void> workerProvider;
+    private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> transactionProcessor;
+    private final CodeGenerationWrapperProvider<Provider<ASTType>, JDefinedClass> workerProvider;
 
     @Inject
     public AnalysisGenerationTransactionProcessorBuilder(
@@ -43,8 +44,8 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
             Provider<FilerResourceWriter> resourceCodeWriterProvider,
             ScopedTransactionFactory scopedTransactionFactory) {
         this.scopedTransactionFactory = scopedTransactionFactory;
-        transactionProcessor = new TransactionProcessorPool<Provider<ASTType>, Void>();
-        this.workerProvider = new CodeGenerationWrapperProvider<Provider<ASTType>, Void>(workerProvider, codeModelProvider, sourceCodeWriterProvider, resourceCodeWriterProvider);
+        transactionProcessor = new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
+        this.workerProvider = new CodeGenerationWrapperProvider<Provider<ASTType>, JDefinedClass>(workerProvider, codeModelProvider, sourceCodeWriterProvider, resourceCodeWriterProvider);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
     }
 
     @Override
-    public TransactionProcessor getTransactionProcessor() {
+    public TransactionProcessor<Provider<ASTType>, JDefinedClass> getTransactionProcessor() {
         return transactionProcessor;
     }
 }

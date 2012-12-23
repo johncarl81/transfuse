@@ -15,37 +15,34 @@
  */
 package org.androidtransfuse.processor;
 
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.module.ImplementedByTransactionWorker;
+import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class ImplementedByProcessorBuilder implements TransactionProcessorBuilder<Provider<ASTType>, Void> {
+public class ComponentsTransactionFactory implements TransactionFactory<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
+    private final Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider;
     private final ScopedTransactionFactory scopedTransactionFactory;
-    private final TransactionProcessorPool<Provider<ASTType>, Void> transactionProcessor;
-    private final Provider<ImplementedByTransactionWorker> workerProvider;
 
     @Inject
-    public ImplementedByProcessorBuilder(
-            Provider<ImplementedByTransactionWorker> workerProvider,
+    public ComponentsTransactionFactory(
+            @Named(TransfuseSetupGuiceModule.COMPONENTS_TRANSACTION_WORKER)
+            Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider,
             ScopedTransactionFactory scopedTransactionFactory) {
-        this.scopedTransactionFactory = scopedTransactionFactory;
-        this.transactionProcessor = new TransactionProcessorPool<Provider<ASTType>, Void>();
         this.workerProvider = workerProvider;
+        this.scopedTransactionFactory = scopedTransactionFactory;
     }
 
     @Override
-    public void submit(Provider<ASTType> astTypeProvider) {
-        transactionProcessor.submit(scopedTransactionFactory.buildTransaction(astTypeProvider, workerProvider));
-    }
-
-    @Override
-    public TransactionProcessor<Provider<ASTType>, Void> getTransactionProcessor() {
-        return transactionProcessor;
+    public Transaction<Map<Provider<ASTType>, JDefinedClass>, Void> buildTransaction(Map<Provider<ASTType>, JDefinedClass> value) {
+        return scopedTransactionFactory.buildTransaction(value, workerProvider);
     }
 }

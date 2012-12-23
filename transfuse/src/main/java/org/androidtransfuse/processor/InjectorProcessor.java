@@ -45,7 +45,7 @@ public class InjectorProcessor implements TransactionProcessorBuilder<Provider<A
         processor.execute();
     }
 
-    public TransactionProcessor getTransactionProcessor() {
+    public TransactionProcessor<Provider<ASTType>, JDefinedClass> getTransactionProcessor() {
         return processor;
     }
 }

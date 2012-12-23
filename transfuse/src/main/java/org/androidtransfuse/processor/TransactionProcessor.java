@@ -17,14 +17,18 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Map;
+
 /**
  * @author John Ericksen
  */
-public interface TransactionProcessor {
+public interface TransactionProcessor<V, R> {
 
     void execute();
 
     boolean isComplete();
 
     ImmutableSet<Exception> getErrors();
+
+    Map<V, R> getResults();
 }

@@ -45,7 +45,7 @@ public class ModuleProcessorBuilder implements TransactionProcessorBuilder<Provi
     }
 
     @Override
-    public TransactionProcessor getTransactionProcessor() {
+    public TransactionProcessor<Provider<ASTType>, Void> getTransactionProcessor() {
         return transactionProcessor;
     }
 }

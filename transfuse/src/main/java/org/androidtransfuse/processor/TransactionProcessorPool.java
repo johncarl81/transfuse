@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author John Ericksen
  */
-public class TransactionProcessorPool<V, R> implements TransactionProcessor {
+public class TransactionProcessorPool<V, R> implements TransactionProcessor<V, R> {
 
     private final List<Transaction<V, R>> transactions = new ArrayList<Transaction<V, R>>();
 

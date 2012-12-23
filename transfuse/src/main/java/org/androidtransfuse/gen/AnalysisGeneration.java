@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen;
 
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.Analysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -25,7 +26,7 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class AnalysisGeneration extends AbstractCompletionTransactionWorker<Provider<ASTType>, Void> {
+public class AnalysisGeneration extends AbstractCompletionTransactionWorker<Provider<ASTType>, JDefinedClass> {
 
     private final Provider<? extends Analysis<ComponentDescriptor>> analysis;
     private final Provider<ComponentGenerator> generatorProvider;
@@ -37,13 +38,12 @@ public class AnalysisGeneration extends AbstractCompletionTransactionWorker<Prov
     }
 
     @Override
-    public Void innerRun(Provider<ASTType> astTypeProvider) {
+    public JDefinedClass innerRun(Provider<ASTType> astTypeProvider) {
 
         ASTType astType = astTypeProvider.get();
 
         ComponentDescriptor descriptor = analysis.get().analyze(astType);
 
-        generatorProvider.get().generate(descriptor);
-        return null;
+        return generatorProvider.get().generate(descriptor);
     }
 }

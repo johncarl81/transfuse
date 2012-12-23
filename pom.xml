@@ -63,11 +63,6 @@
                         <exclude>**/AndroidManifest.xml</exclude>
                     </excludes>
                     <useDefaultExcludes>true</useDefaultExcludes>
-                    <mapping>
-                        <jwc>XML_STYLE</jwc>
-                        <application>XML_STYLE</application>
-                        <myFileExtension>JAVADOC_STYLE</myFileExtension>
-                    </mapping>
                     <strictCheck>true</strictCheck>
                 </configuration>
                 <executions>

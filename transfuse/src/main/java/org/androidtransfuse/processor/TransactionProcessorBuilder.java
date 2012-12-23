@@ -22,5 +22,5 @@ public interface TransactionProcessorBuilder<T, R> {
 
     void submit(T astTypeProvider);
 
-    TransactionProcessor getTransactionProcessor();
+    TransactionProcessor<T, R> getTransactionProcessor();
 }

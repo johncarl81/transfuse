@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen;
 
+import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.analysis.Analysis;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -47,7 +48,7 @@ public class AnalysisGenerationFactory {
         }
 
         @Override
-        public TransactionWorker<Provider<ASTType>, Void> get() {
+        public TransactionWorker<Provider<ASTType>, JDefinedClass> get() {
             return new AnalysisGeneration(analysis, generator);
         }
     }
