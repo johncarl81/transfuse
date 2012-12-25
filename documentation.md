@@ -775,7 +775,7 @@ public class ExampleUsage{
 }
 {% endhighlight %}
 
-Injectors may also be used as a factory with input parameters.  This is analaous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to 
+Injectors may also be used as a factory with input parameters.  This is analagous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to concretely map parameters. 
 
 {% highlight java %}
 @Injector
