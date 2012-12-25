@@ -775,6 +775,33 @@ public class ExampleUsage{
 }
 {% endhighlight %}
 
+Injectors may also be used as a factory with input parameters.  This is analaous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to 
+
+{% highlight java %}
+@Injector
+public interface AssistedInjector {
+    AssistedTarget buildTarget(AssistedDependency dependency);
+    AssistedDoubleTarget buildTarget(@Named("one") AssistedDependency dependencyOne,
+                                      @Named("two") AssistedDependency dependencyTwo);
+}
+{% endhighlight %}
+
+{% highlight java %}
+public class AssistedTarget {
+    @Inject
+    AssistedDependency dependency;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public class AssistedDoubleTarget {
+    @Inject @Named("one")
+    AssistedDependency dependencyOne;
+    @Inject @Named("two")
+    AssistedDependency dependencyTwo;
+}
+{% endhighlight %}
+
 <hr/>
 
 #### Legacy Support
