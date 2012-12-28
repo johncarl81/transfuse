@@ -71,4 +71,13 @@ public class TransactionTest {
         assertEquals(null, transaction.getResult());
         assertEquals(input, transaction.getValue());
     }
+
+    @Test
+    public void testError() {
+        Exception exception = new Exception();
+
+        when(transactionWorker.getError()).thenReturn(exception);
+
+        assertEquals(exception, transaction.getError());
+    }
 }
