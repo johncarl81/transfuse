@@ -58,9 +58,9 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
             JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(codeModel.ref(Class.class).narrow(t));
-            JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(t), "type");
+            JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(codeModel.wildcard()), "type");
 
-            getMethod.body()._return(JExpr.cast(codeModel.ref(Class.class).narrow(t), registrationMap.invoke("get").arg(typeParam)));
+            getMethod.body()._return(registrationMap.invoke("get").arg(typeParam));
 
             //static registration block
             JBlock injectorRegistrationBlock = injectorRepositoryClass.init();
