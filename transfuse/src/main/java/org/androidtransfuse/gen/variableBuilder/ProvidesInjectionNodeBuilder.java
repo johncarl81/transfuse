@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
+import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTMethod;
 import org.androidtransfuse.analysis.adapter.ASTParameter;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -35,16 +36,19 @@ public class ProvidesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotati
     private final ASTType moduleType;
     private final ASTMethod providesMethod;
     private final Analyzer analyzer;
+    private final InjectionPointFactory injectionNodeFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
     public ProvidesInjectionNodeBuilder(@Assisted ASTType moduleType,
                                         @Assisted ASTMethod providesMethod,
                                         Analyzer analyzer,
+                                        InjectionPointFactory injectionNodeFactory,
                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
         this.moduleType = moduleType;
         this.providesMethod = providesMethod;
         this.analyzer = analyzer;
+        this.injectionNodeFactory = injectionNodeFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
@@ -58,7 +62,7 @@ public class ProvidesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotati
         Map<ASTParameter, InjectionNode> dependencyAnalysis = new HashMap<ASTParameter, InjectionNode>();
 
         for (ASTParameter parameter : providesMethod.getParameters()) {
-            InjectionNode parameterInjectionNode = analyzer.analyze(parameter.getASTType(), parameter.getASTType(), context);
+            InjectionNode parameterInjectionNode = injectionNodeFactory.buildInjectionNode(parameter.getASTType(), context);
 
             dependencyAnalysis.put(parameter, parameterInjectionNode);
         }

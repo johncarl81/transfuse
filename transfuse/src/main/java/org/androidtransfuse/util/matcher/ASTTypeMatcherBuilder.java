@@ -26,7 +26,6 @@ public class ASTTypeMatcherBuilder {
 
     private final ASTType astType;
     private boolean ignoreGenerics = false;
-    private ASTTypeMatcher astTypeMatcher;
 
     public ASTTypeMatcherBuilder(ASTType astType) {
         this.astType = astType;
