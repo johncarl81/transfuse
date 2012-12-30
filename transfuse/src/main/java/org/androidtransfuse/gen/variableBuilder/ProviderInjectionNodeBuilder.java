@@ -43,7 +43,7 @@ public class ProviderInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotati
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         InjectionNode providerInjectionNode = analyzer.analyze(providerType, providerType, context);
 

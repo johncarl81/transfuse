@@ -17,6 +17,7 @@ package org.androidtransfuse.event;
 
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
+import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * @author John Ericksen
  */
-//todo: fix @Singleton with provider
+@Singleton
 public class EventManager {
 
     private final ReadWriteLock observersLock = new ReentrantReadWriteLock();

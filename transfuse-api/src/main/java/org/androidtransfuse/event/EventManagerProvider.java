@@ -24,10 +24,10 @@ import javax.inject.Provider;
  */
 public class EventManagerProvider implements Provider<EventManager> {
 
-    private static final EventManager EVENT_MANAGER = new EventManager();
+    private EventManager eventManager = new EventManager();
 
     @Override
     public EventManager get() {
-        return EVENT_MANAGER;
+        return eventManager;
     }
 }
