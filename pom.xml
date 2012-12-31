@@ -62,6 +62,10 @@
                         <exclude>target/**</exclude>
                         <exclude>**/AndroidManifest.xml</exclude>
                     </excludes>
+                    <properties>
+                        <year>2012</year>
+                        <name>John Ericksen</name>
+                    </properties>
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <strictCheck>true</strictCheck>
                 </configuration>
