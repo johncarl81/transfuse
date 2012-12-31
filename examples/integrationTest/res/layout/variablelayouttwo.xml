@@ -22,7 +22,7 @@
               android:layout_height="fill_parent">
     <TextView
             android:id="@+id/variableText"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Random Layout Two"/>
 </LinearLayout>
