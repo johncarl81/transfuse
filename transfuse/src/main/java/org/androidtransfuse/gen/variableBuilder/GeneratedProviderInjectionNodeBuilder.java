@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -35,16 +36,19 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
     private final Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     private final InjectionPointFactory injectionPointFactory;
+    private final Analyzer analyzer;
 
     @Inject
     public GeneratedProviderInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                                  ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository,
                                                  Provider<VariableInjectionBuilder> variableInjectionBuilderProvider,
-                                                 InjectionPointFactory injectionPointFactory) {
+                                                 InjectionPointFactory injectionPointFactory,
+                                                 Analyzer analyzer) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
         this.variableInjectionBuilderProvider = variableInjectionBuilderProvider;
         this.injectionPointFactory = injectionPointFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
             return providerInjectionNodeBuilder.buildInjectionNode(astType, context, annotations);
         }
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
         InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(providerGenericType, context);
         providerInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 

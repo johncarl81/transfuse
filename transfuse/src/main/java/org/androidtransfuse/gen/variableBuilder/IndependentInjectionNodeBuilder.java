@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
@@ -30,15 +31,17 @@ import java.util.Collection;
 public class IndependentInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private final VariableBuilder variableBuilder;
+    private final Analyzer analyzer;
 
     @Inject
-    public IndependentInjectionNodeBuilder(@Assisted VariableBuilder variableBuilder) {
+    public IndependentInjectionNodeBuilder(@Assisted VariableBuilder variableBuilder, Analyzer analyzer) {
         this.variableBuilder = variableBuilder;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         injectionNode.addAspect(VariableBuilder.class, variableBuilder);
 

@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import android.content.Context;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -32,20 +33,23 @@ public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuild
 
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Analyzer analyzer;
 
     @Inject
     public SystemServiceBindingInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
-                                                    VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+                                                    VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                                    Analyzer analyzer) {
         super(SystemService.class);
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         String systemService = annotation.getProperty("value", String.class);
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(Context.class, context);
 

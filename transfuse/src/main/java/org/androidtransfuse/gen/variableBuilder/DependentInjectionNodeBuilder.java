@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -35,23 +36,26 @@ public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
     private final DependentVariableBuilder variableBuilder;
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Analyzer analyzer;
 
     @Inject
     public DependentInjectionNodeBuilder(@Assisted("dependency") Class dependency,
                                          @Assisted("returnType") Class returnType,
                                          @Assisted DependentVariableBuilder variableBuilder,
                                          InjectionPointFactory injectionPointFactory,
-                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                         Analyzer analyzer) {
         this.dependency = dependency;
         this.returnType = returnType;
         this.variableBuilder = variableBuilder;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(dependency, context);
 

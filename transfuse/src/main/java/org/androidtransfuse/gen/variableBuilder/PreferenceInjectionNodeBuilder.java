@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import android.content.SharedPreferences;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -32,19 +33,23 @@ public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAn
 
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final InjectionPointFactory injectionPointFactory;
+    private final Analyzer analyzer;
 
     @Inject
-    public PreferenceInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory, InjectionPointFactory injectionPointFactory) {
+    public PreferenceInjectionNodeBuilder(VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                          InjectionPointFactory injectionPointFactory,
+                                          Analyzer analyzer) {
         super(Preference.class);
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.injectionPointFactory = injectionPointFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         String preferenceName = annotation.getProperty("value", String.class);
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(SharedPreferences.class, context);
 

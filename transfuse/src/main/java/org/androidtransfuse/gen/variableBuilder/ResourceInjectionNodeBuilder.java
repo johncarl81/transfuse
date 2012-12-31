@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -36,20 +37,25 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
     private final JCodeModel codeModel;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final ResourceExpressionBuilderFactory resourceExpressionBuilderFactory;
+    private final Analyzer analyzer;
 
     @Inject
-    public ResourceInjectionNodeBuilder(JCodeModel codeModel, VariableInjectionBuilderFactory variableInjectionBuilderFactory, ResourceExpressionBuilderFactory resourceExpressionBuilderFactory) {
+    public ResourceInjectionNodeBuilder(JCodeModel codeModel,
+                                        VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                        ResourceExpressionBuilderFactory resourceExpressionBuilderFactory,
+                                        Analyzer analyzer) {
         super(Resource.class);
         this.codeModel = codeModel;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.resourceExpressionBuilderFactory = resourceExpressionBuilderFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
         Integer resourceId = annotation.getProperty("value", Integer.class);
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         try {
             JType resourceType = codeModel.parseType(astType.getName());

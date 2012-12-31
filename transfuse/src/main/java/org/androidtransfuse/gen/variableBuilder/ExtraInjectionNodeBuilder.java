@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import android.app.Activity;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.adapter.ASTType;
@@ -34,13 +35,16 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Analyzer analyzer;
 
     @Inject
     public ExtraInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
-                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                     Analyzer analyzer) {
         super(Extra.class);
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.analyzer = analyzer;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
         boolean wrapped = astType.isAnnotated(Parcel.class);
 
-        InjectionNode injectionNode = new InjectionNode(astType);
+        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
 
