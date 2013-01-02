@@ -22,13 +22,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
 public class SaveInstanceStateTest {
 
-    private static final CharSequence TEST_TEXT = "tester";
+    private static final String TEST_TEXT = "tester";
 
     private SaveInstanceStateActivity saveInstanceStateActivity;
     private SaveInstanceState saveInstanceState;
@@ -48,15 +50,16 @@ public class SaveInstanceStateTest {
     @Test
     public void testOnSaveInstanceState(){
         saveInstanceState.getStateInput().setText(TEST_TEXT);
+        // mimics button click
+        saveInstanceState.stateSaveListener.onClick(null);
         saveInstanceStateActivity.onSaveInstanceState(bundle);
-        //todo: figure out how to make robolectric work here:
-        //assertEquals(TEST_TEXT, bundle.getCharSequence(SaveInstanceState.TEXT_KEY));
+        assertEquals(TEST_TEXT, bundle.getString(SaveInstanceState.TEXT_KEY));
     }
 
     @Test
     public void testOnRestoreInstanceState(){
-        bundle.putCharSequence(SaveInstanceState.TEXT_KEY, TEST_TEXT);
+        bundle.putString(SaveInstanceState.TEXT_KEY, TEST_TEXT);
         saveInstanceStateActivity.onRestoreInstanceState(bundle);
-        //assertEquals(TEST_TEXT, saveInstanceState.getState1().getText());
+        assertEquals(TEST_TEXT, saveInstanceState.getStateOutput().getText().toString());
     }
 }

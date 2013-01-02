@@ -31,7 +31,7 @@ public class SaveInstanceState {
 
     public static final String TEXT_KEY = "key";
 
-    private CharSequence value = "";
+    private String value = "";
 
     @Inject
     @View(R.id.stateInput)
@@ -42,10 +42,10 @@ public class SaveInstanceState {
     private TextView stateOutput;
 
     @RegisterListener(R.id.stateSave)
-    private android.view.View.OnClickListener stateSaveListener = new android.view.View.OnClickListener() {
+    public android.view.View.OnClickListener stateSaveListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View v) {
-            value = stateInput.getText();
+            value = stateInput.getText().toString();
             stateInput.setText("");
             updateValueText();
         }
@@ -57,16 +57,20 @@ public class SaveInstanceState {
 
     @OnSaveInstanceState
     public void saveText(Bundle bundle){
-        bundle.putCharSequence(TEXT_KEY, value);
+        bundle.putString(TEXT_KEY, value);
     }
 
     @OnRestoreInstanceState
     public void restoreText(Bundle bundle){
-        value = bundle.getCharSequence(TEXT_KEY);
+        value = bundle.getString(TEXT_KEY);
         updateValueText();
     }
 
     public TextView getStateInput() {
         return stateInput;
+    }
+
+    public TextView getStateOutput() {
+        return stateOutput;
     }
 }
