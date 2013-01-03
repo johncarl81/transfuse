@@ -45,7 +45,7 @@ public class InjectorVariableBuilder extends ConsistentTypeVariableBuilder {
 
         JExpression injectorClass = codeModel.ref(injectorType.getName()).dotclass();
 
-        return codeModel.ref(InjectorsGenerator.REPOSITORY_NAME.getFullyQualifiedName())
+        return codeModel.ref(InjectorsGenerator.INJECTORS_NAME.getFullyQualifiedName())
                 .staticInvoke(InjectorsGenerator.GET_METHOD)
                 .arg(injectorClass);
     }

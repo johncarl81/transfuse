@@ -17,8 +17,10 @@ package org.androidtransfuse.gen;
 
 import android.os.Parcelable;
 import com.sun.codemodel.*;
+import org.androidtransfuse.Parcels;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.util.ParcelRepository;
 import org.androidtransfuse.util.ParcelableFactory;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
@@ -32,9 +34,10 @@ import java.util.Map;
  */
 public class ParcelsGenerator {
 
-    public static final PackageClass PARCELS_NAME = new PackageClass("org.androidtransfuse", "Parcels");
+    public static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
+    public static final PackageClass REPOSITORY_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_REPOSITORY_NAME);
     public static final String WRAP_METHOD = "wrap";
-    private static final String MAP_NAME = "PARCEL_WRAPPERS";
+    private static final String MAP_NAME = "parcelWrappers";
 
     private final ClassGenerationUtil classGenerationUtil;
     private final JCodeModel codeModel;
@@ -50,14 +53,16 @@ public class ParcelsGenerator {
     public void generate(Map<Provider<ASTType>, JDefinedClass> generated) {
 
         try {
-            JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(PARCELS_NAME);
+            JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(REPOSITORY_NAME);
+
+            parcelsDefinedClass._implements(ParcelRepository.class);
 
             JClass mapRef = codeModel.ref(Map.class).narrow(Class.class, ParcelableFactory.class);
             JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class, ParcelableFactory.class);
 
-            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapRef, MAP_NAME, JExpr._new(hashMapRef));
+            JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.FINAL, mapRef, MAP_NAME, JExpr._new(hashMapRef));
 
-            JBlock staticInit = parcelsDefinedClass.init();
+            JBlock constructorBody = parcelsDefinedClass.constructor(JMod.PUBLIC).body();
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : generated.entrySet()) {
 
@@ -74,11 +79,10 @@ public class ParcelsGenerator {
 
                 method.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(input));
 
-
-                staticInit.invoke(parcelWrappers, "put").arg(type.staticRef("class")).arg(JExpr._new(factoryDefinedClass));
+                constructorBody.invoke(parcelWrappers, "put").arg(type.staticRef("class")).arg(JExpr._new(factoryDefinedClass));
             }
 
-            JMethod method = parcelsDefinedClass.method(JMod.PUBLIC | JMod.STATIC, Parcelable.class, WRAP_METHOD);
+            JMethod method = parcelsDefinedClass.method(JMod.PUBLIC, Parcelable.class, WRAP_METHOD);
 
             JVar input = method.param(Object.class, "input");
 

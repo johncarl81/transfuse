@@ -16,10 +16,12 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.Components;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.util.ComponentsRepository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -31,7 +33,8 @@ import java.util.Map;
  */
 public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
-    private static final PackageClass COMPONENTS_NAME = new PackageClass("org.androidtransfuse", "Components");
+    private static final PackageClass COMPONENTS_NAME = new PackageClass(Components.COMPONENTS_PACKAGE, Components.COMPONENTS_NAME);
+    private static final PackageClass REPOSITORY_NAME = new PackageClass(Components.COMPONENTS_PACKAGE, Components.COMPONENTS_REPOSITORY_NAME);
     private static final String MAP_NAME = "COMPONENTS";
     private static final String GET_METHOD = "get";
 
@@ -47,23 +50,25 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> components) {
         try {
-            JDefinedClass injectorRepositoryClass = generationUtil.defineClass(COMPONENTS_NAME);
+            JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
+
+            injectorRepositoryClass._implements(ComponentsRepository.class);
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Class.class);
-            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
+            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
             //getter
-            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
+            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(codeModel.ref(Class.class).narrow(t));
             JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(codeModel.wildcard()), "type");
 
             getMethod.body()._return(registrationMap.invoke("get").arg(typeParam));
 
-            //static registration block
-            JBlock injectorRegistrationBlock = injectorRepositoryClass.init();
+            // constructor registration block
+            JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> componentEntry : components.entrySet()) {
                 JClass componentClass = codeModel.ref(componentEntry.getKey().get().getName());

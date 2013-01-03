@@ -19,6 +19,7 @@ import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.util.InjectorRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,8 +67,9 @@ public class InjectorsGeneratorTest {
         ASTType injectorType = astClassFactory.getType(Injector.class);
         JDefinedClass injectorGeneratedClass = injectorGenerator.generate(injectorType);
 
-        JDefinedClass injectorsDefinedClass = injectorsGenerator.generateInjectors(Collections.<Provider<ASTType>, JDefinedClass>singletonMap(
-                new SingletonProvider<ASTType>(injectorType), injectorGeneratedClass));
+        JDefinedClass injectorsDefinedClass = injectorsGenerator.generateInjectors(
+                Collections.<Provider<ASTType>, JDefinedClass>singletonMap(
+                        new SingletonProvider<ASTType>(injectorType), injectorGeneratedClass));
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
@@ -76,6 +78,7 @@ public class InjectorsGeneratorTest {
 
     @Test
     public void test() throws Exception {
-        assertNotNull(injectorsClass.getMethod("get", Class.class).invoke(null, Injector.class));
+        InjectorRepository injector = (InjectorRepository) injectorsClass.newInstance();
+        assertNotNull(injectorsClass.getMethod("get", Class.class).invoke(injector, Injector.class));
     }
 }

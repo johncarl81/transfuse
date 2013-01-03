@@ -16,9 +16,11 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.Injectors;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.util.InjectorRepository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -31,9 +33,10 @@ import java.util.Map;
  */
 public class InjectorsGenerator {
 
-    public static final PackageClass REPOSITORY_NAME = new PackageClass("org.androidtransfuse", "Injectors");
+    public static final PackageClass INJECTORS_NAME = new PackageClass(Injectors.INJECTORS_PACKAGE, Injectors.INJECTORS_NAME);
+    private static final PackageClass REPOSITORY_NAME = new PackageClass(Injectors.INJECTORS_PACKAGE, Injectors.INJECTORS_REPOSITORY_NAME);
     public static final String GET_METHOD = "get";
-    private static final String MAP_NAME = "INJECTORS";
+    private static final String MAP_NAME = "injectors";
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
@@ -48,21 +51,23 @@ public class InjectorsGenerator {
         try {
             JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
+            injectorRepositoryClass._implements(InjectorRepository.class);
+
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Object.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Object.class);
-            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
+            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
             //getter
-            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC | JMod.STATIC, Object.class, GET_METHOD);
+            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(t);
             JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(t), "type");
 
             getMethod.body()._return(JExpr.cast(t, registrationMap.invoke("get").arg(typeParam)));
 
-            //static registration block
-            JBlock injectorRegistrationBlock = injectorRepositoryClass.init();
+            // constructor registration block
+            JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
                 JClass interfaceClass = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());

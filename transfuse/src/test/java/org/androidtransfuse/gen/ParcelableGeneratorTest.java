@@ -18,6 +18,7 @@ package org.androidtransfuse.gen;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.RepositoryUpdater;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
 import org.androidtransfuse.analysis.adapter.ASTClassFactory;
@@ -66,7 +67,7 @@ public class ParcelableGeneratorTest {
     private ParcelSecondTarget parcelSecondTarget;
 
     @Before
-    public void setup() throws ClassNotFoundException, IOException {
+    public void setup() throws ClassNotFoundException, IOException, NoSuchFieldException, IllegalAccessException {
         TransfuseTestInjector.inject(this);
 
         ASTType mockParcelASTType = astClassFactory.getType(ParcelTarget.class);
@@ -85,6 +86,7 @@ public class ParcelableGeneratorTest {
         parcelsGenerator.generate(generated);
 
         ClassLoader classLoader = codeGenerationUtil.build();
+
         parcelableClass = (Class<Parcelable>) classLoader.loadClass(parcelableDefinedClass.fullName());
         Class parcelableTwoClass = classLoader.loadClass(parcelableTwoDefinedClass.fullName());
 
@@ -99,6 +101,8 @@ public class ParcelableGeneratorTest {
 
         mockParcel = PowerMockito.mock(Parcel.class);
         mockSecondParcel = (Parcelable) PowerMockito.mock(parcelableTwoClass);
+
+        RepositoryUpdater.updateParcels(classLoader);
     }
 
     @Test
