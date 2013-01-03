@@ -107,7 +107,7 @@ public class ParcelableGenerator {
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
                         namer.generateName(parcelableDescriptor.getParcelConverterType()), JExpr._new(converterType));
 
-                parcelConstructorBody.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam);
+                parcelConstructorBody.assign(wrapped, JExpr.invoke(converterField, ParcelConverter.CONVERT_FROM_PARCEL).arg(parcelParam));
 
                 writeToParcelMethod.body().invoke(converterField, ParcelConverter.CONVERT_TO_PARCEL).arg(wrapped).arg(wtParcelParam);
             }
