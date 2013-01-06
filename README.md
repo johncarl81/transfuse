@@ -22,7 +22,7 @@ You may download Transfuse as a Maven dependency:
 </dependency>
 ```
 
-Or from the [Maven Central][2].
+Or from [Maven Central][2].
 
 ## License
 
