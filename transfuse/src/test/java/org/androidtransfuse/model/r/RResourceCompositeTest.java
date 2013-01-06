@@ -16,7 +16,7 @@
 package org.androidtransfuse.model.r;
 
 import org.androidtransfuse.TransfuseTestInjector;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.OnReceive;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;

@@ -16,8 +16,9 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;

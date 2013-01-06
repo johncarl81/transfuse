@@ -18,7 +18,7 @@ package org.androidtransfuse.model.r;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Inject;
 

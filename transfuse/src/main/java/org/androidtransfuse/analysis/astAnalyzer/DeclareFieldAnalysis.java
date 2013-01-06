@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.DeclareField;
 

@@ -16,7 +16,7 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ParcelsGenerator;
 
 import javax.inject.Inject;

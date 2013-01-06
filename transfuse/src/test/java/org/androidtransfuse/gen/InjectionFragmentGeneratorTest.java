@@ -16,12 +16,12 @@
 package org.androidtransfuse.gen;
 
 import org.androidtransfuse.TransfuseTestInjector;
+import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
-import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;

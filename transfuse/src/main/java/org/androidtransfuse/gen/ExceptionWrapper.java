@@ -16,7 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.util.TransfuseInjectionException;
 
 import javax.inject.Inject;

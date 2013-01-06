@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleTransactionWorker;
 
 import javax.inject.Inject;

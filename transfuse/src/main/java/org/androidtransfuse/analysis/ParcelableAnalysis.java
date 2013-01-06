@@ -15,7 +15,11 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.adapter.*;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTVoidType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.annotations.ParcelConverter;
 import org.androidtransfuse.annotations.Transient;

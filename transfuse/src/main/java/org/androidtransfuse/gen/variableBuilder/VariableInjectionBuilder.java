@@ -16,8 +16,8 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;

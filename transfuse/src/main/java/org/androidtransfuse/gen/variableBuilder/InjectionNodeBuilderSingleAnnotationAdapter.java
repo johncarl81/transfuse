@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTUtils;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.ASTUtils;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.lang.annotation.Annotation;

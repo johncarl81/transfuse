@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;

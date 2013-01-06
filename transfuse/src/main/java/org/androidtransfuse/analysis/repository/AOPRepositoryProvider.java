@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.analysis.repository;
 
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Asynchronous;
 import org.androidtransfuse.annotations.UIThread;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;

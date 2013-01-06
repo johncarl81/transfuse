@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.PackageClass;

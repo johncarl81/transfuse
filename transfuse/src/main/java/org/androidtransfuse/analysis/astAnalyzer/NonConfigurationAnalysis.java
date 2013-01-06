@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.NonConfigurationInstance;
 import org.androidtransfuse.model.InjectionNode;
 

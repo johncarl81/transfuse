@@ -16,8 +16,8 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;

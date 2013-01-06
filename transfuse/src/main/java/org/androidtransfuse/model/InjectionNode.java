@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -16,10 +16,10 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.TransfuseTestInjector;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.MethodSignature;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.MethodSignature;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.junit.Before;
 import org.junit.Test;
 

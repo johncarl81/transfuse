@@ -17,12 +17,12 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.TransfuseTestInjector;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.gen.proxy.MockDelegate;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;

@@ -18,7 +18,7 @@ package org.androidtransfuse.gen;
 import android.os.Parcelable;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Parcels;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.ParcelRepository;
 import org.androidtransfuse.util.ParcelableFactory;

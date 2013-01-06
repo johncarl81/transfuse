@@ -16,8 +16,8 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analysis;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.processor.TransactionWorker;
 import org.androidtransfuse.processor.WorkerProvider;

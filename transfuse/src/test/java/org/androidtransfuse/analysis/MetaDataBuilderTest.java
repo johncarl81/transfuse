@@ -16,8 +16,8 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.TransfuseTestInjector;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.MetaData;
 import org.androidtransfuse.annotations.MetaDataSet;
 import org.junit.Before;

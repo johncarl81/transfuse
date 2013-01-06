@@ -16,8 +16,8 @@
 package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.junit.Before;
 import org.junit.Test;
 

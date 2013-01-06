@@ -17,10 +17,10 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.lang.annotation.Annotation;

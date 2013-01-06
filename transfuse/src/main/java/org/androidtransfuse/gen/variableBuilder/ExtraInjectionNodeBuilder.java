@@ -16,11 +16,11 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import android.app.Activity;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.annotations.Parcel;

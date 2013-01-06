@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTAnnotation;
 
 /**
  * Module processing class to process all type annotation configurations.

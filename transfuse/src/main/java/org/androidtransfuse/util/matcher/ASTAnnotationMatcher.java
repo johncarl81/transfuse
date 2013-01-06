@@ -16,7 +16,7 @@
 package org.androidtransfuse.util.matcher;
 
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTAnnotation;
 
 import java.util.Collection;
 

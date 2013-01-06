@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.model.InjectionNode;

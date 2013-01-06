@@ -16,7 +16,7 @@
 package org.androidtransfuse.analysis.module;
 
 import com.google.inject.assistedinject.Assisted;
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTAnnotation;
 
 import javax.inject.Inject;
 

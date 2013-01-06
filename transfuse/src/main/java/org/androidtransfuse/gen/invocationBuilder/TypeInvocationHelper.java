@@ -18,10 +18,10 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTPrimitiveType;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;

@@ -16,9 +16,9 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;

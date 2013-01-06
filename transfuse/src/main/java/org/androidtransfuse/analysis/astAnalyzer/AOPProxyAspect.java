@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.MethodSignature;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.util.HashMap;

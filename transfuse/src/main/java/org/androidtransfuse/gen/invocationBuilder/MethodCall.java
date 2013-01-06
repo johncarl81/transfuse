@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.MethodSignature;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.MethodSignature;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

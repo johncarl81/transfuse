@@ -18,9 +18,9 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
-import org.androidtransfuse.analysis.adapter.ASTVoidType;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.TypedExpression;
 

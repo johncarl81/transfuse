@@ -16,10 +16,10 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.TransfuseTestInjector;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.DeclareField;
 import org.junit.Before;

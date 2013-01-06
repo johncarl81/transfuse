@@ -16,8 +16,8 @@
 package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;

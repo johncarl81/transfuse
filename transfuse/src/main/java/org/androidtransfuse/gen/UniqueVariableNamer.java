@@ -16,7 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JType;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Singleton;

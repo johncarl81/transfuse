@@ -17,7 +17,7 @@ package org.androidtransfuse.analysis;
 
 import android.app.Activity;
 import org.androidtransfuse.TransfuseTestInjector;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.junit.Before;

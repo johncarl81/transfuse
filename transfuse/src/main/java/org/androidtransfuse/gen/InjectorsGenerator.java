@@ -17,8 +17,8 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.Injectors;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.InjectorRepository;
 

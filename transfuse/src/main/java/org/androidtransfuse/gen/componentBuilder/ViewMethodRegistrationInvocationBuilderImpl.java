@@ -18,7 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;

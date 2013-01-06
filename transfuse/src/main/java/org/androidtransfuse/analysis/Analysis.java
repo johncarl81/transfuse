@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * @author John Ericksen

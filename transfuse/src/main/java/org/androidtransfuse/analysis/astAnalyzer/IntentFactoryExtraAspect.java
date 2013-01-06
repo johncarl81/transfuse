@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**

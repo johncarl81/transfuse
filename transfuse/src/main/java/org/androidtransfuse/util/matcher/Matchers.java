@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.util.matcher;
 
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * Matcher builder utility class.

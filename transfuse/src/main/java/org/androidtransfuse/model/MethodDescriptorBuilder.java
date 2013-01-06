@@ -17,9 +17,9 @@ package org.androidtransfuse.model;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.JMethod;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * @author John Ericksen

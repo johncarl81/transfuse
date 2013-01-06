@@ -17,12 +17,14 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.analysis.adapter.*;
+import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.util.QualifierPredicate;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

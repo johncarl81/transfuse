@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * Module processing class for handling Method annotations.  Pulls the return type and annotation value field

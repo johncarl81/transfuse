@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;

@@ -16,11 +16,11 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.inject.assistedinject.Assisted;
+import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.adapter.ASTParameter;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;

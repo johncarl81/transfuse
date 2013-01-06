@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTMethodUniqueSignatureDecorator;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.util.*;

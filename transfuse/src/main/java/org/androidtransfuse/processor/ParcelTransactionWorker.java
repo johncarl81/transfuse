@@ -16,8 +16,8 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.gen.ParcelableGenerator;
 import org.androidtransfuse.model.ParcelableDescriptor;
 

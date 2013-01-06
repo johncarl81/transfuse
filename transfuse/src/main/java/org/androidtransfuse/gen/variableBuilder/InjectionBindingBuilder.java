@@ -20,8 +20,8 @@ import android.preference.PreferenceManager;
 import com.google.common.collect.ImmutableList;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.adapter.ASTClassFactory;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;

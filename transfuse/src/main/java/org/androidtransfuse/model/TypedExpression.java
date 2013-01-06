@@ -16,7 +16,7 @@
 package org.androidtransfuse.model;
 
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * @author John Ericksen

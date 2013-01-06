@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.analysis.adapter.ASTAccessModifier;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * @author John Ericksen

@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.analysis.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTMethod;
 
 /**
  * @author John Ericksen

@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.analysis.repository;
 
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Singleton;
 import java.util.HashMap;

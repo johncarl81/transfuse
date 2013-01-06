@@ -16,7 +16,7 @@
 package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableMap;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Provider;
 import java.lang.annotation.Annotation;

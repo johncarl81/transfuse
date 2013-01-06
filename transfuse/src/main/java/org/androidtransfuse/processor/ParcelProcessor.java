@@ -16,8 +16,8 @@
 package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTType;
 
 import javax.inject.Provider;
 import java.util.Collection;

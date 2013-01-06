@@ -16,10 +16,10 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
-import org.androidtransfuse.analysis.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;

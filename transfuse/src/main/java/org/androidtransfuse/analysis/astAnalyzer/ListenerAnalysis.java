@@ -16,9 +16,9 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.adapter.ASTMethod;
-import org.androidtransfuse.analysis.adapter.ASTType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
 

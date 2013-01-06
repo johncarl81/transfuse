@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.r;
 
-import org.androidtransfuse.analysis.adapter.ASTField;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTType;
 
 import java.util.Collection;
 

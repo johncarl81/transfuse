@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.util.matcher;
 
-import org.androidtransfuse.analysis.adapter.ASTAnnotation;
-import org.androidtransfuse.analysis.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionSignature;
 
 import java.util.Collection;
