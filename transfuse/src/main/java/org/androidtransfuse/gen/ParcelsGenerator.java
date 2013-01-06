@@ -75,6 +75,7 @@ public class ParcelsGenerator {
                 factoryDefinedClass._implements(codeModel.ref(ParcelableFactory.class).narrow(type));
 
                 JMethod method = factoryDefinedClass.method(JMod.PUBLIC, astTypeJDefinedClassEntry.getValue(), ParcelableFactory.BUILD_PARCELABLE);
+                method.annotate(Override.class);
                 JVar input = method.param(type, "input");
 
                 method.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(input));
@@ -83,6 +84,7 @@ public class ParcelsGenerator {
             }
 
             JMethod method = parcelsDefinedClass.method(JMod.PUBLIC, Parcelable.class, WRAP_METHOD);
+            method.annotate(Override.class);
 
             JVar input = method.param(Object.class, "input");
 

@@ -187,6 +187,7 @@ public class AOPProxyGenerator {
         JType returnType = codeModel.parseType(method.getReturnType().getName());
 
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
+        methodDeclaration.annotate(Override.class);
         JBlock body = methodDeclaration.body();
 
         //define method parameter
@@ -237,6 +238,7 @@ public class AOPProxyGenerator {
 
             //getMethod()
             JMethod getMethod = methodExecutionClass.method(JMod.PUBLIC, Method.class, MethodInterceptorChain.MethodExecution.GET_METHOD);
+            getMethod.annotate(Override.class);
 
             JInvocation getMethodInvocation = definedClass.dotclass().invoke(CLASS_GET_METHOD).arg(method.getName());
             getMethod.body()._return(getMethodInvocation);
@@ -248,6 +250,7 @@ public class AOPProxyGenerator {
 
             //invoke()
             JMethod invokeMethod = methodExecutionClass.method(JMod.PUBLIC, Object.class, MethodInterceptorChain.MethodExecution.INVOKE);
+            invokeMethod.annotate(Override.class);
 
             //add all throws of contained method
             for (ASTType throwable : method.getThrowsTypes()) {

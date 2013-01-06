@@ -86,6 +86,7 @@ public class ParcelableGenerator {
 
             //writeToParcel(android.os.Parcel,int)
             JMethod writeToParcelMethod = parcelableClass.method(JMod.PUBLIC, codeModel.VOID, WRITE_TO_PARCEL);
+            writeToParcelMethod.annotate(Override.class);
             JVar wtParcelParam = writeToParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
             JVar flags = writeToParcelMethod.param(codeModel.INT, "flags");
 
@@ -119,10 +120,12 @@ public class ParcelableGenerator {
 
             //describeContents()
             JMethod describeContentsMethod = parcelableClass.method(JMod.PUBLIC, codeModel.INT, DESCRIBE_CONTENTS);
+            describeContentsMethod.annotate(Override.class);
             describeContentsMethod.body()._return(JExpr.lit(0));
 
             //ParcelWrapper.getParcel()
             JMethod getWrappedMethod = parcelableClass.method(JMod.PUBLIC, inputType, ParcelWrapper.GET_PARCEL);
+            getWrappedMethod.annotate(Override.class);
             getWrappedMethod.body()._return(wrapped);
 
             //public static final CREATOR = ...
@@ -132,15 +135,15 @@ public class ParcelableGenerator {
 
             //createFromParcel method
             JMethod createFromParcelMethod = creatorClass.method(JMod.PUBLIC, parcelableClass, CREATE_FROM_PARCEL);
-            JVar cfpParcelParam = createFromParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
             createFromParcelMethod.annotate(Override.class);
+            JVar cfpParcelParam = createFromParcelMethod.param(Parcel.class, namer.generateName(Parcel.class));
 
             createFromParcelMethod.body()._return(JExpr._new(parcelableClass).arg(cfpParcelParam));
 
             //newArray method
             JMethod newArrayMethod = creatorClass.method(JMod.PUBLIC, parcelableClass.array(), NEW_ARRAY);
-            JVar sizeParam = newArrayMethod.param(codeModel.INT, "size");
             newArrayMethod.annotate(Override.class);
+            JVar sizeParam = newArrayMethod.param(codeModel.INT, "size");
 
             newArrayMethod.body()._return(JExpr.newArray(parcelableClass, sizeParam));
 

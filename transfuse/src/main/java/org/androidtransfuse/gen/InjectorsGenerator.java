@@ -60,6 +60,7 @@ public class InjectorsGenerator {
 
             //getter
             JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
+            getMethod.annotate(Override.class);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(t);
             JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(t), "type");

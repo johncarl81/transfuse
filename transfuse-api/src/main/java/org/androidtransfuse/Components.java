@@ -21,17 +21,21 @@ import org.androidtransfuse.util.GeneratedRepositoryProxy;
 /**
  * @author John Ericksen
  */
-public class Components {
+public final class Components {
 
     public static final String COMPONENTS_NAME = "Components";
     public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse$Components";
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
 
-    private static final GeneratedRepositoryProxy<ComponentsRepository> proxy =
+    private Components(){
+        // private utility class constructor
+    }
+
+    private static final GeneratedRepositoryProxy<ComponentsRepository> PROXY =
             new GeneratedRepositoryProxy<ComponentsRepository>(COMPONENTS_PACKAGE, COMPONENTS_REPOSITORY_NAME);
 
     public static<T> Class<T> get(Class<?> type) {
-        ComponentsRepository componentsRepository = proxy.get();
+        ComponentsRepository componentsRepository = PROXY.get();
         return componentsRepository == null ? null : (Class<T>) componentsRepository.get(type);
     }
 }

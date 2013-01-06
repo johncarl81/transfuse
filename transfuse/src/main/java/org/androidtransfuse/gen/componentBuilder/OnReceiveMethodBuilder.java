@@ -49,6 +49,7 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         try {
             JMethod onReceiveMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onReceive");
+            onReceiveMethod.annotate(Override.class);
             ASTMethod onReceiveASTMethod = astClassFactory.getMethod(android.content.BroadcastReceiver.class.getDeclaredMethod("onReceive", Context.class, Intent.class));
 
             MethodDescriptorBuilder methodDescriptor = new MethodDescriptorBuilder(onReceiveMethod, onReceiveASTMethod);

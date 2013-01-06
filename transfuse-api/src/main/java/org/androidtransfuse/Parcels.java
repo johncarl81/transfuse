@@ -22,21 +22,25 @@ import org.androidtransfuse.util.ParcelRepository;
 /**
  * @author John Ericksen
  */
-public class Parcels {
+public final class Parcels {
 
     public static final String PARCELS_NAME = "Parcels";
     public static final String PARCELS_REPOSITORY_NAME = "Transfuse$Parcels";
     public static final String PARCELS_PACKAGE = "org.androidtransfuse";
 
-    private static final GeneratedRepositoryProxy<ParcelRepository> proxy =
+    private Parcels(){
+        // private utility class constructor
+    }
+
+    private static final GeneratedRepositoryProxy<ParcelRepository> PROXY =
             new GeneratedRepositoryProxy<ParcelRepository>(PARCELS_PACKAGE, PARCELS_REPOSITORY_NAME);
 
     protected static void update(ClassLoader classLoader){
-        proxy.update(classLoader);
+        PROXY.update(classLoader);
     }
 
     public static Parcelable wrap(Object input) {
-        ParcelRepository parcelRepository = proxy.get();
+        ParcelRepository parcelRepository = PROXY.get();
         return parcelRepository == null ? null : parcelRepository.wrap(input);
     }
 }

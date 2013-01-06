@@ -96,6 +96,7 @@ public class VirtualProxyGenerator {
             definedClass._implements(codeModel.ref(DelayedLoad.class).narrow(delegateClass));
 
             JMethod delayedLoadMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, DelayedLoad.LOAD_METHOD);
+            delayedLoadMethod.annotate(Override.class);
             JVar delegateParam = delayedLoadMethod.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
             delayedLoadMethod.body().assign(delegateField, delegateParam);
 

@@ -78,6 +78,7 @@ public class ProviderGenerator {
             //todo:possible context variable injections?
             //get() method
             JMethod getMethod = providerClass.method(JMod.PUBLIC, injectionNodeClassRef, GET_METHOD);
+            getMethod.annotate(Override.class);
 
             JBlock getMethodBody = getMethod.body();
 

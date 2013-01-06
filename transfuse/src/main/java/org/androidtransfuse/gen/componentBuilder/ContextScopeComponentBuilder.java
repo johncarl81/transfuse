@@ -53,6 +53,7 @@ public class ContextScopeComponentBuilder implements ExpressionVariableDependent
 
         //method
         JMethod getScope = definedClass.method(JMod.PUBLIC, Scope.class, ContextScopeHolder.GET_SCOPE);
+        getScope.annotate(Override.class);
         getScope.body()._return(scopeField);
     }
 }

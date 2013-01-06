@@ -82,6 +82,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
 
                 //add to onRetainNonConfigurationInstance
                 JMethod onNonConfigInst = definedClass.method(JMod.PUBLIC, Object.class, "onRetainNonConfigurationInstance");
+                onNonConfigInst.annotate(Override.class);
 
                 JBlock methodBody = onNonConfigInst.body();
 

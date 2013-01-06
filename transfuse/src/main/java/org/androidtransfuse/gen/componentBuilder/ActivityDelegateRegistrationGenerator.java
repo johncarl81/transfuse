@@ -56,6 +56,7 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
         for (ASTMethod method : methods) {
             //mirror method
             JMethod implementedMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(method.getReturnType().getName()), method.getName());
+            implementedMethod.annotate(Override.class);
 
             Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
             for (ASTParameter astParameter : method.getParameters()) {

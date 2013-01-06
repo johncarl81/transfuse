@@ -116,6 +116,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
 
                     JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
+                    triggerMethod.annotate(Override.class);
                     JVar eventParam = triggerMethod.param(eventRef, namer.generateName(event));
                     JVar targetParam = triggerMethod.param(targetRef, namer.generateName(typedExpression.getType()));
                     JBlock triggerBody = triggerMethod.body();

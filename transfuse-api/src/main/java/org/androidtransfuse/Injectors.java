@@ -21,17 +21,21 @@ import org.androidtransfuse.util.InjectorRepository;
 /**
  * @author John Ericksen
  */
-public class Injectors {
+public final class Injectors {
 
     public static final String INJECTORS_NAME = "Injectors";
     public static final String INJECTORS_REPOSITORY_NAME = "Transfuse$Injectors";
     public static final String INJECTORS_PACKAGE = "org.androidtransfuse";
 
-    private static final GeneratedRepositoryProxy<InjectorRepository> proxy =
+    private Injectors(){
+        // private utility class constructor
+    }
+
+    private static final GeneratedRepositoryProxy<InjectorRepository> PROXY =
             new GeneratedRepositoryProxy<InjectorRepository>(INJECTORS_PACKAGE, INJECTORS_REPOSITORY_NAME);
 
     public static<T> T get(Class<T> type) {
-        InjectorRepository injectorRepository = proxy.get();
+        InjectorRepository injectorRepository = PROXY.get();
         return injectorRepository == null ? null : injectorRepository.get(type);
     }
 }

@@ -48,7 +48,8 @@ public class OnCreateMethodBuilder implements MethodBuilder {
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        final JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
+        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onCreate");
+        onCreateMethod.annotate(Override.class);
         MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateASTMethod);
 
         List<JVar> parameters = new ArrayList<JVar>();

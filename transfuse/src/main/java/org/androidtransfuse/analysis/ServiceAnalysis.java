@@ -248,6 +248,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         @Override
         public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
             JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
+            onBind.annotate(Override.class);
             onBind.param(Intent.class, "intent");
 
             onBind.body()._return(JExpr._null());

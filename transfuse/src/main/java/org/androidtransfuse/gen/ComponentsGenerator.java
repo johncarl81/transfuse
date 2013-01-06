@@ -33,9 +33,8 @@ import java.util.Map;
  */
 public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
-    private static final PackageClass COMPONENTS_NAME = new PackageClass(Components.COMPONENTS_PACKAGE, Components.COMPONENTS_NAME);
     private static final PackageClass REPOSITORY_NAME = new PackageClass(Components.COMPONENTS_PACKAGE, Components.COMPONENTS_REPOSITORY_NAME);
-    private static final String MAP_NAME = "COMPONENTS";
+    private static final String MAP_NAME = "components";
     private static final String GET_METHOD = "get";
 
     private final ClassGenerationUtil generationUtil;
@@ -61,6 +60,7 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
 
             //getter
             JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
+            getMethod.annotate(Override.class);
             JTypeVar t = getMethod.generify("T");
             getMethod.type(codeModel.ref(Class.class).narrow(t));
             JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(codeModel.wildcard()), "type");

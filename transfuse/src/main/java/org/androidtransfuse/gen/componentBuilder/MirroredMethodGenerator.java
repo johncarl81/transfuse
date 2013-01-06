@@ -43,6 +43,7 @@ public class MirroredMethodGenerator implements MethodGenerator {
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         JMethod method = definedClass.method(JMod.PUBLIC, codeModel.ref(overrideMethod.getReturnType().getName()), overrideMethod.getName());
+        method.annotate(Override.class);
 
         MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, overrideMethod);
 

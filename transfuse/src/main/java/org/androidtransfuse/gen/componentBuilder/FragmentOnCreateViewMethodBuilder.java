@@ -63,6 +63,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
         JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(View.class), "onCreateView");
+        onCreateMethod.annotate(Override.class);
         MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateViewMethod);
 
         for (ASTParameter methodArgument : onCreateViewMethod.getParameters()) {
