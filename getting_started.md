@@ -2,6 +2,7 @@
 layout: default
 title: Transfuse Getting Started
 documentationExpanded: false
+postsExpanded: false
 ---
 
 ### Getting Started

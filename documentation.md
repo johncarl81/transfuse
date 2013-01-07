@@ -2,6 +2,7 @@
 layout: default
 title: Transfuse Documentation
 documentationExpanded: true
+postsExpanded: false
 ---
 
 ### Documentation
