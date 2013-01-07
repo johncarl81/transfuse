@@ -3,6 +3,7 @@ layout: default
 title: Failure Tolerant Code Generation Using Transactions
 shortTitle: Transactions
 documentationExpanded: false
+comments: true
 postsExpanded: true
 excerpt: A while back a bug posted on the Dagger issue list prompted an architectural rework in the way Transfuse performs analysis and code generation.  This was a significant change which resulted in a very resilient design with some positive side effects.  The following covers the core concepts and results of the change as well as some guidance for implementing Annotation Processors.
 root: ../../../
@@ -108,6 +109,7 @@ Second, partitioning the code into separate Processors decoupled the code genera
 ##### Conclusion
 
 Developing Annotation Processors is a challenge due to a number of factors.  This technique is becoming popular due to the performance aspects, especially in the Android space.  The Transfuse library found some positive gains in implementing fault tolerance by a Transactional model, which resulted in resilient code and a great execution model.  The hope is that this post sheds some light on one of the more interesting concepts behind the Transfuse Annotation Processor so that other Annotation Processor implementations may take advantage of this technique.
+    
 
 [1]: https://github.com/square/dagger/issues/108
 [2]: http://docs.oracle.com/javase/6/docs/api/javax/lang/model/util/Elements.html
