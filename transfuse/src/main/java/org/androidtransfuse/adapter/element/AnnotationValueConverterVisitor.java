@@ -35,7 +35,7 @@ import java.util.List;
  * @param <T>
  * @author John Ericksen
  */
-public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
+public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVisitor6<T, Void> {
 
     private static final String ERROR_TYPE = "<error>";
 
@@ -44,10 +44,10 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
     private final ElementConverterFactory astTypeElementConverterFactory;
     private final ASTFactory astFactory;
 
-    public AnnotationTypeValueConverterVisitor(Class<T> type,
-                                               ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                                               ElementConverterFactory astTypeElementConverterFactory,
-                                               ASTFactory astFactory) {
+    public AnnotationValueConverterVisitor(Class<T> type,
+                                           ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                                           ElementConverterFactory astTypeElementConverterFactory,
+                                           ASTFactory astFactory) {
         this.type = type;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astTypeElementConverterFactory = astTypeElementConverterFactory;
@@ -118,7 +118,7 @@ public class AnnotationTypeValueConverterVisitor<T> extends SimpleAnnotationValu
 
         for (AnnotationValue annotationValue : annotationValues) {
             annotationASTTypes.add(annotationValue.accept(
-                    new AnnotationTypeValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory, astFactory),
+                    new AnnotationValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory, astFactory),
                     null));
         }
 

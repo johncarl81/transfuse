@@ -44,7 +44,7 @@ public class ElementConverterFactory {
         return new ASTTypeElementConverter<T>(clazz, astElementFactoryProvider.get());
     }
 
-    public <T> AnnotationTypeValueConverterVisitor<T> buildAnnotationValueConverter(Class<T> clazz) {
-        return new AnnotationTypeValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, this, astFactory);
+    public <T> AnnotationValueConverterVisitor<T> buildAnnotationValueConverter(Class<T> clazz) {
+        return new AnnotationValueConverterVisitor<T>(clazz, astTypeBuilderVisitor, this, astFactory);
     }
 }
