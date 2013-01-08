@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Failure Tolerant Code Generation Using Transactions
+title: Fault Tolerant Code Generation Using Transactions
 shortTitle: Transactions
 documentationExpanded: false
 comments: true
@@ -11,10 +11,10 @@ root: ../../../
 
 ### Transfuse Technical Blog
 
-#### Failure Tolerant Code Generation Using Transactions
+#### Fault Tolerant Code Generation Using Transactions
 January 6, 2013
 
-A short time ago [bug posted on the Dagger issue list][1] prompted an [architectural rework][3] in the way Transfuse performs analysis and code generation.  This was a significant change which resulted in a very resilient and fascinating design with some positive side effects.  The following covers the core concepts and results of the change in hopes that it will provide some guidance for implementing Annotation Processors.
+A short time ago a [bug posted on the Dagger issue list][1] prompted an [architectural rework][3] in the way Transfuse performs analysis and code generation.  This was a significant change which resulted in a very resilient and fascinating design with some positive side effects.  The following covers the core concepts and results of the change in hopes that it will provide some guidance for implementing Annotation Processors.
 
 ##### Basics
 
