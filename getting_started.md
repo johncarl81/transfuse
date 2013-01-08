@@ -1,6 +1,8 @@
 ---
 layout: default
-title: Transfuse
+title: Transfuse Getting Started
+documentationExpanded: false
+postsExpanded: false
 ---
 
 ### Getting Started
@@ -26,13 +28,6 @@ mvn archetype:generate \
 
 {% endhighlight %}
 
-<div class="note">
-<h5>Note</h5>
-
-Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step below is not required, but some manual merging may be needed.
-
-</div>
-
 Remove the generated Activity class (HelloAndroidActivity.java) as well as the Application entry in the AndroidManifest.xml.
 
 The AndroidManifest.xml should look like this:
@@ -44,7 +39,7 @@ package="org.androidtransfuse" android:versionCode="1" android:versionName="1.0-
 </manifest>
 {% endhighlight %}
 
-
+Transfuse will add the Application xml back and manage it for the user. Transfuse is legacy friendly and gives the user the ability to migrate Activities and other Android components into Transfuse as needed. For applications with an existing codebase the step above is not required, but some manual merging may be needed.
 
 #### Download Transfuse
 
@@ -66,7 +61,7 @@ Add the transfuse dependencies into the Maven pom:
 
 {% endhighlight %}
 
-Transfuse also can be downloaded directly from the [Download page.][4]
+Transfuse also can be downloaded directly from [Maven Central][4].
 
 <div class="note">
 <h5>Note</h5>
@@ -124,7 +119,7 @@ Transfuse requires a full build to generate the necessary class files and resour
 
 {% highlight bash %}
 
-> mvn clean package android:deploy
+mvn clean package android:deploy
 
 {% endhighlight %}
 
@@ -133,4 +128,4 @@ A fully functional Android application has now been built using Transfuse.
 [1]: http://developer.android.com/training/index.html
 [2]: https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid
 [3]: http://developer.android.com/sdk/index.html
-[4]: https://github.com/johncarl81/transfuse/downloads
+[4]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22

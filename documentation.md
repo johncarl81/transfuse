@@ -1,6 +1,8 @@
 ---
-layout: docs_expanded
-title: Transfuse
+layout: default
+title: Transfuse Documentation
+documentationExpanded: true
+postsExpanded: false
 ---
 
 ### Documentation
@@ -25,7 +27,7 @@ Transfuse moves the declaration of Manifest metadata to the component class leve
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
-Available to each component is DI generated at compile time.  This feature is covered in-depth in the <a href="#dependency_injection_di">Dependency Injection</a> section.
+Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection section</a>.
 
 #### Components
 
@@ -99,9 +101,7 @@ Transfuse adds this property to the AndroidManifest.xml, resulting in the follow
 
 <div class="note">
 <h5>Note</h5>
-
 To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
-
 </div>
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
@@ -142,9 +142,7 @@ public class Example {
 
 <div class="note">
 <h5>Note</h5>
-
 Lifecycle events will not be called in any predefined order.
-
 </div>
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
@@ -366,9 +364,7 @@ Fragments map lifecycle events associated with the following annotations:
 
 <div class="note">
 <h5>Note</h5>
-
 Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
-
 </div>
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
@@ -381,7 +377,7 @@ Annotating a class with the Service annotation tells Transfuse to use the class 
 
 {% highlight java %}
 @Service
-@IntentFilter
+@IntentFilter(@Intent(type=IntentType.ACTION, name="arbitraryIntent"))
 public class ExampleService {}
 {% endhighlight %}
 
@@ -389,12 +385,16 @@ Transfuse Service classes have the following lifecycle events defined, analogous
 
 {% highlight java %}
 @OnCreate
-@OnStart
 @OnDestroy
-
 {% endhighlight %}
 
-Service may be injected as described in the Injection section:
+Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event.  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
+
+{% highlight java %}
+ServiceOnStartCommand
+{% endhighlight %}
+
+Service may be injected as described in the <a href="#dependency_injection_di">Injection section</a>:
 
 {% highlight java %}
 @Service
@@ -486,9 +486,7 @@ Transfuse allows users to inject into the constructor, methods and fields of a c
 
 <div class="note">
 <h5>Note</h5>
-
 This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
-
 </div>
 
 ##### Provider
@@ -520,10 +518,10 @@ To map a Provider to a type, define the Provider binding in the TransfuseModule:
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindProvider(ExampleProvider.class)
-    Example mapExampleProvider();
-}
+@BindProviders({
+    @BindProvider(type = Example.class, provider = ExampleProvider.class)
+})
+public class Module{}
 {% endhighlight %}
 
 
@@ -538,6 +536,29 @@ public class SingletonExample{
 }
 {% endhighlight %}
 
+##### @ImplementedBy
+
+Annotating a class with @ImplementedBy configures Transfuse to inject the given annotation type whenever the annotated type is injected.  This is much like the @Bind module configuration, but @ImplemnetedBy is located on the type instead of within the @TransfuseModule class.
+
+An example of this is as follows:
+
+{% highlight java %}
+@ImplementedBy(Andy.class)
+public interface Android {}
+{% endhighlight %}
+
+{% highlight java %}
+public class Andy implements Android {}
+{% endhighlight %}
+
+The following injection would inject Andy in place of Android:
+
+{% highlight java %}
+@Inject
+Android andoid // injected Andy
+{% endhighlight %}
+
+
 ##### @Named
 
 Named support is pending.
@@ -546,9 +567,7 @@ Named support is pending.
 
 For completeness, Transfuse allows the declaration of dependency cycles.  For Transfuse to instantiate dependency cycles, at least one dependency in the loop must be injected via an interface.
 
-###### @ImplementedBy
 
-ImplementedBy support is pending.
 
 ###### @ContextScope
 
@@ -570,9 +589,7 @@ Annotating a method with @UIthread will execute the given method through an Andr
 
 <div class="note">
 <h5>Note</h5>
-
 If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
-
 </div>
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
@@ -607,9 +624,11 @@ public class Example{
 }
 {% endhighlight %}
 
-These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration</a> section for more details.
+These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
 
-##### Configuration
+<hr/>
+
+#### Configuration
 
 Transfuse's DI and Method Interception may be configured by defining a Transfuse Module.  This entails annotating a interface with @TransfuseModule and specifying one of the configuration options.
 
@@ -617,10 +636,10 @@ To specify a specific binding from one injection type to a concrete type, use th
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @Bind(Example.class)
-    ExampleImpl getImp();
-}
+@Bindings({
+    @Bind(type=Example.class, to=ExampleImpl.class)
+})
+public interface Module{}
 {% endhighlight %}
 
 This tells Transfuse to instantiate an instance of ExampleImpl and inject it every time a Example type is requested for injection.
@@ -629,10 +648,10 @@ To specify a Provider to be used as a source for a binding, use the @BindProvide
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindProvider(ExampleProvider.class)
-    Example getExample();
-}
+@BindProviders({
+    @BindProvider(type=Example.class, provider=ExampleProvider.class
+})
+public interface Module{}
 {% endhighlight %}
 
 Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection.
@@ -641,13 +660,27 @@ To associate a method interceptor with an annotation use the @BindInterceptor an
 
 {% highlight java %}
 @TransfuseModule
-public interface Module{
-    @BindInterceptor(Log.class)
-    LogInterceptor getLogInterceptor();
-}
+@BindInterceptors({
+    @BindInterceptor(annotation = Log.class, interceptor = LogInterceptor.class)
+})
+public interface Module{}
 {% endhighlight %}
 
 This is requred to use the given method interceptor each time the corresponding annotation is used.
+
+Another flavor of configuration is available by the @Provides annotation.  @Provides configures a method in the Module to be called for the given return type:
+
+{% highlight java %}
+@TransfuseModule
+public interface Module{
+    @Provides 
+    public ExampleProvides buildExample(Depenendency dependency){
+        return new ExampleProvides(dependency);
+    }
+}
+{% endhighlight %}
+
+<hr/>
 
 #### Events
 
@@ -738,8 +771,35 @@ public class ExampleUsage{
     }
 
     public void staticUsage(){
-        Example example = InjectorRepository.get(TransfuseInjector.class).getExample();
+        Example example = Injectors.get(TransfuseInjector.class).getExample();
     }
+}
+{% endhighlight %}
+
+Injectors may also be used as a factory with input parameters.  This is analagous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to concretely map parameters. 
+
+{% highlight java %}
+@Injector
+public interface AssistedInjector {
+    AssistedTarget buildTarget(AssistedDependency dependency);
+    AssistedDoubleTarget buildTarget(@Named("one") AssistedDependency dependencyOne,
+                                      @Named("two") AssistedDependency dependencyTwo);
+}
+{% endhighlight %}
+
+{% highlight java %}
+public class AssistedTarget {
+    @Inject
+    AssistedDependency dependency;
+}
+{% endhighlight %}
+
+{% highlight java %}
+public class AssistedDoubleTarget {
+    @Inject @Named("one")
+    AssistedDependency dependencyOne;
+    @Inject @Named("two")
+    AssistedDependency dependencyTwo;
 }
 {% endhighlight %}
 
@@ -758,9 +818,7 @@ Define Android components as normal, and register them in the AndroidManifest.xm
 
 <div class="note">
 <h5>Note</h5>
-
 DI and the other code generation features are not available on legacy Android components.
-
 </div>
 
 The second option looks like the following:
