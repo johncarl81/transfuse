@@ -15,6 +15,10 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -23,6 +27,8 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Analyzer to add Aspect Oriented Programming method interceptors from the AOP Repository to the appropriately
@@ -40,12 +46,32 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
     }
 
     @Override
+    public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
+        //AOP is only available on top level
+        if (injectionNode.getASTType().equals(concreteType)) {
+            for (ASTAnnotation annotation : concreteType.getAnnotations()) {
+                if (context.getAOPRepository().isInterceptor(annotation)) {
+
+                    ImmutableSet<ASTMethod> nonPrivateMethods = FluentIterable.from(concreteType.getMethods()).filter(new Predicate<ASTMethod>() {
+                        @Override
+                        public boolean apply(ASTMethod method) {
+                            return !ASTAccessModifier.PRIVATE.equals(method.getAccessModifier());
+                        }
+                    }).toImmutableSet();
+
+                    addInterceptor(injectionNode, nonPrivateMethods, getInterceptorInjectionNode(annotation, context));
+                }
+            }
+        }
+    }
+
+    @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
         //AOP is only available on top level
         if (injectionNode.getASTType().equals(concreteType)) {
-            for (ASTAnnotation methodAnnotation : astMethod.getAnnotations()) {
-                if (context.getAOPRepository().isInterceptor(methodAnnotation)) {
-                    addInterceptor(injectionNode, astMethod, getInterceptorInjectionNode(methodAnnotation, context));
+            for (ASTAnnotation annotation : astMethod.getAnnotations()) {
+                if (context.getAOPRepository().isInterceptor(annotation)) {
+                    addInterceptor(injectionNode, Collections.singleton(astMethod), getInterceptorInjectionNode(annotation, context));
                 }
             }
         }
@@ -57,13 +83,13 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
         return injectionPointFactory.buildInjectionNode(interceptorType, context);
     }
 
-    private void addInterceptor(InjectionNode injectionNode, ASTMethod astMethod, InjectionNode interceptor) {
+    private void addInterceptor(InjectionNode injectionNode, Collection<ASTMethod> astMethods, InjectionNode interceptor) {
         if (!injectionNode.containsAspect(AOPProxyAspect.class)) {
             injectionNode.addAspect(new AOPProxyAspect());
         }
 
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
 
-        aopProxyAspect.addInterceptor(astMethod, interceptor);
+        aopProxyAspect.addInterceptors(astMethods, interceptor);
     }
 }

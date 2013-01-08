@@ -19,10 +19,7 @@ import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.model.InjectionNode;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents the AOP proxy Method Interceptors.  This aspect is applied to the InjectionNode and used during the
@@ -44,6 +41,12 @@ public class AOPProxyAspect {
         }
 
         return unboxedMethodInterceptors;
+    }
+
+    public void addInterceptors(Collection<ASTMethod> methods, InjectionNode interceptorInjectionNode) {
+        for (ASTMethod method : methods) {
+            addInterceptor(method, interceptorInjectionNode);
+        }
     }
 
     public void addInterceptor(ASTMethod astMethod, InjectionNode interceptorInjectionNode) {

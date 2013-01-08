@@ -33,6 +33,7 @@ import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
 @Activity(name = "AOPActivity", label = "AOP")
 @Layout(R.layout.aop)
 @DeclareField
+@AOPInterceptor
 public class AOP {
 
     public static final String INTERCEPT_VALUE = "interception";
@@ -57,11 +58,9 @@ public class AOP {
         }
     };
 
-    @AOPInterceptor
     public void interceptMe() {
     }
 
-    @AOPInterceptor
     public String interceptMeWithReturn() {
         return INTERCEPT_VALUE;
     }
