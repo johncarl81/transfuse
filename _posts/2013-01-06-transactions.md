@@ -5,7 +5,7 @@ shortTitle: Transactions
 documentationExpanded: false
 comments: true
 postsExpanded: true
-excerpt: A while back a bug posted on the Dagger issue list prompted an architectural rework in the way Transfuse performs analysis and code generation.  This was a significant change which resulted in a very resilient design with some positive side effects.  The following covers the core concepts and results of the change as well as some guidance for implementing Annotation Processors.
+excerpt: A short time ago a bug posted on the Dagger issue list prompted an architectural rework in the way Transfuse performs analysis and code generation.  This was a significant change which resulted in a very resilient and fascinating design with some positive side effects.  The following covers the core concepts and results of the change in hopes that it will provide some guidance for implementing Annotation Processors.
 root: ../../../
 ---
 
