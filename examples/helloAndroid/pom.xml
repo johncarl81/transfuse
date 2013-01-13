@@ -7,7 +7,15 @@
     <artifactId>transfuse-hello-android</artifactId>
     <version>0.1.0</version>
     <packaging>apk</packaging>
+
     <name>Transfuse Hello Android Example</name>
+
+    <parent>
+        <groupId>org.androidtransfuse</groupId>
+        <artifactId>transfuse-examples</artifactId>
+        <version>0.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <dependencies>
         <dependency>
