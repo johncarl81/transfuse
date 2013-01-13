@@ -626,6 +626,8 @@ public class Example{
 
 These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
 
+Annotating a class (as opposed to a method in a class) will configure Transfuse to apply the given aspect to all public methods defined on the class.
+
 <hr/>
 
 #### Configuration
