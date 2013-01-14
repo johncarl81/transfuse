@@ -41,9 +41,9 @@ public class GeneratedRepositoryProxy<T> {
         } catch (ClassNotFoundException e) {
             instance = null;
         } catch (InstantiationException e) {
-            throw new TransfuseRuntimeException("Unable to instantiate generated ParcelRepository", e);
+            throw new TransfuseRuntimeException("Unable to instantiate generated Repository", e);
         } catch (IllegalAccessException e) {
-            throw new TransfuseRuntimeException("Unable to access generated ParcelRepository", e);
+            throw new TransfuseRuntimeException("Unable to access generated Repository", e);
         }
     }
 }

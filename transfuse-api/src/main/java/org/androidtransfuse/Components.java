@@ -23,7 +23,6 @@ import org.androidtransfuse.util.GeneratedRepositoryProxy;
  */
 public final class Components {
 
-    public static final String COMPONENTS_NAME = "Components";
     public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse$Components";
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
 
