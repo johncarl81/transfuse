@@ -20,11 +20,27 @@ import org.aopalliance.intercept.MethodInterceptor;
 import java.lang.annotation.*;
 
 /**
+ * <p>
+ * On a {@code @TransfuseModule} class, specifying a {@code @BindInterceptor} associates an interceptor annotation to
+ * the {@code MethodInterceptor} implementation.</p>
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code @TransfuseModule}
+ *     {@code @BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class)}
+ *     public class Module{}
+ * </pre>
+ * </p>
+ * <p>
+ * Every time a method is annotated with {@code @Asynchronous}, Transfuse will wrap the method ith the
+ * {@code AsynchronousMethodInterceptor} Method Interceptor.
+ * </p>
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BindInterceptor {
+
     Class<? extends Annotation> annotation();
 
     Class<? extends MethodInterceptor> interceptor();

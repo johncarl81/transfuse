@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.listeners;
+package org.androidtransfuse.annotations;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+/**
+ * Declares an instance as having a unique String label.  This is useful when converting to and from a serialized
+ * version of the instance, ie Enum and XML.
+ *
+ * @author John Ericksen
+ */
+public interface Labeled {
 
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@Qualifier
-public @interface Listener {}
+    /**
+     * Returns a unique formatted label.
+     *
+     * @return label
+     */
+    String getLabel();
+}

@@ -16,10 +16,21 @@
 package org.androidtransfuse.util;
 
 /**
+ * General RuntimeException in the Transfuse library.
+ *
  * @author John Ericksen
  */
 public class TransfuseRuntimeException extends RuntimeException {
+
+    public TransfuseRuntimeException(String message) {
+        super(message);
+    }
+
     public TransfuseRuntimeException(String s, Exception e) {
         super(s,e);
+    }
+
+    public TransfuseRuntimeException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

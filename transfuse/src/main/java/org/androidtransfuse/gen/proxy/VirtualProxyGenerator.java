@@ -46,7 +46,7 @@ public class VirtualProxyGenerator {
     private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
     private static final String CHECK_DELEGATE = "checkDelegate";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
-    private static final String VPROXY_EXT = "_VProxy";
+    private static final String VPROXY_EXT = "$VProxy";
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;

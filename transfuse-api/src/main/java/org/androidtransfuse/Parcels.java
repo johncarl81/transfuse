@@ -17,9 +17,10 @@ package org.androidtransfuse;
 
 import android.os.Parcelable;
 import org.androidtransfuse.util.GeneratedRepositoryProxy;
-import org.androidtransfuse.util.ParcelRepository;
 
 /**
+ * Static utility class used to wrap an {@code @Parcel} annotated class with the generated {@code Parcelable} wrapper.
+ *
  * @author John Ericksen
  */
 public final class Parcels {
@@ -28,19 +29,61 @@ public final class Parcels {
     public static final String PARCELS_REPOSITORY_NAME = "Transfuse$Parcels";
     public static final String PARCELS_PACKAGE = "org.androidtransfuse";
 
+    private static final GeneratedRepositoryProxy<ParcelRepository> PROXY =
+            new GeneratedRepositoryProxy<ParcelRepository>(PARCELS_PACKAGE, PARCELS_REPOSITORY_NAME);
+
     private Parcels(){
         // private utility class constructor
     }
 
-    private static final GeneratedRepositoryProxy<ParcelRepository> PROXY =
-            new GeneratedRepositoryProxy<ParcelRepository>(PARCELS_PACKAGE, PARCELS_REPOSITORY_NAME);
-
+    /**
+     * Testing method for replacing the Transfuse$Parcels class with one referenced in the given classloader.
+     *
+     * @param classLoader
+     */
     protected static void update(ClassLoader classLoader){
         PROXY.update(classLoader);
     }
 
+    /**
+     * Wraps the input {@code @Parcel} annotated class with a {@code Parcelable} wrapper.
+     *
+     * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
+     * Transfuse$Parcels class.
+     * @param input Parcel
+     * @return Parcelable wrapper
+     */
     public static Parcelable wrap(Object input) {
-        ParcelRepository parcelRepository = PROXY.get();
-        return parcelRepository == null ? null : parcelRepository.wrap(input);
+        return PROXY.get().wrap(input);
+    }
+
+    /**
+     * Proxy Interface to be implemented by code generation.
+     */
+    public static interface ParcelRepository {
+
+        /**
+         * Wraps the input {@code @Parcel} annotated class with a {@code Parcelable} wrapper.
+         *
+         * @param input Parcel
+         * @return Parcelable wrapper
+         */
+        Parcelable wrap(Object input);
+    }
+
+    /**
+     * Factory class for building a Parcelable from the given input.
+     */
+    public static interface ParcelableFactory<T> {
+
+        String BUILD_PARCELABLE = "buildParcelable";
+
+        /**
+         * Build the corresponding Parcelable class.
+         *
+         * @param input input to wrap with a Parcelable
+         * @return Parcelable instance
+         */
+        Parcelable buildParcelable(T input);
     }
 }

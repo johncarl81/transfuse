@@ -16,11 +16,18 @@
 package org.androidtransfuse.util;
 
 /**
+ * Defines the getter for the contents of a wrapped {@code @Parcel} instance.
+ *
  * @author John Ericksen
  */
 public interface ParcelWrapper<T> {
 
     String GET_PARCEL = "getParcel";
 
+    /**
+     * Return wrapped {@code @Parcel} instance
+     *
+     * @return {@code @Parcel} instance
+     */
     T getParcel();
 }

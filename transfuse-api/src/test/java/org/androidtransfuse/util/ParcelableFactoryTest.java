@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.util;
 
+import org.androidtransfuse.Parcels;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -28,7 +29,7 @@ public class ParcelableFactoryTest {
 
     @Test
     public void testMethodName() throws NoSuchMethodException {
-        Method buildParcelableMethod = ParcelableFactory.class.getMethod(ParcelableFactory.BUILD_PARCELABLE, Object.class);
+        Method buildParcelableMethod = Parcels.ParcelableFactory.class.getMethod(Parcels.ParcelableFactory.BUILD_PARCELABLE, Object.class);
         assertNotNull(buildParcelableMethod);
     }
 }

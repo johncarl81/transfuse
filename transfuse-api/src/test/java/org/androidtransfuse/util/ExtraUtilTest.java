@@ -16,7 +16,6 @@
 package org.androidtransfuse.util;
 
 import android.os.Bundle;
-import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.mockito.PowerMockito;
 
@@ -32,23 +31,17 @@ import static org.mockito.Mockito.when;
  */
 public class ExtraUtilTest {
 
-    private ExtraUtil extraUtil;
     private static final String TEST_NAME = "test extra";
     private static final String TEST_EXTRA_TARGET = "target";
 
-    @Before
-    public void setup() {
-        extraUtil = ExtraUtil.getInstance();
-    }
-
     @Test
     public void testNullExtras() {
-        extraUtil.getExtra(null, TEST_NAME, true);
+        ExtraUtil.getExtra(null, TEST_NAME, true);
     }
 
     @Test(expected = TransfuseInjectionException.class)
     public void testUnexpectedNullExtras() {
-        extraUtil.getExtra(null, TEST_NAME, false);
+        ExtraUtil.getExtra(null, TEST_NAME, false);
     }
 
     @Test
@@ -59,7 +52,7 @@ public class ExtraUtilTest {
         when(mockBundle.containsKey(TEST_NAME)).thenReturn(true);
         when(mockBundle.get(TEST_NAME)).thenReturn(TEST_EXTRA_TARGET);
 
-        Object extraOutput = extraUtil.getExtra(mockBundle, TEST_NAME, false);
+        Object extraOutput = ExtraUtil.getExtra(mockBundle, TEST_NAME, false);
 
         assertEquals(TEST_EXTRA_TARGET, extraOutput);
     }
@@ -71,7 +64,7 @@ public class ExtraUtilTest {
 
         when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
 
-        assertNull(extraUtil.getExtra(mockBundle, TEST_NAME, false));
+        assertNull(ExtraUtil.getExtra(mockBundle, TEST_NAME, false));
     }
 
     @Test
@@ -81,13 +74,11 @@ public class ExtraUtilTest {
 
         when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
 
-        extraUtil.getExtra(mockBundle, TEST_NAME, true);
+        ExtraUtil.getExtra(mockBundle, TEST_NAME, true);
     }
 
     @Test
     public void verifyExtraMethodNames() throws NoSuchMethodException {
-        Method getInstanceMethod = ExtraUtil.class.getMethod(ExtraUtil.GET_INSTANCE);
-        assertNotNull(getInstanceMethod);
         Method getExtraMethod = ExtraUtil.class.getMethod(ExtraUtil.GET_EXTRA, Bundle.class, String.class, boolean.class);
         assertNotNull(getExtraMethod);
     }

@@ -16,6 +16,8 @@
 package org.androidtransfuse.util;
 
 /**
+ * Exception thrown if an error condition arises when dealing with Virtual Proxies.
+ *
  * @author John Ericksen
  */
 public class VirtualProxyException extends RuntimeException {

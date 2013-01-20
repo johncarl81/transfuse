@@ -55,6 +55,7 @@ public class ListenerAnalysis extends ASTAnalysisAdaptor {
         eventListenerAnnotations.add(OnActivityCreated.class);
         eventListenerAnnotations.add(OnDestroyView.class);
         eventListenerAnnotations.add(OnDetach.class);
+        eventListenerAnnotations.add(OnTaskRemoved.class);
 
         this.methodAnnotations = eventListenerAnnotations.build();
     }

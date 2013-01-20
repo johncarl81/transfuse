@@ -21,9 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Application {@code onTerminate()} callback method annotation.  Registers the annotated method
+ * to be called if the {@code onTerminate()} function is called.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnTerminate {
-}
+public @interface OnTerminate {}

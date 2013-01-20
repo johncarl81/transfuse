@@ -18,24 +18,30 @@ package org.androidtransfuse.util;
 import android.os.Bundle;
 
 /**
+ * Utility class for dealing with Android Extras.
+ *
  * @author John Ericksen
  */
 public final class ExtraUtil {
 
     public static final String GET_EXTRA = "getExtra";
-    public static final String GET_INSTANCE = "getInstance";
-
-    private static final ExtraUtil INSTANCE = new ExtraUtil();
-
-    public static ExtraUtil getInstance() {
-        return INSTANCE;
-    }
 
     private ExtraUtil() {
         //singleton constructor
     }
 
-    public Object getExtra(Bundle extras, String name, boolean nullable) {
+    /**
+     * Returns the extras in the given bundle by name.  If no extra is found and the extra is considered
+     * not nullable, this method will throw a TransfuseInjectionException.  If no extra is found and the
+     * extra is considered nullable, this method will, of course, return null.
+     *
+     * @throws TransfuseInjectionException
+     * @param extras bundle
+     * @param name name of the extra to access
+     * @param nullable nullability of the extra
+     * @return extra value
+     */
+    public static Object getExtra(Bundle extras, String name, boolean nullable) {
         Object value = null;
         if (extras != null && extras.containsKey(name)) {
             value = extras.get(name);

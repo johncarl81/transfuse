@@ -16,11 +16,20 @@
 package org.androidtransfuse.util;
 
 /**
+ * Declares the functionality to load a Virtual Proxy.  This class allows Transfuse to break injection loops by delaying
+ * the construction of a key instance.  Transfuse will, once the injection loop is established, construct and load the
+ * 'breaking' instance via the functionality defined in this interface.
+ *
  * @author John Ericksen
  */
 public interface DelayedLoad<T> {
 
     String LOAD_METHOD = "load";
 
+    /**
+     * Loads the given target as a proxy.
+     *
+     * @param target proxy
+     */
     void load(T target);
 }

@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * AOP method interceptor annotation which executes the annotated method within a {@code Handler.post()} call.
+ *
+ * @see org.androidtransfuse.aop.UIThreadMethodInterceptor
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UIThread {
-}
+public @interface UIThread {}

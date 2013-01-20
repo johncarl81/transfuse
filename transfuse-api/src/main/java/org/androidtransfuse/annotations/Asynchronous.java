@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * AOP method interceptor annotation which executes the annotated method on a new Thread.
+ *
+ * @see org.androidtransfuse.aop.AsynchronousMethodInterceptor
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Asynchronous {
-}
+public @interface Asynchronous {}

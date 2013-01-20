@@ -13,12 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.annotations;
+package org.androidtransfuse.listeners;
+
+import javax.inject.Qualifier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * <p>
+ * Defines the annotated method as a Call-Through method.  This means that the corresponding Android Context
+ * method call including parameters and return value is mapped directly to the annotated method.</p>
+ *
  * @author John Ericksen
  */
-public interface LabeledEnum {
-
-    String getLabel();
-}
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface CallThrough {}

@@ -21,9 +21,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Injection qualifier annotation to specify which System Service to inject by name.  This annotation will tell Transfuse which
+ * System Service to lookup via the {@code Context.getSystemService()} method.
+ *
+ * @author John Ericksen
+ */
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface SystemService {
+
+    /**
+     * System Service/Manager name
+     */
     String value();
 }

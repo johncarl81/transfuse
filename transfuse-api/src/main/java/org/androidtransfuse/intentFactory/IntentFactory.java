@@ -22,6 +22,8 @@ import android.content.Intent;
 import javax.inject.Inject;
 
 /**
+ * Factory for building an Android {@code Intent} from an input IntentStrategy.
+ *
  * @author John Ericksen
  */
 public class IntentFactory {
@@ -29,10 +31,24 @@ public class IntentFactory {
     private final Context context;
     private final IntentAdapterFactory intentMockFactory;
 
+    /**
+     * Intent factory class used for testing purposes.
+     */
     protected interface IntentAdapterFactory {
+
+        /**
+         * Builds an Intent using the given current context and target Context class.
+         *
+         * @param context current context
+         * @param clazz target context class
+         * @return Intent
+         */
         Intent buildIntent(Context context, Class<? extends Context> clazz);
     }
 
+    /**
+     * Concrete default implementation of the IntentAdapterFactory.
+     */
     private static final class IntentAdapterFactoryImpl implements IntentAdapterFactory{
         @Override
         public Intent buildIntent(Context context, Class<? extends Context> clazz) {
@@ -56,6 +72,11 @@ public class IntentFactory {
         this.intentMockFactory = intentMockFactory;
     }
 
+    /**
+     * Start the appropriate target Context specified by the input Strategy.
+     *
+     * @param parameters Strategy instance
+     */
     public void start(IntentFactoryStrategy parameters) {
         Intent intent = buildIntent(parameters);
 
@@ -63,6 +84,12 @@ public class IntentFactory {
 
     }
 
+    /**
+     * Build an Intent specified by the given input Strategy.
+     *
+     * @param parameters Strategy instance
+     * @return Intent
+     */
     public Intent buildIntent(IntentFactoryStrategy parameters) {
         android.content.Intent intent = intentMockFactory.buildIntent(context, parameters.getTargetContext());
 
@@ -71,6 +98,12 @@ public class IntentFactory {
         return intent;
     }
 
+    /**
+     * Build a PendingIntent specified by the given input Strategy.
+     *
+     * @param parameters Strategy instance
+     * @return PendingIntent
+     */
     public PendingIntent buildPendingIntent(IntentFactoryStrategy parameters){
         return PendingIntent.getActivity(context, 0, buildIntent(parameters), 0);
     }

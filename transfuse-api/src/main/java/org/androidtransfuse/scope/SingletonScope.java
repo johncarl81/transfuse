@@ -16,6 +16,8 @@
 package org.androidtransfuse.scope;
 
 /**
+ * Utility class for referencing a static singleton scope.
+ *
  * @author John Ericksen
  */
 public final class SingletonScope {
@@ -28,6 +30,11 @@ public final class SingletonScope {
         //private singleton constructor
     }
 
+    /**
+     * Returns the singleton scope instance.
+     *
+     * @return singleton scope
+     */
     public static Scope getInstance() {
         return INSTANCE;
     }

@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
-public enum ReqTouchScreen implements LabeledEnum {
+public enum ReqTouchScreen implements Labeled {
     UNDEFINED("undefined"),
     NOTOUCH("notouch"),
     STYLUS("stylus"),

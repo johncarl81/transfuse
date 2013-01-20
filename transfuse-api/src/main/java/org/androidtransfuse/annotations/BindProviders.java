@@ -21,10 +21,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>
+ * Allows for multiple {@code @BindProvider} declarations to be provided on a {@code @TransfuseModule} class.</p>
+ *
+ * <p>Example:
+ * <pre>
+ *     {@code @TransfuseModule}
+ *     {@literal @}BindProviders({
+ *         {@code @BindProvider(Cat.class, OrangeTabbyProvider.class),}
+ *         {@code @BindProvider(Dog.class, BlackDobermanProvider.class)}
+ *     }
+ *     public class Module{}
+ * </pre>
+ * </p>
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BindProviders {
+
     BindProvider[] value();
 }

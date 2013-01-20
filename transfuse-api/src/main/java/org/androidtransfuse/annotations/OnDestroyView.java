@@ -21,9 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Fragment {@code onDestroyView()} Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the {@code onDestroyView()} Lifecycle Phase.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnDestroyView {
-}
+public @interface OnDestroyView {}

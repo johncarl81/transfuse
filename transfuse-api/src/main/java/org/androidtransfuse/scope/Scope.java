@@ -18,11 +18,21 @@ package org.androidtransfuse.scope;
 import javax.inject.Provider;
 
 /**
+ * Defines a scope in which to lookup instances by type.  When looking up instances, a provider for the given type
+ * must be also provided in case the instance does not exist.
+ *
  * @author John Ericksen
  */
 public interface Scope {
 
     String GET_SCOPED_OBJECT = "getScopedObject";
 
+    /**
+     * Lookup of the given instance by type.
+     * @param clazz type of the instance
+     * @param provider required to build the instance if applicable
+     * @param <T> relating type
+     * @return scoped instance
+     */
     <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
 }

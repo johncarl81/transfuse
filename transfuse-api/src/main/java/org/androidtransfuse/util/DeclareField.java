@@ -21,6 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Defines the annotated type as to be declared as a parameter in the containing injection context class.  This is
+ * meant for Transfuse testing purposes and is used in conjunction with reflection to lookup a parameter to test.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)

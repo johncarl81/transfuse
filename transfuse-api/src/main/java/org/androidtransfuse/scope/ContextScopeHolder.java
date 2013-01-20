@@ -16,11 +16,18 @@
 package org.androidtransfuse.scope;
 
 /**
+ * Interface defining the scope available in an Android Context object.
+ *
  * @author John Ericksen
  */
 public interface ContextScopeHolder {
 
     String GET_SCOPE = "getScope";
 
+    /**
+     * Defines a simple getter for the context scope.
+     *
+     * @return context scope
+     */
     Scope getScope();
 }

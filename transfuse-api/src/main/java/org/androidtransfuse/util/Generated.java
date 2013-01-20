@@ -25,9 +25,18 @@ package org.androidtransfuse.util;
 @java.lang.annotation.Target({java.lang.annotation.ElementType.PACKAGE, java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.ANNOTATION_TYPE, java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.CONSTRUCTOR, java.lang.annotation.ElementType.FIELD, java.lang.annotation.ElementType.LOCAL_VARIABLE, java.lang.annotation.ElementType.PARAMETER})
 public @interface Generated {
 
+    /**
+     * Identifies the Generator used to generate the annotated class.
+     */
     java.lang.String[] value();
 
+    /**
+     * Specifies the date in ISO 8601 format when this class was generated.
+     */
     java.lang.String date() default "";
 
+    /**
+     * Contains any relevant comments.
+     */
     java.lang.String comments() default "";
 }

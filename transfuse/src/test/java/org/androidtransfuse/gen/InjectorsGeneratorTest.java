@@ -16,10 +16,10 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.Injectors;
 import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.util.InjectorRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,7 +78,7 @@ public class InjectorsGeneratorTest {
 
     @Test
     public void test() throws Exception {
-        InjectorRepository injector = (InjectorRepository) injectorsClass.newInstance();
+        Injectors.InjectorRepository injector = (Injectors.InjectorRepository) injectorsClass.newInstance();
         assertNotNull(injectorsClass.getMethod("get", Class.class).invoke(injector, Injector.class));
     }
 }

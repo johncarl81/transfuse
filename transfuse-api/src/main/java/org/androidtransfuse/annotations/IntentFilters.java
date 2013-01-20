@@ -21,10 +21,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Allows for multiple {@code @IntentFilter}s to be defined on a class.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IntentFilters {
+
     IntentFilter[] value();
 }

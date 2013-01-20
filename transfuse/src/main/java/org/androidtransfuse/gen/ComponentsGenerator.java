@@ -21,7 +21,6 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
-import org.androidtransfuse.util.ComponentsRepository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -51,7 +50,7 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
         try {
             JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            injectorRepositoryClass._implements(ComponentsRepository.class);
+            injectorRepositoryClass._implements(Components.ComponentsRepository.class);
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);

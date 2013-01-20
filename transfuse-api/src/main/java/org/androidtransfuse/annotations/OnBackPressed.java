@@ -21,9 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Activity {@code onBackPressed()} callback method annotation.  Registers the annotated method
+ * to be called if the {@code onBackPressed()} function is called.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnBackPressed {
-}
+public @interface OnBackPressed {}

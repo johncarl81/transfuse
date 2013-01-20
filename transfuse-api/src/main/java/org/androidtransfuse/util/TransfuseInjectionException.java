@@ -16,6 +16,8 @@
 package org.androidtransfuse.util;
 
 /**
+ * RuntimeException thrown in correspondence to injection code.
+ *
  * @author John Ericksen
  */
 public class TransfuseInjectionException extends RuntimeException {

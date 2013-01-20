@@ -16,9 +16,12 @@
 package org.androidtransfuse.annotations;
 
 /**
+ * Constants representing the android:exported property on the Activity Manifest tag.
+ *
  * @author John Ericksen
  */
 public enum Exported {
+
     UNSPECIFIED(null),
     TRUE(true),
     FALSE(false);

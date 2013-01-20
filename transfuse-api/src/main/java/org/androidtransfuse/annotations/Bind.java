@@ -21,6 +21,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>
+ * On a {@code @TransfuseModule} class, defining a binding with {@code @Bind} defines a relationship between two related classes
+ * in which for each given type the class bound to will be used during injection.</p>
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code @TransfuseModule}
+ *     {@code @Bind(type=Cat.class, to=OrangeTabby.class)}
+ *     public class Module{}
+ * </pre>
+ * </p>
+ * <p>
+ * In each instance where a {@code Cat} is injected, an instance of the {@code OrangeTabby} class will be used.
+ * </p>
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)

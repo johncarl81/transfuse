@@ -19,10 +19,22 @@ import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Injection qualifier annotation specifying a preference to be injected by name.
+ *
+ * @author John Ericksen
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface Preference {
+
+    /**
+     * Preference name
+     */
     String value();
 
+    /**
+     * Default value to be injected if one does not exist (if preference is null)
+     */
     String defaultValue();
 }

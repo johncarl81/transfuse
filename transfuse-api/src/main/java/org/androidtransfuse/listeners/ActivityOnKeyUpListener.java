@@ -15,11 +15,19 @@
  */
 package org.androidtransfuse.listeners;
 
+import android.view.KeyEvent;
+
 /**
+ * <p>
+ * Defines the Activity onKeyUp() Call-Through method.  Each defined method represents a method in the corresponding
+ * Activity class.</p>
+ *
+ * <p>Only one Call-Through component per type may be defined per injection graph.</p>
+ *
  * @author John Ericksen
  */
 public interface ActivityOnKeyUpListener {
 
-    @Listener
-    boolean onKeyUp(int keyCode, android.view.KeyEvent event);
+    @CallThrough
+    boolean onKeyUp(int keyCode, KeyEvent event);
 }

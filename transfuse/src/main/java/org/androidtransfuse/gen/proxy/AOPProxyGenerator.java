@@ -41,7 +41,7 @@ public class AOPProxyGenerator {
 
     private static final String SUPER_REF = "super";
     private static final String CLASS_GET_METHOD = "getMethod";
-    private static final String AOPPROXY_EXT = "_AOPProxy";
+    private static final String AOPPROXY_EXT = "$AOPProxy";
     private static final String METHOD_INTERCEPTOR_INVOKE = "invoke";
 
     private final AOPProxyCache cache;

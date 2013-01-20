@@ -15,27 +15,51 @@
  */
 package org.androidtransfuse;
 
-import org.androidtransfuse.util.ComponentsRepository;
 import org.androidtransfuse.util.GeneratedRepositoryProxy;
 
 /**
+ * Static utility class which maps Transfuse Components to the generated Android Components.
+ *
  * @author John Ericksen
  */
 public final class Components {
 
-    public static final String COMPONENTS_NAME = "Components";
     public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse$Components";
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
+
+    private static final GeneratedRepositoryProxy<ComponentsRepository> PROXY =
+            new GeneratedRepositoryProxy<ComponentsRepository>(COMPONENTS_PACKAGE, COMPONENTS_REPOSITORY_NAME);
 
     private Components(){
         // private utility class constructor
     }
 
-    private static final GeneratedRepositoryProxy<ComponentsRepository> PROXY =
-            new GeneratedRepositoryProxy<ComponentsRepository>(COMPONENTS_PACKAGE, COMPONENTS_REPOSITORY_NAME);
-
+    /**
+     * Provides the corresponding generated Android Component class for the input Transfuse Component class.
+     *
+     * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
+     * Transfuse$Components class.
+     * @param type Transfuse Component class
+     * @param <T>
+     * @return class Android Component class
+     */
     public static<T> Class<T> get(Class<?> type) {
-        ComponentsRepository componentsRepository = PROXY.get();
-        return componentsRepository == null ? null : (Class<T>) componentsRepository.get(type);
+        return (Class<T>) PROXY.get().get(type);
+    }
+
+    /**
+     * Proxy Interface to be implemented by code generation.
+     */
+    public static interface ComponentsRepository {
+
+        /**
+         * Provides the corresponding generated Android Component class for the input Transfuse Component class.
+         *
+         * Transfuse$Components class.
+         * @param type Transfuse Component class
+         * @param <T>
+         * @return class Android Component class
+         */
+        <T> Class<T> get(Class<?> type);
     }
 }
