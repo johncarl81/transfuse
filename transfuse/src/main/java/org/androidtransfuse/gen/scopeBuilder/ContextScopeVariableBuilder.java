@@ -20,7 +20,6 @@ import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
@@ -32,7 +31,6 @@ import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.scope.Scope;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -61,7 +59,8 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
         //build provider
-        JExpression provider = buildProvider(injectionNode);
+        JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
+        JExpression provider = JExpr._new(providerClass);
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
@@ -74,20 +73,5 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
 
         return typedExpressionFactory.build(injectionNode.getASTType(), expression);
-    }
-
-    private JExpression buildProvider(InjectionNode injectionNode) {
-
-        InjectionNode nonScopedInjectionNode = new InjectionNode(injectionNode.getUsageType(), injectionNode.getASTType());
-
-        for (Map.Entry<Class, Object> aspectEntry : injectionNode.getAspects().entrySet()) {
-            nonScopedInjectionNode.addAspect(aspectEntry.getKey(), aspectEntry.getValue());
-        }
-
-        nonScopedInjectionNode.getAspects().remove(ScopeAspect.class);
-
-        JDefinedClass providerClass = providerGenerator.generateProvider(nonScopedInjectionNode);
-
-        return JExpr._new(providerClass);
     }
 }

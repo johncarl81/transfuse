@@ -17,6 +17,7 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -32,8 +33,10 @@ import java.util.Map;
  */
 public class ProviderGenerator {
 
+    private static final String SCOPED_EXTENSION = "_Provider";
+    private static final String UNSCOPED_EXTENSION = "_UnscopedProvider";
+
     private static final String GET_METHOD = "get";
-    private static final String PROVIDER_EXT = "_Provider";
 
     private final ProviderCache cache;
     private final JCodeModel codeModel;
@@ -42,11 +45,17 @@ public class ProviderGenerator {
 
     @Singleton
     public static class ProviderCache {
-        private final Map<String, JDefinedClass> providerClasses = new HashMap<String, JDefinedClass>();
+        private final Map<String, Map<String, JDefinedClass>> providerExtendedClasses = new HashMap<String, Map<String, JDefinedClass>>();
 
-        public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator) {
+        public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator, String extension) {
+
+            if(!providerExtendedClasses.containsKey(extension)){
+                providerExtendedClasses.put(extension, new HashMap<String, JDefinedClass>());
+            }
+            Map<String, JDefinedClass> providerClasses = providerExtendedClasses.get(extension);
+
             if (!providerClasses.containsKey(injectionNode.getClassName())) {
-                JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode);
+                JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode, extension);
                 providerClasses.put(injectionNode.getClassName(), providerClass);
             }
 
@@ -62,20 +71,37 @@ public class ProviderGenerator {
         this.generationUtil = generationUtil;
     }
 
-    public JDefinedClass generateProvider(InjectionNode injectionNode) {
-        return cache.getCached(injectionNode, this);
+    public JDefinedClass generateProvider(InjectionNode injectionNode, boolean removeScope) {
+
+        if(removeScope){
+            return cache.getCached(unscoped(injectionNode), this, UNSCOPED_EXTENSION);
+
+        }
+        else{
+            return cache.getCached(injectionNode, this, SCOPED_EXTENSION);
+        }
     }
 
-    protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode) {
+    private InjectionNode unscoped(InjectionNode input){
+        InjectionNode nonScopedInjectionNode = new InjectionNode(input.getUsageType(), input.getASTType());
+
+        for (Map.Entry<Class, Object> aspectEntry : input.getAspects().entrySet()) {
+            nonScopedInjectionNode.addAspect(aspectEntry.getKey(), aspectEntry.getValue());
+        }
+
+        nonScopedInjectionNode.getAspects().remove(ScopeAspect.class);
+        return nonScopedInjectionNode;
+    }
+
+    protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode, String extension) {
 
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
-            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(PROVIDER_EXT));
+            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(extension));
 
             providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 
-            //todo:possible context variable injections?
             //get() method
             JMethod getMethod = providerClass.method(JMod.PUBLIC, injectionNodeClassRef, GET_METHOD);
             getMethod.annotate(Override.class);
