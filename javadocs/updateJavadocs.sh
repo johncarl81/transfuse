@@ -1,6 +1,4 @@
 #!/bin/bash
-#Grab transfuse
-git clone git@github.com:johncarl81/transfuse.git
 
 # Remove old javadocs
 git rm -r api
@@ -21,8 +19,8 @@ mkdir api
 mkdir main
 
 # Move javadocs into place
-cp -r transfuse/transfuse/target/apidocs/* main/
-cp -r transfuse/transfuse-api/target/apidocs/* api/
+cp -r transfuse/transfuse/target/site/apidocs/* main/
+cp -r transfuse/transfuse-api/target/site/apidocs/* api/
 
 # Re-add javadocs
 git add main
