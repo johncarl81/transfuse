@@ -1,11 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="c4433" href="./CachedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" alt="" coords="15,214,203,239"/>
-<area shape="rect" id="c4434" href="./VariableExpressionBuilder.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" alt="" coords="236,11,409,53"/>
-<area shape="rect" id="c4438" href="./VariableBuilderExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableBuilderExpressionDecorator" alt="" coords="71,118,300,143"/>
-<area shape="rect" id="c4439" href="./VariableExpressionBuilderDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" alt="" coords="345,118,575,143"/>
-<area shape="rect" id="c4435" href="./ScopedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" alt="" coords="248,214,435,239"/>
-<area shape="rect" id="c4436" href="./ExpressionDecoratorFactory.html" title="org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory" alt="" coords="455,19,641,45"/>
-<area shape="rect" id="c4437" href="./ObservesExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ObservesExpressionDecorator" alt="" coords="479,214,678,239"/>
-<area shape="rect" id="c4440" href="./VirtualProxyExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" alt="" coords="723,214,936,239"/>
-<area shape="rect" id="c4441" href="./VariableExpressionBuilderFactory.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory" alt="" coords="686,11,903,53"/>
+<area shape="rect" id="c6414" href="./CachedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" alt="" coords="79,214,267,239"/>
+<area shape="rect" id="c6415" href="./VariableExpressionBuilder.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" alt="" coords="181,11,355,53"/>
+<area shape="rect" id="c6418" href="./VariableBuilderExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableBuilderExpressionDecorator" alt="" coords="16,118,245,143"/>
+<area shape="rect" id="c6419" href="./VariableExpressionBuilderDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" alt="" coords="291,118,520,143"/>
+<area shape="rect" id="c6416" href="./ScopedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" alt="" coords="312,214,499,239"/>
+<area shape="rect" id="c6417" href="./ExpressionDecoratorFactory.html" title="org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory" alt="" coords="400,19,587,45"/>
+<area shape="rect" id="c6420" href="./VirtualProxyExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" alt="" coords="544,214,757,239"/>
+<area shape="rect" id="c6421" href="./VariableExpressionBuilderFactory.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory" alt="" coords="631,11,849,53"/>
 </map>

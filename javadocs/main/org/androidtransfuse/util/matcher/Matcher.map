@@ -1,4 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c57597" href="./ASTTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcher" alt="" coords="16,118,139,143"/>
-<area shape="rect" id="c57598" href="./Matcher.html" title="org.androidtransfuse.util.matcher.Matcher" alt="" coords="31,11,123,53"/>
+<area shape="rect" id="c83963" href="./MatchAny.html" title="org.androidtransfuse.util.matcher.MatchAny" alt="" coords="16,118,96,143"/>
+<area shape="rect" id="c83965" href="./InjectionSignatureMatcher.html" title="org.androidtransfuse.util.matcher.InjectionSignatureMatcher" alt="" coords="141,118,313,143"/>
+<area shape="rect" id="c83967" href="./ASTTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcher" alt="" coords="357,118,480,143"/>
+<area shape="rect" id="c83968" href="./Matcher.html" title="org.androidtransfuse.util.matcher.Matcher" alt="" coords="373,11,465,53"/>
+<area shape="rect" id="c83969" href="./ASTAnnotationTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTAnnotationTypeMatcher" alt="" coords="525,118,710,143"/>
+<area shape="rect" id="c83970" href="./ASTAnnotationMatcher.html" title="org.androidtransfuse.util.matcher.ASTAnnotationMatcher" alt="" coords="754,118,910,143"/>
 </map>

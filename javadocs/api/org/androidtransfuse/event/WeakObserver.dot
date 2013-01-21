@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.event.EventObserver<T>
-	c9656 [label=<<table title="org.androidtransfuse.event.EventObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventObserver.html">
+	c12711 [label=<<table title="org.androidtransfuse.event.EventObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventObserver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> EventObserver&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.event.WeakObserver<E, T>
-	c9658 [label=<<table title="org.androidtransfuse.event.WeakObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WeakObserver.html">
+	c12713 [label=<<table title="org.androidtransfuse.event.WeakObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./WeakObserver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> WeakObserver&lt;E, T&gt; </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.event.WeakObserver<E, T> implements org.androidtransfuse.event.EventObserver<T>
-	c9656:p -> c9658:p [dir=back,arrowtail=empty,style=dashed];
+	c12711:p -> c12713:p [dir=back,arrowtail=empty,style=dashed];
 }
 

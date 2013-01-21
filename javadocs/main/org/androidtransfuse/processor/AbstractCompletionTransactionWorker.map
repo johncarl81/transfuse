@@ -1,0 +1,15 @@
+<map id="G" name="G">
+<area shape="rect" id="c96186" href="../analysis/module/ModuleTransactionWorker.html" title="org.androidtransfuse.analysis.module.ModuleTransactionWorker" alt="" coords="16,214,189,239"/>
+<area shape="rect" id="c96190" href="../analysis/module/ImplementedByTransactionWorker.html" title="org.androidtransfuse.analysis.module.ImplementedByTransactionWorker" alt="" coords="235,214,456,239"/>
+<area shape="rect" id="c96267" href="./ParcelsTransactionWorker.html" title="org.androidtransfuse.processor.ParcelsTransactionWorker" alt="" coords="501,214,675,239"/>
+<area shape="rect" id="c96272" href="./GenerateModuleProcessor.html" title="org.androidtransfuse.processor.GenerateModuleProcessor" alt="" coords="719,214,894,239"/>
+<area shape="rect" id="c96294" href="./AbstractCompletionTransactionWorker.html" title="org.androidtransfuse.processor.AbstractCompletionTransactionWorker" alt="" coords="1163,118,1453,143"/>
+<area shape="rect" id="c96295" href="./ParcelTransactionWorker.html" title="org.androidtransfuse.processor.ParcelTransactionWorker" alt="" coords="939,214,1107,239"/>
+<area shape="rect" id="c96298" href="./CodeGenerationScopedTransactionWorker.html" title="org.androidtransfuse.processor.CodeGenerationScopedTransactionWorker" alt="" coords="1152,214,1464,239"/>
+<area shape="rect" id="c96306" href="./InjectorsTransactionWorker.html" title="org.androidtransfuse.processor.InjectorsTransactionWorker" alt="" coords="1509,214,1691,239"/>
+<area shape="rect" id="c96310" href="./InjectorTransactionWorker.html" title="org.androidtransfuse.processor.InjectorTransactionWorker" alt="" coords="1736,214,1909,239"/>
+<area shape="rect" id="c96322" href="../gen/AnalysisGeneration.html" title="org.androidtransfuse.gen.AnalysisGeneration" alt="" coords="1955,214,2088,239"/>
+<area shape="rect" id="c96329" href="../gen/ComponentsGenerator.html" title="org.androidtransfuse.gen.ComponentsGenerator" alt="" coords="2133,214,2285,239"/>
+<area shape="rect" id="c96404" href="../gen/invocationBuilder/PackageHelperGenerator.html" title="org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator" alt="" coords="2330,214,2497,239"/>
+<area shape="rect" id="c96297" href="./TransactionWorker.html" title="org.androidtransfuse.processor.TransactionWorker" alt="" coords="1221,11,1395,53"/>
+</map>

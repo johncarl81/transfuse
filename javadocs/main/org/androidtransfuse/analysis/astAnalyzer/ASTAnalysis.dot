@@ -10,35 +10,35 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer
-	c35159 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionAnalyzer.html">
+	c48914 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionAnalyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c35163 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTAnalysis.html">
+	c48918 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer
-	c35170 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegistrationAnalyzer.html">
+	c48925 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegistrationAnalyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RegistrationAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c35172 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
+	c48927 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTAnalysisAdaptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c35163:p -> c35159:p [dir=back,arrowtail=empty,style=dashed];
+	c48918:p -> c48914:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c35163:p -> c35170:p [dir=back,arrowtail=empty,style=dashed];
+	c48918:p -> c48925:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c35163:p -> c35172:p [dir=back,arrowtail=empty,style=dashed];
+	c48918:p -> c48927:p [dir=back,arrowtail=empty,style=dashed];
 }
 

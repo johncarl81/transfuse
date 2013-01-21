@@ -10,63 +10,69 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.util.DeclareField
-	c361 [label=<<table title="org.androidtransfuse.util.DeclareField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeclareField.html">
+	c527 [label=<<table title="org.androidtransfuse.util.DeclareField" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeclareField.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> DeclareField </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.Generated
-	c362 [label=<<table title="org.androidtransfuse.util.Generated" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Generated.html">
+	c528 [label=<<table title="org.androidtransfuse.util.Generated" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Generated.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Generated </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.InjectionUtil
-	c363 [label=<<table title="org.androidtransfuse.util.InjectionUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionUtil.html">
+	c529 [label=<<table title="org.androidtransfuse.util.InjectionUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionUtil </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.ExtraUtil
-	c364 [label=<<table title="org.androidtransfuse.util.ExtraUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraUtil.html">
+	c530 [label=<<table title="org.androidtransfuse.util.ExtraUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraUtil.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExtraUtil </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.util.ParcelableWrapper<T>
-	c365 [label=<<table title="org.androidtransfuse.util.ParcelableWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableWrapper.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> ParcelableWrapper&lt;T&gt; </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.AccessibleElementPrivilegedAction<T, E extends java.lang.reflect.AccessibleObject>
-	c366 [label=<<table title="org.androidtransfuse.util.AccessibleElementPrivilegedAction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AccessibleElementPrivilegedAction.html">
+	c531 [label=<<table title="org.androidtransfuse.util.AccessibleElementPrivilegedAction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AccessibleElementPrivilegedAction.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AccessibleElementPrivilegedAction&lt;T, E extends AccessibleObject&gt; </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.TransfuseInjectionException
-	c367 [label=<<table title="org.androidtransfuse.util.TransfuseInjectionException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseInjectionException.html">
+	c532 [label=<<table title="org.androidtransfuse.util.TransfuseInjectionException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseInjectionException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseInjectionException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.VirtualProxyException
-	c368 [label=<<table title="org.androidtransfuse.util.VirtualProxyException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyException.html">
+	c533 [label=<<table title="org.androidtransfuse.util.VirtualProxyException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> VirtualProxyException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.ParcelWrapper<T>
+	c534 [label=<<table title="org.androidtransfuse.util.ParcelWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelWrapper.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> ParcelWrapper&lt;T&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.GeneratedRepositoryProxy<T>
+	c535 [label=<<table title="org.androidtransfuse.util.GeneratedRepositoryProxy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratedRepositoryProxy.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> GeneratedRepositoryProxy&lt;T&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.DelayedLoad<T>
-	c369 [label=<<table title="org.androidtransfuse.util.DelayedLoad" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DelayedLoad.html">
+	c536 [label=<<table title="org.androidtransfuse.util.DelayedLoad" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DelayedLoad.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DelayedLoad&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.TransfuseRuntimeException
-	c370 [label=<<table title="org.androidtransfuse.util.TransfuseRuntimeException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseRuntimeException.html">
+	c537 [label=<<table title="org.androidtransfuse.util.TransfuseRuntimeException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseRuntimeException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseRuntimeException </td></tr>
 		</table></td></tr>

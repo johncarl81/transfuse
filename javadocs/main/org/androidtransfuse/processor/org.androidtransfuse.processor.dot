@@ -9,71 +9,325 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.processor.TransfuseAssembler
-	c3795 [label=<<table title="org.androidtransfuse.processor.TransfuseAssembler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAssembler.html">
+	// org.androidtransfuse.processor.ComponentsTransactionFactory
+	c5574 [label=<<table title="org.androidtransfuse.processor.ComponentsTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentsTransactionFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> TransfuseAssembler </td></tr>
+<tr><td align="center" balign="center"> ComponentsTransactionFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.ComponentProcessor
-	c3796 [label=<<table title="org.androidtransfuse.processor.ComponentProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentProcessor.html">
+	// org.androidtransfuse.processor.ParcelsTransactionWorker
+	c5575 [label=<<table title="org.androidtransfuse.processor.ParcelsTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelsTransactionWorker.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ComponentProcessor </td></tr>
+<tr><td align="center" balign="center"> ParcelsTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory
+	c5576 [label=<<table title="org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGenerationTransactionProcessorBuilderFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> AnalysisGenerationTransactionProcessorBuilderFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ImplementedByProcessorBuilder
+	c5577 [label=<<table title="org.androidtransfuse.processor.ImplementedByProcessorBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ImplementedByProcessorBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ImplementedByProcessorBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorComposite<V, R>
+	c5578 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorComposite" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorComposite.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionProcessorComposite&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.GeneratorRepository
+	c5579 [label=<<table title="org.androidtransfuse.processor.GeneratorRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorRepository.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> GeneratorRepository </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.GenerateModuleProcessor
+	c5580 [label=<<table title="org.androidtransfuse.processor.GenerateModuleProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GenerateModuleProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> GenerateModuleProcessor </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorChain
+	c5581 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorChain" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorChain.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionProcessorChain </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ScopedTransactionWorker<V, R>
+	c5582 [label=<<table title="org.androidtransfuse.processor.ScopedTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopedTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ScopedTransactionWorker&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ParcelsTransactionFactory
+	c5583 [label=<<table title="org.androidtransfuse.processor.ParcelsTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelsTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ParcelsTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.InjectorsTransactionFactory
+	c5584 [label=<<table title="org.androidtransfuse.processor.InjectorsTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorsTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorsTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ModuleProcessorBuilder
+	c5585 [label=<<table title="org.androidtransfuse.processor.ModuleProcessorBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleProcessorBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ModuleProcessorBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorBuilder<T, R>
+	c5586 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TransactionProcessorBuilder&lt;T, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.GeneratorRepositoryProvider
+	c5587 [label=<<table title="org.androidtransfuse.processor.GeneratorRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorRepositoryProvider.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> GeneratorRepositoryProvider </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ParcelProcessor
+	c5588 [label=<<table title="org.androidtransfuse.processor.ParcelProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ParcelProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeableTagConverter
-	c3797 [label=<<table title="org.androidtransfuse.processor.MergeableTagConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTagConverter.html">
+	c5589 [label=<<table title="org.androidtransfuse.processor.MergeableTagConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTagConverter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeableTagConverter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.Merger
-	c3798 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merger.html">
+	c5590 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merger.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Merger </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergerException
-	c3799 [label=<<table title="org.androidtransfuse.processor.MergerException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergerException.html">
+	c5591 [label=<<table title="org.androidtransfuse.processor.MergerException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergerException.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergerException </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ScopedTransactionFactory
+	c5592 [label=<<table title="org.androidtransfuse.processor.ScopedTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopedTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ScopedTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.InjectorProcessor
+	c5593 [label=<<table title="org.androidtransfuse.processor.InjectorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorProcessor </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.ManifestManager
-	c3800 [label=<<table title="org.androidtransfuse.processor.ManifestManager" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestManager.html">
+	c5594 [label=<<table title="org.androidtransfuse.processor.ManifestManager" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestManager.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ManifestManager </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeCollection
-	c3801 [label=<<table title="org.androidtransfuse.processor.MergeCollection" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeCollection.html">
+	c5595 [label=<<table title="org.androidtransfuse.processor.MergeCollection" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeCollection.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MergeCollection </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.InjectorTransactionFactory
+	c5596 [label=<<table title="org.androidtransfuse.processor.InjectorTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ReloadableASTElementFactory
+	c5597 [label=<<table title="org.androidtransfuse.processor.ReloadableASTElementFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReloadableASTElementFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ReloadableASTElementFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598 [label=<<table title="org.androidtransfuse.processor.TransactionProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TransactionProcessor&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ParcelTransactionFactory
+	c5599 [label=<<table title="org.androidtransfuse.processor.ParcelTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ParcelTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600 [label=<<table title="org.androidtransfuse.processor.TransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TransactionFactory&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.TransfuseProcessor
-	c3802 [label=<<table title="org.androidtransfuse.processor.TransfuseProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseProcessor.html">
+	c5601 [label=<<table title="org.androidtransfuse.processor.TransfuseProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.processor.TransfuseInjector
-	c3803 [label=<<table title="org.androidtransfuse.processor.TransfuseInjector" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseInjector.html">
+	// org.androidtransfuse.processor.AbstractCompletionTransactionWorker<V, R>
+	c5602 [label=<<table title="org.androidtransfuse.processor.AbstractCompletionTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractCompletionTransactionWorker.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> TransfuseInjector </td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractCompletionTransactionWorker&lt;V, R&gt; </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.ParcelTransactionWorker
+	c5603 [label=<<table title="org.androidtransfuse.processor.ParcelTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ParcelTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilder
+	c5604 [label=<<table title="org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGenerationTransactionProcessorBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> AnalysisGenerationTransactionProcessorBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionWorker<V, R>
+	c5605 [label=<<table title="org.androidtransfuse.processor.TransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TransactionWorker&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.CodeGenerationScopedTransactionWorker<V, R>
+	c5606 [label=<<table title="org.androidtransfuse.processor.CodeGenerationScopedTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CodeGenerationScopedTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> CodeGenerationScopedTransactionWorker&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.PackageHelperTransactionFactory
+	c5607 [label=<<table title="org.androidtransfuse.processor.PackageHelperTransactionFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PackageHelperTransactionFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> PackageHelperTransactionFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorPredefined
+	c5608 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorPredefined" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorPredefined.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionProcessorPredefined </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.Merge
-	c3804 [label=<<table title="org.androidtransfuse.processor.Merge" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merge.html">
+	c5609 [label=<<table title="org.androidtransfuse.processor.Merge" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Merge.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Merge </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionRuntimeException
+	c5610 [label=<<table title="org.androidtransfuse.processor.TransactionRuntimeException" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionRuntimeException.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionRuntimeException </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.WorkerProvider
+	c5611 [label=<<table title="org.androidtransfuse.processor.WorkerProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WorkerProvider.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> WorkerProvider </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorPool<V, R>
+	c5612 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorPool" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorPool.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionProcessorPool&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.processor.MergeableTags
-	c3805 [label=<<table title="org.androidtransfuse.processor.MergeableTags" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTags.html">
+	c5613 [label=<<table title="org.androidtransfuse.processor.MergeableTags" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MergeableTags.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MergeableTags </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.InjectorsTransactionWorker
+	c5614 [label=<<table title="org.androidtransfuse.processor.InjectorsTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorsTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorsTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.CodeGenerationWrapperProvider<V, R>
+	c5615 [label=<<table title="org.androidtransfuse.processor.CodeGenerationWrapperProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CodeGenerationWrapperProvider.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> CodeGenerationWrapperProvider&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.TransactionProcessorChannel<V, R, R2>
+	c5616 [label=<<table title="org.androidtransfuse.processor.TransactionProcessorChannel" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransactionProcessorChannel.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransactionProcessorChannel&lt;V, R, R2&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.Transaction<V, R>
+	c5617 [label=<<table title="org.androidtransfuse.processor.Transaction" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Transaction.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Transaction&lt;V, R&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.processor.InjectorTransactionWorker
+	c5618 [label=<<table title="org.androidtransfuse.processor.InjectorTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.processor.ComponentsTransactionFactory implements org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600:p -> c5574:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ParcelsTransactionWorker extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<java.util.Map<javax.inject.Provider<org.androidtransfuse.adapter.ASTType>, com.sun.codemodel.JDefinedClass>, java.lang.Void>
+	c5602:p -> c5575:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.processor.ImplementedByProcessorBuilder implements org.androidtransfuse.processor.TransactionProcessorBuilder<T, R>
+	c5586:p -> c5577:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.TransactionProcessorComposite<V, R> implements org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598:p -> c5578:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.GenerateModuleProcessor extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<java.lang.Void, java.lang.Void>
+	c5602:p -> c5580:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.processor.TransactionProcessorChain implements org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598:p -> c5581:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ScopedTransactionWorker<V, R> implements org.androidtransfuse.processor.TransactionWorker<V, R>
+	c5605:p -> c5582:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ParcelsTransactionFactory implements org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600:p -> c5583:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.InjectorsTransactionFactory implements org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600:p -> c5584:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ModuleProcessorBuilder implements org.androidtransfuse.processor.TransactionProcessorBuilder<T, R>
+	c5586:p -> c5585:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.InjectorProcessor implements org.androidtransfuse.processor.TransactionProcessorBuilder<T, R>
+	c5586:p -> c5593:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.InjectorTransactionFactory implements org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600:p -> c5596:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ParcelTransactionFactory implements org.androidtransfuse.processor.TransactionFactory<V, R>
+	c5600:p -> c5599:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.AbstractCompletionTransactionWorker<V, R> implements org.androidtransfuse.processor.TransactionWorker<V, R>
+	c5605:p -> c5602:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.ParcelTransactionWorker extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<javax.inject.Provider<org.androidtransfuse.adapter.ASTType>, com.sun.codemodel.JDefinedClass>
+	c5602:p -> c5603:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilder implements org.androidtransfuse.processor.TransactionProcessorBuilder<T, R>
+	c5586:p -> c5604:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.CodeGenerationScopedTransactionWorker<V, R> extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<V, R>
+	c5602:p -> c5606:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.processor.TransactionProcessorPredefined implements org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598:p -> c5608:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.TransactionProcessorPool<V, R> implements org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598:p -> c5612:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.InjectorsTransactionWorker extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<java.util.Map<javax.inject.Provider<org.androidtransfuse.adapter.ASTType>, com.sun.codemodel.JDefinedClass>, java.lang.Void>
+	c5602:p -> c5614:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.processor.TransactionProcessorChannel<V, R, R2> implements org.androidtransfuse.processor.TransactionProcessor<V, R>
+	c5598:p -> c5616:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.processor.InjectorTransactionWorker extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<javax.inject.Provider<org.androidtransfuse.adapter.ASTType>, com.sun.codemodel.JDefinedClass>
+	c5602:p -> c5618:p [dir=back,arrowtail=empty];
 }
 

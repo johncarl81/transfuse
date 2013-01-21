@@ -1,0 +1,19 @@
+<map id="G" name="G">
+<area shape="rect" id="c3993" href="./ASTElementConverterFactory.html" title="org.androidtransfuse.adapter.element.ASTElementConverterFactory" alt="" coords="15,17,211,42"/>
+<area shape="rect" id="c3994" href="./ElementConverterFactory.html" title="org.androidtransfuse.adapter.element.ElementConverterFactory" alt="" coords="255,17,425,42"/>
+<area shape="rect" id="c3995" href="./ASTElementType.html" title="org.androidtransfuse.adapter.element.ASTElementType" alt="" coords="121,113,245,138"/>
+<area shape="rect" id="c3996" href="./ASTElementMethod.html" title="org.androidtransfuse.adapter.element.ASTElementMethod" alt="" coords="289,113,426,138"/>
+<area shape="rect" id="c3997" href="./ASTTypeBuilderVisitor.html" title="org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor" alt="" coords="639,17,793,42"/>
+<area shape="rect" id="c3998" href="./LazyElementParameterBuilder.html" title="org.androidtransfuse.adapter.element.LazyElementParameterBuilder" alt="" coords="837,17,1035,42"/>
+<area shape="rect" id="c3999" href="./AnnotationValueConverterVisitor.html" title="org.androidtransfuse.adapter.element.AnnotationValueConverterVisitor" alt="" coords="1079,17,1313,42"/>
+<area shape="rect" id="c4000" href="./ASTElementFactory.html" title="org.androidtransfuse.adapter.element.ASTElementFactory" alt="" coords="1357,17,1496,42"/>
+<area shape="rect" id="c4001" href="./ASTElementBase.html" title="org.androidtransfuse.adapter.element.ASTElementBase" alt="" coords="469,17,595,42"/>
+<area shape="rect" id="c4002" href="./ASTElementField.html" title="org.androidtransfuse.adapter.element.ASTElementField" alt="" coords="471,113,593,138"/>
+<area shape="rect" id="c4007" href="./ASTElementParameter.html" title="org.androidtransfuse.adapter.element.ASTElementParameter" alt="" coords="639,113,793,138"/>
+<area shape="rect" id="c4009" href="./ASTElementConstructor.html" title="org.androidtransfuse.adapter.element.ASTElementConstructor" alt="" coords="839,113,1001,138"/>
+<area shape="rect" id="c4003" href="./ASTTypeElementConverter.html" title="org.androidtransfuse.adapter.element.ASTTypeElementConverter" alt="" coords="1541,17,1747,42"/>
+<area shape="rect" id="c4004" href="./ASTTypeLazyLoader.html" title="org.androidtransfuse.adapter.element.ASTTypeLazyLoader" alt="" coords="1792,17,2061,42"/>
+<area shape="rect" id="c4005" href="./ElementASTTypeLazyLoader.html" title="org.androidtransfuse.adapter.element.ElementASTTypeLazyLoader" alt="" coords="1831,113,2022,138"/>
+<area shape="rect" id="c4006" href="./ASTElementConverter.html" title="org.androidtransfuse.adapter.element.ASTElementConverter" alt="" coords="2107,17,2283,42"/>
+<area shape="rect" id="c4008" href="./ASTElementAnnotation.html" title="org.androidtransfuse.adapter.element.ASTElementAnnotation" alt="" coords="2328,17,2485,42"/>
+</map>

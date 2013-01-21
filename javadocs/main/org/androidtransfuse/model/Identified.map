@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="c11210" href="./Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="372,11,457,53"/>
-<area shape="rect" id="c11218" href="./manifest/MetaData.html" title="org.androidtransfuse.model.manifest.MetaData" alt="" coords="16,118,93,143"/>
-<area shape="rect" id="c11220" href="./manifest/Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="139,118,224,143"/>
-<area shape="rect" id="c11223" href="./manifest/Category.html" title="org.androidtransfuse.model.manifest.Category" alt="" coords="269,118,342,143"/>
-<area shape="rect" id="c11231" href="./manifest/Action.html" title="org.androidtransfuse.model.manifest.Action" alt="" coords="386,118,443,143"/>
-<area shape="rect" id="c11236" href="./manifest/Service.html" title="org.androidtransfuse.model.manifest.Service" alt="" coords="487,118,553,143"/>
-<area shape="rect" id="c11240" href="./manifest/Receiver.html" title="org.androidtransfuse.model.manifest.Receiver" alt="" coords="597,118,670,143"/>
-<area shape="rect" id="c11245" href="./manifest/Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="714,118,779,143"/>
+<area shape="rect" id="c18873" href="./Identified.html" title="org.androidtransfuse.model.Identified" alt="" coords="372,11,457,53"/>
+<area shape="rect" id="c18883" href="./manifest/MetaData.html" title="org.androidtransfuse.model.manifest.MetaData" alt="" coords="16,118,93,143"/>
+<area shape="rect" id="c18885" href="./manifest/Application.html" title="org.androidtransfuse.model.manifest.Application" alt="" coords="139,118,224,143"/>
+<area shape="rect" id="c18888" href="./manifest/Category.html" title="org.androidtransfuse.model.manifest.Category" alt="" coords="269,118,342,143"/>
+<area shape="rect" id="c18896" href="./manifest/Action.html" title="org.androidtransfuse.model.manifest.Action" alt="" coords="386,118,443,143"/>
+<area shape="rect" id="c18901" href="./manifest/Service.html" title="org.androidtransfuse.model.manifest.Service" alt="" coords="487,118,553,143"/>
+<area shape="rect" id="c18905" href="./manifest/Receiver.html" title="org.androidtransfuse.model.manifest.Receiver" alt="" coords="597,118,670,143"/>
+<area shape="rect" id="c18909" href="./manifest/Activity.html" title="org.androidtransfuse.model.manifest.Activity" alt="" coords="714,118,779,143"/>
 </map>

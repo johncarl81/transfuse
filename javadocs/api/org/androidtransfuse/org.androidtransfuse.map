@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="c290" href="./Injectors.html" title="org.androidtransfuse.Injectors" alt="" coords="15,19,86,45"/>
+<area shape="rect" id="c291" href="./Injectors.InjectorRepository.html" title="org.androidtransfuse.Injectors.InjectorRepository" alt="" coords="130,11,257,53"/>
+<area shape="rect" id="c292" href="./Parcels.html" title="org.androidtransfuse.Parcels" alt="" coords="301,19,366,45"/>
+<area shape="rect" id="c293" href="./Parcels.ParcelRepository.html" title="org.androidtransfuse.Parcels.ParcelRepository" alt="" coords="410,11,531,53"/>
+<area shape="rect" id="c294" href="./Parcels.ParcelableFactory.html" title="org.androidtransfuse.Parcels.ParcelableFactory" alt="" coords="576,11,725,53"/>
+<area shape="rect" id="c295" href="./Components.html" title="org.androidtransfuse.Components" alt="" coords="770,19,865,45"/>
+<area shape="rect" id="c296" href="./Components.ComponentsRepository.html" title="org.androidtransfuse.Components.ComponentsRepository" alt="" coords="909,11,1067,53"/>
+</map>

@@ -10,27 +10,27 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder
-	c71241 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DependentVariableBuilder.html">
+	c116324 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DependentVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> DependentVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.MethodCallVariableBuilder
-	c71256 [label=<<table title="org.androidtransfuse.gen.variableBuilder.MethodCallVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallVariableBuilder.html">
+	c116339 [label=<<table title="org.androidtransfuse.gen.variableBuilder.MethodCallVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodCallVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodCallVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.StaticInvocationVariableBuilder
-	c71257 [label=<<table title="org.androidtransfuse.gen.variableBuilder.StaticInvocationVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./StaticInvocationVariableBuilder.html">
+	c116340 [label=<<table title="org.androidtransfuse.gen.variableBuilder.StaticInvocationVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./StaticInvocationVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> StaticInvocationVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.MethodCallVariableBuilder implements org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder
-	c71241:p -> c71256:p [dir=back,arrowtail=empty,style=dashed];
+	c116324:p -> c116339:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.StaticInvocationVariableBuilder implements org.androidtransfuse.gen.variableBuilder.DependentVariableBuilder
-	c71241:p -> c71257:p [dir=back,arrowtail=empty,style=dashed];
+	c116324:p -> c116340:p [dir=back,arrowtail=empty,style=dashed];
 }
 

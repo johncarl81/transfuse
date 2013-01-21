@@ -10,15 +10,27 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.proxy.VirtualProxyGenerator
-	c5398 [label=<<table title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyGenerator.html">
+	c7628 [label=<<table title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> VirtualProxyGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.proxy.VirtualProxyGenerator.VirtualProxyGeneratorCache
+	c7629 [label=<<table title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator.VirtualProxyGeneratorCache" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VirtualProxyGenerator.VirtualProxyGeneratorCache.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> VirtualProxyGeneratorCache </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.proxy.AOPProxyGenerator
-	c5399 [label=<<table title="org.androidtransfuse.gen.proxy.AOPProxyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyGenerator.html">
+	c7630 [label=<<table title="org.androidtransfuse.gen.proxy.AOPProxyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AOPProxyGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.proxy.AOPProxyGenerator.AOPProxyCache
+	c7631 [label=<<table title="org.androidtransfuse.gen.proxy.AOPProxyGenerator.AOPProxyCache" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPProxyGenerator.AOPProxyCache.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> AOPProxyCache </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 }

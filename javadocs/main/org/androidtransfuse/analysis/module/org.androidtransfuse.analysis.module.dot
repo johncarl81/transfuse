@@ -9,41 +9,93 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.analysis.module.TypeProcessor
+	c2805 [label=<<table title="org.androidtransfuse.analysis.module.TypeProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TypeProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> TypeProcessor </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.module.ModuleTransactionWorker
+	c2806 [label=<<table title="org.androidtransfuse.analysis.module.ModuleTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ModuleTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.module.BindProviderProcessor
-	c2569 [label=<<table title="org.androidtransfuse.analysis.module.BindProviderProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProviderProcessor.html">
+	c2807 [label=<<table title="org.androidtransfuse.analysis.module.BindProviderProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProviderProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BindProviderProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.module.MethodProcessor
-	c2570 [label=<<table title="org.androidtransfuse.analysis.module.MethodProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodProcessor.html">
+	// org.androidtransfuse.analysis.module.ProvidesProcessor
+	c2808 [label=<<table title="org.androidtransfuse.analysis.module.ProvidesProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProvidesProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MethodProcessor </font></td></tr>
+<tr><td align="center" balign="center"> ProvidesProcessor </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.module.BindingConfigurationFactory
+	c2809 [label=<<table title="org.androidtransfuse.analysis.module.BindingConfigurationFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindingConfigurationFactory.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> BindingConfigurationFactory </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.module.ImplementedByTransactionWorker
+	c2810 [label=<<table title="org.androidtransfuse.analysis.module.ImplementedByTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ImplementedByTransactionWorker.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ImplementedByTransactionWorker </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.module.ModuleConfiguration
+	c2811 [label=<<table title="org.androidtransfuse.analysis.module.ModuleConfiguration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleConfiguration.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> ModuleConfiguration </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.analysis.module.MethodProcessor
+	c2812 [label=<<table title="org.androidtransfuse.analysis.module.MethodProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodProcessor.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> MethodProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.module.BindInterceptorProcessor
-	c2571 [label=<<table title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptorProcessor.html">
+	c2813 [label=<<table title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptorProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BindInterceptorProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.module.ModuleProcessor
-	c2572 [label=<<table title="org.androidtransfuse.analysis.module.ModuleProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleProcessor.html">
+	// org.androidtransfuse.analysis.module.ModuleConfigurationComposite
+	c2814 [label=<<table title="org.androidtransfuse.analysis.module.ModuleConfigurationComposite" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ModuleConfigurationComposite.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ModuleProcessor </td></tr>
+<tr><td align="center" balign="center"> ModuleConfigurationComposite </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.module.BindProcessor
-	c2573 [label=<<table title="org.androidtransfuse.analysis.module.BindProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProcessor.html">
+	c2815 [label=<<table title="org.androidtransfuse.analysis.module.BindProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BindProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.analysis.module.BindProviderProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c2570:p -> c2569:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.analysis.module.BindInterceptorProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c2570:p -> c2571:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.analysis.module.BindProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c2570:p -> c2573:p [dir=back,arrowtail=empty];
+	// org.androidtransfuse.analysis.module.BindConfigurationComposite
+	c2816 [label=<<table title="org.androidtransfuse.analysis.module.BindConfigurationComposite" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindConfigurationComposite.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> BindConfigurationComposite </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.analysis.module.BindProviderProcessor implements org.androidtransfuse.analysis.module.TypeProcessor
+	c2805:p -> c2807:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.module.ProvidesProcessor implements org.androidtransfuse.analysis.module.MethodProcessor
+	c2812:p -> c2808:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.module.BindInterceptorProcessor implements org.androidtransfuse.analysis.module.TypeProcessor
+	c2805:p -> c2813:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.module.ModuleConfigurationComposite implements org.androidtransfuse.analysis.module.ModuleConfiguration
+	c2811:p -> c2814:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.module.BindProcessor implements org.androidtransfuse.analysis.module.TypeProcessor
+	c2805:p -> c2815:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.analysis.module.BindConfigurationComposite implements org.androidtransfuse.analysis.module.TypeProcessor
+	c2805:p -> c2816:p [dir=back,arrowtail=empty,style=dashed];
 }
 

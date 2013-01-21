@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c96062" href="./NoOpLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" alt="" coords="16,118,149,143"/>
-<area shape="rect" id="c96068" href="./LayoutHandlerBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" alt="" coords="194,118,339,143"/>
-<area shape="rect" id="c96084" href="./RLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" alt="" coords="384,118,493,143"/>
-<area shape="rect" id="c96087" href="./LayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" alt="" coords="217,11,317,53"/>
+<area shape="rect" id="c154798" href="./NoOpLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.NoOpLayoutBuilder" alt="" coords="16,118,149,143"/>
+<area shape="rect" id="c154804" href="./LayoutHandlerBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutHandlerBuilder" alt="" coords="194,118,339,143"/>
+<area shape="rect" id="c154821" href="./RLayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.RLayoutBuilder" alt="" coords="384,118,493,143"/>
+<area shape="rect" id="c154824" href="./LayoutBuilder.html" title="org.androidtransfuse.gen.componentBuilder.LayoutBuilder" alt="" coords="217,11,317,53"/>
 </map>

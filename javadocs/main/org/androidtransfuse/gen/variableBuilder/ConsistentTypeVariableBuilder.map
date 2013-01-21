@@ -1,11 +1,13 @@
 <map id="G" name="G">
-<area shape="rect" id="c73662" href="./ExtraValuableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder" alt="" coords="16,214,157,239"/>
-<area shape="rect" id="c73664" href="./ViewVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder" alt="" coords="202,214,339,239"/>
-<area shape="rect" id="c73665" href="./ConsistentTypeVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" alt="" coords="641,118,841,143"/>
-<area shape="rect" id="c73669" href="./GeneratedProviderVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" alt="" coords="384,214,600,239"/>
-<area shape="rect" id="c73671" href="./FragmentViewVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder" alt="" coords="645,214,837,239"/>
-<area shape="rect" id="c73674" href="./DependentVariableBuilderWrapper.html" title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper" alt="" coords="882,214,1102,239"/>
-<area shape="rect" id="c73692" href="./IndependentVariableBuilderWrapper.html" title="org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper" alt="" coords="1146,214,1374,239"/>
-<area shape="rect" id="c73694" href="./SystemServiceVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder" alt="" coords="1419,214,1616,239"/>
-<area shape="rect" id="c73683" href="./VariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" alt="" coords="687,11,795,53"/>
+<area shape="rect" id="c119401" href="./ExtraValuableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder" alt="" coords="16,214,157,239"/>
+<area shape="rect" id="c119403" href="./ViewVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder" alt="" coords="202,214,339,239"/>
+<area shape="rect" id="c119404" href="./ConsistentTypeVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" alt="" coords="892,118,1092,143"/>
+<area shape="rect" id="c119408" href="./GeneratedProviderVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" alt="" coords="384,214,600,239"/>
+<area shape="rect" id="c119410" href="./FragmentViewVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder" alt="" coords="645,214,837,239"/>
+<area shape="rect" id="c119413" href="./DependentVariableBuilderWrapper.html" title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper" alt="" coords="882,214,1102,239"/>
+<area shape="rect" id="c119432" href="./IndependentVariableBuilderWrapper.html" title="org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper" alt="" coords="1146,214,1374,239"/>
+<area shape="rect" id="c119435" href="./SystemServiceVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder" alt="" coords="1419,214,1616,239"/>
+<area shape="rect" id="c119437" href="./InjectorVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectorVariableBuilder" alt="" coords="1661,214,1811,239"/>
+<area shape="rect" id="c119438" href="./ProvidesVariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProvidesVariableBuilder" alt="" coords="1855,214,2014,239"/>
+<area shape="rect" id="c119423" href="./VariableBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" alt="" coords="938,11,1046,53"/>
 </map>

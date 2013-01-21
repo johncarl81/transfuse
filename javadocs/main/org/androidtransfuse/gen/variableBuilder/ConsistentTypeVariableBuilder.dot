@@ -10,75 +10,91 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder
-	c73662 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraValuableBuilder.html">
+	c119401 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraValuableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExtraValuableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder
-	c73664 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewVariableBuilder.html">
+	c119403 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConsistentTypeVariableBuilder.html">
+	c119404 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConsistentTypeVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ConsistentTypeVariableBuilder </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder
-	c73669 [label=<<table title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratedProviderVariableBuilder.html">
+	c119408 [label=<<table title="org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratedProviderVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> GeneratedProviderVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder
-	c73671 [label=<<table title="org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentViewVariableBuilder.html">
+	c119410 [label=<<table title="org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentViewVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FragmentViewVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper
-	c73674 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DependentVariableBuilderWrapper.html">
+	c119413 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DependentVariableBuilderWrapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DependentVariableBuilderWrapper </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c73683 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableBuilder.html">
+	c119423 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> VariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper
-	c73692 [label=<<table title="org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndependentVariableBuilderWrapper.html">
+	c119432 [label=<<table title="org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IndependentVariableBuilderWrapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IndependentVariableBuilderWrapper </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder
-	c73694 [label=<<table title="org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemServiceVariableBuilder.html">
+	c119435 [label=<<table title="org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemServiceVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SystemServiceVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.variableBuilder.InjectorVariableBuilder
+	c119437 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectorVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorVariableBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorVariableBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.variableBuilder.ProvidesVariableBuilder
+	c119438 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ProvidesVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProvidesVariableBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ProvidesVariableBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.ExtraValuableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73662:p [dir=back,arrowtail=empty];
+	c119404:p -> c119401:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.ViewVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73664:p [dir=back,arrowtail=empty];
+	c119404:p -> c119403:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c73683:p -> c73665:p [dir=back,arrowtail=empty,style=dashed];
+	c119423:p -> c119404:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.GeneratedProviderVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73669:p [dir=back,arrowtail=empty];
+	c119404:p -> c119408:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.FragmentViewVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73671:p [dir=back,arrowtail=empty];
+	c119404:p -> c119410:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.DependentVariableBuilderWrapper extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73674:p [dir=back,arrowtail=empty];
+	c119404:p -> c119413:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.IndependentVariableBuilderWrapper extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73692:p [dir=back,arrowtail=empty];
+	c119404:p -> c119432:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.SystemServiceVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c73665:p -> c73694:p [dir=back,arrowtail=empty];
+	c119404:p -> c119435:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.variableBuilder.InjectorVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
+	c119404:p -> c119437:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.gen.variableBuilder.ProvidesVariableBuilder extends org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
+	c119404:p -> c119438:p [dir=back,arrowtail=empty];
 }
 

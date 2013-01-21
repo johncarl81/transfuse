@@ -10,154 +10,169 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.FilerSourceCodeWriter
-	c4108 [label=<<table title="org.androidtransfuse.gen.FilerSourceCodeWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FilerSourceCodeWriter.html">
+	c6003 [label=<<table title="org.androidtransfuse.gen.FilerSourceCodeWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FilerSourceCodeWriter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FilerSourceCodeWriter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.ExpressionMatchingIterable
+	c6004 [label=<<table title="org.androidtransfuse.gen.ExpressionMatchingIterable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExpressionMatchingIterable.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ExpressionMatchingIterable </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.AnalysisGenerationFactory
-	c4109 [label=<<table title="org.androidtransfuse.gen.AnalysisGenerationFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGenerationFactory.html">
+	c6005 [label=<<table title="org.androidtransfuse.gen.AnalysisGenerationFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGenerationFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AnalysisGenerationFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.ParcelsGenerator
+	c6006 [label=<<table title="org.androidtransfuse.gen.ParcelsGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelsGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ParcelsGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.ClassGenerationUtil
+	c6007 [label=<<table title="org.androidtransfuse.gen.ClassGenerationUtil" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ClassGenerationUtil.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ClassGenerationUtil </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.FilerResourceWriter
+	c6008 [label=<<table title="org.androidtransfuse.gen.FilerResourceWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FilerResourceWriter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> FilerResourceWriter </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.GeneratorFactory
-	c4110 [label=<<table title="org.androidtransfuse.gen.GeneratorFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorFactory.html">
+	c6009 [label=<<table title="org.androidtransfuse.gen.GeneratorFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> GeneratorFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.UniqueVariableNamer
-	c4111 [label=<<table title="org.androidtransfuse.gen.UniqueVariableNamer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UniqueVariableNamer.html">
+	c6010 [label=<<table title="org.androidtransfuse.gen.UniqueVariableNamer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UniqueVariableNamer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UniqueVariableNamer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ComponentGenerator
-	c4112 [label=<<table title="org.androidtransfuse.gen.ComponentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentGenerator.html">
+	c6011 [label=<<table title="org.androidtransfuse.gen.ComponentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ComponentGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.ApplicationGenerator
-	c4113 [label=<<table title="org.androidtransfuse.gen.ApplicationGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationGenerator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> ApplicationGenerator </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectionBuilderContextFactory
-	c4114 [label=<<table title="org.androidtransfuse.gen.InjectionBuilderContextFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionBuilderContextFactory.html">
+	c6012 [label=<<table title="org.androidtransfuse.gen.InjectionBuilderContextFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionBuilderContextFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionBuilderContextFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ResourceCodeWriter
-	c4115 [label=<<table title="org.androidtransfuse.gen.ResourceCodeWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceCodeWriter.html">
+	c6013 [label=<<table title="org.androidtransfuse.gen.ResourceCodeWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceCodeWriter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ResourceCodeWriter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.AnalysisGeneration<T>
-	c4116 [label=<<table title="org.androidtransfuse.gen.AnalysisGeneration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGeneration.html">
+	// org.androidtransfuse.gen.AnalysisGeneration
+	c6014 [label=<<table title="org.androidtransfuse.gen.AnalysisGeneration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisGeneration.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AnalysisGeneration&lt;T&gt; </td></tr>
+<tr><td align="center" balign="center"> AnalysisGeneration </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.IntentFactoryStrategyGenerator
-	c4117 [label=<<table title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFactoryStrategyGenerator.html">
+	c6015 [label=<<table title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFactoryStrategyGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IntentFactoryStrategyGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.Generator<T>
-	c4118 [label=<<table title="org.androidtransfuse.gen.Generator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Generator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> Generator&lt;T&gt; </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectorGenerator
-	c4119 [label=<<table title="org.androidtransfuse.gen.InjectorGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorGenerator.html">
+	c6016 [label=<<table title="org.androidtransfuse.gen.InjectorGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectorGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.InjectorRepositoryGenerator
-	c4120 [label=<<table title="org.androidtransfuse.gen.InjectorRepositoryGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorRepositoryGenerator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> InjectorRepositoryGenerator </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ProviderGenerator
-	c4121 [label=<<table title="org.androidtransfuse.gen.ProviderGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderGenerator.html">
+	c6017 [label=<<table title="org.androidtransfuse.gen.ProviderGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ProviderGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.GeneratedClassAnnotator
-	c4122 [label=<<table title="org.androidtransfuse.gen.GeneratedClassAnnotator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratedClassAnnotator.html">
+	// org.androidtransfuse.gen.ProviderGenerator.ProviderCache
+	c6018 [label=<<table title="org.androidtransfuse.gen.ProviderGenerator.ProviderCache" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderGenerator.ProviderCache.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> GeneratedClassAnnotator </td></tr>
+<tr><td align="center" balign="center"> ProviderCache </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.InjectorsGenerator
+	c6019 [label=<<table title="org.androidtransfuse.gen.InjectorsGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectorsGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectorsGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectionBuilderContext
-	c4123 [label=<<table title="org.androidtransfuse.gen.InjectionBuilderContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionBuilderContext.html">
+	c6020 [label=<<table title="org.androidtransfuse.gen.InjectionBuilderContext" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionBuilderContext.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionBuilderContext </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.ComponentsGenerator
+	c6021 [label=<<table title="org.androidtransfuse.gen.ComponentsGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ComponentsGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ComponentsGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectionFragmentGenerator
-	c4124 [label=<<table title="org.androidtransfuse.gen.InjectionFragmentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionFragmentGenerator.html">
+	c6022 [label=<<table title="org.androidtransfuse.gen.InjectionFragmentGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionFragmentGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionFragmentGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InjectionExpressionBuilder
-	c4125 [label=<<table title="org.androidtransfuse.gen.InjectionExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionExpressionBuilder.html">
+	c6023 [label=<<table title="org.androidtransfuse.gen.InjectionExpressionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionExpressionBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionExpressionBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ParcelableGenerator
-	c4126 [label=<<table title="org.androidtransfuse.gen.ParcelableGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableGenerator.html">
+	c6024 [label=<<table title="org.androidtransfuse.gen.ParcelableGenerator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableGenerator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ParcelableGenerator </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ParcelableGenerator.ReadWritePair
-	c4127 [label=<<table title="org.androidtransfuse.gen.ParcelableGenerator.ReadWritePair" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableGenerator.ReadWritePair.html">
+	c6025 [label=<<table title="org.androidtransfuse.gen.ParcelableGenerator.ReadWritePair" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableGenerator.ReadWritePair.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ReadWritePair </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.InvocationBuilder
-	c4128 [label=<<table title="org.androidtransfuse.gen.InvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InvocationBuilder.html">
+	c6026 [label=<<table title="org.androidtransfuse.gen.InvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InvocationBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InvocationBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.gen.ManifestBuilder
+	c6027 [label=<<table title="org.androidtransfuse.gen.ManifestBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ManifestBuilder.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ManifestBuilder </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ExceptionWrapper
-	c4129 [label=<<table title="org.androidtransfuse.gen.ExceptionWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExceptionWrapper.html">
+	c6028 [label=<<table title="org.androidtransfuse.gen.ExceptionWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExceptionWrapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExceptionWrapper </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.ExceptionWrapper.BlockWriter<T>
-	c4130 [label=<<table title="org.androidtransfuse.gen.ExceptionWrapper.BlockWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExceptionWrapper.BlockWriter.html">
+	c6029 [label=<<table title="org.androidtransfuse.gen.ExceptionWrapper.BlockWriter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExceptionWrapper.BlockWriter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> BlockWriter&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.ComponentGenerator implements org.androidtransfuse.gen.Generator<T>
-	c4118:p -> c4112:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.gen.ApplicationGenerator implements org.androidtransfuse.gen.Generator<T>
-	c4118:p -> c4113:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.gen.AnalysisGeneration<T> implements org.androidtransfuse.gen.Generator<T>
-	c4118:p -> c4116:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.gen.InjectorGenerator implements org.androidtransfuse.gen.Generator<T>
-	c4118:p -> c4119:p [dir=back,arrowtail=empty,style=dashed];
 }
 

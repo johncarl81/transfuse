@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c141346" href="./PrivateInjectionBuilder.html" title="org.androidtransfuse.gen.invocationBuilder.PrivateInjectionBuilder" alt="" coords="15,118,166,143"/>
+<area shape="rect" id="c141347" href="./ProtectedInjectionBuilder.html" title="org.androidtransfuse.gen.invocationBuilder.ProtectedInjectionBuilder" alt="" coords="211,118,376,143"/>
+<area shape="rect" id="c141348" href="./PublicInjectionBuilder.html" title="org.androidtransfuse.gen.invocationBuilder.PublicInjectionBuilder" alt="" coords="421,118,566,143"/>
+<area shape="rect" id="c141349" href="./ModifierInjectionBuilder.html" title="org.androidtransfuse.gen.invocationBuilder.ModifierInjectionBuilder" alt="" coords="215,11,371,53"/>
+</map>

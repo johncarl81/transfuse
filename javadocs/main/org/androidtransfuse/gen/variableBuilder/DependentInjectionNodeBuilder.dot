@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder
-	c83334 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilder.html">
+	c133233 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder
-	c83361 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DependentInjectionNodeBuilder.html">
+	c133264 [label=<<table title="org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./DependentInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> DependentInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.DependentInjectionNodeBuilder implements org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder
-	c83334:p -> c83361:p [dir=back,arrowtail=empty,style=dashed];
+	c133233:p -> c133264:p [dir=back,arrowtail=empty,style=dashed];
 }
 

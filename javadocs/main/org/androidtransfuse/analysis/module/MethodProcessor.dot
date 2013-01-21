@@ -9,35 +9,20 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.analysis.module.BindProviderProcessor
-	c53048 [label=<<table title="org.androidtransfuse.analysis.module.BindProviderProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProviderProcessor.html">
+	// org.androidtransfuse.analysis.module.ProvidesProcessor
+	c57000 [label=<<table title="org.androidtransfuse.analysis.module.ProvidesProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProvidesProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> BindProviderProcessor </td></tr>
+<tr><td align="center" balign="center"> ProvidesProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.module.MethodProcessor
-	c53049 [label=<<table title="org.androidtransfuse.analysis.module.MethodProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MethodProcessor.html">
+	c57004 [label=<<table title="org.androidtransfuse.analysis.module.MethodProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MethodProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MethodProcessor </font></td></tr>
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> MethodProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.module.BindInterceptorProcessor
-	c53050 [label=<<table title="org.androidtransfuse.analysis.module.BindInterceptorProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptorProcessor.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> BindInterceptorProcessor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.module.BindProcessor
-	c53052 [label=<<table title="org.androidtransfuse.analysis.module.BindProcessor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProcessor.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> BindProcessor </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.analysis.module.BindProviderProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c53049:p -> c53048:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.analysis.module.BindInterceptorProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c53049:p -> c53050:p [dir=back,arrowtail=empty];
-	//org.androidtransfuse.analysis.module.BindProcessor extends org.androidtransfuse.analysis.module.MethodProcessor
-	c53049:p -> c53052:p [dir=back,arrowtail=empty];
+	//org.androidtransfuse.analysis.module.ProvidesProcessor implements org.androidtransfuse.analysis.module.MethodProcessor
+	c57004:p -> c57000:p [dir=back,arrowtail=empty,style=dashed];
 }
 

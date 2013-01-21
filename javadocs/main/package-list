@@ -1,12 +1,15 @@
 org.androidtransfuse
+org.androidtransfuse.adapter
+org.androidtransfuse.adapter.classes
+org.androidtransfuse.adapter.element
 org.androidtransfuse.analysis
-org.androidtransfuse.analysis.adapter
 org.androidtransfuse.analysis.astAnalyzer
 org.androidtransfuse.analysis.module
 org.androidtransfuse.analysis.repository
 org.androidtransfuse.config
 org.androidtransfuse.gen
 org.androidtransfuse.gen.componentBuilder
+org.androidtransfuse.gen.invocationBuilder
 org.androidtransfuse.gen.proxy
 org.androidtransfuse.gen.scopeBuilder
 org.androidtransfuse.gen.variableBuilder

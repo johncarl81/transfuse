@@ -10,223 +10,223 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.manifest.UsesLibrary
-	c623 [label=<<table title="org.androidtransfuse.model.manifest.UsesLibrary" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesLibrary.html">
+	c797 [label=<<table title="org.androidtransfuse.model.manifest.UsesLibrary" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesLibrary.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesLibrary </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Data
-	c624 [label=<<table title="org.androidtransfuse.model.manifest.Data" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Data.html">
+	c798 [label=<<table title="org.androidtransfuse.model.manifest.Data" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Data.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Data </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Screen
-	c625 [label=<<table title="org.androidtransfuse.model.manifest.Screen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Screen.html">
+	c799 [label=<<table title="org.androidtransfuse.model.manifest.Screen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Screen.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Screen </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.UsesConfiguration
-	c626 [label=<<table title="org.androidtransfuse.model.manifest.UsesConfiguration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesConfiguration.html">
+	c800 [label=<<table title="org.androidtransfuse.model.manifest.UsesConfiguration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesConfiguration.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesConfiguration </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.model.manifest.LabeledConverter<T extends org.androidtransfuse.annotations.Labeled>
+	c801 [label=<<table title="org.androidtransfuse.model.manifest.LabeledConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LabeledConverter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> LabeledConverter&lt;T extends Labeled&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ReqKeyboardType
-	c627 [label=<<table title="org.androidtransfuse.model.manifest.ReqKeyboardType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqKeyboardType.html">
+	c802 [label=<<table title="org.androidtransfuse.model.manifest.ReqKeyboardType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqKeyboardType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReqKeyboardType </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.MetaData
-	c628 [label=<<table title="org.androidtransfuse.model.manifest.MetaData" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaData.html">
+	c803 [label=<<table title="org.androidtransfuse.model.manifest.MetaData" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaData.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MetaData </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.SupportsScreens
-	c629 [label=<<table title="org.androidtransfuse.model.manifest.SupportsScreens" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SupportsScreens.html">
+	c804 [label=<<table title="org.androidtransfuse.model.manifest.SupportsScreens" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SupportsScreens.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SupportsScreens </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Application
-	c630 [label=<<table title="org.androidtransfuse.model.manifest.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Application.html">
+	c805 [label=<<table title="org.androidtransfuse.model.manifest.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Application.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Application </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ReqTouchScreen
-	c631 [label=<<table title="org.androidtransfuse.model.manifest.ReqTouchScreen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqTouchScreen.html">
+	c806 [label=<<table title="org.androidtransfuse.model.manifest.ReqTouchScreen" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqTouchScreen.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReqTouchScreen </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.GrantUriPermission
-	c632 [label=<<table title="org.androidtransfuse.model.manifest.GrantUriPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GrantUriPermission.html">
+	c807 [label=<<table title="org.androidtransfuse.model.manifest.GrantUriPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GrantUriPermission.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> GrantUriPermission </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Category
-	c633 [label=<<table title="org.androidtransfuse.model.manifest.Category" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Category.html">
+	c808 [label=<<table title="org.androidtransfuse.model.manifest.Category" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Category.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Category </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Manifest
-	c634 [label=<<table title="org.androidtransfuse.model.manifest.Manifest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Manifest.html">
+	c809 [label=<<table title="org.androidtransfuse.model.manifest.Manifest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Manifest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Manifest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.PathPermission
-	c635 [label=<<table title="org.androidtransfuse.model.manifest.PathPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PathPermission.html">
+	c810 [label=<<table title="org.androidtransfuse.model.manifest.PathPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PathPermission.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PathPermission </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.PermissionTree
-	c636 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTree" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionTree.html">
+	c811 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTree" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionTree.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PermissionTree </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.UsesSDK
-	c637 [label=<<table title="org.androidtransfuse.model.manifest.UsesSDK" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesSDK.html">
+	c812 [label=<<table title="org.androidtransfuse.model.manifest.UsesSDK" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesSDK.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesSDK </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ScreenDensity
-	c638 [label=<<table title="org.androidtransfuse.model.manifest.ScreenDensity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenDensity.html">
+	c813 [label=<<table title="org.androidtransfuse.model.manifest.ScreenDensity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenDensity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ScreenDensity </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.SupportsGlTexture
-	c639 [label=<<table title="org.androidtransfuse.model.manifest.SupportsGlTexture" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SupportsGlTexture.html">
+	c814 [label=<<table title="org.androidtransfuse.model.manifest.SupportsGlTexture" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SupportsGlTexture.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SupportsGlTexture </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Instrumentation
-	c640 [label=<<table title="org.androidtransfuse.model.manifest.Instrumentation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Instrumentation.html">
+	c815 [label=<<table title="org.androidtransfuse.model.manifest.Instrumentation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Instrumentation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Instrumentation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Action
-	c641 [label=<<table title="org.androidtransfuse.model.manifest.Action" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Action.html">
+	c816 [label=<<table title="org.androidtransfuse.model.manifest.Action" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Action.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Action </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.PermissionTest
-	c642 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionTest.html">
+	c817 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PermissionTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.UsesFeature
-	c643 [label=<<table title="org.androidtransfuse.model.manifest.UsesFeature" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesFeature.html">
+	c818 [label=<<table title="org.androidtransfuse.model.manifest.UsesFeature" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesFeature.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesFeature </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.CompatibleScreens
-	c644 [label=<<table title="org.androidtransfuse.model.manifest.CompatibleScreens" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CompatibleScreens.html">
+	c819 [label=<<table title="org.androidtransfuse.model.manifest.CompatibleScreens" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CompatibleScreens.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> CompatibleScreens </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Permission
-	c645 [label=<<table title="org.androidtransfuse.model.manifest.Permission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Permission.html">
+	c820 [label=<<table title="org.androidtransfuse.model.manifest.Permission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Permission.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Permission </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Service
-	c646 [label=<<table title="org.androidtransfuse.model.manifest.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Service.html">
+	c821 [label=<<table title="org.androidtransfuse.model.manifest.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Service.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Service </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ReqNavigation
-	c647 [label=<<table title="org.androidtransfuse.model.manifest.ReqNavigation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqNavigation.html">
+	c822 [label=<<table title="org.androidtransfuse.model.manifest.ReqNavigation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ReqNavigation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ReqNavigation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.InstallLocation
-	c648 [label=<<table title="org.androidtransfuse.model.manifest.InstallLocation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InstallLocation.html">
+	c823 [label=<<table title="org.androidtransfuse.model.manifest.InstallLocation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InstallLocation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> InstallLocation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ActivityAlias
-	c649 [label=<<table title="org.androidtransfuse.model.manifest.ActivityAlias" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAlias.html">
+	c824 [label=<<table title="org.androidtransfuse.model.manifest.ActivityAlias" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAlias.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActivityAlias </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Receiver
-	c650 [label=<<table title="org.androidtransfuse.model.manifest.Receiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Receiver.html">
+	c825 [label=<<table title="org.androidtransfuse.model.manifest.Receiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Receiver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Receiver </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.model.manifest.LabeledEnumConverter<T extends org.androidtransfuse.annotations.LabeledEnum>
-	c651 [label=<<table title="org.androidtransfuse.model.manifest.LabeledEnumConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LabeledEnumConverter.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> LabeledEnumConverter&lt;T extends LabeledEnum&gt; </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.UsesPermission
-	c652 [label=<<table title="org.androidtransfuse.model.manifest.UsesPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesPermission.html">
+	c826 [label=<<table title="org.androidtransfuse.model.manifest.UsesPermission" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UsesPermission.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesPermission </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Provider
-	c653 [label=<<table title="org.androidtransfuse.model.manifest.Provider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Provider.html">
+	c827 [label=<<table title="org.androidtransfuse.model.manifest.Provider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Provider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Provider </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ProtectionLevel
-	c654 [label=<<table title="org.androidtransfuse.model.manifest.ProtectionLevel" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProtectionLevel.html">
+	c828 [label=<<table title="org.androidtransfuse.model.manifest.ProtectionLevel" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProtectionLevel.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ProtectionLevel </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Activity
-	c655 [label=<<table title="org.androidtransfuse.model.manifest.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Activity.html">
+	c829 [label=<<table title="org.androidtransfuse.model.manifest.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Activity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Activity </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.PermissionGroup
-	c656 [label=<<table title="org.androidtransfuse.model.manifest.PermissionGroup" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionGroup.html">
+	c830 [label=<<table title="org.androidtransfuse.model.manifest.PermissionGroup" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PermissionGroup.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PermissionGroup </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.IntentFilter
-	c657 [label=<<table title="org.androidtransfuse.model.manifest.IntentFilter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilter.html">
+	c831 [label=<<table title="org.androidtransfuse.model.manifest.IntentFilter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> IntentFilter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.ScreenSize
-	c658 [label=<<table title="org.androidtransfuse.model.manifest.ScreenSize" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenSize.html">
+	c832 [label=<<table title="org.androidtransfuse.model.manifest.ScreenSize" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenSize.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ScreenSize </td></tr>

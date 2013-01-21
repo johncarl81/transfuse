@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c94247 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewRegistrationInvocationBuilder.html">
+	c152491 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewRegistrationInvocationBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ViewRegistrationInvocationBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl
-	c94269 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ViewMethodRegistrationInvocationBuilderImpl.html">
+	c152514 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ViewMethodRegistrationInvocationBuilderImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewMethodRegistrationInvocationBuilderImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl implements org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c94247:p -> c94269:p [dir=back,arrowtail=empty,style=dashed];
+	c152491:p -> c152514:p [dir=back,arrowtail=empty,style=dashed];
 }
 

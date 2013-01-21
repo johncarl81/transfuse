@@ -1,8 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c70326" href="./CachedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" alt="" coords="15,214,203,239"/>
-<area shape="rect" id="c70327" href="./VariableExpressionBuilder.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" alt="" coords="373,11,547,53"/>
-<area shape="rect" id="c70332" href="./VariableExpressionBuilderDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" alt="" coords="345,118,575,143"/>
-<area shape="rect" id="c70328" href="./ScopedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" alt="" coords="248,214,435,239"/>
-<area shape="rect" id="c70330" href="./ObservesExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ObservesExpressionDecorator" alt="" coords="479,214,678,239"/>
-<area shape="rect" id="c70333" href="./VirtualProxyExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" alt="" coords="723,214,936,239"/>
+<area shape="rect" id="c115164" href="./CachedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.CachedExpressionDecorator" alt="" coords="15,214,203,239"/>
+<area shape="rect" id="c115165" href="./VariableExpressionBuilder.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder" alt="" coords="255,11,428,53"/>
+<area shape="rect" id="c115169" href="./VariableExpressionBuilderDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderDecorator" alt="" coords="227,118,456,143"/>
+<area shape="rect" id="c115166" href="./ScopedExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.ScopedExpressionDecorator" alt="" coords="248,214,435,239"/>
+<area shape="rect" id="c115170" href="./VirtualProxyExpressionDecorator.html" title="org.androidtransfuse.gen.variableDecorator.VirtualProxyExpressionDecorator" alt="" coords="480,214,693,239"/>
 </map>

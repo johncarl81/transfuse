@@ -9,20 +9,52 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.util.matcher.MatchAny
+	c83963 [label=<<table title="org.androidtransfuse.util.matcher.MatchAny" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MatchAny.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MatchAny </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.matcher.InjectionSignatureMatcher
+	c83965 [label=<<table title="org.androidtransfuse.util.matcher.InjectionSignatureMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionSignatureMatcher.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> InjectionSignatureMatcher </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.matcher.ASTTypeMatcher
-	c57597 [label=<<table title="org.androidtransfuse.util.matcher.ASTTypeMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTTypeMatcher.html">
+	c83967 [label=<<table title="org.androidtransfuse.util.matcher.ASTTypeMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTTypeMatcher.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTTypeMatcher </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.matcher.Matcher<T>
-	c57598 [label=<<table title="org.androidtransfuse.util.matcher.Matcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Matcher.html">
+	c83968 [label=<<table title="org.androidtransfuse.util.matcher.Matcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Matcher.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Matcher&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.matcher.ASTAnnotationTypeMatcher
+	c83969 [label=<<table title="org.androidtransfuse.util.matcher.ASTAnnotationTypeMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnnotationTypeMatcher.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ASTAnnotationTypeMatcher </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.util.matcher.ASTAnnotationMatcher
+	c83970 [label=<<table title="org.androidtransfuse.util.matcher.ASTAnnotationMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnnotationMatcher.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ASTAnnotationMatcher </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.util.matcher.MatchAny implements org.androidtransfuse.util.matcher.Matcher<T>
+	c83968:p -> c83963:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.util.matcher.InjectionSignatureMatcher implements org.androidtransfuse.util.matcher.Matcher<T>
+	c83968:p -> c83965:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.util.matcher.ASTTypeMatcher implements org.androidtransfuse.util.matcher.Matcher<T>
-	c57598:p -> c57597:p [dir=back,arrowtail=empty,style=dashed];
+	c83968:p -> c83967:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.util.matcher.ASTAnnotationTypeMatcher implements org.androidtransfuse.util.matcher.Matcher<T>
+	c83968:p -> c83969:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.util.matcher.ASTAnnotationMatcher implements org.androidtransfuse.util.matcher.Matcher<T>
+	c83968:p -> c83970:p [dir=back,arrowtail=empty,style=dashed];
 }
 

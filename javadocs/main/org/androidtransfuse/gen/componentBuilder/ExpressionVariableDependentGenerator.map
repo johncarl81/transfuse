@@ -1,8 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="c92660" href="../IntentFactoryStrategyGenerator.html" title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" alt="" coords="15,118,219,143"/>
-<area shape="rect" id="c92739" href="./ContextScopeComponentBuilder.html" title="org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder" alt="" coords="264,118,475,143"/>
-<area shape="rect" id="c92745" href="./NonConfigurationInstanceGenerator.html" title="org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator" alt="" coords="520,118,749,143"/>
-<area shape="rect" id="c92747" href="./ListenerRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" alt="" coords="794,118,987,143"/>
-<area shape="rect" id="c92751" href="./MethodCallbackGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" alt="" coords="1031,118,1203,143"/>
-<area shape="rect" id="c92754" href="./ExpressionVariableDependentGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" alt="" coords="508,11,761,53"/>
+<area shape="rect" id="c150477" href="../IntentFactoryStrategyGenerator.html" title="org.androidtransfuse.gen.IntentFactoryStrategyGenerator" alt="" coords="15,118,219,143"/>
+<area shape="rect" id="c150573" href="./ContextScopeComponentBuilder.html" title="org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder" alt="" coords="264,118,475,143"/>
+<area shape="rect" id="c150579" href="./NonConfigurationInstanceGenerator.html" title="org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator" alt="" coords="520,118,749,143"/>
+<area shape="rect" id="c150581" href="./ListenerRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator" alt="" coords="794,118,987,143"/>
+<area shape="rect" id="c150583" href="./ObservesRegistrationGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator" alt="" coords="1031,118,1235,143"/>
+<area shape="rect" id="c150586" href="./MethodCallbackGenerator.html" title="org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator" alt="" coords="1279,118,1451,143"/>
+<area shape="rect" id="c150589" href="./ExpressionVariableDependentGenerator.html" title="org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator" alt="" coords="636,11,889,53"/>
 </map>

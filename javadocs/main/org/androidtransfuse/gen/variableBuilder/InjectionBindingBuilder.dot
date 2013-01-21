@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder
-	c79725 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionBindingBuilder.html">
+	c127489 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionBindingBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionBindingBuilder </td></tr>
 		</table></td></tr>

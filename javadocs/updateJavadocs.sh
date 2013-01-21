@@ -11,9 +11,9 @@ git clone git@github.com:johncarl81/transfuse.git
 
 # Build selected modules
 cd transfuse/transfuse/
-mvn clean install
+mvn clean javadoc:javadoc
 cd ../transfuse-api
-mvn clean install
+mvn clean javadoc:javadoc
 cd ../..;
 
 # Add structure folders

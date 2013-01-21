@@ -10,27 +10,27 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl
-	c89114 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeFactoryImpl.html">
+	c145580 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeFactoryImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionNodeFactoryImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
-	c89118 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionNodeFactory.html">
+	c145584 [label=<<table title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionNodeFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionNodeFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory
-	c89140 [label=<<table title="org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverInjectionNodeFactory.html">
+	c145607 [label=<<table title="org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverInjectionNodeFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BroadcastReceiverInjectionNodeFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl implements org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
-	c89118:p -> c89114:p [dir=back,arrowtail=empty,style=dashed];
+	c145584:p -> c145580:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory implements org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory
-	c89118:p -> c89140:p [dir=back,arrowtail=empty,style=dashed];
+	c145584:p -> c145607:p [dir=back,arrowtail=empty,style=dashed];
 }
 

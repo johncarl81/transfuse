@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.intentFactory.IntentFactoryStrategy
-	c7075 [label=<<table title="org.androidtransfuse.intentFactory.IntentFactoryStrategy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IntentFactoryStrategy.html">
+	c9541 [label=<<table title="org.androidtransfuse.intentFactory.IntentFactoryStrategy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./IntentFactoryStrategy.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> IntentFactoryStrategy </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy
-	c7078 [label=<<table title="org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractIntentFactoryStrategy.html">
+	c9544 [label=<<table title="org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AbstractIntentFactoryStrategy.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractIntentFactoryStrategy </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy implements org.androidtransfuse.intentFactory.IntentFactoryStrategy
-	c7075:p -> c7078:p [dir=back,arrowtail=empty,style=dashed];
+	c9541:p -> c9544:p [dir=back,arrowtail=empty,style=dashed];
 }
 

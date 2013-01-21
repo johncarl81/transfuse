@@ -1,0 +1,23 @@
+<map id="G" name="G">
+<area shape="rect" id="c3588" href="./MethodSignature.html" title="org.androidtransfuse.adapter.MethodSignature" alt="" coords="527,19,646,45"/>
+<area shape="rect" id="c3589" href="./ASTAccessModifier.html" title="org.androidtransfuse.adapter.ASTAccessModifier" alt="" coords="690,11,827,53"/>
+<area shape="rect" id="c3590" href="./ASTArrayType.html" title="org.androidtransfuse.adapter.ASTArrayType" alt="" coords="16,222,123,247"/>
+<area shape="rect" id="c3591" href="./ASTMethodUniqueSignatureDecorator.html" title="org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator" alt="" coords="1360,222,1603,247"/>
+<area shape="rect" id="c3592" href="./ASTTypeVirtualProxy.html" title="org.androidtransfuse.adapter.ASTTypeVirtualProxy" alt="" coords="168,222,315,247"/>
+<area shape="rect" id="c3593" href="./ASTAnnotation.html" title="org.androidtransfuse.adapter.ASTAnnotation" alt="" coords="1003,11,1112,53"/>
+<area shape="rect" id="c3594" href="./ASTGenericTypeWrapper.html" title="org.androidtransfuse.adapter.ASTGenericTypeWrapper" alt="" coords="359,222,529,247"/>
+<area shape="rect" id="c3595" href="./ASTProxyType.html" title="org.androidtransfuse.adapter.ASTProxyType" alt="" coords="573,222,683,247"/>
+<area shape="rect" id="c3596" href="./ASTConstructor.html" title="org.androidtransfuse.adapter.ASTConstructor" alt="" coords="580,113,695,154"/>
+<area shape="rect" id="c3597" href="./ASTBase.html" title="org.androidtransfuse.adapter.ASTBase" alt="" coords="872,11,957,53"/>
+<area shape="rect" id="c3599" href="./ASTType.html" title="org.androidtransfuse.adapter.ASTType" alt="" coords="740,113,825,154"/>
+<area shape="rect" id="c3600" href="./ASTMethod.html" title="org.androidtransfuse.adapter.ASTMethod" alt="" coords="870,113,959,154"/>
+<area shape="rect" id="c3602" href="./ASTParameter.html" title="org.androidtransfuse.adapter.ASTParameter" alt="" coords="1004,113,1111,154"/>
+<area shape="rect" id="c3607" href="./ASTField.html" title="org.androidtransfuse.adapter.ASTField" alt="" coords="1156,113,1241,154"/>
+<area shape="rect" id="c3598" href="./ASTStringType.html" title="org.androidtransfuse.adapter.ASTStringType" alt="" coords="728,222,837,247"/>
+<area shape="rect" id="c3603" href="./ASTPrimitiveType.html" title="org.androidtransfuse.adapter.ASTPrimitiveType" alt="" coords="882,214,1009,255"/>
+<area shape="rect" id="c3605" href="./ASTVoidType.html" title="org.androidtransfuse.adapter.ASTVoidType" alt="" coords="1053,214,1158,255"/>
+<area shape="rect" id="c3606" href="./ASTEmptyType.html" title="org.androidtransfuse.adapter.ASTEmptyType" alt="" coords="1202,222,1315,247"/>
+<area shape="rect" id="c3601" href="./ASTUtils.html" title="org.androidtransfuse.adapter.ASTUtils" alt="" coords="1157,19,1230,45"/>
+<area shape="rect" id="c3604" href="./LazyTypeParameterBuilder.html" title="org.androidtransfuse.adapter.LazyTypeParameterBuilder" alt="" coords="1274,11,1451,53"/>
+<area shape="rect" id="c3608" href="./ASTFactory.html" title="org.androidtransfuse.adapter.ASTFactory" alt="" coords="1496,11,1587,53"/>
+</map>

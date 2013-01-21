@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c6035" href="./SingletonScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory" alt="" coords="16,118,213,143"/>
-<area shape="rect" id="c6036" href="./ContextScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory" alt="" coords="259,118,448,143"/>
-<area shape="rect" id="c6037" href="./SingletonScopeBuilder.html" title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" alt="" coords="349,19,501,45"/>
-<area shape="rect" id="c6038" href="./ContextScopeVariableBuilder.html" title="org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder" alt="" coords="546,19,737,45"/>
-<area shape="rect" id="c6039" href="./ScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory" alt="" coords="162,11,305,53"/>
+<area shape="rect" id="c8827" href="./SingletonScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory" alt="" coords="16,118,213,143"/>
+<area shape="rect" id="c8828" href="./ContextScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory" alt="" coords="259,118,448,143"/>
+<area shape="rect" id="c8829" href="./SingletonScopeBuilder.html" title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" alt="" coords="349,19,501,45"/>
+<area shape="rect" id="c8830" href="./ContextScopeVariableBuilder.html" title="org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder" alt="" coords="546,19,737,45"/>
+<area shape="rect" id="c8831" href="./ScopeAspectFactory.html" title="org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory" alt="" coords="162,11,305,53"/>
 </map>

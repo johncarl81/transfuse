@@ -10,32 +10,32 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.Mergeable
-	c20272 [label=<<table title="org.androidtransfuse.model.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Mergeable.html">
+	c31165 [label=<<table title="org.androidtransfuse.model.Mergeable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Mergeable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Mergeable </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.Identified
-	c20275 [label=<<table title="org.androidtransfuse.model.Identified" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Identified.html">
+	c31168 [label=<<table title="org.androidtransfuse.model.Identified" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../Identified.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Identified </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.manifest.Receiver
-	c20305 [label=<<table title="org.androidtransfuse.model.manifest.Receiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Receiver.html">
+	c31200 [label=<<table title="org.androidtransfuse.model.manifest.Receiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Receiver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Receiver </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.model.manifest.Receiver extends org.androidtransfuse.model.Mergeable
-	c20272:p -> c20305:p [dir=back,arrowtail=empty];
+	c31165:p -> c31200:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.model.manifest.Receiver implements java.lang.Comparable<T>
-	c20561:p -> c20305:p [dir=back,arrowtail=empty,style=dashed];
+	c31527:p -> c31200:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.model.manifest.Receiver implements org.androidtransfuse.model.Identified
-	c20275:p -> c20305:p [dir=back,arrowtail=empty,style=dashed];
+	c31168:p -> c31200:p [dir=back,arrowtail=empty,style=dashed];
 	// java.lang.Comparable<T>
-	c20561 [label=<<table title="java.lang.Comparable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html">
+	c31527 [label=<<table title="java.lang.Comparable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Comparable&lt;T&gt; </td></tr>

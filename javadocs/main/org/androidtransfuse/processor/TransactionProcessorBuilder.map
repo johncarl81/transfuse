@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="c90119" href="./ImplementedByProcessorBuilder.html" title="org.androidtransfuse.processor.ImplementedByProcessorBuilder" alt="" coords="16,118,227,143"/>
+<area shape="rect" id="c90127" href="./ModuleProcessorBuilder.html" title="org.androidtransfuse.processor.ModuleProcessorBuilder" alt="" coords="271,118,433,143"/>
+<area shape="rect" id="c90128" href="./TransactionProcessorBuilder.html" title="org.androidtransfuse.processor.TransactionProcessorBuilder" alt="" coords="331,11,560,53"/>
+<area shape="rect" id="c90135" href="./InjectorProcessor.html" title="org.androidtransfuse.processor.InjectorProcessor" alt="" coords="477,118,600,143"/>
+<area shape="rect" id="c90146" href="./AnalysisGenerationTransactionProcessorBuilder.html" title="org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilder" alt="" coords="645,118,947,143"/>
+</map>

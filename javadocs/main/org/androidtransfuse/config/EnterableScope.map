@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="c11168" href="./EnterableScope.html" title="org.androidtransfuse.config.EnterableScope" alt="" coords="75,113,189,154"/>
+<area shape="rect" id="c11175" href="./MapScope.html" title="org.androidtransfuse.config.MapScope" alt="" coords="16,219,99,245"/>
+<area shape="rect" id="c11176" href="./ThreadLocalScope.html" title="org.androidtransfuse.config.ThreadLocalScope" alt="" coords="143,219,273,245"/>
+<area shape="rect" id="c11547" href="http://java.sun.com/j2se/1.4.2/docs/api/com/google/inject/Scope.html" title="com.google.inject.Scope" alt="" coords="89,11,175,53"/>
+</map>

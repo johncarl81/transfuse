@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.processor.Merger
-	c59114 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Merger.html">
+	c91670 [label=<<table title="org.androidtransfuse.processor.Merger" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Merger.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> Merger </td></tr>
 		</table></td></tr>

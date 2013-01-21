@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.util.matcher.ASTTypeMatcher
-	c57295 [label=<<table title="org.androidtransfuse.util.matcher.ASTTypeMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTTypeMatcher.html">
+	c83583 [label=<<table title="org.androidtransfuse.util.matcher.ASTTypeMatcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ASTTypeMatcher.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTTypeMatcher </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.util.matcher.Matcher<T>
-	c57296 [label=<<table title="org.androidtransfuse.util.matcher.Matcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Matcher.html">
+	c83584 [label=<<table title="org.androidtransfuse.util.matcher.Matcher" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Matcher.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Matcher&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.util.matcher.ASTTypeMatcher implements org.androidtransfuse.util.matcher.Matcher<T>
-	c57296:p -> c57295:p [dir=back,arrowtail=empty,style=dashed];
+	c83584:p -> c83583:p [dir=back,arrowtail=empty,style=dashed];
 }
 

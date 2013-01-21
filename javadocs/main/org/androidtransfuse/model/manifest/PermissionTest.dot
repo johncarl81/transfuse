@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.manifest.PermissionTest
-	c17879 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./PermissionTest.html">
+	c28118 [label=<<table title="org.androidtransfuse.model.manifest.PermissionTest" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./PermissionTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PermissionTest </td></tr>
 		</table></td></tr>

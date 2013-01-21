@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="c71236" href="../ASTBase.html" title="org.androidtransfuse.adapter.ASTBase" alt="" coords="384,11,469,53"/>
+<area shape="rect" id="c71256" href="./ASTElementBase.html" title="org.androidtransfuse.adapter.element.ASTElementBase" alt="" coords="364,118,489,143"/>
+<area shape="rect" id="c71250" href="./ASTElementType.html" title="org.androidtransfuse.adapter.element.ASTElementType" alt="" coords="15,214,139,239"/>
+<area shape="rect" id="c71251" href="./ASTElementMethod.html" title="org.androidtransfuse.adapter.element.ASTElementMethod" alt="" coords="183,214,321,239"/>
+<area shape="rect" id="c71257" href="./ASTElementField.html" title="org.androidtransfuse.adapter.element.ASTElementField" alt="" coords="365,214,488,239"/>
+<area shape="rect" id="c71262" href="./ASTElementParameter.html" title="org.androidtransfuse.adapter.element.ASTElementParameter" alt="" coords="533,214,688,239"/>
+<area shape="rect" id="c71264" href="./ASTElementConstructor.html" title="org.androidtransfuse.adapter.element.ASTElementConstructor" alt="" coords="733,214,896,239"/>
+</map>

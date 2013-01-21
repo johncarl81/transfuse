@@ -10,18 +10,18 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis
-	c33345 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ObservesAnalysis.html">
+	c46608 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ObservesAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ObservesAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c33360 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
+	c46623 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysisAdaptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ASTAnalysisAdaptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.astAnalyzer.ObservesAnalysis extends org.androidtransfuse.analysis.astAnalyzer.ASTAnalysisAdaptor
-	c33360:p -> c33345:p [dir=back,arrowtail=empty];
+	c46623:p -> c46608:p [dir=back,arrowtail=empty];
 }
 

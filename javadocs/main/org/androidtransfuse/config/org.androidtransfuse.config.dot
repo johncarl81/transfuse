@@ -9,36 +9,94 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
+	// org.androidtransfuse.config.SynchronizedElements
+	c0 [label=<<table title="org.androidtransfuse.config.SynchronizedElements" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SynchronizedElements.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> SynchronizedElements </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.XStreamProvider
-	c0 [label=<<table title="org.androidtransfuse.config.XStreamProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XStreamProvider.html">
+	c1 [label=<<table title="org.androidtransfuse.config.XStreamProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XStreamProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> XStreamProvider </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.TransfuseSetupGuiceModule
-	c1 [label=<<table title="org.androidtransfuse.config.TransfuseSetupGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseSetupGuiceModule.html">
+	c2 [label=<<table title="org.androidtransfuse.config.TransfuseSetupGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseSetupGuiceModule.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseSetupGuiceModule </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.SynchronizedFiler
+	c3 [label=<<table title="org.androidtransfuse.config.SynchronizedFiler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SynchronizedFiler.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> SynchronizedFiler </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.ConfigurationScope
+	c4 [label=<<table title="org.androidtransfuse.config.ConfigurationScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConfigurationScope.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ConfigurationScope </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.EnterableScope
+	c5 [label=<<table title="org.androidtransfuse.config.EnterableScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EnterableScope.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> EnterableScope </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.ThrowingProvider<T>
+	c6 [label=<<table title="org.androidtransfuse.config.ThrowingProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ThrowingProvider.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ThrowingProvider&lt;T&gt; </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.Nullable
-	c2 [label=<<table title="org.androidtransfuse.config.Nullable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Nullable.html">
+	c7 [label=<<table title="org.androidtransfuse.config.Nullable" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Nullable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Nullable </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.TransfuseInjector
+	c8 [label=<<table title="org.androidtransfuse.config.TransfuseInjector" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseInjector.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> TransfuseInjector </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.TransfuseGenerateGuiceModule
-	c3 [label=<<table title="org.androidtransfuse.config.TransfuseGenerateGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseGenerateGuiceModule.html">
+	c9 [label=<<table title="org.androidtransfuse.config.TransfuseGenerateGuiceModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseGenerateGuiceModule.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> TransfuseGenerateGuiceModule </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.config.TransfuseAndroidModule
-	c4 [label=<<table title="org.androidtransfuse.config.TransfuseAndroidModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAndroidModule.html">
+	c10 [label=<<table title="org.androidtransfuse.config.TransfuseAndroidModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseAndroidModule.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> TransfuseAndroidModule </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.CodeGenerationScope
+	c11 [label=<<table title="org.androidtransfuse.config.CodeGenerationScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CodeGenerationScope.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> CodeGenerationScope </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.MapScope
+	c12 [label=<<table title="org.androidtransfuse.config.MapScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MapScope.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MapScope </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.config.ThreadLocalScope
+	c13 [label=<<table title="org.androidtransfuse.config.ThreadLocalScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ThreadLocalScope.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> ThreadLocalScope </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	//org.androidtransfuse.config.MapScope implements org.androidtransfuse.config.EnterableScope
+	c5:p -> c12:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.config.ThreadLocalScope implements org.androidtransfuse.config.EnterableScope
+	c5:p -> c13:p [dir=back,arrowtail=empty,style=dashed];
 }
 

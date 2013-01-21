@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="c89114" href="./InjectionNodeFactoryImpl.html" title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl" alt="" coords="15,118,185,143"/>
-<area shape="rect" id="c89118" href="./InjectionNodeFactory.html" title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory" alt="" coords="155,11,301,53"/>
-<area shape="rect" id="c89140" href="./BroadcastReceiverInjectionNodeFactory.html" title="org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory" alt="" coords="229,118,485,143"/>
+<area shape="rect" id="c145580" href="./InjectionNodeFactoryImpl.html" title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactoryImpl" alt="" coords="15,118,185,143"/>
+<area shape="rect" id="c145584" href="./InjectionNodeFactory.html" title="org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory" alt="" coords="155,11,301,53"/>
+<area shape="rect" id="c145607" href="./BroadcastReceiverInjectionNodeFactory.html" title="org.androidtransfuse.gen.componentBuilder.BroadcastReceiverInjectionNodeFactory" alt="" coords="229,118,485,143"/>
 </map>

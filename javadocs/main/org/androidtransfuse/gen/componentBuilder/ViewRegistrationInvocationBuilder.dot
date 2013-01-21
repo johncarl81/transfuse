@@ -10,35 +10,35 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c87603 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ViewRegistrationInvocationBuilder.html">
+	c143659 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ViewRegistrationInvocationBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ViewRegistrationInvocationBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl
-	c87609 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewTypeRegistrationInvocationBuilderImpl.html">
+	c143665 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewTypeRegistrationInvocationBuilderImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewTypeRegistrationInvocationBuilderImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl
-	c87625 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewMethodRegistrationInvocationBuilderImpl.html">
+	c143682 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewMethodRegistrationInvocationBuilderImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewMethodRegistrationInvocationBuilderImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl
-	c87626 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewFieldRegistrationInvocationBuilderImpl.html">
+	c143683 [label=<<table title="org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewFieldRegistrationInvocationBuilderImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewFieldRegistrationInvocationBuilderImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl implements org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c87603:p -> c87609:p [dir=back,arrowtail=empty,style=dashed];
+	c143659:p -> c143665:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl implements org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c87603:p -> c87625:p [dir=back,arrowtail=empty,style=dashed];
+	c143659:p -> c143682:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl implements org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder
-	c87603:p -> c87626:p [dir=back,arrowtail=empty,style=dashed];
+	c143659:p -> c143683:p [dir=back,arrowtail=empty,style=dashed];
 }
 

@@ -1,12 +1,13 @@
 <map id="G" name="G">
-<area shape="rect" id="c361" href="./DeclareField.html" title="org.androidtransfuse.util.DeclareField" alt="" coords="16,19,109,45"/>
-<area shape="rect" id="c362" href="./Generated.html" title="org.androidtransfuse.util.Generated" alt="" coords="154,19,235,45"/>
-<area shape="rect" id="c363" href="./InjectionUtil.html" title="org.androidtransfuse.util.InjectionUtil" alt="" coords="279,19,369,45"/>
-<area shape="rect" id="c364" href="./ExtraUtil.html" title="org.androidtransfuse.util.ExtraUtil" alt="" coords="413,19,485,45"/>
-<area shape="rect" id="c365" href="./ParcelableWrapper.html" title="org.androidtransfuse.util.ParcelableWrapper" alt="" coords="531,11,685,53"/>
-<area shape="rect" id="c366" href="./AccessibleElementPrivilegedAction.html" title="org.androidtransfuse.util.AccessibleElementPrivilegedAction" alt="" coords="731,19,1155,45"/>
-<area shape="rect" id="c367" href="./TransfuseInjectionException.html" title="org.androidtransfuse.util.TransfuseInjectionException" alt="" coords="1199,19,1385,45"/>
-<area shape="rect" id="c368" href="./VirtualProxyException.html" title="org.androidtransfuse.util.VirtualProxyException" alt="" coords="1429,19,1579,45"/>
-<area shape="rect" id="c369" href="./DelayedLoad.html" title="org.androidtransfuse.util.DelayedLoad" alt="" coords="1623,11,1745,53"/>
-<area shape="rect" id="c370" href="./TransfuseRuntimeException.html" title="org.androidtransfuse.util.TransfuseRuntimeException" alt="" coords="1789,19,1974,45"/>
+<area shape="rect" id="c527" href="./DeclareField.html" title="org.androidtransfuse.util.DeclareField" alt="" coords="16,19,109,45"/>
+<area shape="rect" id="c528" href="./Generated.html" title="org.androidtransfuse.util.Generated" alt="" coords="154,19,235,45"/>
+<area shape="rect" id="c529" href="./InjectionUtil.html" title="org.androidtransfuse.util.InjectionUtil" alt="" coords="279,19,369,45"/>
+<area shape="rect" id="c530" href="./ExtraUtil.html" title="org.androidtransfuse.util.ExtraUtil" alt="" coords="413,19,485,45"/>
+<area shape="rect" id="c531" href="./AccessibleElementPrivilegedAction.html" title="org.androidtransfuse.util.AccessibleElementPrivilegedAction" alt="" coords="531,19,955,45"/>
+<area shape="rect" id="c532" href="./TransfuseInjectionException.html" title="org.androidtransfuse.util.TransfuseInjectionException" alt="" coords="999,19,1185,45"/>
+<area shape="rect" id="c533" href="./VirtualProxyException.html" title="org.androidtransfuse.util.VirtualProxyException" alt="" coords="1229,19,1379,45"/>
+<area shape="rect" id="c534" href="./ParcelWrapper.html" title="org.androidtransfuse.util.ParcelWrapper" alt="" coords="1424,11,1555,53"/>
+<area shape="rect" id="c535" href="./GeneratedRepositoryProxy.html" title="org.androidtransfuse.util.GeneratedRepositoryProxy" alt="" coords="1599,19,1801,45"/>
+<area shape="rect" id="c536" href="./DelayedLoad.html" title="org.androidtransfuse.util.DelayedLoad" alt="" coords="1845,11,1966,53"/>
+<area shape="rect" id="c537" href="./TransfuseRuntimeException.html" title="org.androidtransfuse.util.TransfuseRuntimeException" alt="" coords="2010,19,2195,45"/>
 </map>

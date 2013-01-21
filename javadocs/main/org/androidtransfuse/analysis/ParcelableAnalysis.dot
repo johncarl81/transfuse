@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.Analysis<T>
-	c26366 [label=<<table title="org.androidtransfuse.analysis.Analysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Analysis.html">
+	c38514 [label=<<table title="org.androidtransfuse.analysis.Analysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Analysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Analysis&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ParcelableAnalysis
-	c26371 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ParcelableAnalysis.html">
+	c38519 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ParcelableAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ParcelableAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.ParcelableAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c26366:p -> c26371:p [dir=back,arrowtail=empty,style=dashed];
+	c38514:p -> c38519:p [dir=back,arrowtail=empty,style=dashed];
 }
 

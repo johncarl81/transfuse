@@ -10,26 +10,26 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.MethodInjectionPoint
-	c9087 [label=<<table title="org.androidtransfuse.model.MethodInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodInjectionPoint.html">
+	c16176 [label=<<table title="org.androidtransfuse.model.MethodInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MethodInjectionPoint.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> MethodInjectionPoint </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.MethodInjectionPointBase
-	c9089 [label=<<table title="org.androidtransfuse.model.MethodInjectionPointBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MethodInjectionPointBase.html">
+	c16178 [label=<<table title="org.androidtransfuse.model.MethodInjectionPointBase" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MethodInjectionPointBase.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MethodInjectionPointBase </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.model.ConstructorInjectionPoint
-	c9092 [label=<<table title="org.androidtransfuse.model.ConstructorInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConstructorInjectionPoint.html">
+	c16181 [label=<<table title="org.androidtransfuse.model.ConstructorInjectionPoint" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConstructorInjectionPoint.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ConstructorInjectionPoint </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.model.MethodInjectionPoint extends org.androidtransfuse.model.MethodInjectionPointBase
-	c9089:p -> c9087:p [dir=back,arrowtail=empty];
+	c16178:p -> c16176:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.model.ConstructorInjectionPoint extends org.androidtransfuse.model.MethodInjectionPointBase
-	c9089:p -> c9092:p [dir=back,arrowtail=empty];
+	c16178:p -> c16181:p [dir=back,arrowtail=empty];
 }
 

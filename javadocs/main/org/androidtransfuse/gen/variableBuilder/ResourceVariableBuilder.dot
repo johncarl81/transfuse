@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder
-	c78816 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ResourceVariableBuilder.html">
+	c126334 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ResourceVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ResourceVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c78817 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableBuilder.html">
+	c126335 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> VariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c78817:p -> c78816:p [dir=back,arrowtail=empty,style=dashed];
+	c126335:p -> c126334:p [dir=back,arrowtail=empty,style=dashed];
 }
 

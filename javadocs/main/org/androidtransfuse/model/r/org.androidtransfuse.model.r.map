@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c961" href="./RResourceReferenceBuilder.html" title="org.androidtransfuse.model.r.RResourceReferenceBuilder" alt="" coords="16,19,203,45"/>
-<area shape="rect" id="c962" href="./ResourceIdentifier.html" title="org.androidtransfuse.model.r.ResourceIdentifier" alt="" coords="247,19,374,45"/>
-<area shape="rect" id="c963" href="./RResourceComposite.html" title="org.androidtransfuse.model.r.RResourceComposite" alt="" coords="292,118,441,143"/>
-<area shape="rect" id="c964" href="./RResourceMapping.html" title="org.androidtransfuse.model.r.RResourceMapping" alt="" coords="487,118,623,143"/>
-<area shape="rect" id="c965" href="./RBuilder.html" title="org.androidtransfuse.model.r.RBuilder" alt="" coords="549,19,619,45"/>
-<area shape="rect" id="c966" href="./RResource.html" title="org.androidtransfuse.model.r.RResource" alt="" coords="418,11,505,53"/>
+<area shape="rect" id="c1217" href="./RResourceReferenceBuilder.html" title="org.androidtransfuse.model.r.RResourceReferenceBuilder" alt="" coords="16,19,203,45"/>
+<area shape="rect" id="c1218" href="./ResourceIdentifier.html" title="org.androidtransfuse.model.r.ResourceIdentifier" alt="" coords="247,19,374,45"/>
+<area shape="rect" id="c1219" href="./RResourceComposite.html" title="org.androidtransfuse.model.r.RResourceComposite" alt="" coords="292,118,441,143"/>
+<area shape="rect" id="c1220" href="./RResourceMapping.html" title="org.androidtransfuse.model.r.RResourceMapping" alt="" coords="487,118,623,143"/>
+<area shape="rect" id="c1221" href="./RBuilder.html" title="org.androidtransfuse.model.r.RBuilder" alt="" coords="549,19,619,45"/>
+<area shape="rect" id="c1222" href="./RResource.html" title="org.androidtransfuse.model.r.RResource" alt="" coords="418,11,505,53"/>
 </map>

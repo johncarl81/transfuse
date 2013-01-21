@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c37277 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysis.html">
+	c51606 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ASTAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ASTAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer
-	c37284 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./RegistrationAnalyzer.html">
+	c51613 [label=<<table title="org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./RegistrationAnalyzer.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> RegistrationAnalyzer </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer implements org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis
-	c37277:p -> c37284:p [dir=back,arrowtail=empty,style=dashed];
+	c51606:p -> c51613:p [dir=back,arrowtail=empty,style=dashed];
 }
 

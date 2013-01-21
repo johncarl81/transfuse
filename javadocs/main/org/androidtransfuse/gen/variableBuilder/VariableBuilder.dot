@@ -10,75 +10,75 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.ExpressionVariableBuilderWrapper
-	c79095 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExpressionVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExpressionVariableBuilderWrapper.html">
+	c126694 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExpressionVariableBuilderWrapper" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExpressionVariableBuilderWrapper.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExpressionVariableBuilderWrapper </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder
-	c79101 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConsistentTypeVariableBuilder.html">
+	c126700 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConsistentTypeVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ConsistentTypeVariableBuilder </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder
-	c79111 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableInjectionBuilder.html">
+	c126710 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./VariableInjectionBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> VariableInjectionBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder
-	c79114 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderVariableBuilder.html">
+	c126714 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ProviderVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder
-	c79118 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceVariableBuilder.html">
+	c126718 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ResourceVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableBuilder.html">
+	c126719 [label=<<table title="org.androidtransfuse.gen.variableBuilder.VariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./VariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> VariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.PreferenceVariableBuilder
-	c79129 [label=<<table title="org.androidtransfuse.gen.variableBuilder.PreferenceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PreferenceVariableBuilder.html">
+	c126729 [label=<<table title="org.androidtransfuse.gen.variableBuilder.PreferenceVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PreferenceVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PreferenceVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder
-	c79178 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../scopeBuilder/SingletonScopeBuilder.html">
+	c126795 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../scopeBuilder/SingletonScopeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SingletonScopeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder
-	c79179 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../scopeBuilder/ContextScopeVariableBuilder.html">
+	c126796 [label=<<table title="org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../scopeBuilder/ContextScopeVariableBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ContextScopeVariableBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.ExpressionVariableBuilderWrapper implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79095:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126694:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79101:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126700:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79111:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126710:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79114:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126714:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.ResourceVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79118:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126718:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.PreferenceVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79129:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126729:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79178:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126795:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder implements org.androidtransfuse.gen.variableBuilder.VariableBuilder
-	c79119:p -> c79179:p [dir=back,arrowtail=empty,style=dashed];
+	c126719:p -> c126796:p [dir=back,arrowtail=empty,style=dashed];
 }
 

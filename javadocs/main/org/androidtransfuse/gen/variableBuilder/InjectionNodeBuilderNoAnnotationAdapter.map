@@ -1,7 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c74270" href="./VariableASTImplementationInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableASTImplementationInjectionNodeBuilder" alt="" coords="15,214,318,239"/>
-<area shape="rect" id="c74271" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="325,118,590,143"/>
-<area shape="rect" id="c74280" href="./ProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilder" alt="" coords="363,214,552,239"/>
-<area shape="rect" id="c74288" href="./VariableInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder" alt="" coords="597,214,785,239"/>
-<area shape="rect" id="c74274" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="387,11,528,53"/>
+<area shape="rect" id="c120173" href="./VariableASTImplementationInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableASTImplementationInjectionNodeBuilder" alt="" coords="15,214,318,239"/>
+<area shape="rect" id="c120174" href="./InjectionNodeBuilderNoAnnotationAdapter.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter" alt="" coords="441,118,706,143"/>
+<area shape="rect" id="c120183" href="./ProviderInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilder" alt="" coords="363,214,552,239"/>
+<area shape="rect" id="c120192" href="./VariableInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder" alt="" coords="597,214,785,239"/>
+<area shape="rect" id="c120202" href="./ProvidesInjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilder" alt="" coords="829,214,1021,239"/>
+<area shape="rect" id="c120177" href="./InjectionNodeBuilder.html" title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" alt="" coords="503,11,644,53"/>
 </map>

@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c64568" href="./ComponentGenerator.html" title="org.androidtransfuse.gen.ComponentGenerator" alt="" coords="15,118,161,143"/>
-<area shape="rect" id="c64569" href="./ApplicationGenerator.html" title="org.androidtransfuse.gen.ApplicationGenerator" alt="" coords="205,118,347,143"/>
-<area shape="rect" id="c64572" href="./AnalysisGeneration.html" title="org.androidtransfuse.gen.AnalysisGeneration" alt="" coords="392,118,549,143"/>
-<area shape="rect" id="c64574" href="./Generator.html" title="org.androidtransfuse.gen.Generator" alt="" coords="323,11,424,53"/>
-<area shape="rect" id="c64575" href="./InjectorGenerator.html" title="org.androidtransfuse.gen.InjectorGenerator" alt="" coords="594,118,715,143"/>
-</map>

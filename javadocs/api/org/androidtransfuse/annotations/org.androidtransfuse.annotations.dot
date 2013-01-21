@@ -10,385 +10,415 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.annotations.OnTerminate
-	c99 [label=<<table title="org.androidtransfuse.annotations.OnTerminate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnTerminate.html">
+	c113 [label=<<table title="org.androidtransfuse.annotations.OnTerminate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnTerminate.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnTerminate </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnRestart
-	c100 [label=<<table title="org.androidtransfuse.annotations.OnRestart" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRestart.html">
+	c114 [label=<<table title="org.androidtransfuse.annotations.OnRestart" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRestart.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnRestart </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.BindProvider
-	c101 [label=<<table title="org.androidtransfuse.annotations.BindProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProvider.html">
+	c115 [label=<<table title="org.androidtransfuse.annotations.BindProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> BindProvider </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.MetaData
-	c102 [label=<<table title="org.androidtransfuse.annotations.MetaData" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaData.html">
+	c116 [label=<<table title="org.androidtransfuse.annotations.MetaData" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaData.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MetaData </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnDestroyView
-	c103 [label=<<table title="org.androidtransfuse.annotations.OnDestroyView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDestroyView.html">
+	c117 [label=<<table title="org.androidtransfuse.annotations.OnDestroyView" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDestroyView.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnDestroyView </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.annotations.LabeledEnum
-	c104 [label=<<table title="org.androidtransfuse.annotations.LabeledEnum" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LabeledEnum.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> LabeledEnum </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Intent
-	c105 [label=<<table title="org.androidtransfuse.annotations.Intent" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Intent.html">
+	c118 [label=<<table title="org.androidtransfuse.annotations.Intent" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Intent.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Intent </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Extra
-	c106 [label=<<table title="org.androidtransfuse.annotations.Extra" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Extra.html">
+	c119 [label=<<table title="org.androidtransfuse.annotations.Extra" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Extra.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Extra </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.UIThread
-	c107 [label=<<table title="org.androidtransfuse.annotations.UIThread" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UIThread.html">
+	c120 [label=<<table title="org.androidtransfuse.annotations.UIThread" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UIThread.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> UIThread </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Application
-	c108 [label=<<table title="org.androidtransfuse.annotations.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Application.html">
+	c121 [label=<<table title="org.androidtransfuse.annotations.Application" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Application.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Application </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnBackPressed
-	c109 [label=<<table title="org.androidtransfuse.annotations.OnBackPressed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnBackPressed.html">
+	c122 [label=<<table title="org.androidtransfuse.annotations.OnBackPressed" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnBackPressed.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnBackPressed </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.TransfuseModule
-	c110 [label=<<table title="org.androidtransfuse.annotations.TransfuseModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseModule.html">
+	c123 [label=<<table title="org.androidtransfuse.annotations.TransfuseModule" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./TransfuseModule.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> TransfuseModule </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Exported
-	c111 [label=<<table title="org.androidtransfuse.annotations.Exported" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Exported.html">
+	c124 [label=<<table title="org.androidtransfuse.annotations.Exported" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Exported.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> Exported </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.Labeled
+	c125 [label=<<table title="org.androidtransfuse.annotations.Labeled" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Labeled.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
+<tr><td align="center" balign="center"> Labeled </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Parcel
-	c112 [label=<<table title="org.androidtransfuse.annotations.Parcel" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Parcel.html">
+	c126 [label=<<table title="org.androidtransfuse.annotations.Parcel" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Parcel.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Parcel </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.Parcel.EmptyConverter
+	c127 [label=<<table title="org.androidtransfuse.annotations.Parcel.EmptyConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Parcel.EmptyConverter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> EmptyConverter </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.IntentFilters
-	c113 [label=<<table title="org.androidtransfuse.annotations.IntentFilters" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilters.html">
+	c128 [label=<<table title="org.androidtransfuse.annotations.IntentFilters" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilters.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> IntentFilters </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.LayoutHandler
-	c114 [label=<<table title="org.androidtransfuse.annotations.LayoutHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandler.html">
+	c129 [label=<<table title="org.androidtransfuse.annotations.LayoutHandler" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LayoutHandler.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> LayoutHandler </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnPause
-	c115 [label=<<table title="org.androidtransfuse.annotations.OnPause" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnPause.html">
+	c130 [label=<<table title="org.androidtransfuse.annotations.OnPause" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnPause.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnPause </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.IntentType
-	c116 [label=<<table title="org.androidtransfuse.annotations.IntentType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentType.html">
+	c131 [label=<<table title="org.androidtransfuse.annotations.IntentType" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentType.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> IntentType </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Transient
-	c117 [label=<<table title="org.androidtransfuse.annotations.Transient" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Transient.html">
+	c132 [label=<<table title="org.androidtransfuse.annotations.Transient" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Transient.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Transient </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.ParcelConverter<T>
-	c118 [label=<<table title="org.androidtransfuse.annotations.ParcelConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelConverter.html">
+	c133 [label=<<table title="org.androidtransfuse.annotations.ParcelConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelConverter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> ParcelConverter&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.annotations.ParcelConverter.EmptyConverter
-	c119 [label=<<table title="org.androidtransfuse.annotations.ParcelConverter.EmptyConverter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelConverter.EmptyConverter.html">
+	// org.androidtransfuse.annotations.OnTrimMemory
+	c134 [label=<<table title="org.androidtransfuse.annotations.OnTrimMemory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnTrimMemory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> EmptyConverter </td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnTrimMemory </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.MetaDataSet
-	c120 [label=<<table title="org.androidtransfuse.annotations.MetaDataSet" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaDataSet.html">
+	c135 [label=<<table title="org.androidtransfuse.annotations.MetaDataSet" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaDataSet.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> MetaDataSet </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnConfigurationChanged
-	c121 [label=<<table title="org.androidtransfuse.annotations.OnConfigurationChanged" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnConfigurationChanged.html">
+	c136 [label=<<table title="org.androidtransfuse.annotations.OnConfigurationChanged" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnConfigurationChanged.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnConfigurationChanged </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnCreate
-	c122 [label=<<table title="org.androidtransfuse.annotations.OnCreate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnCreate.html">
+	c137 [label=<<table title="org.androidtransfuse.annotations.OnCreate" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnCreate.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnCreate </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnStart
-	c123 [label=<<table title="org.androidtransfuse.annotations.OnStart" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnStart.html">
+	c138 [label=<<table title="org.androidtransfuse.annotations.OnStart" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnStart.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnStart </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnStop
-	c124 [label=<<table title="org.androidtransfuse.annotations.OnStop" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnStop.html">
+	c139 [label=<<table title="org.androidtransfuse.annotations.OnStop" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnStop.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnStop </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.LaunchMode
-	c125 [label=<<table title="org.androidtransfuse.annotations.LaunchMode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LaunchMode.html">
+	c140 [label=<<table title="org.androidtransfuse.annotations.LaunchMode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./LaunchMode.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> LaunchMode </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.WindowSoftInputMode
-	c126 [label=<<table title="org.androidtransfuse.annotations.WindowSoftInputMode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WindowSoftInputMode.html">
+	c141 [label=<<table title="org.androidtransfuse.annotations.WindowSoftInputMode" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WindowSoftInputMode.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> WindowSoftInputMode </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.BroadcastReceiver
-	c127 [label=<<table title="org.androidtransfuse.annotations.BroadcastReceiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiver.html">
+	c142 [label=<<table title="org.androidtransfuse.annotations.BroadcastReceiver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> BroadcastReceiver </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.annotations.ImplementedBy
-	c128 [label=<<table title="org.androidtransfuse.annotations.ImplementedBy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ImplementedBy.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ImplementedBy </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Injector
-	c129 [label=<<table title="org.androidtransfuse.annotations.Injector" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Injector.html">
+	c143 [label=<<table title="org.androidtransfuse.annotations.Injector" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Injector.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Injector </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Bind
-	c130 [label=<<table title="org.androidtransfuse.annotations.Bind" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Bind.html">
+	c144 [label=<<table title="org.androidtransfuse.annotations.Bind" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Bind.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Bind </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnRestoreInstanceState
-	c131 [label=<<table title="org.androidtransfuse.annotations.OnRestoreInstanceState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRestoreInstanceState.html">
+	c145 [label=<<table title="org.androidtransfuse.annotations.OnRestoreInstanceState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRestoreInstanceState.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnRestoreInstanceState </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.BindInterceptor
-	c132 [label=<<table title="org.androidtransfuse.annotations.BindInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptor.html">
+	c146 [label=<<table title="org.androidtransfuse.annotations.BindInterceptor" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> BindInterceptor </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.ContextScope
-	c133 [label=<<table title="org.androidtransfuse.annotations.ContextScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ContextScope.html">
+	c147 [label=<<table title="org.androidtransfuse.annotations.ContextScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ContextScope.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> ContextScope </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnRebind
-	c134 [label=<<table title="org.androidtransfuse.annotations.OnRebind" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRebind.html">
+	c148 [label=<<table title="org.androidtransfuse.annotations.OnRebind" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnRebind.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnRebind </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.BindInterceptors
+	c149 [label=<<table title="org.androidtransfuse.annotations.BindInterceptors" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindInterceptors.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> BindInterceptors </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.ConfigChanges
-	c135 [label=<<table title="org.androidtransfuse.annotations.ConfigChanges" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConfigChanges.html">
+	c150 [label=<<table title="org.androidtransfuse.annotations.ConfigChanges" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConfigChanges.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ConfigChanges </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.UIOptions
-	c136 [label=<<table title="org.androidtransfuse.annotations.UIOptions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UIOptions.html">
+	c151 [label=<<table title="org.androidtransfuse.annotations.UIOptions" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UIOptions.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> UIOptions </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.NonConfigurationInstance
-	c137 [label=<<table title="org.androidtransfuse.annotations.NonConfigurationInstance" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NonConfigurationInstance.html">
+	c152 [label=<<table title="org.androidtransfuse.annotations.NonConfigurationInstance" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NonConfigurationInstance.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> NonConfigurationInstance </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.RegisterListener
-	c138 [label=<<table title="org.androidtransfuse.annotations.RegisterListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegisterListener.html">
+	c153 [label=<<table title="org.androidtransfuse.annotations.RegisterListener" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RegisterListener.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> RegisterListener </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnDestroy
-	c139 [label=<<table title="org.androidtransfuse.annotations.OnDestroy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDestroy.html">
+	c154 [label=<<table title="org.androidtransfuse.annotations.OnDestroy" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDestroy.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnDestroy </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnLowMemory
-	c140 [label=<<table title="org.androidtransfuse.annotations.OnLowMemory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnLowMemory.html">
+	c155 [label=<<table title="org.androidtransfuse.annotations.OnLowMemory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnLowMemory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnLowMemory </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnResume
-	c141 [label=<<table title="org.androidtransfuse.annotations.OnResume" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnResume.html">
+	c156 [label=<<table title="org.androidtransfuse.annotations.OnResume" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnResume.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnResume </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Service
-	c142 [label=<<table title="org.androidtransfuse.annotations.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Service.html">
+	c157 [label=<<table title="org.androidtransfuse.annotations.Service" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Service.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Service </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.OnTaskRemoved
+	c158 [label=<<table title="org.androidtransfuse.annotations.OnTaskRemoved" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnTaskRemoved.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnTaskRemoved </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.BindProviders
+	c159 [label=<<table title="org.androidtransfuse.annotations.BindProviders" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindProviders.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> BindProviders </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Layout
-	c143 [label=<<table title="org.androidtransfuse.annotations.Layout" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Layout.html">
+	c160 [label=<<table title="org.androidtransfuse.annotations.Layout" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Layout.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Layout </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Resource
-	c144 [label=<<table title="org.androidtransfuse.annotations.Resource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Resource.html">
+	c161 [label=<<table title="org.androidtransfuse.annotations.Resource" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Resource.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Resource </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.Provides
+	c162 [label=<<table title="org.androidtransfuse.annotations.Provides" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Provides.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Provides </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.SystemService
-	c145 [label=<<table title="org.androidtransfuse.annotations.SystemService" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemService.html">
+	c163 [label=<<table title="org.androidtransfuse.annotations.SystemService" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemService.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> SystemService </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnActivityCreated
-	c146 [label=<<table title="org.androidtransfuse.annotations.OnActivityCreated" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnActivityCreated.html">
+	c164 [label=<<table title="org.androidtransfuse.annotations.OnActivityCreated" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnActivityCreated.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnActivityCreated </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.View
-	c147 [label=<<table title="org.androidtransfuse.annotations.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./View.html">
+	c165 [label=<<table title="org.androidtransfuse.annotations.View" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./View.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> View </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnReceive
-	c148 [label=<<table title="org.androidtransfuse.annotations.OnReceive" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnReceive.html">
+	c166 [label=<<table title="org.androidtransfuse.annotations.OnReceive" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnReceive.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnReceive </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Fragment
-	c149 [label=<<table title="org.androidtransfuse.annotations.Fragment" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Fragment.html">
+	c167 [label=<<table title="org.androidtransfuse.annotations.Fragment" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Fragment.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Fragment </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Observes
-	c150 [label=<<table title="org.androidtransfuse.annotations.Observes" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Observes.html">
+	c168 [label=<<table title="org.androidtransfuse.annotations.Observes" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Observes.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Observes </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
+	// org.androidtransfuse.annotations.Bindings
+	c169 [label=<<table title="org.androidtransfuse.annotations.Bindings" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Bindings.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Bindings </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Preference
-	c151 [label=<<table title="org.androidtransfuse.annotations.Preference" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Preference.html">
+	c170 [label=<<table title="org.androidtransfuse.annotations.Preference" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Preference.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Preference </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Asynchronous
-	c152 [label=<<table title="org.androidtransfuse.annotations.Asynchronous" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Asynchronous.html">
+	c171 [label=<<table title="org.androidtransfuse.annotations.Asynchronous" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Asynchronous.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Asynchronous </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.ScreenOrientation
-	c153 [label=<<table title="org.androidtransfuse.annotations.ScreenOrientation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenOrientation.html">
+	c172 [label=<<table title="org.androidtransfuse.annotations.ScreenOrientation" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScreenOrientation.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;enumeration&#187; </td></tr>
 <tr><td align="center" balign="center"> ScreenOrientation </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnDetach
-	c154 [label=<<table title="org.androidtransfuse.annotations.OnDetach" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDetach.html">
+	c173 [label=<<table title="org.androidtransfuse.annotations.OnDetach" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnDetach.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnDetach </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.Activity
-	c155 [label=<<table title="org.androidtransfuse.annotations.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Activity.html">
+	c174 [label=<<table title="org.androidtransfuse.annotations.Activity" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Activity.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> Activity </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnSaveInstanceState
-	c156 [label=<<table title="org.androidtransfuse.annotations.OnSaveInstanceState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnSaveInstanceState.html">
+	c175 [label=<<table title="org.androidtransfuse.annotations.OnSaveInstanceState" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnSaveInstanceState.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnSaveInstanceState </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.IntentFilter
-	c157 [label=<<table title="org.androidtransfuse.annotations.IntentFilter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilter.html">
+	c176 [label=<<table title="org.androidtransfuse.annotations.IntentFilter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./IntentFilter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> IntentFilter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.annotations.OnListItemClick
-	c158 [label=<<table title="org.androidtransfuse.annotations.OnListItemClick" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnListItemClick.html">
+	c177 [label=<<table title="org.androidtransfuse.annotations.OnListItemClick" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OnListItemClick.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> OnListItemClick </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.annotations.ParcelConverter.EmptyConverter implements org.androidtransfuse.annotations.ParcelConverter<T>
-	c118:p -> c119:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.annotations.LaunchMode implements org.androidtransfuse.annotations.LabeledEnum
-	c104:p -> c125:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.annotations.WindowSoftInputMode implements org.androidtransfuse.annotations.LabeledEnum
-	c104:p -> c126:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.annotations.ConfigChanges implements org.androidtransfuse.annotations.LabeledEnum
-	c104:p -> c135:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.annotations.UIOptions implements org.androidtransfuse.annotations.LabeledEnum
-	c104:p -> c136:p [dir=back,arrowtail=empty,style=dashed];
-	//org.androidtransfuse.annotations.ScreenOrientation implements org.androidtransfuse.annotations.LabeledEnum
-	c104:p -> c153:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.Parcel.EmptyConverter implements org.androidtransfuse.annotations.ParcelConverter<T>
+	c133:p -> c127:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.LaunchMode implements org.androidtransfuse.annotations.Labeled
+	c125:p -> c140:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.WindowSoftInputMode implements org.androidtransfuse.annotations.Labeled
+	c125:p -> c141:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.ConfigChanges implements org.androidtransfuse.annotations.Labeled
+	c125:p -> c150:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.UIOptions implements org.androidtransfuse.annotations.Labeled
+	c125:p -> c151:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.annotations.ScreenOrientation implements org.androidtransfuse.annotations.Labeled
+	c125:p -> c172:p [dir=back,arrowtail=empty,style=dashed];
 }
 

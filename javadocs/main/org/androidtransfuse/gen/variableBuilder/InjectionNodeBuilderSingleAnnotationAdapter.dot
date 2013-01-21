@@ -10,67 +10,67 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.gen.variableBuilder.FragmentViewInjectionNodeBuilder
-	c78191 [label=<<table title="org.androidtransfuse.gen.variableBuilder.FragmentViewInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentViewInjectionNodeBuilder.html">
+	c125544 [label=<<table title="org.androidtransfuse.gen.variableBuilder.FragmentViewInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentViewInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FragmentViewInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder
-	c78198 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceInjectionNodeBuilder.html">
+	c125551 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ResourceInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ResourceInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder
-	c78200 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilder.html">
+	c125553 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> InjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder
-	c78207 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewInjectionNodeBuilder.html">
+	c125561 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ViewInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ViewInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder
-	c78209 [label=<<table title="org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemServiceBindingInjectionNodeBuilder.html">
+	c125563 [label=<<table title="org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./SystemServiceBindingInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> SystemServiceBindingInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
+	c125564 [label=<<table title="org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./InjectionNodeBuilderSingleAnnotationAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> InjectionNodeBuilderSingleAnnotationAdapter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.PreferenceInjectionNodeBuilder
-	c78211 [label=<<table title="org.androidtransfuse.gen.variableBuilder.PreferenceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PreferenceInjectionNodeBuilder.html">
+	c125565 [label=<<table title="org.androidtransfuse.gen.variableBuilder.PreferenceInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./PreferenceInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> PreferenceInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder
-	c78225 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraInjectionNodeBuilder.html">
+	c125580 [label=<<table title="org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ExtraInjectionNodeBuilder.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ExtraInjectionNodeBuilder </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.gen.variableBuilder.FragmentViewInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78191:p [dir=back,arrowtail=empty];
+	c125564:p -> c125544:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.ResourceInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78198:p [dir=back,arrowtail=empty];
+	c125564:p -> c125551:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.ViewInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78207:p [dir=back,arrowtail=empty];
+	c125564:p -> c125561:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.SystemServiceBindingInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78209:p [dir=back,arrowtail=empty];
+	c125564:p -> c125563:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter implements org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder
-	c78200:p -> c78210:p [dir=back,arrowtail=empty,style=dashed];
+	c125553:p -> c125564:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.gen.variableBuilder.PreferenceInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78211:p [dir=back,arrowtail=empty];
+	c125564:p -> c125565:p [dir=back,arrowtail=empty];
 	//org.androidtransfuse.gen.variableBuilder.ExtraInjectionNodeBuilder extends org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderSingleAnnotationAdapter
-	c78210:p -> c78225:p [dir=back,arrowtail=empty];
+	c125564:p -> c125580:p [dir=back,arrowtail=empty];
 }
 

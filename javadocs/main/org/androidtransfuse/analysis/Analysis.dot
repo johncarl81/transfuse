@@ -10,59 +10,59 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.Analysis<T>
-	c24856 [label=<<table title="org.androidtransfuse.analysis.Analysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Analysis.html">
+	c36594 [label=<<table title="org.androidtransfuse.analysis.Analysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Analysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Analysis&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.FragmentAnalysis
-	c24857 [label=<<table title="org.androidtransfuse.analysis.FragmentAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentAnalysis.html">
+	c36595 [label=<<table title="org.androidtransfuse.analysis.FragmentAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./FragmentAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> FragmentAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.BroadcastReceiverAnalysis
-	c24858 [label=<<table title="org.androidtransfuse.analysis.BroadcastReceiverAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverAnalysis.html">
+	c36596 [label=<<table title="org.androidtransfuse.analysis.BroadcastReceiverAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BroadcastReceiverAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BroadcastReceiverAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ParcelableAnalysis
-	c24861 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableAnalysis.html">
+	c36599 [label=<<table title="org.androidtransfuse.analysis.ParcelableAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ParcelableAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ParcelableAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ActivityAnalysis
-	c24862 [label=<<table title="org.androidtransfuse.analysis.ActivityAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAnalysis.html">
+	c36600 [label=<<table title="org.androidtransfuse.analysis.ActivityAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActivityAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ApplicationAnalysis
-	c24866 [label=<<table title="org.androidtransfuse.analysis.ApplicationAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationAnalysis.html">
+	c36604 [label=<<table title="org.androidtransfuse.analysis.ApplicationAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ApplicationAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ApplicationAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.ServiceAnalysis
-	c24868 [label=<<table title="org.androidtransfuse.analysis.ServiceAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ServiceAnalysis.html">
+	c36606 [label=<<table title="org.androidtransfuse.analysis.ServiceAnalysis" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ServiceAnalysis.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ServiceAnalysis </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.analysis.FragmentAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24857:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36595:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.BroadcastReceiverAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24858:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36596:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.ParcelableAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24861:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36599:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.ActivityAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24862:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36600:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.ApplicationAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24866:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36604:p [dir=back,arrowtail=empty,style=dashed];
 	//org.androidtransfuse.analysis.ServiceAnalysis implements org.androidtransfuse.analysis.Analysis<T>
-	c24856:p -> c24868:p [dir=back,arrowtail=empty,style=dashed];
+	c36594:p -> c36606:p [dir=back,arrowtail=empty,style=dashed];
 }
 

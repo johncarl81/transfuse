@@ -10,85 +10,73 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.analysis.repository.BindingRepositoryFactory
-	c1585 [label=<<table title="org.androidtransfuse.analysis.repository.BindingRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindingRepositoryFactory.html">
+	c2005 [label=<<table title="org.androidtransfuse.analysis.repository.BindingRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BindingRepositoryFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> BindingRepositoryFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository
-	c1586 [label=<<table title="org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderInjectionNodeBuilderRepository.html">
+	c2006 [label=<<table title="org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ProviderInjectionNodeBuilderRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ProviderInjectionNodeBuilderRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory
-	c1587 [label=<<table title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepositoryFactory.html">
+	c2007 [label=<<table title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepositoryFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActivityComponentBuilderRepositoryFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.repository.GeneratorRepository
-	c1588 [label=<<table title="org.androidtransfuse.analysis.repository.GeneratorRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorRepository.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> GeneratorRepository </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.AnalysisRepository
-	c1589 [label=<<table title="org.androidtransfuse.analysis.repository.AnalysisRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepository.html">
+	c2008 [label=<<table title="org.androidtransfuse.analysis.repository.AnalysisRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AnalysisRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.AOPRepository
-	c1590 [label=<<table title="org.androidtransfuse.analysis.repository.AOPRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepository.html">
+	c2009 [label=<<table title="org.androidtransfuse.analysis.repository.AOPRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AOPRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.analysis.repository.GeneratorRepositoryProvider
-	c1591 [label=<<table title="org.androidtransfuse.analysis.repository.GeneratorRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./GeneratorRepositoryProvider.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> GeneratorRepositoryProvider </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository
-	c1592 [label=<<table title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderRepository.html">
+	c2010 [label=<<table title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionNodeBuilderRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.AOPRepositoryProvider
-	c1593 [label=<<table title="org.androidtransfuse.analysis.repository.AOPRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepositoryProvider.html">
+	c2011 [label=<<table title="org.androidtransfuse.analysis.repository.AOPRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AOPRepositoryProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AOPRepositoryProvider </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory
-	c1594 [label=<<table title="org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepositoryFactory.html">
+	c2012 [label=<<table title="org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./AnalysisRepositoryFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> AnalysisRepositoryFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository
-	c1595 [label=<<table title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepository.html">
+	c2013 [label=<<table title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAspectFactoryRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory
-	c1596 [label=<<table title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderRepositoryFactory.html">
+	c2014 [label=<<table title="org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InjectionNodeBuilderRepositoryFactory.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> InjectionNodeBuilderRepositoryFactory </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository
-	c1597 [label=<<table title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepository.html">
+	c2015 [label=<<table title="org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepository" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ActivityComponentBuilderRepository.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ActivityComponentBuilderRepository </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepositoryProvider
-	c1598 [label=<<table title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepositoryProvider.html">
+	c2016 [label=<<table title="org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepositoryProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ScopeAspectFactoryRepositoryProvider.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ScopeAspectFactoryRepositoryProvider </td></tr>
 		</table></td></tr>

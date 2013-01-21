@@ -1,6 +1,11 @@
 <map id="G" name="G">
-<area shape="rect" id="c3489" href="./ASTTypeMatcherBuilder.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcherBuilder" alt="" coords="16,19,179,45"/>
-<area shape="rect" id="c3490" href="./ASTTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcher" alt="" coords="208,118,331,143"/>
-<area shape="rect" id="c3491" href="./Matcher.html" title="org.androidtransfuse.util.matcher.Matcher" alt="" coords="223,11,315,53"/>
-<area shape="rect" id="c3492" href="./ASTMatcherBuilder.html" title="org.androidtransfuse.util.matcher.ASTMatcherBuilder" alt="" coords="360,19,493,45"/>
+<area shape="rect" id="c5181" href="./MatchAny.html" title="org.androidtransfuse.util.matcher.MatchAny" alt="" coords="16,118,96,143"/>
+<area shape="rect" id="c5182" href="./ASTTypeMatcherBuilder.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcherBuilder" alt="" coords="509,19,672,45"/>
+<area shape="rect" id="c5183" href="./InjectionSignatureMatcher.html" title="org.androidtransfuse.util.matcher.InjectionSignatureMatcher" alt="" coords="141,118,313,143"/>
+<area shape="rect" id="c5184" href="./InjectionSignatureMatcherBuilder.html" title="org.androidtransfuse.util.matcher.InjectionSignatureMatcherBuilder" alt="" coords="717,19,929,45"/>
+<area shape="rect" id="c5185" href="./ASTTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTTypeMatcher" alt="" coords="357,118,480,143"/>
+<area shape="rect" id="c5186" href="./Matcher.html" title="org.androidtransfuse.util.matcher.Matcher" alt="" coords="373,11,465,53"/>
+<area shape="rect" id="c5187" href="./ASTAnnotationTypeMatcher.html" title="org.androidtransfuse.util.matcher.ASTAnnotationTypeMatcher" alt="" coords="525,118,710,143"/>
+<area shape="rect" id="c5188" href="./ASTAnnotationMatcher.html" title="org.androidtransfuse.util.matcher.ASTAnnotationMatcher" alt="" coords="754,118,910,143"/>
+<area shape="rect" id="c5189" href="./Matchers.html" title="org.androidtransfuse.util.matcher.Matchers" alt="" coords="973,19,1048,45"/>
 </map>

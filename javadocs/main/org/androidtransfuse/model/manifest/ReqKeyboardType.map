@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="c13331" href="./ReqKeyboardType.html" title="org.androidtransfuse.model.manifest.ReqKeyboardType" alt="" coords="15,113,145,154"/>
-<area shape="rect" id="c13610" href="http://java.sun.com/j2se/1.4.2/docs/api/org/androidtransfuse/annotations/LabeledEnum.html" title="org.androidtransfuse.annotations.LabeledEnum" alt="" coords="30,11,130,53"/>
+<area shape="rect" id="c22340" href="./ReqKeyboardType.html" title="org.androidtransfuse.model.manifest.ReqKeyboardType" alt="" coords="15,113,145,154"/>
+<area shape="rect" id="c22690" href="http://java.sun.com/j2se/1.4.2/docs/api/org/androidtransfuse/annotations/Labeled.html" title="org.androidtransfuse.annotations.Labeled" alt="" coords="37,11,123,53"/>
 </map>

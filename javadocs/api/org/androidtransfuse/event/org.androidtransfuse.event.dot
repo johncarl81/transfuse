@@ -9,38 +9,32 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.event.EventManagerProvider
-	c575 [label=<<table title="org.androidtransfuse.event.EventManagerProvider" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventManagerProvider.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> EventManagerProvider </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.event.EventObserver<T>
-	c576 [label=<<table title="org.androidtransfuse.event.EventObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventObserver.html">
+	c772 [label=<<table title="org.androidtransfuse.event.EventObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventObserver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> EventObserver&lt;T&gt; </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.event.EventTending<T>
-	c577 [label=<<table title="org.androidtransfuse.event.EventTending" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventTending.html">
+	// org.androidtransfuse.event.EventTending
+	c773 [label=<<table title="org.androidtransfuse.event.EventTending" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventTending.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> EventTending&lt;T&gt; </td></tr>
+<tr><td align="center" balign="center"> EventTending </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.event.WeakObserver<E, T>
-	c578 [label=<<table title="org.androidtransfuse.event.WeakObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WeakObserver.html">
+	c774 [label=<<table title="org.androidtransfuse.event.WeakObserver" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WeakObserver.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"><font face="Helvetica-Oblique"> WeakObserver&lt;E, T&gt; </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.event.EventManager
-	c579 [label=<<table title="org.androidtransfuse.event.EventManager" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventManager.html">
+	c775 [label=<<table title="org.androidtransfuse.event.EventManager" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EventManager.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> EventManager </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.event.WeakObserver<E, T> implements org.androidtransfuse.event.EventObserver<T>
-	c576:p -> c578:p [dir=back,arrowtail=empty,style=dashed];
+	c772:p -> c774:p [dir=back,arrowtail=empty,style=dashed];
 }
 

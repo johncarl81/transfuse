@@ -9,20 +9,19 @@ digraph G {
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// org.androidtransfuse.gen.AnalysisGeneration<T>
-	c63968 [label=<<table title="org.androidtransfuse.gen.AnalysisGeneration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AnalysisGeneration.html">
+	// org.androidtransfuse.processor.AbstractCompletionTransactionWorker<V, R>
+	c107055 [label=<<table title="org.androidtransfuse.processor.AbstractCompletionTransactionWorker" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../processor/AbstractCompletionTransactionWorker.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> AnalysisGeneration&lt;T&gt; </td></tr>
+<tr><td align="center" balign="center"><font face="Helvetica-Oblique"> AbstractCompletionTransactionWorker&lt;V, R&gt; </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	// org.androidtransfuse.gen.Generator<T>
-	c63970 [label=<<table title="org.androidtransfuse.gen.Generator" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Generator.html">
+	// org.androidtransfuse.gen.AnalysisGeneration
+	c107083 [label=<<table title="org.androidtransfuse.gen.AnalysisGeneration" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./AnalysisGeneration.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
-<tr><td align="center" balign="center"> Generator&lt;T&gt; </td></tr>
+<tr><td align="center" balign="center"> AnalysisGeneration </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
-	//org.androidtransfuse.gen.AnalysisGeneration<T> implements org.androidtransfuse.gen.Generator<T>
-	c63970:p -> c63968:p [dir=back,arrowtail=empty,style=dashed];
+	//org.androidtransfuse.gen.AnalysisGeneration extends org.androidtransfuse.processor.AbstractCompletionTransactionWorker<javax.inject.Provider<org.androidtransfuse.adapter.ASTType>, com.sun.codemodel.JDefinedClass>
+	c107055:p -> c107083:p [dir=back,arrowtail=empty];
 }
 

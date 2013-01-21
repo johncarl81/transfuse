@@ -10,7 +10,7 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.model.manifest.UsesSDK
-	c16363 [label=<<table title="org.androidtransfuse.model.manifest.UsesSDK" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./UsesSDK.html">
+	c26192 [label=<<table title="org.androidtransfuse.model.manifest.UsesSDK" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./UsesSDK.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> UsesSDK </td></tr>
 		</table></td></tr>

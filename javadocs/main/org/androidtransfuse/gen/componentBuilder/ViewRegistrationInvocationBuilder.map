@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c87603" href="./ViewRegistrationInvocationBuilder.html" title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" alt="" coords="367,11,587,53"/>
-<area shape="rect" id="c87609" href="./ViewTypeRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl" alt="" coords="15,118,289,143"/>
-<area shape="rect" id="c87625" href="./ViewMethodRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" alt="" coords="333,118,621,143"/>
-<area shape="rect" id="c87626" href="./ViewFieldRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl" alt="" coords="666,118,939,143"/>
+<area shape="rect" id="c143659" href="./ViewRegistrationInvocationBuilder.html" title="org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder" alt="" coords="367,11,587,53"/>
+<area shape="rect" id="c143665" href="./ViewTypeRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl" alt="" coords="15,118,289,143"/>
+<area shape="rect" id="c143682" href="./ViewMethodRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewMethodRegistrationInvocationBuilderImpl" alt="" coords="333,118,621,143"/>
+<area shape="rect" id="c143683" href="./ViewFieldRegistrationInvocationBuilderImpl.html" title="org.androidtransfuse.gen.componentBuilder.ViewFieldRegistrationInvocationBuilderImpl" alt="" coords="666,118,939,143"/>
 </map>

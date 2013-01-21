@@ -1,4 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c5398" href="./VirtualProxyGenerator.html" title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator" alt="" coords="16,17,165,42"/>
-<area shape="rect" id="c5399" href="./AOPProxyGenerator.html" title="org.androidtransfuse.gen.proxy.AOPProxyGenerator" alt="" coords="210,17,350,42"/>
+<area shape="rect" id="c7628" href="./VirtualProxyGenerator.html" title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator" alt="" coords="16,17,165,42"/>
+<area shape="rect" id="c7629" href="./VirtualProxyGenerator.VirtualProxyGeneratorCache.html" title="org.androidtransfuse.gen.proxy.VirtualProxyGenerator.VirtualProxyGeneratorCache" alt="" coords="211,17,397,42"/>
+<area shape="rect" id="c7630" href="./AOPProxyGenerator.html" title="org.androidtransfuse.gen.proxy.AOPProxyGenerator" alt="" coords="442,17,582,42"/>
+<area shape="rect" id="c7631" href="./AOPProxyGenerator.AOPProxyCache.html" title="org.androidtransfuse.gen.proxy.AOPProxyGenerator.AOPProxyCache" alt="" coords="626,17,747,42"/>
 </map>

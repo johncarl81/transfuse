@@ -10,19 +10,19 @@ digraph G {
 	nodesep=0.25;
 	ranksep=0.5;
 	// org.androidtransfuse.scope.Scope
-	c9856 [label=<<table title="org.androidtransfuse.scope.Scope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Scope.html">
+	c12939 [label=<<table title="org.androidtransfuse.scope.Scope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./Scope.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> &#171;interface&#187; </td></tr>
 <tr><td align="center" balign="center"> Scope </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	// org.androidtransfuse.scope.ConcurrentDoubleLockingScope
-	c9859 [label=<<table title="org.androidtransfuse.scope.ConcurrentDoubleLockingScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConcurrentDoubleLockingScope.html">
+	c12942 [label=<<table title="org.androidtransfuse.scope.ConcurrentDoubleLockingScope" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ConcurrentDoubleLockingScope.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 <tr><td align="center" balign="center"> ConcurrentDoubleLockingScope </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=10.0];
 	//org.androidtransfuse.scope.ConcurrentDoubleLockingScope implements org.androidtransfuse.scope.Scope
-	c9856:p -> c9859:p [dir=back,arrowtail=empty,style=dashed];
+	c12939:p -> c12942:p [dir=back,arrowtail=empty,style=dashed];
 }
 
