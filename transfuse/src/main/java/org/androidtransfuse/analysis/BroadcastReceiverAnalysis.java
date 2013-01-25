@@ -92,7 +92,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType));
 
-            receiverDescriptor.setInitMethodBuilder(OnReceive.class, componentBuilderFactory.buildOnReceiveMethodBuilder());
+            receiverDescriptor.setInitMethodBuilder(astClassFactory.getType(OnReceive.class), componentBuilderFactory.buildOnReceiveMethodBuilder());
 
             receiverDescriptor.addGenerators(contextScopeComponentBuilder);
 

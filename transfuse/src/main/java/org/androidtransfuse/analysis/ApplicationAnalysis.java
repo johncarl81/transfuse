@@ -108,7 +108,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
         //onCreate
-        applicationDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        applicationDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
         applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
@@ -119,7 +119,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         //onConfigurationChanged
         ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", Configuration.class);
         applicationDescriptor.addGenerators(
-                componentBuilderFactory.buildMethodCallbackGenerator(OnConfigurationChanged.class,
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
 
         applicationDescriptor.addGenerators(contextScopeComponentBuilder);
@@ -127,8 +127,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         applicationDescriptor.addRegistration(observesExpressionDecorator);
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName) {
         ASTMethod method = getASTMethod(methodName);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));

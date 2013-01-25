@@ -21,18 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Activity, Service, Application and Fragment {@code onCreate()} Lifecycle Event callback method annotation.  Registers
- * the annotated method to be called during the {@code onCreate()} Lifecycle Phase.</p>
- *
- * <p>
- * Optionally, if the {@code Bundle} parameter is defined on the annotated method, Transfuse will provide the input
- * {@code onCreate()} {@code Bundle} parameter.
- * </p>
+ * Annotates other annotations to be used as Event Listeners.
  *
  * @author John Ericksen
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@EventListener
-public @interface OnCreate {}
+public @interface EventListener {
+}

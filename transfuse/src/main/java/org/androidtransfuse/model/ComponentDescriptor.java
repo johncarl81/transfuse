@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.model;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodBuilder;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class ComponentDescriptor {
     private List<ExpressionVariableDependentGenerator> generators = new ArrayList<ExpressionVariableDependentGenerator>();
     private List<ExpressionVariableDependentGenerator> registrations = new ArrayList<ExpressionVariableDependentGenerator>();
     private InjectionNodeFactory injectionNodeFactory;
-    private Class<? extends Annotation> initMethodEventAnnotation;
+    private ASTType initMethodEventAnnotation;
 
     public ComponentDescriptor(String type, PackageClass packageClass) {
         this.type = type;
@@ -69,7 +69,7 @@ public class ComponentDescriptor {
         }
     }
 
-    public void setInitMethodBuilder(Class<? extends Annotation> initEventAnnotation, MethodBuilder initMethodBuilder) {
+    public void setInitMethodBuilder(ASTType initEventAnnotation, MethodBuilder initMethodBuilder) {
         this.initMethodBuilder = initMethodBuilder;
         this.initMethodEventAnnotation = initEventAnnotation;
     }
@@ -82,7 +82,7 @@ public class ComponentDescriptor {
         this.injectionNodeFactory = injectionNodeFactory;
     }
 
-    public Class<? extends Annotation> getInitMethodEventAnnotation() {
+    public ASTType getInitMethodEventAnnotation() {
         return initMethodEventAnnotation;
     }
 
