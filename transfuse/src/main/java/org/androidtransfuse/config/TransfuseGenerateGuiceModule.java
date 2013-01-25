@@ -20,7 +20,10 @@ import com.google.inject.Key;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
-import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.analysis.repository.AnalysisRepository;
+import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
+import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
+import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepositoryProvider;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
@@ -74,7 +77,6 @@ public class TransfuseGenerateGuiceModule extends AbstractModule {
         bind(VariableExpressionBuilder.class).toProvider(ExpressionDecoratorFactory.class);
         bind(ScopeAspectFactoryRepository.class).toProvider(ScopeAspectFactoryRepositoryProvider.class);
         bind(AnalysisRepository.class).toProvider(AnalysisRepositoryFactory.class).in(ConfigurationScope.class);
-        bind(AOPRepository.class).toProvider(AOPRepositoryProvider.class).in(ConfigurationScope.class);
 
         bind(GeneratorRepository.class).toProvider(GeneratorRepositoryProvider.class);
 

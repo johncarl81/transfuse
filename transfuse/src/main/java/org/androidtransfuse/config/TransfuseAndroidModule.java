@@ -15,8 +15,14 @@
  */
 package org.androidtransfuse.config;
 
-import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
+import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 
 @TransfuseModule
+@BindInterceptors({
+        @BindInterceptor(annotation = Asynchronous.class, interceptor = AsynchronousMethodInterceptor.class),
+        @BindInterceptor(annotation = UIThread.class, interceptor = UIThreadMethodInterceptor.class)
+})
 public class TransfuseAndroidModule {
 }
