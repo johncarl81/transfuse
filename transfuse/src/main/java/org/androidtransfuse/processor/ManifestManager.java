@@ -45,6 +45,8 @@ public class ManifestManager {
     private final List<Activity> activities = new ArrayList<Activity>();
     private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
     private final List<Service> services = new ArrayList<Service>();
+    private final List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
+    private UsesSDK usesSdk;
 
     @Inject
     public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originalManifest) {
@@ -53,6 +55,20 @@ public class ManifestManager {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public void addUsesPermission(String permission) {
+        try {
+            UsesPermission usesPermission = new UsesPermission(permission);
+            updateMergeTags(UsesPermission.class, usesPermission);
+            usesPermissions.add(usesPermission);
+        } catch (MergerException e) {
+            throw new TransfuseAnalysisException("Unable to Merge UsesPermission", e);
+        }
+    }
+
+    public void setUsesSdk(UsesSDK usesSdk) {
+        this.usesSdk = usesSdk;
     }
 
     public void addActivity(Activity activity) {
@@ -112,6 +128,12 @@ public class ManifestManager {
         localApplication.getServices().addAll(services);
 
         manifest.getApplications().add(localApplication);
+
+        manifest.getUsesPermissions().addAll(usesPermissions);
+
+        if(usesSdk != null){
+            manifest.getUsesSDKs().add(usesSdk);
+        }
 
         manifest.updatePackages();
 

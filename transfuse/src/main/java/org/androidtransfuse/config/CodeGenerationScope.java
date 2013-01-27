@@ -25,5 +25,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Scope
-public @interface CodeGenerationScope {
-}
+public @interface CodeGenerationScope {}

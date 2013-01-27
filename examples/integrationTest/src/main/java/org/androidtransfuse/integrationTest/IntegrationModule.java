@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.integrationTest;
 
+import android.Manifest;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
@@ -44,6 +45,12 @@ import java.util.Random;
         @Bind(type = LoopThree.class, to = LoopThreeImpl.class),
         @Bind(type = Proxied.class, to = ProxiedProxy.class)
 })
+@UsesPermission({
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.VIBRATE
+})
+@UsesSdk(min = 5, target = 11)
 public class IntegrationModule {
 
     public static final String ONE = "one";

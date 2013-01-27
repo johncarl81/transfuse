@@ -44,7 +44,9 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    BindInterceptorProcessor bindInterceptorProcessor,
                                    BindingConfigurationFactory configurationFactory,
                                    ProvidesProcessor providesProcessor,
-                                   ASTClassFactory astClassFactory) {
+                                   ASTClassFactory astClassFactory,
+                                   UsesPermissionProcessor usesPermissionProcessor,
+                                   UsesSdkProcessor usesSdkProcessor) {
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
 
         methodProcessorsBuilder.put(astClassFactory.getType(Provides.class), providesProcessor);
@@ -61,6 +63,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(Bindings.class),
                 configurationFactory.buildConfigurationComposite(bindProcessor));
+        typeProcessorsBuilder.put(astClassFactory.getType(UsesPermission.class), usesPermissionProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(UsesSdk.class), usesSdkProcessor);
 
 
         typeProcessors = typeProcessorsBuilder.build();

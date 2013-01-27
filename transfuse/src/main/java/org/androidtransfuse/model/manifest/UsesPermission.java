@@ -17,6 +17,8 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
 
 /**
  * attributes:
@@ -24,17 +26,31 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class UsesPermission {
+public class UsesPermission extends Mergeable implements Comparable<UsesPermission> {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute
     private String name;
 
+    public UsesPermission() {
+        //empty bean constructor
+    }
+
+    public UsesPermission(String name) {
+        this.name = name;
+    }
+
+    @Merge("n")
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public int compareTo(UsesPermission usesPermission) {
+        return getName().compareTo(usesPermission.getName());
     }
 }
