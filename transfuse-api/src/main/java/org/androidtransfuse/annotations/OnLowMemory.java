@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Application {@code onLowMemory()} callback method annotation.  Registers the annotated method
+ * to be called if the {@code onLowMemory()} function is called.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnLowMemory {
-}
+@EventListener
+public @interface OnLowMemory {}

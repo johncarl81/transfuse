@@ -15,15 +15,14 @@
  */
 package org.androidtransfuse.config;
 
-import org.androidtransfuse.annotations.BindProvider;
-import org.androidtransfuse.annotations.BindProviders;
-import org.androidtransfuse.annotations.TransfuseModule;
-import org.androidtransfuse.event.EventManager;
-import org.androidtransfuse.event.EventManagerProvider;
+import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
+import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 
 @TransfuseModule
-@BindProviders(
-        @BindProvider(type = EventManager.class, provider = EventManagerProvider.class)
-)
+@BindInterceptors({
+        @BindInterceptor(annotation = Asynchronous.class, interceptor = AsynchronousMethodInterceptor.class),
+        @BindInterceptor(annotation = UIThread.class, interceptor = UIThreadMethodInterceptor.class)
+})
 public class TransfuseAndroidModule {
 }

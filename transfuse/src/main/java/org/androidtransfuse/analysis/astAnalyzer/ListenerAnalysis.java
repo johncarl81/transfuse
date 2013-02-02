@@ -15,14 +15,12 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.annotations.EventListener;
 import org.androidtransfuse.model.InjectionNode;
-
-import java.lang.annotation.Annotation;
 
 /**
  * Analyzes the given class for listener annotations.  Adds these annotated methods to a ListenerAspect for
@@ -32,43 +30,17 @@ import java.lang.annotation.Annotation;
  */
 public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
-    private final ImmutableSet<Class<? extends Annotation>> methodAnnotations;
-
-    public ListenerAnalysis() {
-        ImmutableSet.Builder<Class<? extends Annotation>> eventListenerAnnotations = ImmutableSet.builder();
-        eventListenerAnnotations.add(OnCreate.class);
-        eventListenerAnnotations.add(OnDestroy.class);
-        eventListenerAnnotations.add(OnPause.class);
-        eventListenerAnnotations.add(OnRestart.class);
-        eventListenerAnnotations.add(OnResume.class);
-        eventListenerAnnotations.add(OnStart.class);
-        eventListenerAnnotations.add(OnStop.class);
-        eventListenerAnnotations.add(OnLowMemory.class);
-        eventListenerAnnotations.add(OnSaveInstanceState.class);
-        eventListenerAnnotations.add(OnRestoreInstanceState.class);
-        eventListenerAnnotations.add(OnBackPressed.class);
-        eventListenerAnnotations.add(OnTerminate.class);
-        eventListenerAnnotations.add(OnConfigurationChanged.class);
-        eventListenerAnnotations.add(OnListItemClick.class);
-        eventListenerAnnotations.add(OnReceive.class);
-        eventListenerAnnotations.add(OnRebind.class);
-        eventListenerAnnotations.add(OnActivityCreated.class);
-        eventListenerAnnotations.add(OnDestroyView.class);
-        eventListenerAnnotations.add(OnDetach.class);
-
-        this.methodAnnotations = eventListenerAnnotations.build();
-    }
-
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
-        for (Class<? extends Annotation> annotation : methodAnnotations) {
-            if (astMethod.isAnnotated(annotation)) {
-                addMethod(injectionNode, annotation, astMethod);
+        for (ASTAnnotation annotation : astMethod.getAnnotations()) {
+            ASTType annotationType = annotation.getASTType();
+            if (annotationType.isAnnotated(EventListener.class)) {
+                addMethod(injectionNode, annotationType, astMethod);
             }
         }
     }
 
-    private void addMethod(InjectionNode injectionNode, Class<? extends Annotation> annotation, ASTMethod astMethod) {
+    private void addMethod(InjectionNode injectionNode, ASTType annotation, ASTMethod astMethod) {
 
         if (!injectionNode.containsAspect(ListenerAspect.class)) {
             injectionNode.addAspect(new ListenerAspect());
@@ -77,17 +49,14 @@ public class ListenerAnalysis extends ASTAnalysisAdaptor {
 
         methodCallbackToken.addMethodCallback(annotation, astMethod);
 
-        if (!annotation.equals(OnCreate.class)) {
-            ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
+        ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
 
-            if (injectionAspect == null) {
-                injectionAspect = new ASTInjectionAspect();
-                injectionNode.addAspect(ASTInjectionAspect.class, injectionAspect);
-            }
-
-            //injection node is now required outside of the local scope
-            injectionAspect.setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
+        if (injectionAspect == null) {
+            injectionAspect = new ASTInjectionAspect();
+            injectionNode.addAspect(ASTInjectionAspect.class, injectionAspect);
         }
 
+        //injection node is now required outside of the local scope
+        injectionAspect.setAssignmentType(ASTInjectionAspect.InjectionAssignmentType.FIELD);
     }
 }

@@ -168,7 +168,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
 
-        serviceDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        serviceDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
         serviceDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
@@ -177,8 +177,10 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addGenerators(buildEventMethod(OnDestroy.class, "onDestroy"));
         //onLowMemory
         serviceDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
-        //onRebind onRebind(android.content.Intent intent)
+        //onRebind(android.content.Intent intent)
         serviceDescriptor.addGenerators(buildEventMethod(OnRebind.class, "onRebind", Intent.class));
+        //onTaskRemoved(Intent rootIntent)
+        //serviceDescriptor.addGenerators(buildEventMethod(OnTaskRemoved.class, "onTaskRemoved", Intent.class));
 
         //todo: move this somewhere else
         serviceDescriptor.addGenerators(new OnBindGenerator());
@@ -192,8 +194,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName, Class... args) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, Class... args) {
         ASTMethod method = getASTMethod(methodName, args);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));

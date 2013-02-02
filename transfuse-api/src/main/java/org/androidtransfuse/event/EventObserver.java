@@ -16,11 +16,20 @@
 package org.androidtransfuse.event;
 
 /**
+ * Interface defining a triggerable Event Observer.  This interface will be used by the EventManager to call when
+ * the associated Event is raised.
+ *
+ * @see EventManager
+ *
  * @author John Ericksen
  */
 public interface EventObserver<T> {
 
     String TRIGGER = "trigger";
 
+    /**
+     * Triggers when a T event is triggered on the EventManager which this Observer is registered with.
+     * @param object event
+     */
     void trigger(T object);
 }

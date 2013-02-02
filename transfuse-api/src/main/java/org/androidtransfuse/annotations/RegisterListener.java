@@ -21,14 +21,46 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>
+ * Specifies the given type, field or method return type as a listener to the identified component.  This annotation
+ * triggers Transfuse to investigate the interfaces implemented by the given type.  If the interfaces match any of the
+ * available listeners or Call-Through methods, the appropriate registration method will be used to make the annotated
+ * instance a listener of the component</p>
+ *
+ * <p>
+ * As an example, one may register an anonymous inner class OnClick Listener as follows:
+ * <pre>
+ *     {@literal @}RegisterListener(R.id.button)
+ *     View.OnClickListener listener = new View.OnClickListener() {
+ *         public void onClick(View v) {...}
+ *     };
+ * </pre>
+ * Likewise, one may register an injected listener the same way:
+ * <pre>
+ *     {@literal @}RegisterListener(R.id.button)
+ *     {@literal @}Inject
+ *     ButtonOnClickListener listener;
+ * </pre>
+ * </p>
+ *
  * @author John Ericksen
  */
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegisterListener {
+
+    /**
+     * Resource id used to lookup the View via the {@code Activity.getViewById()} method.
+     */
     int value() default -1;
 
+    /**
+     * Resource tag used to lookup the View via the {@code Activity.getViewByTag()} method.
+     */
     String tag() default "";
 
+    /**
+     * Listener interfaces to use.  If none are specified, all Listener interfaces will be registered.
+     */
     Class[] interfaces() default {};
 }

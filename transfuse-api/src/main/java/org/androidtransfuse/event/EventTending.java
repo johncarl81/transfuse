@@ -24,13 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Coordinates registration/unregistration of observers to events based on Android lifecycle
+ * Coordinates registration/unregistration of observers to events based on Android lifecycle using Transfuse
+ * event lifecycle annotations.
  *
  * @author John Ericksen
  */
-public class EventTending {
+public final class EventTending {
 
-    public static final String REGISTER_METHOD = "register";
+    public static final String ADD_OBSERVER_METHOD = "addObserver";
 
     private final Map<Class, EventObserver> eventObservers = new HashMap<Class, EventObserver>();
     private final EventManager eventManager;
@@ -40,20 +41,33 @@ public class EventTending {
         this.eventManager = eventManager;
     }
 
-    public final <T> void register(Class<T> event, EventObserver<T> observer){
+    /**
+     * Associate an EventObserver with an Event by Class.
+     *
+     * @param event class
+     * @param observer EventObserver
+     * @param <T> relating Type
+     */
+    public <T> void addObserver(Class<T> event, EventObserver<T> observer){
         eventObservers.put(event, observer);
     }
 
+    /**
+     * Register the observers defined in the addObserver() method with the given EventManager.
+     */
     @OnRestart
     @OnCreate
-    public final void register(){
+    public void register(){
         for (Map.Entry<Class, EventObserver> observerEntry : eventObservers.entrySet()) {
             eventManager.register(observerEntry.getKey(), observerEntry.getValue());
         }
     }
 
+    /**
+     * Unregister the observers defined in teh addObserver() method with the given EventManager.
+     */
     @OnPause
-    public final void unregister(){
+    public void unregister(){
         for (Map.Entry<Class, EventObserver> observerEntry : eventObservers.entrySet()) {
             eventManager.unregister(observerEntry.getValue());
         }

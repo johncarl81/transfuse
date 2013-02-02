@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Activity, Service and Fragment {@code onConfigurationChanged()} callback method annotation.  Registers the annotated
+ * method to be called if the {@code onConfigurationChanged()} function is called.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnConfigurationChanged {
-}
+@EventListener
+public @interface OnConfigurationChanged {}

@@ -19,24 +19,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
+ * <p>
+ * Defines the Activity Menu related Call-Through methods.  Each defined method represents a method in the corresponding
+ * Activity class.</p>
+ *
+ * <p>Only one Call-Through component per type may be defined per injection graph.</p>
+ *
  * @author John Ericksen
  */
 public interface ActivityMenuComponent {
 
-    @Listener
+    @CallThrough
     boolean onCreateOptionsMenu(Menu menu);
 
-    @Listener
-    boolean onPrepareOptionsMenu(android.view.Menu menu);
+    @CallThrough
+    boolean onPrepareOptionsMenu(Menu menu);
 
-    @Listener
+    @CallThrough
     boolean onOptionsItemSelected(MenuItem menuItem);
 
-    @Listener
-    boolean onMenuOpened(int featureId, android.view.Menu menu);
+    @CallThrough
+    boolean onMenuOpened(int featureId, Menu menu);
 
-    @Listener
-    void onOptionsMenuClosed(android.view.Menu menu);
+    @CallThrough
+    void onOptionsMenuClosed(Menu menu);
 
 
 }

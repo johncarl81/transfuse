@@ -130,7 +130,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateViewMethod = getASTMethod("onCreateView", LayoutInflater.class, ViewGroup.class, Bundle.class);
 
-        fragmentDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
+        fragmentDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
 
         fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 
@@ -159,7 +159,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         if (fragmentType.extendsFrom(astClassFactory.getType(ListFragment.class))) {
             ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, Integer.TYPE, Long.TYPE);
             fragmentDescriptor.addGenerators(
-                    componentBuilderFactory.buildMethodCallbackGenerator(OnListItemClick.class,
+                    componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class),
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
 
@@ -169,8 +169,9 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName, Class... args) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, Class... args) {
         ASTMethod method = getASTMethod(methodName, args);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }

@@ -29,6 +29,40 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * <p>
+ * Centralized Bus for registering, unregistering and triggering events.  An event may be any object and the EventManager
+ * triggers observers based on the non-generic type of the event object.  Observers may be registered by calling
+ * the {@code register()} method, which relates an observer to an event type.</p>
+ *
+ * <p>
+ * Transfuse will generate the calls to {@code register()} and {@code unregister()} based on the {@code @Observes}
+ * annotation.  Any method in an object managed by Transfuse annotated with {@code @Observes} will register a call
+ * to that method with the first parameter in the method as the Event type.
+ * </p>
+ *
+ * <p>For instance:
+ * <pre>
+ *     {@code @Observes}
+ *     public void drink(Coffee coffee){...}
+ * </pre>
+ *
+ * will result in Transfuse generating a the following {@code EventObserver}:
+ * <pre>
+ *     public class DrinkCoffeeEventObserver<Coffee>{
+ *         ...
+ *         void trigger(Coffee coffee){
+ *             managedInstance.drink(coffee);
+ *         }
+ *     }
+ * </pre>
+ *
+ * and the following registration:
+ *
+ * <pre>
+ *     eventManager.register(Coffee.class, drinkCoffeeEventObserver);
+ * </pre>
+ * </p>
+ *
  * @author John Ericksen
  */
 @Singleton
@@ -58,6 +92,13 @@ public class EventManager {
         }
     }
 
+    /**
+     * Register the given observer to be triggered if the given event type is triggered.
+     *
+     * @param event type
+     * @param observer event observer
+     * @param <T> relating type
+     */
     public <T> void register(Class<T> event, EventObserver<T> observer){
         if(event == null){
             throw new IllegalArgumentException("Null Event type passed to register");
@@ -86,6 +127,12 @@ public class EventManager {
         return result;
     }
 
+    /**
+     * Triggers an event through the EventManager.  This will call the registered EventObservers with the provided
+     * event.
+     *
+     * @param event object
+     */
     public void trigger(Object event){
 
         Set<Class> eventTypes = getAllInheritedClasses(event.getClass());
@@ -148,6 +195,11 @@ public class EventManager {
         }
     }
 
+    /**
+     * Unregisters an EventObserver by equality.
+     *
+     * @param observer Event Observer
+     */
     public void unregister(EventObserver<?> observer){
         observersLock.writeLock().lock();
         try{

@@ -16,6 +16,10 @@
 package org.androidtransfuse.annotations;
 
 /**
+ * Defines the different types of Intents available in the Android Manifest.
+ *
+ * @see Intent
+ *
  * @author John Ericksen
  */
 public enum IntentType {

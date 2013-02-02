@@ -16,11 +16,20 @@
 package org.androidtransfuse.layout;
 
 /**
+ * <p>
+ * Interface which defines a manual layout definition call on the Activity in contrast to simply specifying a layout id
+ * via the {@code @Layout} annotation.  A {@code LayoutHandlerDelegate} may be injected into, most notably the current
+ * Activity may be injected allowing a wide variety of view definitions to be specified.  This includes generating the
+ * layout problematically or calling a different {@code setContentView()} method.</p>
+ *
  * @author John Ericksen
  */
 public interface LayoutHandlerDelegate {
 
     String INVOKE_LAYOUT_METHOD = "invokeLayout";
 
+    /**
+     * Executes during the {@code onCreate()} method in place of the {@code setContentView()} call.
+     */
     void invokeLayout();
 }

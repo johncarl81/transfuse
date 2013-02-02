@@ -25,6 +25,7 @@ import android.widget.ListView;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.annotations.*;
@@ -80,7 +81,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
         ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, int.class, long.class);
         listActivityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(OnListItemClick.class,
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
 
         return listActivityCallbackGenerators.build();
@@ -106,13 +107,13 @@ public class ActivityComponentBuilderRepositoryFactory {
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
         activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(OnSaveInstanceState.class,
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true)));
 
         // onRestoreInstanceState
         ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", Bundle.class);
         activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(OnRestoreInstanceState.class,
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnRestoreInstanceState.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onRestoreInstanceState, true)));
 
         //extra intent factory
@@ -127,9 +128,10 @@ public class ActivityComponentBuilderRepositoryFactory {
         return activityCallbackGenerators.build();
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotation, String methodName) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName) {
 
         ASTMethod method = getASTMethod(methodName);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));

@@ -15,7 +15,13 @@
  */
 package org.androidtransfuse.annotations;
 
-public enum LaunchMode implements LabeledEnum {
+/**
+ * Constants representing the android:launchMode property on the Activity Manifest tag.
+ *
+ * @author John Ericksen
+ */
+public enum LaunchMode implements Labeled {
+
     STANDARD("standard"),
     SINGLE_TOP("singleTop"),
     SINGLE_TASK("singleTask"),

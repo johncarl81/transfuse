@@ -16,9 +16,17 @@
 package org.androidtransfuse.annotations;
 
 /**
+ * Declares an instance as having a unique String label.  This is useful when converting to and from a serialized
+ * version of the instance, ie Enum and XML.
+ *
  * @author John Ericksen
  */
-public interface LabeledEnum {
+public interface Labeled {
 
+    /**
+     * Returns a unique formatted label.
+     *
+     * @return label
+     */
     String getLabel();
 }

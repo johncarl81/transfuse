@@ -15,11 +15,19 @@
  */
 package org.androidtransfuse.listeners;
 
+import android.view.MotionEvent;
+
 /**
+ * <p>
+ * Defines the Activity onTrackballEvent() Call-Through method.  Each defined method represents a method in the corresponding
+ * Activity class.</p>
+ *
+ * <p>Only one Call-Through component per type may be defined per injection graph.</p>
+ *
  * @author John Ericksen
  */
 public interface ActivityOnTrackballEventListener {
 
-    @Listener
-    boolean onTrackballEvent(android.view.MotionEvent event);
+    @CallThrough
+    boolean onTrackballEvent(MotionEvent event);
 }

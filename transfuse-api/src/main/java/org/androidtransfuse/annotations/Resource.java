@@ -21,9 +21,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Injection qualifier annotation specifying which Android Resource to inject.
+ *
+ * @author John Ericksen
+ */
 @Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface Resource {
+
+    /**
+     * Resource id used to lookup the given resource.
+     */
     int value();
 }

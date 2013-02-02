@@ -17,8 +17,8 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator;
+import org.androidtransfuse.adapter.ASTType;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
@@ -28,26 +28,26 @@ import java.util.*;
  */
 public class ListenerAspect {
 
-    private final Map<Class<? extends Annotation>, Set<ASTMethod>> listeners = new HashMap<Class<? extends Annotation>, Set<ASTMethod>>();
+    private final Map<ASTType, Set<ASTMethod>> listeners = new HashMap<ASTType, Set<ASTMethod>>();
 
-    public void addMethodCallback(Class<? extends Annotation> annotation, ASTMethod method) {
-        if (!listeners.containsKey(annotation)) {
-            listeners.put(annotation, new HashSet<ASTMethod>());
+    public void addMethodCallback(ASTType annotationType, ASTMethod method) {
+        if (!listeners.containsKey(annotationType)) {
+            listeners.put(annotationType, new HashSet<ASTMethod>());
         }
-        Set<ASTMethod> methods = listeners.get(annotation);
+        Set<ASTMethod> methods = listeners.get(annotationType);
 
         methods.add(new ASTMethodUniqueSignatureDecorator(method));
     }
 
-    public Set<ASTMethod> getListeners(Class<? extends Annotation> annotation) {
-        if(listeners.containsKey(annotation)){
-            return listeners.get(annotation);
+    public Set<ASTMethod> getListeners(ASTType annotationType) {
+        if(listeners.containsKey(annotationType)){
+            return listeners.get(annotationType);
         }
 
         return Collections.emptySet();
     }
 
-    public boolean contains(Class<? extends Annotation> annotation) {
-        return listeners.containsKey(annotation);
+    public boolean contains(ASTType annotationType) {
+        return listeners.containsKey(annotationType);
     }
 }

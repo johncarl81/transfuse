@@ -17,6 +17,8 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
 
 /**
  * attributes:
@@ -26,7 +28,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class UsesSDK {
+public class UsesSDK extends Mergeable {
 
     @XStreamAlias("android:minSdkVersion")
     @XStreamAsAttribute
@@ -38,6 +40,7 @@ public class UsesSDK {
     @XStreamAsAttribute
     private Integer maxSdkVersion;
 
+    @Merge("m")
     public Integer getMinSdkVersion() {
         return minSdkVersion;
     }
@@ -46,6 +49,7 @@ public class UsesSDK {
         this.minSdkVersion = minSdkVersion;
     }
 
+    @Merge("t")
     public Integer getTargetSdkVersion() {
         return targetSdkVersion;
     }
@@ -54,6 +58,7 @@ public class UsesSDK {
         this.targetSdkVersion = targetSdkVersion;
     }
 
+    @Merge("x")
     public Integer getMaxSdkVersion() {
         return maxSdkVersion;
     }

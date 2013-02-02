@@ -15,11 +15,19 @@
  */
 package org.androidtransfuse.listeners;
 
+import android.content.Intent;
+
 /**
+ * <p>
+ * Defines the Service onStartCommand() Call-Through method.  Each defined method represents a method in the corresponding
+ * Activity class.</p>
+ *
+ * <p>Only one Call-Through component per type may be defined per injection graph.</p>
+ *
  * @author John Ericksen
  */
 public interface ServiceOnStartCommand {
 
-    @Listener
-    int onStartCommand(android.content.Intent intent, int flags, int startId);
+    @CallThrough
+    int onStartCommand(Intent intent, int flags, int startId);
 }

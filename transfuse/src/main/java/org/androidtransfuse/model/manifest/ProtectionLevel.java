@@ -15,12 +15,12 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
 /**
  * @author John Ericksen
  */
-public enum ProtectionLevel implements LabeledEnum {
+public enum ProtectionLevel implements Labeled {
     NORMAL("normal"),
     DANGEROUS("dangerous"),
     SIGNATURE("signature"),

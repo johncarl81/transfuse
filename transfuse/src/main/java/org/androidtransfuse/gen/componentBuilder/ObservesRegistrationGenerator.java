@@ -72,7 +72,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                 TypedExpression tendingExpression = buildEventTending(block, definedClass, tendingInjectionNode, expressionMap);
 
                 for (Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
-                    block.invoke(tendingExpression.getExpression(), EventTending.REGISTER_METHOD)
+                    block.invoke(tendingExpression.getExpression(), EventTending.ADD_OBSERVER_METHOD)
                             .arg(tupleEntry.getKey().dotclass())
                             .arg(tupleEntry.getValue());
                 }

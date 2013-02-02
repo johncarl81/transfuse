@@ -15,32 +15,26 @@
  */
 package org.androidtransfuse.aop;
 
-import android.os.Handler;
-import org.aopalliance.intercept.MethodInterceptor;
+import org.androidtransfuse.util.TransfuseInjectionException;
 import org.aopalliance.intercept.MethodInvocation;
 
-import javax.inject.Inject;
-
 /**
- * Method Interceptor that executes the given MethodInvocation
- *
- * @author John Ericksen
+ * Runnable Adapter which executes the {@code MethodInvocation.proceed()} method.
  */
-public class UIThreadMethodInterceptor implements MethodInterceptor {
+class MethodInvocationRunnable implements Runnable {
 
-    private final Handler handler;
+    private final MethodInvocation methodInvocation;
 
-    @Inject
-    public UIThreadMethodInterceptor(Handler handler){
-        this.handler = handler;
+    protected MethodInvocationRunnable(MethodInvocation methodInvocation) {
+        this.methodInvocation = methodInvocation;
     }
 
     @Override
-    public Object invoke(MethodInvocation invocation) {
-
-        handler.post(new MethodInvocationRunnable(invocation));
-
-        //asynchronous, so cannot return
-        return null;
+    public void run() {
+        try {
+            methodInvocation.proceed();
+        } catch (Throwable e) {
+            throw new TransfuseInjectionException("Exception while invoking method on thread", e);
+        }
     }
 }

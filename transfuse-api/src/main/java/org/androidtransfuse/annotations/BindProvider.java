@@ -22,11 +22,30 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * <p>
+ * On a {@code @TransfuseModule} class, defining a {@code Provider} binding with {@code @BindProvider} defines a
+ * relationship between a class and a {@code Provider}.  Each time the given type is requested to be injected, the
+ * defined provider's {@code Provider.get()} method will be used to request an instance.</p>
+ * <p>
+ * Example:
+ * <pre>
+ *     {@code @TransfuseModule}
+ *     {@code @BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)}
+ *     public class Module{}
+ * </pre>
+ * </p>
+ * <p>
+ * In each instance where a {@code Cat} is injected, the return value from the get() method on an instance of the
+ * {@code OrangeTabbyProvider} class will be used.
+ * </p>
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BindProvider {
+
     Class<?> type();
+
     Class<? extends Provider> provider();
 }

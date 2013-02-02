@@ -15,7 +15,13 @@
  */
 package org.androidtransfuse.annotations;
 
-public enum UIOptions implements LabeledEnum {
+/**
+ * Constants representing the android:uiOptions property on the Activity Manifest tag.
+ *
+ * @author John Ericksen
+ */
+public enum UIOptions implements Labeled {
+
     NONE("none"),
     SPLIT_ACTION_BAR_WHEN_NARROW("splitActionBarWhenNarrow");
 

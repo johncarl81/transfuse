@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
-public enum ReqKeyboardType implements LabeledEnum {
+public enum ReqKeyboardType implements Labeled {
     UNDEFINED("undefined"),
     NOKEYS("nokeys"),
     QUERTY("qwerty"),

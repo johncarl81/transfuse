@@ -222,7 +222,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
-        activityDescriptor.setInitMethodBuilder(OnCreate.class, componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
+        activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
 
         activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
 

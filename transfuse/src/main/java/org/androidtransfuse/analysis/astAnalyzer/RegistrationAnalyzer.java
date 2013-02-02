@@ -170,7 +170,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         ImmutableList.Builder<ASTMethod> delegateMethods = ImmutableList.builder();
         for (ASTMethod method : listenerInterface.getMethods()) {
-            if (method.isAnnotated(Listener.class)) {
+            if (method.isAnnotated(CallThrough.class)) {
                 delegateMethods.add(method);
             }
         }

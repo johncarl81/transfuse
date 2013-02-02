@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * Encapsulates a scope map utilizing the double-check locking algorithm.
+ *
  * @author John Ericksen
  */
 public class ConcurrentDoubleLockingScope implements Scope {

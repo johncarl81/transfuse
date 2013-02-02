@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Activity and Fragment {@code onPause()} Lifecycle Event callback method annotation.  Registers
+ * the annotated method to be called during the {@code onPause()} Lifecycle Phase.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnPause {
-}
+@EventListener
+public @interface OnPause {}

@@ -21,6 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Allows for multiple MetaData annotations to be used on a single Transfuse Component.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)

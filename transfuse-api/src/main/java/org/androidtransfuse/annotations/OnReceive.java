@@ -21,8 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * BroadcastReceiver {@code onReceive()} callback method annotation.  Registers the annotated method
+ * to be called if the {@code onReceive()} function is called.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
+@EventListener
 public @interface OnReceive {}

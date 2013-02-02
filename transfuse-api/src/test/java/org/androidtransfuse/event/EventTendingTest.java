@@ -39,7 +39,7 @@ public class EventTendingTest {
 
         eventTending = new EventTending(mockEventManager);
 
-        eventTending.register(Object.class, mockEventObserver);
+        eventTending.addObserver(Object.class, mockEventObserver);
 
     }
 
@@ -60,7 +60,7 @@ public class EventTendingTest {
     @Test
     public void testRegisterMethod() throws NoSuchMethodException {
 
-        Method registerMethod = EventTending.class.getMethod(EventTending.REGISTER_METHOD, Class.class, EventObserver.class);
+        Method registerMethod = EventTending.class.getMethod(EventTending.ADD_OBSERVER_METHOD, Class.class, EventObserver.class);
         assertNotNull(registerMethod);
     }
 }

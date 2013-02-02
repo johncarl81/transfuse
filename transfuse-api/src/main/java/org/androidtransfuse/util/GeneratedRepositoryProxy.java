@@ -16,13 +16,17 @@
 package org.androidtransfuse.util;
 
 /**
+ * Centralized repository loader which, upon construction, instantiates an instance of the given Repository using
+ * reflection.  Although reflection is frowned upon when seeking performance, this class is typically used in a
+ * static context, so it is only loaded once per application and thus the reflection calls are kept to a minimum.
+ *
  * @author John Ericksen
  */
 public class GeneratedRepositoryProxy<T> {
 
     private final String repositoryPackage;
     private final String repositoryName;
-    private T instance;
+    private T instance = null;
 
     public GeneratedRepositoryProxy(String repositoryPackage, String repositoryName) {
         this.repositoryPackage = repositoryPackage;
@@ -30,14 +34,31 @@ public class GeneratedRepositoryProxy<T> {
         update(getClass().getClassLoader());
     }
 
+    /**
+     * returns the contained Repository instance.  If no instance was able to be constructed then this method will
+     * throw a TransfuseRuntimeException if called.
+     *
+     * @throws TransfuseRuntimeException
+     * @return Repository instance
+     */
     public T get() {
+        if(instance == null){
+            throw new TransfuseRuntimeException("Unable to find " + repositoryName + " class");
+        }
         return instance;
     }
 
+    /**
+     * Update the repository class from the given classloader.  If the given repository class cannot be instantiated
+     * then this method will throw a TransfuseRuntimeException.
+     *
+     * @throws TransfuseRuntimeException
+     * @param classLoader
+     */
     public final void update(ClassLoader classLoader){
         try{
-            Class injectorClass = classLoader.loadClass(repositoryPackage + "." + repositoryName);
-            instance = (T) injectorClass.newInstance();
+            Class repositoryClass = classLoader.loadClass(repositoryPackage + "." + repositoryName);
+            instance = (T) repositoryClass.newInstance();
         } catch (ClassNotFoundException e) {
             instance = null;
         } catch (InstantiationException e) {

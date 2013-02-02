@@ -21,9 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Defines the annotated getter or setter property as ignored when generating a Parcel converter.
+ *
+ * @see Parcel
+ *
  * @author John Ericksen
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Transient {
-}
+public @interface Transient {}

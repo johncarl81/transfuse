@@ -16,9 +16,10 @@
 package org.androidtransfuse;
 
 import org.androidtransfuse.util.GeneratedRepositoryProxy;
-import org.androidtransfuse.util.InjectorRepository;
 
 /**
+ * Static utility class which maps the {@code @Injector} annotated interface to the generated implementation.
+ *
  * @author John Ericksen
  */
 public final class Injectors {
@@ -27,15 +28,38 @@ public final class Injectors {
     public static final String INJECTORS_REPOSITORY_NAME = "Transfuse$Injectors";
     public static final String INJECTORS_PACKAGE = "org.androidtransfuse";
 
+    private static final GeneratedRepositoryProxy<InjectorRepository> PROXY =
+            new GeneratedRepositoryProxy<InjectorRepository>(INJECTORS_PACKAGE, INJECTORS_REPOSITORY_NAME);
+
     private Injectors(){
         // private utility class constructor
     }
 
-    private static final GeneratedRepositoryProxy<InjectorRepository> PROXY =
-            new GeneratedRepositoryProxy<InjectorRepository>(INJECTORS_PACKAGE, INJECTORS_REPOSITORY_NAME);
-
+    /**
+     * Returns an instance of the provided {@code @Injector} interface.
+     *
+     * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
+     * Transfuse$Injectors class.
+     * @param type Injector type
+     * @param <T>
+     * @return Generated Injector instance
+     */
     public static<T> T get(Class<T> type) {
-        InjectorRepository injectorRepository = PROXY.get();
-        return injectorRepository == null ? null : injectorRepository.get(type);
+        return PROXY.get().get(type);
+    }
+
+    /**
+     * Proxy Interface to be implemented by code generation.
+     */
+    public static interface InjectorRepository {
+
+        /**
+         * Returns an instance of the provided {@code @Injector} interface.
+         *
+         * @param type Injector type
+         * @param <T>
+         * @return Generated Injector instance
+         */
+        <T> T get(Class<T> type);
     }
 }

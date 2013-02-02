@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
-public enum InstallLocation implements LabeledEnum {
+public enum InstallLocation implements Labeled {
     AUTO("auto"),
     INTERNAL_ONLY("internalOnly"),
     PREFER_EXTERNAL("preferExternal");

@@ -21,7 +21,6 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Parcel;
-import org.androidtransfuse.annotations.ParcelConverter;
 import org.androidtransfuse.annotations.Transient;
 import org.androidtransfuse.model.GetterSetterMethodPair;
 import org.androidtransfuse.model.ParcelableDescriptor;
@@ -107,7 +106,7 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
     private boolean converterDefined(ASTType astType) {
 
         ASTType converterType = getConverterType(astType);
-        ASTType emptyConverterType = astClassFactory.getType(ParcelConverter.EmptyConverter.class);
+        ASTType emptyConverterType = astClassFactory.getType(Parcel.EmptyConverter.class);
         return converterType != null && !converterType.equals(emptyConverterType);
     }
 

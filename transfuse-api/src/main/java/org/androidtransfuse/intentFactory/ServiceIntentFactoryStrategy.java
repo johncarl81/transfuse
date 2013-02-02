@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
+ * Service specific Base class defining how to start an Activity by Intent.
+ *
  * @author John Ericksen
  */
 public class ServiceIntentFactoryStrategy extends AbstractIntentFactoryStrategy {

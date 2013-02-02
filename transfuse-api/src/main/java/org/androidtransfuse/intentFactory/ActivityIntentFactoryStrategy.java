@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
+ * Activity specific Base class defining how to start an Activity by Intent.
+ *
  * @author John Ericksen
  */
 public class ActivityIntentFactoryStrategy extends AbstractIntentFactoryStrategy {

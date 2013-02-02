@@ -23,6 +23,9 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 
 /**
+ * Utility class for performing a variety of operations through reflection.  This functionality should be used sparingly
+ * as frequent calls can cause performance issues.
+ *
  * @author John Ericksen
  */
 public final class InjectionUtil {
@@ -42,7 +45,16 @@ public final class InjectionUtil {
     private InjectionUtil() {
         //singleton constructor
     }
-
+    /**
+     * Returns the value of a field.
+     *
+     * @param returnType type of the field
+     * @param targetClass class represented by the target parameter
+     * @param target object containing the field
+     * @param field name of the field
+     * @param <T> type parameter
+     * @return field value
+     */
     public <T> T getField(Class<T> returnType, Class<?> targetClass, Object target, String field) {
         try {
             Field declaredField = targetClass.getDeclaredField(field);
@@ -75,12 +87,20 @@ public final class InjectionUtil {
         }
     }
 
-    public void setField(Class<?> targetClass, Object target, String field, Object source) {
+    /**
+     * Updates field with the given value.
+     *
+     * @param targetClass class representing the object containing the field.
+     * @param target object containing the field to update
+     * @param field name of the field
+     * @param value object to update the field to
+     */
+    public void setField(Class<?> targetClass, Object target, String field, Object value) {
         try {
             Field classField = targetClass.getDeclaredField(field);
 
             AccessController.doPrivileged(
-                    new SetFieldPrivilegedAction(classField, target, source));
+                    new SetFieldPrivilegedAction(classField, target, value));
 
         } catch (NoSuchFieldException e) {
             throw new TransfuseInjectionException(
@@ -95,22 +115,34 @@ public final class InjectionUtil {
     private static final class SetFieldPrivilegedAction extends AccessibleElementPrivilegedAction<Void, Field> {
 
         private final Object target;
-        private final Object source;
+        private final Object value;
 
-        private SetFieldPrivilegedAction(Field classField, Object target, Object source) {
+        private SetFieldPrivilegedAction(Field classField, Object target, Object value) {
             super(classField);
             this.target = target;
-            this.source = source;
+            this.value = value;
         }
 
         @Override
         public Void run(Field classField) throws IllegalAccessException {
-            classField.set(target, source);
+            classField.set(target, value);
 
             return null;
         }
     }
 
+    /**
+     * Calls a method with the provided arguments as parameters.
+     *
+     * @param retClass the method return value
+     * @param targetClass the instance class
+     * @param target the instance containing the method
+     * @param method the method name
+     * @param argClasses types of the method arguments
+     * @param args method arguments used during invocation
+     * @param <T> relating type parameter
+     * @return method return value
+     */
     public <T> T callMethod(Class<T> retClass, Class<?> targetClass, Object target, String method, Class[] argClasses, Object[] args) {
         try {
             Method classMethod = targetClass.getDeclaredMethod(method, argClasses);
@@ -144,6 +176,15 @@ public final class InjectionUtil {
     }
 
 
+    /**
+     * Instantiates a class by calling the constructor.
+     *
+     * @param targetClass instance type to construct
+     * @param argClasses argument types accepted by the constructor
+     * @param args constructor argument values
+     * @param <T> relating type parameter
+     * @return instance created by constructor
+     */
     public <T> T callConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
         T output;
 

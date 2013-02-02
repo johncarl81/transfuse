@@ -23,14 +23,12 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
 
-import java.lang.annotation.Annotation;
-
 /**
  * @author John Ericksen
  */
 public interface ComponentBuilderFactory {
 
-    MethodCallbackGenerator buildMethodCallbackGenerator(Class<? extends Annotation> eventAnnotation, MethodGenerator methodGenerator);
+    MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, MethodGenerator methodGenerator);
 
     RLayoutBuilder buildRLayoutBuilder(Integer layout);
 

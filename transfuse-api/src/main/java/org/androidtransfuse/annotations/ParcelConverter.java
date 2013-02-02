@@ -16,6 +16,8 @@
 package org.androidtransfuse.annotations;
 
 /**
+ * Defines a concrete serialization of an instance to and from a Parcel.
+ *
  * @author John Ericksen
  */
 public interface ParcelConverter<T> {
@@ -23,18 +25,19 @@ public interface ParcelConverter<T> {
     String CONVERT_TO_PARCEL = "toParcel";
     String CONVERT_FROM_PARCEL = "fromParcel";
 
+    /**
+     * Write the given input parameter to the destinationParcel.
+     *
+     * @param input T instance
+     * @param destinationParcel Parcel to write to
+     */
     void toParcel(T input, android.os.Parcel destinationParcel);
 
+    /**
+     * Generates an instance from the values provided in the given parcel.
+     *
+     * @param parcel Parcel to read from
+     * @return instance of the mapped class.
+     */
     T fromParcel(android.os.Parcel parcel);
-
-    class EmptyConverter implements ParcelConverter<Object> {
-        @Override
-        public void toParcel(Object input, android.os.Parcel destinationParcel) {
-        }
-
-        @Override
-        public Object fromParcel(android.os.Parcel parcel) {
-            return null;
-        }
-    }
 }

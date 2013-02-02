@@ -16,9 +16,16 @@
 package org.androidtransfuse.annotations;
 
 import javax.inject.Scope;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+/**
+ * Defines the scope of the annotated Type or {@code @Provides} type to be a Context-Scoped object.  This means that
+ * there will be one instance of the given type injected during the lifecycle of a Context.
+ */
 @Scope
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContextScope {}

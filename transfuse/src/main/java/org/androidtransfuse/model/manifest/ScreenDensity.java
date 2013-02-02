@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
-public enum ScreenDensity implements LabeledEnum {
+public enum ScreenDensity implements Labeled {
     LDPI("ldpi"),
     MDPI("mdpi"),
     HDPI("hdpi"),

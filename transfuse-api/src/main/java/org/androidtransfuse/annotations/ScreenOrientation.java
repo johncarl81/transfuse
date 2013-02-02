@@ -15,7 +15,13 @@
  */
 package org.androidtransfuse.annotations;
 
-public enum ScreenOrientation implements LabeledEnum {
+/**
+ * Constants representing the android:screenOrientation property on the Activity Manifest tag.
+ *
+ * @author John Ericksen
+ */
+public enum ScreenOrientation implements Labeled {
+
     UNSPECIFIED("unspecified"),
     USER("user"),
     BEHIND("behind"),

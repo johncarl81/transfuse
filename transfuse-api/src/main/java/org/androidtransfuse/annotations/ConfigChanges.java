@@ -15,7 +15,13 @@
  */
 package org.androidtransfuse.annotations;
 
-public enum ConfigChanges implements LabeledEnum {
+/**
+ * Constants representing the android:configChanges property on the Activity Manifest tag.
+ *
+ * @author John Ericksen
+ */
+public enum ConfigChanges implements Labeled {
+
     MCC("mcc"),
     MNC("mnc"),
     LOCALE("locale"),

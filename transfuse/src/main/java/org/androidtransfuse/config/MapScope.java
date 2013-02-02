@@ -19,18 +19,19 @@ import com.google.inject.Key;
 import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author John Ericksen
  */
 public class MapScope implements EnterableScope {
 
-    private Map<Key<?>, Object> values;
+    private ConcurrentMap<Key<?>, Object> values;
 
     public void enter() {
-        values = new HashMap<Key<?>, Object>();
+        values = new ConcurrentHashMap<Key<?>, Object>();
     }
 
     public void exit() {
@@ -46,23 +47,38 @@ public class MapScope implements EnterableScope {
         seed(Key.get(clazz), value);
     }
 
-    public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
-        return new Provider<T>() {
-            public T get() {
-                Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
-
-                @SuppressWarnings("unchecked")
-                T current = (T) scopedObjects.get(key);
-                if (current == null && !scopedObjects.containsKey(key)) {
-                    current = unscoped.get();
-                    scopedObjects.put(key, current);
-                }
-                return current;
-            }
-        };
+    public <T> Provider<T> scope(final Key<T> key, final Provider<T> provider) {
+        return new MapScopeProvider<T>(key, provider);
     }
 
-    private <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
+    private final class MapScopeProvider<T> implements Provider<T>{
+
+        private Key<T> key;
+        private Provider<T> provider;
+
+        private MapScopeProvider(Key<T> key, Provider<T> provider) {
+            this.key = key;
+            this.provider = provider;
+        }
+
+        @Override
+        public T get() {
+            ConcurrentMap<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+
+            @SuppressWarnings("unchecked")
+            Object current = scopedObjects.get(key);
+            if (current == null) {
+                Object value = provider.get();
+                current = scopedObjects.putIfAbsent(key, value);
+                if(current == null){
+                    current = value;
+                }
+            }
+            return (T) current;
+        }
+    }
+
+    private <T> ConcurrentMap<Key<?>, Object> getScopedObjectMap(Key<T> key) {
         if (values == null) {
             throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
         }

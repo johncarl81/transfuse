@@ -58,6 +58,6 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
 
     private JDefinedClass generateProviderType(InjectionNode providerTypeInjectionNode) {
 
-        return providerGenerator.generateProvider(providerTypeInjectionNode);
+        return providerGenerator.generateProvider(providerTypeInjectionNode, false);
     }
 }

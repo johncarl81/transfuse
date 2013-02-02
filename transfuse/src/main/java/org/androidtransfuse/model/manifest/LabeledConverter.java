@@ -16,7 +16,7 @@
 package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +24,13 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class LabeledEnumConverter<T extends LabeledEnum> extends AbstractSingleValueConverter {
+public class LabeledConverter<T extends Labeled> extends AbstractSingleValueConverter {
 
-    private Class<T> labeledEnum;
+    private Class<T> labeled;
     private Map<String, T> labelMap;
 
-    public LabeledEnumConverter(Class<T> labeledEnum, T[] values) {
-        this.labeledEnum = labeledEnum;
+    public LabeledConverter(Class<T> labeled, T[] values) {
+        this.labeled = labeled;
         labelMap = new HashMap<String, T>();
         for (T value : values) {
             labelMap.put(value.getLabel(), value);
@@ -39,7 +39,7 @@ public class LabeledEnumConverter<T extends LabeledEnum> extends AbstractSingleV
 
     @Override
     public boolean canConvert(Class type) {
-        return labeledEnum.isAssignableFrom(type);
+        return labeled.isAssignableFrom(type);
     }
 
     @Override
@@ -49,6 +49,6 @@ public class LabeledEnumConverter<T extends LabeledEnum> extends AbstractSingleV
 
     @Override
     public String toString(Object obj) {
-        return labeledEnum.cast(obj).getLabel();
+        return labeled.cast(obj).getLabel();
     }
 }

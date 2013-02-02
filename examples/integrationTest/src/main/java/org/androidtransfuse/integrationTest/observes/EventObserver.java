@@ -24,6 +24,7 @@ import org.androidtransfuse.integrationTest.R;
 import org.androidtransfuse.util.DeclareField;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import static org.androidtransfuse.integrationTest.SharedVariables.ONE_SECOND;
 
@@ -39,6 +40,8 @@ public class EventObserver {
     private boolean eventTwoTriggered;
     @Inject
     private EventManager eventManager;
+    @Inject
+    private Provider<EventManager> eventManagerProvider;
     @Inject
     @View(R.id.observertext)
     private EditText editText;
@@ -67,7 +70,7 @@ public class EventObserver {
     private android.view.View.OnClickListener eventThreeListener = new android.view.View.OnClickListener() {
         @Override
         public void onClick(android.view.View v) {
-            eventManager.trigger(new EventThree());
+            eventManagerProvider.get().trigger(new EventThree());
         }
     };
 

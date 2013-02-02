@@ -37,18 +37,18 @@ public class XStreamProvider implements Provider<XStream> {
 
         xStream.processAnnotations(Manifest.class);
 
-        xStream.registerConverter(new LabeledEnumConverter<ConfigChanges>(ConfigChanges.class, ConfigChanges.values()));
-        xStream.registerConverter(new LabeledEnumConverter<InstallLocation>(InstallLocation.class, InstallLocation.values()));
-        xStream.registerConverter(new LabeledEnumConverter<LaunchMode>(LaunchMode.class, LaunchMode.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ProtectionLevel>(ProtectionLevel.class, ProtectionLevel.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ReqKeyboardType>(ReqKeyboardType.class, ReqKeyboardType.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ReqNavigation>(ReqNavigation.class, ReqNavigation.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ReqTouchScreen>(ReqTouchScreen.class, ReqTouchScreen.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ScreenDensity>(ScreenDensity.class, ScreenDensity.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ScreenOrientation>(ScreenOrientation.class, ScreenOrientation.values()));
-        xStream.registerConverter(new LabeledEnumConverter<ScreenSize>(ScreenSize.class, ScreenSize.values()));
-        xStream.registerConverter(new LabeledEnumConverter<UIOptions>(UIOptions.class, UIOptions.values()));
-        xStream.registerConverter(new LabeledEnumConverter<WindowSoftInputMode>(WindowSoftInputMode.class, WindowSoftInputMode.values()));
+        xStream.registerConverter(new LabeledConverter<ConfigChanges>(ConfigChanges.class, ConfigChanges.values()));
+        xStream.registerConverter(new LabeledConverter<InstallLocation>(InstallLocation.class, InstallLocation.values()));
+        xStream.registerConverter(new LabeledConverter<LaunchMode>(LaunchMode.class, LaunchMode.values()));
+        xStream.registerConverter(new LabeledConverter<ProtectionLevel>(ProtectionLevel.class, ProtectionLevel.values()));
+        xStream.registerConverter(new LabeledConverter<ReqKeyboardType>(ReqKeyboardType.class, ReqKeyboardType.values()));
+        xStream.registerConverter(new LabeledConverter<ReqNavigation>(ReqNavigation.class, ReqNavigation.values()));
+        xStream.registerConverter(new LabeledConverter<ReqTouchScreen>(ReqTouchScreen.class, ReqTouchScreen.values()));
+        xStream.registerConverter(new LabeledConverter<ScreenDensity>(ScreenDensity.class, ScreenDensity.values()));
+        xStream.registerConverter(new LabeledConverter<ScreenOrientation>(ScreenOrientation.class, ScreenOrientation.values()));
+        xStream.registerConverter(new LabeledConverter<ScreenSize>(ScreenSize.class, ScreenSize.values()));
+        xStream.registerConverter(new LabeledConverter<UIOptions>(UIOptions.class, UIOptions.values()));
+        xStream.registerConverter(new LabeledConverter<WindowSoftInputMode>(WindowSoftInputMode.class, WindowSoftInputMode.values()));
         xStream.registerConverter(new MergeableTagConverter());
 
         return xStream;

@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.annotations.LabeledEnum;
+import org.androidtransfuse.annotations.Labeled;
 
-public enum ReqNavigation implements LabeledEnum {
+public enum ReqNavigation implements Labeled {
     UNDEFINED("undefined"),
     NONAV("nonav"),
     DPAD("dpad"),

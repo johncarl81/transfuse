@@ -19,6 +19,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 /**
+ * Abstract Base class defining the required parameters to build an Intent.
+ *
  * @author John Ericksen
  */
 public abstract class AbstractIntentFactoryStrategy implements IntentFactoryStrategy{

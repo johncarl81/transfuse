@@ -20,7 +20,32 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p>
+ * Configures a factory method to provide an instance of the return type for injection in a {@code @TransfuseManifest}
+ * annotated configuration and binds it to the return type.</p>
+ *
+ * <p>
+ * For instance, the following module configuration builds a {@code Telescope} object from a {@code Mirror},
+ * {@code Tube} and {@code Eyepiece} object:
+ * <pre>
+ *     {@literal @}TransfuseModule
+ *     public void ModuleExample{
+ *         {@literal @}Provides
+ *         public Telescope buildTelescope(Mirror mirror, Tube tube, Eyepiece eyepiece){
+ *             return new SchmidtCassegrainTelescope(mirror, tube, eyepiece);
+ *         }
+ *     }
+ * </pre>
+ * </p>
+ *
+ * <p>
+ * Qualifier annotations as well as scoping annotations may be used in addition to the {@code @Provides} annotation
+ * for the desired effect.
+ * </p>
+ *
+ * @author John Ericksen
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Provides {
-}
+public @interface Provides {}

@@ -15,7 +15,13 @@
  */
 package org.androidtransfuse.annotations;
 
-public enum WindowSoftInputMode implements LabeledEnum {
+/**
+ * Constants representing the android:windowSoftInputMode property on the Activity Manifest tag.
+ *
+ * @author John Ericksen
+ */
+public enum WindowSoftInputMode implements Labeled {
+
     STATE_UNSPECIFIED("stateUnspecified"),
     STATE_UNCHANGED("stateUnchanged"),
     STATE_HIDDEN("stateHidden"),

@@ -19,7 +19,9 @@ import java.lang.reflect.AccessibleObject;
 import java.security.PrivilegedExceptionAction;
 
 /**
- * Accessibility modifying Privileged Action
+ * Executes a PrivilegedExceptionAction against a AccessibleObject with the convenience of toggling the Accessible
+ * parameter on the AccessibleObject.  This essentially turns off encapsulation via declaring methods, fields, etc as
+ * private.
  *
  * @author John Ericksen
  */
@@ -31,6 +33,7 @@ public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleO
         this.accessible = accessible;
     }
 
+    @Override
     public T run() throws Exception {
         boolean previous = this.accessible.isAccessible();
         accessible.setAccessible(true);
@@ -42,5 +45,12 @@ public abstract class AccessibleElementPrivilegedAction<T, E extends AccessibleO
         return output;
     }
 
+    /**
+     * Execute a Privileged Action against the given element which has been toggled to be accessible.
+     *
+     * @param element input AccessibleObject
+     * @return T
+     * @throws Exception
+     */
     public abstract T run(E element) throws Exception;
 }

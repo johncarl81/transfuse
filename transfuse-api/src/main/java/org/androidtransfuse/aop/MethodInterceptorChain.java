@@ -23,6 +23,11 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
+/**
+ * Defines a chain of interceptors to wrap the given method.
+ *
+ * @author John Ericksen
+ */
 public class MethodInterceptorChain {
 
     private final MethodInterceptor[] methodInterceptors;
@@ -35,6 +40,12 @@ public class MethodInterceptorChain {
         this.proxy = proxy;
     }
 
+    /**
+     * Invoke the method interception chain.
+     *
+     * @param arguments provided to the wrapped method.
+     * @return value returned by interceptor chain.
+     */
     public Object invoke(Object[] arguments) {
         try {
             return new MethodInterceptorIterator(arguments).proceed();
@@ -43,6 +54,9 @@ public class MethodInterceptorChain {
         }
     }
 
+    /**
+     * Class which encapsulates the iteration of the MethodInterceptors and final call to the MethodExecution instance.
+     */
     private final class MethodInterceptorIterator implements MethodInvocation {
 
         private int i = -1;
@@ -68,6 +82,7 @@ public class MethodInterceptorChain {
 
         @Override
         public Object proceed() throws Throwable {
+            //recursively iterate through the method interceptors
             i++;
             if (i == methodInterceptors.length) {
                 return methodExecution.invoke();
@@ -87,14 +102,26 @@ public class MethodInterceptorChain {
         }
     }
 
+    /**
+     * Interface defining the {@code Method} to be invoked.
+     */
     public interface MethodExecution {
 
         String GET_METHOD = "getMethod";
-
         String INVOKE = "invoke";
 
+        /**
+         * Looks up the represented class {@code Method}.
+         * @return Method
+         * @throws Exception if an error occurs
+         */
         Method getMethod() throws Exception;
 
+        /**
+         * Invokes the represented {@code Method}.
+         * @return value returned by the method
+         * @throws Throwable if an error occurs
+         */
         Object invoke() throws Throwable;
     }
 } 
