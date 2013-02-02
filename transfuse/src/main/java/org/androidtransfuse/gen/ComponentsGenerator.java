@@ -17,8 +17,8 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.Components;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 

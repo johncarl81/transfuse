@@ -20,6 +20,7 @@ import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.PrivateInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.ProtectedInjectionBuilder;
 import org.androidtransfuse.gen.invocationBuilder.PublicInjectionBuilder;
@@ -52,11 +53,11 @@ public class InvocationBuilderTest {
         protectedInjectionBuilder = mock(ProtectedInjectionBuilder.class);
         privateInjectionBuilder = mock(PrivateInjectionBuilder.class);
 
-        invocationBuilder = new InvocationBuilder(
+        invocationBuilder = new InvocationBuilder(new DefaultInvocationBuilderStrategy(
                 new InstanceProvider<PublicInjectionBuilder>(publicInjectionBuilder),
                 new InstanceProvider<ProtectedInjectionBuilder>(protectedInjectionBuilder),
                 new InstanceProvider<PrivateInjectionBuilder>(privateInjectionBuilder)
-        );
+        ));
     }
 
     @Test

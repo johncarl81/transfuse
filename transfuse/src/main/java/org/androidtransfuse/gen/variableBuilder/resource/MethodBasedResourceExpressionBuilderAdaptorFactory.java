@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
+import org.androidtransfuse.annotations.Injector;
+
 /**
  * @author John Ericksen
  */
+@Injector
 public interface MethodBasedResourceExpressionBuilderAdaptorFactory {
 
     MethodBasedResourceExpressionBuilderAdaptor buildMethodBasedResourceExpressionBuilderAdaptor(Class clazz, String accessMethod);

@@ -15,7 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import org.androidtransfuse.TransfuseTestInjector;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.util.ManifestSerializer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ManifestTest {
 
     @Inject
@@ -40,7 +42,7 @@ public class ManifestTest {
 
     @Before
     public void setUp() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
     }
 
     @Test

@@ -15,10 +15,11 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Application;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ApplicationAnalysisTest {
 
     @Inject
@@ -41,7 +43,7 @@ public class ApplicationAnalysisTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         applicationASTType = astClassFactory.getType(ApplicationAnalysisTarget.class);
     }

@@ -91,7 +91,7 @@ public class InjectionTest {
     public void testDeclaredProviderInjection() {
         Provider<ProvidedInjectTarget> providedInjectTargetProvider = injection.getProvidedInjectTargetProvider();
         assertNotNull(providedInjectTargetProvider);
-        assertEquals(InjectTargetProvider.class, providedInjectTargetProvider.getClass());
+        assertNotNull(providedInjectTargetProvider.get());
     }
 
     @Test

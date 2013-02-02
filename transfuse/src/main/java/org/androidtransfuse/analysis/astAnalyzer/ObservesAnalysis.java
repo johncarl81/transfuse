@@ -15,13 +15,13 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.annotations.Observes;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.model.InjectionNode;

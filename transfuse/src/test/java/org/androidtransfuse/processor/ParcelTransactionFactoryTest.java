@@ -18,6 +18,7 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.config.ThreadLocalScope;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class ParcelTransactionFactoryTest {
         input = mock(Provider.class);
         ThreadLocalScope simpleScope = new ThreadLocalScope();
         ScopedTransactionFactory scopedTransactionFactory = new ScopedTransactionFactory(simpleScope);
-        Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider = mock(Provider.class);
+        Provider<TransfuseAndroidModule.ParcelMarkerTransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider = mock(Provider.class);
         factory = new ParcelTransactionFactory(scopedTransactionFactory, workerProvider);
     }
 

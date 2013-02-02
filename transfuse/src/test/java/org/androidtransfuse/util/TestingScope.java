@@ -40,6 +40,11 @@ public class TestingScope implements EnterableScope {
     }
 
     @Override
+    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
+        return scope(Key.get(clazz), com.google.inject.util.Providers.guicify(provider)).get();
+    }
+
+    @Override
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             @Override

@@ -51,7 +51,8 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     public void buildLayoutCall(JDefinedClass definedClass, JBlock block) {
 
         try {
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode);
+            //todo: wire in scopes
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, null);
 
             //LayoutHandlerDelegate.invokeLayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();

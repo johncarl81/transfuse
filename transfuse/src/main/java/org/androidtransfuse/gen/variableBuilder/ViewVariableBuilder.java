@@ -18,11 +18,12 @@ package org.androidtransfuse.gen.variableBuilder;
 import android.view.View;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
@@ -48,7 +49,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final RResource rResource;
-    private final GeneratorFactory generatorFactory;
+    private final GeneratorFactory2 generatorFactory;
 
     @Inject
     public ViewVariableBuilder(@Assisted @Nullable Integer viewId,
@@ -62,7 +63,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                UniqueVariableNamer variableNamer,
                                RResource rResource,
                                TypedExpressionFactory typedExpressionFactory,
-                               GeneratorFactory generatorFactory) {
+                               GeneratorFactory2 generatorFactory) {
         super(View.class, typedExpressionFactory);
         this.viewId = viewId;
         this.viewTag = viewTag;

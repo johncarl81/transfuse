@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.annotations.Injector;
+
 /**
  * @author John Ericksen
  */
+@Injector
 public interface AnalysisGenerationTransactionProcessorBuilderFactory {
 
     AnalysisGenerationTransactionProcessorBuilder buildBuilder(WorkerProvider workerProvider);

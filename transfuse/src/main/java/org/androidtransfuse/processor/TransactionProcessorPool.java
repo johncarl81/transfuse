@@ -16,7 +16,7 @@
 package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.TransfuseAnalysisException;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;

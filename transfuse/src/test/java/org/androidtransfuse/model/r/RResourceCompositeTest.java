@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.model.r;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ import static junit.framework.Assert.assertNull;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class RResourceCompositeTest {
 
     private static final int RESOURCE_THAT_DOESNT_EXIST = 12345;
@@ -50,7 +52,7 @@ public class RResourceCompositeTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         resourceOne = new RResourceMapping();
         resourceOne.addResource(astClassFactory.getType(RTest.one.class), "id1", RTest.one.id1);

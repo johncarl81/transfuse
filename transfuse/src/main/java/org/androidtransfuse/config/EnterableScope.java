@@ -23,7 +23,7 @@ import com.google.inject.Scope;
  *
  * @author John Ericksen
  */
-public interface EnterableScope extends Scope {
+public interface EnterableScope extends Scope, org.androidtransfuse.scope.Scope {
 
     /**
      * Begins the current scope.

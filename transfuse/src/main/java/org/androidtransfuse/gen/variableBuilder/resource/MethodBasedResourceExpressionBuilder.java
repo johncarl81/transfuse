@@ -20,7 +20,7 @@ import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
-import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
+import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 

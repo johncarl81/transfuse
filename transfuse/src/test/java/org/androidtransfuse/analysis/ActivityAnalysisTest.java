@@ -16,10 +16,22 @@
 package org.androidtransfuse.analysis;
 
 import android.app.Activity;
-import org.androidtransfuse.TransfuseTestInjector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
+import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
+import org.androidtransfuse.config.ConfigurationScope;
+import org.androidtransfuse.config.EnterableScope;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.manifest.Application;
+import org.androidtransfuse.model.manifest.Manifest;
+import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.util.EmptyRResource;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +42,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ActivityAnalysisTest {
 
     public static final String TEST_NAME = "ActivityTestTarget";
@@ -39,10 +52,25 @@ public class ActivityAnalysisTest {
     private ActivityAnalysis activityAnalysis;
     @Inject
     private ASTClassFactory astClassFactory;
+    @Inject
+    @ScopeReference(ConfigurationScope.class)
+    private EnterableScope configurationScope;
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
+
+        Manifest manifest = new Manifest();
+        manifest.getApplications().add(new Application());
+
+        configurationScope.seed(RResource.class, new EmptyRResource());
+        configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
+        configurationScope.enter();
+    }
+
+    @After
+    public void tearDown() {
+        configurationScope.exit();
     }
 
     @Test

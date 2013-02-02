@@ -19,7 +19,9 @@ import com.google.common.collect.Maps;
 import com.google.inject.Key;
 import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
+import com.google.inject.util.Providers;
 
+import javax.inject.Singleton;
 import java.util.Map;
 
 /**
@@ -27,6 +29,7 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
+@Singleton
 public class ThreadLocalScope implements EnterableScope {
 
     private final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
@@ -46,6 +49,11 @@ public class ThreadLocalScope implements EnterableScope {
 
     public <T> void seed(Class<T> clazz, T value) {
         seed(Key.get(clazz), value);
+    }
+
+    @Override
+    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
+        return scope(Key.get(clazz), Providers.guicify(provider)).get();
     }
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {

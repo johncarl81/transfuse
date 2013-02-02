@@ -17,7 +17,7 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.config.TransfuseSetupGuiceModule;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,12 +29,12 @@ import javax.inject.Provider;
 public class InjectorTransactionFactory implements TransactionFactory<Provider<ASTType>, JDefinedClass> {
 
     private final ScopedTransactionFactory scopedTransactionFactory;
-    private final Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;
+    private final Provider<TransfuseAndroidModule.InjectorMarkerTransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;
 
     @Inject
     public InjectorTransactionFactory(ScopedTransactionFactory scopedTransactionFactory,
-                                      @Named(TransfuseSetupGuiceModule.INJECTOR_TRANSACTION_WORKER)
-                                      Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider) {
+                                      @Named(TransfuseAndroidModule.INJECTOR_TRANSACTION_WORKER)
+                                      Provider<TransfuseAndroidModule.InjectorMarkerTransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider) {
         this.scopedTransactionFactory = scopedTransactionFactory;
         this.workerProvider = workerProvider;
     }

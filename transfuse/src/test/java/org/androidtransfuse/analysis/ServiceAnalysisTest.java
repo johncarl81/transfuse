@@ -15,10 +15,11 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Service;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ServiceAnalysisTest {
 
     @Inject
@@ -42,7 +44,7 @@ public class ServiceAnalysisTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         serviceTargetType = astClassFactory.getType(ServiceAnalysisTarget.class);
     }

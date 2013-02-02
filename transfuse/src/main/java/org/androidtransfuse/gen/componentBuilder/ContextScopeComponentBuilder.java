@@ -43,7 +43,7 @@ public class ContextScopeComponentBuilder implements ExpressionVariableDependent
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
         //setup context scope
         definedClass._implements(ContextScopeHolder.class);
 

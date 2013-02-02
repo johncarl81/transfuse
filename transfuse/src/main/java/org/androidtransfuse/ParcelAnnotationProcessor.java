@@ -16,6 +16,11 @@
 package org.androidtransfuse;
 
 import org.androidtransfuse.annotations.Parcel;
+import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
+import org.androidtransfuse.config.ConfigurationScope;
+import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.processor.ParcelProcessor;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
 import org.androidtransfuse.util.SupportedAnnotations;
@@ -28,8 +33,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
-import static org.androidtransfuse.config.TransfuseInjector.buildInjector;
-
 /**
  * Annotation processor which generates for classes annotated with @Parcel, Android Parcelable wrapper classes.
  * <p/>
@@ -40,21 +43,30 @@ import static org.androidtransfuse.config.TransfuseInjector.buildInjector;
  */
 @SupportedAnnotations(Parcel.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
+@Bootstrap
 public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
     private ParcelProcessor parcelProcessor;
     @Inject
     private ReloadableASTElementFactory reloadableASTElementFactory;
+    @Inject
+    @ScopeReference(ConfigurationScope.class)
+    private EnterableScope configurationScope;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        buildInjector(processingEnv).injectMembers(this);
+
+        Bootstraps.getInjector(ParcelAnnotationProcessor.class)
+                .addSingleton(ProcessingEnvironment.class, processingEnv)
+                .inject(ParcelAnnotationProcessor.class, this);
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
+
+        configurationScope.enter();
 
         parcelProcessor.submit(reloadableASTElementFactory.buildProviders(roundEnvironment.getElementsAnnotatedWith(Parcel.class)));
 
@@ -64,6 +76,8 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
             // Throws an exception if errors still exist.
             parcelProcessor.checkForErrors();
         }
+
+        configurationScope.exit();
 
         return true;
     }

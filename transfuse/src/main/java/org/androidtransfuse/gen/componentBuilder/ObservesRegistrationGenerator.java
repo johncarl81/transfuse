@@ -16,10 +16,10 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTVoidType;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;
@@ -59,7 +59,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         try {
             //mapping from event type -> observer
@@ -69,7 +69,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
             if (!observerTuples.isEmpty() && tendingInjectionNode != null) {
                 //build observer tuple array and observer tending class
-                TypedExpression tendingExpression = buildEventTending(block, definedClass, tendingInjectionNode, expressionMap);
+                TypedExpression tendingExpression = buildEventTending(block, definedClass, tendingInjectionNode, scopesExpression, expressionMap);
 
                 for (Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
                     block.invoke(tendingExpression.getExpression(), EventTending.ADD_OBSERVER_METHOD)
@@ -156,8 +156,8 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
         return null;
     }
 
-    private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
-        injectionFragmentGenerator.buildFragment(block, definedClass, tendingInjectionNode, expressionMap);
+    private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, JExpression scopesExpression, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+        injectionFragmentGenerator.buildFragment(block, definedClass, tendingInjectionNode, scopesExpression, expressionMap);
 
         return expressionMap.get(tendingInjectionNode);
     }

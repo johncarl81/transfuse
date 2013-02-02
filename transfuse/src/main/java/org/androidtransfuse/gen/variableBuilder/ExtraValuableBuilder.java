@@ -22,12 +22,14 @@ import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.ExtraUtil;
 import org.androidtransfuse.util.ParcelWrapper;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * @author John Ericksen
@@ -47,8 +49,8 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     @Inject
     public ExtraValuableBuilder(@Assisted String extraId,
                                 @Assisted InjectionNode activityInjectionNode,
-                                @Assisted("nullable") boolean nullable,
-                                @Assisted("wrapped") boolean wrapped,
+                                @Assisted("nullable") @Named("nullable") boolean nullable,
+                                @Assisted("wrapped") @Named("wrapped") boolean wrapped,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
                                 JCodeModel codeModel,
                                 TypedExpressionFactory typedExpressionFactory) {

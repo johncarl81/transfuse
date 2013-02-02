@@ -20,10 +20,10 @@ import android.os.Parcelable;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
@@ -53,7 +53,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
 
     @Inject
-    public IntentFactoryStrategyGenerator(@Assisted Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass,
+    public IntentFactoryStrategyGenerator(@Assisted Class factoryStrategyClass,
                                           JCodeModel codeModel,
                                           ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.factoryStrategyClass = factoryStrategyClass;
@@ -75,7 +75,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         try {
             JDefinedClass strategyClass = generationUtil.defineClass(descriptor.getPackageClass().append(STRATEGY_EXT));

@@ -19,10 +19,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.RepositoryUpdater;
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.ParcelableAnalysis;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ParcelableDescriptor;
 import org.androidtransfuse.util.ParcelWrapper;
 import org.androidtransfuse.util.Providers;
@@ -44,6 +45,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 @PrepareForTest(Parcel.class)
 public class ParcelableGeneratorTest {
 
@@ -68,7 +70,7 @@ public class ParcelableGeneratorTest {
 
     @Before
     public void setup() throws ClassNotFoundException, IOException, NoSuchFieldException, IllegalAccessException {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         ASTType mockParcelASTType = astClassFactory.getType(ParcelTarget.class);
         ASTType mockParcelTwoASTType = astClassFactory.getType(ParcelSecondTarget.class);

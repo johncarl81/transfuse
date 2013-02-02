@@ -19,6 +19,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.scope.Scopes;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,6 +37,8 @@ public class InjectionFragmentGeneratorHarness {
     private InjectionFragmentGenerator injectionFragmentGenerator;
     @Inject
     private ClassGenerationUtil generationUtil;
+    @Inject
+    private UniqueVariableNamer namer;
 
     public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
         JDefinedClass definedClass = generationUtil.defineClass(providerPackageClass);
@@ -48,7 +51,12 @@ public class InjectionFragmentGeneratorHarness {
         getMethod.annotate(Override.class);
 
         JBlock block = getMethod.body();
-        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode);
+        //Singleton scopes holder
+
+        JClass scopesRef = codeModel.ref(Scopes.class);
+        JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
+
+        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, scopes);
 
         block._return(expressionMap.get(injectionNode).getExpression());
     }

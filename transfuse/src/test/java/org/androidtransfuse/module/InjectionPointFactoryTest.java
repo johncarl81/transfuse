@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.module;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
@@ -24,6 +23,8 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.targets.MockAnalysisClass;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -44,6 +45,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class InjectionPointFactoryTest {
 
     private AnalysisContext emptyContext;
@@ -56,7 +58,7 @@ public class InjectionPointFactoryTest {
 
     @Before
     public void setUp() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
         emptyContext = contextFactory.buildContext();
     }
 

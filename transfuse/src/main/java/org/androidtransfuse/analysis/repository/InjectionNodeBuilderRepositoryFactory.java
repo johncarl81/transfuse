@@ -21,29 +21,28 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.view.MenuInflater;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JExpr;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.gen.variableBuilder.GeneratedProviderInjectionNodeBuilder;
+import org.androidtransfuse.analysis.module.ModuleRepository;
+import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.matcher.Matcher;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 /**
  * @author John Ericksen
  */
 @Singleton
-public class InjectionNodeBuilderRepositoryFactory {
+public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
 
     public static final java.lang.String POWER_SERVICE = "power";
     public static final java.lang.String WINDOW_SERVICE = "window";
@@ -81,17 +80,17 @@ public class InjectionNodeBuilderRepositoryFactory {
     private final Map<Matcher<ASTType>, InjectionNodeBuilder> moduleConfiguration = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
     private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> injectionSignatureConfig = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
     private final ImmutableMap<String, ASTType> systemServices;
-    private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
     private final InjectionBindingBuilder injectionBindingBuilder;
-    private final ASTClassFactory astClassFactory;
+    private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
+    private final CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory;
+    private final Set<ASTType> installedComponents = new HashSet<ASTType>();
+    private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
 
     @Inject
-    public InjectionNodeBuilderRepositoryFactory(Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
-                                                 InjectionBindingBuilder injectionBindingBuilder,
-                                                 ASTClassFactory astClassFactory) {
-        this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
+    public InjectionNodeBuilderRepositoryFactory(InjectionBindingBuilder injectionBindingBuilder,
+                                                 CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory) {
         this.injectionBindingBuilder = injectionBindingBuilder;
-        this.astClassFactory = astClassFactory;
+        this.customScopeAspectFactoryFactory = customScopeAspectFactoryFactory;
 
         ImmutableMap.Builder<String, ASTType> systemServiceBuilder = ImmutableMap.builder();
         //mapping to class by string to avoid differences in Android platform compilation problems.
@@ -157,11 +156,6 @@ public class InjectionNodeBuilderRepositoryFactory {
         for (Map.Entry<Matcher<InjectionSignature>, InjectionNodeBuilder> matcherInjectionNodeBuilderEntry : injectionSignatureConfig.entrySet()) {
             repository.putSignatureMatcher(matcherInjectionNodeBuilderEntry.getKey(), matcherInjectionNodeBuilderEntry.getValue());
         }
-
-        //provider type
-        repository.putTypeMatcher(
-                Matchers.type(astClassFactory.getType(Provider.class)).ignoreGenerics().build(),
-                generatedProviderInjectionNodeBuilderProvider.get());
     }
 
     public void putModuleConfig(Matcher<ASTType> type, InjectionNodeBuilder injectionNodeBuilder) {
@@ -176,5 +170,48 @@ public class InjectionNodeBuilderRepositoryFactory {
             throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
         }
         injectionSignatureConfig.put(type, injectionNodeBuilder);
+    }
+
+    @Override
+    public void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository) {
+        for (Map.Entry<ASTType, ASTType> astTypeASTTypeEntry : scopeConfiguration.entrySet()) {
+            scopedVariableBuilderRepository.putAspectFactory(astTypeASTTypeEntry.getKey(), astTypeASTTypeEntry.getValue(),
+                    customScopeAspectFactoryFactory.buildScopeBuilder(astTypeASTTypeEntry.getKey()));
+        }
+    }
+
+    public void addScopeConfig(ASTType annotation, ASTType scope){
+        scopeConfiguration.put(annotation, scope);
+    }
+
+    @Override
+    public Collection<ASTType> getInstalledAnnotatedWith(Class<? extends Annotation> annotation) {
+        ImmutableSet.Builder<ASTType> installedBuilder = ImmutableSet.builder();
+
+        for (ASTType installedComponent : installedComponents) {
+            if(installedComponent.isAnnotated(annotation)){
+                installedBuilder.add(installedComponent);
+            }
+        }
+
+        return installedBuilder.build();
+    }
+
+    @Override
+    public void addInstalledComponents(ASTType[] astType) {
+        installedComponents.addAll(Arrays.asList(astType));
+    }
+
+    @Override
+    public ASTType getScope(ASTType astType) {
+        if(scoping.containsKey(astType)){
+            return scoping.get(astType);
+        }
+        return null;
+    }
+
+    @Override
+    public void putScoped(ASTType scope, ASTType toBeScoped) {
+        scoping.put(toBeScoped, scope);
     }
 }

@@ -20,12 +20,13 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
 /**
@@ -40,9 +41,9 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
 
     @Inject
-    public ViewRegistrationGenerator(@Assisted("viewInjectionNode") InjectionNode viewInjectionNode,
+    public ViewRegistrationGenerator(@Assisted("viewInjectionNode") @Named("viewInjectionNode") InjectionNode viewInjectionNode,
                                      @Assisted String method,
-                                     @Assisted("targetInjectionNode") InjectionNode injectionNode,
+                                     @Assisted("targetInjectionNode") @Named("targetInjectionNode") InjectionNode injectionNode,
                                      @Assisted ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder,
                                      InjectionFragmentGenerator injectionFragmentGenerator) {
         this.viewInjectionNode = viewInjectionNode;
@@ -56,7 +57,8 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
     public void build(JDefinedClass definedClass, JBlock block, TypedExpression value) {
         try{
 
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, viewInjectionNode);
+            //todo: map scopes
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, viewInjectionNode, null);
 
             JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
 

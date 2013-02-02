@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -31,7 +32,7 @@ import java.util.Map;
 public class ListenerRegistrationGenerator implements ExpressionVariableDependentGenerator {
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         JBlock block = methodDescriptor.getMethod().body();
 

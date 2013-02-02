@@ -24,6 +24,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 
 /**
@@ -39,8 +40,8 @@ public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
     private final Analyzer analyzer;
 
     @Inject
-    public DependentInjectionNodeBuilder(@Assisted("dependency") Class dependency,
-                                         @Assisted("returnType") Class returnType,
+    public DependentInjectionNodeBuilder(@Assisted("dependency") @Named("dependency") Class dependency,
+                                         @Assisted("returnType") @Named("returnType") Class returnType,
                                          @Assisted DependentVariableBuilder variableBuilder,
                                          InjectionPointFactory injectionPointFactory,
                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory,

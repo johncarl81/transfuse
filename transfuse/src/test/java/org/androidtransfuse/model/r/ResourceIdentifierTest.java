@@ -15,9 +15,10 @@
  */
 package org.androidtransfuse.model.r;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ResourceIdentifierTest {
 
     @Inject
@@ -43,7 +45,7 @@ public class ResourceIdentifierTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         rInnerType = astClassFactory.getType(RInnerType.class);
         otherInnerType = astClassFactory.getType(OtherInnerType.class);

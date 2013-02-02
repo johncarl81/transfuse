@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.TransactionRuntimeException;
 import org.androidtransfuse.config.EnterableScope;
 
 import javax.inject.Provider;

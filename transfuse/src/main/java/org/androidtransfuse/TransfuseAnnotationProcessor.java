@@ -16,15 +16,15 @@
 package org.androidtransfuse;
 
 import com.google.inject.ImplementedBy;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
+import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
+import org.androidtransfuse.config.FileProxy;
 import org.androidtransfuse.config.TransfuseAndroidModule;
-import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
@@ -40,21 +40,18 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Provider;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
-import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Collections2.transform;
-import static org.androidtransfuse.config.TransfuseInjector.buildInjector;
 
 /**
  * Transfuse Annotation processor.  Kicks off the process of analyzing and generating code based on the compiled
@@ -79,6 +76,7 @@ import static org.androidtransfuse.config.TransfuseInjector.buildInjector;
         Injector.class,
         ImplementedBy.class})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
+@Bootstrap
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
@@ -94,7 +92,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private Logger logger;
     @Inject
-    @Named(TransfuseGenerateGuiceModule.CONFIGURATION_SCOPE)
+    @ScopeReference(ConfigurationScope.class)
     private EnterableScope configurationScope;
     @Inject
     private Provider<TransfuseProcessor> processorProvider;
@@ -103,9 +101,12 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private boolean baseModuleConfiguration = false;
 
     @Override
-    public void init(ProcessingEnvironment processingEnv) {
+    public void init(final ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        buildInjector(processingEnv).injectMembers(this);
+
+        Bootstraps.getInjector(TransfuseAnnotationProcessor.class)
+                .addSingleton(ProcessingEnvironment.class, processingEnv)
+                .inject(TransfuseAnnotationProcessor.class, this);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
-        File manifestFile = manifestLocator.findManifest();
+        FileProxy manifestFile = manifestLocator.findManifest();
         Manifest manifest = manifestParser.readManifest(manifestFile);
 
         RResourceComposite r = new RResourceComposite(
@@ -123,9 +124,11 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         configurationScope.enter();
 
-        configurationScope.seed(Key.get(File.class, Names.named(TransfuseGenerateGuiceModule.MANIFEST_FILE)), manifestFile);
+        //configurationScope.seed(Key.get(File.class, Names.named(TransfuseAndroidModule.MANIFEST_FILE)), manifestFile);
+        configurationScope.seed(FileProxy.class, manifestFile);
         configurationScope.seed(RResource.class, r);
-        configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST)), manifest);
+        //configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
+        configurationScope.seed(Manifest.class, manifest);
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
@@ -173,7 +176,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private RResource buildR(RBuilder rBuilder, String className) {
         TypeElement rTypeElement = elements.getTypeElement(className);
         if (rTypeElement != null) {
-            Collection<? extends ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
+            Collection<ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
             return rBuilder.buildR(rInnerTypes);
         }
         return null;
@@ -183,7 +186,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         return reloadableASTElementFactory.buildProviders(round.getElementsAnnotatedWith(annotation));
     }
 
-    private Collection<? extends ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
+    private Collection<ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
         return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );

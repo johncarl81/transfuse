@@ -15,14 +15,12 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
-import org.androidtransfuse.config.TransfuseGenerateGuiceModule;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.model.manifest.*;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -49,7 +47,7 @@ public class ManifestManager {
     private UsesSDK usesSdk;
 
     @Inject
-    public ManifestManager(@Named(TransfuseGenerateGuiceModule.ORIGINAL_MANIFEST) Manifest originalManifest) {
+    public ManifestManager(/*todo:@Named(TransfuseAndroidModule.ORIGINAL_MANIFEST)*/ Manifest originalManifest) {
         this.manifestPackage = originalManifest.getApplicationPackage();
     }
 

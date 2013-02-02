@@ -17,11 +17,11 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.annotations.Resource;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderFactory;

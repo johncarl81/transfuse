@@ -21,7 +21,17 @@
     <dependencies>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
+            <artifactId>transfuse-bootstrap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.androidtransfuse</groupId>
+            <artifactId>transfuse-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -131,7 +141,9 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <compilerArgument>-proc:none</compilerArgument>
+                    <annotationProcessors>
+                        <annotationProcessor>org.androidtransfuse.bootstrap.BootstrapProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
             <plugin>

@@ -20,10 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.IBinder;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
+import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -249,7 +247,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private static class OnBindGenerator implements ExpressionVariableDependentGenerator {
         @Override
-        public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+        public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
             JMethod onBind = definedClass.method(JMod.PUBLIC, IBinder.class, "onBind");
             onBind.annotate(Override.class);
             onBind.param(Intent.class, "intent");

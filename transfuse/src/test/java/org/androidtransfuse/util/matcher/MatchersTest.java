@@ -15,10 +15,11 @@
  */
 package org.androidtransfuse.util.matcher;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.InjectionSignature;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,7 @@ import static org.junit.Assert.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class MatchersTest {
 
     @Inject
@@ -74,7 +76,7 @@ public class MatchersTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         zeroMatcherASTType = astClassFactory.getType(ZeroMatcherTarget.class);
         singleMatcherASTType = astClassFactory.getType(SingleMatcherTarget.class);

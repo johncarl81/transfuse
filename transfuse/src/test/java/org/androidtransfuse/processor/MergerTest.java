@@ -15,7 +15,8 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.TransfuseTestInjector;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.junit.Before;
@@ -40,6 +41,7 @@ import static junit.framework.Assert.assertNull;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class MergerTest {
 
     public static class MergeableRoot extends Mergeable implements Identified {
@@ -228,7 +230,7 @@ public class MergerTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
     }
 
     @Test

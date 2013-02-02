@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.apache.commons.beanutils.PropertyUtils;

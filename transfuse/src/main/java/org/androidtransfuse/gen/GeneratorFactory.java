@@ -15,19 +15,13 @@
  */
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.TypedExpression;
-
-import java.util.List;
-import java.util.Map;
+import org.androidtransfuse.annotations.Injector;
 
 /**
  * @author John Ericksen
  */
+@Injector
 public interface GeneratorFactory {
 
-    IntentFactoryStrategyGenerator buildStrategyGenerator(Class<? extends AbstractIntentFactoryStrategy> baseClass);
-
-    ExpressionMatchingIterable buildExpressionMatchingIterable(Map<InjectionNode, TypedExpression> variableMap, List<InjectionNode> keys);
+    IntentFactoryStrategyGenerator buildStrategyGenerator(Class baseClass);
 }

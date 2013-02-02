@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.config.CodeGenerationScope;
 import org.androidtransfuse.config.EnterableScope;
-import org.androidtransfuse.config.TransfuseSetupGuiceModule;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Provider;
 
 /**
@@ -30,7 +30,9 @@ public class ScopedTransactionFactory {
     private final EnterableScope codeGenerationScope;
 
     @Inject
-    public ScopedTransactionFactory(@Named(TransfuseSetupGuiceModule.CODE_GENERATION_SCOPE) EnterableScope codeGenerationScope) {
+    public ScopedTransactionFactory(
+            //@Named(TestTransfuseAndroidModule.CODE_GENERATION_SCOPE)
+            @ScopeReference(CodeGenerationScope.class) EnterableScope codeGenerationScope) {
         this.codeGenerationScope = codeGenerationScope;
     }
 

@@ -47,9 +47,6 @@ public class InjectorsTransactionWorker extends AbstractCompletionTransactionWor
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
 
-        //setup Injectors class
-        injectorsGenerator.generateInjectors(aggregate);
-
         //register injector configuration
         for (Provider<ASTType> typeProvider : aggregate.keySet()) {
             ASTType type = typeProvider.get();
@@ -57,6 +54,11 @@ public class InjectorsTransactionWorker extends AbstractCompletionTransactionWor
             injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
                     variableInjectionBuilderFactory.buildInjectorNodeBuilder(type));
         }
+
+
+        //setup Injectors class
+        injectorsGenerator.generateInjectors(aggregate);
+
         return null;
     }
 }

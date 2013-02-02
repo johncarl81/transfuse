@@ -15,13 +15,14 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;
 import org.androidtransfuse.annotations.IntentType;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +34,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class IntentFilterFactoryTest {
 
     protected static final String TEST_INTENT = "test";
@@ -67,7 +69,7 @@ public class IntentFilterFactoryTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
     }
 
     @Test

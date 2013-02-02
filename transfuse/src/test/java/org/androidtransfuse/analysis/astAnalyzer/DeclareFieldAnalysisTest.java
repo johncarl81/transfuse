@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.DeclareField;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import static org.junit.Assert.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class DeclareFieldAnalysisTest {
 
     private AnalysisContext analysisContext;
@@ -53,7 +55,7 @@ public class DeclareFieldAnalysisTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         analysisContext = simpleAnalysisContextFactory.buildContext();
     }

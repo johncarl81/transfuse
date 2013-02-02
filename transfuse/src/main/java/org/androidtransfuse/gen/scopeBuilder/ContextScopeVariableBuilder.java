@@ -23,8 +23,8 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
-import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
+import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ContextScopeHolder;
@@ -60,7 +60,7 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
         //build provider
         JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
-        JExpression provider = JExpr._new(providerClass);
+        JExpression provider = JExpr._new(providerClass).arg(injectionBuilderContext.getScopeVar());
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);

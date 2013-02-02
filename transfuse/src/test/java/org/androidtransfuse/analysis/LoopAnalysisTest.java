@@ -15,14 +15,14 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.google.inject.Injector;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.analysis.targets.*;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.gen.CodeGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGeneratorHarness;
 import org.androidtransfuse.gen.variableBuilder.ProviderVariableBuilder;
@@ -35,6 +35,7 @@ import org.androidtransfuse.model.PackageClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
 
@@ -45,36 +46,37 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class LoopAnalysisTest {
 
+    @Inject
     private Analyzer analyzer;
+    @Inject
     private ASTClassFactory astClassFactory;
+    @Inject
+    private SimpleAnalysisContextFactory analysisContextFactory;
     private AnalysisContext analysisContext;
-    private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    @Inject
+    private VariableInjectionBuilder variableInjectionBuilder;
+    @Inject
     private InjectionFragmentGeneratorHarness fragmentGeneratorHarness;
+    @Inject
     private CodeGenerationUtil codeGenerationUtil;
+    @Inject
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     //A -> B (BImpl) -> C -> A
     //D -> E (EImpl) -> F (FProvider.get()) -> D
 
     @Before
     public void setup() {
-        Injector injector = TransfuseTestInjector.getInjector(this);
+        Bootstraps.injectTest(this);
 
         A.reset();
         BImpl.reset();
         C.reset();
 
-        VariableInjectionBuilderFactory variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
-
-        fragmentGeneratorHarness = injector.getInstance(InjectionFragmentGeneratorHarness.class);
-        codeGenerationUtil = injector.getInstance(CodeGenerationUtil.class);
-        analyzer = injector.getInstance(Analyzer.class);
-        astClassFactory = injector.getInstance(ASTClassFactory.class);
-
-        analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
-
-        variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
+        analysisContext = analysisContextFactory.buildContext();
 
         analysisContext.getInjectionNodeBuilders().putType(B.class,
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.getType(BImpl.class)));
@@ -91,7 +93,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.getType(D.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilder);
 
         //D -> E
         ConstructorInjectionPoint deConstructorInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();
@@ -118,7 +120,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.getType(C.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
-        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example1");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
         ClassLoader classLoader = codeGenerationUtil.build();
@@ -142,7 +144,7 @@ public class LoopAnalysisTest {
         ASTType astImplType = astClassFactory.getType(BImpl.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astImplType, analysisContext);
-        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example2");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
         ClassLoader classLoader = codeGenerationUtil.build();
@@ -165,7 +167,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.getType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
-        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example");
+        PackageClass providerPC = new PackageClass("org.androidtransfuse", "TestProvider_Example3");
         fragmentGeneratorHarness.buildProvider(injectionNode, providerPC);
 
         ClassLoader classLoader = codeGenerationUtil.build();
@@ -188,7 +190,7 @@ public class LoopAnalysisTest {
         ASTType astType = astClassFactory.getType(A.class);
 
         InjectionNode injectionNode = analyzer.analyze(astType, astType, analysisContext);
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilder);
 
         //A -> B
         ConstructorInjectionPoint abConstructorInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint();

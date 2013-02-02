@@ -31,4 +31,7 @@ public class ThrowingProvider<T> implements Provider<T> {
     public T get() {
         throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
     }
+
+
+
 }

@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.MetaData;
 import org.androidtransfuse.annotations.MetaDataSet;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class MetaDataBuilderTest {
 
     private static final String TEST_NAME = "testName";
@@ -57,7 +59,7 @@ public class MetaDataBuilderTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
         metaDataBuilder = new MetaDataBuilder();
 
         metaDataTargetASTType = astClassFactory.getType(MetaDataTarget.class);

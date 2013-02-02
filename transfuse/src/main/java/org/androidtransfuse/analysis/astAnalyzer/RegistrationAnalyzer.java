@@ -21,11 +21,11 @@ import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.listeners.*;
@@ -47,7 +47,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     @Inject
     public RegistrationAnalyzer(ASTClassFactory astClassFactory,
                                 InjectionPointFactory injectionPointFactory,
-                                ComponentBuilderFactory componentBuilderFactory) throws NoSuchMethodException {
+                                ComponentBuilderFactory componentBuilderFactory) {
         this.astClassFactory = astClassFactory;
         this.injectionPointFactory = injectionPointFactory;
         this.componentBuilderFactory = componentBuilderFactory;

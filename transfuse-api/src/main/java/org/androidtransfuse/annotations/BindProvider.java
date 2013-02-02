@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.annotations;
 
+import org.androidtransfuse.scope.EmptyScope;
+
+import javax.inject.Named;
 import javax.inject.Provider;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * <p>
@@ -48,4 +48,8 @@ public @interface BindProvider {
     Class<?> type();
 
     Class<? extends Provider> provider();
+
+    Class<? extends Annotation> scope() default EmptyScope.class;
+
+    Named named() default @Named;
 }

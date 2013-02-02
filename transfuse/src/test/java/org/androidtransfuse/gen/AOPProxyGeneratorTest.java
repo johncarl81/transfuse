@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -24,6 +23,8 @@ import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.gen.proxy.MockDelegate;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
@@ -42,6 +43,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class AOPProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
@@ -79,7 +81,7 @@ public class AOPProxyGeneratorTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         delegateAST = astClassFactory.getType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());

@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +36,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class MethodSignatureTest {
 
     @Inject
@@ -57,7 +59,7 @@ public class MethodSignatureTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         ASTType targetType = astClassFactory.getType(MethodSignatureTarget.class);
 

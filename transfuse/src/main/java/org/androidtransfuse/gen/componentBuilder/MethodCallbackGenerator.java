@@ -49,7 +49,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         this.invocationBuilder = invocationBuilder;
     }
 
-    public void generate(JDefinedClass definedClass, MethodDescriptor creationMethodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor creationMethodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         MethodDescriptor methodDescriptor = null;
         for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {

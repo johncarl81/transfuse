@@ -15,20 +15,15 @@
  */
 package org.androidtransfuse.scope;
 
-import org.junit.Test;
-
-import javax.inject.Provider;
-import java.lang.reflect.Method;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import org.junit.Ignore;
 
 /**
  * @author John Ericksen
  */
+@Ignore
 public class SingletonScopeTest {
 
-    private interface ScopeTargetBuilder extends Provider<ScopeTarget> {
+    /*private interface ScopeTargetBuilder extends Provider<ScopeTarget> {
     }
 
     @Test
@@ -59,5 +54,5 @@ public class SingletonScopeTest {
     public void verifyMethod() throws NoSuchMethodException {
         Method getInstanceMethod = SingletonScope.class.getMethod(SingletonScope.GET_INSTANCE);
         assertNotNull(getInstanceMethod);
-    }
+    }*/
 }

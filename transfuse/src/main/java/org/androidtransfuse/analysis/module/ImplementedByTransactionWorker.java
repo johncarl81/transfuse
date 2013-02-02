@@ -16,9 +16,9 @@
 package org.androidtransfuse.analysis.module;
 
 import com.google.inject.ImplementedBy;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;

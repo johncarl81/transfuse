@@ -19,19 +19,19 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.annotations.Injector;
 import org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
-import java.util.Map;
+import javax.inject.Named;
 
 /**
  * @author John Ericksen
  */
+@Injector
 public interface VariableInjectionBuilderFactory {
 
     ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(ASTType astType);
@@ -44,11 +44,9 @@ public interface VariableInjectionBuilderFactory {
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
-    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, @Assisted("nullable") boolean nullable, @Assisted("wrapped") boolean wrapped);
+    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, @Assisted("nullable") @Named("nullable") boolean nullable, @Assisted("wrapped") @Named("wrapped") boolean wrapped);
 
     ViewVariableBuilder buildViewVariableBuilder(Integer viewId, String viewTag, InjectionNode activityInjectionNode, JType jType);
-
-    GeneratedProviderVariableBuilder buildGeneratedProviderVariableBuilder(InjectionNode providerTypeInjectionNode);
 
     PreferenceVariableBuilder buildPreferenceVariableBuilder(ASTType preferenceType, String preferenceName, InjectionNode preferenceManagerInjectionNode);
 
@@ -56,7 +54,7 @@ public interface VariableInjectionBuilderFactory {
 
     MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<JExpression> arguments);
 
-    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") Class dependency, @Assisted("returnType") Class returnType, DependentVariableBuilder variableBuilder);
+    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") @Named("dependency") Class dependency, @Assisted("returnType") @Named("returnType") Class returnType, DependentVariableBuilder variableBuilder);
 
     DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, Class type);
 
@@ -70,11 +68,5 @@ public interface VariableInjectionBuilderFactory {
 
     ContextScopeVariableBuilder buildContextScopeVariableBuilder(InjectionNode contextScopeHolder);
 
-    ProvidesInjectionNodeBuilder buildProvidesInjectionNodeBuilder(ASTType moduleType, ASTMethod providesMethod);
-
-    ProvidesVariableBuilder buildProvidesVariableBuilder(InjectionNode module, ASTMethod method, Map<ASTParameter, InjectionNode> dependencyAnalysis);
-
     InjectorNodeBuilder buildInjectorNodeBuilder(ASTType injectorType);
-
-    InjectorVariableBuilder buildInjectorVariableBuilder(ASTType injectorType);
 }

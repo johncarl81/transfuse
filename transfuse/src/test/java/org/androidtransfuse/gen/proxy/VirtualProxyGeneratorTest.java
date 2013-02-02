@@ -17,12 +17,13 @@ package org.androidtransfuse.gen.proxy;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.gen.CodeGenerationUtil;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.DelayedLoad;
@@ -39,6 +40,7 @@ import static junit.framework.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class VirtualProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
@@ -59,7 +61,7 @@ public class VirtualProxyGeneratorTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         ASTType interfaceAST = astClassFactory.getType(MockInterface.class);
         ASTType secondInterfaceAST = astClassFactory.getType(SecondMockInteface.class);

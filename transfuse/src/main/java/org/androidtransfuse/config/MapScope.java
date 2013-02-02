@@ -18,6 +18,7 @@ package org.androidtransfuse.config;
 import com.google.inject.Key;
 import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
+import com.google.inject.util.Providers;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +50,11 @@ public class MapScope implements EnterableScope {
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> provider) {
         return new MapScopeProvider<T>(key, provider);
+    }
+
+    @Override
+    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
+        return scope(Key.get(clazz), Providers.guicify(provider)).get();
     }
 
     private final class MapScopeProvider<T> implements Provider<T>{

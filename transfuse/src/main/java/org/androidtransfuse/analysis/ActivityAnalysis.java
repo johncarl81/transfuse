@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;

@@ -15,12 +15,13 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.annotations.ParcelConverter;
 import org.androidtransfuse.annotations.Transient;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.GetterSetterMethodPair;
 import org.androidtransfuse.model.ParcelableDescriptor;
 import org.junit.Before;
@@ -34,6 +35,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class ParcelableAnalysisTest {
 
     @Inject
@@ -43,7 +45,7 @@ public class ParcelableAnalysisTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
     }
 
     @Test

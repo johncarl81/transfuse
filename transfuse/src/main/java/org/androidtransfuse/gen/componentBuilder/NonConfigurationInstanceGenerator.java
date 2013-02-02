@@ -16,11 +16,11 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.analysis.TransfuseAnalysisException;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
-import org.androidtransfuse.gen.variableBuilder.TypedExpressionFactory;
+import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.*;
 
 import javax.inject.Inject;
@@ -48,7 +48,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor) {
+    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         try {
             List<InjectionNode> nonConfigurationComponents = buildNonConfigurationComponents(expressionMap);

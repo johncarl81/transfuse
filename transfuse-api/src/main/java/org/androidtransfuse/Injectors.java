@@ -15,7 +15,12 @@
  */
 package org.androidtransfuse;
 
+import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedRepositoryProxy;
+import org.androidtransfuse.util.TransfuseRuntimeException;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Static utility class which maps the {@code @Injector} annotated interface to the generated implementation.
@@ -48,6 +53,33 @@ public final class Injectors {
         return PROXY.get().get(type);
     }
 
+    public static<T> T get(Class<T> type, Scopes scopes){
+        Class injector = PROXY.get().getType(type);
+
+        try {
+            //todo: clean this up
+            if(injector == null){
+                //try to find class
+                injector = Class.forName(type.getName() + "Impl");
+            }
+
+            Constructor constructor = injector.getConstructor(Scopes.class);
+
+            return (T) constructor.newInstance(scopes);
+
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseRuntimeException("testing", e);
+        } catch (InvocationTargetException e) {
+            throw new TransfuseRuntimeException("testing", e);
+        } catch (InstantiationException e) {
+            throw new TransfuseRuntimeException("testing", e);
+        } catch (IllegalAccessException e) {
+            throw new TransfuseRuntimeException("testing", e);
+        } catch (ClassNotFoundException e) {
+            throw new TransfuseRuntimeException("testing", e);
+        }
+    }
+
     /**
      * Proxy Interface to be implemented by code generation.
      */
@@ -61,5 +93,7 @@ public final class Injectors {
          * @return Generated Injector instance
          */
         <T> T get(Class<T> type);
+
+        <T> Class<? extends T> getType(Class<T> type);
     }
 }

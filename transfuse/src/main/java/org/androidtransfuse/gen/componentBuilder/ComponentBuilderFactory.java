@@ -21,11 +21,15 @@ import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.annotations.Injector;
 import org.androidtransfuse.model.InjectionNode;
+
+import javax.inject.Named;
 
 /**
  * @author John Ericksen
  */
+@Injector
 public interface ComponentBuilderFactory {
 
     MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, MethodGenerator methodGenerator);
@@ -46,7 +50,7 @@ public interface ComponentBuilderFactory {
 
     InjectionNodeFactoryImpl buildInjectionNodeFactory(ASTType astType, AnalysisContext context);
 
-    ViewRegistrationGenerator buildViewRegistrationGenerator(@Assisted("viewInjectionNode")InjectionNode viewInjectionNode, String listenerMethod, @Assisted("targetInjectionNode")InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
+    ViewRegistrationGenerator buildViewRegistrationGenerator(@Assisted("viewInjectionNode") @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, @Assisted("targetInjectionNode") @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
 
     ViewMethodRegistrationInvocationBuilderImpl buildViewMethodRegistrationInvocationBuilder(ASTMethod getterMethod);
 

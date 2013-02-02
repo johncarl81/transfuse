@@ -15,12 +15,12 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.google.inject.Injector;
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -40,6 +40,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class AnalyzerTest {
 
     //A -> E -> F
@@ -102,23 +103,24 @@ public class AnalyzerTest {
         //empty
     }
 
+    @Inject
     private Analyzer analyzer;
+    @Inject
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    @Inject
     private ASTClassFactory astClassFactory;
+    @Inject
+    private SimpleAnalysisContextFactory analysisContextFactory;
     private AnalysisContext analysisContext;
+    @Inject
+    private VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Before
     public void setup() {
-        Injector injector = TransfuseTestInjector.getInjector(this);
+        Bootstraps.injectTest(this);
 
-        VariableInjectionBuilderFactory variableInjectionBuilderFactory = injector.getInstance(VariableInjectionBuilderFactory.class);
+        analysisContext = analysisContextFactory.buildContext();
 
-        analyzer = injector.getInstance(Analyzer.class);
-        astClassFactory = injector.getInstance(ASTClassFactory.class);
-
-        analysisContext = injector.getInstance(SimpleAnalysisContextFactory.class).buildContext();
-
-        variableInjectionBuilderProvider = injector.getProvider(VariableInjectionBuilder.class);
 
         analysisContext.getInjectionNodeBuilders().putType(B.class,
                 variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(astClassFactory.getType(BImpl.class)));

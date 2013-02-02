@@ -15,13 +15,14 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.InjectionNode;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -41,6 +42,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class AOPProxyAnalyzerTest {
 
     @Inject
@@ -77,7 +79,7 @@ public class AOPProxyAnalyzerTest {
 
     @Before
     public void setup() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         methodInterceptorASTType = astClassFactory.getType(AOPAnnotationMethodInterceptor.class);
         aopAnnotationASTType = astClassFactory.getType(AOPAnnotation.class);

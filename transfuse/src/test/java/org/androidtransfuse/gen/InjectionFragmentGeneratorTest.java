@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.TransfuseTestInjector;
 import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -25,6 +24,8 @@ import org.androidtransfuse.analysis.SimpleAnalysisContextFactory;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.gen.target.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilderNoAnnotationAdapter;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
@@ -43,6 +44,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
+@Bootstrap(test = true)
 public class InjectionFragmentGeneratorTest {
 
     @Inject
@@ -65,7 +67,7 @@ public class InjectionFragmentGeneratorTest {
 
     @Before
     public void setUp() {
-        TransfuseTestInjector.inject(this);
+        Bootstraps.injectTest(this);
 
         context = contextFactory.buildContext();
     }
