@@ -75,7 +75,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.getType(ConstructorInjectable.class));
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
         //setup constructor injection
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, astClassFactory.getType(ConstructorInjectable.class));
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astClassFactory.getType(ConstructorInjectable.class), ASTAccessModifier.PUBLIC);
         constructorInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
         getInjectionAspect(injectionNode).add(constructorInjectionPoint);
 
@@ -125,14 +125,14 @@ public class InjectionFragmentGeneratorTest {
         injectionNode.addAspect(proxyAspect);
 
         //setup constructor injection
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, astClassFactory.getType(DelayedProxyDependency.class));
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(astClassFactory.getType(DelayedProxyDependency.class), ASTAccessModifier.PUBLIC);
         InjectionNode dependencyInjectionNode = new InjectionNode(astClassFactory.getType(DelayedProxyDependency.class));
         dependencyInjectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
         constructorInjectionPoint.addInjectionNode(dependencyInjectionNode);
         getInjectionAspect(injectionNode).add(constructorInjectionPoint);
 
         //reference circle
-        ConstructorInjectionPoint dependencyConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, astClassFactory.getType(DelayedProxyDependency.class));
+        ConstructorInjectionPoint dependencyConstructorInjectionPoint = new ConstructorInjectionPoint(astClassFactory.getType(DelayedProxyDependency.class), ASTAccessModifier.PUBLIC);
         dependencyConstructorInjectionPoint.addInjectionNode(injectionNode);
         getInjectionAspect(dependencyInjectionNode).add(dependencyConstructorInjectionPoint);
 
@@ -185,7 +185,7 @@ public class InjectionFragmentGeneratorTest {
         InjectionNode injectionNode = new InjectionNode(astClassFactory.getType(instanceClass));
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
-        ConstructorInjectionPoint noArgConstructorInjectionPoint = new ConstructorInjectionPoint(ASTAccessModifier.PUBLIC, injectionNode.getASTType());
+        ConstructorInjectionPoint noArgConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), ASTAccessModifier.PUBLIC);
         getInjectionAspect(injectionNode).add(noArgConstructorInjectionPoint);
 
         return injectionNode;
