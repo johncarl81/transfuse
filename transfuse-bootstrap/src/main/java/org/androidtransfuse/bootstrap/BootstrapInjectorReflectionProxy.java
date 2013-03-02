@@ -1,12 +1,11 @@
 package org.androidtransfuse.bootstrap;
 
-import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 /**
  * @author John Ericksen
  */
-public class BootstrapInjectorReflectionProxy<T> extends Bootstraps.BootstrapInjector<T> {
+public class BootstrapInjectorReflectionProxy<T> implements Bootstraps.BootstrapInjector<T> {
 
     private Bootstraps.BootstrapInjector<T> injector;
 
@@ -27,12 +26,7 @@ public class BootstrapInjectorReflectionProxy<T> extends Bootstraps.BootstrapInj
     }
 
     @Override
-    protected void scopeSingletons(Scopes scopes) {
-        injector.scopeSingletons(scopes);
-    }
-
-    @Override
-    public void inject(Class<T> key, T input) {
-        injector.inject(key, input);
+    public void inject(T input) {
+        injector.inject(input);
     }
 }

@@ -52,7 +52,7 @@ public class Bootstraps {
 
     @SuppressWarnings("unchecked")
     public static <T> void inject(T input){
-        REPOSITORY.get(input.getClass()).inject(input.getClass(), input);
+        REPOSITORY.get(input.getClass()).inject(input);
     }
 
     @SuppressWarnings("unchecked")
@@ -60,10 +60,17 @@ public class Bootstraps {
         return REPOSITORY.get(clazz);
     }
 
-    public static abstract class BootstrapInjector<T>{
+    public interface BootstrapInjector<T>{
+
+        void inject(T input);
+
+        <S> BootstrapInjector<T> addSingleton(Class<S> singletonClass, S singleton);
+    }
+
+    public static abstract class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
         private final Map<Class, Object> singletons = new HashMap<Class, Object>();
 
-        public abstract void inject(Class<T> key, T input);
+        public abstract void inject(T input);
 
         public <S> BootstrapInjector<T> addSingleton(Class<S> singletonClass, S singleton){
             singletons.put(singletonClass, singleton);

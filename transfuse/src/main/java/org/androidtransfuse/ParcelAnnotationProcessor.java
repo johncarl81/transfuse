@@ -60,7 +60,7 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
 
         Bootstraps.getInjector(ParcelAnnotationProcessor.class)
                 .addSingleton(ProcessingEnvironment.class, processingEnv)
-                .inject(ParcelAnnotationProcessor.class, this);
+                .inject(this);
     }
 
     @Override

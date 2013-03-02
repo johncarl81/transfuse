@@ -74,10 +74,9 @@ public class BootstrapsInjectorGenerator {
             // add injector class
             JDefinedClass innerInjectorClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(Bootstraps.IMPL_EXT));
 
-            innerInjectorClass._extends(codeModel.ref(Bootstraps.BootstrapInjector.class).narrow(nodeClass));
+            innerInjectorClass._extends(codeModel.ref(Bootstraps.BootstrapsInjectorAdapter.class).narrow(nodeClass));
 
             JMethod method = innerInjectorClass.method(JMod.PUBLIC, codeModel.VOID, Bootstraps.BOOTSTRAPS_INJECTOR_METHOD);
-            method.param(codeModel.ref(Class.class).narrow(nodeClass), "key");
             JVar input = method.param(nodeClass, "input");
             JBlock injectorBlock = method.body();
 
