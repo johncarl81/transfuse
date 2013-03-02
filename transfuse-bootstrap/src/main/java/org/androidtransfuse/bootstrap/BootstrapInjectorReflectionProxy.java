@@ -2,6 +2,8 @@ package org.androidtransfuse.bootstrap;
 
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
+import java.lang.annotation.Annotation;
+
 /**
  * @author John Ericksen
  */
@@ -21,8 +23,8 @@ public class BootstrapInjectorReflectionProxy<T> implements Bootstraps.Bootstrap
     }
 
     @Override
-    public <S> Bootstraps.BootstrapInjector<T> addSingleton(Class<S> singletonClass, S singleton) {
-        return injector.addSingleton(singletonClass, singleton);
+    public <S> Bootstraps.BootstrapInjector<T> add(Class<? extends Annotation> annotation, Class<S> singletonClass, S singleton) {
+        return injector.add(annotation, singletonClass, singleton);
     }
 
     @Override

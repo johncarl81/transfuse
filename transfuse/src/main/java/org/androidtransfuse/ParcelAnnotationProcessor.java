@@ -29,6 +29,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
@@ -59,7 +60,7 @@ public class ParcelAnnotationProcessor extends AnnotationProcessorBase {
         super.init(processingEnv);
 
         Bootstraps.getInjector(ParcelAnnotationProcessor.class)
-                .addSingleton(ProcessingEnvironment.class, processingEnv)
+                .add(Singleton.class, ProcessingEnvironment.class, processingEnv)
                 .inject(this);
     }
 

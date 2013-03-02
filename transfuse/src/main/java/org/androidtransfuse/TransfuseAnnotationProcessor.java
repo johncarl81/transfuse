@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse;
 
-import com.google.inject.ImplementedBy;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.annotations.*;
@@ -41,6 +40,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
@@ -105,7 +105,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         super.init(processingEnv);
 
         Bootstraps.getInjector(TransfuseAnnotationProcessor.class)
-                .addSingleton(ProcessingEnvironment.class, processingEnv)
+                .add(Singleton.class, ProcessingEnvironment.class, processingEnv)
                 .inject(this);
     }
 

@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.integrationTest.inject;
+package org.androidtransfuse;
 
-import org.androidtransfuse.annotations.ImplementedBy;
+import org.androidtransfuse.annotations.Factory;
 
 /**
  * @author John Ericksen
  */
-@ImplementedBy(ImplByImpl.class)
-public interface ImplBy {
+@Factory
+public interface FactoryExample {
+
+    Dependency getDependency();
 }

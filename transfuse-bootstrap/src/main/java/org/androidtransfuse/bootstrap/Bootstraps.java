@@ -20,7 +20,7 @@ import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.Providers;
 
-import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,23 +64,31 @@ public class Bootstraps {
 
         void inject(T input);
 
-        <S> BootstrapInjector<T> addSingleton(Class<S> singletonClass, S singleton);
+        <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> singletonClass, S singleton);
     }
 
     public static abstract class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
-        private final Map<Class, Object> singletons = new HashMap<Class, Object>();
+        private final Map<Class<? extends Annotation> , Map<Class, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<Class, Object>>();
 
         public abstract void inject(T input);
 
-        public <S> BootstrapInjector<T> addSingleton(Class<S> singletonClass, S singleton){
-            singletons.put(singletonClass, singleton);
+        public <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> bindType, S instance){
+            if(!scoped.containsKey(scope)){
+                scoped.put(scope, new HashMap<Class, Object>());
+            }
+            scoped.get(scope).put(bindType, instance);
             return this;
         }
 
         protected void scopeSingletons(Scopes scopes){
-            Scope singletonScope = scopes.getScope(Singleton.class);
-            for (Map.Entry<Class, Object> singletonEntry : singletons.entrySet()) {
-                singletonScope.getScopedObject(singletonEntry.getKey(), Providers.of(singletonEntry.getValue()));
+            for (Map.Entry<Class<? extends Annotation>, Map<Class, Object>> scopedEntry : scoped.entrySet()) {
+                Scope scope = scopes.getScope(scopedEntry.getKey());
+
+                if(scope != null){
+                    for (Map.Entry<Class, Object> scopingEntry : scopedEntry.getValue().entrySet()) {
+                        scope.getScopedObject(scopingEntry.getKey(), Providers.of(scopingEntry.getValue()));
+                    }
+                }
             }
         }
     }
