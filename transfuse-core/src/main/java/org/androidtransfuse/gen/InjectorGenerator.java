@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.Injectors;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -40,8 +41,6 @@ import java.util.Map;
  * @author John Ericksen
  */
 public class InjectorGenerator {
-
-    private static final String IMPL_EXT = "Impl";
 
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
@@ -81,7 +80,7 @@ public class InjectorGenerator {
         }
 
         try {
-            JDefinedClass implClass = generationUtil.defineClass(descriptor.getPackageClass().append(IMPL_EXT));
+            JDefinedClass implClass = generationUtil.defineClass(descriptor.getPackageClass().append(Injectors.IMPL_EXT));
             JClass interfaceClass = codeModel.ref(descriptor.getName());
 
             //scope holder definition

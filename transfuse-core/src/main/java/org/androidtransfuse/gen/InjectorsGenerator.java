@@ -20,6 +20,7 @@ import org.androidtransfuse.Injectors;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.scope.Scopes;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -39,11 +40,13 @@ public class InjectorsGenerator {
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
+    private final UniqueVariableNamer namer;
 
     @Inject
-    public InjectorsGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil) {
+    public InjectorsGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
+        this.namer = namer;
     }
 
     public JDefinedClass generateInjectors(Map<Provider<ASTType>, JDefinedClass> processedAggregate) {
@@ -53,48 +56,51 @@ public class InjectorsGenerator {
             injectorRepositoryClass._implements(Injectors.InjectorRepository.class);
 
             //map definition
-            JClass mapIntances = codeModel.ref(Map.class).narrow(Class.class, Object.class);
-            JClass hashMapIntances = codeModel.ref(HashMap.class).narrow(Class.class, Object.class);
+            JClass mapIntances = codeModel.ref(Map.class).narrow(Class.class, Injectors.InjectorFactory.class);
+            JClass hashMapIntances = codeModel.ref(HashMap.class).narrow(Class.class, Injectors.InjectorFactory.class);
             JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapIntances, MAP_NAME, JExpr._new(hashMapIntances));
 
-            //map types
-            JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);
-            JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Class.class);
-            JVar typeMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, "injectorMapping", JExpr._new(hashMapType));
+            //get factory map
+            JMethod getAll = injectorRepositoryClass.method(JMod.PUBLIC, mapIntances, "get");
+            getAll.body()._return(registrationMap);
 
-            //getter
-            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
-            getMethod.annotate(Override.class);
-            JTypeVar t = getMethod.generify("T");
-            getMethod.type(t);
-            JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(t), "type");
+            generateRegistration(injectorRepositoryClass, processedAggregate, registrationMap);
 
-            getMethod.body()._return(JExpr.cast(t, registrationMap.invoke("get").arg(typeParam)));
-
-            JMethod getType = injectorRepositoryClass.method(JMod.PUBLIC, Class.class, "getType");
-            getType.annotate(Override.class);
-            JTypeVar t2 = getType.generify("T");
-            JVar getTypeParam = getType.param(codeModel.ref(Class.class).narrow(t2), "type");
-            getType.body()._return(typeMap.invoke("get").arg(getTypeParam));
-
-            // constructor registration block
-            JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();
-
-            for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
-                JClass interfaceClass = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
-
-                //register injector implementations
-                injectorRegistrationBlock.add(registrationMap.invoke("put")
-                        .arg(interfaceClass.dotclass())
-                        .arg(JExpr._new(astTypeJDefinedClassEntry.getValue())));
-
-                injectorRegistrationBlock.add(typeMap.invoke("put")
-                        .arg(interfaceClass.dotclass())
-                        .arg(astTypeJDefinedClassEntry.getValue().dotclass()));
-            }
             return injectorRepositoryClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Already generated Injectors class", e);
+        }
+    }
+
+    private void generateRegistration(JDefinedClass injectorRepositoryClass, Map<Provider<ASTType>, JDefinedClass> processedAggregate, JVar registrationMap) throws JClassAlreadyExistsException {
+        // constructor registration block
+        JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();
+
+        for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
+            ASTType astType = astTypeJDefinedClassEntry.getKey().get();
+            JClass interfaceClass = codeModel.ref(astType.getName());
+
+            //injector factory
+            JDefinedClass factoryClass = injectorRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, namer.generateClassName(astType));
+            factoryClass._implements(codeModel.ref(Injectors.InjectorFactory.class).narrow(interfaceClass));
+
+            //getter without scopes
+            JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
+            getMethod.annotate(Override.class);
+
+            getMethod.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()));
+
+            //getter with scopes
+            JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
+            getMethodWithScopes.annotate(Override.class);
+            JVar scopes = getMethodWithScopes.param(codeModel.ref(Scopes.class), namer.generateName(Scopes.class));
+
+            getMethodWithScopes.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(scopes));
+
+            //register injector implementations
+            injectorRegistrationBlock.add(registrationMap.invoke("put")
+                    .arg(interfaceClass.dotclass())
+                    .arg(JExpr._new(factoryClass)));
         }
     }
 }

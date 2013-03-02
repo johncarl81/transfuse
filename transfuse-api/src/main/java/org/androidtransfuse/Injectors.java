@@ -16,11 +16,11 @@
 package org.androidtransfuse;
 
 import org.androidtransfuse.scope.Scopes;
-import org.androidtransfuse.util.GeneratedRepositoryProxy;
-import org.androidtransfuse.util.TransfuseRuntimeException;
+import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.InjectorFactoryReflectionProxy;
+import org.androidtransfuse.util.Repository;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * Static utility class which maps the {@code @Injector} annotated interface to the generated implementation.
@@ -32,68 +32,60 @@ public final class Injectors {
     public static final String INJECTORS_NAME = "Injectors";
     public static final String INJECTORS_REPOSITORY_NAME = "Transfuse$Injectors";
     public static final String INJECTORS_PACKAGE = "org.androidtransfuse";
+    public static final String IMPL_EXT = "$Injector";
 
-    private static final GeneratedRepositoryProxy<InjectorRepository> PROXY =
-            new GeneratedRepositoryProxy<InjectorRepository>(INJECTORS_PACKAGE, INJECTORS_REPOSITORY_NAME);
+    private static final GeneratedCodeRepository<InjectorFactory> REPOSITORY =
+            new GeneratedCodeRepository<InjectorFactory>(INJECTORS_PACKAGE, INJECTORS_REPOSITORY_NAME) {
 
-    private Injectors(){
+                @Override
+                public InjectorFactory findClass(Class clazz) {
+
+                    try {
+                        Class injectorClass = Class.forName(clazz.getName() + IMPL_EXT);
+                        return new InjectorFactoryReflectionProxy(injectorClass);
+                    } catch (ClassNotFoundException e) {
+                        return null;
+                    }
+
+                }
+            };
+
+    private Injectors() {
         // private utility class constructor
     }
 
     /**
      * Returns an instance of the provided {@code @Injector} interface.
      *
-     * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
-     * Transfuse$Injectors class.
      * @param type Injector type
      * @param <T>
      * @return Generated Injector instance
+     * @throws org.androidtransfuse.util.TransfuseRuntimeException
+     *          if there was an error looking up the wrapped
+     *          Injector class
      */
-    public static<T> T get(Class<T> type) {
-        return PROXY.get().get(type);
+    public static <T> T get(Class<T> type) {
+        InjectorFactory injectorFactory = REPOSITORY.get(type);
+        return (T) injectorFactory.get();
     }
 
-    public static<T> T get(Class<T> type, Scopes scopes){
-        Class injector = PROXY.get().getType(type);
-
-        try {
-            //todo: clean this up
-            if(injector == null){
-                //try to find class
-                injector = Class.forName(type.getName() + "Impl");
-            }
-
-            Constructor constructor = injector.getConstructor(Scopes.class);
-
-            return (T) constructor.newInstance(scopes);
-
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseRuntimeException("testing", e);
-        } catch (InvocationTargetException e) {
-            throw new TransfuseRuntimeException("testing", e);
-        } catch (InstantiationException e) {
-            throw new TransfuseRuntimeException("testing", e);
-        } catch (IllegalAccessException e) {
-            throw new TransfuseRuntimeException("testing", e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseRuntimeException("testing", e);
-        }
+    public static <T> T get(Class<T> type, Scopes scopes) {
+        InjectorFactory injectorFactory = REPOSITORY.get(type);
+        return (T) injectorFactory.get(scopes);
     }
 
     /**
      * Proxy Interface to be implemented by code generation.
      */
-    public static interface InjectorRepository {
+    public static interface InjectorRepository extends Repository<InjectorFactory> {
 
-        /**
-         * Returns an instance of the provided {@code @Injector} interface.
-         *
-         * @param type Injector type
-         * @param <T>
-         * @return Generated Injector instance
-         */
-        <T> T get(Class<T> type);
+        Map<Class, InjectorFactory> get();
+    }
 
-        <T> Class<? extends T> getType(Class<T> type);
+    public static interface InjectorFactory<T> {
+
+        T get();
+
+        T get(Scopes scopes);
     }
 }

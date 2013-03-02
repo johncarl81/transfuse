@@ -295,7 +295,7 @@ public class CoreFactory {
     }
 
     public InjectorsGenerator buildInjectorsGenerator() {
-        return new InjectorsGenerator(codeModel, generationUtil);
+        return new InjectorsGenerator(codeModel, generationUtil, namer);
     }
 
     public void registerInjectors(Collection<? extends ASTType> injectors) {
