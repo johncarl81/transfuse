@@ -15,21 +15,18 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import javax.inject.Provider;
+import org.androidtransfuse.annotations.Factory;
+
+import javax.inject.Named;
 
 /**
  * @author John Ericksen
  */
-@org.androidtransfuse.annotations.Injector
-public interface Injector {
+@Factory
+public interface AssistedFactory {
 
-    InjectTarget getTarget();
+    AssistedTarget buildTarget(AssistedDependency dependency);
 
-    LoopOne getLoop();
-
-    LoopTwo getLoopTwo();
-
-    LoopThree getLoopThree();
-
-    Provider<LoopThree> getLoopThreeProvider();
+    AssistedDoubleTarget buildTarget(@Named(AssistedDoubleTarget.ONE) AssistedDependency dependencyOne,
+                                     @Named(AssistedDoubleTarget.TWO) AssistedDependency dependencyTwo);
 }

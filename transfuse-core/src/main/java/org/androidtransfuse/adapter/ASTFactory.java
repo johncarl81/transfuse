@@ -18,7 +18,7 @@ package org.androidtransfuse.adapter;
 import org.androidtransfuse.adapter.classes.LazyClassParameterBuilder;
 import org.androidtransfuse.adapter.element.ASTElementAnnotation;
 import org.androidtransfuse.adapter.element.LazyElementParameterBuilder;
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.type.DeclaredType;
@@ -29,7 +29,7 @@ import java.lang.reflect.ParameterizedType;
  *
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface ASTFactory {
 
     ASTElementAnnotation buildASTElementAnnotation(AnnotationMirror annotationMirror, ASTType type);

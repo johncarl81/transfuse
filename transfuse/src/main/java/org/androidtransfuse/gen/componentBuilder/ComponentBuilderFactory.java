@@ -21,7 +21,7 @@ import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Named;
@@ -29,7 +29,7 @@ import javax.inject.Named;
 /**
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface ComponentBuilderFactory {
 
     MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, MethodGenerator methodGenerator);

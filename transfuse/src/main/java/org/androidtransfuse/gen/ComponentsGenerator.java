@@ -49,36 +49,36 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> components) {
         try {
-            JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
+            JDefinedClass componentsRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            injectorRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Class.class));
+            componentsRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Class.class));
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Class.class);
-            JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
+            JVar registrationMap = componentsRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
             //map getter
-            JMethod getMapMethod = injectorRepositoryClass.method(JMod.PUBLIC, mapType, GET_METHOD);
+            JMethod getMapMethod = componentsRepositoryClass.method(JMod.PUBLIC, mapType, GET_METHOD);
             getMapMethod.body()._return(registrationMap);
 
             // constructor registration block
-            JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();
+            JBlock componentsRegistrationBlock = componentsRepositoryClass.constructor(JMod.PUBLIC).body();
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> componentEntry : components.entrySet()) {
                 JClass componentClass = codeModel.ref(componentEntry.getKey().get().getName());
                 JClass androidClass = componentEntry.getValue();
 
                 if(androidClass != null){
-                    //register injector implementations
-                    injectorRegistrationBlock.add(registrationMap.invoke("put")
+                    //register component implementations
+                    componentsRegistrationBlock.add(registrationMap.invoke("put")
                             .arg(componentClass.dotclass())
                             .arg(androidClass.dotclass()));
                 }
             }
             return null;
         } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Already generated Injectors class", e);
+            throw new TransfuseAnalysisException("Already generated Factories class", e);
         }
     }
 }

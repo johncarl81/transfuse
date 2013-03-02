@@ -24,9 +24,9 @@ import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.module.ModuleProcessor;
-import org.androidtransfuse.annotations.Injector;
-import org.androidtransfuse.gen.InjectorGenerator;
-import org.androidtransfuse.gen.InjectorsGenerator;
+import org.androidtransfuse.annotations.Factory;
+import org.androidtransfuse.gen.FactoriesGenerator;
+import org.androidtransfuse.gen.FactoryGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Providers;
 import org.androidtransfuse.util.SupportedAnnotations;
@@ -80,19 +80,19 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                     moduleProcessor.process(moduleType);
                 }
 
-                ImmutableSet.Builder<ASTType> injectorTypesBuilder = ImmutableSet.builder();
-                injectorTypesBuilder.addAll(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Injector.class)));
-                injectorTypesBuilder.addAll(coreFactory.getModuleRepository().getInstalledAnnotatedWith(Injector.class));
+                ImmutableSet.Builder<ASTType> factoryTypesBuilder = ImmutableSet.builder();
+                factoryTypesBuilder.addAll(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Factory.class)));
+                factoryTypesBuilder.addAll(coreFactory.getModuleRepository().getInstalledAnnotatedWith(Factory.class));
 
-                ImmutableSet<ASTType> injectorTypes = injectorTypesBuilder.build();
+                ImmutableSet<ASTType> factoryTypes = factoryTypesBuilder.build();
 
-                coreFactory.registerInjectors(injectorTypes);
+                coreFactory.registerFactories(factoryTypes);
 
-                InjectorGenerator injectorGenerator = coreFactory.buildInjectorGenerator();
-                Map<Provider<ASTType>, JDefinedClass> injectorAggregate = new HashMap<Provider<ASTType>, JDefinedClass>();
-                for (ASTType injectorType : injectorTypes) {
-                    JDefinedClass generated = injectorGenerator.generate(injectorType);
-                    injectorAggregate.put(Providers.of(injectorType), generated);
+                FactoryGenerator factoryGenerator = coreFactory.buildFactoryGenerator();
+                Map<Provider<ASTType>, JDefinedClass> factoryAggregate = new HashMap<Provider<ASTType>, JDefinedClass>();
+                for (ASTType factoryType : factoryTypes) {
+                    JDefinedClass generated = factoryGenerator.generate(factoryType);
+                    factoryAggregate.put(Providers.of(factoryType), generated);
                 }
 
                 Collection<? extends ASTType> astTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Bootstrap.class));
@@ -106,8 +106,8 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                     bootstrapsInjectorGenerator.generate(injectionNode);
                 }
 
-                InjectorsGenerator injectorsGenerator = coreFactory.buildInjectorsGenerator();
-                injectorsGenerator.generateInjectors(injectorAggregate);
+                FactoriesGenerator factoriesGenerator = coreFactory.buildFactoriesGenerator();
+                factoriesGenerator.generateFactories(factoryAggregate);
 
                 JCodeModel codeModel = coreFactory.getCodeModel();
                 codeModel.build(coreFactory.buildCodeWriter(), coreFactory.buildResourceWriter());

@@ -31,7 +31,7 @@ import javax.inject.Named;
         @Bind(type = DependencyBase.class, to = Dependency.class)
 })
 @Install({
-        InjectorExample.class
+        FactoryExample.class
 })
 public class TestModule {
 

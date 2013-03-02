@@ -82,12 +82,10 @@ public class TransfuseAndroidModule {
 
     public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
     public static final String PARCEL_TRANSACTION_WORKER = "parcelTransactionWorker";
-    public static final String INJECTOR_TRANSACTION_WORKER = "injectorTransactionWorker";
-    public static final String INJECTORS_TRANSACTION_WORKER = "injectorsTransactionWorker";
-    public static final String CODE_GENERATION_SCOPE = "codeGenerationScope";
+    public static final String FACTORY_TRANSACTION_WORKER = "factoryTransactionWorker";
+    public static final String FACTORIES_TRANSACTION_WORKER = "factoriessTransactionWorker";
     public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
     public static final String COMPONENTS_TRANSACTION_WORKER = "componentsTransactionWorker";
-    public static final String CONFIGURATION_SCOPE = "configurationScope";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String DEFAULT_BINDING = "defaultBinding";
     public static final String MANIFEST_FILE = "manifestFile";
@@ -124,25 +122,25 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    public interface InjectorMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
+    public interface FactoryMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
-    @Named(INJECTOR_TRANSACTION_WORKER)
-    public InjectorMarkerTransactionWorker<Provider<ASTType>, JDefinedClass> getInjectorTransactionWorker(JCodeModel codeModel,
-                                                                                                         FilerSourceCodeWriter codeWriter,
-                                                                                                         FilerResourceWriter resourceWriter,
-                                                                                                         InjectorTransactionWorker worker) {
+    @Named(FACTORY_TRANSACTION_WORKER)
+    public FactoryMarkerTransactionWorker<Provider<ASTType>, JDefinedClass> getFactoryTransactionWorker(JCodeModel codeModel,
+                                                                                                        FilerSourceCodeWriter codeWriter,
+                                                                                                        FilerResourceWriter resourceWriter,
+                                                                                                        FactoryTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    public interface InjectorsMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
+    public interface FactoriesMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
-    @Named(INJECTORS_TRANSACTION_WORKER)
-    public InjectorsMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getInjectorsTransactionWorker(JCodeModel codeModel,
-                                                                                                                     FilerSourceCodeWriter codeWriter,
-                                                                                                                     FilerResourceWriter resourceWriter,
-                                                                                                                     InjectorsTransactionWorker worker) {
+    @Named(FACTORIES_TRANSACTION_WORKER)
+    public FactoriesMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getFactoriesTransactionWorker(JCodeModel codeModel,
+                                                                                                                       FilerSourceCodeWriter codeWriter,
+                                                                                                                       FilerResourceWriter resourceWriter,
+                                                                                                                       FactoriesTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
@@ -180,17 +178,17 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
-    public InjectorProcessor getInjectorProcessor(InjectorTransactionFactory injectorTransactionFactory,
-                                                  InjectorsTransactionFactory injectorsTransactionFactory) {
-        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor =
+    public FactoryProcessor getFactoryProcessor(FactoryTransactionFactory factoryTransactionFactory,
+                                                FactoriesTransactionFactory factoriesTransactionFactory) {
+        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> factoryProcessor =
                 new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
-        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> injectorsProcessor =
+        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> factoriesProcessor =
                 new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
 
         TransactionProcessor processor =
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(injectorProcessor, injectorsProcessor, injectorsTransactionFactory);
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(factoryProcessor, factoriesProcessor, factoriesTransactionFactory);
 
-        return new InjectorProcessor(processor, injectorProcessor, injectorTransactionFactory);
+        return new FactoryProcessor(processor, factoryProcessor, factoryTransactionFactory);
     }
 
     @Provides

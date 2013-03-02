@@ -18,7 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory2;
+import org.androidtransfuse.gen.variableBuilder.VariableFactoryBuilderFactory2;
 import org.androidtransfuse.util.QualifierPredicate;
 
 import javax.inject.Inject;
@@ -29,11 +29,11 @@ import javax.inject.Inject;
 public class InjectionNodeImplFactory {
 
     private final InjectionPointFactory injectionPointFactory;
-    private final VariableInjectionBuilderFactory2 injectionBindingBuilder;
+    private final VariableFactoryBuilderFactory2 injectionBindingBuilder;
     private final QualifierPredicate qualifierPredicate;
 
     @Inject
-    public InjectionNodeImplFactory(InjectionPointFactory injectionPointFactory, VariableInjectionBuilderFactory2 injectionBindingBuilder, QualifierPredicate qualifierPredicate) {
+    public InjectionNodeImplFactory(InjectionPointFactory injectionPointFactory, VariableFactoryBuilderFactory2 injectionBindingBuilder, QualifierPredicate qualifierPredicate) {
         this.injectionPointFactory = injectionPointFactory;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.qualifierPredicate = qualifierPredicate;

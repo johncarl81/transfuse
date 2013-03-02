@@ -104,7 +104,7 @@ public class BootstrapsInjectorGenerator {
             registerBlock.invoke(registerField, "put").arg(nodeClass.dotclass()).arg(JExpr._new(innerInjectorClass));
 
         } catch (JClassAlreadyExistsException e) {
-            throw new BootstrapException("Unable to crate Bootstrap Injector, class already exists.", e);
+            throw new BootstrapException("Unable to crate Bootstrap Factory, class already exists.", e);
         } catch (ClassNotFoundException e) {
             throw new BootstrapException("Unable to find class", e);
         }

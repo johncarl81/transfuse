@@ -73,7 +73,7 @@ import static com.google.common.collect.Collections2.transform;
         Service.class,
         Fragment.class,
         TransfuseModule.class,
-        Injector.class,
+        Factory.class,
         ImplementedBy.class})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 @Bootstrap
@@ -154,7 +154,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         transfuseProcessor.submit(TransfuseModule.class, buildASTCollection(roundEnvironment, TransfuseModule.class));
         transfuseProcessor.submit(ImplementedBy.class, buildASTCollection(roundEnvironment, ImplementedBy.class));
-        transfuseProcessor.submit(Injector.class, buildASTCollection(roundEnvironment, Injector.class));
+        transfuseProcessor.submit(Factory.class, buildASTCollection(roundEnvironment, Factory.class));
         transfuseProcessor.submit(Activity.class, buildASTCollection(roundEnvironment, Activity.class));
         transfuseProcessor.submit(BroadcastReceiver.class, buildASTCollection(roundEnvironment, BroadcastReceiver.class));
         transfuseProcessor.submit(Service.class, buildASTCollection(roundEnvironment, Service.class));

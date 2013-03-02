@@ -26,21 +26,21 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class VariableInjectionBuilderFactory2 {
+public class VariableFactoryBuilderFactory2 {
 
     private final TypedExpressionFactory typedExpressionFactory;
     private final JCodeModel codeModel;
     private final Analyzer analyzer;
 
     @Inject
-    public VariableInjectionBuilderFactory2(TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel, Analyzer analyzer) {
+    public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel, Analyzer analyzer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.codeModel = codeModel;
         this.analyzer = analyzer;
     }
 
-    public InjectorVariableBuilder buildInjectorVariableBuilder(ASTType injectorType) {
-        return new InjectorVariableBuilder(injectorType, typedExpressionFactory, codeModel);
+    public FactoryVariableBuilder buildFactoryVariableBuilder(ASTType factoryType) {
+        return new FactoryVariableBuilder(factoryType, typedExpressionFactory, codeModel);
     }
 
     public IndependentInjectionNodeBuilder buildInjectionNodeBuilder(ExpressionVariableBuilderWrapper wrapper) {

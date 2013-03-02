@@ -282,28 +282,28 @@ public class CoreFactory {
         return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor);
     }
 
-    public InjectorGenerator buildInjectorGenerator() {
+    public FactoryGenerator buildFactoryGenerator() {
 
-        return new InjectorGenerator(codeModel,
+        return new FactoryGenerator(codeModel,
                 buildInjectionGenerator(),
                 new AnalysisContextFactory(buildAnalysisRepository(), aopRepository),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
-                new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableInjectionBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), new QualifierPredicate(astClassFactory)),
+                new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), new QualifierPredicate(astClassFactory)),
                 new MirroredMethodGeneratorFactory(namer, codeModel),
                 generationUtil, namer);
     }
 
-    public InjectorsGenerator buildInjectorsGenerator() {
-        return new InjectorsGenerator(codeModel, generationUtil, namer);
+    public FactoriesGenerator buildFactoriesGenerator() {
+        return new FactoriesGenerator(codeModel, generationUtil, namer);
     }
 
-    public void registerInjectors(Collection<? extends ASTType> injectors) {
-        //register injector configuration
-        for (ASTType injectorType : injectors) {
+    public void registerFactories(Collection<? extends ASTType> factories) {
+        //register factory configuration
+        for (ASTType factoryType : factories) {
 
-            moduleRepository.putModuleConfig(Matchers.type(injectorType).build(),
-                    new InjectorNodeBuilder(injectorType, new VariableInjectionBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), buildAnalyser()));
+            moduleRepository.putModuleConfig(Matchers.type(factoryType).build(),
+                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), buildAnalyser()));
         }
     }
 

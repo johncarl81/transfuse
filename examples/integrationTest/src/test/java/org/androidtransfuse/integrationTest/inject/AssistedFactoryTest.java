@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import org.androidtransfuse.Injectors;
+import org.androidtransfuse.Factories;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,19 +24,19 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-public class AssistedInjectorTest {
+public class AssistedFactoryTest {
 
-    private AssistedInjector injector;
+    private AssistedFactory factory;
 
     @Before
     public void setUp() throws Exception {
-        injector = Injectors.get(AssistedInjector.class);
+        factory = Factories.get(AssistedFactory.class);
     }
 
     @Test
     public void testAssistedInjection(){
         AssistedDependency dependency = new AssistedDependency();
-        AssistedTarget assistedTarget = injector.buildTarget(dependency);
+        AssistedTarget assistedTarget = factory.buildTarget(dependency);
 
         assertEquals(dependency, assistedTarget.getDependency());
     }
@@ -45,7 +45,7 @@ public class AssistedInjectorTest {
     public void testAssistedDoubleInjection(){
         AssistedDependency one = new AssistedDependency();
         AssistedDependency two = new AssistedDependency();
-        AssistedDoubleTarget assistedTarget = injector.buildTarget(one, two);
+        AssistedDoubleTarget assistedTarget = factory.buildTarget(one, two);
 
         assertEquals(one, assistedTarget.getDependencyOne());
         assertEquals(two, assistedTarget.getDependencyTwo());

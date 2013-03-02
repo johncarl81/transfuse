@@ -6,11 +6,11 @@ import org.androidtransfuse.util.TransfuseRuntimeException;
 /**
  * @author John Ericksen
  */
-public class BootstrapInjectorRefletionProxy<T> extends Bootstraps.BootstrapInjector<T> {
+public class BootstrapInjectorReflectionProxy<T> extends Bootstraps.BootstrapInjector<T> {
 
     private Bootstraps.BootstrapInjector<T> injector;
 
-    public BootstrapInjectorRefletionProxy(Class<Bootstraps.BootstrapInjector<T>> injectorClass) {
+    public BootstrapInjectorReflectionProxy(Class<Bootstraps.BootstrapInjector<T>> injectorClass) {
 
         try {
             injector = injectorClass.newInstance();

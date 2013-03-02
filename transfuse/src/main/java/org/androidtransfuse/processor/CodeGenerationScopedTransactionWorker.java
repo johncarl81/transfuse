@@ -26,7 +26,7 @@ import java.io.IOException;
  * @author John Ericksen
  */
 public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R>
-        implements TransfuseAndroidModule.InjectorsMarkerTransactionWorker<V, R>, TransfuseAndroidModule.InjectorMarkerTransactionWorker<V,R>,
+        implements TransfuseAndroidModule.FactoriesMarkerTransactionWorker<V, R>, TransfuseAndroidModule.FactoryMarkerTransactionWorker<V,R>,
         TransfuseAndroidModule.ParcelMarkerTransactionWorker<V, R>, TransfuseAndroidModule.ComponentsMarkerTransactionWorker<V, R>,
         TransfuseAndroidModule.PackageHelperMarkerTransactionWorker<V, R>, TransfuseAndroidModule.ParcelsMarkerTransactionWorker<V, R>{
 

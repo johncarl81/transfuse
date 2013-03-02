@@ -18,7 +18,7 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.gen.InjectorsGenerator;
+import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.util.matcher.Matchers;
 
@@ -29,17 +29,17 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class InjectorsTransactionWorker extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
+public class FactoriesTransactionWorker extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
-    private final InjectorsGenerator injectorsGenerator;
+    private final FactoriesGenerator factoriesGenerator;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
 
     @Inject
-    public InjectorsTransactionWorker(InjectorsGenerator injectorsGenerator,
+    public FactoriesTransactionWorker(FactoriesGenerator factoriesGenerator,
                                       InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
                                       VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
-        this.injectorsGenerator = injectorsGenerator;
+        this.factoriesGenerator = factoriesGenerator;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
@@ -47,17 +47,17 @@ public class InjectorsTransactionWorker extends AbstractCompletionTransactionWor
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
 
-        //register injector configuration
+        //register factory configuration
         for (Provider<ASTType> typeProvider : aggregate.keySet()) {
             ASTType type = typeProvider.get();
 
             injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
-                    variableInjectionBuilderFactory.buildInjectorNodeBuilder(type));
+                    variableInjectionBuilderFactory.buildFactoryNodeBuilder(type));
         }
 
 
-        //setup Injectors class
-        injectorsGenerator.generateInjectors(aggregate);
+        //setup Factories class
+        factoriesGenerator.generateFactories(aggregate);
 
         return null;
     }

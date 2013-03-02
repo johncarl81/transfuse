@@ -25,7 +25,7 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory2;
+import org.androidtransfuse.gen.variableBuilder.VariableFactoryBuilderFactory2;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
@@ -43,14 +43,14 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     private final ASTType astType;
     private final AnalysisContext context;
     private final InjectionPointFactory injectionPointFactory;
-    private final VariableInjectionBuilderFactory2 injectionBindingBuilder;
+    private final VariableFactoryBuilderFactory2 injectionBindingBuilder;
     private final QualifierPredicate qualifierPredicate;
 
     @Inject
     public InjectionNodeFactoryImpl(@Assisted ASTType astType,
                                     @Assisted AnalysisContext context,
                                     InjectionPointFactory injectionPointFactory,
-                                    VariableInjectionBuilderFactory2 injectionBindingBuilder,
+                                    VariableFactoryBuilderFactory2 injectionBindingBuilder,
                                     QualifierPredicate qualifierPredicate) {
         this.astType = astType;
         this.context = context;

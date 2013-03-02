@@ -32,66 +32,66 @@ import static org.junit.Assert.assertNotNull;
  * @author John Ericksen
  */
 @Bootstrap
-public class InjectorGeneratorTest {
+public class FactoryGeneratorTest {
 
     @Inject
-    private InjectorGenerator injectorGenerator;
+    private FactoryGenerator factoryGenerator;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
     @Inject
     private ASTClassFactory astClassFactory;
 
-    private Injector injector;
+    private Factory factory;
 
-    public interface Injector {
+    public interface Factory {
 
-        InjectorTarget getInjectorTarget();
+        FactoryTarget getFactoryTarget();
 
-        InjectorTarget getTargetWithDependency(InjectorTargetDependency dependency);
+        FactoryTarget getTargetWithDependency(FactoryTargetDepenency dependency);
     }
 
-    public static class InjectorTarget {
+    public static class FactoryTarget {
 
         @Inject
-        public InjectorTargetDependency dependency;
+        public FactoryTargetDepenency dependency;
 
-        public InjectorTargetDependency getDependency() {
+        public FactoryTargetDepenency getDependency() {
             return dependency;
         }
     }
 
-    public static class InjectorTargetDependency {
+    public static class FactoryTargetDepenency {
     }
 
     @Before
     public void setup() throws Exception {
         Bootstraps.inject(this);
 
-        ASTType injectorType = astClassFactory.getType(Injector.class);
+        ASTType factoryType = astClassFactory.getType(Factory.class);
 
-        JDefinedClass injectorDefinedClass = injectorGenerator.generate(injectorType);
+        JDefinedClass factoryDefinedClass = factoryGenerator.generate(factoryType);
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        Class<Injector> injectorClass = (Class<Injector>) classLoader.loadClass(injectorDefinedClass.fullName());
+        Class<Factory> factoryClass = (Class<Factory>) classLoader.loadClass(factoryDefinedClass.fullName());
 
-        injector = injectorClass.newInstance();
+        factory = factoryClass.newInstance();
     }
 
     @Test
     public void testInjectionTarget() {
-        InjectorTarget injectorTarget = injector.getInjectorTarget();
-        assertNotNull(injectorTarget);
-        assertNotNull(injectorTarget.getDependency());
+        FactoryTarget factoryTarget = factory.getFactoryTarget();
+        assertNotNull(factoryTarget);
+        assertNotNull(factoryTarget.getDependency());
     }
 
     @Test
     public void testInjectionTargetDependency() {
-        InjectorTargetDependency dependency = new InjectorTargetDependency();
+        FactoryTargetDepenency dependency = new FactoryTargetDepenency();
 
-        InjectorTarget injectorTarget = injector.getTargetWithDependency(dependency);
-        assertNotNull(injectorTarget);
-        assertNotNull(injectorTarget.getDependency());
-        assertEquals(dependency, injectorTarget.getDependency());
+        FactoryTarget factoryTarget = factory.getTargetWithDependency(dependency);
+        assertNotNull(factoryTarget);
+        assertNotNull(factoryTarget.getDependency());
+        assertEquals(dependency, factoryTarget.getDependency());
     }
 }

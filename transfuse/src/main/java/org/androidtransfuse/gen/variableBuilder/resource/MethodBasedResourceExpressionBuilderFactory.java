@@ -15,13 +15,13 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.model.InjectionNode;
 
 /**
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface MethodBasedResourceExpressionBuilderFactory {
 
     MethodBasedResourceExpressionBuilder buildMethodBasedResourceExpressionBuilder(Class returnType, String accessMethod, InjectionNode resourcesNode);

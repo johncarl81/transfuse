@@ -20,7 +20,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.gen.scopeBuilder.ContextScopeVariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -31,7 +31,7 @@ import javax.inject.Named;
 /**
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface VariableInjectionBuilderFactory {
 
     ProviderInjectionNodeBuilder buildProviderInjectionNodeBuilder(ASTType astType);
@@ -68,5 +68,5 @@ public interface VariableInjectionBuilderFactory {
 
     ContextScopeVariableBuilder buildContextScopeVariableBuilder(InjectionNode contextScopeHolder);
 
-    InjectorNodeBuilder buildInjectorNodeBuilder(ASTType injectorType);
+    FactoryNodeBuilder buildFactoryNodeBuilder(ASTType factoryType);
 }

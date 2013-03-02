@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import org.androidtransfuse.Injectors;
+import org.androidtransfuse.Factories;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.inject.LibraryDependency1;
@@ -81,7 +81,7 @@ public class Injection extends InjectionBase {
     @ValueQualifier(IntegrationModule.FIVE_QUALIFIER)
     private String qualifierFive;
     @Inject
-    private Injector injector;
+    private TargetFactory targetFactory;
 
     @Inject
     protected InnerClass innerClass;
@@ -151,15 +151,15 @@ public class Injection extends InjectionBase {
     }
 
     public InjectTarget getStaticInjectionTarget() {
-        return Injectors.get(Injector.class).getTarget();
+        return Factories.get(TargetFactory.class).getTarget();
     }
 
     public LoopOne getStaticInjectionLoop() {
-        return Injectors.get(Injector.class).getLoop();
+        return Factories.get(TargetFactory.class).getLoop();
     }
 
     public Provider<LoopThree> getStaticInjectionProvider() {
-        return injector.getLoopThreeProvider();
+        return targetFactory.getLoopThreeProvider();
     }
 
     public LibraryDependency1 getLibraryDependency() {

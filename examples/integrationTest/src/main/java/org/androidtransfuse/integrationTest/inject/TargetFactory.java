@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.processor;
+package org.androidtransfuse.integrationTest.inject;
 
-import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.gen.InjectorGenerator;
+import org.androidtransfuse.annotations.Factory;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
-public class InjectorTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, JDefinedClass> {
+@Factory
+public interface TargetFactory {
 
-    private final InjectorGenerator injectorGenerator;
+    InjectTarget getTarget();
 
-    @Inject
-    public InjectorTransactionWorker(InjectorGenerator injectorGenerator) {
-        this.injectorGenerator = injectorGenerator;
-    }
+    LoopOne getLoop();
 
-    @Override
-    public JDefinedClass innerRun(Provider<ASTType> value) {
-        return injectorGenerator.generate(value.get());
-    }
+    LoopTwo getLoopTwo();
+
+    LoopThree getLoopThree();
+
+    Provider<LoopThree> getLoopThreeProvider();
 }

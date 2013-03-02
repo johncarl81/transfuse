@@ -19,8 +19,8 @@ import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.InjectorsGenerator;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -29,26 +29,26 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class InjectorVariableBuilder extends ConsistentTypeVariableBuilder {
+public class FactoryVariableBuilder extends ConsistentTypeVariableBuilder {
 
-    private final ASTType injectorType;
+    private final ASTType factoryType;
     private final JCodeModel codeModel;
 
     @Inject
-    public InjectorVariableBuilder(@Assisted ASTType injectorType, TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel) {
-        super(injectorType, typedExpressionFactory);
-        this.injectorType = injectorType;
+    public FactoryVariableBuilder(@Assisted ASTType factoryType, TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel) {
+        super(factoryType, typedExpressionFactory);
+        this.factoryType = factoryType;
         this.codeModel = codeModel;
     }
 
     @Override
     public JExpression buildExpression(InjectionBuilderContext context, InjectionNode injectionNode) {
 
-        JExpression injectorClass = codeModel.ref(injectorType.getName()).dotclass();
+        JExpression factoryClass = codeModel.ref(factoryType.getName()).dotclass();
 
-        return codeModel.ref(InjectorsGenerator.INJECTORS_NAME.getFullyQualifiedName())
-                .staticInvoke(InjectorsGenerator.GET_METHOD)
-                .arg(injectorClass)
+        return codeModel.ref(FactoriesGenerator.FACTORIES_NAME.getFullyQualifiedName())
+                .staticInvoke(FactoriesGenerator.GET_METHOD)
+                .arg(factoryClass)
                 .arg(context.getScopeVar());
     }
 }

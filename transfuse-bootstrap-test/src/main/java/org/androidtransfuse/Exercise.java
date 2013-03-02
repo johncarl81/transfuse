@@ -34,7 +34,7 @@ public class Exercise {
     @Inject
     private DependencyBase dependencyBase;
     @Inject
-    private InjectorExample injector;
+    private FactoryExample factory;
     @Inject
     private SingletonDependency singleton;
 
@@ -54,8 +54,8 @@ public class Exercise {
         return dependencyBase;
     }
 
-    public InjectorExample getInjector() {
-        return injector;
+    public FactoryExample getFactory() {
+        return factory;
     }
 
     public SingletonDependency getSingleton() {

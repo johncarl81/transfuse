@@ -36,20 +36,20 @@ import static org.junit.Assert.assertNotNull;
  * @author John Ericksen
  */
 @Bootstrap
-public class InjectorsGeneratorTest {
+public class FactoriesGeneratorTest {
 
     @Inject
-    private InjectorsGenerator injectorsGenerator;
+    private FactoriesGenerator factoriesGenerator;
     @Inject
-    private InjectorGenerator injectorGenerator;
+    private FactoryGenerator factoryGenerator;
     @Inject
     private ASTClassFactory astClassFactory;
     @Inject
     private CodeGenerationUtil codeGenerationUtil;
 
-    private Class injectorsClass;
+    private Class factoryClass;
 
-    public interface Injector {
+    public interface Factory {
     }
 
     private class SingletonProvider<T> implements Provider<T> {
@@ -68,23 +68,23 @@ public class InjectorsGeneratorTest {
     public void setUp() throws Exception {
         Bootstraps.inject(this);
 
-        ASTType injectorType = astClassFactory.getType(Injector.class);
-        JDefinedClass injectorGeneratedClass = injectorGenerator.generate(injectorType);
+        ASTType factoryType = astClassFactory.getType(Factory.class);
+        JDefinedClass factoryGeneratedClass = factoryGenerator.generate(factoryType);
 
-        JDefinedClass injectorsDefinedClass = injectorsGenerator.generateInjectors(
+        JDefinedClass factoriesDefinedClass = factoriesGenerator.generateFactories(
                 Collections.<Provider<ASTType>, JDefinedClass>singletonMap(
-                        new SingletonProvider<ASTType>(injectorType), injectorGeneratedClass));
+                        new SingletonProvider<ASTType>(factoryType), factoryGeneratedClass));
 
         ClassLoader classLoader = codeGenerationUtil.build();
 
-        injectorsClass = classLoader.loadClass(injectorsDefinedClass.fullName());
+        factoryClass = classLoader.loadClass(factoriesDefinedClass.fullName());
     }
 
     @Test
     @Ignore
     public void test() throws Exception {
-        Repository injector = (Repository) injectorsClass.newInstance();
-        assertNotNull(injectorsClass.getMethod("get", Class.class).invoke(injector, Injector.class));
-        assertNotNull(injectorsClass.getMethod("get", Class.class, Scopes.class).invoke(injector, Injector.class, new Scopes()));
+        Repository factoryRepository = (Repository) factoryClass.newInstance();
+        assertNotNull(factoryClass.getMethod("get", Class.class).invoke(factoryRepository, Factory.class));
+        assertNotNull(factoryClass.getMethod("get", Class.class, Scopes.class).invoke(factoryRepository, Factory.class, new Scopes()));
     }
 }

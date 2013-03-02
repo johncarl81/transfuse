@@ -28,16 +28,16 @@ import java.util.Collection;
 /**
  * @author John Ericksen
  */
-public class InjectorNodeBuilder implements InjectionNodeBuilder {
+public class FactoryNodeBuilder implements InjectionNodeBuilder {
 
-    private final ASTType injectorType;
-    private final VariableInjectionBuilderFactory2 variableInjectionBuilderFactory;
+    private final ASTType factoryType;
+    private final VariableFactoryBuilderFactory2 variableInjectionBuilderFactory;
     private final Analyzer analyzer;
 
     @Inject
-    public InjectorNodeBuilder(@Assisted ASTType injectorType,
-                               VariableInjectionBuilderFactory2 variableInjectionBuilderFactory, Analyzer analyzer) {
-        this.injectorType = injectorType;
+    public FactoryNodeBuilder(@Assisted ASTType factoryType,
+                              VariableFactoryBuilderFactory2 variableInjectionBuilderFactory, Analyzer analyzer) {
+        this.factoryType = factoryType;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
     }
@@ -46,7 +46,7 @@ public class InjectorNodeBuilder implements InjectionNodeBuilder {
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
         InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
 
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildInjectorVariableBuilder(injectorType));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFactoryVariableBuilder(factoryType));
 
         return injectionNode;
     }

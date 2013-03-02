@@ -15,14 +15,14 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 
 import javax.inject.Named;
 
 /**
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface VariableExpressionBuilderFactory {
 
     CachedExpressionDecorator buildCachedExpressionDecorator(@Named("variableExpressionBuilder") VariableExpressionBuilder decorator);

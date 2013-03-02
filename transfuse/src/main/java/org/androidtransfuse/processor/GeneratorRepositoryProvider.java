@@ -41,14 +41,14 @@ import java.util.Map;
  *  +->| ImplementedBy +-+  |                   +->| Components |-+ |
  *     +---------------+    |                      +------------+   |
  *                          |  +-------------+  +-----------+       |
- *                          +->| Injector(s) +->| Injectors +-------+
+ *                          +->| Factory(s) +->| Factories +-------+
  *                             +-------------+  +-----------+
  *
  * @author John Ericksen
  */
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
 
-    private final InjectorProcessor injectorProcessor;
+    private final FactoryProcessor factoryProcessor;
     private final AnalysisGenerationFactory analysisGenerationFactory;
     private final Provider<ActivityAnalysis> activityAnalysisProvider;
     private final Provider<BroadcastReceiverAnalysis> broadcastReceiverAnalysisProvider;
@@ -64,7 +64,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final ComponentsTransactionFactory componentsTransactionFactory;
 
     @Inject
-    public GeneratorRepositoryProvider(InjectorProcessor injectorProcessor,
+    public GeneratorRepositoryProvider(FactoryProcessor factoryProcessor,
                                        AnalysisGenerationFactory analysisGenerationFactory,
                                        Provider<ActivityAnalysis> activityAnalysisProvider,
                                        Provider<BroadcastReceiverAnalysis> broadcastReceiverAnalysisProvider,
@@ -78,7 +78,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        ImplementedByProcessorBuilder implementedByProcessorBuilder,
                                        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor,
                                        ComponentsTransactionFactory componentsTransactionFactory) {
-        this.injectorProcessor = injectorProcessor;
+        this.factoryProcessor = factoryProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
         this.broadcastReceiverAnalysisProvider = broadcastReceiverAnalysisProvider;
@@ -136,10 +136,10 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
 
         ImmutableSet.Builder<TransactionProcessor<?, ?>> configurationDependentBuilders = ImmutableSet.builder();
 
-        configurationDependentBuilders.add(injectorProcessor.getTransactionProcessor());
+        configurationDependentBuilders.add(factoryProcessor.getTransactionProcessor());
         configurationDependentBuilders.add(componentProcessorCompletion);
 
-        processorMapBuilder.put(Injector.class, injectorProcessor);
+        processorMapBuilder.put(Factory.class, factoryProcessor);
 
         // Package Helper processing (to be run last)
         TransactionProcessor<Void, Void> packageHelperProcessor = new TransactionProcessorPredefined(ImmutableSet.of(packageHelperTransactionFactory.buildTransaction()));

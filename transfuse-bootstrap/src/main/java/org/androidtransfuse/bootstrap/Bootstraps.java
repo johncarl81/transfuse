@@ -30,10 +30,10 @@ import java.util.Map;
 public class Bootstraps {
 
     public static final String BOOTSTRAPS_INJECTOR_PACKAGE = "org.androidtransfuse.bootstrap";
-    public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Injector";
+    public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Factory";
     public static final String BOOTSTRAPS_INJECTOR_METHOD = "inject";
     public static final String BOOTSTRAPS_INJECTOR_GET = "get";
-    public static final String IMPL_EXT = "Injector";
+    public static final String IMPL_EXT = "Factory";
 
     private static final GeneratedCodeRepository<BootstrapInjector> REPOSITORY =
             new GeneratedCodeRepository<BootstrapInjector>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_INJECTOR_NAME) {
@@ -42,7 +42,7 @@ public class Bootstraps {
 
                     try {
                         Class bootstrapClass = Class.forName(clazz.getName() + IMPL_EXT);
-                        return new BootstrapInjectorRefletionProxy(bootstrapClass);
+                        return new BootstrapInjectorReflectionProxy(bootstrapClass);
                     } catch (ClassNotFoundException e) {
                         return null;
                     }

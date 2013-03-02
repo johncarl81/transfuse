@@ -13,22 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen;
+package org.androidtransfuse.processor;
 
-import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
-import org.androidtransfuse.annotations.Factory;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.FactoryGenerator;
 
-import java.util.Map;
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
-@Factory
-public interface InjectionBuilderContextFactory {
+public class FactoryTransactionWorker extends AbstractCompletionTransactionWorker<Provider<ASTType>, JDefinedClass> {
 
-    InjectionBuilderContext buildContext(JBlock block, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap);
+    private final FactoryGenerator factoryGenerator;
+
+    @Inject
+    public FactoryTransactionWorker(FactoryGenerator factoryGenerator) {
+        this.factoryGenerator = factoryGenerator;
+    }
+
+    @Override
+    public JDefinedClass innerRun(Provider<ASTType> value) {
+        return factoryGenerator.generate(value.get());
+    }
 }

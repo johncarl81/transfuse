@@ -23,22 +23,22 @@ import javax.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class InjectorProcessor implements TransactionProcessorBuilder<Provider<ASTType>, JDefinedClass> {
+public class FactoryProcessor implements TransactionProcessorBuilder<Provider<ASTType>, JDefinedClass> {
 
     private final TransactionProcessor processor;
-    private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor;
-    private final TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory;
+    private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> factoryProcessor;
+    private final TransactionFactory<Provider<ASTType>, JDefinedClass> factoryTransactionFactory;
 
-    public InjectorProcessor(TransactionProcessor processor,
-                             TransactionProcessorPool<Provider<ASTType>, JDefinedClass> injectorProcessor,
-                             TransactionFactory<Provider<ASTType>, JDefinedClass> injectorTransactionFactory) {
+    public FactoryProcessor(TransactionProcessor processor,
+                            TransactionProcessorPool<Provider<ASTType>, JDefinedClass> factoryProcessor,
+                            TransactionFactory<Provider<ASTType>, JDefinedClass> factoryTransactionFactory) {
         this.processor = processor;
-        this.injectorProcessor = injectorProcessor;
-        this.injectorTransactionFactory = injectorTransactionFactory;
+        this.factoryProcessor = factoryProcessor;
+        this.factoryTransactionFactory = factoryTransactionFactory;
     }
 
     public void submit(Provider<ASTType> parcel) {
-        injectorProcessor.submit(injectorTransactionFactory.buildTransaction(parcel));
+        factoryProcessor.submit(factoryTransactionFactory.buildTransaction(parcel));
     }
 
     public void execute() {

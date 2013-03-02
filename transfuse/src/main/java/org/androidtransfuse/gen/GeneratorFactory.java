@@ -15,12 +15,12 @@
  */
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.annotations.Injector;
+import org.androidtransfuse.annotations.Factory;
 
 /**
  * @author John Ericksen
  */
-@Injector
+@Factory
 public interface GeneratorFactory {
 
     IntentFactoryStrategyGenerator buildStrategyGenerator(Class baseClass);

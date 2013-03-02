@@ -51,8 +51,8 @@ public class ExerciseTest {
         assertNotNull(exercise.getDependency());
         assertNotNull(exercise.getDependencyProvider());
         assertNotNull(exercise.getDependencyBase());
-        assertNotNull(exercise.getInjector());
-        assertNotNull(exercise.getInjector().getDependency());
+        assertNotNull(exercise.getFactory());
+        assertNotNull(exercise.getFactory().getDependency());
         assertEquals(singletonDependency, exercise.getSingleton());
     }
 }
