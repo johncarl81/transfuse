@@ -45,7 +45,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 @PrepareForTest(Parcel.class)
 public class ParcelableGeneratorTest {
 
@@ -70,7 +70,7 @@ public class ParcelableGeneratorTest {
 
     @Before
     public void setup() throws ClassNotFoundException, IOException, NoSuchFieldException, IllegalAccessException {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         ASTType mockParcelASTType = astClassFactory.getType(ParcelTarget.class);
         ASTType mockParcelTwoASTType = astClassFactory.getType(ParcelSecondTarget.class);

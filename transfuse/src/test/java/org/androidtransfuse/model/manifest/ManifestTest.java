@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ManifestTest {
 
     @Inject
@@ -42,7 +42,7 @@ public class ManifestTest {
 
     @Before
     public void setUp() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class AOPProxyAnalyzerTest {
 
     @Inject
@@ -79,7 +79,7 @@ public class AOPProxyAnalyzerTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         methodInterceptorASTType = astClassFactory.getType(AOPAnnotationMethodInterceptor.class);
         aopAnnotationASTType = astClassFactory.getType(AOPAnnotation.class);

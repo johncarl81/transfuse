@@ -28,7 +28,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ApplicationAnalysisTest {
 
     @Inject
@@ -43,7 +43,7 @@ public class ApplicationAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         applicationASTType = astClassFactory.getType(ApplicationAnalysisTarget.class);
     }

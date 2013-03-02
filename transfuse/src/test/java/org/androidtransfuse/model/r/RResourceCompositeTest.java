@@ -29,7 +29,7 @@ import static junit.framework.Assert.assertNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class RResourceCompositeTest {
 
     private static final int RESOURCE_THAT_DOESNT_EXIST = 12345;
@@ -52,7 +52,7 @@ public class RResourceCompositeTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         resourceOne = new RResourceMapping();
         resourceOne.addResource(astClassFactory.getType(RTest.one.class), "id1", RTest.one.id1);

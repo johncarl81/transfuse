@@ -43,7 +43,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class AOPProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
@@ -81,7 +81,7 @@ public class AOPProxyGeneratorTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         delegateAST = astClassFactory.getType(MockDelegate.class);
         delegateInjectionNode = analyzer.analyze(delegateAST, delegateAST, contextFactory.buildContext());

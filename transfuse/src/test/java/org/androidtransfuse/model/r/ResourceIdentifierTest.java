@@ -29,7 +29,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ResourceIdentifierTest {
 
     @Inject
@@ -45,7 +45,7 @@ public class ResourceIdentifierTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         rInnerType = astClassFactory.getType(RInnerType.class);
         otherInnerType = astClassFactory.getType(OtherInnerType.class);

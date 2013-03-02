@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class MatchersTest {
 
     @Inject
@@ -76,7 +76,7 @@ public class MatchersTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         zeroMatcherASTType = astClassFactory.getType(ZeroMatcherTarget.class);
         singleMatcherASTType = astClassFactory.getType(SingleMatcherTarget.class);

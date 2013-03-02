@@ -44,7 +44,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class InjectionFragmentGeneratorTest {
 
     @Inject
@@ -67,7 +67,7 @@ public class InjectionFragmentGeneratorTest {
 
     @Before
     public void setUp() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         context = contextFactory.buildContext();
     }

@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
+import org.androidtransfuse.scope.Scopes;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class InjectorsGeneratorTest {
 
     @Inject
@@ -65,7 +66,7 @@ public class InjectorsGeneratorTest {
 
     @Before
     public void setUp() throws Exception {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         ASTType injectorType = astClassFactory.getType(Injector.class);
         JDefinedClass injectorGeneratedClass = injectorGenerator.generate(injectorType);
@@ -84,5 +85,6 @@ public class InjectorsGeneratorTest {
     public void test() throws Exception {
         Injectors.InjectorRepository injector = (Injectors.InjectorRepository) injectorsClass.newInstance();
         assertNotNull(injectorsClass.getMethod("get", Class.class).invoke(injector, Injector.class));
+        assertNotNull(injectorsClass.getMethod("get", Class.class, Scopes.class).invoke(injector, Injector.class, new Scopes()));
     }
 }

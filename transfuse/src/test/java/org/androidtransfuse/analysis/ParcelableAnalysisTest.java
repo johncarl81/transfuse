@@ -35,7 +35,7 @@ import static junit.framework.Assert.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ParcelableAnalysisTest {
 
     @Inject
@@ -45,7 +45,7 @@ public class ParcelableAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

@@ -17,8 +17,9 @@ package org.androidtransfuse.bootstrap;
 
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.Scopes;
-import org.androidtransfuse.util.GeneratedRepositoryProxy;
+import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.Providers;
+import org.androidtransfuse.util.Repository;
 
 import javax.inject.Singleton;
 import java.util.HashMap;
@@ -31,37 +32,33 @@ public class Bootstraps {
 
     public static final String BOOTSTRAPS_INJECTOR_PACKAGE = "org.androidtransfuse.bootstrap";
     public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Injector";
-    public static final String BOOTSTRAPS_TEST_INJECTOR_NAME = "Bootstraps$TestInjector";
     public static final String BOOTSTRAPS_INJECTOR_METHOD = "inject";
-    public static final String BOOTSTRAPS_INJECTOR_GET = "getMappings";
+    public static final String BOOTSTRAPS_INJECTOR_GET = "get";
+    public static final String IMPL_EXT = "Injector";
 
-    private static final GeneratedRepositoryProxy<BootstrapRepository> PROXY =
-            new GeneratedRepositoryProxy<BootstrapRepository>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_INJECTOR_NAME);
+    private static final GeneratedCodeRepository<BootstrapInjector> REPOSITORY =
+            new GeneratedCodeRepository<BootstrapInjector>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_INJECTOR_NAME) {
+                @Override
+                public BootstrapInjector findClass(Class clazz) {
 
-    private static final GeneratedRepositoryProxy<BootstrapRepository> TEST_PROXY =
-            new GeneratedRepositoryProxy<BootstrapRepository>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_TEST_INJECTOR_NAME);
+                    try {
+                        Class bootstrapClass = Class.forName(clazz.getName() + IMPL_EXT);
+                        return new BootstrapInjectorRefletionProxy(bootstrapClass);
+                    } catch (ClassNotFoundException e) {
+                        return null;
+                    }
 
-
-
+                }
+            };
 
     @SuppressWarnings("unchecked")
     public static <T> void inject(T input){
-        PROXY.get().getMappings().get(input.getClass()).inject(input.getClass(), input);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> void injectTest(T input){
-        TEST_PROXY.get().getMappings().get(input.getClass()).inject(input.getClass(), input);
+        REPOSITORY.get(input.getClass()).inject(input.getClass(), input);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> BootstrapInjector<T> getInjector(Class<T> clazz){
-        return PROXY.get().getMappings().get(clazz);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> BootstrapInjector<T> getTestInjector(Class<T> clazz){
-        return TEST_PROXY.get().getMappings().get(clazz);
+        return REPOSITORY.get(clazz);
     }
 
     public static abstract class BootstrapInjector<T>{
@@ -82,7 +79,7 @@ public class Bootstraps {
         }
     }
 
-    public interface BootstrapRepository{
-        Map<Class, BootstrapInjector> getMappings();
+    public interface BootstrapRepository extends Repository<BootstrapInjector>{
+        Map<Class, BootstrapInjector> get();
     }
 }

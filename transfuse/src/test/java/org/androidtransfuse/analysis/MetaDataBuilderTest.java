@@ -32,7 +32,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class MetaDataBuilderTest {
 
     private static final String TEST_NAME = "testName";
@@ -59,7 +59,7 @@ public class MetaDataBuilderTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
         metaDataBuilder = new MetaDataBuilder();
 
         metaDataTargetASTType = astClassFactory.getType(MetaDataTarget.class);

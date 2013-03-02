@@ -40,7 +40,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class AnalyzerTest {
 
     //A -> E -> F
@@ -117,7 +117,7 @@ public class AnalyzerTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         analysisContext = analysisContextFactory.buildContext();
 

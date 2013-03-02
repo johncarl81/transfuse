@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class InjectorGeneratorTest {
 
     @Inject
@@ -65,7 +65,7 @@ public class InjectorGeneratorTest {
 
     @Before
     public void setup() throws Exception {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         ASTType injectorType = astClassFactory.getType(Injector.class);
 

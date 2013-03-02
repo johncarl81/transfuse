@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ExerciseTest {
 
     @Inject
@@ -38,7 +38,7 @@ public class ExerciseTest {
 
     @Before
     public void setUp() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

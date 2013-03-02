@@ -29,7 +29,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class BroadcastReceiverAnalysisTest {
 
     @Inject
@@ -44,7 +44,7 @@ public class BroadcastReceiverAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         broadcastReceiverType = astClassFactory.getType(BroadcastReceiverTarget.class);
     }

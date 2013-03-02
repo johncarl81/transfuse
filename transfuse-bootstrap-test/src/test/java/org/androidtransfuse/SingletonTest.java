@@ -29,7 +29,7 @@ import static junit.framework.Assert.assertNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class SingletonTest {
 
     private static final String TEST_VALUE = "test";
@@ -41,7 +41,7 @@ public class SingletonTest {
 
     @Before
     public void setUp() throws Exception {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

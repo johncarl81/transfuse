@@ -46,7 +46,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class LoopAnalysisTest {
 
     @Inject
@@ -70,7 +70,7 @@ public class LoopAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         A.reset();
         BImpl.reset();

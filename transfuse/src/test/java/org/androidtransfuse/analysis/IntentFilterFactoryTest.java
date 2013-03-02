@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class IntentFilterFactoryTest {
 
     protected static final String TEST_INTENT = "test";
@@ -69,7 +69,7 @@ public class IntentFilterFactoryTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

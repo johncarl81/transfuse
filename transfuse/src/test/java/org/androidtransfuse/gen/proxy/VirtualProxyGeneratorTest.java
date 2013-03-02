@@ -40,7 +40,7 @@ import static junit.framework.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class VirtualProxyGeneratorTest {
 
     public static final String TEST_VALUE = "test";
@@ -61,7 +61,7 @@ public class VirtualProxyGeneratorTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         ASTType interfaceAST = astClassFactory.getType(MockInterface.class);
         ASTType secondInterfaceAST = astClassFactory.getType(SecondMockInteface.class);

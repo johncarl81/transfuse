@@ -41,7 +41,7 @@ import static junit.framework.Assert.assertNull;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class MergerTest {
 
     public static class MergeableRoot extends Mergeable implements Identified {
@@ -230,7 +230,7 @@ public class MergerTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
     }
 
     @Test

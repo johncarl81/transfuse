@@ -29,7 +29,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ServiceAnalysisTest {
 
     @Inject
@@ -44,7 +44,7 @@ public class ServiceAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         serviceTargetType = astClassFactory.getType(ServiceAnalysisTarget.class);
     }

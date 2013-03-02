@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class DeclareFieldAnalysisTest {
 
     private AnalysisContext analysisContext;
@@ -55,7 +55,7 @@ public class DeclareFieldAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         analysisContext = simpleAnalysisContextFactory.buildContext();
     }

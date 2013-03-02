@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class MethodSignatureTest {
 
     @Inject
@@ -59,7 +59,7 @@ public class MethodSignatureTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         ASTType targetType = astClassFactory.getType(MethodSignatureTarget.class);
 

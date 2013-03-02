@@ -42,7 +42,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class ActivityAnalysisTest {
 
     public static final String TEST_NAME = "ActivityTestTarget";
@@ -58,7 +58,7 @@ public class ActivityAnalysisTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         Manifest manifest = new Manifest();
         manifest.getApplications().add(new Application());

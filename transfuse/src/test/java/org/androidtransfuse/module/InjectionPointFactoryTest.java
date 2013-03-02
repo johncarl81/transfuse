@@ -45,7 +45,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class InjectionPointFactoryTest {
 
     private AnalysisContext emptyContext;
@@ -58,7 +58,7 @@ public class InjectionPointFactoryTest {
 
     @Before
     public void setUp() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
         emptyContext = contextFactory.buildContext();
     }
 

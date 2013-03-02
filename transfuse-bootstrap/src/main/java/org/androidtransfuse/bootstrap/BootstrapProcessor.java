@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.AnnotationProcessorBase;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -102,13 +101,9 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                 AnalysisContext context = coreFactory.buildAnalysisContext();
                 for (ASTType astType : astTypes) {
 
-                    ASTAnnotation astAnnotation = astType.getASTAnnotation(Bootstrap.class);
-                    Boolean testInjector = astAnnotation.getProperty("test", Boolean.class);
-                    testInjector = testInjector == null? false : testInjector;
-
                     InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, context);
 
-                    bootstrapsInjectorGenerator.generate(injectionNode, testInjector);
+                    bootstrapsInjectorGenerator.generate(injectionNode);
                 }
 
                 InjectorsGenerator injectorsGenerator = coreFactory.buildInjectorsGenerator();

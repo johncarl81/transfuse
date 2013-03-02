@@ -30,7 +30,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author John Ericksen
  */
-@Bootstrap(test = true)
+@Bootstrap
 public class RBuilderTest {
 
     @Inject
@@ -45,7 +45,7 @@ public class RBuilderTest {
 
     @Before
     public void setup() {
-        Bootstraps.injectTest(this);
+        Bootstraps.inject(this);
 
         idInnerType = astClassFactory.getType(RTest.class);
     }
