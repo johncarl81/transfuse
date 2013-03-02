@@ -18,9 +18,6 @@ package org.androidtransfuse;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.InjectorFactoryReflectionProxy;
-import org.androidtransfuse.util.Repository;
-
-import java.util.Map;
 
 /**
  * Static utility class which maps the {@code @Injector} annotated interface to the generated implementation.
@@ -72,14 +69,6 @@ public final class Injectors {
     public static <T> T get(Class<T> type, Scopes scopes) {
         InjectorFactory injectorFactory = REPOSITORY.get(type);
         return (T) injectorFactory.get(scopes);
-    }
-
-    /**
-     * Proxy Interface to be implemented by code generation.
-     */
-    public static interface InjectorRepository extends Repository<InjectorFactory> {
-
-        Map<Class, InjectorFactory> get();
     }
 
     public static interface InjectorFactory<T> {

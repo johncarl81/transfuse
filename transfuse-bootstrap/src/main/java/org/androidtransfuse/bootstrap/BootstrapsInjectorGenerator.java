@@ -25,6 +25,7 @@ import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.util.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,7 +117,7 @@ public class BootstrapsInjectorGenerator {
     private synchronized JDefinedClass getInjectorClass() throws JClassAlreadyExistsException {
         if(injectorClass == null){
             injectorClass = generationUtil.defineClass(BOOTSTRAPS_INJECTOR);
-            injectorClass._implements(Bootstraps.BootstrapRepository.class);
+            injectorClass._implements(codeModel.ref(Repository.class).narrow(Bootstraps.BootstrapInjector.class));
 
             // map to hold injector instances
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Bootstraps.BootstrapInjector.class);

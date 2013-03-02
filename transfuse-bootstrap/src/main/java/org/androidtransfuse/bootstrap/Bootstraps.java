@@ -19,7 +19,6 @@ import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.Providers;
-import org.androidtransfuse.util.Repository;
 
 import javax.inject.Singleton;
 import java.util.HashMap;
@@ -77,9 +76,5 @@ public class Bootstraps {
                 singletonScope.getScopedObject(singletonEntry.getKey(), Providers.of(singletonEntry.getValue()));
             }
         }
-    }
-
-    public interface BootstrapRepository extends Repository<BootstrapInjector>{
-        Map<Class, BootstrapInjector> get();
     }
 }

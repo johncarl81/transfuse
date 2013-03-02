@@ -21,6 +21,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -53,7 +54,7 @@ public class InjectorsGenerator {
         try {
             JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            injectorRepositoryClass._implements(Injectors.InjectorRepository.class);
+            injectorRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Injectors.InjectorFactory.class));
 
             //map definition
             JClass mapIntances = codeModel.ref(Map.class).narrow(Class.class, Injectors.InjectorFactory.class);

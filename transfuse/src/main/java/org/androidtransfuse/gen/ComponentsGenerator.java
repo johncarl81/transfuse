@@ -21,6 +21,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -50,21 +51,16 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
         try {
             JDefinedClass injectorRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            injectorRepositoryClass._implements(Components.ComponentsRepository.class);
+            injectorRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Class.class));
 
             //map definition
             JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);
             JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Class.class);
             JVar registrationMap = injectorRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
-            //getter
-            JMethod getMethod = injectorRepositoryClass.method(JMod.PUBLIC, Object.class, GET_METHOD);
-            getMethod.annotate(Override.class);
-            JTypeVar t = getMethod.generify("T");
-            getMethod.type(codeModel.ref(Class.class).narrow(t));
-            JVar typeParam = getMethod.param(codeModel.ref(Class.class).narrow(codeModel.wildcard()), "type");
-
-            getMethod.body()._return(registrationMap.invoke("get").arg(typeParam));
+            //map getter
+            JMethod getMapMethod = injectorRepositoryClass.method(JMod.PUBLIC, mapType, GET_METHOD);
+            getMapMethod.body()._return(registrationMap);
 
             // constructor registration block
             JBlock injectorRegistrationBlock = injectorRepositoryClass.constructor(JMod.PUBLIC).body();

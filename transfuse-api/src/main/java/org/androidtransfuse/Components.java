@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse;
 
-import org.androidtransfuse.util.GeneratedRepositoryProxy;
+import org.androidtransfuse.util.GeneratedCodeRepository;
 
 /**
  * Static utility class which maps Transfuse Components to the generated Android Components.
@@ -27,8 +27,13 @@ public final class Components {
     public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse$Components";
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
 
-    private static final GeneratedRepositoryProxy<ComponentsRepository> PROXY =
-            new GeneratedRepositoryProxy<ComponentsRepository>(COMPONENTS_PACKAGE, COMPONENTS_REPOSITORY_NAME);
+    private static final GeneratedCodeRepository<Class> REPOSITORY =
+            new GeneratedCodeRepository<Class>(COMPONENTS_PACKAGE, COMPONENTS_REPOSITORY_NAME) {
+                @Override
+                public Class findClass(Class clazz) {
+                    return null; //cannot find class
+                }
+            };
 
     private Components(){
         // private utility class constructor
@@ -44,22 +49,6 @@ public final class Components {
      * @return class Android Component class
      */
     public static<T> Class<T> get(Class<?> type) {
-        return (Class<T>) PROXY.get().get(type);
-    }
-
-    /**
-     * Proxy Interface to be implemented by code generation.
-     */
-    public static interface ComponentsRepository {
-
-        /**
-         * Provides the corresponding generated Android Component class for the input Transfuse Component class.
-         *
-         * Transfuse$Components class.
-         * @param type Transfuse Component class
-         * @param <T>
-         * @return class Android Component class
-         */
-        <T> Class<T> get(Class<?> type);
+        return (Class<T>) REPOSITORY.get(type);
     }
 }
