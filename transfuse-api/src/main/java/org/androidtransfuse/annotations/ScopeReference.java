@@ -16,9 +16,14 @@
 package org.androidtransfuse.annotations;
 
 import javax.inject.Qualifier;
-import java.lang.annotation.*;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.PARAMETER})
+import static java.lang.annotation.ElementType.*;
+
+@Target({METHOD, CONSTRUCTOR, FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface ScopeReference {

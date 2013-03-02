@@ -16,10 +16,11 @@
 package org.androidtransfuse.annotations;
 
 import javax.inject.Qualifier;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
 
 /**
  * Injection qualifier annotation to specify which System Service to inject by name.  This annotation will tell Transfuse which
@@ -27,7 +28,7 @@ import java.lang.annotation.Target;
  *
  * @author John Ericksen
  */
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.PARAMETER})
+@Target({METHOD, CONSTRUCTOR, FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface SystemService {
