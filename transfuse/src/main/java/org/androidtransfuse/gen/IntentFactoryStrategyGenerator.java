@@ -149,7 +149,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         }
         if (type.isAnnotated(Parcel.class)) {
             JInvocation wrappedParcel = codeModel.ref(ParcelsGenerator.PARCELS_NAME.toString())
-                    .staticInvoke(ParcelsGenerator.WRAP_METHOD).arg(extraParam);
+                    .staticInvoke(ParcelableGenerator.WRAP_METHOD).arg(extraParam);
 
             return extras.invoke("putParcelable").arg(name).arg(wrappedParcel);
         }

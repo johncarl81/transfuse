@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.gen;
 
-import android.os.Parcelable;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Parcels;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.util.Repository;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Inject;
@@ -34,7 +34,6 @@ public class ParcelsGenerator {
 
     public static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
     public static final PackageClass REPOSITORY_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_REPOSITORY_NAME);
-    public static final String WRAP_METHOD = "wrap";
     private static final String MAP_NAME = "parcelWrappers";
 
     private final ClassGenerationUtil classGenerationUtil;
@@ -53,7 +52,7 @@ public class ParcelsGenerator {
         try {
             JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(REPOSITORY_NAME);
 
-            parcelsDefinedClass._implements(Parcels.ParcelRepository.class);
+            parcelsDefinedClass._implements(Repository.class);
 
             JClass mapRef = codeModel.ref(Map.class).narrow(Class.class, Parcels.ParcelableFactory.class);
             JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class, Parcels.ParcelableFactory.class);
@@ -66,7 +65,7 @@ public class ParcelsGenerator {
 
                 JClass type = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
 
-                String innerClassName = uniqueVariableNamer.generateClassName(astTypeJDefinedClassEntry.getValue()) + "Factory";
+                String innerClassName = uniqueVariableNamer.generateClassName(astTypeJDefinedClassEntry.getValue()) + Parcels.IMPL_EXT;
 
                 JDefinedClass factoryDefinedClass = parcelsDefinedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, innerClassName);
 
@@ -81,14 +80,8 @@ public class ParcelsGenerator {
                 constructorBody.invoke(parcelWrappers, "put").arg(type.staticRef("class")).arg(JExpr._new(factoryDefinedClass));
             }
 
-            JMethod method = parcelsDefinedClass.method(JMod.PUBLIC, Parcelable.class, WRAP_METHOD);
-            method.annotate(Override.class);
-
-            JVar input = method.param(Object.class, "input");
-
-            JInvocation wrapper = parcelWrappers.invoke("get").arg(input.invoke("getClass"));
-
-            method.body()._return(wrapper.invoke(Parcels.ParcelableFactory.BUILD_PARCELABLE).arg(input));
+            JMethod getMethod = parcelsDefinedClass.method(JMod.PUBLIC, mapRef, "get");
+            getMethod.body()._return(parcelWrappers);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseRuntimeException("Class already exists", e);

@@ -49,6 +49,7 @@ public class ParcelableGenerator {
     private static final String WRITE_TO_PARCEL = "writeToParcel";
     private static final String DESCRIBE_CONTENTS = "describeContents";
     private static final String PARCELABLE_EXT = "_Parcelable";
+    public static final String WRAP_METHOD = "wrap";
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
@@ -212,7 +213,7 @@ public class ParcelableGenerator {
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
 
             JInvocation wrappedParcel = codeModel.ref(ParcelsGenerator.PARCELS_NAME.toString())
-                    .staticInvoke(ParcelsGenerator.WRAP_METHOD).arg(wrapped.invoke(propertyMutator.getGetter().getName()));
+                    .staticInvoke(WRAP_METHOD).arg(wrapped.invoke(propertyMutator.getGetter().getName()));
 
             body.invoke(parcel, "writeParcelable").arg(wrappedParcel)
                     .arg(flags);
