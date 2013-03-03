@@ -20,7 +20,7 @@ import javax.inject.Singleton;
 /**
  * @author John Ericksen
  */
-public class ScopesUtil {
+public final class ScopesUtil {
 
     public static final String GET_INSTANCE = "getInstance";
 
@@ -33,7 +33,6 @@ public class ScopesUtil {
 
     private ScopesUtil(){
         //private utility constructor
-
     }
 
     public static Scopes getInstance(){

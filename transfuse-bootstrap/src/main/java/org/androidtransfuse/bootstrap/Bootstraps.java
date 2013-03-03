@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class Bootstraps {
+public final class Bootstraps {
 
     public static final String BOOTSTRAPS_INJECTOR_PACKAGE = "org.androidtransfuse.bootstrap";
     public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Factory";
@@ -50,6 +50,10 @@ public class Bootstraps {
                 }
             };
 
+    private Bootstraps(){
+        //private utility constructor
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> void inject(T input){
         REPOSITORY.get(input.getClass()).inject(input);
@@ -67,7 +71,7 @@ public class Bootstraps {
         <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> singletonClass, S singleton);
     }
 
-    public static abstract class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
+    public abstract static class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
         private final Map<Class<? extends Annotation> , Map<Class, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<Class, Object>>();
 
         public abstract void inject(T input);

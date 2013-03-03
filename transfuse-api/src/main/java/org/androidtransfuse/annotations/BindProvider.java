@@ -17,7 +17,6 @@ package org.androidtransfuse.annotations;
 
 import org.androidtransfuse.scope.EmptyScope;
 
-import javax.inject.Named;
 import javax.inject.Provider;
 import java.lang.annotation.*;
 
@@ -50,6 +49,4 @@ public @interface BindProvider {
     Class<? extends Provider> provider();
 
     Class<? extends Annotation> scope() default EmptyScope.class;
-
-    Named named() default @Named;
 }

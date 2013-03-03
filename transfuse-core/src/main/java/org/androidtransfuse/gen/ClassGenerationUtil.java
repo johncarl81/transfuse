@@ -39,8 +39,7 @@ import java.util.Date;
 public class ClassGenerationUtil {
 
     // ISO 8601 standard date format
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-
+    private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     private final JCodeModel codeModel;
     private final Logger log;
 
@@ -70,6 +69,6 @@ public class ClassGenerationUtil {
     private void annotateGeneratedClass(JDefinedClass definedClass) {
         definedClass.annotate(Generated.class)
                 .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor"/*TransfuseAnnotationProcessor.class.getName()*/)
-                .param("date", DATE_FORMAT.format(new Date()));
+                .param("date", iso8601.format(new Date()));
     }
 }

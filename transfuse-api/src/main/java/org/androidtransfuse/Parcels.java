@@ -75,7 +75,7 @@ public final class Parcels {
     /**
      * Factory class for building a Parcelable from the given input.
      */
-    public static interface ParcelableFactory<T> {
+    public interface ParcelableFactory<T> {
 
         String BUILD_PARCELABLE = "buildParcelable";
 

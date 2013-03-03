@@ -71,7 +71,7 @@ public final class Factories {
         return (T) factoryBuilder.get(scopes);
     }
 
-    public static interface FactoryBuilder<T> {
+    public interface FactoryBuilder<T> {
 
         T get();
 

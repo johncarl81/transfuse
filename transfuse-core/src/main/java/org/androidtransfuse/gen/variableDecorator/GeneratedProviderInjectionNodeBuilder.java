@@ -20,7 +20,6 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
-import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -34,17 +33,14 @@ import java.util.Collection;
 public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private final GeneratedProviderBuilderFactory variableInjectionBuilderFactory;
-    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
     private final InjectionPointFactory injectionPointFactory;
     private final Analyzer analyzer;
 
     @Inject
     public GeneratedProviderInjectionNodeBuilder(GeneratedProviderBuilderFactory variableInjectionBuilderFactory,
-                                                 ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository,
                                                  InjectionPointFactory injectionPointFactory,
                                                  Analyzer analyzer) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
         this.injectionPointFactory = injectionPointFactory;
         this.analyzer = analyzer;
     }

@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.AnnotationProcessorBase;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -113,8 +114,7 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                 codeModel.build(coreFactory.buildCodeWriter(), coreFactory.buildResourceWriter());
 
             } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+                throw new TransfuseAnalysisException("Exception while writing Bootstrap class", e);
             }
             ran = true;
         }

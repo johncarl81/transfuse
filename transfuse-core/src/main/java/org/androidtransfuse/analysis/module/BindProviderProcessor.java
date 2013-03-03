@@ -17,10 +17,8 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
-import org.androidtransfuse.gen.variableBuilder.VariableASTImplementationFactory;
 import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
@@ -35,20 +33,14 @@ public class BindProviderProcessor implements TypeProcessor {
     private final ModuleRepository injectionNodeBuilders;
     private final ProviderInjectionNodeBuilderFactory variableInjectionBuilderFactory;
     private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
-    private final VariableASTImplementationFactory variableASTImplementationFactory;
-    private final ASTClassFactory astClassFactory;
 
     @Inject
     public BindProviderProcessor(ModuleRepository injectionNodeBuilders,
                                  ProviderInjectionNodeBuilderFactory variableInjectionBuilderFactory,
-                                 ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository,
-                                 VariableASTImplementationFactory variableASTImplementationFactory,
-                                 ASTClassFactory astClassFactory) {
+                                 ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository) {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
-        this.variableASTImplementationFactory = variableASTImplementationFactory;
-        this.astClassFactory = astClassFactory;
     }
 
     @Override

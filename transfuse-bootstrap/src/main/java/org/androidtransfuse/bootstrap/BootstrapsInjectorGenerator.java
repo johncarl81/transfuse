@@ -66,9 +66,6 @@ public class BootstrapsInjectorGenerator {
     public void generate(InjectionNode injectionNode){
 
         try {
-
-            getInjectorClass();
-
             JClass nodeClass = codeModel.ref(injectionNode.getClassName());
 
             // add injector class
@@ -100,7 +97,7 @@ public class BootstrapsInjectorGenerator {
             injectionGenerator.buildFragment(injectorBlock, innerInjectorClass, injectionNode, scopes);
 
             // add instance to map
-            registerBlock.invoke(registerField, "put").arg(nodeClass.dotclass()).arg(JExpr._new(innerInjectorClass));
+            addBootstrapRegistration(nodeClass, innerInjectorClass);
 
         } catch (JClassAlreadyExistsException e) {
             throw new BootstrapException("Unable to crate Bootstrap Factory, class already exists.", e);
@@ -113,7 +110,7 @@ public class BootstrapsInjectorGenerator {
         injectionNode.addAspect(VariableBuilder.class, variableBuilderFactory.buildVariableBuilder(input));
     }
 
-    private synchronized JDefinedClass getInjectorClass() throws JClassAlreadyExistsException {
+    private synchronized void addBootstrapRegistration(JClass nodeClass, JDefinedClass innerInjectorClass) throws JClassAlreadyExistsException {
         if(injectorClass == null){
             injectorClass = generationUtil.defineClass(BOOTSTRAPS_INJECTOR);
             injectorClass._implements(codeModel.ref(Repository.class).narrow(Bootstraps.BootstrapInjector.class));
@@ -132,6 +129,7 @@ public class BootstrapsInjectorGenerator {
             method.body()._return(registerField);
 
         }
-        return injectorClass;
+
+        registerBlock.invoke(registerField, "put").arg(nodeClass.dotclass()).arg(JExpr._new(innerInjectorClass));
     }
 }

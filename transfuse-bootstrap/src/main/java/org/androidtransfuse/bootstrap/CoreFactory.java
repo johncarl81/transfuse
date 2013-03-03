@@ -175,9 +175,9 @@ public class CoreFactory {
         };
 
         GeneratedProviderBuilderFactory generatedProviderBuilderFactory = new GeneratedProviderBuilderFactory(providerGeneratorProvider,
-                Providers.of(namer), Providers.of(typedExpressionFactory), Providers.of(codeModel), providerRepository);
+                Providers.of(namer), Providers.of(typedExpressionFactory));
 
-        return new GeneratedProviderInjectionNodeBuilder(generatedProviderBuilderFactory, providerRepository, buildInjectionPointFactory(), buildAnalyser());
+        return new GeneratedProviderInjectionNodeBuilder(generatedProviderBuilderFactory, buildInjectionPointFactory(), buildAnalyser());
     }
 
     private AnalysisRepository buildAnalysisRepository(){
@@ -227,12 +227,7 @@ public class CoreFactory {
     }
 
     private InjectionFragmentGenerator buildInjectionGenerator(){
-        InjectionBuilderContextFactory injectionBuilderContextFactory = new InjectionBuilderContextFactory() {
-            @Override
-            public InjectionBuilderContext buildContext(JBlock block, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
-                return new InjectionBuilderContext(block, definedClass, scopeVar, expressionMap);
-            }
-        };
+        InjectionBuilderContextFactory injectionBuilderContextFactory = new InjectionBuilderContextFactoryImpl();
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
@@ -269,7 +264,7 @@ public class CoreFactory {
         ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilderFactory = new ProviderInjectionNodeBuilderFactory(buildAnalyser(), providerVariableBuilderFactory);
 
         BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, moduleRepository);
-        BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(moduleRepository, providerInjectionNodeBuilderFactory, providerRepository, variableASTImplementationFactory, astClassFactory);
+        BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(moduleRepository, providerInjectionNodeBuilderFactory, providerRepository);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
         ProvidesProcessor providesProcessor = new ProvidesProcessor(moduleRepository, providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
 
@@ -309,6 +304,13 @@ public class CoreFactory {
 
     public ModuleRepository getModuleRepository() {
         return moduleRepository;
+    }
+
+    private static class InjectionBuilderContextFactoryImpl implements InjectionBuilderContextFactory {
+        @Override
+        public InjectionBuilderContext buildContext(JBlock block, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
+            return new InjectionBuilderContext(block, definedClass, scopeVar, expressionMap);
+        }
     }
 
     private final class ConcreteASTFactory implements ASTFactory {
@@ -396,7 +398,6 @@ public class CoreFactory {
 
             ProxyVariableBuilder proxyVariableBuilder = new ProxyVariableBuilder(namer);
             VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
-            TypedExpressionFactory typedExpressionFactory = new TypedExpressionFactory(astClassFactory);
 
             return new VirtualProxyExpressionDecorator(decorator, proxyVariableBuilder, virtualProxyGenerator, typedExpressionFactory);
         }

@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
@@ -32,24 +30,18 @@ public class GeneratedProviderBuilderFactory {
     private final Provider<ProviderGenerator> providerGeneratorProvider;
     private final Provider<UniqueVariableNamer> namerProvider;
     private final Provider<TypedExpressionFactory> typedExpressionFactoryProvider;
-    private final Provider<JCodeModel> codeModelProvider;
-    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
 
     @Inject
     public GeneratedProviderBuilderFactory(Provider<ProviderGenerator> providerGeneratorProvider,
                                            Provider<UniqueVariableNamer> namerProvider,
-                                           Provider<TypedExpressionFactory> typedExpressionFactoryProvider,
-                                           Provider<JCodeModel> codeModelProvider,
-                                           ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository) {
+                                           Provider<TypedExpressionFactory> typedExpressionFactoryProvider) {
         this.providerGeneratorProvider = providerGeneratorProvider;
         this.namerProvider = namerProvider;
         this.typedExpressionFactoryProvider = typedExpressionFactoryProvider;
-        this.codeModelProvider = codeModelProvider;
-        this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
     }
 
     public GeneratedProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerTypeInjectionNode){
 
-        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerGeneratorProvider.get(), namerProvider.get(), typedExpressionFactoryProvider.get(), providerInjectionNodeBuilderRepository, codeModelProvider.get());
+        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerGeneratorProvider.get(), namerProvider.get(), typedExpressionFactoryProvider.get());
     }
 }

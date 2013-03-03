@@ -105,10 +105,6 @@ public class UniqueVariableNamer {
         builder.append(nullSaveIterGet(nameRoot));
         String name =  builder.toString();
 
-        if(name.equals("provider_2")){
-            //throw new RuntimeException("Found");
-        }
-
         return name;
     }
 

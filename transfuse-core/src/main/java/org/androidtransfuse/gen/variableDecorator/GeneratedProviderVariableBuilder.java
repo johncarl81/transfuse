@@ -16,11 +16,9 @@
 package org.androidtransfuse.gen.variableDecorator;
 
 import com.google.inject.assistedinject.Assisted;
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -38,22 +36,16 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
     private final ProviderGenerator providerGenerator;
     private final UniqueVariableNamer variableNamer;
     private final InjectionNode providerTypeInjectionNode;
-    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
-    private final JCodeModel codeModel;
 
     @Inject
     public GeneratedProviderVariableBuilder(@Assisted InjectionNode providerTypeInjectionNode,
                                             ProviderGenerator providerGenerator,
                                             UniqueVariableNamer variableNamer,
-                                            TypedExpressionFactory typedExpressionFactory,
-                                            ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository,
-                                            JCodeModel codeModel) {
+                                            TypedExpressionFactory typedExpressionFactory) {
         super(Provider.class, typedExpressionFactory);
         this.providerGenerator = providerGenerator;
         this.variableNamer = variableNamer;
         this.providerTypeInjectionNode = providerTypeInjectionNode;
-        this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
-        this.codeModel = codeModel;
     }
 
     @Override

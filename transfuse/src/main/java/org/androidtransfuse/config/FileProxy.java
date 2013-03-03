@@ -23,6 +23,8 @@ import java.net.URI;
  */
 public class FileProxy extends File {
 
+    private static final long serialVersionUID = -637507751011590863L;
+
     public FileProxy(String pathname) {
         super(pathname);
     }
