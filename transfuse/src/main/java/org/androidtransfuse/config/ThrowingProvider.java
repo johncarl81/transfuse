@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.config;
 
-import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 
 /**

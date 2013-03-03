@@ -17,7 +17,6 @@ package org.androidtransfuse.config;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Key;
-import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 import com.google.inject.util.Providers;
 
