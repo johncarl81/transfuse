@@ -15,14 +15,13 @@
  */
 package org.androidtransfuse.adapter.element;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTUtils;
 
 import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 
 /**
  * Element specific ASTBase implementation
@@ -32,9 +31,9 @@ import java.util.Collection;
 public class ASTElementBase implements ASTBase {
 
     private final Element element;
-    private final ImmutableCollection<ASTAnnotation> annotations;
+    private final ImmutableSet<ASTAnnotation> annotations;
 
-    public ASTElementBase(Element element, ImmutableCollection<ASTAnnotation> annotations) {
+    public ASTElementBase(Element element, ImmutableSet<ASTAnnotation> annotations) {
         this.element = element;
         this.annotations = annotations;
     }
@@ -52,7 +51,7 @@ public class ASTElementBase implements ASTBase {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotations;
     }
 

@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.adapter.element;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
@@ -33,7 +33,7 @@ public class ASTElementParameter extends ASTElementBase implements ASTParameter 
 
     public ASTElementParameter(Element element,
                                ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                               ImmutableCollection<ASTAnnotation> annotations) {
+                               ImmutableSet<ASTAnnotation> annotations) {
         super(element, annotations);
         this.astTypeLoader = new ElementASTTypeLazyLoader(element, astTypeBuilderVisitor);
     }

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTUtils;
@@ -22,7 +23,6 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 
 /**
  * @author John Ericksen
@@ -36,7 +36,7 @@ public abstract class InjectionNodeBuilderSingleAnnotationAdapter implements Inj
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations) {
 
         ASTAnnotation annotation = ASTUtils.getInstance().getAnnotation(annotationClass, annotations);
 

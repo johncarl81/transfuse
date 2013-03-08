@@ -15,16 +15,13 @@
  */
 package org.androidtransfuse.adapter.element;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.lang.model.element.TypeElement;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Element specific AST Type
@@ -35,20 +32,20 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     private final TypeElement typeElement;
     private final PackageClass packageClass;
-    private final ImmutableCollection<ASTMethod> methods;
-    private final ImmutableCollection<ASTConstructor> constructors;
-    private final ImmutableCollection<ASTField> fields;
-    private final ImmutableCollection<ASTType> interfaces;
+    private final ImmutableSet<ASTMethod> methods;
+    private final ImmutableSet<ASTConstructor> constructors;
+    private final ImmutableSet<ASTField> fields;
+    private final ImmutableSet<ASTType> interfaces;
     private final ASTType superClass;
 
     public ASTElementType(PackageClass packageClass,
                           TypeElement typeElement,
-                          ImmutableCollection<ASTConstructor> constructors,
-                          ImmutableCollection<ASTMethod> methods,
-                          ImmutableCollection<ASTField> fields,
+                          ImmutableSet<ASTConstructor> constructors,
+                          ImmutableSet<ASTMethod> methods,
+                          ImmutableSet<ASTField> fields,
                           ASTType superClass,
-                          ImmutableCollection<ASTType> interfaces,
-                          ImmutableCollection<ASTAnnotation> annotations) {
+                          ImmutableSet<ASTType> interfaces,
+                          ImmutableSet<ASTAnnotation> annotations) {
         super(typeElement, annotations);
         this.packageClass = packageClass;
         this.typeElement = typeElement;
@@ -70,17 +67,17 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return methods;
     }
 
     @Override
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return fields;
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return constructors;
     }
 
@@ -95,7 +92,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
+    public ImmutableSet<ASTType> getInterfaces() {
         return interfaces;
     }
 
@@ -124,8 +121,8 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTType> getGenericParameters() {
+        return ImmutableSet.of();
     }
 
     @Override

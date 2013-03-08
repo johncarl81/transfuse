@@ -32,8 +32,6 @@ import org.androidtransfuse.util.matcher.Matchers;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Sets up the @Provides configuration.
@@ -114,8 +112,8 @@ public class ProvidesProcessor implements MethodProcessor {
 
             ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
                 @Override
-                public List<ASTType> buildGenericParameters() {
-                    return Collections.singletonList(astMethod.getReturnType());
+                public ImmutableSet<ASTType> buildGenericParameters() {
+                    return ImmutableSet.of(astMethod.getReturnType());
                 }
             });
 

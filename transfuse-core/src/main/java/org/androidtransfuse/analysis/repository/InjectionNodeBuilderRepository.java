@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.analysis.repository;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
@@ -31,7 +32,10 @@ import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -78,7 +82,7 @@ public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
         this.typeQualifierBindings.put(matcher, variableBuilder);
     }
 
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> qualifiers) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> qualifiers) {
         //check type and qualifiers
         InjectionNodeBuilder typeQualifierBuilder = get(typeQualifierBindings, new InjectionSignature(astType, qualifiers));
 

@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.List;
 
 /**
@@ -43,5 +45,5 @@ public interface ASTConstructor extends ASTBase {
      *
      * @return throw types
      */
-    List<ASTType> getThrowsTypes();
+    ImmutableSet<ASTType> getThrowsTypes();
 }

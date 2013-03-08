@@ -17,8 +17,8 @@ package org.androidtransfuse.adapter.element;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.model.PackageClass;
 
@@ -85,20 +85,20 @@ public class ASTElementFactory {
     private ASTType buildType(TypeElement typeElement) {
         //build placeholder for ASTElementType and contained data structures to allow for children population
         //while avoiding back link loops
-        ImmutableList.Builder<ASTConstructor> constructors = ImmutableList.builder();
-        ImmutableList.Builder<ASTField> fields = ImmutableList.builder();
-        ImmutableList.Builder<ASTMethod> methods = ImmutableList.builder();
+        ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTMethod> methods = ImmutableSet.builder();
 
         ASTType superClass = null;
         if (typeElement.getSuperclass() != null) {
             superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
         }
 
-        ImmutableList<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
+        ImmutableSet<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
                 .transform(astTypeBuilderVisitor)
-                .toImmutableList();
+                .toImmutableSet();
 
-        ImmutableList.Builder<ASTAnnotation> annotations = ImmutableList.builder();
+        ImmutableSet.Builder<ASTAnnotation> annotations = ImmutableSet.builder();
 
         PackageClass packageClass = buildPackageClass(typeElement);
 
@@ -181,15 +181,15 @@ public class ASTElementFactory {
 
         ImmutableList<ASTParameter> parameters = getParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
+        ImmutableSet<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
         return new ASTElementMethod(executableElement, astTypeBuilderVisitor, parameters, modifier, getAnnotations(executableElement), throwsTypes);
     }
 
-    private ImmutableList<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
+    private ImmutableSet<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
         return FluentIterable.from(mirrorTypes)
                 .transform(astTypeBuilderVisitor)
-                .toImmutableList();
+                .toImmutableSet();
     }
 
     /**
@@ -227,13 +227,13 @@ public class ASTElementFactory {
     public ASTConstructor getConstructor(ExecutableElement executableElement) {
         ImmutableList<ASTParameter> parameters = getParameters(executableElement.getParameters());
         ASTAccessModifier modifier = buildAccessModifier(executableElement);
-        ImmutableList<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
+        ImmutableSet<ASTType> throwsTypes = buildASTElementTypes(executableElement.getThrownTypes());
 
         return new ASTElementConstructor(executableElement, parameters, modifier, getAnnotations(executableElement), throwsTypes);
     }
 
-    private ImmutableCollection<ASTAnnotation> getAnnotations(Element element) {
-        ImmutableList.Builder<ASTAnnotation> annotationBuilder = ImmutableList.builder();
+    private ImmutableSet<ASTAnnotation> getAnnotations(Element element) {
+        ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
             ASTType type = getType((TypeElement) annotationMirror.getAnnotationType().asElement());

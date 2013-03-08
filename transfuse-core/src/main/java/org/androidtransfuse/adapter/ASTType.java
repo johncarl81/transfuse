@@ -15,10 +15,8 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.model.PackageClass;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Abstract Syntax Tree Type node
@@ -32,21 +30,21 @@ public interface ASTType extends ASTBase {
      *
      * @return available methods
      */
-    Collection<ASTMethod> getMethods();
+    ImmutableSet<ASTMethod> getMethods();
 
     /**
      * Supplies all available fields
      *
      * @return fields
      */
-    Collection<ASTField> getFields();
+    ImmutableSet<ASTField> getFields();
 
     /**
      * Supplies all available constructors
      *
      * @return constructors
      */
-    Collection<ASTConstructor> getConstructors();
+    ImmutableSet<ASTConstructor> getConstructors();
 
     /**
      * Determines if the given AST type represents a concrete class
@@ -67,7 +65,7 @@ public interface ASTType extends ASTBase {
      *
      * @return interfaces implemented
      */
-    Collection<ASTType> getInterfaces();
+    ImmutableSet<ASTType> getInterfaces();
 
     /**
      * Determines if this type is an array type
@@ -81,7 +79,7 @@ public interface ASTType extends ASTBase {
      *
      * @return generic parameters
      */
-    List<ASTType> getGenericParameters();
+    ImmutableSet<ASTType> getGenericParameters();
 
     /**
      * Determines if the current type inherits (extends or implements) from the given type.

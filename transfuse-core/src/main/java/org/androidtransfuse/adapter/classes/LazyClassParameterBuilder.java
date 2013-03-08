@@ -17,7 +17,7 @@ package org.androidtransfuse.adapter.classes;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
@@ -28,7 +28,6 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -37,7 +36,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
 
     private final ParameterizedType parameterizedType;
     private final ASTClassFactory astClassFactory;
-    private ImmutableList<ASTType> genericParameters = null;
+    private ImmutableSet<ASTType> genericParameters = null;
 
     @Inject
     public LazyClassParameterBuilder(@Assisted ParameterizedType parameterizedType,
@@ -46,17 +45,17 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
         this.astClassFactory = astClassFactory;
     }
 
-    public List<ASTType> buildGenericParameters() {
+    public ImmutableSet<ASTType> buildGenericParameters() {
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
         return genericParameters;
     }
 
-    private ImmutableList<ASTType> innerBuildGenericParameters() {
+    private ImmutableSet<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
                 .transform(this)
-                .toImmutableList();
+                .toImmutableSet();
     }
 
     @Override

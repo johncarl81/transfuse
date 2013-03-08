@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
@@ -257,7 +258,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         }
 
         @Override
-        public Collection<String> getPropertyNames() {
+        public ImmutableSet<String> getPropertyNames() {
             return annotation.getPropertyNames();
         }
     }

@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
-import java.util.Collection;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Utility singleton for AST classes.
@@ -60,7 +60,7 @@ public final class ASTUtils {
         return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
     }
 
-    public ASTAnnotation getAnnotation(Class resourceClass, Collection<ASTAnnotation> annotations) {
+    public ASTAnnotation getAnnotation(Class resourceClass, ImmutableSet<ASTAnnotation> annotations) {
         for (ASTAnnotation astAnnotation : annotations) {
             if (astAnnotation.getASTType().getName().equals(resourceClass.getCanonicalName())) {
                 return astAnnotation;

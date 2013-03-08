@@ -15,14 +15,12 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -46,18 +44,18 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTMethod> getMethods() {
+        return ImmutableSet.of();
     }
 
     @Override
-    public Collection<ASTField> getFields() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTField> getFields() {
+        return ImmutableSet.of();
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTConstructor> getConstructors() {
+        return ImmutableSet.of();
     }
 
     @Override
@@ -71,8 +69,8 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTType> getInterfaces() {
+        return ImmutableSet.of();
     }
 
     @Override
@@ -81,8 +79,8 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTType> getGenericParameters() {
+        return ImmutableSet.of();
     }
 
     @Override
@@ -106,8 +104,8 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
+        return ImmutableSet.of();
     }
 
     @Override

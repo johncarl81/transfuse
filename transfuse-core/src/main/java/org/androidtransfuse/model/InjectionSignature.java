@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.model;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.Collection;
 
@@ -27,11 +30,15 @@ import java.util.Collection;
 public class InjectionSignature {
 
     private final ASTType type;
-    private final Collection<ASTAnnotation> annotations;
+    private final ImmutableSet<ASTAnnotation> annotations;
+    private final int hashCode;
 
-    public InjectionSignature(ASTType type, Collection<ASTAnnotation> annotations) {
+    public InjectionSignature(ASTType type, ImmutableSet<ASTAnnotation> annotations) {
         this.type = type;
         this.annotations = annotations;
+
+        //immutable hash code
+        this.hashCode = new HashCodeBuilder().append(type).append(annotations).hashCode();
     }
 
     public ASTType getType() {
@@ -48,5 +55,20 @@ public class InjectionSignature {
                 "type=" + type +
                 ", annotations=" + StringUtils.join(annotations, ",") +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InjectionSignature)) return false;
+
+        InjectionSignature that = (InjectionSignature) o;
+
+        return new EqualsBuilder().append(type, that.type).append(annotations, that.annotations).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
     }
 }

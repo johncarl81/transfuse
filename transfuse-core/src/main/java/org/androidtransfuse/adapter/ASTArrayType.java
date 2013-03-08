@@ -15,14 +15,12 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Specific AST Array Type.
@@ -50,7 +48,7 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return delegate.getAnnotations();
     }
 
@@ -65,17 +63,17 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return delegate.getMethods();
     }
 
     @Override
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return delegate.getFields();
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return delegate.getConstructors();
     }
 
@@ -90,13 +88,13 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
+    public ImmutableSet<ASTType> getInterfaces() {
         return delegate.getInterfaces();
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTType> getGenericParameters() {
+        return ImmutableSet.of();
     }
 
     @Override

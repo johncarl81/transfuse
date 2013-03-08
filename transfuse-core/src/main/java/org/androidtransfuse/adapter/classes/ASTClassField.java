@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.adapter.classes;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.util.AccessibleElementPrivilegedAction;
@@ -24,7 +24,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
-import java.util.Collection;
 
 /**
  * Class specific AST Field
@@ -36,9 +35,9 @@ public class ASTClassField implements ASTField {
     private final Field field;
     private final ASTType astType;
     private final ASTAccessModifier modifier;
-    private final ImmutableCollection<ASTAnnotation> annotations;
+    private final ImmutableSet<ASTAnnotation> annotations;
 
-    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, ImmutableCollection<ASTAnnotation> annotations) {
+    public ASTClassField(Field field, ASTType astType, ASTAccessModifier modifier, ImmutableSet<ASTAnnotation> annotations) {
         this.field = field;
         this.astType = astType;
         this.modifier = modifier;
@@ -66,7 +65,7 @@ public class ASTClassField implements ASTField {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotations;
     }
 

@@ -16,6 +16,8 @@
 package org.androidtransfuse.adapter.classes;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
@@ -24,9 +26,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
-
-import static com.google.common.collect.Collections2.transform;
 
 
 /**
@@ -46,9 +45,10 @@ public class ASTClassAnnotation implements ASTAnnotation {
         this.type = type;
     }
 
-    public Collection<String> getPropertyNames(){
-        return transform(Arrays.asList(annotation.annotationType().getDeclaredMethods()),
-                new MethodNameExtractor());
+    public ImmutableSet<String> getPropertyNames(){
+        return FluentIterable.from(Arrays.asList(annotation.annotationType().getDeclaredMethods()))
+                .transform(new MethodNameExtractor())
+                .toImmutableSet();
     }
 
     private static final class MethodNameExtractor implements Function<Method, String> {

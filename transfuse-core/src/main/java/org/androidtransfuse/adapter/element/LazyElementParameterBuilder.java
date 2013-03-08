@@ -16,14 +16,13 @@
 package org.androidtransfuse.adapter.element;
 
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
 import javax.lang.model.type.DeclaredType;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -32,7 +31,7 @@ public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
 
     private final DeclaredType declaredType;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private ImmutableList<ASTType> genericParameters = null;
+    private ImmutableSet<ASTType> genericParameters = null;
 
     @Inject
     public LazyElementParameterBuilder(@Assisted DeclaredType declaredType,
@@ -41,16 +40,16 @@ public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
-    public List<ASTType> buildGenericParameters() {
+    public ImmutableSet<ASTType> buildGenericParameters() {
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
         return genericParameters;
     }
 
-    public ImmutableList<ASTType> innerBuildGenericParameters() {
+    public ImmutableSet<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(declaredType.getTypeArguments())
                 .transform(astTypeBuilderVisitor)
-                .toImmutableList();
+                .toImmutableSet();
     }
 }

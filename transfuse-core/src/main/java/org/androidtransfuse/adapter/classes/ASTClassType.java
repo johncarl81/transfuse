@@ -15,16 +15,13 @@
  */
 package org.androidtransfuse.adapter.classes;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Class specific AST Type
@@ -35,21 +32,21 @@ public class ASTClassType implements ASTType {
 
     private final Class<?> clazz;
     private final PackageClass packageClass;
-    private final ImmutableCollection<ASTAnnotation> annotationList;
-    private final ImmutableCollection<ASTMethod> methods;
-    private final ImmutableCollection<ASTConstructor> constructors;
-    private final ImmutableCollection<ASTField> fields;
+    private final ImmutableSet<ASTAnnotation> annotationList;
+    private final ImmutableSet<ASTMethod> methods;
+    private final ImmutableSet<ASTConstructor> constructors;
+    private final ImmutableSet<ASTField> fields;
     private final ASTType superClass;
-    private final ImmutableCollection<ASTType> interfaces;
+    private final ImmutableSet<ASTType> interfaces;
 
     public ASTClassType(Class<?> clazz,
                         PackageClass packageClass,
-                        ImmutableCollection<ASTAnnotation> annotationList,
-                        ImmutableCollection<ASTConstructor> constructors,
-                        ImmutableCollection<ASTMethod> methods,
-                        ImmutableCollection<ASTField> fields,
+                        ImmutableSet<ASTAnnotation> annotationList,
+                        ImmutableSet<ASTConstructor> constructors,
+                        ImmutableSet<ASTMethod> methods,
+                        ImmutableSet<ASTField> fields,
                         ASTType superClass,
-                        ImmutableCollection<ASTType> interfaces) {
+                        ImmutableSet<ASTType> interfaces) {
         this.clazz = clazz;
         this.packageClass = packageClass;
         this.annotationList = annotationList;
@@ -71,17 +68,17 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return methods;
     }
 
     @Override
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return fields;
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return constructors;
     }
 
@@ -96,7 +93,7 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotationList;
     }
 
@@ -106,7 +103,7 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
+    public ImmutableSet<ASTType> getInterfaces() {
         return interfaces;
     }
 
@@ -140,8 +137,8 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
-        return Collections.emptyList();
+    public ImmutableSet<ASTType> getGenericParameters() {
+        return ImmutableSet.of();
     }
 
     @Override

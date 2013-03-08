@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -25,7 +26,6 @@ import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import java.util.Collection;
 
 /**
  * @author John Ericksen
@@ -46,7 +46,7 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, Collection<ASTAnnotation> annotations) {
+    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations) {
 
         ASTType providerGenericType = getProviderTemplateType(astType);
 
@@ -59,6 +59,6 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     }
 
     private ASTType getProviderTemplateType(ASTType astType) {
-        return astType.getGenericParameters().get(0);
+        return astType.getGenericParameters().iterator().next();
     }
 }

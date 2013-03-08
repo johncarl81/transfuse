@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 
 /**
  * Base class defining shared Abstract Syntax Tree elements
@@ -39,7 +40,7 @@ public interface ASTBase {
      *
      * @return ast annotation list
      */
-    Collection<ASTAnnotation> getAnnotations();
+    ImmutableSet<ASTAnnotation> getAnnotations();
 
     /**
      * Supplies the given annotation instance from the given annotation class key

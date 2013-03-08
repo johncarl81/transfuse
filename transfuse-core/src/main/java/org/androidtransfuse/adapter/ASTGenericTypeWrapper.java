@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.collections.ListUtils;
@@ -24,8 +25,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -42,19 +41,19 @@ public class ASTGenericTypeWrapper implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
+    public ImmutableSet<ASTType> getGenericParameters() {
         return lazyTypeParameterBuilder.buildGenericParameters();
     }
 
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return astType.getMethods();
     }
 
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return astType.getFields();
     }
 
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return astType.getConstructors();
     }
 
@@ -66,7 +65,7 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.getSuperClass();
     }
 
-    public Collection<ASTType> getInterfaces() {
+    public ImmutableSet<ASTType> getInterfaces() {
         return astType.getInterfaces();
     }
 
@@ -78,7 +77,7 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.isAnnotated(annotation);
     }
 
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return astType.getAnnotations();
     }
 

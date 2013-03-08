@@ -15,14 +15,13 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
 
 /**
  * Replaces the given AST Type with a proxy type.  This is used during AOP and Virtual proxy of the given
@@ -52,12 +51,12 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return proxyASTType.getMethods();
     }
 
     @Override
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return proxyASTType.getFields();
     }
 
@@ -67,7 +66,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return proxyASTType.getAnnotations();
     }
 
@@ -77,7 +76,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return proxyASTType.getConstructors();
     }
 
@@ -87,8 +86,8 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
-        return Collections.emptySet();
+    public ImmutableSet<ASTType> getInterfaces() {
+        return ImmutableSet.of();
     }
 
     @Override
@@ -117,7 +116,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
+    public ImmutableSet<ASTType> getGenericParameters() {
         return proxyASTType.getGenericParameters();
     }
 

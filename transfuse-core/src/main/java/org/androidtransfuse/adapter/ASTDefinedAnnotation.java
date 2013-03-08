@@ -16,8 +16,7 @@
 package org.androidtransfuse.adapter;
 
 import com.google.common.collect.ImmutableMap;
-
-import java.util.Collection;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * @author John Ericksen
@@ -43,7 +42,7 @@ public class ASTDefinedAnnotation implements ASTAnnotation {
     }
 
     @Override
-    public Collection<String> getPropertyNames() {
+    public ImmutableSet<String> getPropertyNames() {
         return properties.keySet();
     }
 }

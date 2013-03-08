@@ -15,15 +15,14 @@
  */
 package org.androidtransfuse.adapter.classes;
 
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTUtils;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 
 /**
  * Class specific AST Parameter
@@ -34,9 +33,9 @@ public class ASTClassParameter implements ASTParameter {
 
     private final ASTType astType;
     private final ImmutableMap<Class<?>, Annotation> annotationMap;
-    private final ImmutableCollection<ASTAnnotation> annotations;
+    private final ImmutableSet<ASTAnnotation> annotations;
 
-    public ASTClassParameter(Annotation[] annotations, ASTType astType, ImmutableCollection<ASTAnnotation> astAnnotations) {
+    public ASTClassParameter(Annotation[] annotations, ASTType astType, ImmutableSet<ASTAnnotation> astAnnotations) {
         this.annotations = astAnnotations;
         this.astType = astType;
 
@@ -67,7 +66,7 @@ public class ASTClassParameter implements ASTParameter {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotations;
     }
 

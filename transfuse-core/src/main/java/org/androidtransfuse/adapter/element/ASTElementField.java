@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.adapter.element;
 
-import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTField;
@@ -38,7 +38,7 @@ public class ASTElementField extends ASTElementBase implements ASTField {
     public ASTElementField(VariableElement variableElement,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            ASTAccessModifier modifier,
-                           ImmutableCollection<ASTAnnotation> annotations) {
+                           ImmutableSet<ASTAnnotation> annotations) {
         super(variableElement, annotations);
         this.variableElement = variableElement;
         this.modifier = modifier;

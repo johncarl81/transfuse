@@ -15,13 +15,12 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author John Ericksen
@@ -47,17 +46,17 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public Collection<ASTMethod> getMethods() {
+    public ImmutableSet<ASTMethod> getMethods() {
         return getProxy().getMethods();
     }
 
     @Override
-    public Collection<ASTField> getFields() {
+    public ImmutableSet<ASTField> getFields() {
         return getProxy().getFields();
     }
 
     @Override
-    public Collection<ASTConstructor> getConstructors() {
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return getProxy().getConstructors();
     }
 
@@ -72,7 +71,7 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public Collection<ASTType> getInterfaces() {
+    public ImmutableSet<ASTType> getInterfaces() {
         return getProxy().getInterfaces();
     }
 
@@ -82,7 +81,7 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public List<ASTType> getGenericParameters() {
+    public ImmutableSet<ASTType> getGenericParameters() {
         return getProxy().getGenericParameters();
     }
 
@@ -107,7 +106,7 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return getProxy().getAnnotations();
     }
 

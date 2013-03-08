@@ -16,11 +16,11 @@
 package org.androidtransfuse.adapter.classes;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,10 +33,10 @@ public class ASTClassConstructor implements ASTConstructor {
     private final Constructor constructor;
     private final ImmutableList<ASTParameter> parameters;
     private final ASTAccessModifier modifier;
-    private final ImmutableList<ASTAnnotation> annotations;
-    private final ImmutableList<ASTType> throwsTypes;
+    private final ImmutableSet<ASTAnnotation> annotations;
+    private final ImmutableSet<ASTType> throwsTypes;
 
-    public ASTClassConstructor(ImmutableList<ASTAnnotation> annotations, Constructor<?> constructor, ImmutableList<ASTParameter> parameters, ASTAccessModifier modifier, ImmutableList<ASTType> throwsTypes) {
+    public ASTClassConstructor(ImmutableSet<ASTAnnotation> annotations, Constructor<?> constructor, ImmutableList<ASTParameter> parameters, ASTAccessModifier modifier, ImmutableSet<ASTType> throwsTypes) {
         this.annotations = annotations;
         this.constructor = constructor;
         this.parameters = parameters;
@@ -65,7 +65,7 @@ public class ASTClassConstructor implements ASTConstructor {
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotations;
     }
 
@@ -75,7 +75,7 @@ public class ASTClassConstructor implements ASTConstructor {
     }
 
     @Override
-    public List<ASTType> getThrowsTypes() {
+    public ImmutableSet<ASTType> getThrowsTypes() {
         return throwsTypes;
     }
 

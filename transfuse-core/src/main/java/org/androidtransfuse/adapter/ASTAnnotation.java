@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
-import java.util.Collection;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Abstract Syntax Tree Annotation
@@ -46,5 +46,5 @@ public interface ASTAnnotation {
      *
      * @return property names
      */
-    Collection<String> getPropertyNames();
+    ImmutableSet<String> getPropertyNames();
 }

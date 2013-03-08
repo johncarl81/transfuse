@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,7 +51,7 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
-    public List<ASTType> getThrowsTypes() {
+    public ImmutableSet<ASTType> getThrowsTypes() {
         return method.getThrowsTypes();
     }
 
@@ -61,7 +61,7 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return method.getAnnotations();
     }
 

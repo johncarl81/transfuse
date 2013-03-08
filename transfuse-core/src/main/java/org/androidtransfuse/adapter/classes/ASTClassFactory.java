@@ -74,9 +74,9 @@ public class ASTClassFactory {
     }
 
     private ASTType buildType(Class<?> clazz) {
-        ImmutableList.Builder<ASTConstructor> constructorBuilder = ImmutableList.builder();
-        ImmutableList.Builder<ASTMethod> methodBuilder = ImmutableList.builder();
-        ImmutableList.Builder<ASTField> fieldBuilder = ImmutableList.builder();
+        ImmutableSet.Builder<ASTConstructor> constructorBuilder = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTMethod> methodBuilder = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTField> fieldBuilder = ImmutableSet.builder();
 
         ASTType superClass = null;
         if (clazz.getSuperclass() != null) {
@@ -179,13 +179,13 @@ public class ASTClassFactory {
 
         ImmutableList<ASTParameter> astParameters = getParameters(method);
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(method.getModifiers());
-        ImmutableList<ASTType> throwsTypes = getTypes(method.getExceptionTypes());
+        ImmutableSet<ASTType> throwsTypes = getTypes(method.getExceptionTypes());
 
         return new ASTClassMethod(method, getType(method.getReturnType(), method.getGenericReturnType()), astParameters, modifier, getAnnotations(method), throwsTypes);
     }
 
-    private ImmutableList<ASTType> getTypes(Class<?>[] inputClasses) {
-        ImmutableList.Builder<ASTType> typesBuilder = ImmutableList.builder();
+    private ImmutableSet<ASTType> getTypes(Class<?>[] inputClasses) {
+        ImmutableSet.Builder<ASTType> typesBuilder = ImmutableSet.builder();
 
         for (Class<?> inputClass : inputClasses) {
             typesBuilder.add(getType(inputClass));
@@ -216,12 +216,12 @@ public class ASTClassFactory {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
         ImmutableList<ASTParameter> constructorParameters = getParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
-        ImmutableList<ASTType> throwsTypes = getTypes(constructor.getExceptionTypes());
+        ImmutableSet<ASTType> throwsTypes = getTypes(constructor.getExceptionTypes());
 
         return new ASTClassConstructor(getAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);
     }
 
-    private ImmutableList<ASTAnnotation> getAnnotations(AnnotatedElement element) {
+    private ImmutableSet<ASTAnnotation> getAnnotations(AnnotatedElement element) {
         return getAnnotations(element.getAnnotations());
     }
 
@@ -231,9 +231,9 @@ public class ASTClassFactory {
      * @param annotations
      * @return List of AST Annotations
      */
-    private ImmutableList<ASTAnnotation> getAnnotations(Annotation[] annotations) {
+    private ImmutableSet<ASTAnnotation> getAnnotations(Annotation[] annotations) {
 
-        ImmutableList.Builder<ASTAnnotation> astAnnotationBuilder = ImmutableList.builder();
+        ImmutableSet.Builder<ASTAnnotation> astAnnotationBuilder = ImmutableSet.builder();
 
         for (Annotation annotation : annotations) {
             astAnnotationBuilder.add(getAnnotation(annotation));
