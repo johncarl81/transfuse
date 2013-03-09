@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JExpr;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
@@ -77,7 +78,7 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     public static final java.lang.String USB_SERVICE = "usb";
     public static final java.lang.String INPUT_SERVICE = "input";
 
-    private final Map<Matcher<ASTType>, InjectionNodeBuilder> moduleConfiguration = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
+    private final Map<InjectionSignature, InjectionNodeBuilder> moduleConfiguration = new HashMap<InjectionSignature, InjectionNodeBuilder>();
     private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> injectionSignatureConfig = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
     private final ImmutableMap<String, ASTType> systemServices;
     private final InjectionBindingBuilder injectionBindingBuilder;
@@ -149,7 +150,7 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     }
 
     public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
-        for (Map.Entry<Matcher<ASTType>, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
+        for (Map.Entry<InjectionSignature, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
             repository.putTypeMatcher(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
         }
 
@@ -158,11 +159,12 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         }
     }
 
-    public void putModuleConfig(Matcher<ASTType> type, InjectionNodeBuilder injectionNodeBuilder) {
-        if(moduleConfiguration.containsKey(type)){
+    public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
+        InjectionSignature injectionSignature = new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of());
+        if(moduleConfiguration.containsKey(injectionSignature)){
             throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
         }
-        moduleConfiguration.put(type, injectionNodeBuilder);
+        moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
     }
 
     public void putInjectionSignatureConfig(Matcher<InjectionSignature> type, InjectionNodeBuilder injectionNodeBuilder) {
@@ -170,6 +172,14 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
             throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
         }
         injectionSignatureConfig.put(type, injectionNodeBuilder);
+    }
+
+    @Override
+    public void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder) {
+        if(moduleConfiguration.containsKey(injectionSignature)){
+            throw new TransfuseAnalysisException("Binding for type already exists: " + injectionSignature.toString());
+        }
+        moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
     }
 
     @Override

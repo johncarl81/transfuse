@@ -20,7 +20,6 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -51,8 +50,7 @@ public class FactoriesTransactionWorker extends AbstractCompletionTransactionWor
         for (Provider<ASTType> typeProvider : aggregate.keySet()) {
             ASTType type = typeProvider.get();
 
-            injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
-                    variableInjectionBuilderFactory.buildFactoryNodeBuilder(type));
+            injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.buildFactoryNodeBuilder(type));
         }
 
 

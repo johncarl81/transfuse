@@ -23,10 +23,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Arrays;
 
 /**
@@ -82,6 +79,8 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
             } else {
                 return null;
             }
+        } else if(type instanceof TypeVariable){
+            return getClass(((TypeVariable) type).getBounds()[0]);
         } else {
             return null;
         }

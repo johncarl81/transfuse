@@ -27,6 +27,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableFactoryBuilderFactory2;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.QualifierPredicate;
@@ -80,7 +81,7 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
             ImmutableSet<ASTAnnotation> qualifiers = FluentIterable.from(parameter.getAnnotations()).filter(qualifierPredicate).toImmutableSet();
 
             if(qualifiers.isEmpty()){
-                injectionNodeBuilders.putTypeMatcher(Matchers.type(parameterType).build(), buildExpression(expression));
+                injectionNodeBuilders.putTypeMatcher(new InjectionSignature(parameterType, ImmutableSet.<ASTAnnotation>of()), buildExpression(expression));
             }
             else{
                 injectionNodeBuilders.putSignatureMatcher(Matchers.type(parameterType).annotated().byAnnotation(qualifiers).build(),

@@ -18,7 +18,6 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.VariableASTImplementationFactory;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 
@@ -59,8 +58,7 @@ public class BindProcessor implements TypeProcessor {
         @Override
         public void setConfiguration() {
 
-            injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
-                    variableInjectionBuilderFactory.buildVariableASTBuilder(to));
+            injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.buildVariableASTBuilder(to));
         }
     }
 }

@@ -50,7 +50,6 @@ import org.androidtransfuse.util.MessagerLogger;
 import org.androidtransfuse.util.Providers;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.matcher.Matcher;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -297,7 +296,7 @@ public class CoreFactory {
         //register factory configuration
         for (ASTType factoryType : factories) {
 
-            moduleRepository.putModuleConfig(Matchers.type(factoryType).build(),
+            moduleRepository.putModuleConfig(factoryType,
                     new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), buildAnalyser()));
         }
     }
@@ -405,14 +404,14 @@ public class CoreFactory {
 
     private final class ModuleRepositoryImpl implements  ModuleRepository{
 
-        private final Map<Matcher<ASTType>, InjectionNodeBuilder> moduleConfiguration = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
+        private final Map<InjectionSignature, InjectionNodeBuilder> moduleConfiguration = new HashMap<InjectionSignature, InjectionNodeBuilder>();
         private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> injectionSignatureConfig = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
         private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
         private final Set<ASTType> installedComponents = new HashSet<ASTType>();
         private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
 
         public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
-            for (Map.Entry<Matcher<ASTType>, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
+            for (Map.Entry<InjectionSignature, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
                 repository.putTypeMatcher(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
             }
 
@@ -421,11 +420,12 @@ public class CoreFactory {
             }
         }
 
-        public void putModuleConfig(Matcher<ASTType> type, InjectionNodeBuilder injectionNodeBuilder) {
-            if(moduleConfiguration.containsKey(type)){
+        public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
+            InjectionSignature injectionSignature = new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of());
+            if(moduleConfiguration.containsKey(injectionSignature)){
                 throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
             }
-            moduleConfiguration.put(type, injectionNodeBuilder);
+            moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
         }
 
         public void putInjectionSignatureConfig(Matcher<InjectionSignature> type, InjectionNodeBuilder injectionNodeBuilder) {
@@ -433,6 +433,14 @@ public class CoreFactory {
                 throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
             }
             injectionSignatureConfig.put(type, injectionNodeBuilder);
+        }
+
+        @Override
+        public void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder) {
+            if(moduleConfiguration.containsKey(injectionSignature)){
+                throw new TransfuseAnalysisException("Binding for type already exists: " + injectionSignature.toString());
+            }
+            moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
         }
 
         @Override

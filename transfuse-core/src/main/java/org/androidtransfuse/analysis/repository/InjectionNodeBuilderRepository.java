@@ -44,7 +44,7 @@ public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
 
 
     private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> typeQualifierBindings = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
-    private final Map<Matcher<ASTType>, InjectionNodeBuilder> typeBindings = new HashMap<Matcher<ASTType>, InjectionNodeBuilder>();
+    private final Map<InjectionSignature, InjectionNodeBuilder> typeBindings = new HashMap<InjectionSignature, InjectionNodeBuilder>();
     private final VariableInjectionNodeBuilder defaultBinding;
     private final ASTClassFactory astClassFactory;
     private final Matcher<ASTType> providerMatcher;
@@ -67,15 +67,15 @@ public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        putTypeMatcher(Matchers.type(type).build(), variableBuilder);
+        putTypeMatcher(new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of()), variableBuilder);
     }
 
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
-        putTypeMatcher(Matchers.type(astClassFactory.getType(clazz)).build(), variableBuilder);
+        putType(astClassFactory.getType(clazz), variableBuilder);
     }
 
-    public void putTypeMatcher(Matcher<ASTType> matcher, InjectionNodeBuilder variableBuilder) {
-        this.typeBindings.put(matcher, variableBuilder);
+    public void putTypeMatcher(InjectionSignature injectionSignature, InjectionNodeBuilder variableBuilder) {
+        this.typeBindings.put(injectionSignature, variableBuilder);
     }
 
     public void putSignatureMatcher(Matcher<InjectionSignature> matcher, InjectionNodeBuilder variableBuilder) {
@@ -84,22 +84,23 @@ public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
 
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> qualifiers) {
         //check type and qualifiers
-        InjectionNodeBuilder typeQualifierBuilder = get(typeQualifierBindings, new InjectionSignature(astType, qualifiers));
+        InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
+        InjectionNodeBuilder typeQualifierBuilder = get(typeQualifierBindings, injectionSignature);
 
         if(typeQualifierBuilder != null){
             return typeQualifierBuilder.buildInjectionNode(astType, context, qualifiers);
         }
 
-        if(qualifiers.size() > 0){
-            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + astType + " " +
-                    StringUtils.join(qualifiers, ", "));
-        }
-
         //check type
-        InjectionNodeBuilder typeBindingBuilder = get(typeBindings, astType);
+        InjectionNodeBuilder typeBindingBuilder = typeBindings.get(injectionSignature);
 
         if (typeBindingBuilder != null) {
             return typeBindingBuilder.buildInjectionNode(astType, context, qualifiers);
+        }
+
+        if(qualifiers.size() > 0){
+            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + astType + " " +
+                    StringUtils.join(qualifiers, ", "));
         }
 
         //generated provider

@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.analysis.module;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
-import org.androidtransfuse.util.matcher.Matchers;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -70,8 +71,7 @@ public class BindProviderProcessor implements TypeProcessor {
         @Override
         public void setConfiguration() {
             if(named == null){
-                injectionNodeBuilders.putModuleConfig(Matchers.type(type).build(),
-                        variableInjectionBuilderFactory.builderProviderBuilder(provider));
+                injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
 
                 /*ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
                     @Override
@@ -84,7 +84,7 @@ public class BindProviderProcessor implements TypeProcessor {
                         variableASTImplementationFactory.buildVariableASTBuilder(provider));*/
             }
             else{
-                injectionNodeBuilders.putInjectionSignatureConfig(Matchers.type(type).annotated().byAnnotation(named).build(),
+                injectionNodeBuilders.putInjectionSignatureConfig(new InjectionSignature(type, ImmutableSet.of(named)),
                         variableInjectionBuilderFactory.builderProviderBuilder(provider));
 
                 /*ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {

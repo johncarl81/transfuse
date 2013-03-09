@@ -32,9 +32,11 @@ public interface ModuleRepository {
 
     void addModuleConfiguration(InjectionNodeBuilderRepository repository);
 
-    void putModuleConfig(Matcher<ASTType> build, InjectionNodeBuilder injectionNodeBuilder);
+    void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder);
 
     void putInjectionSignatureConfig(Matcher<InjectionSignature> matcher, InjectionNodeBuilder injectionNodeBuilder);
+
+    void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder);
 
     void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository);
 

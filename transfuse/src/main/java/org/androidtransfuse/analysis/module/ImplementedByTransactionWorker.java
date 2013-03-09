@@ -23,7 +23,6 @@ import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -65,8 +64,7 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
                 throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
 
-            injectionNodeBuilders.putModuleConfig(Matchers.type(astType).build(),
-                    variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
+            injectionNodeBuilders.putModuleConfig(astType, variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
         }
         return null;
     }

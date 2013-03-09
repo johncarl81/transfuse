@@ -18,7 +18,6 @@ package org.androidtransfuse.adapter;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.model.PackageClass;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -125,8 +124,10 @@ public class ASTGenericTypeWrapper implements ASTType {
 
         ASTType that = (ASTType) o;
 
-        return new EqualsBuilder().append(getName(), that.getName()).isEquals() &&
-                ListUtils.isEqualList(this.getGenericParameters(), that.getGenericParameters());
+        return new EqualsBuilder()
+                .append(getName(), that.getName())
+                .append(getGenericParameters(), that.getGenericParameters())
+                .isEquals();
     }
 
     @Override
