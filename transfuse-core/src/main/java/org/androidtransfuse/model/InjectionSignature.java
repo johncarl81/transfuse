@@ -18,6 +18,7 @@ package org.androidtransfuse.model;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.util.Contract;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -34,6 +35,8 @@ public class InjectionSignature {
     private final int hashCode;
 
     public InjectionSignature(ASTType type, ImmutableSet<ASTAnnotation> annotations) {
+        Contract.notNull(type, "type");
+        Contract.notNull(annotations, "annotations");
         this.type = type;
         this.annotations = annotations;
 
