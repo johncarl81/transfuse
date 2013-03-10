@@ -67,14 +67,14 @@ public class InjectionNodeBuilderRepository implements InjectionNodeBuilder{
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        putTypeMatcher(new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of()), variableBuilder);
+        putType(new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of()), variableBuilder);
     }
 
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
         putType(astClassFactory.getType(clazz), variableBuilder);
     }
 
-    public void putTypeMatcher(InjectionSignature injectionSignature, InjectionNodeBuilder variableBuilder) {
+    public void putType(InjectionSignature injectionSignature, InjectionNodeBuilder variableBuilder) {
         this.typeBindings.put(injectionSignature, variableBuilder);
     }
 

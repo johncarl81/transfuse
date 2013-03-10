@@ -151,7 +151,7 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
 
     public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
         for (Map.Entry<InjectionSignature, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
-            repository.putTypeMatcher(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
+            repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
         }
 
         for (Map.Entry<Matcher<InjectionSignature>, InjectionNodeBuilder> matcherInjectionNodeBuilderEntry : injectionSignatureConfig.entrySet()) {

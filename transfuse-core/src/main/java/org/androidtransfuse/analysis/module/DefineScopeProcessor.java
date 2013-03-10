@@ -54,24 +54,26 @@ public class DefineScopeProcessor implements TypeProcessor {
 
     private final class ScopeModuleConfiguration implements ModuleConfiguration {
 
-        private final ASTType annotation;
+        private final ASTType annotationType;
         private final ASTType scope;
 
-        private ScopeModuleConfiguration(ASTType annotation, ASTType scope) {
-            this.annotation = annotation;
+        private ScopeModuleConfiguration(ASTType annotationType, ASTType scope) {
+            this.annotationType = annotationType;
             this.scope = scope;
         }
 
         @Override
         public void setConfiguration() {
 
-            moduleRepository.addScopeConfig(annotation, scope);
+            moduleRepository.addScopeConfig(annotationType, scope);
 
             ASTType scopeReference = astClassFactory.getType(ScopeReference.class);
 
-            moduleRepository.putInjectionSignatureConfig(Matchers.type(scope).inherits().annotated().byAnnotation(
-                    new ASTDefinedAnnotation(scopeReference, ImmutableMap.<String, Object>of("value", annotation))).build(),
-                    scopeReferenceInjectionFactory.buildInjectionNodeBuilder(annotation));
+            ASTAnnotation annotation = new ASTDefinedAnnotation(scopeReference, ImmutableMap.<String, Object>of("value", annotationType));
+
+            //todo: validate proper type.
+            moduleRepository.putInjectionSignatureConfig(Matchers.annotated().byAnnotation(annotation).build(),
+                    scopeReferenceInjectionFactory.buildInjectionNodeBuilder(annotationType));
         }
     }
 }
