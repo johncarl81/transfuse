@@ -24,12 +24,11 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory;
-import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.componentBuilder.*;
-import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
@@ -65,11 +64,15 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final IntentFilterFactory intentFilterBuilder;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final MetaDataBuilder metadataBuilder;
-    private final BindingRepositoryFactory bindingRepositoryFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final ViewInjectionNodeBuilder viewVariableBuilder;
+    private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
+    private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
+    private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
+    private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
 
     @Inject
     public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
@@ -84,10 +87,15 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             IntentFilterFactory intentFilterBuilder,
                             ComponentBuilderFactory componentBuilderFactory,
                             MetaDataBuilder metadataBuilder,
-                            BindingRepositoryFactory bindingRepositoryFactory,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
-                            ContextScopeComponentBuilder contextScopeComponentBuilder, ObservesRegistrationGenerator observesExpressionDecorator) {
+                            ContextScopeComponentBuilder contextScopeComponentBuilder,
+                            ObservesRegistrationGenerator observesExpressionDecorator,
+                            ViewInjectionNodeBuilder viewVariableBuilder,
+                            ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
+                            SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
+                            ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
+                            PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder) {
         this.injectionPointFactory = injectionPointFactory;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -100,11 +108,15 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.intentFilterBuilder = intentFilterBuilder;
         this.componentBuilderFactory = componentBuilderFactory;
         this.metadataBuilder = metadataBuilder;
-        this.bindingRepositoryFactory = bindingRepositoryFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.observesExpressionDecorator = observesExpressionDecorator;
+        this.viewVariableBuilder = viewVariableBuilder;
+        this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
+        this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
+        this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
+        this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -261,8 +273,11 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
         }
 
-        bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);
-        bindingRepositoryFactory.addViewBindingAnnotation(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Resource.class, resourceInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(View.class, viewVariableBuilder);
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 

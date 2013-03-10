@@ -135,7 +135,7 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         //resources
         repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
 
-        //menu inflator
+        //menu inflater
         repository.putType(MenuInflater.class, injectionBindingBuilder.dependency(android.app.Activity.class).invoke(MenuInflater.class, "getMenuInflater").build());
 
         //system services

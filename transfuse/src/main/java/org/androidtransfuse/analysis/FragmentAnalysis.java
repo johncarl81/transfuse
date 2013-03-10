@@ -32,7 +32,6 @@ import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
-import org.androidtransfuse.analysis.repository.BindingRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
@@ -40,7 +39,7 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
-import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.scope.ContextScopeHolder;
@@ -66,9 +65,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
-    private final BindingRepositoryFactory bindingRepositoryFactory;
     private final ListenerRegistrationGenerator listenerRegistrationGenerator;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
+    private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
+    private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
+    private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
+    private final FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -78,9 +81,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             ComponentBuilderFactory componentBuilderFactory,
-                            BindingRepositoryFactory bindingRepositoryFactory,
                             ListenerRegistrationGenerator listenerRegistrationGenerator,
-                            ObservesRegistrationGenerator observesExpressionDecorator) {
+                            ObservesRegistrationGenerator observesExpressionDecorator,
+                            ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
+                            SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
+                            ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
+                            PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
+                            FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder) {
         this.astClassFactory = astClassFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -88,7 +95,11 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.bindingRepositoryFactory = bindingRepositoryFactory;
+        this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
+        this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
+        this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
+        this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
+        this.fragmentViewInjectionNodeBuilder = fragmentViewInjectionNodeBuilder;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
         this.observesExpressionDecorator = observesExpressionDecorator;
     }
@@ -205,9 +216,11 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
         }
 
-        bindingRepositoryFactory.addBindingAnnotations(injectionNodeBuilderRepository);
-        //bind views
-        bindingRepositoryFactory.addFragmentViewBindingAnnotation(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Resource.class, resourceInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(org.androidtransfuse.annotations.View.class, fragmentViewInjectionNodeBuilder);
 
         injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
 
