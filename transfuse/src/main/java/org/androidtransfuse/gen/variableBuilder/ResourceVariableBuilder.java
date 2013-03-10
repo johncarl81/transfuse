@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -34,8 +33,8 @@ public class ResourceVariableBuilder implements VariableBuilder {
     private final RResource rResource;
 
     @Inject
-    public ResourceVariableBuilder(@Assisted int resourceId,
-                                   @Assisted ResourceExpressionBuilder resourceExpressionBuilder,
+    public ResourceVariableBuilder(/*@Assisted*/ int resourceId,
+                                   /*@Assisted*/ ResourceExpressionBuilder resourceExpressionBuilder,
                                    RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {
         this.resourceId = resourceId;
         this.resourceExpressionBuilder = resourceExpressionBuilder;

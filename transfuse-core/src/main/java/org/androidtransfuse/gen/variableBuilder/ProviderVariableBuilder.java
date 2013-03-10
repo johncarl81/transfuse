@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
@@ -37,7 +36,7 @@ public class ProviderVariableBuilder implements VariableBuilder {
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
-    public ProviderVariableBuilder(@Assisted InjectionNode providerInjectionNode,
+    public ProviderVariableBuilder(/*@Assisted*/ InjectionNode providerInjectionNode,
                                    InjectionExpressionBuilder injectionExpressionBuilder, TypedExpressionFactory typedExpressionFactory) {
         this.providerInjectionNode = providerInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;

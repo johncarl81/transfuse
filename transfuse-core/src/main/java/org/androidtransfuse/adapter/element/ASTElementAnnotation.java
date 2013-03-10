@@ -18,7 +18,6 @@ package org.androidtransfuse.adapter.element;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 
@@ -40,8 +39,8 @@ public class ASTElementAnnotation implements ASTAnnotation {
     private final ElementConverterFactory elementConverterFactory;
 
     @Inject
-    public ASTElementAnnotation(@Assisted AnnotationMirror annotationMirror,
-                                @Assisted ASTType type,
+    public ASTElementAnnotation(/*@Assisted*/ AnnotationMirror annotationMirror,
+                                /*@Assisted*/ ASTType type,
                                 ElementConverterFactory elementConverterFactory) {
         this.annotationMirror = annotationMirror;
         this.elementConverterFactory = elementConverterFactory;

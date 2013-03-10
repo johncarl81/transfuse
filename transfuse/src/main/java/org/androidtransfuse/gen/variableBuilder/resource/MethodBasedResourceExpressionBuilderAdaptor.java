@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder.resource;
 
 import android.content.res.Resources;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
@@ -34,8 +33,8 @@ public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpr
     private final InjectionPointFactory injectionPointFactory;
 
     @Inject
-    public MethodBasedResourceExpressionBuilderAdaptor(@Assisted Class returnType,
-                                                       @Assisted String accessMethod,
+    public MethodBasedResourceExpressionBuilderAdaptor(/*@Assisted*/ Class returnType,
+                                                       /*@Assisted*/ String accessMethod,
                                                        MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory,
                                                        InjectionPointFactory injectionPointFactory) {
         this.accessMethod = accessMethod;

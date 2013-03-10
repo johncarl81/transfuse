@@ -18,7 +18,6 @@ package org.androidtransfuse.adapter.classes;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
@@ -36,7 +35,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
     private ImmutableSet<ASTType> genericParameters = null;
 
     @Inject
-    public LazyClassParameterBuilder(@Assisted ParameterizedType parameterizedType,
+    public LazyClassParameterBuilder(/*@Assisted*/ ParameterizedType parameterizedType,
                                      ASTClassFactory astClassFactory) {
         this.parameterizedType = parameterizedType;
         this.astClassFactory = astClassFactory;

@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import android.view.View;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
@@ -52,10 +51,10 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final GeneratorFactory2 generatorFactory;
 
     @Inject
-    public ViewVariableBuilder(@Assisted @Nullable Integer viewId,
-                               @Assisted @Nullable String viewTag,
-                               @Assisted InjectionNode activityInjectionNode,
-                               @Assisted JType viewType,
+    public ViewVariableBuilder(/*@Assisted*/ @Nullable Integer viewId,
+                               /*@Assisted*/ @Nullable String viewTag,
+                               /*@Assisted*/ InjectionNode activityInjectionNode,
+                               /*@Assisted*/ JType viewType,
                                InjectionExpressionBuilder injectionExpressionBuilder,
                                RResourceReferenceBuilder rResourceReferenceBuilder,
                                JCodeModel codeModel,

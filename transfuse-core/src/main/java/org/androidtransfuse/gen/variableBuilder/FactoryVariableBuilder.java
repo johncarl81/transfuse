@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
@@ -35,7 +34,7 @@ public class FactoryVariableBuilder extends ConsistentTypeVariableBuilder {
     private final JCodeModel codeModel;
 
     @Inject
-    public FactoryVariableBuilder(@Assisted ASTType factoryType, TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel) {
+    public FactoryVariableBuilder(/*@Assisted*/ ASTType factoryType, TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel) {
         super(factoryType, typedExpressionFactory);
         this.factoryType = factoryType;
         this.codeModel = codeModel;

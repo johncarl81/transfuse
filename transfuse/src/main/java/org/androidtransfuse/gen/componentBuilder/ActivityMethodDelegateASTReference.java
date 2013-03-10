@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -33,7 +32,7 @@ public class ActivityMethodDelegateASTReference implements ActivityDelegateASTRe
     private final InvocationBuilder invocationBuilder;
 
     @Inject
-    public ActivityMethodDelegateASTReference(@Assisted ASTMethod method, InvocationBuilder invocationBuilder) {
+    public ActivityMethodDelegateASTReference(/*@Assisted*/ ASTMethod method, InvocationBuilder invocationBuilder) {
         this.method = method;
         this.invocationBuilder = invocationBuilder;
     }

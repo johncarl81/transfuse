@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
@@ -48,8 +47,8 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     private final QualifierPredicate qualifierPredicate;
 
     @Inject
-    public InjectionNodeFactoryImpl(@Assisted ASTType astType,
-                                    @Assisted AnalysisContext context,
+    public InjectionNodeFactoryImpl(/*@Assisted*/ ASTType astType,
+                                    /*@Assisted*/ AnalysisContext context,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableFactoryBuilderFactory2 injectionBindingBuilder,
                                     QualifierPredicate qualifierPredicate) {

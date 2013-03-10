@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTType;
@@ -44,7 +43,7 @@ public interface VariableInjectionBuilderFactory {
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
-    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, @Assisted("nullable") @Named("nullable") boolean nullable, @Assisted("wrapped") @Named("wrapped") boolean wrapped);
+    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, /*@Assisted("nullable")*/ @Named("nullable") boolean nullable, /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped);
 
     ViewVariableBuilder buildViewVariableBuilder(Integer viewId, String viewTag, InjectionNode activityInjectionNode, JType jType);
 
@@ -54,7 +53,7 @@ public interface VariableInjectionBuilderFactory {
 
     MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<JExpression> arguments);
 
-    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(@Assisted("dependency") @Named("dependency") Class dependency, @Assisted("returnType") @Named("returnType") Class returnType, DependentVariableBuilder variableBuilder);
+    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") Class dependency, /*@Assisted("returnType")*/ @Named("returnType") Class returnType, DependentVariableBuilder variableBuilder);
 
     DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, Class type);
 

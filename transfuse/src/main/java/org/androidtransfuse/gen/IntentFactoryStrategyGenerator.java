@@ -18,7 +18,6 @@ package org.androidtransfuse.gen;
 import android.os.Bundle;
 import android.os.Parcelable;
 import com.google.common.collect.ImmutableMap;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
@@ -53,7 +52,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
 
     @Inject
-    public IntentFactoryStrategyGenerator(@Assisted Class factoryStrategyClass,
+    public IntentFactoryStrategyGenerator(/*@Assisted*/ Class factoryStrategyClass,
                                           JCodeModel codeModel,
                                           ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.factoryStrategyClass = factoryStrategyClass;

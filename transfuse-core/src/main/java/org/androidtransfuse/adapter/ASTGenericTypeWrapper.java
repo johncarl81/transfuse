@@ -16,7 +16,6 @@
 package org.androidtransfuse.adapter;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.model.PackageClass;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -34,7 +33,7 @@ public class ASTGenericTypeWrapper implements ASTType {
     private final LazyTypeParameterBuilder lazyTypeParameterBuilder;
 
     @Inject
-    public ASTGenericTypeWrapper(@Assisted ASTType astType, @Assisted LazyTypeParameterBuilder lazyTypeParameterBuilder) {
+    public ASTGenericTypeWrapper(/*@Assisted*/ ASTType astType, /*@Assisted*/ LazyTypeParameterBuilder lazyTypeParameterBuilder) {
         this.astType = astType;
         this.lazyTypeParameterBuilder = lazyTypeParameterBuilder;
     }

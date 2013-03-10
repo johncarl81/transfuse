@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTAnnotation;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class BindConfigurationComposite implements TypeProcessor {
     private final TypeProcessor processor;
 
     @Inject
-    public BindConfigurationComposite(@Assisted TypeProcessor processor) {
+    public BindConfigurationComposite(/*@Assisted*/ TypeProcessor processor) {
         this.processor = processor;
     }
 

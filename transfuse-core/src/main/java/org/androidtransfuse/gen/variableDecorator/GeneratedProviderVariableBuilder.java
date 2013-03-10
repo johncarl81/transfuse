@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
@@ -38,7 +37,7 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
     private final InjectionNode providerTypeInjectionNode;
 
     @Inject
-    public GeneratedProviderVariableBuilder(@Assisted InjectionNode providerTypeInjectionNode,
+    public GeneratedProviderVariableBuilder(/*@Assisted*/ InjectionNode providerTypeInjectionNode,
                                             ProviderGenerator providerGenerator,
                                             UniqueVariableNamer variableNamer,
                                             TypedExpressionFactory typedExpressionFactory) {

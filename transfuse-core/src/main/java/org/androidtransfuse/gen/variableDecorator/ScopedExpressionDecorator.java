@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.model.InjectionNode;
@@ -30,7 +29,7 @@ import javax.inject.Named;
 public class ScopedExpressionDecorator extends VariableExpressionBuilderDecorator {
 
     @Inject
-    public ScopedExpressionDecorator(@Assisted @Named("variableExpressionBuilder") VariableExpressionBuilder decorator) {
+    public ScopedExpressionDecorator(/*@Assisted*/ @Named("variableExpressionBuilder") VariableExpressionBuilder decorator) {
         super(decorator);
     }
 

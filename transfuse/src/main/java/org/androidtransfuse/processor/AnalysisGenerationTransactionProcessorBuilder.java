@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.processor;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
@@ -38,7 +37,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
 
     @Inject
     public AnalysisGenerationTransactionProcessorBuilder(
-            @Assisted WorkerProvider workerProvider,
+            /*@Assisted*/ WorkerProvider workerProvider,
             Provider<JCodeModel> codeModelProvider,
             Provider<FilerSourceCodeWriter> sourceCodeWriterProvider,
             Provider<FilerResourceWriter> resourceCodeWriterProvider,

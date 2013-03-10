@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -30,7 +29,7 @@ import java.util.Map;
 public class CachedExpressionDecorator extends VariableExpressionBuilderDecorator {
 
     @Inject
-    public CachedExpressionDecorator(@Assisted @Named("variableExpressionBuilder") VariableExpressionBuilder decorated) {
+    public CachedExpressionDecorator(/*@Assisted*/ @Named("variableExpressionBuilder") VariableExpressionBuilder decorated) {
         super(decorated);
     }
 

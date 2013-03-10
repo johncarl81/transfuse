@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -43,9 +42,9 @@ public class ProvidesVariableBuilder extends ConsistentTypeVariableBuilder {
     private final InvocationBuilder invocationBuilder;
 
     @Inject
-    public ProvidesVariableBuilder(@Assisted InjectionNode module,
-                                   @Assisted ASTMethod method,
-                                   @Assisted Map<ASTParameter, InjectionNode> dependencyAnalysis,
+    public ProvidesVariableBuilder(/*@Assisted*/ InjectionNode module,
+                                   /*@Assisted*/ ASTMethod method,
+                                   /*@Assisted*/ Map<ASTParameter, InjectionNode> dependencyAnalysis,
                                    InjectionExpressionBuilder injectionExpressionBuilder,
                                    TypedExpressionFactory typedExpressionFactory,
                                    InvocationBuilder invocationBuilder) {

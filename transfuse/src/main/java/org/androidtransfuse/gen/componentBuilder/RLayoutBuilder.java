@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.model.r.RResource;
@@ -34,7 +33,7 @@ public class RLayoutBuilder implements LayoutBuilder {
     private final RResource rResource;
 
     @Inject
-    public RLayoutBuilder(@Assisted Integer layout, RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {
+    public RLayoutBuilder(/*@Assisted*/ Integer layout, RResourceReferenceBuilder rResourceReferenceBuilder, RResource rResource) {
         this.layout = layout;
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
         this.rResource = rResource;

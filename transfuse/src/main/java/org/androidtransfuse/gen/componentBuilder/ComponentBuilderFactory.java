@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -50,7 +49,7 @@ public interface ComponentBuilderFactory {
 
     InjectionNodeFactoryImpl buildInjectionNodeFactory(ASTType astType, AnalysisContext context);
 
-    ViewRegistrationGenerator buildViewRegistrationGenerator(@Assisted("viewInjectionNode") @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, @Assisted("targetInjectionNode") @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
+    ViewRegistrationGenerator buildViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
 
     ViewMethodRegistrationInvocationBuilderImpl buildViewMethodRegistrationInvocationBuilder(ASTMethod getterMethod);
 

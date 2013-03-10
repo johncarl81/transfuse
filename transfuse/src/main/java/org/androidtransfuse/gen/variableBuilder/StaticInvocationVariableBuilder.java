@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 
@@ -31,8 +30,8 @@ public class StaticInvocationVariableBuilder implements DependentVariableBuilder
     private final JCodeModel codeModel;
 
     @Inject
-    public StaticInvocationVariableBuilder(@Assisted Class invocationTarget,
-                                           @Assisted String staticInvocation,
+    public StaticInvocationVariableBuilder(/*@Assisted*/ Class invocationTarget,
+                                           /*@Assisted*/ String staticInvocation,
                                            JCodeModel codeModel) {
         this.invocationTarget = invocationTarget;
         this.staticInvocation = staticInvocation;

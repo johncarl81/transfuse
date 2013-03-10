@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
@@ -36,7 +35,7 @@ public class ViewMethodRegistrationInvocationBuilderImpl implements ViewRegistra
     private final ASTMethod getterMethod;
 
     @Inject
-    public ViewMethodRegistrationInvocationBuilderImpl(@Assisted ASTMethod getterMethod, InvocationBuilder invocationBuilder) {
+    public ViewMethodRegistrationInvocationBuilderImpl(/*@Assisted*/ ASTMethod getterMethod, InvocationBuilder invocationBuilder) {
         this.invocationBuilder = invocationBuilder;
         this.getterMethod = getterMethod;
     }

@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -34,7 +33,7 @@ public class VariableASTImplementationInjectionNodeBuilder extends InjectionNode
     private final Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     @Inject
-    public VariableASTImplementationInjectionNodeBuilder(@Assisted ASTType implType,
+    public VariableASTImplementationInjectionNodeBuilder(/*@Assisted*/ ASTType implType,
                                                          Analyzer analyzer,
                                                          Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
         this.analyzer = analyzer;

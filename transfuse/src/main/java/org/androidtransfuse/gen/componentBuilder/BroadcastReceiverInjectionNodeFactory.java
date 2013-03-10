@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -44,7 +43,7 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
 
     @Inject
-    public BroadcastReceiverInjectionNodeFactory(@Assisted ASTType astType,
+    public BroadcastReceiverInjectionNodeFactory(/*@Assisted*/ ASTType astType,
                                                  AnalysisContextFactory analysisContextFactory,
                                                  InjectionPointFactory injectionPointFactory,
                                                  InjectionNodeBuilderRepository injectionNodeBuilderRepository,

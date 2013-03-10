@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.scopeBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
@@ -44,7 +43,7 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
-    public ContextScopeVariableBuilder(@Assisted InjectionNode contextScopeHolder,
+    public ContextScopeVariableBuilder(/*@Assisted*/ InjectionNode contextScopeHolder,
                                        JCodeModel codeModel,
                                        ProviderGenerator providerGenerator,
                                        TypedExpressionFactory typedExpressionFactory,

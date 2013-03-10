@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
@@ -43,7 +42,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
     private final InvocationBuilder invocationBuilder;
 
     @Inject
-    public MethodCallbackGenerator(@Assisted ASTType eventAnnotation, @Assisted MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {
+    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {
         this.eventAnnotation = eventAnnotation;
         this.methodGenerator = methodGenerator;
         this.invocationBuilder = invocationBuilder;

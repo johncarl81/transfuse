@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
@@ -39,7 +38,7 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
-    public VirtualProxyExpressionDecorator(@Assisted @Named("variableExpressionBuilder") VariableExpressionBuilder decorated,
+    public VirtualProxyExpressionDecorator(/*@Assisted*/ @Named("variableExpressionBuilder") VariableExpressionBuilder decorated,
                                            ProxyVariableBuilder proxyVariableBuilder,
                                            VirtualProxyGenerator virtualProxyGenerator,
                                            TypedExpressionFactory typedExpressionFactory) {

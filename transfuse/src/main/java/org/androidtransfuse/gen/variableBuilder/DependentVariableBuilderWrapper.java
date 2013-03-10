@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
@@ -35,9 +34,9 @@ public class DependentVariableBuilderWrapper extends ConsistentTypeVariableBuild
     private final DependentVariableBuilder dependentVariableBuilder;
 
     @Inject
-    public DependentVariableBuilderWrapper(@Assisted InjectionNode dependency,
-                                           @Assisted DependentVariableBuilder dependentVariableBuilder,
-                                           @Assisted Class type,
+    public DependentVariableBuilderWrapper(/*@Assisted*/ InjectionNode dependency,
+                                           /*@Assisted*/ DependentVariableBuilder dependentVariableBuilder,
+                                           /*@Assisted*/ Class type,
                                            TypedExpressionFactory typedExpressionFactory,
                                            InjectionExpressionBuilder injectionExpressionBuilder) {
         super(type, typedExpressionFactory);

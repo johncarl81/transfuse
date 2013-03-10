@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
@@ -44,9 +43,9 @@ public class PreferenceVariableBuilder implements VariableBuilder {
     private Map<ASTType, PrefGetBuilder> accessorMethods = new HashMap<ASTType, PrefGetBuilder>();
 
     @Inject
-    public PreferenceVariableBuilder(@Assisted ASTType preferenceType,
-                                     @Assisted String preferenceName,
-                                     @Assisted InjectionNode preferenceManagerInjectionNode,
+    public PreferenceVariableBuilder(/*@Assisted*/ ASTType preferenceType,
+                                     /*@Assisted*/ String preferenceName,
+                                     /*@Assisted*/ InjectionNode preferenceManagerInjectionNode,
                                      TypedExpressionFactory typedExpressionFactory, InjectionExpressionBuilder injectionExpressionBuilder, ASTClassFactory astClassFactory) {
         this.preferenceName = preferenceName;
         this.preferenceManagerInjectionNode = preferenceManagerInjectionNode;

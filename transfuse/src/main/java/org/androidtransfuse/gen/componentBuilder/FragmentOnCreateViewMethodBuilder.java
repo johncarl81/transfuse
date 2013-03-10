@@ -18,7 +18,6 @@ package org.androidtransfuse.gen.componentBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -46,8 +45,8 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     private final RResourceReferenceBuilder rResourceReferenceBuilder;
 
     @Inject
-    public FragmentOnCreateViewMethodBuilder(@Assisted @Nullable Integer layout,
-                                             @Assisted ASTMethod onCreateViewMethod,
+    public FragmentOnCreateViewMethodBuilder(/*@Assisted*/ @Nullable Integer layout,
+                                             /*@Assisted*/ ASTMethod onCreateViewMethod,
                                              JCodeModel codeModel,
                                              UniqueVariableNamer namer,
                                              ASTClassFactory astClassFactory,

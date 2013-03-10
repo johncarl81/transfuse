@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
@@ -41,10 +40,10 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
 
     @Inject
-    public ViewRegistrationGenerator(@Assisted("viewInjectionNode") @Named("viewInjectionNode") InjectionNode viewInjectionNode,
-                                     @Assisted String method,
-                                     @Assisted("targetInjectionNode") @Named("targetInjectionNode") InjectionNode injectionNode,
-                                     @Assisted ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder,
+    public ViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode,
+                                     /*@Assisted*/ String method,
+                                     /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode,
+                                     /*@Assisted*/ ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder,
                                      InjectionFragmentGenerator injectionFragmentGenerator) {
         this.viewInjectionNode = viewInjectionNode;
         this.method = method;

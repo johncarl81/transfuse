@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -32,7 +31,7 @@ public class ActivityFieldDelegateASTReference implements ActivityDelegateASTRef
     private final InvocationBuilder invocationBuilder;
 
     @Inject
-    public ActivityFieldDelegateASTReference(@Assisted ASTField astField, InvocationBuilder invocationBuilder) {
+    public ActivityFieldDelegateASTReference(/*@Assisted*/ ASTField astField, InvocationBuilder invocationBuilder) {
         this.astField = astField;
         this.invocationBuilder = invocationBuilder;
     }

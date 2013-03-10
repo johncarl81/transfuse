@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -32,8 +31,8 @@ public class IndependentVariableBuilderWrapper extends ConsistentTypeVariableBui
     private final JExpression expression;
 
     @Inject
-    public IndependentVariableBuilderWrapper(@Assisted ASTType astType,
-                                             @Assisted JExpression expression,
+    public IndependentVariableBuilderWrapper(/*@Assisted*/ ASTType astType,
+                                             /*@Assisted*/ JExpression expression,
                                              TypedExpressionFactory typedExpressionFactory) {
         super(astType, typedExpressionFactory);
         this.expression = expression;

@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 
@@ -31,8 +30,8 @@ public class MethodCallVariableBuilder implements DependentVariableBuilder{
     private final ImmutableList<JExpression> arguments;
 
     @Inject
-    public MethodCallVariableBuilder(@Assisted String methodName,
-                                     @Assisted ImmutableList<JExpression> arguments) {
+    public MethodCallVariableBuilder(/*@Assisted*/ String methodName,
+                                     /*@Assisted*/ ImmutableList<JExpression> arguments) {
         this.methodName = methodName;
         this.arguments = arguments;
     }

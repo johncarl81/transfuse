@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.assistedinject.Assisted;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
@@ -40,9 +39,9 @@ public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
     private final Analyzer analyzer;
 
     @Inject
-    public DependentInjectionNodeBuilder(@Assisted("dependency") @Named("dependency") Class dependency,
-                                         @Assisted("returnType") @Named("returnType") Class returnType,
-                                         @Assisted DependentVariableBuilder variableBuilder,
+    public DependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") Class dependency,
+                                         /*@Assisted("returnType")*/ @Named("returnType") Class returnType,
+                                         /*@Assisted*/ DependentVariableBuilder variableBuilder,
                                          InjectionPointFactory injectionPointFactory,
                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                          Analyzer analyzer) {

@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
@@ -47,10 +46,10 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     private final JCodeModel codeModel;
 
     @Inject
-    public ExtraValuableBuilder(@Assisted String extraId,
-                                @Assisted InjectionNode activityInjectionNode,
-                                @Assisted("nullable") @Named("nullable") boolean nullable,
-                                @Assisted("wrapped") @Named("wrapped") boolean wrapped,
+    public ExtraValuableBuilder(/*@Assisted*/ String extraId,
+                                /*@Assisted*/ InjectionNode activityInjectionNode,
+                                /*@Assisted("nullable")*/ @Named("nullable") boolean nullable,
+                                /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
                                 JCodeModel codeModel,
                                 TypedExpressionFactory typedExpressionFactory) {

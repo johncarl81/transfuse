@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -38,8 +37,8 @@ public class SystemServiceVariableBuilder extends ConsistentTypeVariableBuilder 
     private final InjectionExpressionBuilder injectionExpressionBuilder;
 
     @Inject
-    public SystemServiceVariableBuilder(@Assisted String systemService,
-                                        @Assisted InjectionNode contextInjectionNode,
+    public SystemServiceVariableBuilder(/*@Assisted*/ String systemService,
+                                        /*@Assisted*/ InjectionNode contextInjectionNode,
                                         InjectionExpressionBuilder injectionExpressionBuilder,
                                         TypedExpressionFactory typedExpressionFactory) {
         super(Object.class, typedExpressionFactory);

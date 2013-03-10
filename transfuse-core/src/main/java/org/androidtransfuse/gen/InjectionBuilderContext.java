@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
@@ -38,10 +37,10 @@ public class InjectionBuilderContext {
     private final Map<InjectionNode, TypedExpression> proxyLoad = new HashMap<InjectionNode, TypedExpression>();
 
     @Inject
-    public InjectionBuilderContext(@Assisted JBlock block,
-                                   @Assisted JDefinedClass definedClass,
-                                   @Assisted JExpression scopeVar,
-                                   @Assisted Map<InjectionNode, TypedExpression> variableMap) {
+    public InjectionBuilderContext(/*@Assisted*/ JBlock block,
+                                   /*@Assisted*/ JDefinedClass definedClass,
+                                   /*@Assisted*/ JExpression scopeVar,
+                                   /*@Assisted*/ Map<InjectionNode, TypedExpression> variableMap) {
         this.block = block;
         this.definedClass = definedClass;
         this.variableMap = variableMap;

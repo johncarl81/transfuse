@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.variableBuilder.resource;
 
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -41,7 +40,7 @@ public class AnimationResourceExpressionBuilder implements ResourceExpressionBui
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
-    public AnimationResourceExpressionBuilder(@Assisted InjectionNode applicationInjectionNode,
+    public AnimationResourceExpressionBuilder(/*@Assisted*/ InjectionNode applicationInjectionNode,
                                               JCodeModel codeModel,
                                               InjectionExpressionBuilder injectionExpressionBuilder, TypedExpressionFactory typedExpressionFactory) {
         this.codeModel = codeModel;

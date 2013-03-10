@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -33,7 +32,7 @@ public class MirroredMethodGenerator implements MethodGenerator {
     private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public MirroredMethodGenerator(@Assisted ASTMethod overrideMethod, @Assisted boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+    public MirroredMethodGenerator(/*@Assisted*/ ASTMethod overrideMethod, /*@Assisted*/ boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
         this.overrideMethod = overrideMethod;
         this.superCall = superCall;
         this.codeModel = codeModel;

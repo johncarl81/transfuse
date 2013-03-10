@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -35,9 +34,9 @@ public class MethodBasedResourceExpressionBuilder implements ResourceExpressionB
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
-    public MethodBasedResourceExpressionBuilder(@Assisted Class returnType,
-                                                @Assisted String accessMethod,
-                                                @Assisted InjectionNode resourcesInjectionNode,
+    public MethodBasedResourceExpressionBuilder(/*@Assisted*/ Class returnType,
+                                                /*@Assisted*/ String accessMethod,
+                                                /*@Assisted*/ InjectionNode resourcesInjectionNode,
                                                 InjectionExpressionBuilder injectionExpressionBuilder,
                                                 TypedExpressionFactory typedExpressionFactory) {
         this.returnType = returnType;

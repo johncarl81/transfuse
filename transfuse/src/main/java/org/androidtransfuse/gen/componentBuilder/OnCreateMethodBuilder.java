@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -39,7 +38,7 @@ public class OnCreateMethodBuilder implements MethodBuilder {
     private final LayoutBuilder layoutBuilder;
 
     @Inject
-    public OnCreateMethodBuilder(@Assisted ASTMethod onCreateASTMethod, @Assisted LayoutBuilder layoutBuilder, JCodeModel codeModel, UniqueVariableNamer namer) {
+    public OnCreateMethodBuilder(/*@Assisted*/ ASTMethod onCreateASTMethod, /*@Assisted*/ LayoutBuilder layoutBuilder, JCodeModel codeModel, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.onCreateASTMethod = onCreateASTMethod;
         this.namer = namer;

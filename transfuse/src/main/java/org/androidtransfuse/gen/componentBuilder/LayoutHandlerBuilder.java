@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
@@ -40,7 +39,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
-                                @Assisted InjectionNode layoutHandlerInjectionNode,
+                                /*@Assisted*/ InjectionNode layoutHandlerInjectionNode,
                                 Logger logger) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;

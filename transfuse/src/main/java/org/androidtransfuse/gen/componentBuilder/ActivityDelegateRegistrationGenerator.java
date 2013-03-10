@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.google.inject.assistedinject.Assisted;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -40,8 +39,8 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
 
 
     @Inject
-    public ActivityDelegateRegistrationGenerator(@Assisted ActivityDelegateASTReference activityDelegateASTReference,
-                                                 @Assisted ImmutableList<ASTMethod> methods,
+    public ActivityDelegateRegistrationGenerator(/*@Assisted*/ ActivityDelegateASTReference activityDelegateASTReference,
+                                                 /*@Assisted*/ ImmutableList<ASTMethod> methods,
                                                  JCodeModel codeModel,
                                                  UniqueVariableNamer namer) {
         this.methods = methods;
