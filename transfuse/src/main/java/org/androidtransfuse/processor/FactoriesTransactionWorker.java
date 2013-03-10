@@ -17,6 +17,7 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -33,25 +34,31 @@ public class FactoriesTransactionWorker extends AbstractCompletionTransactionWor
     private final FactoriesGenerator factoriesGenerator;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
 
     @Inject
     public FactoriesTransactionWorker(FactoriesGenerator factoriesGenerator,
                                       InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
-                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory) {
+                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                      Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
         this.factoriesGenerator = factoriesGenerator;
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
     }
 
     @Override
     public Void innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
 
         //register factory configuration
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         for (Provider<ASTType> typeProvider : aggregate.keySet()) {
             ASTType type = typeProvider.get();
 
-            injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.buildFactoryNodeBuilder(type));
+            repository.putType(type, variableInjectionBuilderFactory.buildFactoryNodeBuilder(type));
         }
+
+        injectionNodeBuilders.addModuleRepository(repository);
 
 
         //setup Factories class

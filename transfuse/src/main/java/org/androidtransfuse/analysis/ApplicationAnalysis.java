@@ -151,9 +151,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(android.app.Application.class, injectionBindingBuilder.buildThis((android.app.Application.class)));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
-        variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
-
-        variableBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildApplicationInjections());
+        injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
 

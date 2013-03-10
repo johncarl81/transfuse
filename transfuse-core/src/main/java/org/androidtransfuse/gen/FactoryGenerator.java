@@ -104,7 +104,7 @@ public class FactoryGenerator {
                 JBlock block = methodDescriptor.getMethod().body();
 
                 InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
-                injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+                injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
                 AnalysisContext context = analysisContextFactory.buildAnalysisContext(injectionNodeBuilderRepository);
                 InjectionNodeFactory injectionNodeFactory = injectionNodeImplFactory.buildInjectionNodeFactory(interfaceMethod.getReturnType(), context);
 

@@ -19,6 +19,9 @@ package org.androidtransfuse.integrationTest;
  * @author John Ericksen
  */
 public class TransfuseTestException extends RuntimeException {
+
+    private static final long serialVersionUID = -6476941710981551096L;
+
     public TransfuseTestException(String s) {
         super(s);
     }

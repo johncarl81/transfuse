@@ -129,9 +129,9 @@ public class AOPProxyGenerator {
             }
 
         } catch (JClassAlreadyExistsException e) {
-            logger.error("JClassAlreadyExistsException while building AOP Proxy", e);
+            throw new TransfuseAnalysisException("JClassAlreadyExistsException while building AOP Proxy", e);
         } catch (ClassNotFoundException e) {
-            logger.error("ClassNotFoundException while building AOP Proxy", e);
+            throw new TransfuseAnalysisException("ClassNotFoundException while building AOP Proxy", e);
         }
 
         return buildProxyInjectionNode(injectionNode, proxyClassName, injectionAspect, proxyConstructorInjectionPoint);
@@ -139,7 +139,7 @@ public class AOPProxyGenerator {
 
     private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, PackageClass proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
         InjectionNode proxyInjectionNode = new InjectionNode(
-                new ASTProxyType(injectionNode.getASTType(), proxyClassName));
+                new ASTProxyType(injectionNode.getASTType(), proxyClassName.getFullyQualifiedName()));
 
         proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
 

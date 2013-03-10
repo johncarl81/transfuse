@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 
 import javax.inject.Inject;
 
@@ -48,7 +49,7 @@ public class InstallProcessor implements TypeProcessor {
         }
 
         @Override
-        public void setConfiguration() {
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
             if(types != null && types.length > 0){
                 moduleRepository.addInstalledComponents(types);
             }

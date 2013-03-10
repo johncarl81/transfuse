@@ -214,23 +214,22 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
 
-        InjectionNodeBuilderRepository injectionNodeRepository = injectionNodeRepositoryProvider.get();
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeRepositoryProvider.get();
 
-        injectionNodeRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
-        injectionNodeRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
-        injectionNodeRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
-        injectionNodeRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
+        injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
+        injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
+        injectionNodeBuilderRepository.putType(android.app.Service.class, injectionBindingBuilder.buildThis(android.app.Service.class));
+        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         if (type != null && !type.toString().equals(android.app.Service.class.getName())) {
             ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
-            injectionNodeRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
+            injectionNodeBuilderRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
         }
 
-        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeRepository);
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
-        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeRepository);
-
-        return injectionNodeRepository;
+        return injectionNodeBuilderRepository;
 
     }
 

@@ -101,14 +101,12 @@ public class UniqueVariableNamer {
 
         String nameRoot = builder.toString();
 
-        builder.append('_');
-        builder.append(nullSaveIterGet(nameRoot));
-        String name =  builder.toString();
-
-        return name;
+        builder.append('$');
+        builder.append(nullSafeIterGet(nameRoot));
+        return builder.toString();
     }
 
-    private int nullSaveIterGet(String name){
+    private int nullSafeIterGet(String name){
         if (!nameMap.containsKey(name)) {
             nameMap.put(name, 0);
         } else {

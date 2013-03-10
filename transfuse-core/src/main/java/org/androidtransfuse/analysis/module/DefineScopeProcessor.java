@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTDefinedAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.ScopeReference;
 import org.androidtransfuse.gen.variableBuilder.ScopeReferenceInjectionFactory;
 import org.androidtransfuse.util.matcher.Matchers;
@@ -63,7 +64,7 @@ public class DefineScopeProcessor implements TypeProcessor {
         }
 
         @Override
-        public void setConfiguration() {
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
 
             moduleRepository.addScopeConfig(annotationType, scope);
 
@@ -71,8 +72,7 @@ public class DefineScopeProcessor implements TypeProcessor {
 
             ASTAnnotation annotation = new ASTDefinedAnnotation(scopeReference, ImmutableMap.<String, Object>of("value", annotationType));
 
-            //todo: validate proper type.
-            moduleRepository.putInjectionSignatureConfig(Matchers.annotated().byAnnotation(annotation).build(),
+            configurationRepository.putSignatureMatcher(Matchers.annotated().byAnnotation(annotation).build(),
                     scopeReferenceInjectionFactory.buildInjectionNodeBuilder(annotationType));
         }
     }

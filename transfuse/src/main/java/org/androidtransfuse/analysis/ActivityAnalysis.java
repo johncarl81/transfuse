@@ -279,9 +279,11 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(View.class, viewVariableBuilder);
 
-        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.addRepository(
+                injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
 
-        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.addRepository(
+                injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
 

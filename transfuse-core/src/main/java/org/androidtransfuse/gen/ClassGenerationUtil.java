@@ -42,16 +42,29 @@ public class ClassGenerationUtil {
     private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     private final JCodeModel codeModel;
     private final Logger log;
+    private final UniqueVariableNamer namer;
 
     @Inject
-    public ClassGenerationUtil(JCodeModel codeModel, Logger log) {
+    public ClassGenerationUtil(JCodeModel codeModel, Logger log, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.log = log;
+        this.namer = namer;
     }
 
     public JDefinedClass defineClass(PackageClass className) throws JClassAlreadyExistsException {
+        return defineClass(className, false);
+    }
+
+    public JDefinedClass defineClass(PackageClass className, boolean enforceUniqueName) throws JClassAlreadyExistsException {
         JPackage jPackage = codeModel._package(className.getPackage());
-        JDefinedClass definedClass = jPackage._class(className.getClassName());
+        String name;
+        if(enforceUniqueName){
+            name = namer.generateClassName(className.getClassName());
+        }
+        else{
+            name = className.getClassName();
+        }
+        JDefinedClass definedClass = jPackage._class(name);
 
         annotateGeneratedClass(definedClass);
 

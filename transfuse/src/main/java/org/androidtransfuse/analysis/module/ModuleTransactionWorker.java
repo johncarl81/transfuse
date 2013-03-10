@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
 
@@ -37,6 +38,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
     private final ImmutableMap<ASTType, MethodProcessor> methodProcessors;
     private final ImmutableMap<ASTType, TypeProcessor> typeProcessors;
+    private final ModuleRepository moduleRepository;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
 
     @Inject
     public ModuleTransactionWorker(BindProcessor bindProcessor,
@@ -47,7 +50,11 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    ASTClassFactory astClassFactory,
                                    UsesPermissionProcessor usesPermissionProcessor,
                                    UsesSdkProcessor usesSdkProcessor,
-                                   DefineScopeProcessor defineScopeProcessor) {
+                                   DefineScopeProcessor defineScopeProcessor,
+                                   ModuleRepository moduleRepository,
+                                   Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
+        this.moduleRepository = moduleRepository;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
 
         methodProcessorsBuilder.put(astClassFactory.getType(Provides.class), providesProcessor);
@@ -99,9 +106,11 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
             }
         }
 
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         for (ModuleConfiguration moduleConfiguration : configurations.build()) {
-            moduleConfiguration.setConfiguration();
+            moduleConfiguration.setConfiguration(repository);
         }
+        moduleRepository.addModuleRepository(repository);
 
         return null;
     }

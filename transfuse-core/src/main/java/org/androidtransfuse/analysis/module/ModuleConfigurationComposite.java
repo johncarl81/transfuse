@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis.module;
 
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +30,9 @@ public class ModuleConfigurationComposite implements ModuleConfiguration {
     private List<ModuleConfiguration> moduleConfigurations = new ArrayList<ModuleConfiguration>();
 
     @Override
-    public void setConfiguration() {
+    public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
         for (ModuleConfiguration moduleConfiguration : moduleConfigurations) {
-            moduleConfiguration.setConfiguration();
+            moduleConfiguration.setConfiguration(configurationRepository);
         }
     }
 

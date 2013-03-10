@@ -84,7 +84,7 @@ public class VirtualProxyGenerator {
 
         try {
 
-            JDefinedClass definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT));
+            JDefinedClass definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT), true);
 
             //define delegate
             JClass delegateClass = codeModel.ref(injectionNode.getClassName());
@@ -143,7 +143,7 @@ public class VirtualProxyGenerator {
 
             return definedClass;
         } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Error while trying to build new class", e);
+            throw new TransfuseAnalysisException("Error while trying to build new class: " + injectionNode.getASTType().getPackageClass().append(VPROXY_EXT) , e);
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("Unable to find expected method", e);
         }

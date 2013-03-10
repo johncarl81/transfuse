@@ -21,9 +21,11 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.*;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Central module processor class.  Scans the input AST elements for the appropriate annotations and registers
@@ -35,6 +37,8 @@ public class ModuleProcessor {
 
     private final ImmutableMap<ASTType, MethodProcessor> methodProcessors;
     private final ImmutableMap<ASTType, TypeProcessor> typeProcessors;
+    private final ModuleRepository moduleRepository;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
 
     @Inject
     public ModuleProcessor(BindProcessor bindProcessor,
@@ -43,7 +47,11 @@ public class ModuleProcessor {
                            ProvidesProcessor providesProcessor,
                            ASTClassFactory astClassFactory,
                            DefineScopeProcessor defineScopeProcessor,
-                           InstallProcessor installComponentProcessor) {
+                           InstallProcessor installComponentProcessor,
+                           ModuleRepository moduleRepository,
+                           Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
+        this.moduleRepository = moduleRepository;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
 
         methodProcessorsBuilder.put(astClassFactory.getType(Provides.class), providesProcessor);
@@ -88,9 +96,11 @@ public class ModuleProcessor {
             }
         }
 
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         for (ModuleConfiguration moduleConfiguration : configurations.build()) {
-            moduleConfiguration.setConfiguration();
+            moduleConfiguration.setConfiguration(repository);
         }
+        moduleRepository.addModuleRepository(repository);
 
         return null;
     }

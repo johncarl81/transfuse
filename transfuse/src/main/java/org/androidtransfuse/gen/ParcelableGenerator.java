@@ -48,7 +48,7 @@ public class ParcelableGenerator {
     private static final String NEW_ARRAY = "newArray";
     private static final String WRITE_TO_PARCEL = "writeToParcel";
     private static final String DESCRIBE_CONTENTS = "describeContents";
-    private static final String PARCELABLE_EXT = "_Parcelable";
+    private static final String PARCELABLE_EXT = "$Parcelable";
     public static final String WRAP_METHOD = "wrap";
 
     private final JCodeModel codeModel;
@@ -154,7 +154,7 @@ public class ParcelableGenerator {
 
             return parcelableClass;
         } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Class Already Exists: " + type.getName() + "_Parelable", e);
+            throw new TransfuseAnalysisException("Class Already Exists: " + type.getName() + PARCELABLE_EXT, e);
         }
     }
 

@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis.module;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
 import org.androidtransfuse.model.InjectionSignature;
@@ -69,33 +70,13 @@ public class BindProviderProcessor implements TypeProcessor {
         }
 
         @Override
-        public void setConfiguration() {
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
             if(named == null){
-                injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
-
-                /*ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
-                    @Override
-                    public List<ASTType> buildGenericParameters() {
-                        return Collections.singletonList(type);
-                    }
-                });
-
-                injectionNodeBuilders.putModuleConfig(Matchers.type(providerType).build(),
-                        variableASTImplementationFactory.buildVariableASTBuilder(provider));*/
+                configurationRepository.putType(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
             }
             else{
-                injectionNodeBuilders.putInjectionSignatureConfig(new InjectionSignature(type, ImmutableSet.of(named)),
+                configurationRepository.putType(new InjectionSignature(type, ImmutableSet.of(named)),
                         variableInjectionBuilderFactory.builderProviderBuilder(provider));
-
-                /*ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
-                    @Override
-                    public List<ASTType> buildGenericParameters() {
-                        return Collections.singletonList(type);
-                    }
-                });
-
-                injectionNodeBuilders.putInjectionSignatureConfig(Matchers.type(providerType).annotated().byAnnotation(named).build(),
-                        variableASTImplementationFactory.buildVariableASTBuilder(provider));*/
             }
 
             providerInjectionNodeBuilderRepository.addProvider(type, provider);

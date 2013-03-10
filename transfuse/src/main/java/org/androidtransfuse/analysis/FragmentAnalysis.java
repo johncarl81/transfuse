@@ -222,9 +222,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(org.androidtransfuse.annotations.View.class, fragmentViewInjectionNodeBuilder);
 
-        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
-
-        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
     }

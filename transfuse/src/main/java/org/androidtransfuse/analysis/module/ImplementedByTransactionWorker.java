@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -40,12 +41,17 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilders;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
 
     @Inject
-    public ImplementedByTransactionWorker(InjectionNodeBuilderRepositoryFactory injectionNodeBuilders, VariableInjectionBuilderFactory variableInjectionBuilderFactory, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+    public ImplementedByTransactionWorker(InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
+                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory,
+                                          ASTTypeBuilderVisitor astTypeBuilderVisitor,
+                                          Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
     }
 
     @Override
@@ -55,6 +61,7 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
 
         ImplementedBy annotation = astType.getAnnotation(ImplementedBy.class);
 
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         if (annotation != null) {
             TypeMirror implementedClass = getTypeMirror(new ImplementedByClassTypeMirrorRunnable(annotation));
 
@@ -64,8 +71,11 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
                 throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
 
-            injectionNodeBuilders.putModuleConfig(astType, variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
+            repository.putType(astType, variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
         }
+
+        injectionNodeBuilders.addModuleRepository(repository);
+
         return null;
     }
 

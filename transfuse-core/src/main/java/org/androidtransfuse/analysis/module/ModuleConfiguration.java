@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis.module;
 
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+
 /**
  * Acts as a lazy configuration to allow all the type processing / analysis to occur.  This is required to allow for
  * errors during processing and analysis.  When errors are found the given configuration run is rolled back and retried.
@@ -29,6 +31,7 @@ public interface ModuleConfiguration {
      * Set a configuration during the second phase of configuration processing.
      *
      * Should never throw a TransactionRuntimeException.
+     * @param configurationRepository
      */
-    void setConfiguration();
+    void setConfiguration(InjectionNodeBuilderRepository configurationRepository);
 }

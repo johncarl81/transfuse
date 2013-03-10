@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.Provides;
 import org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilderFactory;
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
@@ -40,19 +41,16 @@ import java.util.Collection;
  */
 public class ProvidesProcessor implements MethodProcessor {
 
-    private final ModuleRepository injectionNodeBuilders;
     private final ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory;
     private final QualifierPredicate qualifierPredicate;
     private final ASTClassFactory astClassFactory;
     private final GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder;
 
     @Inject
-    public ProvidesProcessor(ModuleRepository injectionNodeBuilders,
-                             ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
+    public ProvidesProcessor(ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
                              QualifierPredicate qualifierPredicate,
                              ASTClassFactory astClassFactory,
                              GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder) {
-        this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.qualifierPredicate = qualifierPredicate;
         this.astClassFactory = astClassFactory;
@@ -104,10 +102,10 @@ public class ProvidesProcessor implements MethodProcessor {
         }
 
         @Override
-        public void setConfiguration() {
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
             Matcher<InjectionSignature> matcher = Matchers.type(astMethod.getReturnType()).annotated().byAnnotation(qualifiers).build();
 
-            injectionNodeBuilders.putInjectionSignatureConfig(matcher,
+            configurationRepository.putSignatureMatcher(matcher,
                     variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod));
 
             ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
@@ -119,7 +117,7 @@ public class ProvidesProcessor implements MethodProcessor {
 
             Matcher<InjectionSignature> providerMatcher = Matchers.type(providerType).annotated().byAnnotation(qualifiers).build();
 
-            injectionNodeBuilders.putInjectionSignatureConfig(providerMatcher,
+            configurationRepository.putSignatureMatcher(providerMatcher,
                     generatedProviderInjectionNodeBuilder);
         }
     }

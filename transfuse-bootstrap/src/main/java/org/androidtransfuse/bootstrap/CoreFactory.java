@@ -17,7 +17,6 @@ package org.androidtransfuse.bootstrap;
 
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.classes.LazyClassParameterBuilder;
@@ -42,14 +41,12 @@ import org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.MessagerLogger;
 import org.androidtransfuse.util.Providers;
 import org.androidtransfuse.util.QualifierPredicate;
-import org.androidtransfuse.util.matcher.Matcher;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -88,7 +85,7 @@ public class CoreFactory {
         this.elements = elements;
         this.logger = new MessagerLogger(messager);
         this.filer = filer;
-        this.generationUtil = new ClassGenerationUtil(codeModel, logger);
+        this.generationUtil = new ClassGenerationUtil(codeModel, logger, namer);
     }
 
     public ASTElementConverterFactory buildConverterFactory() {
@@ -113,11 +110,22 @@ public class CoreFactory {
     public InjectionPointFactory buildInjectionPointFactory() {
         QualifierPredicate qualifierPredicate = new QualifierPredicate(astClassFactory);
 
-        return new InjectionPointFactory(astClassFactory, qualifierPredicate);
+        return new InjectionPointFactory(astClassFactory, qualifierPredicate,
+                new VariableInjectionNodeBuilder(buildAnalyser(),
+                buildVariableInjectionBuilder()),
+                new GeneratedProviderInjectionNodeBuilderProvider());
     }
 
-    private VariableInjectionBuilder buildVarialbeInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(aopProxyCache, codeModel, namer, logger, new ClassGenerationUtil(codeModel, logger));
+    private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
+
+        @Override
+        public GeneratedProviderInjectionNodeBuilder get() {
+            return buildGeneratedProviderInjectionNodeBuilder();
+        }
+    }
+
+    private VariableInjectionBuilder buildVariableInjectionBuilder(){
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(aopProxyCache, codeModel, namer, logger, generationUtil);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
@@ -136,7 +144,7 @@ public class CoreFactory {
 
     private Analyzer buildAnalyser(){
         Analyzer analyzer = new Analyzer();
-        analyzer.setVariableInjectionBuilderProvider(Providers.of(buildVarialbeInjectionBuilder()));
+        analyzer.setVariableInjectionBuilderProvider(Providers.of(buildVariableInjectionBuilder()));
 
         return analyzer;
     }
@@ -155,13 +163,7 @@ public class CoreFactory {
     }
 
     private InjectionNodeBuilderRepository buildInjectionNodeRepository(){
-
-        InjectionNodeBuilderRepository injectionNodeBuilders = new InjectionNodeBuilderRepository(new VariableInjectionNodeBuilder(buildAnalyser(), buildVarialbeInjectionBuilder()), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
-
-        //module configuration
-        moduleRepository.addModuleConfiguration(injectionNodeBuilders);
-
-        return injectionNodeBuilders;
+        return moduleRepository.buildModuleConfiguration();
     }
 
     private GeneratedProviderInjectionNodeBuilder buildGeneratedProviderInjectionNodeBuilder(){
@@ -251,7 +253,7 @@ public class CoreFactory {
 
     public ModuleProcessor buildModuleProcessor() {
 
-        VariableASTImplementationFactory variableASTImplementationFactory = new VariableASTImplementationFactory(buildAnalyser(), Providers.of(buildVarialbeInjectionBuilder()));
+        VariableASTImplementationFactory variableASTImplementationFactory = new VariableASTImplementationFactory(buildAnalyser(), Providers.of(buildVariableInjectionBuilder()));
 
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
@@ -262,10 +264,10 @@ public class CoreFactory {
         ProviderVariableBuilderFactory providerVariableBuilderFactory = new ProviderVariableBuilderFactory(injectionExpressionBuilder, typedExpressionFactory);
         ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilderFactory = new ProviderInjectionNodeBuilderFactory(buildAnalyser(), providerVariableBuilderFactory);
 
-        BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, moduleRepository);
+        BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory);
         BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(moduleRepository, providerInjectionNodeBuilderFactory, providerRepository);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
-        ProvidesProcessor providesProcessor = new ProvidesProcessor(moduleRepository, providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
+        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, codeModel, buildAnalyser());
 
@@ -273,7 +275,7 @@ public class CoreFactory {
 
         InstallProcessor installProcessor = new InstallProcessor(moduleRepository);
 
-        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor);
+        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor, moduleRepository, buildInjectionNodeRepositoryProvider());
     }
 
     public FactoryGenerator buildFactoryGenerator() {
@@ -294,11 +296,13 @@ public class CoreFactory {
 
     public void registerFactories(Collection<? extends ASTType> factories) {
         //register factory configuration
+        InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
         for (ASTType factoryType : factories) {
-
-            moduleRepository.putModuleConfig(factoryType,
+            repository.putType(factoryType,
                     new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), buildAnalyser()));
         }
+
+        moduleRepository.addModuleRepository(repository);
     }
 
     public ModuleRepository getModuleRepository() {
@@ -404,43 +408,15 @@ public class CoreFactory {
 
     private final class ModuleRepositoryImpl implements  ModuleRepository{
 
-        private final Map<InjectionSignature, InjectionNodeBuilder> moduleConfiguration = new HashMap<InjectionSignature, InjectionNodeBuilder>();
-        private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> injectionSignatureConfig = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
         private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
         private final Set<ASTType> installedComponents = new HashSet<ASTType>();
         private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
+        private final InjectionNodeBuilderRepository moduleInjectionNodeBuilderRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
-        public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
-            for (Map.Entry<InjectionSignature, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
-                repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
-            }
-
-            for (Map.Entry<Matcher<InjectionSignature>, InjectionNodeBuilder> matcherInjectionNodeBuilderEntry : injectionSignatureConfig.entrySet()) {
-                repository.putSignatureMatcher(matcherInjectionNodeBuilderEntry.getKey(), matcherInjectionNodeBuilderEntry.getValue());
-            }
-        }
-
-        public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
-            InjectionSignature injectionSignature = new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of());
-            if(moduleConfiguration.containsKey(injectionSignature)){
-                throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
-            }
-            moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
-        }
-
-        public void putInjectionSignatureConfig(Matcher<InjectionSignature> type, InjectionNodeBuilder injectionNodeBuilder) {
-            if(injectionSignatureConfig.containsKey(type)){
-                throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
-            }
-            injectionSignatureConfig.put(type, injectionNodeBuilder);
-        }
-
-        @Override
-        public void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder) {
-            if(moduleConfiguration.containsKey(injectionSignature)){
-                throw new TransfuseAnalysisException("Binding for type already exists: " + injectionSignature.toString());
-            }
-            moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
+        public InjectionNodeBuilderRepository buildModuleConfiguration() {
+            InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
+            repository.addRepository(moduleInjectionNodeBuilderRepository);
+            return repository;
         }
 
         @Override
@@ -491,6 +467,11 @@ public class CoreFactory {
         @Override
         public void putScoped(ASTType scope, ASTType toBeScoped) {
             scoping.put(toBeScoped, scope);
+        }
+
+        @Override
+        public void addModuleRepository(InjectionNodeBuilderRepository repository) {
+            this.moduleInjectionNodeBuilderRepository.addRepository(repository);
         }
     }
 }

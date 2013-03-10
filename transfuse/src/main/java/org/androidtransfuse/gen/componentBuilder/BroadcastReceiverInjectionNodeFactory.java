@@ -38,7 +38,6 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
 
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionPointFactory injectionPointFactory;
-    private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private final InjectionNodeBuilderRepository injectionNodeBuilderRepository;
     private final ASTType astType;
     private final InjectionBindingBuilder injectionBindingBuilder;
@@ -48,12 +47,11 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
     public BroadcastReceiverInjectionNodeFactory(@Assisted ASTType astType,
                                                  AnalysisContextFactory analysisContextFactory,
                                                  InjectionPointFactory injectionPointFactory,
-                                                 InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                                  InjectionNodeBuilderRepository injectionNodeBuilderRepository,
-                                                 InjectionBindingBuilder injectionBindingBuilder, InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory) {
+                                                 InjectionBindingBuilder injectionBindingBuilder,
+                                                 InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory) {
         this.analysisContextFactory = analysisContextFactory;
         this.injectionPointFactory = injectionPointFactory;
-        this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepository = injectionNodeBuilderRepository;
         this.astType = astType;
         this.injectionBindingBuilder = injectionBindingBuilder;
@@ -74,11 +72,8 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
             injectionNodeBuilderRepository.putType(parameterEntry.getKey().getASTType(), injectionBindingBuilder.buildExpression(parameterEntry.getValue()));
         }
 
-        injectionNodeBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
-
-        injectionNodeBuilderRepositoryFactory.addModuleConfiguration(injectionNodeBuilderRepository);
-
-        variableBuilderRepositoryFactory.addApplicationInjections(injectionNodeBuilderRepository);
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
+        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
     }

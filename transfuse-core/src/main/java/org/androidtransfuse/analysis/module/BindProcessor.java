@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableASTImplementationFactory;
 
 import javax.inject.Inject;
@@ -28,12 +29,10 @@ import javax.inject.Inject;
  */
 public class BindProcessor implements TypeProcessor {
 
-    private final ModuleRepository injectionNodeBuilders;
     private final VariableASTImplementationFactory variableInjectionBuilderFactory;
 
     @Inject
-    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory, ModuleRepository injectionNodeBuilders) {
-        this.injectionNodeBuilders = injectionNodeBuilders;
+    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
     }
 
@@ -56,9 +55,8 @@ public class BindProcessor implements TypeProcessor {
         }
 
         @Override
-        public void setConfiguration() {
-
-            injectionNodeBuilders.putModuleConfig(type, variableInjectionBuilderFactory.buildVariableASTBuilder(to));
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
+            configurationRepository.putType(type, variableInjectionBuilderFactory.buildVariableASTBuilder(to));
         }
     }
 }

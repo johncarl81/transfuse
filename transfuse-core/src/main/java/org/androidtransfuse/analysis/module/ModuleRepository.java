@@ -18,9 +18,6 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
-import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.util.matcher.Matcher;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -30,13 +27,7 @@ import java.util.Collection;
  */
 public interface ModuleRepository {
 
-    void addModuleConfiguration(InjectionNodeBuilderRepository repository);
-
-    void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder);
-
-    void putInjectionSignatureConfig(Matcher<InjectionSignature> matcher, InjectionNodeBuilder injectionNodeBuilder);
-
-    void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder);
+    InjectionNodeBuilderRepository buildModuleConfiguration();
 
     void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository);
 
@@ -49,4 +40,6 @@ public interface ModuleRepository {
     ASTType getScope(ASTType astType);
 
     void putScoped(ASTType scope, ASTType toBeScoped);
+
+    void addModuleRepository(InjectionNodeBuilderRepository repository);
 }

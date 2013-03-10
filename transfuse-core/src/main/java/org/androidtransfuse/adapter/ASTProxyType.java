@@ -32,11 +32,11 @@ import java.lang.annotation.Annotation;
 public class ASTProxyType implements ASTType {
 
     private final ASTType proxyASTType;
-    private final PackageClass packageClass;
+    private final String name;
 
-    public ASTProxyType(ASTType proxyASTType, PackageClass packageClass) {
+    public ASTProxyType(ASTType proxyASTType, String name) {
         this.proxyASTType = proxyASTType;
-        this.packageClass = packageClass;
+        this.name = name;
     }
 
     @Override
@@ -46,8 +46,7 @@ public class ASTProxyType implements ASTType {
 
     @Override
     public String getName() {
-        //proxy name
-        return packageClass.getFullyQualifiedName();
+        return name;
     }
 
     @Override
@@ -105,14 +104,14 @@ public class ASTProxyType implements ASTType {
         }
         ASTProxyType rhs = (ASTProxyType) obj;
         return new EqualsBuilder()
-                .append(packageClass, rhs.packageClass)
+                .append(name, rhs.name)
                 .append(proxyASTType, rhs.proxyASTType)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(packageClass).append(proxyASTType).hashCode();
+        return new HashCodeBuilder().append(name).append(proxyASTType).hashCode();
     }
 
     @Override

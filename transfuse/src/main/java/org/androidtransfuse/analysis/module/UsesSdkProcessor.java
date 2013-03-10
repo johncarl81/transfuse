@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.manifest.UsesSDK;
 import org.androidtransfuse.processor.ManifestManager;
 
@@ -55,7 +56,7 @@ public class UsesSdkProcessor implements TypeProcessor {
         }
 
         @Override
-        public void setConfiguration() {
+        public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
             UsesSDK usesSDK = new UsesSDK();
             boolean valueExists = false;
             if(min != null && min >= 0){

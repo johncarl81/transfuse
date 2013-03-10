@@ -23,18 +23,14 @@ import android.view.MenuInflater;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JExpr;
-import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.util.matcher.Matcher;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -78,20 +74,22 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     public static final java.lang.String USB_SERVICE = "usb";
     public static final java.lang.String INPUT_SERVICE = "input";
 
-    private final Map<InjectionSignature, InjectionNodeBuilder> moduleConfiguration = new HashMap<InjectionSignature, InjectionNodeBuilder>();
-    private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> injectionSignatureConfig = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
     private final ImmutableMap<String, ASTType> systemServices;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
     private final CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory;
     private final Set<ASTType> installedComponents = new HashSet<ASTType>();
     private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
+    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
+    private final InjectionNodeBuilderRepository moduleRepository;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(InjectionBindingBuilder injectionBindingBuilder,
-                                                 CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory) {
+                                                 CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory,
+                                                 Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.customScopeAspectFactoryFactory = customScopeAspectFactoryFactory;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
 
         ImmutableMap.Builder<String, ASTType> systemServiceBuilder = ImmutableMap.builder();
         //mapping to class by string to avoid differences in Android platform compilation problems.
@@ -129,9 +127,12 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         systemServiceBuilder.put(WINDOW_SERVICE, new ASTStringType("android.view.WindowManager"));
 
         systemServices = systemServiceBuilder.build();
+
+        moduleRepository = injectionNodeBuilderRepositoryProvider.get();
     }
 
-    public void addApplicationInjections(InjectionNodeBuilderRepository repository) {
+    public InjectionNodeBuilderRepository buildApplicationInjections() {
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         //resources
         repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
 
@@ -147,39 +148,13 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         repository.putType(SharedPreferences.class,
                 injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").dependencyArg(Context.class).build());
 
+        return repository;
     }
 
-    public void addModuleConfiguration(InjectionNodeBuilderRepository repository) {
-        for (Map.Entry<InjectionSignature, InjectionNodeBuilder> astTypeInjectionNodeBuilderEntry : moduleConfiguration.entrySet()) {
-            repository.putType(astTypeInjectionNodeBuilderEntry.getKey(), astTypeInjectionNodeBuilderEntry.getValue());
-        }
-
-        for (Map.Entry<Matcher<InjectionSignature>, InjectionNodeBuilder> matcherInjectionNodeBuilderEntry : injectionSignatureConfig.entrySet()) {
-            repository.putSignatureMatcher(matcherInjectionNodeBuilderEntry.getKey(), matcherInjectionNodeBuilderEntry.getValue());
-        }
-    }
-
-    public void putModuleConfig(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
-        InjectionSignature injectionSignature = new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of());
-        if(moduleConfiguration.containsKey(injectionSignature)){
-            throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
-        }
-        moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
-    }
-
-    public void putInjectionSignatureConfig(Matcher<InjectionSignature> type, InjectionNodeBuilder injectionNodeBuilder) {
-        if(injectionSignatureConfig.containsKey(type)){
-            throw new TransfuseAnalysisException("Binding for type already exists: " + type.toString());
-        }
-        injectionSignatureConfig.put(type, injectionNodeBuilder);
-    }
-
-    @Override
-    public void putInjectionSignatureConfig(InjectionSignature injectionSignature, InjectionNodeBuilder injectionNodeBuilder) {
-        if(moduleConfiguration.containsKey(injectionSignature)){
-            throw new TransfuseAnalysisException("Binding for type already exists: " + injectionSignature.toString());
-        }
-        moduleConfiguration.put(injectionSignature, injectionNodeBuilder);
+    public InjectionNodeBuilderRepository buildModuleConfiguration() {
+        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
+        repository.addRepository(moduleRepository);
+        return repository;
     }
 
     @Override
@@ -223,5 +198,10 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     @Override
     public void putScoped(ASTType scope, ASTType toBeScoped) {
         scoping.put(toBeScoped, scope);
+    }
+
+    @Override
+    public void addModuleRepository(InjectionNodeBuilderRepository repository) {
+        this.moduleRepository.addRepository(repository);
     }
 }

@@ -17,20 +17,22 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
+import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
+import org.androidtransfuse.model.*;
 import org.androidtransfuse.util.QualifierPredicate;
+import org.androidtransfuse.util.matcher.Matcher;
+import org.androidtransfuse.util.matcher.Matchers;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import javax.inject.Provider;
+import java.util.*;
 
 /**
  * InjectionPoint Factory for building the various InjectionPoints from the AST
@@ -41,11 +43,21 @@ public class InjectionPointFactory {
 
     private final ASTClassFactory astClassFactory;
     private final QualifierPredicate qualifierPredicate;
+    private final VariableInjectionNodeBuilder defaultBinding;
+    private final Matcher<ASTType> providerMatcher;
+    private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
 
     @Inject
-    public InjectionPointFactory(ASTClassFactory astClassFactory, QualifierPredicate qualifierPredicate) {
+    public InjectionPointFactory(ASTClassFactory astClassFactory,
+                                 QualifierPredicate qualifierPredicate,
+                                 VariableInjectionNodeBuilder defaultBinding,
+                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
         this.astClassFactory = astClassFactory;
         this.qualifierPredicate = qualifierPredicate;
+        this.defaultBinding = defaultBinding;
+        this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
+
+        this.providerMatcher = Matchers.type(astClassFactory.getType(Provider.class)).ignoreGenerics().build();
     }
 
     /**
@@ -132,12 +144,56 @@ public class InjectionPointFactory {
 
     public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
-        InjectionNodeBuilder injectionNodeBuilders = context.getInjectionNodeBuilders();
-
         ImmutableSet<ASTAnnotation> qualifiers =
                 FluentIterable.from(annotations).filter(qualifierPredicate).toImmutableSet();
 
         //specific binding annotation lookup
-        return injectionNodeBuilders.buildInjectionNode(astType, context, qualifiers);
+        return buildInjectionNode(context.getInjectionNodeBuilders(), astType, context, qualifiers);
+    }
+
+    public InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> qualifiers) {
+        //check type and qualifiers
+        InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
+        InjectionNodeBuilder typeQualifierBuilder = get(repository.getTypeQualifierBindings(), injectionSignature);
+
+        if(typeQualifierBuilder != null){
+            return typeQualifierBuilder.buildInjectionNode(astType, context, qualifiers);
+        }
+
+        //check type
+        InjectionNodeBuilder typeBindingBuilder = repository.getTypeBindings().get(injectionSignature);
+
+        if (typeBindingBuilder != null) {
+            return typeBindingBuilder.buildInjectionNode(astType, context, qualifiers);
+        }
+
+        if(qualifiers.size() > 0){
+            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + astType + " " +
+                    StringUtils.join(qualifiers, ", "));
+        }
+
+        //generated provider
+        if(providerMatcher.matches(astType)){
+            return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(astType, context, qualifiers);
+        }
+
+        //default case
+        return defaultBinding.buildInjectionNode(astType, context, qualifiers);
+    }
+
+    private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){
+        List<InjectionNodeBuilder> builders = new ArrayList<InjectionNodeBuilder>();
+        for (Map.Entry<Matcher<T>, InjectionNodeBuilder> bindingEntry : builderMap.entrySet()) {
+            if (bindingEntry.getKey().matches(input)) {
+                builders.add(bindingEntry.getValue());
+            }
+        }
+        if(builders.size() > 1){
+            throw new TransfuseAnalysisException("Multiple types matched on type " + input + ":" + StringUtils.join(builders, ","));
+        }
+        if(builders.size() == 1){
+            return builders.get(0);
+        }
+        return null;
     }
 }

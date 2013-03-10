@@ -36,19 +36,19 @@ public class VariableNamerTest {
 
     @Test
     public void testBuildName() {
-        assertEquals("fieldInjectable_0", variableNamer.generateName(FieldInjectable.class));
+        assertEquals("fieldInjectable$0", variableNamer.generateName(FieldInjectable.class));
     }
 
     @Test
     public void testMultipleNames() {
-        assertEquals("fieldInjectable_0", variableNamer.generateName(FieldInjectable.class));
-        assertEquals("fieldInjectable_1", variableNamer.generateName(FieldInjectable.class));
-        assertEquals("fieldInjectable_2", variableNamer.generateName(FieldInjectable.class));
+        assertEquals("fieldInjectable$0", variableNamer.generateName(FieldInjectable.class));
+        assertEquals("fieldInjectable$1", variableNamer.generateName(FieldInjectable.class));
+        assertEquals("fieldInjectable$2", variableNamer.generateName(FieldInjectable.class));
     }
 
     @Test
     public void testSmallClassName() {
-        assertEquals("a_0", variableNamer.generateName(A.class));
+        assertEquals("a$0", variableNamer.generateName(A.class));
     }
 
 

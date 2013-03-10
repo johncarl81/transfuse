@@ -34,8 +34,8 @@ import java.util.Map;
  */
 public class ProviderGenerator {
 
-    private static final String SCOPED_EXTENSION = "_Provider";
-    private static final String UNSCOPED_EXTENSION = "_UnscopedProvider";
+    private static final String SCOPED_EXTENSION = "$Provider";
+    private static final String UNSCOPED_EXTENSION = "$UnscopedProvider";
 
     private static final String GET_METHOD = "get";
 
