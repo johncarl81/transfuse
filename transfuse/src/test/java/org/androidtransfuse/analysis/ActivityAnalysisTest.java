@@ -16,8 +16,6 @@
 package org.androidtransfuse.analysis;
 
 import android.app.Activity;
-import com.google.inject.Key;
-import com.google.inject.name.Names;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
 import org.androidtransfuse.annotations.ScopeReference;
@@ -25,7 +23,6 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
-import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
@@ -64,7 +61,8 @@ public class ActivityAnalysisTest {
         manifest.getApplications().add(new Application());
 
         configurationScope.seed(RResource.class, new EmptyRResource());
-        configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
+        //todo: configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
+        configurationScope.seed(Manifest.class, manifest);
         configurationScope.enter();
     }
 

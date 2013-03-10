@@ -21,6 +21,8 @@ import org.junit.Test;
 import javax.inject.Provider;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +53,31 @@ public class ConcurrentDoubleLockingScopeTest {
         assertEquals(scopeTarget, resultTarget);
         ScopeTarget secondResultTarget = scope.getScopedObject(ScopeTarget.class, builder);
         assertEquals(scopeTarget, secondResultTarget);
+    }
+
+    @Test
+    public void testKeyScope(){
+        class ScopeTargetBuilderImpl implements ScopeTargetBuilder{
+            @Override
+            public ScopeTarget get() {
+                return new ScopeTarget();
+            }
+        }
+
+        ScopeTarget scoped1 = scope.getScopedObject(ScopeTarget.class, new ScopeTargetBuilderImpl());
+        ScopeTarget scoped2 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, null), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped3 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, null), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped4 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test"), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped5 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test"), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped6 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test2"), new ScopeTargetBuilderImpl());
+
+        assertSame(scoped1, scoped2);
+        assertSame(scoped1, scoped3);
+        assertSame(scoped4, scoped5);
+        assertNotSame(scoped1, scoped4);
+        assertNotSame(scoped1, scoped4);
+        assertNotSame(scoped1, scoped6);
+        assertNotSame(scoped5, scoped6);
     }
 
 }

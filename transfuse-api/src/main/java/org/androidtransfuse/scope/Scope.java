@@ -35,4 +35,6 @@ public interface Scope {
      * @return scoped instance
      */
     <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
+
+    <T> T getScopedObject(ScopeKey<T> key, Provider<T> provider);
 }

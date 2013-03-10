@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.config;
 
-import com.google.inject.Provider;
+import javax.inject.Provider;
 
 /**
  * Toxic Provider that throws an exception if get() is called.

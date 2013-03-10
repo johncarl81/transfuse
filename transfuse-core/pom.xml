@@ -18,12 +18,6 @@
     </parent>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-assistedinject</artifactId>
-            <version>3.0</version>
-        </dependency>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse-api</artifactId>

@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.config;
 
-import com.google.inject.Key;
-import com.google.inject.Provider;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.inject.Provider;
 
 import static org.junit.Assert.*;
 
@@ -35,14 +35,18 @@ public class MapScopeTest {
 
     private MapScope scope;
     private ScopedTarget target;
-    private Provider<ScopedTarget> provider;
+    private ScopedTarget scopedTarget;
 
     @Before
     public void setup() {
         scope = new MapScope();
         target = new ScopedTarget();
 
-        provider = scope.scope(Key.get(ScopedTarget.class), new Provider<ScopedTarget>() {
+
+    }
+
+    private ScopedTarget getScopedTarget(){
+        return scope.getScopedObject(ScopedTarget.class, new Provider<ScopedTarget>() {
             @Override
             public ScopedTarget get() {
                 return target;
@@ -55,7 +59,7 @@ public class MapScopeTest {
 
         scope.enter();
 
-        assertEquals(target, provider.get());
+        assertEquals(target, getScopedTarget());
 
         scope.exit();
     }
@@ -68,7 +72,7 @@ public class MapScopeTest {
         scope.exit();
 
         try {
-            provider.get();
+            getScopedTarget();
             assertTrue(false);
         } catch (OutOfScopeException e) {
             assertTrue(true);
@@ -79,7 +83,7 @@ public class MapScopeTest {
     @Test
     public void testBeforeOutOfScope() {
         try {
-            provider.get();
+            getScopedTarget();
             assertTrue(false);
         } catch (OutOfScopeException e) {
             assertTrue(true);
@@ -91,7 +95,7 @@ public class MapScopeTest {
         scope.enter();
 
         try {
-            scope.scope(Key.get(SeedTarget.class), new ThrowingProvider<SeedTarget>()).get();
+            scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>());
             //should throw exception
             assertTrue(false);
         } catch (OutOfScopeException e) {
@@ -100,7 +104,7 @@ public class MapScopeTest {
 
         scope.seed(SeedTarget.class, new SeedTarget());
 
-        assertNotNull(scope.scope(Key.get(SeedTarget.class), new ThrowingProvider<SeedTarget>()).get());
+        assertNotNull(scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>()));
 
         scope.exit();
     }
@@ -110,16 +114,16 @@ public class MapScopeTest {
         scope.enter();
 
         try {
-            scope.scope(Key.get(SeedTarget.class), new ThrowingProvider<SeedTarget>()).get();
+            scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>());
             //should throw exception
             assertTrue(false);
         } catch (OutOfScopeException e) {
             assertTrue(true);
         }
 
-        scope.seed(Key.get(SeedTarget.class), new SeedTarget());
+        scope.seed(SeedTarget.class, new SeedTarget());
 
-        assertNotNull(scope.scope(Key.get(SeedTarget.class), new ThrowingProvider<SeedTarget>()).get());
+        assertNotNull(scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>()));
 
         scope.exit();
     }

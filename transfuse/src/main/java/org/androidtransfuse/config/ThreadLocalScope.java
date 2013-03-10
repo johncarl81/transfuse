@@ -15,12 +15,11 @@
  */
 package org.androidtransfuse.config;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.util.Providers;
+import org.androidtransfuse.scope.ScopeKey;
 
+import javax.inject.Provider;
 import javax.inject.Singleton;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,48 +30,44 @@ import java.util.Map;
 @Singleton
 public class ThreadLocalScope implements EnterableScope {
 
-    private final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
+    private final ThreadLocal<Map<ScopeKey<?>, Object>> values = new ThreadLocal<Map<ScopeKey<?>, Object>>();
 
     public void enter() {
-        values.set(Maps.<Key<?>, Object>newHashMap());
+        values.set(new HashMap<ScopeKey<?>, Object>());
     }
 
     public void exit() {
         values.remove();
     }
 
-    public <T> void seed(Key<T> key, T value) {
-        Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+    public <T> void seed(ScopeKey<T> key, T value) {
+        Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
         scopedObjects.put(key, value);
     }
 
     public <T> void seed(Class<T> clazz, T value) {
-        seed(Key.get(clazz), value);
+        seed(new ScopeKey<T>(clazz), value);
     }
 
     @Override
     public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
-        return scope(Key.get(clazz), Providers.guicify(provider)).get();
+        return getScopedObject(new ScopeKey<T>(clazz), provider);
     }
 
-    public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
-        return new Provider<T>() {
-            public T get() {
-                Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+    public <T> T getScopedObject(final ScopeKey<T> key, final Provider<T> unscoped) {
+        Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
 
-                @SuppressWarnings("unchecked")
-                T current = (T) scopedObjects.get(key);
-                if (current == null && !scopedObjects.containsKey(key)) {
-                    current = unscoped.get();
-                    scopedObjects.put(key, current);
-                }
-                return current;
-            }
-        };
+        @SuppressWarnings("unchecked")
+        T current = (T) scopedObjects.get(key);
+        if (current == null && !scopedObjects.containsKey(key)) {
+            current = unscoped.get();
+            scopedObjects.put(key, current);
+        }
+        return current;
     }
 
-    private <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
-        Map<Key<?>, Object> scopedObjects = values.get();
+    private <T> Map<ScopeKey<?>, Object> getScopedObjectMap(ScopeKey<T> key) {
+        Map<ScopeKey<?>, Object> scopedObjects = values.get();
         if (scopedObjects == null) {
             throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
         }

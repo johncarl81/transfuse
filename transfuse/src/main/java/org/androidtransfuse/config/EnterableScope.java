@@ -15,15 +15,15 @@
  */
 package org.androidtransfuse.config;
 
-import com.google.inject.Key;
-import com.google.inject.Scope;
+import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.ScopeKey;
 
 /**
  * Scope with enter and exit functionality.
  *
  * @author John Ericksen
  */
-public interface EnterableScope extends Scope, org.androidtransfuse.scope.Scope {
+public interface EnterableScope extends Scope {
 
     /**
      * Begins the current scope.
@@ -42,7 +42,7 @@ public interface EnterableScope extends Scope, org.androidtransfuse.scope.Scope 
      * @param value of the object
      * @param <T>   generic parameter binding key and value
      */
-    <T> void seed(Key<T> key, T value);
+    <T> void seed(ScopeKey<T> key, T value);
 
     /**
      * Specifies the given value to be used with in this scoping block
