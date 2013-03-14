@@ -51,29 +51,11 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.github.goldin</groupId>
-                <artifactId>find-maven-plugin</artifactId>
-                <version>0.2.5</version>
-                <executions>
-                    <execution>
-                        <id>find-notice-file</id>
-                        <goals>
-                            <goal>find</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <propertyName>notice.file</propertyName>
-                            <file>NOTICE</file>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <version>1.9.0</version>
                 <configuration>
-                    <header>${notice.file}</header>
+                    <header>NOTICE</header>
                     <includes>
                         <include>**/*.java</include>
                         <include>**/*.xml</include>
