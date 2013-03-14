@@ -27,6 +27,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.EmptyRResource;
 import org.junit.After;
 import org.junit.Before;
@@ -60,9 +61,9 @@ public class ActivityAnalysisTest {
         Manifest manifest = new Manifest();
         manifest.getApplications().add(new Application());
 
-        configurationScope.seed(RResource.class, new EmptyRResource());
+        configurationScope.seed(ScopeKey.of(RResource.class), new EmptyRResource());
         //todo: configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
-        configurationScope.seed(Manifest.class, manifest);
+        configurationScope.seed(ScopeKey.of(Manifest.class), manifest);
         configurationScope.enter();
     }
 

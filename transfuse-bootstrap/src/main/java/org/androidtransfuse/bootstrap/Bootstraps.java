@@ -16,6 +16,7 @@
 package org.androidtransfuse.bootstrap;
 
 import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.Providers;
@@ -90,7 +91,7 @@ public final class Bootstraps {
 
                 if(scope != null){
                     for (Map.Entry<Class, Object> scopingEntry : scopedEntry.getValue().entrySet()) {
-                        scope.getScopedObject(scopingEntry.getKey(), Providers.of(scopingEntry.getValue()));
+                        scope.getScopedObject(ScopeKey.of(scopingEntry.getKey()), Providers.of(scopingEntry.getValue()));
                     }
                 }
             }

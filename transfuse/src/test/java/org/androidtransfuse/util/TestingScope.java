@@ -25,23 +25,17 @@ public class TestingScope implements EnterableScope {
 
     private HashMap<ScopeKey<?>, Object> values = new HashMap<ScopeKey<?>, Object>();
 
+    @Override
     public void enter() {//noop
     }
 
+    @Override
     public void exit() {//noop
     }
 
+    @Override
     public <T> void seed(ScopeKey<T> key, T value) {
         values.put(key, value);
-    }
-
-    public <T> void seed(Class<T> clazz, T value) {
-        seed(new ScopeKey<T>(clazz), value);
-    }
-
-    @Override
-    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
-        return getScopedObject(new ScopeKey<T>(clazz), provider);
     }
 
     @Override

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.config;
 
+import org.androidtransfuse.scope.ScopeKey;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class ThreadLocalScopeTest {
     }
 
     private ScopedTarget getScopedTarget(){
-        return scope.getScopedObject(ScopedTarget.class, new Provider<ScopedTarget>() {
+        return scope.getScopedObject(ScopeKey.of(ScopedTarget.class), new Provider<ScopedTarget>() {
             @Override
             public ScopedTarget get() {
                 return target;
@@ -95,16 +96,16 @@ public class ThreadLocalScopeTest {
         scope.enter();
 
         try {
-            scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>());
+            scope.getScopedObject(ScopeKey.of(SeedTarget.class), new ThrowingProvider<SeedTarget>());
             //should throw exception
             assertTrue(false);
         } catch (OutOfScopeException e) {
             assertTrue(true);
         }
 
-        scope.seed(SeedTarget.class, new SeedTarget());
+        scope.seed(ScopeKey.of(SeedTarget.class), new SeedTarget());
 
-        assertNotNull(scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>()));
+        assertNotNull(scope.getScopedObject(ScopeKey.of(SeedTarget.class), new ThrowingProvider<SeedTarget>()));
 
         scope.exit();
     }
@@ -114,16 +115,16 @@ public class ThreadLocalScopeTest {
         scope.enter();
 
         try {
-            scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>());
+            scope.getScopedObject(ScopeKey.of(SeedTarget.class), new ThrowingProvider<SeedTarget>());
             //should throw exception
             assertTrue(false);
         } catch (OutOfScopeException e) {
             assertTrue(true);
         }
 
-        scope.seed(SeedTarget.class, new SeedTarget());
+        scope.seed(ScopeKey.of(SeedTarget.class), new SeedTarget());
 
-        assertNotNull(scope.getScopedObject(SeedTarget.class, new ThrowingProvider<SeedTarget>()));
+        assertNotNull(scope.getScopedObject(ScopeKey.of(SeedTarget.class), new ThrowingProvider<SeedTarget>()));
 
         scope.exit();
     }

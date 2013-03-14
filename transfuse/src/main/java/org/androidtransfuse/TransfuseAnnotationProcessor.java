@@ -30,6 +30,7 @@ import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
 import org.androidtransfuse.processor.TransfuseProcessor;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
@@ -124,11 +125,11 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         configurationScope.enter();
 
-        //configurationScope.seed(Key.get(File.class, Names.named(TransfuseAndroidModule.MANIFEST_FILE)), manifestFile);
-        configurationScope.seed(FileProxy.class, manifestFile);
-        configurationScope.seed(RResource.class, r);
-        //configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
-        configurationScope.seed(Manifest.class, manifest);
+        //todo:configurationScope.seed(Key.get(File.class, Names.named(TransfuseAndroidModule.MANIFEST_FILE)), manifestFile);
+        configurationScope.seed(ScopeKey.of(FileProxy.class), manifestFile);
+        configurationScope.seed(ScopeKey.of(RResource.class), r);
+        //todo:configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
+        configurationScope.seed(ScopeKey.of(Manifest.class), manifest);
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 

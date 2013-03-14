@@ -24,6 +24,7 @@ import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.scope.Scopes;
 
 import javax.inject.Inject;
@@ -50,21 +51,22 @@ public class SingletonScopeBuilder implements VariableBuilder {
         this.namer = namer;
     }
 
-    public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
+    public TypedExpression buildVariable(InjectionBuilderContext context, InjectionNode injectionNode) {
 
         //build provider
         JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
-        JExpression provider = JExpr._new(providerClass).arg(injectionBuilderContext.getScopeVar());
+        JExpression provider = JExpr._new(providerClass).arg(context.getScopeVar());
 
         //build scope call
-        // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
-        JExpression scopesVar = injectionBuilderContext.getScopeVar();
+        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+        JExpression scopesVar = context.getScopeVar();
         JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(codeModel.ref(Singleton.class).dotclass());
 
-        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
+        JInvocation scopeKey = JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(injectionNode.getClassName()));
 
-        JVar decl = injectionBuilderContext.getBlock().decl(codeModel.ref(injectionNode.getClassName()),
+        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(scopeKey).arg(provider);
+
+        JVar decl = context.getBlock().decl(codeModel.ref(injectionNode.getClassName()),
                 namer.generateName(injectionNode), expression);
 
         return typedExpressionFactory.build(injectionNode.getASTType(), decl);

@@ -29,11 +29,6 @@ public class ConcurrentDoubleLockingScope implements Scope {
     private final ConcurrentMap<ScopeKey, Object> singletonMap = new ConcurrentHashMap<ScopeKey, Object>();
 
     @Override
-    public <T> T getScopedObject(Class<T> clazz, Provider<T> provider) {
-        return getScopedObject(new ScopeKey<T>(clazz), provider);
-    }
-
-    @Override
     public <T> T getScopedObject(ScopeKey<T> clazz, Provider<T> provider) {
         Object result = singletonMap.get(clazz);
         if (result == null) {

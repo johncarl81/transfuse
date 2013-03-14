@@ -29,7 +29,7 @@ public class ScopeTest {
 
     @Test
     public void verifyScopeMethod() throws NoSuchMethodException {
-        Method getScopedObjectMethod = Scope.class.getMethod(Scope.GET_SCOPED_OBJECT, Class.class, Provider.class);
-        assertNotNull(getScopedObjectMethod);
+        Method getScopedByKeyMethod = Scope.class.getMethod(Scope.GET_SCOPED_OBJECT, ScopeKey.class, Provider.class);
+        assertNotNull(getScopedByKeyMethod);
     }
 }

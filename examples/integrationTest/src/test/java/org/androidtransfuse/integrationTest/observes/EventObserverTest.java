@@ -19,6 +19,7 @@ import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.event.EventManager;
 import org.androidtransfuse.event.EventManager$UnscopedProvider;
 import org.androidtransfuse.integrationTest.DelegateUtil;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.scope.ScopesUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,11 +46,11 @@ public class EventObserverTest {
         eventObserverActivity = new EventObserverActivity();
         eventObserverActivity.onCreate(null);
 
-        eventManager = ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(EventManager.class, new EventManager$UnscopedProvider(ScopesUtil.getInstance()));
+        eventManager = ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(ScopeKey.of(EventManager.class), new EventManager$UnscopedProvider(ScopesUtil.getInstance()));
 
         eventObserver = DelegateUtil.getDelegate(eventObserverActivity, EventObserver.class);
 
-        singletonObserver = ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(SingletonObserver.class, new SingletonObserver$UnscopedProvider(ScopesUtil.getInstance()));
+        singletonObserver = ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(ScopeKey.of(SingletonObserver.class), new SingletonObserver$UnscopedProvider(ScopesUtil.getInstance()));
         singletonObserver.reset();
     }
 

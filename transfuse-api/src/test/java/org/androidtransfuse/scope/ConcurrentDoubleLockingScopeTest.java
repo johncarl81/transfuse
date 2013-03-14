@@ -49,9 +49,9 @@ public class ConcurrentDoubleLockingScopeTest {
     public void testScopedBuild() {
         when(builder.get()).thenReturn(scopeTarget);
 
-        ScopeTarget resultTarget = scope.getScopedObject(ScopeTarget.class, builder);
+        ScopeTarget resultTarget = scope.getScopedObject(ScopeKey.of(ScopeTarget.class), builder);
         assertEquals(scopeTarget, resultTarget);
-        ScopeTarget secondResultTarget = scope.getScopedObject(ScopeTarget.class, builder);
+        ScopeTarget secondResultTarget = scope.getScopedObject(ScopeKey.of(ScopeTarget.class), builder);
         assertEquals(scopeTarget, secondResultTarget);
     }
 
@@ -64,12 +64,12 @@ public class ConcurrentDoubleLockingScopeTest {
             }
         }
 
-        ScopeTarget scoped1 = scope.getScopedObject(ScopeTarget.class, new ScopeTargetBuilderImpl());
-        ScopeTarget scoped2 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, null), new ScopeTargetBuilderImpl());
-        ScopeTarget scoped3 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, null), new ScopeTargetBuilderImpl());
-        ScopeTarget scoped4 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test"), new ScopeTargetBuilderImpl());
-        ScopeTarget scoped5 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test"), new ScopeTargetBuilderImpl());
-        ScopeTarget scoped6 = scope.getScopedObject(new ScopeKey<ScopeTarget>(ScopeTarget.class, "test2"), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped1 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped2 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped3 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped4 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class).annotatedBy("@test"), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped5 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class).annotatedBy("@test"), new ScopeTargetBuilderImpl());
+        ScopeTarget scoped6 = scope.getScopedObject(ScopeKey.of(ScopeTarget.class).annotatedBy("@test2"), new ScopeTargetBuilderImpl());
 
         assertSame(scoped1, scoped2);
         assertSame(scoped1, scoped3);

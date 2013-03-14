@@ -15,10 +15,7 @@
  */
 package org.androidtransfuse.gen.scopeBuilder;
 
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JExpression;
+import com.sun.codemodel.*;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
@@ -28,6 +25,7 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.ScopeKey;
 
 import javax.inject.Inject;
 
@@ -64,12 +62,14 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
         TypedExpression contextScopeHolderExpression = injectionExpressionBuilder.buildVariable(injectionBuilderContext, this.contextScopeHolder);
-        JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
+        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
         //todo:coerce type?
         JExpression cast = JExpr.cast(codeModel.ref(ContextScopeHolder.class), contextScopeHolderExpression.getExpression());
         JExpression scopeVar = cast.invoke(ContextScopeHolder.GET_SCOPE);
 
-        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
+        JInvocation scopeKey = JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(injectionNode.getClassName()));
+
+        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(scopeKey).arg(provider);
 
         return typedExpressionFactory.build(injectionNode.getASTType(), expression);
     }

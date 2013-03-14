@@ -29,12 +29,10 @@ public interface Scope {
 
     /**
      * Lookup of the given instance by type.
-     * @param clazz type of the instance
+     * @param key scoping key
      * @param provider required to build the instance if applicable
      * @param <T> relating type
      * @return scoped instance
      */
-    <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-
     <T> T getScopedObject(ScopeKey<T> key, Provider<T> provider);
 }

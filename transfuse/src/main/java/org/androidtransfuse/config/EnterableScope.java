@@ -43,13 +43,4 @@ public interface EnterableScope extends Scope {
      * @param <T>   generic parameter binding key and value
      */
     <T> void seed(ScopeKey<T> key, T value);
-
-    /**
-     * Specifies the given value to be used with in this scoping block
-     *
-     * @param clazz representing the value
-     * @param value of the object
-     * @param <T>   generic parameter binding key and value
-     */
-    <T> void seed(Class<T> clazz, T value);
 }

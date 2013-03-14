@@ -29,23 +29,23 @@ public class MapScope implements EnterableScope {
 
     private ConcurrentMap<ScopeKey<?>, Object> values;
 
+    @Override
     public void enter() {
         values = new ConcurrentHashMap<ScopeKey<?>, Object>();
     }
 
+    @Override
     public void exit() {
         values = null;
     }
 
+    @Override
     public <T> void seed(ScopeKey<T> key, T value) {
         Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
         scopedObjects.put(key, value);
     }
 
-    public <T> void seed(Class<T> clazz, T value) {
-        seed(new ScopeKey<T>(clazz), value);
-    }
-
+    @Override
     public <T> T getScopedObject(final ScopeKey<T> key, final Provider<T> provider) {
         ConcurrentMap<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
 
@@ -59,11 +59,6 @@ public class MapScope implements EnterableScope {
             }
         }
         return (T) current;
-    }
-
-    @Override
-    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
-        return getScopedObject(new ScopeKey<T>(clazz), provider);
     }
 
     private <T> ConcurrentMap<ScopeKey<?>, Object> getScopedObjectMap(ScopeKey<T> key) {

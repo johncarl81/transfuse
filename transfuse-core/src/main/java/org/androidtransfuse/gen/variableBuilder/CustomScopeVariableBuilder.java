@@ -24,6 +24,7 @@ import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scope;
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.scope.Scopes;
 
 /**
@@ -58,11 +59,13 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        JExpression injectionNodeClassRef = codeModel.ref(injectionNode.getClassName()).dotclass();
+        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
         JExpression scopesVar = injectionBuilderContext.getScopeVar();
         JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(codeModel.ref(scopeKey.getName()).dotclass());
 
-        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(injectionNodeClassRef).arg(provider);
+        JInvocation scopeKey = JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(injectionNode.getClassName()));
+
+        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(scopeKey).arg(provider);
 
         JVar decl = injectionBuilderContext.getBlock().decl(codeModel.ref(injectionNode.getClassName()),
                 namer.generateName(injectionNode), expression);

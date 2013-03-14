@@ -32,28 +32,23 @@ public class ThreadLocalScope implements EnterableScope {
 
     private final ThreadLocal<Map<ScopeKey<?>, Object>> values = new ThreadLocal<Map<ScopeKey<?>, Object>>();
 
+    @Override
     public void enter() {
         values.set(new HashMap<ScopeKey<?>, Object>());
     }
 
+    @Override
     public void exit() {
         values.remove();
     }
 
+    @Override
     public <T> void seed(ScopeKey<T> key, T value) {
         Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
         scopedObjects.put(key, value);
     }
 
-    public <T> void seed(Class<T> clazz, T value) {
-        seed(new ScopeKey<T>(clazz), value);
-    }
-
     @Override
-    public <T> T getScopedObject(Class<T> clazz, javax.inject.Provider<T> provider) {
-        return getScopedObject(new ScopeKey<T>(clazz), provider);
-    }
-
     public <T> T getScopedObject(final ScopeKey<T> key, final Provider<T> unscoped) {
         Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
 
