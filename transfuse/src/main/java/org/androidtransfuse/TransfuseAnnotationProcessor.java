@@ -125,11 +125,9 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         configurationScope.enter();
 
-        //todo:configurationScope.seed(Key.get(File.class, Names.named(TransfuseAndroidModule.MANIFEST_FILE)), manifestFile);
-        configurationScope.seed(ScopeKey.of(File.class), manifestFile);
+        configurationScope.seed(ScopeKey.of(File.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.MANIFEST_FILE + ")"), manifestFile);
         configurationScope.seed(ScopeKey.of(RResource.class), r);
-        //todo:configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
-        configurationScope.seed(ScopeKey.of(Manifest.class), manifest);
+        configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 

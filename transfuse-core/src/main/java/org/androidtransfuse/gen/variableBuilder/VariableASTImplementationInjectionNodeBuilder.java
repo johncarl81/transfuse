@@ -44,7 +44,9 @@ public class VariableASTImplementationInjectionNodeBuilder implements InjectionN
 
     @Override
     public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
-        InjectionNode injectionNode = analyzer.analyze(signature, implType, context);
+        //InjectionNode injectionNode = analyzer.analyze(signature, implType, context);
+        InjectionSignature implSignature = new InjectionSignature(implType);
+        InjectionNode injectionNode = analyzer.analyze(signature, implSignature, context);
 
         //default variable builder
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());

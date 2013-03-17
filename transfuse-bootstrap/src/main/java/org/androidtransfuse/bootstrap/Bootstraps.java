@@ -34,7 +34,7 @@ public final class Bootstraps {
     public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Factory";
     public static final String BOOTSTRAPS_INJECTOR_METHOD = "inject";
     public static final String BOOTSTRAPS_INJECTOR_GET = "get";
-    public static final String IMPL_EXT = "Factory";
+    public static final String IMPL_EXT = "$Bootstrap";
 
     private static final GeneratedCodeRepository<BootstrapInjector> REPOSITORY =
             new GeneratedCodeRepository<BootstrapInjector>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_INJECTOR_NAME) {

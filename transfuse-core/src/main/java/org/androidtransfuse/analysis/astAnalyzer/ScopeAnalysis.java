@@ -35,7 +35,7 @@ public class ScopeAnalysis extends ASTAnalysisAdaptor {
 
         if (injectionNode.getASTType().equals(concreteType)) {
 
-            ASTType scopedType = context.getInjectionNodeBuilders().getScope(injectionNode.getASTType());
+            ASTType scopedType = context.getInjectionNodeBuilders().getScope(injectionNode.getTypeSignature());
             if(scopedType != null){
                 ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopedType);
                 injectionNode.addAspect(scopeAspectFactory.buildAspect(injectionNode, concreteType, context));

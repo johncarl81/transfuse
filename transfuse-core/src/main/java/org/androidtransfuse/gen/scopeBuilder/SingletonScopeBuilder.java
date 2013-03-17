@@ -22,6 +22,7 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.ScopeKey;
@@ -58,17 +59,22 @@ public class SingletonScopeBuilder implements VariableBuilder {
         JExpression provider = JExpr._new(providerClass).arg(context.getScopeVar());
 
         //build scope call
-        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
         JExpression scopesVar = context.getScopeVar();
         JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(codeModel.ref(Singleton.class).dotclass());
 
-        JInvocation scopeKey = JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(injectionNode.getClassName()));
-
-        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(scopeKey).arg(provider);
+        JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(buildScopeKey(injectionNode)).arg(provider);
 
         JVar decl = context.getBlock().decl(codeModel.ref(injectionNode.getClassName()),
                 namer.generateName(injectionNode), expression);
 
         return typedExpressionFactory.build(injectionNode.getASTType(), decl);
+    }
+
+    private JInvocation buildScopeKey(InjectionNode injectionNode){
+        InjectionSignature signature = injectionNode.getTypeSignature();
+
+        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+
+        return JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }
 }

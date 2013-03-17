@@ -23,6 +23,7 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
@@ -62,8 +63,7 @@ public class ActivityAnalysisTest {
         manifest.getApplications().add(new Application());
 
         configurationScope.seed(ScopeKey.of(RResource.class), new EmptyRResource());
-        //todo: configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
-        configurationScope.seed(ScopeKey.of(Manifest.class), manifest);
+        configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
         configurationScope.enter();
     }
 

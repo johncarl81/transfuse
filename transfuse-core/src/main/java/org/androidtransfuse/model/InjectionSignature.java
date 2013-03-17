@@ -19,9 +19,12 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.util.Contract;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -30,7 +33,6 @@ public class InjectionSignature {
 
     private final ASTType type;
     private final ImmutableSet<ASTAnnotation> annotations;
-    private final int hashCode;
 
     public InjectionSignature(ASTType type){
         this(type, ImmutableSet.<ASTAnnotation>of());
@@ -41,9 +43,6 @@ public class InjectionSignature {
         Contract.notNull(annotations, "annotations");
         this.type = type;
         this.annotations = annotations;
-
-        //immutable hash code
-        this.hashCode = new HashCodeBuilder().append(type).append(annotations).hashCode();
     }
 
     public ASTType getType() {
@@ -56,24 +55,56 @@ public class InjectionSignature {
 
     @Override
     public String toString() {
-        return "InjectionSignature{" +
-                "type=" + type +
-                ", annotations=" + StringUtils.join(annotations, ",") +
-                '}';
+        return buildScopeKeySignature();
+    }
+
+    public String buildScopeKeySignature(){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(type);
+
+        for (ASTAnnotation annotation : annotations) {
+            builder.append('@');
+            builder.append(annotation.getASTType().getName());
+            builder.append('(');
+            List<String> propertyNames = new ArrayList<String>(annotation.getPropertyNames());
+            Collections.sort(propertyNames);
+            boolean first = true;
+            for (String property : propertyNames) {
+                if(first){
+                    first = false;
+                }
+                else{
+                    builder.append(',');
+                }
+                builder.append(property);
+                builder.append('=');
+                builder.append(annotation.getProperty(property, Object.class).toString());
+            }
+            builder.append(')');
+        }
+
+        return builder.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InjectionSignature)) return false;
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof InjectionSignature)){
+            return false;
+        }
 
         InjectionSignature that = (InjectionSignature) o;
 
-        return new EqualsBuilder().append(type, that.type).append(annotations, that.annotations).isEquals();
+        return new EqualsBuilder()
+                .append(type, that.type)
+                .append(annotations, that.annotations).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return new HashCodeBuilder().append(type).append(annotations).hashCode();
     }
 }

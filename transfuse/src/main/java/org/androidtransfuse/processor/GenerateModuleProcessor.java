@@ -15,12 +15,14 @@
  */
 package org.androidtransfuse.processor;
 
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.util.Collections;
 
@@ -39,10 +41,10 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
     @Inject
     public GenerateModuleProcessor(ManifestManager manifestManager,
                                    Merger merger,
-                                   //todo:@Named(TransfuseAndroidModule.ORIGINAL_MANIFEST)
+                                   @Named(TransfuseAndroidModule.ORIGINAL_MANIFEST)
                                    Manifest originalManifest,
                                    Logger logger,
-                                   //todo: @Named(TransfuseAndroidModule.MANIFEST_FILE)
+                                   @Named(TransfuseAndroidModule.MANIFEST_FILE)
                                    File manifestFile,
                                    ManifestSerializer manifestParser) {
         this.manifestManager = manifestManager;

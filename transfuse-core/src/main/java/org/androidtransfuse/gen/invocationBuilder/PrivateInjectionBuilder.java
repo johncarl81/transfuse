@@ -50,7 +50,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
         //add classes
         JArray classArray = JExpr.newArray(codeModel.ref(Class.class));
         for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
-            classArray.add(codeModel.ref(injectionNode.getUsageType().getName()).dotclass());
+            classArray.add(codeModel.ref(injectionNode.getSignature().getType().getName()).dotclass());
         }
         constructorInvocation.arg(classArray);
 

@@ -38,7 +38,7 @@ public class InjectionNodeBuilderRepository {
     private final Map<InjectionSignature, InjectionNodeBuilder> typeBindings = new HashMap<InjectionSignature, InjectionNodeBuilder>();
     private final Map<ASTType, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<ASTType, ScopeAspectFactory>();
     private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
-    private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
+    private final Map<InjectionSignature, ASTType> scoping = new HashMap<InjectionSignature, ASTType>();
     private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
     private final ASTClassFactory astClassFactory;
 
@@ -96,15 +96,15 @@ public class InjectionNodeBuilderRepository {
         return scopeVariableBuilderMap;
     }
 
-    private Map<ASTType, ASTType> getScoping() {
+    private Map<InjectionSignature, ASTType> getScoping() {
         return scoping;
     }
 
-    public void putScoped(ASTType type, ASTType scope) {
+    public void putScoped(InjectionSignature type, ASTType scope) {
         scoping.put(type, scope);
     }
 
-    public ASTType getScope(ASTType type) {
+    public ASTType getScope(InjectionSignature type) {
         return scoping.get(type);
     }
 

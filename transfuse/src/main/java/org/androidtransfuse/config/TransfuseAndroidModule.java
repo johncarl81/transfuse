@@ -67,8 +67,6 @@ import java.util.Map;
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
         @BindProvider(type = ProcessingEnvironment.class, provider = ProcessingEnvironmentThrowingProvider.class, scope = Singleton.class),
         @BindProvider(type = RResource.class, provider = RResourceThrowingProvider.class, scope = ConfigurationScope.class),
-        @BindProvider(type = Manifest.class, provider = ManifestThrowingProvider.class, scope = ConfigurationScope.class),
-        @BindProvider(type = File.class, provider = FileThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class, scope = ConfigurationScope.class),
         @BindProvider(type = JCodeModel.class, provider = JCodeModelProvider.class, scope = CodeGenerationScope.class)
@@ -91,18 +89,35 @@ public class TransfuseAndroidModule {
     public static final String MANIFEST_FILE = "manifestFile";
 
     @Provides
+    @Singleton
     public Elements getElements(ProcessingEnvironment processingEnvironment){
         return new SynchronizedElements(processingEnvironment.getElementUtils());
     }
 
     @Provides
+    @Singleton
     public Logger getLogger(ProcessingEnvironment processingEnvironment){
         return new MessagerLogger(processingEnvironment.getMessager());
     }
 
     @Provides
+    @Singleton
     public Filer getFiler(ProcessingEnvironment processingEnvironment){
         return new SynchronizedFiler(processingEnvironment.getFiler());
+    }
+
+    @Provides
+    @ConfigurationScope
+    @Named(MANIFEST_FILE)
+    public File getManifestFile(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    @Named(ORIGINAL_MANIFEST)
+    public Manifest getManifest(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
     }
 
     //todo: remove the following

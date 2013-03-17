@@ -20,11 +20,13 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -81,5 +83,36 @@ public class ASTElementAnnotation implements ASTAnnotation {
         return "ASTElementAnnotation{" +
                 "type=" + type +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof ASTAnnotation)){
+            return false;
+        }
+
+        ASTAnnotation that = (ASTAnnotation) o;
+
+        if(!type.equals(that.getASTType())){
+            return false;
+        }
+
+        Map<String, Object> thisProperties = new HashMap<String, Object>();
+        Map<String, Object> thatProperties = new HashMap<String, Object>();
+
+        for (String property : getPropertyNames()) {
+            thisProperties.put(property, this.getProperty(property, Object.class));
+            thatProperties.put(property, that.getProperty(property, Object.class));
+        }
+
+        return thisProperties.equals(thatProperties);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(type).hashCode();
     }
 }

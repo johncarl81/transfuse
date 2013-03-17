@@ -28,8 +28,6 @@ import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNode
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopesPredicate;
-import org.androidtransfuse.util.matcher.Matcher;
-import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -131,10 +129,9 @@ public class ProvidesProcessor implements MethodProcessor {
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
-            Matcher<InjectionSignature> matcher = Matchers.type(astMethod.getReturnType()).annotated().byAnnotation(qualifiers).build();
+            InjectionSignature signature = new InjectionSignature(astMethod.getReturnType(), qualifiers);
 
-            configurationRepository.putSignatureMatcher(matcher,
-                    variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod));
+            configurationRepository.putType(signature, variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod));
 
             ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
                 @Override
@@ -143,10 +140,13 @@ public class ProvidesProcessor implements MethodProcessor {
                 }
             });
 
-            Matcher<InjectionSignature> providerMatcher = Matchers.type(providerType).annotated().byAnnotation(qualifiers).build();
+            InjectionSignature providerSignature = new InjectionSignature(providerType, qualifiers);
 
-            configurationRepository.putSignatureMatcher(providerMatcher,
-                    generatedProviderInjectionNodeBuilder);
+            configurationRepository.putType(providerSignature, generatedProviderInjectionNodeBuilder);
+
+            if(scope != null){
+                configurationRepository.putScoped(signature, scope.getASTType());
+            }
         }
     }
 }

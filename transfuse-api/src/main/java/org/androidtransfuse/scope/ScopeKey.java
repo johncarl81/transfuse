@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.scope;
 
-import java.lang.annotation.Annotation;
-
 /**
  * @author John Ericksen
  */
@@ -39,20 +37,23 @@ public class ScopeKey<T> {
         return new ScopeKey<T>(this.signature + annotation);
     }
 
-    public ScopeKey<T> annotatedBy(Class<? extends Annotation> annotation){
-        return new ScopeKey<T>(this.signature + "@" + annotation.getName());
+    @Override
+    public String toString() {
+        return signature;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ScopeKey)) return false;
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof ScopeKey)){
+            return false;
+        }
 
         ScopeKey scopeKey = (ScopeKey) o;
 
-        if (!signature.equals(scopeKey.signature)) return false;
-
-        return true;
+        return signature.equals(scopeKey.signature);
     }
 
     @Override

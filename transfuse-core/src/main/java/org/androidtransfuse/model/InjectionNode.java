@@ -26,14 +26,14 @@ import java.util.Map;
 public class InjectionNode {
 
     private final InjectionSignature signature;
-    private final ASTType astType;
+    private final InjectionSignature astType;
     private final Map<Class, Object> aspects = new HashMap<Class, Object>();
 
     public InjectionNode(InjectionSignature signature) {
-        this(signature, signature.getType());
+        this(signature, signature);
     }
 
-    public InjectionNode(InjectionSignature signature, ASTType astType) {
+    public InjectionNode(InjectionSignature signature, InjectionSignature astType) {
         this.astType = astType;
         this.signature = signature;
     }
@@ -42,17 +42,22 @@ public class InjectionNode {
         return signature;
     }
 
+    public InjectionSignature getTypeSignature(){
+        //todo: rename to something else.
+        return astType;
+    }
+
     public ASTType getUsageType() {
         //todo:signature
         return signature.getType();
     }
 
     public String getClassName() {
-        return astType.getName();
+        return getASTType().getName();
     }
 
     public ASTType getASTType() {
-        return astType;
+        return astType.getType();
     }
 
     public <T> T getAspect(Class<T> clazz){

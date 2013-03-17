@@ -118,7 +118,7 @@ public class InjectionFragmentGeneratorTest {
     @Test
     public void testDelayedProxyInjection() throws Exception {
         InjectionNode injectionNode = new InjectionNode(new InjectionSignature(astClassFactory.getType(DelayedProxy.class)),
-                astClassFactory.getType(DelayedProxyTarget.class));
+                new InjectionSignature(astClassFactory.getType(DelayedProxyTarget.class)));
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         VirtualProxyAspect proxyAspect = new VirtualProxyAspect();

@@ -43,7 +43,7 @@ public class InjectionFragmentGeneratorHarness {
     public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
         JDefinedClass definedClass = generationUtil.defineClass(providerPackageClass);
 
-        JType providedType = codeModel.parseType(injectionNode.getUsageType().getName());
+        JType providedType = codeModel.parseType(injectionNode.getSignature().getType().getName());
 
         definedClass._implements(codeModel.ref(Provider.class).narrow(providedType));
 

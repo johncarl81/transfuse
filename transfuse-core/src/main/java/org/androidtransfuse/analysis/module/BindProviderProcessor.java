@@ -19,6 +19,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -62,7 +63,7 @@ public class BindProviderProcessor implements TypeProcessor {
             configurationRepository.putType(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
 
             if(scope != null) {
-                configurationRepository.putScoped(type, scope);
+                configurationRepository.putScoped(new InjectionSignature(type), scope);
             }
         }
     }

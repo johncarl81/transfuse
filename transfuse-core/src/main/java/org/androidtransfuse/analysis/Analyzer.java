@@ -40,11 +40,11 @@ public class Analyzer {
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
     public InjectionNode analyze(InjectionSignature signature, AnalysisContext context){
-        return analyze(signature, signature.getType(), context);
+        return analyze(signature, signature, context);
     }
 
     public InjectionNode analyze(ASTType astType, ASTType concreteType, AnalysisContext context){
-        return analyze(new InjectionSignature(astType), concreteType, context);
+        return analyze(new InjectionSignature(astType), new InjectionSignature(concreteType), context);
     }
 
     /**
@@ -56,14 +56,14 @@ public class Analyzer {
      * @param context      required
      * @return InjectionNode root
      */
-    public InjectionNode analyze(final InjectionSignature signature, final ASTType concreteType, final AnalysisContext context) {
+    public InjectionNode analyze(final InjectionSignature signature, final InjectionSignature concreteType, final AnalysisContext context) {
 
         InjectionNode injectionNode;
 
-        if (context.isDependent(concreteType)) {
+        if (context.isDependent(concreteType.getType())) {
             //if this type is a dependency of itself, we've found a back link.
             //This dependency loop must be broken using a virtual proxy
-            injectionNode = context.getInjectionNode(concreteType);
+            injectionNode = context.getInjectionNode(concreteType.getType());
 
             Stack<InjectionNode> loopedDependencies = context.getDependencyHistory();
 
@@ -84,7 +84,7 @@ public class Analyzer {
             AnalysisContext nextContext = context.addDependent(injectionNode);
 
             //loop over super classes (extension and implements)
-            scanClassHierarchy(concreteType, injectionNode, nextContext);
+            scanClassHierarchy(concreteType.getType(), injectionNode, nextContext);
         }
 
         return injectionNode;

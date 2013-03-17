@@ -39,6 +39,7 @@ import org.androidtransfuse.gen.variableBuilder.resource.MethodBasedResourceExpr
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory;
+import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory;
 import org.androidtransfuse.processor.GeneratorRepository;
@@ -49,6 +50,7 @@ import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.TestingScope;
 
 import javax.annotation.processing.Filer;
+import javax.inject.Named;
 import javax.lang.model.util.Elements;
 
 @BootstrapModule
@@ -89,6 +91,13 @@ import javax.lang.model.util.Elements;
 public class TestTransfuseAndroidModule {
 
     private final JCodeModel codeModel = new JCodeModel();
+
+    @Provides
+    @ConfigurationScope
+    @Named(TransfuseAndroidModule.ORIGINAL_MANIFEST)
+    public Manifest getDummyManifest(){
+        return new Manifest();
+    }
 
     @Provides
     public Logger getLogger(){
