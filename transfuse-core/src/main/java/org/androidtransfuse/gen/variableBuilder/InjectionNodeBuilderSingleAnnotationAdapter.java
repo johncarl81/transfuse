@@ -15,12 +15,11 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTUtils;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import java.lang.annotation.Annotation;
 
@@ -36,12 +35,12 @@ public abstract class InjectionNodeBuilderSingleAnnotationAdapter implements Inj
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations) {
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
 
-        ASTAnnotation annotation = ASTUtils.getInstance().getAnnotation(annotationClass, annotations);
+        ASTAnnotation annotation = ASTUtils.getInstance().getAnnotation(annotationClass, signature.getAnnotations());
 
-        return buildInjectionNode(astType, context, annotation);
+        return buildInjectionNode(signature, context, annotation);
     }
 
-    public abstract InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation);
+    public abstract InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation);
 }

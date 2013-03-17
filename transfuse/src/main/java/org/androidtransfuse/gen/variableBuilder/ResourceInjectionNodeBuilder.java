@@ -19,13 +19,13 @@ import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.annotations.Resource;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -52,13 +52,13 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         Integer resourceId = annotation.getProperty("value", Integer.class);
 
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         try {
-            JType resourceType = codeModel.parseType(astType.getName());
+            JType resourceType = codeModel.parseType(signature.getType().getName());
 
             ResourceExpressionBuilder resourceExpressionBuilder =
                     resourceExpressionBuilderFactory.buildResourceExpressionBuilder(resourceType, context);
@@ -66,7 +66,7 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
             injectionNode.addAspect(VariableBuilder.class,
                     variableInjectionBuilderFactory.buildResourceVariableBuilder(resourceId, resourceExpressionBuilder));
         } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
+            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
         }
 
         return injectionNode;

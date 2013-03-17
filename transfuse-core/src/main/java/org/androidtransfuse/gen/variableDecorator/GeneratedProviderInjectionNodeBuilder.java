@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -24,6 +22,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -46,12 +45,12 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations) {
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
 
-        ASTType providerGenericType = getProviderTemplateType(astType);
+        ASTType providerGenericType = getProviderTemplateType(signature.getType());
 
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
-        InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(annotations, providerGenericType, context.addDependent(injectionNode));
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
+        InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(signature.getAnnotations(), providerGenericType, context.addDependent(injectionNode));
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode));
 

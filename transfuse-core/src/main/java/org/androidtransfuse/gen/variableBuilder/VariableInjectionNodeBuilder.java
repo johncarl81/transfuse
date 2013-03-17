@@ -15,17 +15,17 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-public class VariableInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
+public class VariableInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private final Analyzer analyzer;
     private final VariableInjectionBuilder variableInjectionBuilder;
@@ -37,8 +37,8 @@ public class VariableInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotati
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilder);
 

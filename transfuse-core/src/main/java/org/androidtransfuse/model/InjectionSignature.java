@@ -23,8 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.util.Collection;
-
 /**
  * @author John Ericksen
  */
@@ -33,6 +31,10 @@ public class InjectionSignature {
     private final ASTType type;
     private final ImmutableSet<ASTAnnotation> annotations;
     private final int hashCode;
+
+    public InjectionSignature(ASTType type){
+        this(type, ImmutableSet.<ASTAnnotation>of());
+    }
 
     public InjectionSignature(ASTType type, ImmutableSet<ASTAnnotation> annotations) {
         Contract.notNull(type, "type");
@@ -48,7 +50,7 @@ public class InjectionSignature {
         return type;
     }
 
-    public Collection<ASTAnnotation> getAnnotations() {
+    public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotations;
     }
 

@@ -18,12 +18,12 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.View;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -50,18 +50,18 @@ public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingle
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         Integer viewId = annotation.getProperty("value", Integer.class);
         String viewTag = annotation.getProperty("tag", String.class);
 
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         InjectionNode viewInjectionNode = injectionPointFactory.buildInjectionNode(android.view.View.class, context);
 
         try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, codeModel.parseType(astType.getName())));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, codeModel.parseType(signature.getType().getName())));
         } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
+            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
         }
 
         return injectionNode;

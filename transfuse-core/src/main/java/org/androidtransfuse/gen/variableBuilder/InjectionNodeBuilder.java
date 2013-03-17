@@ -15,16 +15,14 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 /**
  * @author John Ericksen
  */
 public interface InjectionNodeBuilder {
 
-    InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations);
+    InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context);
 }

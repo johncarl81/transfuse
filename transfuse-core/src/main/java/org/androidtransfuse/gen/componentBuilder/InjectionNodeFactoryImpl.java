@@ -80,7 +80,7 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
             ImmutableSet<ASTAnnotation> qualifiers = FluentIterable.from(parameter.getAnnotations()).filter(qualifierPredicate).toImmutableSet();
 
             if(qualifiers.isEmpty()){
-                injectionNodeBuilders.putType(new InjectionSignature(parameterType, ImmutableSet.<ASTAnnotation>of()), buildExpression(expression));
+                injectionNodeBuilders.putType(new InjectionSignature(parameterType), buildExpression(expression));
             }
             else{
                 injectionNodeBuilders.putSignatureMatcher(Matchers.type(parameterType).annotated().byAnnotation(qualifiers).build(),

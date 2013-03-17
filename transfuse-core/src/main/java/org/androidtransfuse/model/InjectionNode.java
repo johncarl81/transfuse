@@ -25,21 +25,26 @@ import java.util.Map;
  */
 public class InjectionNode {
 
-    private final ASTType usageType;
+    private final InjectionSignature signature;
     private final ASTType astType;
     private final Map<Class, Object> aspects = new HashMap<Class, Object>();
 
-    public InjectionNode(ASTType astType) {
-        this(astType, astType);
+    public InjectionNode(InjectionSignature signature) {
+        this(signature, signature.getType());
     }
 
-    public InjectionNode(ASTType usageType, ASTType astType) {
+    public InjectionNode(InjectionSignature signature, ASTType astType) {
         this.astType = astType;
-        this.usageType = usageType;
+        this.signature = signature;
+    }
+
+    public InjectionSignature getSignature(){
+        return signature;
     }
 
     public ASTType getUsageType() {
-        return usageType;
+        //todo:signature
+        return signature.getType();
     }
 
     public String getClassName() {

@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.analysis.repository;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
@@ -47,7 +45,7 @@ public class InjectionNodeBuilderRepository {
     }
 
     public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        putType(new InjectionSignature(type, ImmutableSet.<ASTAnnotation>of()), variableBuilder);
+        putType(new InjectionSignature(type), variableBuilder);
     }
 
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {

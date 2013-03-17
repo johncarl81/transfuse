@@ -24,6 +24,7 @@ import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -38,16 +39,24 @@ public class Analyzer {
 
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
 
+    public InjectionNode analyze(InjectionSignature signature, AnalysisContext context){
+        return analyze(signature, signature.getType(), context);
+    }
+
+    public InjectionNode analyze(ASTType astType, ASTType concreteType, AnalysisContext context){
+        return analyze(new InjectionSignature(astType), concreteType, context);
+    }
+
     /**
      * Analyze the given ASTType and produces a corresponding InjectionNode with the contained
      * AST injection related elements (constructor, method, field) recursively analyzed for InjectionNodes
      *
-     * @param instanceType astType instance
+     * @param signature Injection Signature
      * @param concreteType required type
      * @param context      required
      * @return InjectionNode root
      */
-    public InjectionNode analyze(final ASTType instanceType, final ASTType concreteType, final AnalysisContext context) {
+    public InjectionNode analyze(final InjectionSignature signature, final ASTType concreteType, final AnalysisContext context) {
 
         InjectionNode injectionNode;
 
@@ -68,7 +77,7 @@ public class Analyzer {
             proxyAspect.getProxyInterfaces().add(proxyDependency.getUsageType());
 
         } else {
-            injectionNode = new InjectionNode(instanceType, concreteType);
+            injectionNode = new InjectionNode(signature, concreteType);
             //default variable builder
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 

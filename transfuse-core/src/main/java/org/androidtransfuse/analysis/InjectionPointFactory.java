@@ -147,38 +147,38 @@ public class InjectionPointFactory {
         ImmutableSet<ASTAnnotation> qualifiers =
                 FluentIterable.from(annotations).filter(qualifierPredicate).toImmutableSet();
 
+        InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
+
         //specific binding annotation lookup
-        return buildInjectionNode(context.getInjectionNodeBuilders(), astType, context, qualifiers);
+        return buildInjectionNode(context.getInjectionNodeBuilders(), injectionSignature, context);
     }
 
-    public InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> qualifiers) {
+    private InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, InjectionSignature injectionSignature, AnalysisContext context) {
         //check type and qualifiers
-        InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
         InjectionNodeBuilder typeQualifierBuilder = get(repository.getTypeQualifierBindings(), injectionSignature);
 
         if(typeQualifierBuilder != null){
-            return typeQualifierBuilder.buildInjectionNode(astType, context, qualifiers);
+            return typeQualifierBuilder.buildInjectionNode(injectionSignature, context);
         }
 
         //check type
         InjectionNodeBuilder typeBindingBuilder = repository.getTypeBindings().get(injectionSignature);
 
         if (typeBindingBuilder != null) {
-            return typeBindingBuilder.buildInjectionNode(astType, context, qualifiers);
+            return typeBindingBuilder.buildInjectionNode(injectionSignature, context);
         }
 
-        if(qualifiers.size() > 0){
-            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + astType + " " +
-                    StringUtils.join(qualifiers, ", "));
+        if(injectionSignature.getAnnotations().size() > 0){
+            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + injectionSignature);
         }
 
         //generated provider
-        if(providerMatcher.matches(astType)){
-            return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(astType, context, qualifiers);
+        if(providerMatcher.matches(injectionSignature.getType())){
+            return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(injectionSignature, context);
         }
 
         //default case
-        return defaultBinding.buildInjectionNode(astType, context, qualifiers);
+        return defaultBinding.buildInjectionNode(injectionSignature, context);
     }
 
     private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){

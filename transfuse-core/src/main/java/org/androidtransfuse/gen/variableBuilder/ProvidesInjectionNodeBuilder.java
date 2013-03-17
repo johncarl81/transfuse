@@ -22,6 +22,7 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ProvidesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotationAdapter {
+public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private final ASTType moduleType;
     private final ASTMethod providesMethod;
@@ -53,10 +54,11 @@ public class ProvidesInjectionNodeBuilder extends InjectionNodeBuilderNoAnnotati
 
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode module = analyzer.analyze(moduleType, moduleType, context);
+        InjectionSignature moduleSignature = new InjectionSignature(moduleType);
+        InjectionNode module = analyzer.analyze(moduleSignature, context);
 
         Map<ASTParameter, InjectionNode> dependencyAnalysis = new HashMap<ASTParameter, InjectionNode>();
 

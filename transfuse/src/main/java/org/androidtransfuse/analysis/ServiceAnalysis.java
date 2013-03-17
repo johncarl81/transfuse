@@ -180,7 +180,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         //onTaskRemoved(Intent rootIntent)
         //serviceDescriptor.addGenerators(buildEventMethod(OnTaskRemoved.class, "onTaskRemoved", Intent.class));
 
-        //todo: move this somewhere else
         serviceDescriptor.addGenerators(new OnBindGenerator());
 
         serviceDescriptor.addGenerators(listenerRegistrationGenerator);

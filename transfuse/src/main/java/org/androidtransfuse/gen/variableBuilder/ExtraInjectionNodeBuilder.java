@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import android.app.Activity;
 import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -25,6 +24,7 @@ import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -48,7 +48,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         String extraId = annotation.getProperty("value", String.class);
         Boolean optional = annotation.getProperty("optional", Boolean.class);
 
@@ -56,13 +56,13 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
             optional = false;
         }
 
-        boolean wrapped = astType.isAnnotated(Parcel.class);
+        boolean wrapped = signature.getType().isAnnotated(Parcel.class);
 
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
 
-        injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, astType));
+        injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, signature.getType()));
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, wrapped));
 

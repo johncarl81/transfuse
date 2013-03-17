@@ -15,12 +15,11 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -42,8 +41,8 @@ public class FactoryNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context, ImmutableSet<ASTAnnotation> annotations) {
-        InjectionNode injectionNode = analyzer.analyze(astType, astType, context);
+    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+        InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFactoryVariableBuilder(factoryType));
 

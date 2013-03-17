@@ -25,6 +25,7 @@ import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.util.Logger;
 
@@ -138,8 +139,8 @@ public class AOPProxyGenerator {
     }
 
     private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, PackageClass proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
-        InjectionNode proxyInjectionNode = new InjectionNode(
-                new ASTProxyType(injectionNode.getASTType(), proxyClassName.getFullyQualifiedName()));
+        InjectionNode proxyInjectionNode = new InjectionNode(new InjectionSignature(
+                new ASTProxyType(injectionNode.getASTType(), proxyClassName.getFullyQualifiedName())));
 
         proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
 
