@@ -29,8 +29,6 @@ import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
-import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
-import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFactory;
@@ -46,6 +44,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.lang.model.util.Elements;
+import java.io.File;
 import java.util.Map;
 
 @BootstrapModule
@@ -67,7 +66,7 @@ import java.util.Map;
         @BindProvider(type = ProcessingEnvironment.class, provider = ProcessingEnvironmentThrowingProvider.class, scope = Singleton.class),
         @BindProvider(type = RResource.class, provider = RResourceThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = Manifest.class, provider = ManifestThrowingProvider.class, scope = ConfigurationScope.class),
-        @BindProvider(type = FileProxy.class, provider = FileThrowingProvider.class, scope = ConfigurationScope.class),
+        @BindProvider(type = File.class, provider = FileThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = ScopeAspectFactoryRepository.class, provider = ScopeAspectFactoryRepositoryProvider.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class, scope = ConfigurationScope.class),
@@ -105,12 +104,7 @@ public class TransfuseAndroidModule {
         return new SynchronizedFiler(processingEnvironment.getFiler());
     }
 
-    @Provides
-    @Named(TransfuseAndroidModule.DEFAULT_BINDING)
-    public InjectionNodeBuilder getDefaultInjectionNodeBuilder(VariableInjectionNodeBuilder variableINB){
-        return variableINB;
-    }
-
+    //todo: remove the following
     public interface ParcelMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
@@ -122,6 +116,7 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
+    //todo: remove the following
     public interface FactoryMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
@@ -133,6 +128,7 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
+    //todo: remove the following
     public interface FactoriesMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
@@ -144,6 +140,7 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
+    //todo: remove the following
     public interface ParcelsMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
@@ -155,6 +152,7 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
+    //todo: remove the following
     public interface PackageHelperMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides
@@ -166,6 +164,7 @@ public class TransfuseAndroidModule {
         return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
+    //todo: remove the following
     public interface ComponentsMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
 
     @Provides

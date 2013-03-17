@@ -15,4 +15,6 @@
  */
 package org.androidtransfuse.config;
 
-public class FileThrowingProvider extends ThrowingProvider<FileProxy> {}
+import java.io.File;
+
+public class FileThrowingProvider extends ThrowingProvider<File> {}

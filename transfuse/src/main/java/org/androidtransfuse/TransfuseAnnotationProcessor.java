@@ -22,7 +22,6 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
-import org.androidtransfuse.config.FileProxy;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
@@ -47,6 +46,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
@@ -116,7 +116,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
-        FileProxy manifestFile = manifestLocator.findManifest();
+        File manifestFile = manifestLocator.findManifest();
         Manifest manifest = manifestParser.readManifest(manifestFile);
 
         RResourceComposite r = new RResourceComposite(
@@ -126,7 +126,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         configurationScope.enter();
 
         //todo:configurationScope.seed(Key.get(File.class, Names.named(TransfuseAndroidModule.MANIFEST_FILE)), manifestFile);
-        configurationScope.seed(ScopeKey.of(FileProxy.class), manifestFile);
+        configurationScope.seed(ScopeKey.of(File.class), manifestFile);
         configurationScope.seed(ScopeKey.of(RResource.class), r);
         //todo:configurationScope.seed(Key.get(Manifest.class, Names.named(TransfuseAndroidModule.ORIGINAL_MANIFEST)), manifest);
         configurationScope.seed(ScopeKey.of(Manifest.class), manifest);

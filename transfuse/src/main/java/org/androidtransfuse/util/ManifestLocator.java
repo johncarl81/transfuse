@@ -16,7 +16,6 @@
 package org.androidtransfuse.util;
 
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.config.FileProxy;
 
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
@@ -61,7 +60,7 @@ public class ManifestLocator {
         this.logger = logger;
     }
 
-    public FileProxy findManifest() {
+    public File findManifest() {
         try {
             return findManifestFileThrowing();
         } catch (URISyntaxException e) {
@@ -80,7 +79,7 @@ public class ManifestLocator {
      * find the AndroidManifest.xml file. Any better solution will be
      * appreciated.
      */
-    private FileProxy findManifestFileThrowing() throws IOException, URISyntaxException {
+    private File findManifestFileThrowing() throws IOException, URISyntaxException {
         JavaFileObject dummySourceFile = filer.createSourceFile("dummy" + System.currentTimeMillis());
         String dummySourceFilePath = dummySourceFile.toUri().toString();
 
@@ -103,14 +102,14 @@ public class ManifestLocator {
 
         File projectRoot = sourcesGenerationFolder.getParentFile();
 
-        FileProxy androidManifestFile = new FileProxy(projectRoot, "AndroidManifest.xml");
+        File androidManifestFile = new File (projectRoot, "AndroidManifest.xml");
         for (int i = 0; i < MAX_PARENTS_FROM_SOURCE_FOLDER; i++) {
             if (androidManifestFile.exists()) {
                 break;
             } else {
                 if (projectRoot.getParentFile() != null) {
                     projectRoot = projectRoot.getParentFile();
-                    androidManifestFile = new FileProxy(projectRoot, "AndroidManifest.xml");
+                    androidManifestFile = new File(projectRoot, "AndroidManifest.xml");
                 } else {
                     break;
                 }

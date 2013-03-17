@@ -15,13 +15,13 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.config.FileProxy;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.Collections;
 
 /**
@@ -33,7 +33,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
     private final Merger merger;
     private final Manifest originalManifest;
     private final Logger logger;
-    private final FileProxy manifestFile;
+    private final File manifestFile;
     private ManifestSerializer manifestParser;
 
     @Inject
@@ -43,7 +43,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
                                    Manifest originalManifest,
                                    Logger logger,
                                    //todo: @Named(TransfuseAndroidModule.MANIFEST_FILE)
-                                   FileProxy manifestFile,
+                                   File manifestFile,
                                    ManifestSerializer manifestParser) {
         this.manifestManager = manifestManager;
         this.merger = merger;

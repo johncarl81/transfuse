@@ -38,6 +38,8 @@ import java.util.Date;
  */
 public class ClassGenerationUtil {
 
+    private static final String[] PROHIBITED_PACKAGES = {"java", "javax"};
+
     // ISO 8601 standard date format
     private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     private final JCodeModel codeModel;
@@ -56,7 +58,16 @@ public class ClassGenerationUtil {
     }
 
     public JDefinedClass defineClass(PackageClass className, boolean enforceUniqueName) throws JClassAlreadyExistsException {
-        JPackage jPackage = codeModel._package(className.getPackage());
+
+        // Avoid prohibited package names
+        String packageName = className.getPackage();
+        for (String prohibitedPackage : PROHIBITED_PACKAGES) {
+            if(packageName.startsWith(prohibitedPackage)){
+                packageName = packageName.replaceFirst(prohibitedPackage, prohibitedPackage + "_");
+            }
+        }
+
+        JPackage jPackage = codeModel._package(packageName);
         String name;
         if(enforceUniqueName){
             name = namer.generateClassName(className.getClassName());
