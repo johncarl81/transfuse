@@ -90,7 +90,7 @@ public class AOPProxyAnalyzerTest {
     @Test
     public void testAnalysis() {
         AnalysisContext analysisContext = simpleAnalysisContextFactory.buildContext();
-        analysisContext.getAOPRepository().put(aopAnnotationASTType, methodInterceptorASTType);
+        analysisContext.getInjectionNodeBuilders().putInterceptor(aopAnnotationASTType, methodInterceptorASTType);
 
         for (ASTMethod astMethod : proxyTargetASTType.getMethods()) {
             proxyAnalyzer.analyzeMethod(proxyTargetInjectionNode, proxyTargetASTType, astMethod, analysisContext);

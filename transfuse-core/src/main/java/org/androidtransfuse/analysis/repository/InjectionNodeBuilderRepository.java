@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.analysis.repository;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
@@ -38,6 +39,7 @@ public class InjectionNodeBuilderRepository {
     private final Map<ASTType, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<ASTType, ScopeAspectFactory>();
     private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
     private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
+    private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
     private final ASTClassFactory astClassFactory;
 
     @Inject
@@ -90,11 +92,11 @@ public class InjectionNodeBuilderRepository {
         scopeAnnotations.put(scopeAnnotation, scopeType);
     }
 
-    public Map<ASTType, ScopeAspectFactory> getScopeVariableBuilderMap() {
+    private Map<ASTType, ScopeAspectFactory> getScopeVariableBuilderMap() {
         return scopeVariableBuilderMap;
     }
 
-    public Map<ASTType, ASTType> getScoping() {
+    private Map<ASTType, ASTType> getScoping() {
         return scoping;
     }
 
@@ -106,11 +108,28 @@ public class InjectionNodeBuilderRepository {
         return scoping.get(type);
     }
 
+    public void putInterceptor(ASTType annotationType, ASTType interceptor) {
+        interceptorAnnotationMap.put(annotationType, interceptor);
+    }
+
+    public ASTType getInterceptor(ASTType annotationType) {
+        return interceptorAnnotationMap.get(annotationType);
+    }
+
+    public boolean isInterceptor(ASTAnnotation annotation) {
+        return interceptorAnnotationMap.containsKey(annotation.getASTType());
+    }
+
+    private Map<ASTType, ASTType> getInterceptorAnnotationMap() {
+        return interceptorAnnotationMap;
+    }
+
     public void addRepository(InjectionNodeBuilderRepository repository){
         this.typeQualifierBindings.putAll(repository.getTypeQualifierBindings());
         this.typeBindings.putAll(repository.getTypeBindings());
         this.scopeVariableBuilderMap.putAll(repository.getScopeVariableBuilderMap());
         this.scopeAnnotations.putAll(repository.getScopeAnnotations());
         this.scoping.putAll(repository.getScoping());
+        this.interceptorAnnotationMap.putAll(repository.getInterceptorAnnotationMap());
     }
 }

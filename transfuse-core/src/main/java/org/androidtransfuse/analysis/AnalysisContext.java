@@ -16,7 +16,6 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.AOPRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
@@ -35,19 +34,17 @@ public class AnalysisContext {
     private final Stack<InjectionNode> dependencyHistory;
     private final AnalysisRepository analysisRepository;
     private final InjectionNodeBuilderRepository injectionNodeBuilders;
-    private final AOPRepository aopRepository;
 
     @Inject
-    public AnalysisContext(/*@Assisted*/ InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository, AOPRepository aopRepository) {
+    public AnalysisContext(/*@Assisted*/ InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository) {
         this.dependents = new HashMap<ASTType, InjectionNode>();
         this.dependencyHistory = new Stack<InjectionNode>();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
-        this.aopRepository = aopRepository;
     }
 
-    private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders, AOPRepository aopRepository) {
-        this(injectionNodeBuilders, analysisRepository, aopRepository);
+    private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders) {
+        this(injectionNodeBuilders, analysisRepository);
         this.dependents.putAll(previousContext.dependents);
         this.dependents.put(node.getASTType(), node);
         this.dependencyHistory.addAll(previousContext.dependencyHistory);
@@ -55,7 +52,7 @@ public class AnalysisContext {
     }
 
     public AnalysisContext addDependent(InjectionNode node) {
-        return new AnalysisContext(node, this, analysisRepository, injectionNodeBuilders, aopRepository);
+        return new AnalysisContext(node, this, analysisRepository, injectionNodeBuilders);
     }
 
     public boolean isDependent(ASTType astType) {
@@ -76,10 +73,6 @@ public class AnalysisContext {
 
     public InjectionNodeBuilderRepository getInjectionNodeBuilders() {
         return injectionNodeBuilders;
-    }
-
-    public AOPRepository getAOPRepository() {
-        return aopRepository;
     }
 
     public Stack<InjectionNode> getDependencyHistory() {

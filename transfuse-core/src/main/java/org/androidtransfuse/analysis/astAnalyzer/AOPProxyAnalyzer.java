@@ -50,7 +50,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
         //AOP is only available on top level
         if (injectionNode.getASTType().equals(concreteType)) {
             for (ASTAnnotation annotation : concreteType.getAnnotations()) {
-                if (context.getAOPRepository().isInterceptor(annotation)) {
+                if (context.getInjectionNodeBuilders().isInterceptor(annotation)) {
 
                     ImmutableSet<ASTMethod> nonPrivateMethods = FluentIterable.from(concreteType.getMethods()).filter(new Predicate<ASTMethod>() {
                         @Override
@@ -70,7 +70,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
         //AOP is only available on top level
         if (injectionNode.getASTType().equals(concreteType)) {
             for (ASTAnnotation annotation : astMethod.getAnnotations()) {
-                if (context.getAOPRepository().isInterceptor(annotation)) {
+                if (context.getInjectionNodeBuilders().isInterceptor(annotation)) {
                     addInterceptor(injectionNode, Collections.singleton(astMethod), getInterceptorInjectionNode(annotation, context));
                 }
             }
@@ -78,7 +78,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
     }
 
     private InjectionNode getInterceptorInjectionNode(ASTAnnotation methodAnnotation, AnalysisContext context) {
-        ASTType interceptorType = context.getAOPRepository().getInterceptor(methodAnnotation.getASTType());
+        ASTType interceptorType = context.getInjectionNodeBuilders().getInterceptor(methodAnnotation.getASTType());
 
         return injectionPointFactory.buildInjectionNode(interceptorType, context);
     }

@@ -28,7 +28,6 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis;
 import org.androidtransfuse.analysis.module.*;
-import org.androidtransfuse.analysis.repository.AOPRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.*;
@@ -71,7 +70,6 @@ public class CoreFactory {
     private final UniqueVariableNamer namer = new UniqueVariableNamer();
     private final ClassGenerationUtil generationUtil;
     private final AOPProxyGenerator.AOPProxyCache aopProxyCache = new AOPProxyGenerator.AOPProxyCache();
-    private final AOPRepository aopRepository = new AOPRepository();
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
     private final Filer filer;
     private final Logger logger;
@@ -149,7 +147,7 @@ public class CoreFactory {
     }
 
     public AnalysisContext buildAnalysisContext() {
-        return new AnalysisContext(buildInjectionNodeRepository(), buildAnalysisRepository(), aopRepository);
+        return new AnalysisContext(buildInjectionNodeRepository(), buildAnalysisRepository());
     }
 
     private Provider<InjectionNodeBuilderRepository> buildInjectionNodeRepositoryProvider(){
@@ -285,7 +283,7 @@ public class CoreFactory {
 
         return new FactoryGenerator(codeModel,
                 buildInjectionGenerator(),
-                new AnalysisContextFactory(buildAnalysisRepository(), aopRepository),
+                new AnalysisContextFactory(buildAnalysisRepository()),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
                 new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), new QualifierPredicate(astClassFactory)),

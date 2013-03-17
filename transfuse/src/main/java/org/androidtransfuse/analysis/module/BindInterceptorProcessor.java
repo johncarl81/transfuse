@@ -17,10 +17,7 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.AOPRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-
-import javax.inject.Inject;
 
 /**
  * Adds the given @BindInterceptor properties as a MethodInterceptor and associated annotation.
@@ -28,13 +25,6 @@ import javax.inject.Inject;
  * @author John Ericksen
  */
 public class BindInterceptorProcessor implements TypeProcessor {
-
-    private final AOPRepository aopRepository;
-
-    @Inject
-    public BindInterceptorProcessor(AOPRepository aopRepository) {
-        this.aopRepository = aopRepository;
-    }
 
     @Override
     public ModuleConfiguration process(ASTAnnotation bindInterceptor) {
@@ -57,7 +47,7 @@ public class BindInterceptorProcessor implements TypeProcessor {
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
-            aopRepository.put(annotation, interceptor);
+            configurationRepository.putInterceptor(annotation, interceptor);
         }
     }
 }
