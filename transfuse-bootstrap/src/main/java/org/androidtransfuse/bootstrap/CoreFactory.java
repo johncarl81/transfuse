@@ -28,7 +28,9 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis;
 import org.androidtransfuse.analysis.module.*;
-import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.analysis.repository.AOPRepository;
+import org.androidtransfuse.analysis.repository.AnalysisRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeImplFactory;
 import org.androidtransfuse.gen.componentBuilder.MirroredMethodGeneratorFactory;
@@ -43,10 +45,7 @@ import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
-import org.androidtransfuse.util.Logger;
-import org.androidtransfuse.util.MessagerLogger;
-import org.androidtransfuse.util.Providers;
-import org.androidtransfuse.util.QualifierPredicate;
+import org.androidtransfuse.util.*;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -74,7 +73,6 @@ public class CoreFactory {
     private final AOPProxyGenerator.AOPProxyCache aopProxyCache = new AOPProxyGenerator.AOPProxyCache();
     private final AOPRepository aopRepository = new AOPRepository();
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
-    private final ProviderInjectionNodeBuilderRepository providerRepository = new ProviderInjectionNodeBuilderRepository();
     private final Filer filer;
     private final Logger logger;
     private final ModuleRepositoryImpl moduleRepository = new ModuleRepositoryImpl();
@@ -86,6 +84,7 @@ public class CoreFactory {
         this.logger = new MessagerLogger(messager);
         this.filer = filer;
         this.generationUtil = new ClassGenerationUtil(codeModel, logger, namer);
+        this.moduleRepository.addModuleRepository(buildScopeRepository());
     }
 
     public ASTElementConverterFactory buildConverterFactory() {
@@ -171,7 +170,7 @@ public class CoreFactory {
         Provider<ProviderGenerator> providerGeneratorProvider = new Provider<ProviderGenerator>() {
             @Override
             public ProviderGenerator get() {
-                return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer);
+                return buildProviderGenerator();
             }
         };
 
@@ -181,24 +180,26 @@ public class CoreFactory {
         return new GeneratedProviderInjectionNodeBuilder(generatedProviderBuilderFactory, buildInjectionPointFactory(), buildAnalyser());
     }
 
+    private ProviderGenerator buildProviderGenerator(){
+        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer);
+    }
+
     private AnalysisRepository buildAnalysisRepository(){
         AnalysisRepository analysisRepository = new AnalysisRepository();
 
         analysisRepository.addAnalysis(new InjectionAnalyzer(buildInjectionPointFactory()));
-        analysisRepository.addAnalysis(new ScopeAnalysis(buildScopeRepository(), moduleRepository));
+        analysisRepository.addAnalysis(new ScopeAnalysis());
 
         return analysisRepository;
     }
 
-    private ScopeAspectFactoryRepository buildScopeRepository(){
+    private InjectionNodeBuilderRepository buildScopeRepository(){
 
-        ScopeAspectFactoryRepository scopeRepository = new ScopeAspectFactoryRepository();
+        InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
         SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer), typedExpressionFactory, namer);
-        scopeRepository.putAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
-        scopeRepository.putAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
-
-        moduleRepository.putScopeConfig(scopeRepository);
+        scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
+        scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
 
         return scopeRepository;
     }
@@ -246,7 +247,7 @@ public class CoreFactory {
                     typedExpressionFactory,
                     new ExceptionWrapper(codeModel),
                     new GeneratorFactory2(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))));
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, buildScopeRepository());
+            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, buildInjectionNodeRepository().getScopeAnnotations());
         }
         return bootstrapsInjectorGenerator;
     }
@@ -265,13 +266,15 @@ public class CoreFactory {
         ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilderFactory = new ProviderInjectionNodeBuilderFactory(buildAnalyser(), providerVariableBuilderFactory);
 
         BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory);
-        BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(moduleRepository, providerInjectionNodeBuilderFactory, providerRepository);
+        BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(providerInjectionNodeBuilderFactory);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
-        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
+        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopesPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, codeModel, buildAnalyser());
 
-        DefineScopeProcessor defineScopeProcessor = new DefineScopeProcessor(moduleRepository, astClassFactory, scopeInjectionFactory);
+        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, namer);
+
+        DefineScopeProcessor defineScopeProcessor = new DefineScopeProcessor(astClassFactory, scopeInjectionFactory, scopeAspectFactoryFactory);
 
         InstallProcessor installProcessor = new InstallProcessor(moduleRepository);
 
@@ -408,34 +411,13 @@ public class CoreFactory {
 
     private final class ModuleRepositoryImpl implements  ModuleRepository{
 
-        private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
         private final Set<ASTType> installedComponents = new HashSet<ASTType>();
-        private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
         private final InjectionNodeBuilderRepository moduleInjectionNodeBuilderRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
         public InjectionNodeBuilderRepository buildModuleConfiguration() {
             InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
             repository.addRepository(moduleInjectionNodeBuilderRepository);
             return repository;
-        }
-
-        @Override
-        public void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository) {
-            ProviderGenerator providerGenerator = new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer);
-            InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
-            injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
-
-            CustomScopeAspectFactoryFactory customScopeFactory = new CustomScopeAspectFactoryFactory(codeModel, providerGenerator, typedExpressionFactory, namer);
-
-            for (Map.Entry<ASTType, ASTType> astTypeASTTypeEntry : scopeConfiguration.entrySet()) {
-                scopedVariableBuilderRepository.putAspectFactory(astTypeASTTypeEntry.getKey(), astTypeASTTypeEntry.getValue(),
-                        customScopeFactory.buildScopeBuilder(astTypeASTTypeEntry.getKey()));
-            }
-        }
-
-        @Override
-        public void addScopeConfig(ASTType annotation, ASTType scope) {
-            scopeConfiguration.put(annotation, scope);
         }
 
         @Override
@@ -454,19 +436,6 @@ public class CoreFactory {
         @Override
         public void addInstalledComponents(ASTType[] astType) {
             installedComponents.addAll(Arrays.asList(astType));
-        }
-
-        @Override
-        public ASTType getScope(ASTType astType) {
-            if(scoping.containsKey(astType)){
-                return scoping.get(astType);
-            }
-            return null;
-        }
-
-        @Override
-        public void putScoped(ASTType scope, ASTType toBeScoped) {
-            scoping.put(toBeScoped, scope);
         }
 
         @Override

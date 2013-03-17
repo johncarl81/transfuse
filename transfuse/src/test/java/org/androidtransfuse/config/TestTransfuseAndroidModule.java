@@ -21,7 +21,9 @@ import org.androidtransfuse.NoOpElements;
 import org.androidtransfuse.NoOpFiler;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.analysis.repository.AnalysisRepository;
+import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
@@ -68,7 +70,6 @@ import javax.lang.model.util.Elements;
 @BindProviders({
         @BindProvider(type = XStream.class, provider = XStreamProvider.class),
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
-        @BindProvider(type = ScopeAspectFactoryRepository.class, provider = ScopeAspectFactoryRepositoryProvider.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class)
 })

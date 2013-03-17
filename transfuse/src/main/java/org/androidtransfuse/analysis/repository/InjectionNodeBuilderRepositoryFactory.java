@@ -26,7 +26,6 @@ import com.sun.codemodel.JExpr;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 
 import javax.inject.Inject;
@@ -76,19 +75,15 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
 
     private final ImmutableMap<String, ASTType> systemServices;
     private final InjectionBindingBuilder injectionBindingBuilder;
-    private final Map<ASTType, ASTType> scopeConfiguration = new HashMap<ASTType, ASTType>();
-    private final CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory;
     private final Set<ASTType> installedComponents = new HashSet<ASTType>();
-    private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final InjectionNodeBuilderRepository moduleRepository;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(InjectionBindingBuilder injectionBindingBuilder,
-                                                 CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory,
-                                                 Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
+                                                 Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
+                                                 ScopeAspectFactoryRepositoryProvider scopeAspectFactoryRepositoryProvider) {
         this.injectionBindingBuilder = injectionBindingBuilder;
-        this.customScopeAspectFactoryFactory = customScopeAspectFactoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
 
         ImmutableMap.Builder<String, ASTType> systemServiceBuilder = ImmutableMap.builder();
@@ -129,6 +124,9 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         systemServices = systemServiceBuilder.build();
 
         moduleRepository = injectionNodeBuilderRepositoryProvider.get();
+
+        //Default scopes
+        moduleRepository.addRepository(scopeAspectFactoryRepositoryProvider.get());
     }
 
     public InjectionNodeBuilderRepository buildApplicationInjections() {
@@ -148,25 +146,15 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
         repository.putType(SharedPreferences.class,
                 injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").dependencyArg(Context.class).build());
 
+
         return repository;
     }
 
     public InjectionNodeBuilderRepository buildModuleConfiguration() {
         InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         repository.addRepository(moduleRepository);
+
         return repository;
-    }
-
-    @Override
-    public void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository) {
-        for (Map.Entry<ASTType, ASTType> astTypeASTTypeEntry : scopeConfiguration.entrySet()) {
-            scopedVariableBuilderRepository.putAspectFactory(astTypeASTTypeEntry.getKey(), astTypeASTTypeEntry.getValue(),
-                    customScopeAspectFactoryFactory.buildScopeBuilder(astTypeASTTypeEntry.getKey()));
-        }
-    }
-
-    public void addScopeConfig(ASTType annotation, ASTType scope){
-        scopeConfiguration.put(annotation, scope);
     }
 
     @Override
@@ -185,19 +173,6 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     @Override
     public void addInstalledComponents(ASTType[] astType) {
         installedComponents.addAll(Arrays.asList(astType));
-    }
-
-    @Override
-    public ASTType getScope(ASTType astType) {
-        if(scoping.containsKey(astType)){
-            return scoping.get(astType);
-        }
-        return null;
-    }
-
-    @Override
-    public void putScoped(ASTType scope, ASTType toBeScoped) {
-        scoping.put(toBeScoped, scope);
     }
 
     @Override

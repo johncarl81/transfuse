@@ -17,7 +17,6 @@ package org.androidtransfuse.bootstrap;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -43,7 +42,7 @@ public class BootstrapsInjectorGenerator {
     private final UniqueVariableNamer namer;
     private final InjectionFragmentGenerator injectionGenerator;
     private final ExistingVariableInjectionBuilderFactory variableBuilderFactory;
-    private final ScopeAspectFactoryRepository scopeRepository;
+    private final Map<ASTType, ASTType> scopes;
 
     private JDefinedClass injectorClass = null;
     private JBlock registerBlock = null;
@@ -54,13 +53,13 @@ public class BootstrapsInjectorGenerator {
                                        UniqueVariableNamer namer,
                                        InjectionFragmentGenerator injectionGenerator,
                                        ExistingVariableInjectionBuilderFactory variableBuilderFactory,
-                                       ScopeAspectFactoryRepository scopeRepository) {
+                                       Map<ASTType, ASTType> scopes) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.namer = namer;
         this.injectionGenerator = injectionGenerator;
         this.variableBuilderFactory = variableBuilderFactory;
-        this.scopeRepository = scopeRepository;
+        this.scopes = scopes;
     }
 
     public void generate(InjectionNode injectionNode){
@@ -79,22 +78,22 @@ public class BootstrapsInjectorGenerator {
 
             //define root scope holder
             JClass scopesRef = codeModel.ref(Scopes.class);
-            JVar scopes = injectorBlock.decl(scopesRef, namer.generateName(Scopes.class), JExpr._new(scopesRef));
+            JVar scopesVar = injectorBlock.decl(scopesRef, namer.generateName(Scopes.class), JExpr._new(scopesRef));
 
-            //define scopes
-            for (Map.Entry<ASTType, ASTType> scopeEntry : scopeRepository.getScopeAnnotations().entrySet()) {
+            //define scopesVar
+            for (Map.Entry<ASTType, ASTType> scopeEntry : scopes.entrySet()) {
                 JExpression annotation = codeModel.ref(scopeEntry.getKey().getName()).dotclass();
                 JClass scopeType = codeModel.ref(scopeEntry.getValue().getName());
 
-                injectorBlock.invoke(scopes, Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
+                injectorBlock.invoke(scopesVar, Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
             }
 
 
-            injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopes));
+            injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 
             setupInjectionAspect(injectionNode, input);
 
-            injectionGenerator.buildFragment(injectorBlock, innerInjectorClass, injectionNode, scopes);
+            injectionGenerator.buildFragment(injectorBlock, innerInjectorClass, injectionNode, scopesVar);
 
             // add instance to map
             addBootstrapRegistration(nodeClass, innerInjectorClass);

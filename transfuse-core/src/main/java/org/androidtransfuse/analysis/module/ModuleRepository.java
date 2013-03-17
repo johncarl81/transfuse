@@ -17,7 +17,6 @@ package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -29,17 +28,9 @@ public interface ModuleRepository {
 
     InjectionNodeBuilderRepository buildModuleConfiguration();
 
-    void putScopeConfig(ScopeAspectFactoryRepository scopedVariableBuilderRepository);
-
-    void addScopeConfig(ASTType annotation, ASTType scope);
-
     Collection<ASTType> getInstalledAnnotatedWith(Class<? extends Annotation> annotation);
 
     void addInstalledComponents(ASTType[] astType);
-
-    ASTType getScope(ASTType astType);
-
-    void putScoped(ASTType scope, ASTType toBeScoped);
 
     void addModuleRepository(InjectionNodeBuilderRepository repository);
 }

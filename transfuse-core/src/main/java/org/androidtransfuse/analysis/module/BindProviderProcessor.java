@@ -15,13 +15,10 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-import org.androidtransfuse.analysis.repository.ProviderInjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
-import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 
@@ -32,17 +29,11 @@ import javax.inject.Inject;
  */
 public class BindProviderProcessor implements TypeProcessor {
 
-    private final ModuleRepository injectionNodeBuilders;
     private final ProviderInjectionNodeBuilderFactory variableInjectionBuilderFactory;
-    private final ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository;
 
     @Inject
-    public BindProviderProcessor(ModuleRepository injectionNodeBuilders,
-                                 ProviderInjectionNodeBuilderFactory variableInjectionBuilderFactory,
-                                 ProviderInjectionNodeBuilderRepository providerInjectionNodeBuilderRepository) {
-        this.injectionNodeBuilders = injectionNodeBuilders;
+    public BindProviderProcessor(ProviderInjectionNodeBuilderFactory variableInjectionBuilderFactory) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
-        this.providerInjectionNodeBuilderRepository = providerInjectionNodeBuilderRepository;
     }
 
     @Override
@@ -50,9 +41,8 @@ public class BindProviderProcessor implements TypeProcessor {
         ASTType type = bindProvider.getProperty("type", ASTType.class);
         ASTType provider = bindProvider.getProperty("provider", ASTType.class);
         ASTType scope = bindProvider.getProperty("scope", ASTType.class);
-        ASTAnnotation named = bindProvider.getProperty("named", ASTAnnotation.class);
 
-        return new ProviderConfiguration(type,  provider, scope, named);
+        return new ProviderConfiguration(type,  provider, scope);
     }
 
     private final class ProviderConfiguration implements ModuleConfiguration {
@@ -60,29 +50,19 @@ public class BindProviderProcessor implements TypeProcessor {
         private final ASTType type;
         private final ASTType provider;
         private final ASTType scope;
-        private final ASTAnnotation named;
 
-        private ProviderConfiguration(ASTType type, ASTType provider, ASTType scope, ASTAnnotation named) {
+        private ProviderConfiguration(ASTType type, ASTType provider, ASTType scope) {
             this.type = type;
             this.provider = provider;
             this.scope = scope;
-            this.named = named;
         }
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
-            if(named == null){
-                configurationRepository.putType(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
-            }
-            else{
-                configurationRepository.putType(new InjectionSignature(type, ImmutableSet.of(named)),
-                        variableInjectionBuilderFactory.builderProviderBuilder(provider));
-            }
-
-            providerInjectionNodeBuilderRepository.addProvider(type, provider);
+            configurationRepository.putType(type, variableInjectionBuilderFactory.builderProviderBuilder(provider));
 
             if(scope != null) {
-                injectionNodeBuilders.putScoped(scope, type);
+                configurationRepository.putScoped(type, scope);
             }
         }
     }

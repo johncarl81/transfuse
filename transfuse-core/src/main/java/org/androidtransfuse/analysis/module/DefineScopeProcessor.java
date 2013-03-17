@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.variableBuilder.ScopeReferenceInjectionFactory;
 import org.androidtransfuse.util.matcher.Matchers;
 
@@ -32,17 +33,17 @@ import javax.inject.Inject;
  */
 public class DefineScopeProcessor implements TypeProcessor {
 
-    private final ModuleRepository moduleRepository;
     private final ASTClassFactory astClassFactory;
     private final ScopeReferenceInjectionFactory scopeReferenceInjectionFactory;
+    private final CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory;
 
     @Inject
-    public DefineScopeProcessor(ModuleRepository moduleRepository,
-                                ASTClassFactory astClassFactory,
-                                ScopeReferenceInjectionFactory scopeReferenceInjectionFactory) {
-        this.moduleRepository = moduleRepository;
+    public DefineScopeProcessor(ASTClassFactory astClassFactory,
+                                ScopeReferenceInjectionFactory scopeReferenceInjectionFactory,
+                                CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory) {
         this.astClassFactory = astClassFactory;
         this.scopeReferenceInjectionFactory = scopeReferenceInjectionFactory;
+        this.customScopeAspectFactoryFactory = customScopeAspectFactoryFactory;
     }
 
     @Override
@@ -66,7 +67,8 @@ public class DefineScopeProcessor implements TypeProcessor {
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
 
-            moduleRepository.addScopeConfig(annotationType, scope);
+            configurationRepository.putScopeAspectFactory(annotationType, scope,
+                    customScopeAspectFactoryFactory.buildScopeBuilder(annotationType));
 
             ASTType scopeReference = astClassFactory.getType(ScopeReference.class);
 

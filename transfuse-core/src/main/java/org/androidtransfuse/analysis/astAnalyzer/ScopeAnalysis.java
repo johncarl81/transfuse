@@ -18,12 +18,9 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.analysis.repository.ScopeAspectFactoryRepository;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.model.InjectionNode;
 
-import javax.inject.Inject;
 import java.util.Collection;
 
 /**
@@ -33,33 +30,24 @@ import java.util.Collection;
  */
 public class ScopeAnalysis extends ASTAnalysisAdaptor {
 
-    private final ScopeAspectFactoryRepository scopeAspectFactoryRepository;
-    private final ModuleRepository moduleRepository;
-
-    @Inject
-    public ScopeAnalysis(ScopeAspectFactoryRepository scopeAspectFactoryRepository, ModuleRepository moduleRepository) {
-        this.scopeAspectFactoryRepository = scopeAspectFactoryRepository;
-        this.moduleRepository = moduleRepository;
-    }
-
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
 
         if (injectionNode.getASTType().equals(concreteType)) {
 
-            ASTType scopedType = moduleRepository.getScope(injectionNode.getASTType());
+            ASTType scopedType = context.getInjectionNodeBuilders().getScope(injectionNode.getASTType());
             if(scopedType != null){
-                ScopeAspectFactory scopeAspectFactory = scopeAspectFactoryRepository.getScopeAspectFactory(scopedType);
+                ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopedType);
                 injectionNode.addAspect(scopeAspectFactory.buildAspect(injectionNode, concreteType, context));
                 return;
             }
 
-            for (ASTType scopeType : scopeAspectFactoryRepository.getScopes()) {
+            for (ASTType scopeType : context.getInjectionNodeBuilders().getScopes()) {
                 Collection<ASTAnnotation> annotations = concreteType.getAnnotations();
                 //todo: clean this up
                 for (ASTAnnotation annotation : annotations) {
                     if(annotation.getASTType().equals(scopeType)){
-                        ScopeAspectFactory scopeAspectFactory = scopeAspectFactoryRepository.getScopeAspectFactory(scopeType);
+                        ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopeType);
                         injectionNode.addAspect(scopeAspectFactory.buildAspect(injectionNode, concreteType, context));
                         return;
                     }

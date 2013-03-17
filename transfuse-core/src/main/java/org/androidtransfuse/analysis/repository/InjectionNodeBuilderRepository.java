@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.matcher.Matcher;
@@ -25,6 +26,7 @@ import org.androidtransfuse.util.matcher.Matchers;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -33,6 +35,9 @@ public class InjectionNodeBuilderRepository {
 
     private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> typeQualifierBindings = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
     private final Map<InjectionSignature, InjectionNodeBuilder> typeBindings = new HashMap<InjectionSignature, InjectionNodeBuilder>();
+    private final Map<ASTType, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<ASTType, ScopeAspectFactory>();
+    private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
+    private final Map<ASTType, ASTType> scoping = new HashMap<ASTType, ASTType>();
     private final ASTClassFactory astClassFactory;
 
     @Inject
@@ -68,8 +73,44 @@ public class InjectionNodeBuilderRepository {
         return typeBindings;
     }
 
+    public Set<ASTType> getScopes() {
+        return scopeAnnotations.keySet();
+    }
+
+    public Map<ASTType, ASTType> getScopeAnnotations(){
+        return scopeAnnotations;
+    }
+
+    public ScopeAspectFactory getScopeAspectFactory(ASTType scopeType) {
+        return scopeVariableBuilderMap.get(scopeType);
+    }
+
+    public void putScopeAspectFactory(ASTType scopeAnnotation, ASTType scopeType, ScopeAspectFactory scopeAspectFactory) {
+        scopeVariableBuilderMap.put(scopeAnnotation, scopeAspectFactory);
+        scopeAnnotations.put(scopeAnnotation, scopeType);
+    }
+
+    public Map<ASTType, ScopeAspectFactory> getScopeVariableBuilderMap() {
+        return scopeVariableBuilderMap;
+    }
+
+    public Map<ASTType, ASTType> getScoping() {
+        return scoping;
+    }
+
+    public void putScoped(ASTType type, ASTType scope) {
+        scoping.put(type, scope);
+    }
+
+    public ASTType getScope(ASTType type) {
+        return scoping.get(type);
+    }
+
     public void addRepository(InjectionNodeBuilderRepository repository){
         this.typeQualifierBindings.putAll(repository.getTypeQualifierBindings());
         this.typeBindings.putAll(repository.getTypeBindings());
+        this.scopeVariableBuilderMap.putAll(repository.getScopeVariableBuilderMap());
+        this.scopeAnnotations.putAll(repository.getScopeAnnotations());
+        this.scoping.putAll(repository.getScoping());
     }
 }

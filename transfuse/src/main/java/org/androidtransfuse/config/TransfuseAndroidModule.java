@@ -21,7 +21,9 @@ import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.analysis.repository.*;
+import org.androidtransfuse.analysis.repository.AnalysisRepository;
+import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
@@ -67,7 +69,6 @@ import java.util.Map;
         @BindProvider(type = RResource.class, provider = RResourceThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = Manifest.class, provider = ManifestThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = File.class, provider = FileThrowingProvider.class, scope = ConfigurationScope.class),
-        @BindProvider(type = ScopeAspectFactoryRepository.class, provider = ScopeAspectFactoryRepositoryProvider.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class, scope = ConfigurationScope.class),
         @BindProvider(type = JCodeModel.class, provider = JCodeModelProvider.class, scope = CodeGenerationScope.class)

@@ -17,7 +17,6 @@ package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.annotations.ContextScope;
 import org.androidtransfuse.annotations.TransfuseModule;
 import org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory;
@@ -31,36 +30,31 @@ import javax.inject.Singleton;
 /**
  * @author John Ericksen
  */
-public class ScopeAspectFactoryRepositoryProvider implements Provider<ScopeAspectFactoryRepository> {
+public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionNodeBuilderRepository> {
 
     private final SingletonScopeAspectFactory singletonScopeAspectFactory;
     private final ContextScopeAspectFactory contextScopeAspectFactory;
-    private final ModuleRepository moduleRepository;
     private final ASTClassFactory astClassFactory;
 
     @Inject
     public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory,
                                                 ContextScopeAspectFactory contextScopeAspectFactory,
-                                                ModuleRepository moduleRepository,
                                                 ASTClassFactory astClassFactory) {
         this.singletonScopeAspectFactory = singletonScopeAspectFactory;
         this.contextScopeAspectFactory = contextScopeAspectFactory;
-        this.moduleRepository = moduleRepository;
         this.astClassFactory = astClassFactory;
     }
 
 
     @Override
-    public ScopeAspectFactoryRepository get() {
-        ScopeAspectFactoryRepository scopedVariableBuilderRepository = new ScopeAspectFactoryRepository();
+    public InjectionNodeBuilderRepository get() {
+        InjectionNodeBuilderRepository scopedVariableBuilderRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
         ASTType concurrentScopeType = astClassFactory.getType(ConcurrentDoubleLockingScope.class);
 
-        scopedVariableBuilderRepository.putAspectFactory(astClassFactory.getType(TransfuseModule.class), concurrentScopeType, singletonScopeAspectFactory);
-        scopedVariableBuilderRepository.putAspectFactory(astClassFactory.getType(Singleton.class), concurrentScopeType, singletonScopeAspectFactory);
-        scopedVariableBuilderRepository.putAspectFactory(astClassFactory.getType(ContextScope.class), concurrentScopeType, contextScopeAspectFactory);
-
-        moduleRepository.putScopeConfig(scopedVariableBuilderRepository);
+        scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(TransfuseModule.class), concurrentScopeType, singletonScopeAspectFactory);
+        scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), concurrentScopeType, singletonScopeAspectFactory);
+        scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(ContextScope.class), concurrentScopeType, contextScopeAspectFactory);
 
         return scopedVariableBuilderRepository;
     }

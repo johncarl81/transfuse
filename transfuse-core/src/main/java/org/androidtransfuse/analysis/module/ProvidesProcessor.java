@@ -27,6 +27,7 @@ import org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilderFact
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.QualifierPredicate;
+import org.androidtransfuse.util.ScopesPredicate;
 import org.androidtransfuse.util.matcher.Matcher;
 import org.androidtransfuse.util.matcher.Matchers;
 
@@ -43,16 +44,19 @@ public class ProvidesProcessor implements MethodProcessor {
 
     private final ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory;
     private final QualifierPredicate qualifierPredicate;
+    private final ScopesPredicate scopesPredicate;
     private final ASTClassFactory astClassFactory;
     private final GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder;
 
     @Inject
     public ProvidesProcessor(ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
                              QualifierPredicate qualifierPredicate,
+                             ScopesPredicate scopesPredicate,
                              ASTClassFactory astClassFactory,
                              GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.qualifierPredicate = qualifierPredicate;
+        this.scopesPredicate = scopesPredicate;
         this.astClassFactory = astClassFactory;
         this.generatedProviderInjectionNodeBuilder = generatedProviderInjectionNodeBuilder;
     }
@@ -63,15 +67,31 @@ public class ProvidesProcessor implements MethodProcessor {
                 FluentIterable.from(astMethod.getAnnotations())
                         .filter(qualifierPredicate).toImmutableSet();
 
+        ImmutableSet<ASTAnnotation> scopeAnnotations =
+                FluentIterable.from(astMethod.getAnnotations())
+                        .filter(scopesPredicate).toImmutableSet();
+
+        ASTAnnotation scope = null;
+        if(scopeAnnotations.size() > 0){
+            scope = scopeAnnotations.iterator().next();
+        }
+
         validate(astMethod.getAnnotations());
 
-        return new ProvidesModuleConfiguration(moduleType, qualifierAnnotations, astMethod);
+        return new ProvidesModuleConfiguration(moduleType, qualifierAnnotations, astMethod, scope);
     }
 
     private void validate(Collection<ASTAnnotation> annotations) {
         ImmutableSet<ASTAnnotation> nonQualifierAnnotations =
                 FluentIterable.from(annotations)
-                        .filter(Predicates.not(qualifierPredicate)).toImmutableSet();
+                        .filter(Predicates.and(
+                                Predicates.not(qualifierPredicate),
+                                Predicates.not(scopesPredicate))).toImmutableSet();
+
+        ImmutableSet<ASTAnnotation> scopeAnnotations =
+                FluentIterable.from(annotations)
+                        .filter(scopesPredicate).toImmutableSet();
+
 
         ASTType providesType = astClassFactory.getType(Provides.class);
 
@@ -80,6 +100,12 @@ public class ProvidesProcessor implements MethodProcessor {
             if(!annotation.getASTType().equals(providesType)){
                 //error
                 erroredAnnotations.add(annotation.getASTType());
+            }
+        }
+
+        if(scopeAnnotations.size() > 1){
+            for (ASTAnnotation scopeAnnotation : scopeAnnotations) {
+                erroredAnnotations.add(scopeAnnotation.getASTType());
             }
         }
 
@@ -94,11 +120,13 @@ public class ProvidesProcessor implements MethodProcessor {
         private final ASTType moduleType;
         private final ASTMethod astMethod;
         private final ImmutableSet<ASTAnnotation> qualifiers;
+        private final ASTAnnotation scope;
 
-        private ProvidesModuleConfiguration(ASTType moduleType, ImmutableSet<ASTAnnotation> qualifiers, ASTMethod astMethod) {
+        private ProvidesModuleConfiguration(ASTType moduleType, ImmutableSet<ASTAnnotation> qualifiers, ASTMethod astMethod, ASTAnnotation scope) {
             this.moduleType = moduleType;
             this.astMethod = astMethod;
             this.qualifiers = qualifiers;
+            this.scope = scope;
         }
 
         @Override
