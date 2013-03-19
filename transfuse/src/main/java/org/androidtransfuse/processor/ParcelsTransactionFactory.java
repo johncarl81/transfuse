@@ -29,13 +29,13 @@ import java.util.Map;
  */
 public class ParcelsTransactionFactory implements TransactionFactory<Map<Provider<ASTType>, JDefinedClass>, Void> {
 
-    private final Provider<TransfuseAndroidModule.ParcelsMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider;
+    private final Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider;
     private final ScopedTransactionFactory scopedTransactionFactory;
 
     @Inject
     public ParcelsTransactionFactory(
             @Named(TransfuseAndroidModule.PARCELS_TRANSACTION_WORKER)
-            Provider<TransfuseAndroidModule.ParcelsMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider,
+            Provider<TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>> workerProvider,
             ScopedTransactionFactory scopedTransactionFactory) {
         this.workerProvider = workerProvider;
         this.scopedTransactionFactory = scopedTransactionFactory;

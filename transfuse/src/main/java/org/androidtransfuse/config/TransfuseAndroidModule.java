@@ -120,72 +120,54 @@ public class TransfuseAndroidModule {
         throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
     }
 
-    //todo: remove the following
-    public interface ParcelMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(PARCEL_TRANSACTION_WORKER)
-    public ParcelMarkerTransactionWorker<Provider<ASTType>, JDefinedClass> getParcelTransactionWorker(JCodeModel codeModel,
+    public TransactionWorker<Provider<ASTType>, JDefinedClass> getParcelTransactionWorker(JCodeModel codeModel,
                                                                                                        FilerSourceCodeWriter codeWriter,
                                                                                                        FilerResourceWriter resourceWriter,
                                                                                                        ParcelTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    //todo: remove the following
-    public interface FactoryMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(FACTORY_TRANSACTION_WORKER)
-    public FactoryMarkerTransactionWorker<Provider<ASTType>, JDefinedClass> getFactoryTransactionWorker(JCodeModel codeModel,
+    public TransactionWorker<Provider<ASTType>, JDefinedClass> getFactoryTransactionWorker(JCodeModel codeModel,
                                                                                                         FilerSourceCodeWriter codeWriter,
                                                                                                         FilerResourceWriter resourceWriter,
                                                                                                         FactoryTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    //todo: remove the following
-    public interface FactoriesMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(FACTORIES_TRANSACTION_WORKER)
-    public FactoriesMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getFactoriesTransactionWorker(JCodeModel codeModel,
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getFactoriesTransactionWorker(JCodeModel codeModel,
                                                                                                                        FilerSourceCodeWriter codeWriter,
                                                                                                                        FilerResourceWriter resourceWriter,
                                                                                                                        FactoriesTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    //todo: remove the following
-    public interface ParcelsMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(PARCELS_TRANSACTION_WORKER)
-    public ParcelsMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
                                                                                                                    FilerSourceCodeWriter codeWriter,
                                                                                                                    FilerResourceWriter resourceWriter,
                                                                                                                    ParcelsTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    //todo: remove the following
-    public interface PackageHelperMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(PACKAGE_HELPER_TRANSACTION_WORKER)
-    public PackageHelperMarkerTransactionWorker<Void, Void> getPHTransactionWorker(JCodeModel codeModel,
+    public TransactionWorker<Void, Void> getPHTransactionWorker(JCodeModel codeModel,
                                                                 FilerSourceCodeWriter codeWriter,
                                                                 FilerResourceWriter resourceWriter,
                                                                 PackageHelperGeneratorAdapter worker) {
         return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
-    //todo: remove the following
-    public interface ComponentsMarkerTransactionWorker<V, R> extends TransactionWorker<V, R>{}
-
     @Provides
     @Named(COMPONENTS_TRANSACTION_WORKER)
-    public ComponentsMarkerTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getComponentsWorker(JCodeModel codeModel,
+    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getComponentsWorker(JCodeModel codeModel,
                                                                                                            FilerSourceCodeWriter codeWriter,
                                                                                                            FilerResourceWriter resourceWriter,
                                                                                                            ComponentsGenerator worker) {

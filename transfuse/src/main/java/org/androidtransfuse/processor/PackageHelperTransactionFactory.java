@@ -30,14 +30,13 @@ import javax.inject.Provider;
 public class PackageHelperTransactionFactory {
 
     private final EnterableScope codeGenerationScope;
-    private final Provider<TransfuseAndroidModule.PackageHelperMarkerTransactionWorker<Void, Void>> packageHelperGeneratorProvider;
+    private final Provider<TransactionWorker<Void, Void>> packageHelperGeneratorProvider;
 
     @Inject
     public PackageHelperTransactionFactory(
-            //@Named(TestTransfuseAndroidModule.CODE_GENERATION_SCOPE)
             @ScopeReference(CodeGenerationScope.class) EnterableScope codeGenerationScope,
             @Named(TransfuseAndroidModule.PACKAGE_HELPER_TRANSACTION_WORKER)
-            Provider<TransfuseAndroidModule.PackageHelperMarkerTransactionWorker<Void, Void>> packageHelperGeneratorProvider) {
+            Provider<TransactionWorker<Void, Void>> packageHelperGeneratorProvider) {
         this.packageHelperGeneratorProvider = packageHelperGeneratorProvider;
         this.codeGenerationScope = codeGenerationScope;
     }

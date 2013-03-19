@@ -17,7 +17,6 @@ package org.androidtransfuse.processor;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.io.IOException;
@@ -25,10 +24,7 @@ import java.io.IOException;
 /**
  * @author John Ericksen
  */
-public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R>
-        implements TransfuseAndroidModule.FactoriesMarkerTransactionWorker<V, R>, TransfuseAndroidModule.FactoryMarkerTransactionWorker<V,R>,
-        TransfuseAndroidModule.ParcelMarkerTransactionWorker<V, R>, TransfuseAndroidModule.ComponentsMarkerTransactionWorker<V, R>,
-        TransfuseAndroidModule.PackageHelperMarkerTransactionWorker<V, R>, TransfuseAndroidModule.ParcelsMarkerTransactionWorker<V, R>{
+public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R> implements TransactionWorker<V, R> {
 
     private final JCodeModel codeModel;
     private final CodeWriter codeWriter;

@@ -29,12 +29,12 @@ import javax.inject.Provider;
 public class FactoryTransactionFactory implements TransactionFactory<Provider<ASTType>, JDefinedClass> {
 
     private final ScopedTransactionFactory scopedTransactionFactory;
-    private final Provider<TransfuseAndroidModule.FactoryMarkerTransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;
+    private final Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider;
 
     @Inject
     public FactoryTransactionFactory(ScopedTransactionFactory scopedTransactionFactory,
                                      @Named(TransfuseAndroidModule.FACTORY_TRANSACTION_WORKER)
-                                     Provider<TransfuseAndroidModule.FactoryMarkerTransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider) {
+                                     Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider) {
         this.scopedTransactionFactory = scopedTransactionFactory;
         this.workerProvider = workerProvider;
     }

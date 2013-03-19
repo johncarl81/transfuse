@@ -48,23 +48,22 @@ public class ProviderGenerator {
 
     @Singleton
     public static class ProviderCache {
-        private final Map<String, Map<String, JDefinedClass>> providerExtendedClasses = new HashMap<String, Map<String, JDefinedClass>>();
+        private final Map<String, Map<InjectionSignature, JDefinedClass>> providerExtendedClasses = new HashMap<String, Map<InjectionSignature, JDefinedClass>>();
 
         public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator, String extension) {
 
             if(!providerExtendedClasses.containsKey(extension)){
-                providerExtendedClasses.put(extension, new HashMap<String, JDefinedClass>());
+                providerExtendedClasses.put(extension, new HashMap<InjectionSignature, JDefinedClass>());
             }
-            Map<String, JDefinedClass> providerClasses = providerExtendedClasses.get(extension);
+            Map<InjectionSignature, JDefinedClass> providerClasses = providerExtendedClasses.get(extension);
 
-            //todo: injectionNode.getASTType()?
-            if (!providerClasses.containsKey(injectionNode.getClassName())) {
+            if (!providerClasses.containsKey(injectionNode.getTypeSignature())) {
                 JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode, extension);
-                providerClasses.put(injectionNode.getClassName(), providerClass);
+                providerClasses.put(injectionNode.getTypeSignature(), providerClass);
                 providerGenerator.fillInProvider(injectionNode, providerClass);
             }
 
-            return providerClasses.get(injectionNode.getClassName());
+            return providerClasses.get(injectionNode.getTypeSignature());
         }
     }
 
@@ -104,7 +103,7 @@ public class ProviderGenerator {
         try {
             JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
-            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(extension));
+            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(extension), true);
 
             providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 
