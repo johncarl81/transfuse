@@ -65,8 +65,6 @@ import java.util.Map;
 @BindProviders({
         @BindProvider(type = XStream.class, provider = XStreamProvider.class),
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
-        @BindProvider(type = ProcessingEnvironment.class, provider = ProcessingEnvironmentThrowingProvider.class, scope = Singleton.class),
-        @BindProvider(type = RResource.class, provider = RResourceThrowingProvider.class, scope = ConfigurationScope.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class, scope = ConfigurationScope.class),
         @BindProvider(type = JCodeModel.class, provider = JCodeModelProvider.class, scope = CodeGenerationScope.class)
@@ -104,6 +102,18 @@ public class TransfuseAndroidModule {
     @Singleton
     public Filer getFiler(ProcessingEnvironment processingEnvironment){
         return new SynchronizedFiler(processingEnvironment.getFiler());
+    }
+
+    @Provides
+    @Singleton
+    public ProcessingEnvironment getProcessingEnvironemnt(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    public RResource getRResource(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
     }
 
     @Provides
