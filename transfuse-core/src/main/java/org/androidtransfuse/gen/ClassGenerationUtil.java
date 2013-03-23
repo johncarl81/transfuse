@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utility class unifying the creation of a basic class from a PackageClass
@@ -38,7 +40,12 @@ import java.util.Date;
  */
 public class ClassGenerationUtil {
 
-    private static final String[] PROHIBITED_PACKAGES = {"java", "javax"};
+    private static final Map<String, String> PROHIBITED_PACKAGES = new HashMap<String, String>();
+
+    static{
+        PROHIBITED_PACKAGES.put("java.", "java_.");
+        PROHIBITED_PACKAGES. put("javax.", "javax_.");
+    }
 
     // ISO 8601 standard date format
     private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
@@ -61,9 +68,9 @@ public class ClassGenerationUtil {
 
         // Avoid prohibited package names
         String packageName = className.getPackage();
-        for (String prohibitedPackage : PROHIBITED_PACKAGES) {
-            if(packageName.startsWith(prohibitedPackage)){
-                packageName = packageName.replaceFirst(prohibitedPackage, prohibitedPackage + "_");
+        for (Map.Entry<String, String> prohibitedPackage : PROHIBITED_PACKAGES.entrySet()) {
+            if(packageName.startsWith(prohibitedPackage.getKey())){
+                packageName = packageName.replaceFirst(prohibitedPackage.getKey(), prohibitedPackage.getValue());
             }
         }
 
