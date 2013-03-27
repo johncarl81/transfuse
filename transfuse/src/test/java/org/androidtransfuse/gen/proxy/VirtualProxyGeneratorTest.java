@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.gen.proxy;
 
+import com.sun.codemodel.JClass;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.Analyzer;
@@ -77,7 +77,8 @@ public class VirtualProxyGeneratorTest {
 
     @Test
     public void testProxyByDelayed() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        JDefinedClass proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
+        JClass proxyDescriptor = virtualProxyGenerator.generateProxy(delegateInjectionNode);
+        virtualProxyGenerator.generateProxies();
 
         ClassLoader classLoader = codeGenerationUtil.build();
 

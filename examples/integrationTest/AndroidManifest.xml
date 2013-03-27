@@ -17,7 +17,7 @@
         <activity t:tag="+,l,n" android:label="Preferences" android:name=".activity.PreferencesActivity"/>
         <activity t:tag="+,l,n" android:label="AOP" android:name=".aop.AOPActivity"/>
         <activity t:tag="+,l,n" android:label="Broadcast Receiver" android:name=".broadcastReceiver.ToastTriggerActivity"/>
-        <activity t:tag="+,n" android:name=".externalGenerator.TestActivity"/>
+        <activity t:tag="+,n" android:name=".externalGenerator.ExternalTestActivity"/>
         <activity t:tag="+,n" android:name=".fragments.DetailActivity"/>
         <activity t:tag="+,l,n" android:label="Fragments" android:name=".fragments.FragmentMainActivity"/>
         <activity t:tag="+,l,n" android:label="CustomView" android:name=".inject.CustomViewActivity"/>

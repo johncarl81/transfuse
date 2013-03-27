@@ -109,6 +109,7 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
 
                 FactoriesGenerator factoriesGenerator = coreFactory.buildFactoriesGenerator();
                 factoriesGenerator.generateFactories(factoryAggregate);
+                coreFactory.buildVirtualProxyGenerator().generateProxies();
 
                 JCodeModel codeModel = coreFactory.getCodeModel();
                 codeModel.build(coreFactory.buildCodeWriter(), coreFactory.buildResourceWriter());

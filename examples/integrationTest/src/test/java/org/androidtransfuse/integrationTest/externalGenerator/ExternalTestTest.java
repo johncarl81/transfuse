@@ -19,6 +19,7 @@ import android.os.Bundle;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
@@ -28,25 +29,25 @@ import static org.junit.Assert.assertNotNull;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-public class TestTest {
+public class ExternalTestTest {
 
-    private Test test;
+    private ExternalTest test;
 
     @Before
-    public void setUp() throws Exception {
-        TestActivity testActivity = new TestActivity();
+    public void setUp() {
+        ExternalTestActivity testActivity = new ExternalTestActivity();
         testActivity.onCreate(new Bundle());
 
-        test = DelegateUtil.getDelegate(testActivity, Test.class);
+        test = DelegateUtil.getDelegate(testActivity, ExternalTest.class);
     }
 
-    @org.junit.Test
+    @Test
     public void testGeneratedProxy() throws Exception {
         assertNotNull(test.getTarget().getProxy());
 
     }
 
-    @org.junit.Test
+    @Test
     public void testInjectedProxied() throws Exception {
         assertNotNull(test.getProxied());
         assertEquals(ProxiedProxy.class, test.getProxied().getClass());

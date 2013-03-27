@@ -26,11 +26,8 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -45,54 +42,27 @@ public class AOPProxyGenerator {
     private static final String AOPPROXY_EXT = "$AOPProxy";
     private static final String METHOD_INTERCEPTOR_INVOKE = "invoke";
 
-    private final AOPProxyCache cache;
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
-    private final Logger logger;
     private final ClassGenerationUtil generationUtil;
 
-    @Singleton
-    public static class AOPProxyCache {
-
-        private final Map<String, InjectionNode> aopProxiesGenerated = new HashMap<String, InjectionNode>();
-
-
-        public synchronized InjectionNode getCached(InjectionNode injectionNode, AOPProxyGenerator aopProxyGenerator) {
-
-            if (!aopProxiesGenerated.containsKey(injectionNode.getClassName())) {
-                InjectionNode proxyInjectionNode = aopProxyGenerator.innerGenerateProxyCode(injectionNode);
-                aopProxiesGenerated.put(injectionNode.getClassName(), proxyInjectionNode);
-            }
-
-            return aopProxiesGenerated.get(injectionNode.getClassName());
-        }
-    }
-
     @Inject
-    public AOPProxyGenerator(AOPProxyCache cache, JCodeModel codeModel, UniqueVariableNamer namer, Logger logger, ClassGenerationUtil generationUtil) {
-        this.cache = cache;
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.namer = namer;
-        this.logger = logger;
         this.generationUtil = generationUtil;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
-        return cache.getCached(injectionNode, this);
-    }
-
-    protected InjectionNode innerGenerateProxyCode(InjectionNode injectionNode) {
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
-
-        PackageClass proxyClassName = injectionNode.getASTType().getPackageClass().append(AOPPROXY_EXT);
 
         ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
         ConstructorInjectionPoint constructorInjectionPoint = injectionAspect.getConstructorInjectionPoint();
         ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), ASTAccessModifier.PUBLIC);
 
         try {
-            definedClass = generationUtil.defineClass(proxyClassName);
+            definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(AOPPROXY_EXT), true);
 
             //extending injectionNode
             definedClass._extends(codeModel.ref(injectionNode.getClassName()));
@@ -135,12 +105,12 @@ public class AOPProxyGenerator {
             throw new TransfuseAnalysisException("ClassNotFoundException while building AOP Proxy", e);
         }
 
-        return buildProxyInjectionNode(injectionNode, proxyClassName, injectionAspect, proxyConstructorInjectionPoint);
+        return buildProxyInjectionNode(injectionNode, definedClass.fullName(), injectionAspect, proxyConstructorInjectionPoint);
     }
 
-    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, PackageClass proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
+    private InjectionNode buildProxyInjectionNode(InjectionNode injectionNode, String proxyClassName, ASTInjectionAspect injectionAspect, ConstructorInjectionPoint proxyConstructorInjectionPoint) {
         InjectionNode proxyInjectionNode = new InjectionNode(new InjectionSignature(
-                new ASTProxyType(injectionNode.getASTType(), proxyClassName.getFullyQualifiedName())));
+                new ASTProxyType(injectionNode.getASTType(), proxyClassName)));
 
         proxyInjectionNode.getAspects().putAll(injectionNode.getAspects());
 

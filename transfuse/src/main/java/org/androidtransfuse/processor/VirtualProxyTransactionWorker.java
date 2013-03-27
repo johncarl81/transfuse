@@ -13,37 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.integrationTest.externalGenerator;
+package org.androidtransfuse.processor;
 
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.integrationTest.R;
-import org.androidtransfuse.util.DeclareField;
+import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 
 import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-@Activity
-@Layout(R.layout.main)
-@DeclareField
-public class Test {
+public class VirtualProxyTransactionWorker extends AbstractCompletionTransactionWorker<Void, Void> {
 
-    private Target target;
-    private Proxied proxied;
+    private final VirtualProxyGenerator virtualProxyGenerator;
 
     @Inject
-    public Test(Target target, Proxied proxied) {
-        this.target = target;
-        this.proxied = proxied;
+    public VirtualProxyTransactionWorker(VirtualProxyGenerator virtualProxyGenerator) {
+        this.virtualProxyGenerator = virtualProxyGenerator;
     }
 
-    public Target getTarget() {
-        return target;
-    }
+    @Override
+    public Void innerRun(Void input) {
+        virtualProxyGenerator.generateProxies();
 
-    public Proxied getProxied() {
-        return proxied;
+        return null;
     }
 }

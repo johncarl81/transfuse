@@ -61,6 +61,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final ImplementedByProcessorBuilder implementedByProcessorBuilder;
     private final TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor;
     private final ComponentsTransactionFactory componentsTransactionFactory;
+    private final VirtualProxyTransactionFactory virtualProxyTransactionFactory;
 
     @Inject
     public GeneratorRepositoryProvider(FactoryProcessor factoryProcessor,
@@ -76,7 +77,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        ModuleProcessorBuilder moduleProcessorBuilder,
                                        ImplementedByProcessorBuilder implementedByProcessorBuilder,
                                        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor,
-                                       ComponentsTransactionFactory componentsTransactionFactory) {
+                                       ComponentsTransactionFactory componentsTransactionFactory,
+                                       VirtualProxyTransactionFactory virtualProxyTransactionFactory) {
         this.factoryProcessor = factoryProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
@@ -91,6 +93,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.implementedByProcessorBuilder = implementedByProcessorBuilder;
         this.componentsRepositoryProcessor = componentsRepositoryProcessor;
         this.componentsTransactionFactory = componentsTransactionFactory;
+        this.virtualProxyTransactionFactory = virtualProxyTransactionFactory;
     }
 
     @Override
@@ -141,7 +144,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         processorMapBuilder.put(Factory.class, factoryProcessor);
 
         // Package Helper processing (to be run last)
-        TransactionProcessor<Void, Void> packageHelperProcessor = new TransactionProcessorPredefined(ImmutableSet.of(packageHelperTransactionFactory.buildTransaction()));
+        TransactionProcessor<Void, Void> packageHelperProcessor = new TransactionProcessorPredefined(
+                ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(), virtualProxyTransactionFactory.buildTransaction()));
 
         TransactionProcessor<?, ?> configurationDependentProcessors =
                 new TransactionProcessorComposite(configurationDependentBuilders.build());

@@ -65,5 +65,10 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
 
             return astElementFactory.getType(typeElement);
         }
+
+        @Override
+        public String toString() {
+            return element.toString();
+        }
     }
 }

@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
-import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -56,8 +56,8 @@ public class VirtualProxyExpressionDecorator extends VariableExpressionBuilderDe
 
         if (proxyAspect != null && proxyAspect.isProxyRequired() && !proxyAspect.isProxyDefined()) {
             //proxy
-            JDefinedClass proxyDescriptor = virtualProxyGenerator.generateProxy(injectionNode);
-            JExpression proxyExpression = proxyVariableBuilder.buildProxyInstance(context, injectionNode, proxyDescriptor);
+            JClass proxy = virtualProxyGenerator.generateProxy(injectionNode);
+            JExpression proxyExpression = proxyVariableBuilder.buildProxyInstance(context, injectionNode, proxy);
             variable = typedExpressionFactory.build(injectionNode.getASTType(), proxyExpression);
             variableMap.put(injectionNode, variable);
             proxyAspect.setProxyExpression(variable);

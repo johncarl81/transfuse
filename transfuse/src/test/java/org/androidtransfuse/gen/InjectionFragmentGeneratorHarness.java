@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
@@ -39,6 +40,8 @@ public class InjectionFragmentGeneratorHarness {
     private ClassGenerationUtil generationUtil;
     @Inject
     private UniqueVariableNamer namer;
+    @Inject
+    private VirtualProxyGenerator virtualProxyGenerator;
 
     public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
         JDefinedClass definedClass = generationUtil.defineClass(providerPackageClass);
@@ -57,6 +60,7 @@ public class InjectionFragmentGeneratorHarness {
         JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
 
         Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, scopes);
+        virtualProxyGenerator.generateProxies();
 
         block._return(expressionMap.get(injectionNode).getExpression());
     }

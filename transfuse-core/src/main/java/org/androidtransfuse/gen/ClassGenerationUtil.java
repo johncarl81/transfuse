@@ -60,6 +60,16 @@ public class ClassGenerationUtil {
         this.namer = namer;
     }
 
+    public String getPackage(String inputPackage){
+        String validPackage = inputPackage;
+        for (Map.Entry<String, String> prohibitedPackage : PROHIBITED_PACKAGES.entrySet()) {
+            if(inputPackage.startsWith(prohibitedPackage.getKey())){
+                validPackage = inputPackage.replaceFirst(prohibitedPackage.getKey(), prohibitedPackage.getValue());
+            }
+        }
+        return validPackage;
+    }
+
     public JDefinedClass defineClass(PackageClass className) throws JClassAlreadyExistsException {
         return defineClass(className, false);
     }
@@ -67,12 +77,7 @@ public class ClassGenerationUtil {
     public JDefinedClass defineClass(PackageClass className, boolean enforceUniqueName) throws JClassAlreadyExistsException {
 
         // Avoid prohibited package names
-        String packageName = className.getPackage();
-        for (Map.Entry<String, String> prohibitedPackage : PROHIBITED_PACKAGES.entrySet()) {
-            if(packageName.startsWith(prohibitedPackage.getKey())){
-                packageName = packageName.replaceFirst(prohibitedPackage.getKey(), prohibitedPackage.getValue());
-            }
-        }
+        String packageName = getPackage(className.getPackage());
 
         JPackage jPackage = codeModel._package(packageName);
         String name;

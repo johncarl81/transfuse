@@ -44,7 +44,10 @@ import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
-import org.androidtransfuse.util.*;
+import org.androidtransfuse.util.MessagerLogger;
+import org.androidtransfuse.util.Providers;
+import org.androidtransfuse.util.QualifierPredicate;
+import org.androidtransfuse.util.ScopesPredicate;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -64,24 +67,22 @@ public class CoreFactory {
 
     private final Elements elements;
     private final JCodeModel codeModel = new JCodeModel();
-    private final VirtualProxyGenerator.VirtualProxyGeneratorCache virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache();
+    private final VirtualProxyGenerator.VirtualProxyGeneratorCache virtualProxyCache;
     private final ASTClassFactory astClassFactory = new ASTClassFactory(new ConcreteASTFactory());
     private final TypedExpressionFactory typedExpressionFactory = new TypedExpressionFactory(astClassFactory);
     private final UniqueVariableNamer namer = new UniqueVariableNamer();
     private final ClassGenerationUtil generationUtil;
-    private final AOPProxyGenerator.AOPProxyCache aopProxyCache = new AOPProxyGenerator.AOPProxyCache();
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
     private final Filer filer;
-    private final Logger logger;
     private final ModuleRepositoryImpl moduleRepository = new ModuleRepositoryImpl();
 
     private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
 
     public CoreFactory(Elements elements, Messager messager, Filer filer) {
         this.elements = elements;
-        this.logger = new MessagerLogger(messager);
         this.filer = filer;
-        this.generationUtil = new ClassGenerationUtil(codeModel, logger, namer);
+        this.generationUtil = new ClassGenerationUtil(codeModel, new MessagerLogger(messager), namer);
+        this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(namer, generationUtil);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
     }
 
@@ -122,7 +123,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(aopProxyCache, codeModel, namer, logger, generationUtil);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
@@ -293,6 +294,10 @@ public class CoreFactory {
 
     public FactoriesGenerator buildFactoriesGenerator() {
         return new FactoriesGenerator(codeModel, generationUtil, namer);
+    }
+
+    public VirtualProxyGenerator buildVirtualProxyGenerator(){
+        return new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
     }
 
     public void registerFactories(Collection<? extends ASTType> factories) {

@@ -24,6 +24,7 @@ import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.DelayedLoad;
 import org.androidtransfuse.util.VirtualProxyException;
@@ -49,47 +50,91 @@ public class VirtualProxyGenerator {
     private static final String VPROXY_EXT = "$VProxy";
 
     private final JCodeModel codeModel;
-    private final UniqueVariableNamer variableNamer;
+    private final UniqueVariableNamer namer;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
     private final VirtualProxyGeneratorCache cache;
 
     @Singleton
-    public static class VirtualProxyGeneratorCache {
+    public static final class VirtualProxyGeneratorCache {
 
-        private final Map<ASTType, JDefinedClass> descriptorCache = new HashMap<ASTType, JDefinedClass>();
+        private final Map<ASTType, VirtualProxyDescriptor> descriptorCache = new HashMap<ASTType, VirtualProxyDescriptor>();
+        private final UniqueVariableNamer namer;
+        private final ClassGenerationUtil generationUtil;
 
-        public synchronized JDefinedClass getCached(InjectionNode injectionNode, VirtualProxyGenerator generator) {
+        @Inject
+        public VirtualProxyGeneratorCache(UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
+            this.namer = namer;
+            this.generationUtil = generationUtil;
+        }
+
+        public synchronized VirtualProxyDescriptor getCached(InjectionNode injectionNode) {
             if (!descriptorCache.containsKey(injectionNode.getASTType())) {
-                descriptorCache.put(injectionNode.getASTType(), generator.innerGenerateProxy(injectionNode));
+                PackageClass proxyName = new PackageClass(generationUtil.getPackage(injectionNode.getASTType().getPackageClass().getPackage()),
+                        namer.generateClassName(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT).getClassName()));
+                VirtualProxyDescriptor descriptor = new VirtualProxyDescriptor(proxyName, injectionNode.getASTType());
+                descriptorCache.put(injectionNode.getASTType(), descriptor);
             }
             return descriptorCache.get(injectionNode.getASTType());
         }
     }
 
+    private static final class VirtualProxyDescriptor{
+        private PackageClass proxyName;
+        private ASTType delegate;
+        private Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
+
+        private VirtualProxyDescriptor(PackageClass proxyName, ASTType delegate) {
+            this.proxyName = proxyName;
+            this.delegate = delegate;
+        }
+
+        public PackageClass getProxyName() {
+            return proxyName;
+        }
+
+        public Set<ASTType> getProxyInterfaces() {
+            return proxyInterfaces;
+        }
+
+        public ASTType getDelegate() {
+            return delegate;
+        }
+    }
+
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil, VirtualProxyGeneratorCache cache) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil, VirtualProxyGeneratorCache cache) {
         this.codeModel = codeModel;
-        this.variableNamer = variableNamer;
+        this.namer = namer;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
         this.cache = cache;
     }
 
-    public JDefinedClass generateProxy(InjectionNode injectionNode) {
-        return cache.getCached(injectionNode, this);
+    public JClass generateProxy(InjectionNode injectionNode) {
+        VirtualProxyDescriptor descriptor = cache.getCached(injectionNode);
+
+        descriptor.getProxyInterfaces().addAll(injectionNode.getAspect(VirtualProxyAspect.class).getProxyInterfaces());
+
+        return codeModel.directClass(descriptor.getProxyName().getCanonicalName());
     }
 
-    public JDefinedClass innerGenerateProxy(InjectionNode injectionNode) {
+    public void generateProxies(){
+        for (VirtualProxyDescriptor descriptor : cache.descriptorCache.values()) {
+            innerGenerateProxy(descriptor);
+        }
+    }
+
+    private void innerGenerateProxy(VirtualProxyDescriptor descriptor) {
 
         try {
 
-            JDefinedClass definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT), true);
+            JDefinedClass definedClass = generationUtil.defineClass(descriptor.getProxyName());
 
             //define delegate
-            JClass delegateClass = codeModel.ref(injectionNode.getClassName());
+            JClass delegateClass = codeModel.ref(descriptor.getDelegate().getName());
 
-            Set<ASTType> proxyInterfaces = injectionNode.getAspect(VirtualProxyAspect.class).getProxyInterfaces();
+            Set<ASTType> proxyInterfaces = descriptor.getProxyInterfaces();
 
             JFieldVar delegateField = definedClass.field(JMod.PRIVATE, delegateClass, DELEGATE_NAME,
                     JExpr._null());
@@ -110,40 +155,35 @@ public class VirtualProxyGenerator {
             Set<MethodSignature> methodSignatures = new HashSet<MethodSignature>();
 
             //implements interfaces
-            if (injectionNode.containsAspect(VirtualProxyAspect.class)) {
-                for (ASTType interfaceType : proxyInterfaces) {
-                    definedClass._implements(codeModel.ref(interfaceType.getName()));
+            for (ASTType interfaceType : proxyInterfaces) {
+                definedClass._implements(codeModel.ref(interfaceType.getName()));
 
-                    //implement methods
-                    for (ASTMethod method : interfaceType.getMethods()) {
-                        //checking uniqueness
-                        if (methodSignatures.add(new MethodSignature(method))) {
-                            buildProxyMethod(definedClass, delegateField, delegateCheckMethod, method);
-                        }
+                //implement methods
+                for (ASTMethod method : interfaceType.getMethods()) {
+                    //checking uniqueness
+                    if (methodSignatures.add(new MethodSignature(method))) {
+                        buildProxyMethod(definedClass, delegateField, delegateCheckMethod, method);
                     }
                 }
-
-                //equals, hashcode, and toString()
-                ASTMethod equals = getASTMethod("equals", Object.class);
-                ASTMethod hashCode = getASTMethod("hashCode");
-                ASTMethod toString = getASTMethod("toString");
-                if (methodSignatures.add(new MethodSignature(equals))) {
-                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, equals);
-                }
-
-                if (methodSignatures.add(new MethodSignature(hashCode))) {
-                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, hashCode);
-                }
-
-                if (methodSignatures.add(new MethodSignature(toString))) {
-                    buildProxyMethod(definedClass, delegateField, delegateCheckMethod, toString);
-                }
-
             }
 
-            return definedClass;
+            //equals, hashcode, and toString()
+            ASTMethod equals = getASTMethod("equals", Object.class);
+            ASTMethod hashCode = getASTMethod("hashCode");
+            ASTMethod toString = getASTMethod("toString");
+            if (methodSignatures.add(new MethodSignature(equals))) {
+                buildProxyMethod(definedClass, delegateField, delegateCheckMethod, equals);
+            }
+
+            if (methodSignatures.add(new MethodSignature(hashCode))) {
+                buildProxyMethod(definedClass, delegateField, delegateCheckMethod, hashCode);
+            }
+
+            if (methodSignatures.add(new MethodSignature(toString))) {
+                buildProxyMethod(definedClass, delegateField, delegateCheckMethod, toString);
+            }
         } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Error while trying to build new class: " + injectionNode.getASTType().getPackageClass().append(VPROXY_EXT) , e);
+            throw new TransfuseAnalysisException("Error while trying to build new class: " + descriptor.getProxyName() , e);
         } catch (NoSuchMethodException e) {
             throw new TransfuseAnalysisException("Unable to find expected method", e);
         }
@@ -170,7 +210,7 @@ public class VirtualProxyGenerator {
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
                     methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
-                            variableNamer.generateName(parameter.getASTType())));
+                            namer.generateName(parameter.getASTType())));
         }
 
         //define method body
