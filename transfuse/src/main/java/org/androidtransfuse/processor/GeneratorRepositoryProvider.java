@@ -33,15 +33,15 @@ import java.util.Map;
 /**
  * Configures the Processor chain
  *
- *     +---------+             +--------------+    +----------+        +-----------------+
- * -+->| Modules +-------+--+->| Component(s) +-+->| Manifest |---+-+->| Package Helpers |
- *  |  +---------+       |  |  +--------------+ |  +----------+   | |  +-----------------+
- *  |  +---------------+ |  |                   |  +------------+ | |
- *  +->| ImplementedBy +-+  |                   +->| Components |-+ |
- *     +---------------+    |                      +------------+   |
- *                          |  +-------------+  +-----------+       |
- *                          +->| Factory(s) +->| Factories +-------+
- *                             +-------------+  +-----------+
+ *     +---------+             +--------------+    +----------+          +-----------------+
+ * -+->| Modules +-------+--+->| Component(s) +-+->| Manifest |---+-+-+->| Package Helpers |
+ *  |  +---------+       |  |  +--------------+ |  +----------+   | | |  +-----------------+
+ *  |  +---------------+ |  |                   |  +------------+ | | |  +-----------------+
+ *  +->| ImplementedBy +-+  |                   +->| Components |-+ | +->| Virtual Proxies |
+ *     +---------------+    |                      +------------+   |    +-----------------+
+ *                          |  +-------------+     +-----------+    |
+ *                          +->| Factory(s)  +---->| Factories +----+
+ *                             +-------------+     +-----------+
  *
  * @author John Ericksen
  */
@@ -120,7 +120,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         analyzers.put(Fragment.class, fragmentAnalysisProvider);
 
         for (Map.Entry<Class<? extends Annotation>, Provider<? extends Analysis<ComponentDescriptor>>> providerEntry : analyzers.entrySet()) {
-            WorkerProvider workerProvider = analysisGenerationFactory.buildAnalysisGenerationProvider(providerEntry.getValue());
+            Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider = analysisGenerationFactory.buildAnalysisGenerationProvider(providerEntry.getValue());
             AnalysisGenerationTransactionProcessorBuilder processorBuilder = processorFactory.buildBuilder(workerProvider);
 
             componentProcessors.add(processorBuilder.getTransactionProcessor());

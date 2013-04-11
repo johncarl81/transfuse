@@ -15,7 +15,11 @@
  */
 package org.androidtransfuse.processor;
 
+import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.annotations.Factory;
+
+import javax.inject.Provider;
 
 /**
  * @author John Ericksen
@@ -23,5 +27,5 @@ import org.androidtransfuse.annotations.Factory;
 @Factory
 public interface AnalysisGenerationTransactionProcessorBuilderFactory {
 
-    AnalysisGenerationTransactionProcessorBuilder buildBuilder(WorkerProvider workerProvider);
+    AnalysisGenerationTransactionProcessorBuilder buildBuilder(Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider);
 }

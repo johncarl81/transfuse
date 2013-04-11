@@ -37,7 +37,7 @@ public class AnalysisGenerationTransactionProcessorBuilder implements Transactio
 
     @Inject
     public AnalysisGenerationTransactionProcessorBuilder(
-            /*@Assisted*/ WorkerProvider workerProvider,
+            /*@Assisted*/ Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> workerProvider,
             Provider<JCodeModel> codeModelProvider,
             Provider<FilerSourceCodeWriter> sourceCodeWriterProvider,
             Provider<FilerResourceWriter> resourceCodeWriterProvider,
