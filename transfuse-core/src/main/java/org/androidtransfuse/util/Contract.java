@@ -32,7 +32,7 @@ public class Contract {
      * Throw a null pointer exception if object is null
      * @param object the object to test
      * @param objectName the name of the object
-     * @Throws NullPointerException if the passed object is null
+     * @throws NullPointerException if the passed object is null
      */
     public static void notNull(final Object object, final String objectName) {
         if (object == null) {
