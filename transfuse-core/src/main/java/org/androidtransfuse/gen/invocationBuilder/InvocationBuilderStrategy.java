@@ -21,5 +21,6 @@ import org.androidtransfuse.adapter.ASTAccessModifier;
  * @author John Ericksen
  */
 public interface InvocationBuilderStrategy {
+
     ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier);
 }
