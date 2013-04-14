@@ -25,7 +25,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-@Activity(name = "ScopeTwoActivity", label = "Scope One")
+@Activity(name = "ScopeTwoActivity", label = "Scope Two")
 @Layout(R.layout.scoped)
 @DeclareField
 public class ScopeTwo {

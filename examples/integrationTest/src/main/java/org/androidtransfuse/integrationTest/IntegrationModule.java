@@ -25,6 +25,8 @@ import org.androidtransfuse.integrationTest.externalGenerator.Proxied;
 import org.androidtransfuse.integrationTest.externalGenerator.ProxiedProxy;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.RandomProvider;
+import org.androidtransfuse.integrationTest.scope.CustomScope;
+import org.androidtransfuse.integrationTest.scope.MapScope;
 
 import javax.inject.Named;
 import java.util.Random;
@@ -50,6 +52,7 @@ import java.util.Random;
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.VIBRATE
 })
+@DefineScope(annotation = CustomScope.class, scope = MapScope.class)
 @UsesSdk(min = 5, target = 11)
 public class IntegrationModule {
 

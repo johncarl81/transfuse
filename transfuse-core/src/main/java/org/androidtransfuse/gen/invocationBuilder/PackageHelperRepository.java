@@ -88,8 +88,6 @@ public class PackageHelperRepository {
         PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
         if (!helperClass.getFieldSetMapping().containsKey(fieldInjectionPoint)) {
-
-            //todo: do we need to replace . with$?
             String accessorMethod = PRE_METHOD + containedPackageClass.getClassName().replace('.', '$') + "$FS$" + fieldInjectionPoint.getName();
             helperClass.getFieldSetMapping().put(fieldInjectionPoint, accessorMethod);
         }

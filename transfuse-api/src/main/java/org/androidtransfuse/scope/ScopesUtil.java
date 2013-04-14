@@ -27,7 +27,7 @@ public final class ScopesUtil {
     private static final Scopes SCOPES = new Scopes();
 
     static{
-        //fixme: scope init
+        //todo: fixme: scope init
         SCOPES.addScope(Singleton.class, new ConcurrentDoubleLockingScope());
     }
 

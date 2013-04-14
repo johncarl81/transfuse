@@ -34,6 +34,7 @@ import org.androidtransfuse.integrationTest.observes.EventObserver;
 import org.androidtransfuse.integrationTest.register.Register;
 import org.androidtransfuse.integrationTest.saveState.NonConfigInstance;
 import org.androidtransfuse.integrationTest.saveState.SaveInstanceState;
+import org.androidtransfuse.integrationTest.scope.CustomScopeExample;
 import org.androidtransfuse.integrationTest.scope.ScopeOne;
 import org.androidtransfuse.integrationTest.scope.ScopeTwo;
 import org.androidtransfuse.intentFactory.IntentFactory;
@@ -77,6 +78,7 @@ public class Main {
                 createLI(Components.get(ActivityLifecycle.class), "Activity Lifecycle"),
                 createLI(Components.get(ScopeOne.class), "Singleton Scope One"),
                 createLI(Components.get(ScopeTwo.class), "Singleton Scope Two"),
+                createLI(Components.get(CustomScopeExample.class), "Custom Scope"),
                 createLI(NotManagedActivity.class, "Not Managed"),
                 createLI(Components.get(CustomView.class), "Custom View"),
                 createLI(Components.get(VariableLayout.class), "Variable Layout"),

@@ -35,8 +35,9 @@
         <activity t:tag="+,l,n" android:label="Listener Registration" android:name=".register.RegisterActivity"/>
         <activity t:tag="+,n" android:name=".saveState.NonConfigInstanceActivity"/>
         <activity t:tag="+,l,n" android:label="Save Instance State" android:name=".saveState.SaveInstanceStateActivity"/>
+        <activity t:tag="+,l,n" android:label="Custom Scope" android:name=".scope.CustomScopeActivity"/>
         <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeOneActivity"/>
-        <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeTwoActivity"/>
+        <activity t:tag="+,l,n" android:label="Scope Two" android:name=".scope.ScopeTwoActivity"/>
         <service t:tag="+,n" android:name=".service.ExampleService"/>
         <receiver t:tag="+,n" android:name=".broadcastReceiver.ToasterBroadcastReceiver">
             <intent-filter t:tag="+">
