@@ -18,6 +18,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -29,7 +30,6 @@ import org.androidtransfuse.gen.proxy.MockDelegate;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.PackageClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ import javax.inject.Provider;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * @author John Ericksen

@@ -22,7 +22,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
-import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 
 import javax.inject.Inject;

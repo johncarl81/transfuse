@@ -16,7 +16,7 @@
 package org.androidtransfuse.gen;
 
 import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
-import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 

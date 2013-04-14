@@ -18,6 +18,8 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
+import org.androidtransfuse.transaction.CodeGenerationScopedTransactionWorker;
+import org.androidtransfuse.transaction.TransactionWorker;
 
 import javax.inject.Provider;
 

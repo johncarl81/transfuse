@@ -19,7 +19,7 @@ import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analysis;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Provider;
 

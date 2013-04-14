@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.*;
 
 /**

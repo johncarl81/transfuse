@@ -16,6 +16,7 @@
 package org.androidtransfuse.model;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeFactory;
 import org.androidtransfuse.gen.componentBuilder.MethodBuilder;

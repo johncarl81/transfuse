@@ -18,6 +18,9 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.config.TransfuseAndroidModule;
+import org.androidtransfuse.transaction.Transaction;
+import org.androidtransfuse.transaction.TransactionFactory;
+import org.androidtransfuse.transaction.TransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Named;

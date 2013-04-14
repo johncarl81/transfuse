@@ -37,7 +37,6 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
     private final UniqueVariableNamer namer;
     private final ActivityDelegateASTReference activityDelegateASTReference;
 
-
     @Inject
     public ActivityDelegateRegistrationGenerator(/*@Assisted*/ ActivityDelegateASTReference activityDelegateASTReference,
                                                  /*@Assisted*/ ImmutableList<ASTMethod> methods,

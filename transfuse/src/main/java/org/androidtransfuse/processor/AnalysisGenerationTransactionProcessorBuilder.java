@@ -20,6 +20,10 @@ import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.FilerResourceWriter;
 import org.androidtransfuse.gen.FilerSourceCodeWriter;
+import org.androidtransfuse.transaction.TransactionProcessor;
+import org.androidtransfuse.transaction.TransactionProcessorBuilder;
+import org.androidtransfuse.transaction.TransactionProcessorPool;
+import org.androidtransfuse.transaction.TransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

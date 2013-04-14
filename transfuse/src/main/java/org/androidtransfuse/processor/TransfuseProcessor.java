@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ManifestBuilder;
+import org.androidtransfuse.transaction.TransactionProcessorBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

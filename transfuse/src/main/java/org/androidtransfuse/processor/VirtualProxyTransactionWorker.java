@@ -16,6 +16,7 @@
 package org.androidtransfuse.processor;
 
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 

@@ -23,6 +23,7 @@ import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.transaction.*;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

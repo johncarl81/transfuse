@@ -23,7 +23,6 @@ import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.processor.ParcelProcessor;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
-import org.androidtransfuse.util.SupportedAnnotations;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;

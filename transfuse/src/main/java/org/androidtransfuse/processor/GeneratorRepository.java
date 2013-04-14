@@ -17,6 +17,8 @@ package org.androidtransfuse.processor;
 
 import com.google.common.collect.ImmutableMap;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.transaction.TransactionProcessor;
+import org.androidtransfuse.transaction.TransactionProcessorBuilder;
 
 import javax.inject.Provider;
 import java.lang.annotation.Annotation;

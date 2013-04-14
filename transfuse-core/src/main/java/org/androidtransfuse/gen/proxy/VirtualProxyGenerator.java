@@ -24,7 +24,6 @@ import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.DelayedLoad;
 import org.androidtransfuse.util.VirtualProxyException;

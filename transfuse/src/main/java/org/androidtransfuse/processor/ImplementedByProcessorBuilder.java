@@ -17,6 +17,9 @@ package org.androidtransfuse.processor;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ImplementedByTransactionWorker;
+import org.androidtransfuse.transaction.TransactionProcessor;
+import org.androidtransfuse.transaction.TransactionProcessorBuilder;
+import org.androidtransfuse.transaction.TransactionProcessorPool;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

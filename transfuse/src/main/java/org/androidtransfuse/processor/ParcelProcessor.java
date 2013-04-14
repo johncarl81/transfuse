@@ -18,6 +18,8 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.transaction.TransactionProcessor;
+import org.androidtransfuse.transaction.TransactionProcessorPool;
 
 import javax.inject.Provider;
 import java.util.Collection;

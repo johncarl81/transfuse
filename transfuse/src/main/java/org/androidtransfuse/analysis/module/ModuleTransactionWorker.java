@@ -23,7 +23,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

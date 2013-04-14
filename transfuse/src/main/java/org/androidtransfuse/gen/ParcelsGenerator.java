@@ -18,7 +18,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Parcels;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Repository;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 

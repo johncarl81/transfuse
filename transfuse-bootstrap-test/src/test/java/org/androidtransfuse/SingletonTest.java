@@ -23,8 +23,8 @@ import org.junit.Test;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author John Ericksen

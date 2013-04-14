@@ -18,6 +18,7 @@ package org.androidtransfuse.processor;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.manifest.Application;
 import org.androidtransfuse.model.manifest.Manifest;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestSerializer;
 

@@ -19,7 +19,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.Factories;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 

@@ -37,6 +37,7 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFacto
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.*;
+import org.androidtransfuse.transaction.*;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.MessagerLogger;
 

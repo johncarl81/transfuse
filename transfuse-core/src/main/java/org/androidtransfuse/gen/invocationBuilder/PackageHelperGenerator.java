@@ -19,12 +19,12 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTVoidType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.PackageClass;
 
 import javax.inject.Inject;
 import java.util.List;

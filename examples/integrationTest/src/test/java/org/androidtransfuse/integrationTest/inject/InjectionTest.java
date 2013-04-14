@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Provider;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * @author John Ericksen

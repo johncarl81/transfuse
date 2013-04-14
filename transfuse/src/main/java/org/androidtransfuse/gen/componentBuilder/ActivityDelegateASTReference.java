@@ -22,5 +22,6 @@ import org.androidtransfuse.model.TypedExpression;
  * @author John Ericksen
  */
 public interface ActivityDelegateASTReference {
+
     JExpression buildReference(TypedExpression rootExpression);
 }

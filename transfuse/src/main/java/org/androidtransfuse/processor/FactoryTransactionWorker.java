@@ -18,6 +18,7 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.FactoryGenerator;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

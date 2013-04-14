@@ -19,7 +19,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JPackage;
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Generated;
 import org.androidtransfuse.util.Logger;
 

@@ -40,6 +40,7 @@
     </developers>
 
     <modules>
+        <module>transfuse-support</module>
         <module>transfuse-core</module>
         <module>transfuse-bootstrap</module>
         <module>transfuse-bootstrap-test</module>

@@ -19,8 +19,8 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.Components;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.model.PackageClass;
-import org.androidtransfuse.processor.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;

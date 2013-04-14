@@ -127,7 +127,7 @@ public class CoreFactory {
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
-        GeneratorFactory2 generatorFactory = new GeneratorFactory2(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory)));
+        ExpressionMatchingIterableFactory generatorFactory = new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory)));
 
         return new VariableInjectionBuilder(
                         codeModel,
@@ -245,7 +245,7 @@ public class CoreFactory {
                     injectionExpressionBuilder,
                     typedExpressionFactory,
                     new ExceptionWrapper(codeModel),
-                    new GeneratorFactory2(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))));
+                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))));
             this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, buildInjectionNodeRepository().getScopeAnnotations());
         }
         return bootstrapsInjectorGenerator;

@@ -34,8 +34,7 @@ import org.junit.Test;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static junit.framework.Assert.*;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * @author John Ericksen

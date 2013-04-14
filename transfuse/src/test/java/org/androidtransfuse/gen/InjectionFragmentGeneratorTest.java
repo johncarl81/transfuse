@@ -17,6 +17,7 @@ package org.androidtransfuse.gen;
 
 import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -38,8 +39,8 @@ import org.junit.Test;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author John Ericksen

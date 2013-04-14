@@ -33,7 +33,6 @@ import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
-import org.androidtransfuse.util.SupportedAnnotations;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;

@@ -17,7 +17,7 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.adapter.PackageClass;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

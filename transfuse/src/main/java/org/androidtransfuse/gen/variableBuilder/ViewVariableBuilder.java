@@ -48,7 +48,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final RResource rResource;
-    private final GeneratorFactory2 generatorFactory;
+    private final ExpressionMatchingIterableFactory generatorFactory;
 
     @Inject
     public ViewVariableBuilder(/*@Assisted*/ @Nullable Integer viewId,
@@ -62,7 +62,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                UniqueVariableNamer variableNamer,
                                RResource rResource,
                                TypedExpressionFactory typedExpressionFactory,
-                               GeneratorFactory2 generatorFactory) {
+                               ExpressionMatchingIterableFactory generatorFactory) {
         super(View.class, typedExpressionFactory);
         this.viewId = viewId;
         this.viewTag = viewTag;

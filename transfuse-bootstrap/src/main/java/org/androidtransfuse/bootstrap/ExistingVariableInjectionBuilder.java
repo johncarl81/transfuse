@@ -18,7 +18,6 @@ package org.androidtransfuse.bootstrap;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.TransactionRuntimeException;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
@@ -29,6 +28,7 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.transaction.TransactionRuntimeException;
 
 import javax.inject.Inject;
 
@@ -39,7 +39,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
-    private final GeneratorFactory2 generatorFactory;
+    private final ExpressionMatchingIterableFactory generatorFactory;
 
     @Inject
     public ExistingVariableInjectionBuilder(JExpression expression,
@@ -47,7 +47,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
                                             InjectionExpressionBuilder injectionExpressionBuilder,
                                             TypedExpressionFactory typedExpressionFactory,
                                             ExceptionWrapper exceptionWrapper,
-                                            GeneratorFactory2 generatorFactory) {
+                                            ExpressionMatchingIterableFactory generatorFactory) {
         this.expression = expression;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.injectionExpressionBuilder = injectionExpressionBuilder;

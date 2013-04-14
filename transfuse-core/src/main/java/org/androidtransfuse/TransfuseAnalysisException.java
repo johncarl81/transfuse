@@ -21,6 +21,9 @@ import com.google.common.collect.ImmutableSet;
  * @author John Ericksen
  */
 public class TransfuseAnalysisException extends RuntimeException {
+
+    private static final long serialVersionUID = -3213907344860664924L;
+
     public TransfuseAnalysisException() {
     }
 

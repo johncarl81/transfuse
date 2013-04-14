@@ -16,9 +16,9 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
 

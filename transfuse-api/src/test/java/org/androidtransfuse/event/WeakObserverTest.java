@@ -21,9 +21,7 @@ import org.junit.Test;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author John Ericksen

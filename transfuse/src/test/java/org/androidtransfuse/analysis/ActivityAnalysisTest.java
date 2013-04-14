@@ -36,7 +36,7 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author John Ericksen

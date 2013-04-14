@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.AnnotationProcessorBase;
+import org.androidtransfuse.SupportedAnnotations;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
@@ -30,7 +31,6 @@ import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.FactoryGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Providers;
-import org.androidtransfuse.util.SupportedAnnotations;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;

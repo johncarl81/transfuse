@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.OnReceive;
@@ -23,7 +24,6 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
 import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.TypeMirrorRunnable;

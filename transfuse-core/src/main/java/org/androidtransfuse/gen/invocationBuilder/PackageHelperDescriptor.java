@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.PackageClass;
 
 import java.util.HashMap;
 import java.util.Map;

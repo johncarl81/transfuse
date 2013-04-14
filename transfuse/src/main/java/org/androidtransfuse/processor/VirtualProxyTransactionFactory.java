@@ -19,6 +19,9 @@ import org.androidtransfuse.annotations.ScopeReference;
 import org.androidtransfuse.config.CodeGenerationScope;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseAndroidModule;
+import org.androidtransfuse.transaction.ScopedTransactionWorker;
+import org.androidtransfuse.transaction.Transaction;
+import org.androidtransfuse.transaction.TransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Named;

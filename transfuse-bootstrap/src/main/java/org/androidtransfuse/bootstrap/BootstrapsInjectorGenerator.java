@@ -17,12 +17,12 @@ package org.androidtransfuse.bootstrap;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.PackageClass;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 

@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransactionRuntimeException;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
@@ -28,6 +27,7 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.transaction.TransactionRuntimeException;
 
 import javax.inject.Inject;
 
@@ -43,7 +43,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
-    private final GeneratorFactory2 generatorFactory;
+    private final ExpressionMatchingIterableFactory generatorFactory;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
@@ -53,7 +53,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     InjectionExpressionBuilder injectionExpressionBuilder,
                                     TypedExpressionFactory typedExpressionFactory,
                                     ExceptionWrapper exceptionWrapper,
-                                    GeneratorFactory2 generatorFactory) {
+                                    ExpressionMatchingIterableFactory generatorFactory) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;

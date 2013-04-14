@@ -18,12 +18,13 @@ package org.androidtransfuse.processor;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.config.ThreadLocalScope;
+import org.androidtransfuse.transaction.TransactionWorker;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Provider;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**

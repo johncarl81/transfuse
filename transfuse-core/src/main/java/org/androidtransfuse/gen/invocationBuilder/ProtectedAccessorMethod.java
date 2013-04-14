@@ -17,7 +17,7 @@ package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JInvocation;
-import org.androidtransfuse.model.PackageClass;
+import org.androidtransfuse.adapter.PackageClass;
 
 /**
  * @author John Ericksen
