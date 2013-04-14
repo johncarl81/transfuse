@@ -22,7 +22,7 @@ import java.util.Collection;
 /**
  * @author John Ericksen
  */
-public class Contract {
+public final class Contract {
 
     private Contract(){
         //private utility constructor

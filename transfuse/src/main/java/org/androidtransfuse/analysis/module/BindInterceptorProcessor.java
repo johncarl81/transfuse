@@ -35,7 +35,7 @@ public class BindInterceptorProcessor implements TypeProcessor {
     }
 
 
-    private final class InterceptorsConfiguration implements ModuleConfiguration{
+    private static final class InterceptorsConfiguration implements ModuleConfiguration{
 
         private final ASTType annotation;
         private final ASTType interceptor;
