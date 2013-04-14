@@ -15,40 +15,44 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.google.common.collect.ImmutableMap;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.Collection;
 
 /**
  * @author John Ericksen
  */
 public class AnalysisContext {
 
-    private final Map<ASTType, InjectionNode> dependents;
-    private final Stack<InjectionNode> dependencyHistory;
+    private final ImmutableMap<ASTType, InjectionNode> dependents;
     private final AnalysisRepository analysisRepository;
     private final InjectionNodeBuilderRepository injectionNodeBuilders;
 
     @Inject
     public AnalysisContext(/*@Assisted*/ InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository) {
-        this.dependents = new HashMap<ASTType, InjectionNode>();
-        this.dependencyHistory = new Stack<InjectionNode>();
+        this.dependents = ImmutableMap.of();
         this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
     private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders) {
-        this(injectionNodeBuilders, analysisRepository);
-        this.dependents.putAll(previousContext.dependents);
-        this.dependents.put(node.getASTType(), node);
-        this.dependencyHistory.addAll(previousContext.dependencyHistory);
-        this.dependencyHistory.push(node);
+        ImmutableMap.Builder<ASTType, InjectionNode> dependentsBuilder = ImmutableMap.builder();
+
+        dependentsBuilder.putAll(previousContext.dependents);
+        if(!previousContext.dependents.containsKey(node.getASTType())){
+            //avoid adding duplicate keys (result of dependency loops)
+            dependentsBuilder.put(node.getASTType(), node);
+        }
+
+        this.dependents = dependentsBuilder.build();
+
+        this.analysisRepository = analysisRepository;
+        this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
     public AnalysisContext addDependent(InjectionNode node) {
@@ -63,10 +67,6 @@ public class AnalysisContext {
         return dependents.get(astType);
     }
 
-    public Map<ASTType, InjectionNode> getDependents() {
-        return dependents;
-    }
-
     public AnalysisRepository getAnalysisRepository() {
         return analysisRepository;
     }
@@ -75,9 +75,7 @@ public class AnalysisContext {
         return injectionNodeBuilders;
     }
 
-    public Stack<InjectionNode> getDependencyHistory() {
-        Stack<InjectionNode> dependencyHistoryCopy = new Stack<InjectionNode>();
-        dependencyHistoryCopy.addAll(dependencyHistory);
-        return dependencyHistoryCopy;
+    public Collection<InjectionNode> getDependencyHistory() {
+        return dependents.values();
     }
 }

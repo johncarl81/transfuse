@@ -28,7 +28,7 @@ import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Stack;
+import java.util.Collection;
 
 /**
  * Analysis class for ASTType Injection Analysis
@@ -65,7 +65,7 @@ public class Analyzer {
             //This dependency loop must be broken using a virtual proxy
             injectionNode = context.getInjectionNode(concreteType.getType());
 
-            Stack<InjectionNode> loopedDependencies = context.getDependencyHistory();
+            Collection<InjectionNode> loopedDependencies = context.getDependencyHistory();
 
             InjectionNode proxyDependency = findProxyableDependency(injectionNode, loopedDependencies);
 
@@ -90,18 +90,17 @@ public class Analyzer {
         return injectionNode;
     }
 
-    private InjectionNode findProxyableDependency(InjectionNode duplicateDependency, Stack<InjectionNode> loopedDependencies) {
+    private InjectionNode findProxyableDependency(InjectionNode duplicateDependency, Collection<InjectionNode> loopedDependencies) {
         //there may be better ways to identify the proxyable injection node.
         if (!duplicateDependency.getUsageType().isConcreteClass()) {
             return duplicateDependency;
         }
-        for (InjectionNode loopInjectionNode = loopedDependencies.pop(); !loopedDependencies.empty() && !loopInjectionNode.equals(duplicateDependency); loopInjectionNode = loopedDependencies.pop()) {
-            if (!loopInjectionNode.getUsageType().isConcreteClass()) {
+        for (InjectionNode loopedDependency : loopedDependencies) {
+            if (!loopedDependency.getUsageType().isConcreteClass()) {
                 //found interface
-                return loopInjectionNode;
+                return loopedDependency;
             }
         }
-
         return null;
     }
 
