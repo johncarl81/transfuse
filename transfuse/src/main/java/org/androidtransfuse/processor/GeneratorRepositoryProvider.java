@@ -39,10 +39,10 @@ import java.util.Map;
  *  |  +---------+       |  |  +--------------+ |  +----------+   | | |  +-----------------+
  *  |  +---------------+ |  |                   |  +------------+ | | |  +-----------------+
  *  +->| ImplementedBy +-+  |                   +->| Components |-+ | +->| Virtual Proxies |
- *     +---------------+    |                      +------------+   |    +-----------------+
- *                          |  +-------------+     +-----------+    |
- *                          +->| Factory(s)  +---->| Factories +----+
- *                             +-------------+     +-----------+
+ *     +---------------+    |                      +------------+   | |  +-----------------+
+ *                          |  +-------------+     +-----------+    | |  +-------------+
+ *                          +->| Factory(s)  +---->| Factories +----+ +->| Scopes Util |
+ *                             +-------------+     +-----------+         +-------------+
  *
  * @author John Ericksen
  */
@@ -63,6 +63,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor;
     private final ComponentsTransactionFactory componentsTransactionFactory;
     private final VirtualProxyTransactionFactory virtualProxyTransactionFactory;
+    private final ScopesUtilityTransactionFactory scopesUtilityTransactionFactory;
 
     @Inject
     public GeneratorRepositoryProvider(FactoryProcessor factoryProcessor,
@@ -79,7 +80,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        ImplementedByProcessorBuilder implementedByProcessorBuilder,
                                        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor,
                                        ComponentsTransactionFactory componentsTransactionFactory,
-                                       VirtualProxyTransactionFactory virtualProxyTransactionFactory) {
+                                       VirtualProxyTransactionFactory virtualProxyTransactionFactory,
+                                       ScopesUtilityTransactionFactory scopesUtilityTransactionFactory) {
         this.factoryProcessor = factoryProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
@@ -95,6 +97,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.componentsRepositoryProcessor = componentsRepositoryProcessor;
         this.componentsTransactionFactory = componentsTransactionFactory;
         this.virtualProxyTransactionFactory = virtualProxyTransactionFactory;
+        this.scopesUtilityTransactionFactory = scopesUtilityTransactionFactory;
     }
 
     @Override
@@ -146,7 +149,9 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
 
         // Package Helper processing (to be run last)
         TransactionProcessor<Void, Void> packageHelperProcessor = new TransactionProcessorPredefined(
-                ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(), virtualProxyTransactionFactory.buildTransaction()));
+                ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(),
+                        virtualProxyTransactionFactory.buildTransaction(),
+                        scopesUtilityTransactionFactory.buildTransaction()));
 
         TransactionProcessor<?, ?> configurationDependentProcessors =
                 new TransactionProcessorComposite(configurationDependentBuilders.build());

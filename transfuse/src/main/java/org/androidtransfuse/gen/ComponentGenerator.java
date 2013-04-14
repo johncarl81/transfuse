@@ -22,7 +22,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.scope.ScopesUtil;
+import org.androidtransfuse.scope.Scopes;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -36,16 +36,19 @@ public class ComponentGenerator  {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ClassGenerationUtil generationUtil;
+    private final UniqueVariableNamer namer;
 
     @Inject
     public ComponentGenerator(JCodeModel codeModel,
                               InjectionFragmentGenerator injectionFragmentGenerator,
                               ComponentBuilderFactory componentBuilderFactory,
-                              ClassGenerationUtil generationUtil) {
+                              ClassGenerationUtil generationUtil,
+                              UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.componentBuilderFactory = componentBuilderFactory;
         this.generationUtil = generationUtil;
+        this.namer = namer;
     }
 
     public JDefinedClass generate(ComponentDescriptor descriptor) {
@@ -62,8 +65,10 @@ public class ComponentGenerator  {
 
             JBlock block = initMethodDescriptor.getMethod().body();
 
-            //Singleton scopes holder
-            JExpression scopesGetInstance = codeModel.ref(ScopesUtil.class).staticInvoke(ScopesUtil.GET_INSTANCE);
+            // Scopes instance
+            JClass scopesRef = codeModel.ref(Scopes.class);
+            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
             //Injections
             Map<InjectionNode, TypedExpression> expressionMap =
@@ -71,11 +76,11 @@ public class ComponentGenerator  {
                             block,
                             definedClass,
                             descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor),
-                            scopesGetInstance);
+                            scopesVar);
 
             //Registrations
             for (ExpressionVariableDependentGenerator registrationGenerator : descriptor.getRegistrations()) {
-                registrationGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesGetInstance);
+                registrationGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesVar);
             }
 
             //Method Callbacks
@@ -83,11 +88,11 @@ public class ComponentGenerator  {
             MethodCallbackGenerator onCreateCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(
                     descriptor.getInitMethodEventAnnotation(), onCreateMethodGenerator);
 
-            onCreateCallbackGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesGetInstance);
+            onCreateCallbackGenerator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesVar);
 
             //... and other listeners
             for (ExpressionVariableDependentGenerator generator : descriptor.getGenerators()) {
-                generator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesGetInstance);
+                generator.generate(definedClass, initMethodDescriptor, expressionMap, descriptor, scopesVar);
             }
 
             descriptor.getInitMethodBuilder().closeMethod(initMethodDescriptor);

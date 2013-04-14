@@ -16,14 +16,14 @@
 package org.androidtransfuse.bootstrap;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.ScopesGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class BootstrapsInjectorGenerator {
     private final UniqueVariableNamer namer;
     private final InjectionFragmentGenerator injectionGenerator;
     private final ExistingVariableInjectionBuilderFactory variableBuilderFactory;
-    private final Map<ASTType, ASTType> scopes;
+    private final ModuleRepository repository;
 
     private JDefinedClass injectorClass = null;
     private JBlock registerBlock = null;
@@ -53,13 +53,13 @@ public class BootstrapsInjectorGenerator {
                                        UniqueVariableNamer namer,
                                        InjectionFragmentGenerator injectionGenerator,
                                        ExistingVariableInjectionBuilderFactory variableBuilderFactory,
-                                       Map<ASTType, ASTType> scopes) {
+                                       ModuleRepository repository) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.namer = namer;
         this.injectionGenerator = injectionGenerator;
         this.variableBuilderFactory = variableBuilderFactory;
-        this.scopes = scopes;
+        this.repository = repository;
     }
 
     public void generate(InjectionNode injectionNode){
@@ -77,17 +77,7 @@ public class BootstrapsInjectorGenerator {
             JBlock injectorBlock = method.body();
 
             //define root scope holder
-            JClass scopesRef = codeModel.ref(Scopes.class);
-            JVar scopesVar = injectorBlock.decl(scopesRef, namer.generateName(Scopes.class), JExpr._new(scopesRef));
-
-            //define scopesVar
-            for (Map.Entry<ASTType, ASTType> scopeEntry : scopes.entrySet()) {
-                JExpression annotation = codeModel.ref(scopeEntry.getKey().getName()).dotclass();
-                JClass scopeType = codeModel.ref(scopeEntry.getValue().getName());
-
-                injectorBlock.invoke(scopesVar, Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
-            }
-
+            JVar scopesVar = ScopesGenerator.buildScopes(repository, codeModel, namer, injectorBlock);
 
             injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 

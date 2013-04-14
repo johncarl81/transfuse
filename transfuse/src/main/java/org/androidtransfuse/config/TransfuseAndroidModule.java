@@ -84,8 +84,8 @@ public class TransfuseAndroidModule {
     public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
     public static final String COMPONENTS_TRANSACTION_WORKER = "componentsTransactionWorker";
     public static final String VIRTUAL_PROXY_TRANSACTION_WORKER = "virtualProxyTransactionWorker";
+    public static final String SCOPES_UTIL_TRANSACTION_WORKER = "scopesUtilTransactionWorker";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
-    public static final String DEFAULT_BINDING = "defaultBinding";
     public static final String MANIFEST_FILE = "manifestFile";
 
     @Provides
@@ -108,7 +108,7 @@ public class TransfuseAndroidModule {
 
     @Provides
     @Singleton
-    public ProcessingEnvironment getProcessingEnvironemnt(){
+    public ProcessingEnvironment getProcessingEnvironment(){
         throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
     }
 
@@ -193,6 +193,15 @@ public class TransfuseAndroidModule {
                                                                                                            FilerResourceWriter resourceWriter,
                                                                                                            ComponentsGenerator worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
+    }
+
+    @Provides
+    @Named(SCOPES_UTIL_TRANSACTION_WORKER)
+    public TransactionWorker<Void, Void> getScopesUtilWorker(JCodeModel codeModel,
+                                                                                              FilerSourceCodeWriter codeWriter,
+                                                                                              FilerResourceWriter resourceWriter,
+                                                                                              ScopesGeneratorWorker worker) {
+        return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
     @Provides

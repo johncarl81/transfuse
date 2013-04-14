@@ -127,7 +127,6 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
     private Collection<ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
         ASTElementConverterFactory converterFactory = coreFactory.buildConverterFactory();
 
-        return transform(elementCollection, converterFactory.buildASTElementConverter(ASTType.class)
-        );
+        return transform(elementCollection, converterFactory.buildASTElementConverter(ASTType.class));
     }
 }

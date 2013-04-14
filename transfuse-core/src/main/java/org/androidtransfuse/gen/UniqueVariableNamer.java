@@ -20,8 +20,9 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Generates a unique name for the given type.
@@ -31,7 +32,7 @@ import java.util.Map;
 @Singleton
 public class UniqueVariableNamer {
 
-    private final Map<String, Integer> nameMap = new HashMap<String, Integer>();
+    private final ConcurrentMap<String, AtomicInteger> nameMap = new ConcurrentHashMap<String, AtomicInteger>();
 
     public String generateName(Class clazz) {
         return generateName(clazz.getName(), true);
@@ -73,7 +74,7 @@ public class UniqueVariableNamer {
         return generateName(name, false);
     }
 
-    private synchronized String generateName(String fullClassName, boolean lowerFirst) {
+    private String generateName(String fullClassName, boolean lowerFirst) {
 
         //remove array notation
         String sanitizedFullClassName = fullClassName.replaceAll("\\[\\]", "");
@@ -107,11 +108,15 @@ public class UniqueVariableNamer {
     }
 
     private int nullSafeIterGet(String name){
-        if (!nameMap.containsKey(name)) {
-            nameMap.put(name, 0);
-        } else {
-            nameMap.put(name, nameMap.get(name) + 1);
+        AtomicInteger result = nameMap.get(name);
+        if (result == null) {
+            AtomicInteger value = new AtomicInteger();
+            result = nameMap.putIfAbsent(name, value);
+            if (result == null) {
+                result = value;
+            }
         }
-        return nameMap.get(name);
+
+        return result.getAndIncrement();
     }
 }

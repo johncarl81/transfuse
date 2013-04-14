@@ -114,6 +114,10 @@ public class CoreFactory {
                 new GeneratedProviderInjectionNodeBuilderProvider());
     }
 
+    public ScopesGenerator buildScopesGenerator() {
+        return new ScopesGenerator(codeModel, generationUtil, getModuleRepository(), namer);
+    }
+
     private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
 
         @Override
@@ -246,7 +250,7 @@ public class CoreFactory {
                     typedExpressionFactory,
                     new ExceptionWrapper(codeModel),
                     new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))));
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, buildInjectionNodeRepository().getScopeAnnotations());
+            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
         }
         return bootstrapsInjectorGenerator;
     }
