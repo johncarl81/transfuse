@@ -48,6 +48,7 @@ import javax.lang.model.util.Elements;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Collections2.transform;
@@ -128,6 +129,13 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
+
+        if (!baseModuleConfiguration) {
+            transfuseProcessor.submit(TransfuseModule.class, reloadableASTElementFactory.buildProviders(
+                    Collections.singleton(elements.getTypeElement(APIModule.class.getName())
+                    )));
+            baseModuleConfiguration = true;
+        }
 
         Set<? extends Element> applicationTypes = roundEnvironment.getElementsAnnotatedWith(Application.class);
 

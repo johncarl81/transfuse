@@ -25,8 +25,6 @@ import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
-import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
@@ -51,10 +49,6 @@ import java.io.File;
 import java.util.Map;
 
 @BootstrapModule
-@BindInterceptors({
-        @BindInterceptor(annotation = Asynchronous.class, interceptor = AsynchronousMethodInterceptor.class),
-        @BindInterceptor(annotation = UIThread.class, interceptor = UIThreadMethodInterceptor.class)
-})
 @DefineScopes({
         @DefineScope(annotation = CodeGenerationScope.class, scope = ThreadLocalScope.class),
         @DefineScope(annotation = ConfigurationScope.class, scope = MapScope.class)
