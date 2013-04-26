@@ -87,13 +87,11 @@ public class FactoriesGenerator {
 
             //getter without scopes
             JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-            getMethod.annotate(Override.class);
 
             getMethod.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()));
 
             //getter with scopes
             JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-            getMethodWithScopes.annotate(Override.class);
             JVar scopes = getMethodWithScopes.param(codeModel.ref(Scopes.class), namer.generateName(Scopes.class));
 
             getMethodWithScopes.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(scopes));

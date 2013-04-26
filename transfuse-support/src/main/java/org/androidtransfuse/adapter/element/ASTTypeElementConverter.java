@@ -30,6 +30,7 @@ import javax.lang.model.element.VariableElement;
 public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     private static final String CONSTRUCTOR_IDENTIFIER = "<init>";
+    private static final String STATIC_INITIALIZER_IDENTIFIER = "<clinit>";
 
     private final Class<T> astTypeClass;
     private final ASTElementFactory astElementFactory;
@@ -60,6 +61,9 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
     public T visitExecutable(ExecutableElement executableElement, Void aVoid) {
         //constructors and methods share this Element, the indication that the method is a constructor
         //is that it is named <init>
+        if (executableElement.getSimpleName().contentEquals(STATIC_INITIALIZER_IDENTIFIER)){
+            return null; // ignoring static initializer block
+        }
         if (executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
             if (astTypeClass.isAssignableFrom(ASTConstructor.class)) {
                 return (T) astElementFactory.getConstructor(executableElement);

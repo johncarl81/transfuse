@@ -16,9 +16,7 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTField;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
@@ -28,7 +26,7 @@ import org.androidtransfuse.model.InjectionSignature;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Analysis class for ASTType Injection Analysis
@@ -104,23 +102,60 @@ public class Analyzer {
         return null;
     }
 
-    private void scanClassHierarchy(ASTType concreteType, InjectionNode injectionNode, AnalysisContext context) {
-        if (concreteType.getSuperClass() != null) {
-            scanClassHierarchy(concreteType.getSuperClass(), injectionNode, context);
-        }
+    private void scanClassHierarchy(ASTType type, InjectionNode injectionNode, AnalysisContext context) {
+        scanClassHierarchy(new HashSet<MethodSignature>(), new HashMap<String, Set<MethodSignature>>(), type, injectionNode, context);
+    }
 
+    private void scanClassHierarchy(Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned, ASTType type, InjectionNode injectionNode, AnalysisContext context){
         for (ASTAnalysis analysis : context.getAnalysisRepository().getAnalysisSet()) {
 
-            analysis.analyzeType(injectionNode, concreteType, context);
+            analysis.analyzeType(injectionNode, type, context);
 
-            for (ASTMethod astMethod : concreteType.getMethods()) {
-                analysis.analyzeMethod(injectionNode, concreteType, astMethod, context);
+            for (ASTMethod astMethod : type.getMethods()) {
+                if(!isOverridden(scanned, packagePrivateScanned, type, astMethod)){
+                    analysis.analyzeMethod(injectionNode, type, astMethod, context);
+                }
             }
 
-            for (ASTField astField : concreteType.getFields()) {
-                analysis.analyzeField(injectionNode, concreteType, astField, context);
+            for (ASTField astField : type.getFields()) {
+                analysis.analyzeField(injectionNode, type, astField, context);
             }
         }
+
+        for (ASTMethod astMethod : type.getMethods()) {
+            MethodSignature signature = new MethodSignature(astMethod);
+            if(astMethod.getAccessModifier() == ASTAccessModifier.PUBLIC ||
+               astMethod.getAccessModifier() == ASTAccessModifier.PROTECTED){
+                scanned.add(signature);
+            }
+            else if(astMethod.getAccessModifier() == ASTAccessModifier.PACKAGE_PRIVATE){
+                if(!packagePrivateScanned.containsKey(type.getPackageClass().getPackage())){
+                    packagePrivateScanned.put(type.getPackageClass().getPackage(), new HashSet<MethodSignature>());
+                }
+                packagePrivateScanned.get(type.getPackageClass().getPackage()).add(signature);
+            }
+        }
+
+        if (type.getSuperClass() != null) {
+            scanClassHierarchy(scanned, packagePrivateScanned, type.getSuperClass(), injectionNode, context);
+        }
+
+    }
+
+    private boolean isOverridden(Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned, ASTType type, ASTMethod method) {
+        MethodSignature signature = new MethodSignature(method);
+
+        if(method.getAccessModifier() == ASTAccessModifier.PRIVATE){
+            return false;
+        }
+
+        if(method.getAccessModifier() == ASTAccessModifier.PACKAGE_PRIVATE){
+            return packagePrivateScanned.containsKey(type.getPackageClass().getPackage()) &&
+                   packagePrivateScanned.get(type.getPackageClass().getPackage()).contains(signature);
+        }
+
+        // PUBLIC and PROTECTED handling
+        return scanned.contains(signature);
     }
 
     private VirtualProxyAspect getProxyAspect(InjectionNode injectionNode) {

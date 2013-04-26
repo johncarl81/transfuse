@@ -19,8 +19,8 @@ import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.MethodInjectionPoint;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * InjectionNode aspect containing the relationship injection points for constructors, methods and fields.  These
@@ -35,44 +35,44 @@ public class ASTInjectionAspect {
         LOCAL
     }
 
-    private final Set<ConstructorInjectionPoint> constructorInjectionPoints = new HashSet<ConstructorInjectionPoint>();
-    private final Set<MethodInjectionPoint> methodInjectionPoints = new HashSet<MethodInjectionPoint>();
-    private final Set<FieldInjectionPoint> fieldInjectionPoints = new HashSet<FieldInjectionPoint>();
+    private final List<ConstructorInjectionPoint> constructorInjectionPoints = new ArrayList<ConstructorInjectionPoint>();
+    private final List<MethodInjectionPoint> methodInjectionPoints = new ArrayList<MethodInjectionPoint>();
+    private final List<FieldInjectionPoint> fieldInjectionPoints = new ArrayList<FieldInjectionPoint>();
     private InjectionAssignmentType assignmentType = InjectionAssignmentType.LOCAL;
 
     public void add(ConstructorInjectionPoint constructorInjectionPoint) {
-        constructorInjectionPoints.add(constructorInjectionPoint);
+        constructorInjectionPoints.add(0, constructorInjectionPoint);
     }
 
     public void add(MethodInjectionPoint methodInjectionPoint) {
-        methodInjectionPoints.add(methodInjectionPoint);
+        methodInjectionPoints.add(0, methodInjectionPoint);
     }
 
     public void add(FieldInjectionPoint fieldInjectionPoint) {
-        fieldInjectionPoints.add(fieldInjectionPoint);
+        fieldInjectionPoints.add(0, fieldInjectionPoint);
     }
 
     public ConstructorInjectionPoint getConstructorInjectionPoint() {
         return constructorInjectionPoints.iterator().next();
     }
 
-    public Set<ConstructorInjectionPoint> getConstructorInjectionPoints() {
+    public List<ConstructorInjectionPoint> getConstructorInjectionPoints() {
         return constructorInjectionPoints;
     }
 
-    public Set<MethodInjectionPoint> getMethodInjectionPoints() {
+    public List<MethodInjectionPoint> getMethodInjectionPoints() {
         return methodInjectionPoints;
     }
 
-    public Set<FieldInjectionPoint> getFieldInjectionPoints() {
+    public List<FieldInjectionPoint> getFieldInjectionPoints() {
         return fieldInjectionPoints;
     }
 
-    public void addAllFieldInjectionPoints(Set<FieldInjectionPoint> fieldInjectionPoints) {
+    public void addAllFieldInjectionPoints(List<FieldInjectionPoint> fieldInjectionPoints) {
         this.fieldInjectionPoints.addAll(fieldInjectionPoints);
     }
 
-    public void addAllMethodInjectionPoints(Set<MethodInjectionPoint> methodInjectionPoints) {
+    public void addAllMethodInjectionPoints(List<MethodInjectionPoint> methodInjectionPoints) {
         this.methodInjectionPoints.addAll(methodInjectionPoints);
     }
 
