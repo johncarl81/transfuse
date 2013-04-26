@@ -46,6 +46,7 @@
         <module>transfuse-bootstrap-test</module>
         <module>transfuse-api</module>
         <module>transfuse</module>
+        <module>transfuse-jsr330-tck</module>
         <module>examples</module>
     </modules>
 
