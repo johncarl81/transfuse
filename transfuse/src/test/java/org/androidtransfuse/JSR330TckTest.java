@@ -32,7 +32,7 @@ import javax.inject.Singleton;
 /**
  * @author John Ericksen
  */
-public class JSR330Tck {
+public class JSR330TckTest {
 
     @BootstrapModule
     @Bindings({
