@@ -1,4 +1,5 @@
-# Transfuse
+# <img src="http://androidtransfuse.org/images/icon.png" itemprop="image" title="Transfuse Logo"/> Transfuse
+
 
 Transfuse is a dependency injection and integration library for Google Android.  Transfuse extends the Android API to create a more natural, flexible and maintainable mobile platform.
 
