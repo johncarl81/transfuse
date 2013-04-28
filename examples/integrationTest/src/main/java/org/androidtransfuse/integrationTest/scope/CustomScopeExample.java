@@ -50,7 +50,7 @@ public class CustomScopeExample {
             scopeText.setText(scope.getScopedObject(SCOPE_TEXT_KEY, new Provider<String>() {
                 @Override
                 public String get() {
-                    return null;
+                    return "";
                 }
             }));
         }
