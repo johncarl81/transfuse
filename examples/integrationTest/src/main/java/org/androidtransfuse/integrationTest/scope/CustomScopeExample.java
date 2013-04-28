@@ -33,8 +33,8 @@ import javax.inject.Provider;
 @DeclareField
 public class CustomScopeExample {
 
-    private final static String SCOPE_TEXT = "scopeText";
-    private final static ScopeKey<String> SCOPE_TEXT_KEY = ScopeKey.of(String.class).annotatedBy(SCOPE_TEXT);
+    private static final String SCOPE_TEXT = "scopeText";
+    private static final ScopeKey<String> SCOPE_TEXT_KEY = ScopeKey.of(String.class).annotatedBy(SCOPE_TEXT);
 
     @Inject
     @ScopeReference(CustomScope.class)
