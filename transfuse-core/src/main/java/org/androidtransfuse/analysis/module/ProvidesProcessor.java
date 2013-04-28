@@ -142,7 +142,6 @@ public class ProvidesProcessor implements MethodProcessor {
 
             InjectionSignature providerSignature = new InjectionSignature(providerType, qualifiers);
 
-            //todo: is this needed?
             configurationRepository.putType(providerSignature, generatedProviderInjectionNodeBuilder);
         }
     }
