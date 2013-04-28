@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
@@ -38,7 +39,7 @@ public class ProvidesInjectionNodeBuilderFactory {
         this.analyzer = analyzer;
     }
 
-    public ProvidesInjectionNodeBuilder buildProvidesBuilder(ASTType moduleType, ASTMethod providesMethod){
-        return new ProvidesInjectionNodeBuilder(moduleType, providesMethod, analyzer, injectionNodeFactory, variableInjectionBuilderFactory);
+    public ProvidesInjectionNodeBuilder buildProvidesBuilder(ASTType moduleType, ASTMethod providesMethod, ASTAnnotation scope){
+        return new ProvidesInjectionNodeBuilder(moduleType, providesMethod, scope, analyzer, injectionNodeFactory, variableInjectionBuilderFactory);
     }
 }

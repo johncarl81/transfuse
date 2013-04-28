@@ -28,7 +28,8 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author John Ericksen
@@ -75,8 +76,6 @@ public class DeclareFieldAnalysisTest {
         InjectionNode nonDeclareFieldInjectionNode = injectionPointFactory.buildInjectionNode(NonDeclareFieldTarget.class, analysisContext);
 
         declareFieldAnalysis.analyzeType(nonDeclareFieldInjectionNode, nonDeclareFieldInjectionNode.getASTType(), analysisContext);
-
-        assertFalse(nonDeclareFieldInjectionNode.containsAspect(ASTInjectionAspect.class));
 
         nonDeclareFieldInjectionNode.addAspect(new ASTInjectionAspect());
         assertEquals(ASTInjectionAspect.InjectionAssignmentType.LOCAL, nonDeclareFieldInjectionNode.getAspect(ASTInjectionAspect.class).getAssignmentType());

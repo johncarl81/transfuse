@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.scopeBuilder;
 
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
@@ -41,7 +40,7 @@ public class ContextScopeAspectFactory implements ScopeAspectFactory{
     }
 
     @Override
-    public ScopeAspect buildAspect(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
+    public ScopeAspect buildAspect(AnalysisContext context) {
         InjectionNode contextScopeHolderInjectionNode = injectionPointFactory.buildInjectionNode(ContextScopeHolder.class, context);
 
         return new ScopeAspect(injectionBuilderFactory.buildContextScopeVariableBuilder(contextScopeHolderInjectionNode));

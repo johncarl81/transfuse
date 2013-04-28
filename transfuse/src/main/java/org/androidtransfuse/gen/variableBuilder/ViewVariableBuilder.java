@@ -123,25 +123,27 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
 
         block.assign(variableRef, JExpr.cast(viewType, viewExpression));
 
-        //field injection
-        for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-            block.add(
-                    injectionInvocationBuilder.buildFieldSet(
-                            injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
-                            fieldInjectionPoint,
-                            variableRef));
-        }
+        for (ASTInjectionAspect.InjectionGroup injectionGroup : injectionAspect.getGroups()) {
+            //field injection
+            for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
+                block.add(
+                        injectionInvocationBuilder.buildFieldSet(
+                                injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
+                                fieldInjectionPoint,
+                                variableRef));
+            }
 
-        //method injection
-        for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-            block.add(
-                    injectionInvocationBuilder.buildMethodCall(
-                            ASTVoidType.VOID,
-                            methodInjectionPoint,
-                            generatorFactory.buildExpressionMatchingIterable(
-                                    injectionBuilderContext.getVariableMap(),
-                                    methodInjectionPoint.getInjectionNodes()),
-                            variableRef));
+            //method injection
+            for (MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
+                block.add(
+                        injectionInvocationBuilder.buildMethodCall(
+                                ASTVoidType.VOID,
+                                methodInjectionPoint,
+                                generatorFactory.buildExpressionMatchingIterable(
+                                        injectionBuilderContext.getVariableMap(),
+                                        methodInjectionPoint.getInjectionNodes()),
+                                variableRef));
+            }
         }
 
         return variableRef;

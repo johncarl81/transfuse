@@ -23,7 +23,6 @@ import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.CustomScopeVariableBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
-import org.androidtransfuse.model.InjectionNode;
 
 /**
  * @author John Ericksen
@@ -45,8 +44,7 @@ public class CustomScopeAspectFactory implements ScopeAspectFactory {
     }
 
     @Override
-    public ScopeAspect buildAspect(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
-
+    public ScopeAspect buildAspect(AnalysisContext context) {
         return new ScopeAspect(new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, namer));
     }
 }

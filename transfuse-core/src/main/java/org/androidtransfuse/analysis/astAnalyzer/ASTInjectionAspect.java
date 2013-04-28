@@ -35,45 +35,57 @@ public class ASTInjectionAspect {
         LOCAL
     }
 
-    private final List<ConstructorInjectionPoint> constructorInjectionPoints = new ArrayList<ConstructorInjectionPoint>();
-    private final List<MethodInjectionPoint> methodInjectionPoints = new ArrayList<MethodInjectionPoint>();
-    private final List<FieldInjectionPoint> fieldInjectionPoints = new ArrayList<FieldInjectionPoint>();
+    public static class InjectionGroup{
+
+        private final List<MethodInjectionPoint> methodInjectionPoints = new ArrayList<MethodInjectionPoint>();
+        private final List<FieldInjectionPoint> fieldInjectionPoints = new ArrayList<FieldInjectionPoint>();
+
+        public InjectionGroup add(MethodInjectionPoint methodInjectionPoint) {
+            methodInjectionPoints.add(0, methodInjectionPoint);
+            return this;
+        }
+
+        public InjectionGroup add(FieldInjectionPoint fieldInjectionPoint) {
+            fieldInjectionPoints.add(0, fieldInjectionPoint);
+            return this;
+        }
+
+        public List<MethodInjectionPoint> getMethodInjectionPoints() {
+            return methodInjectionPoints;
+        }
+
+        public List<FieldInjectionPoint> getFieldInjectionPoints() {
+            return fieldInjectionPoints;
+        }
+    }
+
+    private ConstructorInjectionPoint constructorInjectionPoint;
+    private final List<InjectionGroup> groups = new ArrayList<InjectionGroup>();
     private InjectionAssignmentType assignmentType = InjectionAssignmentType.LOCAL;
 
-    public void add(ConstructorInjectionPoint constructorInjectionPoint) {
-        constructorInjectionPoints.add(0, constructorInjectionPoint);
+    public void set(ConstructorInjectionPoint constructorInjectionPoint) {
+        this.constructorInjectionPoint = constructorInjectionPoint;
     }
 
-    public void add(MethodInjectionPoint methodInjectionPoint) {
-        methodInjectionPoints.add(0, methodInjectionPoint);
+    public InjectionGroup addGroup(){
+        groups.add(0, new InjectionGroup());
+        return getCurrentGroup();
     }
 
-    public void add(FieldInjectionPoint fieldInjectionPoint) {
-        fieldInjectionPoints.add(0, fieldInjectionPoint);
+    public InjectionGroup getCurrentGroup(){
+        return groups.get(0);
+    }
+
+    public List<InjectionGroup> getGroups() {
+        return groups;
     }
 
     public ConstructorInjectionPoint getConstructorInjectionPoint() {
-        return constructorInjectionPoints.iterator().next();
+        return constructorInjectionPoint;
     }
 
-    public List<ConstructorInjectionPoint> getConstructorInjectionPoints() {
-        return constructorInjectionPoints;
-    }
-
-    public List<MethodInjectionPoint> getMethodInjectionPoints() {
-        return methodInjectionPoints;
-    }
-
-    public List<FieldInjectionPoint> getFieldInjectionPoints() {
-        return fieldInjectionPoints;
-    }
-
-    public void addAllFieldInjectionPoints(List<FieldInjectionPoint> fieldInjectionPoints) {
-        this.fieldInjectionPoints.addAll(fieldInjectionPoints);
-    }
-
-    public void addAllMethodInjectionPoints(List<MethodInjectionPoint> methodInjectionPoints) {
-        this.methodInjectionPoints.addAll(methodInjectionPoints);
+    public void addAllInjectionGroups(List<InjectionGroup> groups){
+        this.groups.addAll(groups);
     }
 
     public InjectionAssignmentType getAssignmentType() {

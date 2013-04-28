@@ -133,8 +133,8 @@ public class AnalyzerTest {
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderProvider.get());
 
         //A -> B && A -> E
-        assertEquals(1, injectionNode.getAspect(ASTInjectionAspect.class).getMethodInjectionPoints().size());
-        MethodInjectionPoint bInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getMethodInjectionPoints().iterator().next();
+        assertEquals(1, countMethodInjectionPoints(injectionNode.getAspect(ASTInjectionAspect.class)));
+        MethodInjectionPoint bInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getMethodInjectionPoints().iterator().next();
 
         assertEquals(2, bInjectionPoint.getInjectionNodes().size());
         //A -> B
@@ -148,8 +148,8 @@ public class AnalyzerTest {
         assertEquals(E.class.getCanonicalName(), eInjectionNode.getClassName());
 
         //B -> C
-        assertEquals(1, bInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().size());
-        FieldInjectionPoint cInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().iterator().next();
+        assertEquals(1, countFieldInjectionPoints(bInjectionNode.getAspect(ASTInjectionAspect.class)));
+        FieldInjectionPoint cInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getFieldInjectionPoints().iterator().next();
         InjectionNode cInjectionNode = cInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(cInjectionNode));
         assertEquals(C.class.getCanonicalName(), cInjectionNode.getClassName());
@@ -168,8 +168,8 @@ public class AnalyzerTest {
         assertFalse(isProxyRequired(fInjectionNode2));
 
         //C -> D
-        assertEquals(1, cInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().size());
-        FieldInjectionPoint dInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getFieldInjectionPoints().iterator().next();
+        assertEquals(1, countFieldInjectionPoints(cInjectionNode.getAspect(ASTInjectionAspect.class)));
+        FieldInjectionPoint dInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getFieldInjectionPoints().iterator().next();
         InjectionNode dInjectionNode = dInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(dInjectionNode));
         assertEquals(D.class.getCanonicalName(), dInjectionNode.getClassName());
@@ -184,6 +184,24 @@ public class AnalyzerTest {
         //B -> F and E -> F difference
         assertNotSame(fInjectionNode, fInjectionNode2);
         assertFalse(fInjectionNode.equals(fInjectionNode2));
+    }
+
+    private int countFieldInjectionPoints(ASTInjectionAspect aspect) {
+        int count = 0;
+
+        for (ASTInjectionAspect.InjectionGroup injectionGroup : aspect.getGroups()) {
+            count += injectionGroup.getFieldInjectionPoints().size();
+        }
+        return count;
+    }
+
+    private int countMethodInjectionPoints(ASTInjectionAspect aspect) {
+        int count = 0;
+
+        for (ASTInjectionAspect.InjectionGroup injectionGroup : aspect.getGroups()) {
+            count += injectionGroup.getMethodInjectionPoints().size();
+        }
+        return count;
     }
 
     private boolean isProxyRequired(InjectionNode injectionNode) {

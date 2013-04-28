@@ -38,7 +38,7 @@ public class ScopeAnalysis extends ASTAnalysisAdaptor {
             ASTType scopedType = context.getInjectionNodeBuilders().getScope(injectionNode.getTypeSignature());
             if(scopedType != null){
                 ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopedType);
-                injectionNode.addAspect(scopeAspectFactory.buildAspect(injectionNode, concreteType, context));
+                injectionNode.addAspect(scopeAspectFactory.buildAspect(context));
                 return;
             }
 
@@ -48,7 +48,7 @@ public class ScopeAnalysis extends ASTAnalysisAdaptor {
                 for (ASTAnnotation annotation : annotations) {
                     if(annotation.getASTType().equals(scopeType)){
                         ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopeType);
-                        injectionNode.addAspect(scopeAspectFactory.buildAspect(injectionNode, concreteType, context));
+                        injectionNode.addAspect(scopeAspectFactory.buildAspect(context));
                         return;
                     }
                 }

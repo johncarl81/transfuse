@@ -17,7 +17,10 @@ package org.androidtransfuse.gen;
 
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilder;
-import org.androidtransfuse.model.*;
+import org.androidtransfuse.model.FieldInjectionPoint;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 
@@ -36,19 +39,21 @@ public class InjectionExpressionBuilder {
         ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
         if (injectionAspect != null) {
             //constructor injection
-            for (ConstructorInjectionPoint constructorInjectionPoint : injectionAspect.getConstructorInjectionPoints()) {
-                for (InjectionNode constructorNode : constructorInjectionPoint.getInjectionNodes()) {
+            if(injectionAspect.getConstructorInjectionPoint() != null){
+                for (InjectionNode constructorNode : injectionAspect.getConstructorInjectionPoint().getInjectionNodes()) {
                     buildVariable(injectionBuilderContext, constructorNode);
                 }
             }
-            //field injection
-            for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-                buildVariable(injectionBuilderContext, fieldInjectionPoint.getInjectionNode());
-            }
-            //method injection
-            for (MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-                for (InjectionNode methodNode : methodInjectionPoint.getInjectionNodes()) {
-                    buildVariable(injectionBuilderContext, methodNode);
+            for (ASTInjectionAspect.InjectionGroup injectionGroup : injectionAspect.getGroups()) {
+                //field injection
+                for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
+                    buildVariable(injectionBuilderContext, fieldInjectionPoint.getInjectionNode());
+                }
+                //method injection
+                for (MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
+                    for (InjectionNode methodNode : methodInjectionPoint.getInjectionNodes()) {
+                        buildVariable(injectionBuilderContext, methodNode);
+                    }
                 }
             }
         }

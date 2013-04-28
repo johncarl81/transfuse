@@ -42,6 +42,8 @@ public class InjectionAnalyzer implements ASTAnalysis {
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
 
+        getInjectionToken(injectionNode).addGroup();
+
         if (injectionNode.getASTType().equals(concreteType)) {
             //only analyze the root class for constructor injection
             ASTConstructor noArgConstructor = null;
@@ -50,7 +52,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
             for (ASTConstructor astConstructor : concreteType.getConstructors()) {
                 if (astConstructor.isAnnotated(Inject.class)) {
                     annotatedConstructor = astConstructor;
-                    getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, astConstructor, context));
+                    getInjectionToken(injectionNode).set(injectionPointFactory.buildInjectionPoint(concreteType, astConstructor, context));
                 }
                 if (astConstructor.getParameters().size() == 0) {
                     noArgConstructor = astConstructor;
@@ -59,7 +61,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
 
             //only allow zero or one annotated constructors.
             if (annotatedConstructor == null && noArgConstructor != null) {
-                getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, noArgConstructor, context));
+                getInjectionToken(injectionNode).set(injectionPointFactory.buildInjectionPoint(concreteType, noArgConstructor, context));
             }
         }
     }
@@ -67,14 +69,14 @@ public class InjectionAnalyzer implements ASTAnalysis {
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
         if (astMethod.isAnnotated(Inject.class)) {
-            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, astMethod, context));
+            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(concreteType, astMethod, context));
         }
     }
 
     @Override
     public void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context) {
         if (astField.isAnnotated(Inject.class)) {
-            getInjectionToken(injectionNode).add(injectionPointFactory.buildInjectionPoint(concreteType, astField, context));
+            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(concreteType, astField, context));
         }
     }
 

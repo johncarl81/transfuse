@@ -131,7 +131,7 @@ public class ProvidesProcessor implements MethodProcessor {
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
             InjectionSignature signature = new InjectionSignature(astMethod.getReturnType(), qualifiers);
 
-            configurationRepository.putType(signature, variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod));
+            configurationRepository.putType(signature, variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod, scope));
 
             ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
                 @Override
@@ -142,11 +142,8 @@ public class ProvidesProcessor implements MethodProcessor {
 
             InjectionSignature providerSignature = new InjectionSignature(providerType, qualifiers);
 
+            //todo: is this needed?
             configurationRepository.putType(providerSignature, generatedProviderInjectionNodeBuilder);
-
-            if(scope != null){
-                configurationRepository.putScoped(signature, scope.getASTType());
-            }
         }
     }
 }

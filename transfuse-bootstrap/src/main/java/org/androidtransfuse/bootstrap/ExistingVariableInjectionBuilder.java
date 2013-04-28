@@ -67,37 +67,39 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
 
             if (injectionAspect == null) {
                 throw new TransactionRuntimeException("Injection node not mapped: " + injectionNode.getClassName());
-            } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoints().isEmpty()) {
+            } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint() == null) {
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
 
-            //field injection
-            for (FieldInjectionPoint fieldInjectionPoint : injectionAspect.getFieldInjectionPoints()) {
-                block.add(
-                        injectionInvocationBuilder.buildFieldSet(
-                                injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
-                                fieldInjectionPoint,
-                                expression));
-            }
+            for (ASTInjectionAspect.InjectionGroup injectionGroup : injectionAspect.getGroups()) {
+                //field injection
+                for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
+                    block.add(
+                            injectionInvocationBuilder.buildFieldSet(
+                                    injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
+                                    fieldInjectionPoint,
+                                    expression));
+                }
 
-            //method injection
-            for (final MethodInjectionPoint methodInjectionPoint : injectionAspect.getMethodInjectionPoints()) {
-                exceptionWrapper.wrapException(block,
-                        methodInjectionPoint.getThrowsTypes(),
-                        new ExceptionWrapper.BlockWriter<Void>() {
-                            @Override
-                            public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
-                                block.add(
-                                        injectionInvocationBuilder.buildMethodCall(
-                                                ASTVoidType.VOID,
-                                                methodInjectionPoint,
-                                                generatorFactory.buildExpressionMatchingIterable(
-                                                        injectionBuilderContext.getVariableMap(),
-                                                        methodInjectionPoint.getInjectionNodes()),
-                                                expression));
-                                return null;
-                            }
-                        });
+                //method injection
+                for (final MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
+                    exceptionWrapper.wrapException(block,
+                            methodInjectionPoint.getThrowsTypes(),
+                            new ExceptionWrapper.BlockWriter<Void>() {
+                                @Override
+                                public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
+                                    block.add(
+                                            injectionInvocationBuilder.buildMethodCall(
+                                                    ASTVoidType.VOID,
+                                                    methodInjectionPoint,
+                                                    generatorFactory.buildExpressionMatchingIterable(
+                                                            injectionBuilderContext.getVariableMap(),
+                                                            methodInjectionPoint.getInjectionNodes()),
+                                                    expression));
+                                    return null;
+                                }
+                            });
+                }
             }
 
         } catch (ClassNotFoundException e) {

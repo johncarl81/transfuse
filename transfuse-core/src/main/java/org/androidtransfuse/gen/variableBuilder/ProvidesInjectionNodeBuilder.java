@@ -15,12 +15,14 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
+import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 
@@ -35,6 +37,7 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
 
     private final ASTType moduleType;
     private final ASTMethod providesMethod;
+    private final ASTAnnotation scope;
     private final Analyzer analyzer;
     private final InjectionPointFactory injectionNodeFactory;
     private final ProvidesVariableBuilderFactory variableInjectionBuilderFactory;
@@ -42,11 +45,13 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
     @Inject
     public ProvidesInjectionNodeBuilder(/*@Assisted*/ ASTType moduleType,
                                         /*@Assisted*/ ASTMethod providesMethod,
+                                        /*@Assisted*/ ASTAnnotation scope,
                                         Analyzer analyzer,
                                         InjectionPointFactory injectionNodeFactory,
                                         ProvidesVariableBuilderFactory variableInjectionBuilderFactory) {
         this.moduleType = moduleType;
         this.providesMethod = providesMethod;
+        this.scope = scope;
         this.analyzer = analyzer;
         this.injectionNodeFactory = injectionNodeFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
@@ -55,7 +60,17 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
 
     @Override
     public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
-        InjectionNode injectionNode = analyzer.analyze(signature, context);
+        InjectionNode injectionNode = new InjectionNode(signature);
+
+        if(scope != null){
+            for (ASTType scopeType : context.getInjectionNodeBuilders().getScopes()) {
+                if(scope.getASTType().equals(scopeType)){
+                    ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopeType);
+                    injectionNode.addAspect(scopeAspectFactory.buildAspect(context));
+                    break;
+                }
+            }
+        }
 
         InjectionSignature moduleSignature = new InjectionSignature(moduleType);
         InjectionNode module = analyzer.analyze(moduleSignature, context);

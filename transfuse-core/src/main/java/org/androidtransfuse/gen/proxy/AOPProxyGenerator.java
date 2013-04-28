@@ -116,10 +116,9 @@ public class AOPProxyGenerator {
 
         //alter construction injection
         ASTInjectionAspect proxyInjectionAspect = new ASTInjectionAspect();
-        proxyInjectionAspect.addAllFieldInjectionPoints(injectionAspect.getFieldInjectionPoints());
-        proxyInjectionAspect.addAllMethodInjectionPoints(injectionAspect.getMethodInjectionPoints());
+        proxyInjectionAspect.addAllInjectionGroups(injectionAspect.getGroups());
         //replace proxy constructor because of optional interceptor construction parameters
-        proxyInjectionAspect.add(proxyConstructorInjectionPoint);
+        proxyInjectionAspect.set(proxyConstructorInjectionPoint);
 
         proxyInjectionAspect.setAssignmentType(injectionAspect.getAssignmentType());
 
