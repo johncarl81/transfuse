@@ -28,8 +28,11 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.transaction.TransactionRuntimeException;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import javax.tools.Diagnostic;
 
 /**
  * @author John Ericksen
@@ -44,6 +47,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
     private final ExpressionMatchingIterableFactory generatorFactory;
+    private final Validator validator;
 
     @Inject
     public VariableInjectionBuilder(JCodeModel codeModel,
@@ -53,7 +57,8 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     InjectionExpressionBuilder injectionExpressionBuilder,
                                     TypedExpressionFactory typedExpressionFactory,
                                     ExceptionWrapper exceptionWrapper,
-                                    ExpressionMatchingIterableFactory generatorFactory) {
+                                    ExpressionMatchingIterableFactory generatorFactory,
+                                    Validator validator) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
@@ -62,6 +67,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
         this.typedExpressionFactory = typedExpressionFactory;
         this.exceptionWrapper = exceptionWrapper;
         this.generatorFactory = generatorFactory;
+        this.validator = validator;
     }
 
     @Override
@@ -81,8 +87,14 @@ public class VariableInjectionBuilder implements VariableBuilder {
             JBlock block = injectionBuilderContext.getBlock();
 
             if (injectionAspect == null) {
+                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, proxyableInjectionNode.getASTType() + " injection not specified")
+                        .element(injectionNode.getASTType())
+                        .build());
                 throw new TransactionRuntimeException("Injection node not mapped: " + proxyableInjectionNode.getASTType());
             } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint() == null) {
+                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Injection requires either a default no-argument constructor or an @Inject annotated constructor.")
+                        .element(injectionNode.getASTType())
+                        .build());
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             } else {
                 variableRef = exceptionWrapper.wrapException(block,
@@ -108,36 +120,36 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 }
                             }
                         });
-            }
 
-            for (ASTInjectionAspect.InjectionGroup injectionGroup : injectionAspect.getGroups()) {
-                //field injection
-                for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
-                    block.add(
-                            injectionInvocationBuilder.buildFieldSet(
-                                    injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
-                                    fieldInjectionPoint,
-                                    variableRef));
-                }
+                for (ASTInjectionAspect.InjectionGroup injectionGroup : injectionAspect.getGroups()) {
+                    //field injection
+                    for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
+                        block.add(
+                                injectionInvocationBuilder.buildFieldSet(
+                                        injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
+                                        fieldInjectionPoint,
+                                        variableRef));
+                    }
 
-                //method injection
-                for (final MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
-                    exceptionWrapper.wrapException(block,
-                            methodInjectionPoint.getThrowsTypes(),
-                            new ExceptionWrapper.BlockWriter<Void>() {
-                                @Override
-                                public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
-                                    block.add(
-                                            injectionInvocationBuilder.buildMethodCall(
-                                                    ASTVoidType.VOID,
-                                                    methodInjectionPoint,
-                                                    generatorFactory.buildExpressionMatchingIterable(
-                                                            injectionBuilderContext.getVariableMap(),
-                                                            methodInjectionPoint.getInjectionNodes()),
-                                                    variableRef));
-                                    return null;
-                                }
-                            });
+                    //method injection
+                    for (final MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
+                        exceptionWrapper.wrapException(block,
+                                methodInjectionPoint.getThrowsTypes(),
+                                new ExceptionWrapper.BlockWriter<Void>() {
+                                    @Override
+                                    public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
+                                        block.add(
+                                                injectionInvocationBuilder.buildMethodCall(
+                                                        ASTVoidType.VOID,
+                                                        methodInjectionPoint,
+                                                        generatorFactory.buildExpressionMatchingIterable(
+                                                                injectionBuilderContext.getVariableMap(),
+                                                                methodInjectionPoint.getInjectionNodes()),
+                                                        variableRef));
+                                        return null;
+                                    }
+                                });
+                    }
                 }
             }
 

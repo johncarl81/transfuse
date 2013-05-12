@@ -21,6 +21,7 @@ import org.androidtransfuse.gen.ExpressionMatchingIterableFactory;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
+import org.androidtransfuse.validation.Validator;
 
 /**
  * @author John Ericksen
@@ -32,17 +33,20 @@ public class ExistingVariableInjectionBuilderFactory {
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
     private final ExpressionMatchingIterableFactory generatorFactory;
+    private final Validator validator;
 
     public ExistingVariableInjectionBuilderFactory(InvocationBuilder injectionInvocationBuilder,
                                                    InjectionExpressionBuilder injectionExpressionBuilder,
                                                    TypedExpressionFactory typedExpressionFactory,
                                                    ExceptionWrapper exceptionWrapper,
-                                                   ExpressionMatchingIterableFactory generatorFactory) {
+                                                   ExpressionMatchingIterableFactory generatorFactory,
+                                                   Validator validator) {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.typedExpressionFactory = typedExpressionFactory;
         this.exceptionWrapper = exceptionWrapper;
         this.generatorFactory = generatorFactory;
+        this.validator = validator;
     }
 
     public ExistingVariableInjectionBuilder buildVariableBuilder(JExpression expression){
@@ -52,6 +56,7 @@ public class ExistingVariableInjectionBuilderFactory {
                 injectionExpressionBuilder,
                 typedExpressionFactory,
                 exceptionWrapper,
-                generatorFactory);
+                generatorFactory,
+                validator);
     }
 }

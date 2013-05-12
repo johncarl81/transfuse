@@ -32,9 +32,12 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.tools.Diagnostic;
 import java.util.Map;
 
 /**
@@ -51,6 +54,7 @@ public class FactoryGenerator {
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository injectionNodeBuilderRepositoryFactory;
     private final UniqueVariableNamer namer;
+    private final Validator validator;
 
     @Inject
     public FactoryGenerator(JCodeModel codeModel,
@@ -61,7 +65,8 @@ public class FactoryGenerator {
                             InjectionNodeImplFactory injectionNodeImplFactory,
                             MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory,
                             ClassGenerationUtil generationUtil,
-                            UniqueVariableNamer namer) {
+                            UniqueVariableNamer namer,
+                            Validator validator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.analysisContextFactory = analysisContextFactory;
@@ -71,11 +76,14 @@ public class FactoryGenerator {
         this.generationUtil = generationUtil;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.namer = namer;
+        this.validator = validator;
     }
 
     public JDefinedClass generate(ASTType descriptor) {
 
         if (descriptor.isConcreteClass()) {
+            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Factory annotated class must be an interface")
+                                           .element(descriptor).build());
             throw new TransfuseAnalysisException("Unable to build factory from concrete class: " + descriptor.getName());
         }
 

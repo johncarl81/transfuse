@@ -131,7 +131,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil, validator);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
@@ -145,7 +145,8 @@ public class CoreFactory {
                         injectionExpressionBuilder,
                         typedExpressionFactory,
                         exceptionWrapper,
-                        generatorFactory);
+                        generatorFactory,
+                        validator);
     }
 
     private Analyzer buildAnalyser(){
@@ -253,7 +254,8 @@ public class CoreFactory {
                     injectionExpressionBuilder,
                     typedExpressionFactory,
                     new ExceptionWrapper(codeModel),
-                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))));
+                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))),
+                    validator);
             this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
         }
         return bootstrapsInjectorGenerator;
@@ -275,7 +277,7 @@ public class CoreFactory {
         BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, validator);
         BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(providerInjectionNodeBuilderFactory);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
-        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
+        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder(), validator);
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, codeModel, buildAnalyser());
 
@@ -297,7 +299,9 @@ public class CoreFactory {
                 moduleRepository,
                 new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), new QualifierPredicate(astClassFactory)),
                 new MirroredMethodGeneratorFactory(namer, codeModel),
-                generationUtil, namer);
+                generationUtil,
+                namer,
+                validator);
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {

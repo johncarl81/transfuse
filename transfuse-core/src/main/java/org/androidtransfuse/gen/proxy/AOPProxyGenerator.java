@@ -26,8 +26,11 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import javax.tools.Diagnostic;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -45,12 +48,14 @@ public class AOPProxyGenerator {
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
+    private final Validator validator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil, Validator validator) {
         this.codeModel = codeModel;
         this.namer = namer;
         this.generationUtil = generationUtil;
+        this.validator = validator;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
@@ -131,7 +136,9 @@ public class AOPProxyGenerator {
         ASTMethod method = methodInterceptorEntry.getKey();
 
         if (method.getAccessModifier().equals(ASTAccessModifier.PRIVATE)) {
-            throw new TransfuseAnalysisException("Unable to provide AOP on private methods");
+            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "AOP Method Interception is unavailable on private methods")
+                                           .element(method).build());
+            return;
         }
 
         if (!interceptorFields.containsKey(methodInterceptorEntry.getKey())) {

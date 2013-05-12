@@ -18,7 +18,6 @@ package org.androidtransfuse.analysis.module;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
@@ -28,9 +27,12 @@ import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNode
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopePredicate;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.tools.Diagnostic;
 import java.util.Collection;
 
 /**
@@ -45,18 +47,21 @@ public class ProvidesProcessor implements MethodProcessor {
     private final ScopePredicate scopePredicate;
     private final ASTClassFactory astClassFactory;
     private final GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder;
+    private final Validator validator;
 
     @Inject
     public ProvidesProcessor(ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
                              QualifierPredicate qualifierPredicate,
                              ScopePredicate scopePredicate,
                              ASTClassFactory astClassFactory,
-                             GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder) {
+                             GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder,
+                             Validator validator) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.qualifierPredicate = qualifierPredicate;
         this.scopePredicate = scopePredicate;
         this.astClassFactory = astClassFactory;
         this.generatedProviderInjectionNodeBuilder = generatedProviderInjectionNodeBuilder;
+        this.validator = validator;
     }
 
     public ModuleConfiguration process(ASTType moduleType, ASTMethod astMethod, ASTAnnotation astAnnotation) {
@@ -74,12 +79,12 @@ public class ProvidesProcessor implements MethodProcessor {
             scope = scopeAnnotations.iterator().next();
         }
 
-        validate(astMethod.getAnnotations());
+        validate(astMethod, astMethod.getAnnotations());
 
         return new ProvidesModuleConfiguration(moduleType, qualifierAnnotations, astMethod, scope);
     }
 
-    private void validate(Collection<ASTAnnotation> annotations) {
+    private void validate(ASTMethod astMethod, Collection<ASTAnnotation> annotations) {
         ImmutableSet<ASTAnnotation> nonQualifierAnnotations =
                 FluentIterable.from(annotations)
                         .filter(Predicates.and(
@@ -93,23 +98,19 @@ public class ProvidesProcessor implements MethodProcessor {
 
         ASTType providesType = astClassFactory.getType(Provides.class);
 
-        ImmutableSet.Builder<ASTType> erroredAnnotations = ImmutableSet.builder();
         for (ASTAnnotation annotation : nonQualifierAnnotations) {
             if(!annotation.getASTType().equals(providesType)){
                 //error
-                erroredAnnotations.add(annotation.getASTType());
+                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Provides methods may only be anntated with scope or qualifier annotations")
+                        .element(astMethod).annotation(annotation).build());
             }
         }
 
         if(scopeAnnotations.size() > 1){
             for (ASTAnnotation scopeAnnotation : scopeAnnotations) {
-                erroredAnnotations.add(scopeAnnotation.getASTType());
+                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Only one scope annotation is allowed per @Provides method")
+                                                .element(astMethod).annotation(scopeAnnotation).build());
             }
-        }
-
-        ImmutableSet<ASTType> errored = erroredAnnotations.build();
-        if(errored.size() > 0){
-            throw new TransfuseAnalysisException("Found non-Provides, non-Qualifier annotation");
         }
     }
 
