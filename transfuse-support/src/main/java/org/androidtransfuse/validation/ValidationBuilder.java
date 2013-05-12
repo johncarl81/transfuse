@@ -116,7 +116,7 @@ public class ValidationBuilder {
     }
 
 
-    public ValidationBuilder value(String propertyName){
+    public ValidationBuilder parameter(String propertyName){
         if(this.annotation != null){
             for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotation.getElementValues().entrySet()) {
                 if (propertyName.equals(entry.getKey().getSimpleName().toString())) {

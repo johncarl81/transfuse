@@ -48,7 +48,7 @@ public class BindProcessor implements TypeProcessor {
 
         if(!to.inheritsFrom(type)){
             validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Bind to parameter class must inherit from type parameter")
-                    .element(moduleType).annotation(bindAnnotation).value("to").build());
+                    .element(moduleType).annotation(bindAnnotation).parameter("to").build());
         }
 
         return new BindingModuleConfiguration(type, to);

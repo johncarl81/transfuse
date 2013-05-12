@@ -48,7 +48,7 @@ public class AnnotationParameterRegexValidator implements AnnotationValidator{
             validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, message)
                     .element(astBase)
                     .annotation(annotation)
-                    .value(parameter)
+                    .parameter(parameter)
                     .build());
         }
     }
