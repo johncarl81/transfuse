@@ -15,8 +15,21 @@
  */
 package org.androidtransfuse.validation;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
+import org.androidtransfuse.adapter.element.ASTElementAnnotation;
+import org.androidtransfuse.adapter.element.ASTElementField;
+import org.androidtransfuse.adapter.element.ASTElementMethod;
+import org.androidtransfuse.adapter.element.ASTElementType;
+
 import javax.annotation.processing.Messager;
 import javax.inject.Inject;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.tools.Diagnostic;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -30,34 +43,83 @@ public class Validator {
         this.messager = messager;
     }
 
-    public void add(Validation validation){
-        if(validation.getElement() != null){
-            if(validation.getAnnotation() != null){
-                if(validation.getAnnotationValue() != null){
-                    messager.printMessage(validation.getKind(),
-                            validation.getMessage(),
-                            validation.getElement(),
-                            validation.getAnnotation(),
-                            validation.getAnnotationValue());
+    public ValidationBuilder error(String message){
+        return new ValidationBuilder(Diagnostic.Kind.ERROR, message);
+    }
+
+    public class ValidationBuilder{
+        private Diagnostic.Kind kind;
+        private String message;
+        private Element element;
+        private AnnotationMirror annotation;
+        private AnnotationValue value;
+
+        private ValidationBuilder(Diagnostic.Kind kind, String message){
+            //empty utility class constructor
+            this.kind = kind;
+            this.message = message;
+        }
+
+        public ValidationBuilder element(ASTBase astBase){
+            if(astBase instanceof ASTElementType){
+                this.element = ((ASTElementType)astBase).getElement();
+            }
+            if(astBase instanceof ASTElementField){
+                this.element = ((ASTElementField)astBase).getElement();
+            }
+            if(astBase instanceof ASTElementMethod){
+                this.element = ((ASTElementMethod)astBase).getElement();
+            }
+            return this;
+        }
+
+        public ValidationBuilder annotation(ASTAnnotation annotation){
+            if(annotation instanceof ASTElementAnnotation){
+                this.annotation = ((ASTElementAnnotation)annotation).getAnnotationMirror();
+            }
+            return this;
+        }
+
+
+        public ValidationBuilder parameter(String propertyName){
+            if(this.annotation != null){
+                for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotation.getElementValues().entrySet()) {
+                    if (propertyName.equals(entry.getKey().getSimpleName().toString())) {
+                        this.value = entry.getValue();
+                        break;
+                    }
+                }
+            }
+            return this;
+        }
+
+        public void build(){
+            if(element != null){
+                if(annotation != null){
+                    if(value != null){
+                        messager.printMessage(kind,
+                                message,
+                                element,
+                                annotation,
+                                value);
+                    }
+                    else{
+                        messager.printMessage(kind,
+                                message,
+                                element,
+                                annotation);
+                    }
                 }
                 else{
-                    messager.printMessage(validation.getKind(),
-                            validation.getMessage(),
-                            validation.getElement(),
-                            validation.getAnnotation());
+                    messager.printMessage(kind,
+                            message,
+                            element);
                 }
             }
             else{
-                messager.printMessage(validation.getKind(),
-                        validation.getMessage(),
-                        validation.getElement());
+                messager.printMessage(kind,
+                        message);
             }
         }
-        else{
-            messager.printMessage(validation.getKind(),
-                    validation.getMessage());
-        }
     }
-
-
 }

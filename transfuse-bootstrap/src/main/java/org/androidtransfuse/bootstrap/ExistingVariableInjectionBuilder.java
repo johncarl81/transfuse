@@ -29,11 +29,9 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.transaction.TransactionRuntimeException;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
 
 public class ExistingVariableInjectionBuilder implements VariableBuilder {
 
@@ -72,14 +70,14 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
             JBlock block = injectionBuilderContext.getBlock();
 
             if (injectionAspect == null) {
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, injectionNode.getASTType() + " injection not specified")
+                validator.error(injectionNode.getASTType() + " injection not specified")
                         .element(injectionNode.getASTType())
-                        .build());
+                        .build();
                 throw new TransactionRuntimeException("Injection node not mapped: " + injectionNode.getASTType());
             } else if (injectionNode.getAspect(ASTInjectionAspect.class).getConstructorInjectionPoint() == null) {
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Injection requires either a default no-argument constructor or an @Inject annotated constructor.")
+                validator.error("Injection requires either a default no-argument constructor or an @Inject annotated constructor.")
                         .element(injectionNode.getASTType())
-                        .build());
+                        .build();
                 throw new TransfuseAnalysisException("No-Arg Constructor required for injection point: " + injectionNode.getClassName());
             }
             else{

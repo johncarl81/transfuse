@@ -19,10 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
-
-import javax.tools.Diagnostic;
 
 /**
  * @author John Ericksen
@@ -48,10 +45,10 @@ public class AnnotationAccompaniesValidator implements AnnotationValidator {
             }
         }
         if(!found){
-            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, message)
+            validator.error(message)
                     .element(astBase)
                     .annotation(annotation)
-                    .build());
+                    .build();
         }
     }
 }

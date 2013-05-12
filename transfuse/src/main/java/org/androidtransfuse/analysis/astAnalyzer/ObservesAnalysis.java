@@ -25,11 +25,9 @@ import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.annotations.Observes;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
 
 /**
  * Analysis class to find the methods annotated with @Observes.  When found, an ObservesAspect is populated with the
@@ -60,9 +58,9 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
         for (int i = 1; i < astMethod.getParameters().size(); i++) {
             if (astMethod.getParameters().get(i).isAnnotated(Observes.class)) {
                 //don't accept @Observes outside of the first parameter
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Observes methods must annotate either the method or first method parameter")
+                validator.error("@Observes methods must annotate either the method or first method parameter")
                                                .element(astMethod.getParameters().get(i))
-                                               .build());
+                                               .build();
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }
         }
@@ -70,9 +68,9 @@ public class ObservesAnalysis extends ASTAnalysisAdaptor {
         if (firstParameter != null && (firstParameter.isAnnotated(Observes.class) || astMethod.isAnnotated(Observes.class))) {
             //don't accept @Observes with more than one parameter
             if (astMethod.getParameters().size() != 1) {
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Observes methods must contain one and only one event parameter")
+                validator.error("@Observes methods must contain one and only one event parameter")
                         .element(astMethod)
-                        .build());
+                        .build();
                 throw new TransfuseAnalysisException("Malformed event Observer found on " + astMethod.getName());
             }
 

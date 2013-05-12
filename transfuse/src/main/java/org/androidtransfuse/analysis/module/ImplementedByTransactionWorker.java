@@ -24,13 +24,11 @@ import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 import org.androidtransfuse.util.TypeMirrorRunnable;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import javax.tools.Diagnostic;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
@@ -73,11 +71,11 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
             ASTType implAstType = implementedClass.accept(astTypeBuilderVisitor, null);
 
             if (!implAstType.inheritsFrom(astType)) {
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@ImplementedBy must reference a subclass")
-                                               .element(astType)
-                                               .annotation(astType.getASTAnnotation(ImplementedBy.class))
-                                               .parameter("value")
-                                               .build());
+                validator.error("@ImplementedBy must reference a subclass")
+                        .element(astType)
+                        .annotation(astType.getASTAnnotation(ImplementedBy.class))
+                        .parameter("value")
+                        .build();
                 throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
 

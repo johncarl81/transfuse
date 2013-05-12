@@ -25,11 +25,9 @@ import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.annotations.Transient;
 import org.androidtransfuse.model.GetterSetterMethodPair;
 import org.androidtransfuse.model.ParcelableDescriptor;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -97,19 +95,16 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
 
                     if (setterMethod != null && !setterMethod.isAnnotated(Transient.class)) {
                         if (setterMethod.getParameters().size() > 1){
-                            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Setter has too few parameters.")
-                                    .element(astMethod)
-                                    .build());
+                            validator.error("Setter has too few parameters.")
+                                    .element(astMethod).build();
                         }
                         else if (setterMethod.getParameters().size() > 1){
-                            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Setter has too many parameters.")
-                                    .element(astMethod)
-                                    .build());
+                            validator.error("Setter has too many parameters.")
+                                    .element(astMethod).build();
                         }
                         else if(!setterMethod.getParameters().get(0).getASTType().equals(astMethod.getReturnType())) {
-                            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Setter parameter does not match corresponding Getter return type")
-                                            .element(astMethod)
-                            .build());
+                            validator.error("Setter parameter does not match corresponding Getter return type")
+                                            .element(astMethod).build();
                         }
                         else{
                             parcelableDescriptor.getGetterSetterPairs().add(new GetterSetterMethodPair(getPropertyName(astMethod), astMethod, setterMethod));
@@ -138,9 +133,8 @@ public class ParcelableAnalysis implements Analysis<ParcelableDescriptor> {
         boolean isGetter = astMethod.getParameters().size() == 0 &&
                 (astMethod.getName().startsWith(GET) || astMethod.getName().startsWith(IS));
         if (isGetter && astMethod.getReturnType().equals(ASTVoidType.VOID)) {
-            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Bean setter in parcel must not return void.")
-                    .element(astMethod)
-                    .build());
+            validator.error("Bean setter in parcel must not return void.")
+                    .element(astMethod).build();
         }
         return isGetter;
     }

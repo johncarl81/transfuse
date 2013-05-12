@@ -26,11 +26,9 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -136,8 +134,8 @@ public class AOPProxyGenerator {
         ASTMethod method = methodInterceptorEntry.getKey();
 
         if (method.getAccessModifier().equals(ASTAccessModifier.PRIVATE)) {
-            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "AOP Method Interception is unavailable on private methods")
-                                           .element(method).build());
+            validator.error("AOP Method Interception is unavailable on private methods")
+                                           .element(method).build();
             return;
         }
 

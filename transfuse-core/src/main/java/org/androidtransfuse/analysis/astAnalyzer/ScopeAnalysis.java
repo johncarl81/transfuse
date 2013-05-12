@@ -23,11 +23,9 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.ScopePredicate;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
 
 /**
  * Analysis to determine if the given type is scoped.
@@ -61,8 +59,8 @@ public class ScopeAnalysis extends ASTAnalysisAdaptor {
                 ImmutableSet<ASTAnnotation> scopeAnnotations = FluentIterable.from(concreteType.getAnnotations()).filter(scopePredicate).toSet();
 
                 if(scopeAnnotations.size() > 1){
-                    validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Only one scoping may be defined")
-                            .element(concreteType).build());
+                    validator.error("Only one scoping may be defined")
+                            .element(concreteType).build();
                 }
                 for (ASTAnnotation scopeAnnotation : scopeAnnotations) {
                     if(context.getInjectionNodeBuilders().containsScope(scopeAnnotation)){

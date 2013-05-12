@@ -18,10 +18,7 @@ package org.androidtransfuse.analysis.astAnalyzer.validation;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
-
-import javax.tools.Diagnostic;
 
 /**
  * @author John Ericksen
@@ -45,11 +42,11 @@ public class AnnotationParameterRegexValidator implements AnnotationValidator{
         String parameterValue = annotation.getProperty(parameter, String.class);
 
         if(parameterValue != null && !parameterValue.matches(regex)){
-            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, message)
+            validator.error(message)
                     .element(astBase)
                     .annotation(annotation)
                     .parameter(parameter)
-                    .build());
+                    .build();
         }
     }
 }

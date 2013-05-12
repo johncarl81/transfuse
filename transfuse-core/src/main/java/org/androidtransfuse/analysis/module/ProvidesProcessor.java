@@ -27,12 +27,10 @@ import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNode
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopePredicate;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.tools.Diagnostic;
 import java.util.Collection;
 
 /**
@@ -101,15 +99,15 @@ public class ProvidesProcessor implements MethodProcessor {
         for (ASTAnnotation annotation : nonQualifierAnnotations) {
             if(!annotation.getASTType().equals(providesType)){
                 //error
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Provides methods may only be anntated with scope or qualifier annotations")
-                        .element(astMethod).annotation(annotation).build());
+                validator.error("@Provides methods may only be anntated with scope or qualifier annotations")
+                        .element(astMethod).annotation(annotation).build();
             }
         }
 
         if(scopeAnnotations.size() > 1){
             for (ASTAnnotation scopeAnnotation : scopeAnnotations) {
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Only one scope annotation is allowed per @Provides method")
-                                                .element(astMethod).annotation(scopeAnnotation).build());
+                validator.error("Only one scope annotation is allowed per @Provides method")
+                                                .element(astMethod).annotation(scopeAnnotation).build();
             }
         }
     }

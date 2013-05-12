@@ -32,12 +32,10 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
-import org.androidtransfuse.validation.ValidationBuilder;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.tools.Diagnostic;
 import java.util.Map;
 
 /**
@@ -82,8 +80,8 @@ public class FactoryGenerator {
     public JDefinedClass generate(ASTType descriptor) {
 
         if (descriptor.isConcreteClass()) {
-            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Factory annotated class must be an interface")
-                                           .element(descriptor).build());
+            validator.error("@Factory annotated class must be an interface")
+                                           .element(descriptor).build();
             throw new TransfuseAnalysisException("Unable to build factory from concrete class: " + descriptor.getName());
         }
 
