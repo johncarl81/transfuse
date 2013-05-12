@@ -56,6 +56,10 @@ public class ASTElementAnnotation implements ASTAnnotation {
                 .toSet();
     }
 
+    public AnnotationMirror getAnnotationMirror() {
+        return annotationMirror;
+    }
+
     private static final class ExtractElementName implements Function<ExecutableElement, String> {
         @Override
         public String apply(ExecutableElement property) {

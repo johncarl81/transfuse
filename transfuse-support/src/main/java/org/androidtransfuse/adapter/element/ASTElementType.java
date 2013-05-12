@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 /**
@@ -147,5 +148,9 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public Element getElement() {
+        return typeElement;
     }
 }

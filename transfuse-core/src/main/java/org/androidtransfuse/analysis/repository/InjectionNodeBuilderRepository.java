@@ -79,6 +79,10 @@ public class InjectionNodeBuilderRepository {
         return scopeAnnotations.keySet();
     }
 
+    public boolean containsScope(ASTAnnotation scopeAnnotation) {
+        return scopeAnnotations.containsKey(scopeAnnotation.getASTType());
+    }
+
     public Map<ASTType, ASTType> getScopeAnnotations(){
         return scopeAnnotations;
     }
@@ -104,7 +108,7 @@ public class InjectionNodeBuilderRepository {
         scoping.put(type, scope);
     }
 
-    public ASTType getScope(InjectionSignature type) {
+    public ASTType getScoped(InjectionSignature type) {
         return scoping.get(type);
     }
 

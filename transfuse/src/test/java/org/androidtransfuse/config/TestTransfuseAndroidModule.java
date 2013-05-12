@@ -19,6 +19,7 @@ import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.NoOpElements;
 import org.androidtransfuse.NoOpFiler;
+import org.androidtransfuse.NoOpMessager;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
@@ -50,6 +51,7 @@ import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.TestingScope;
 
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
 import javax.inject.Named;
 import javax.lang.model.util.Elements;
 
@@ -67,7 +69,8 @@ import javax.lang.model.util.Elements;
         @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class),
         @Bind(type = RResource.class, to = EmptyRResource.class),
         @Bind(type = Elements.class, to = NoOpElements.class),
-        @Bind(type = Filer.class, to = NoOpFiler.class)
+        @Bind(type = Filer.class, to = NoOpFiler.class),
+        @Bind(type = Messager.class, to = NoOpMessager.class)
 })
 @BindProviders({
         @BindProvider(type = XStream.class, provider = XStreamProvider.class),

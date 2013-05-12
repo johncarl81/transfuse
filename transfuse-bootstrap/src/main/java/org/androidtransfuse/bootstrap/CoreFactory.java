@@ -47,7 +47,8 @@ import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 import org.androidtransfuse.util.MessagerLogger;
 import org.androidtransfuse.util.Providers;
 import org.androidtransfuse.util.QualifierPredicate;
-import org.androidtransfuse.util.ScopesPredicate;
+import org.androidtransfuse.util.ScopePredicate;
+import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -75,6 +76,8 @@ public class CoreFactory {
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
     private final Filer filer;
     private final ModuleRepositoryImpl moduleRepository = new ModuleRepositoryImpl();
+    private final Validator validator;
+    private final ScopePredicate scopePredicate = new ScopePredicate(astClassFactory);
 
     private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
 
@@ -84,6 +87,7 @@ public class CoreFactory {
         this.generationUtil = new ClassGenerationUtil(codeModel, new MessagerLogger(messager), namer);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(namer, generationUtil);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
+        this.validator = new Validator(messager);
     }
 
     public ASTElementConverterFactory buildConverterFactory() {
@@ -191,7 +195,7 @@ public class CoreFactory {
         AnalysisRepository analysisRepository = new AnalysisRepository();
 
         analysisRepository.addAnalysis(new InjectionAnalyzer(buildInjectionPointFactory()));
-        analysisRepository.addAnalysis(new ScopeAnalysis());
+        analysisRepository.addAnalysis(new ScopeAnalysis(scopePredicate, validator));
 
         return analysisRepository;
     }
@@ -271,7 +275,7 @@ public class CoreFactory {
         BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory);
         BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(providerInjectionNodeBuilderFactory);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
-        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopesPredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
+        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder());
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, codeModel, buildAnalyser());
 

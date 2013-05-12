@@ -20,20 +20,19 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 
-import javax.inject.Inject;
-import javax.inject.Scope;
 import java.util.Collection;
 
 /**
+ * Predicate that matches an ASTAnnotation by class.
+ *
  * @author John Ericksen
  */
-public class ScopesPredicate implements Predicate<ASTAnnotation> {
+public class AnnotatedPredicate implements Predicate<ASTAnnotation> {
 
-    private final ASTType scopeType;
+    private final ASTType annotationType;
 
-    @Inject
-    public ScopesPredicate(ASTClassFactory astClassFactory){
-        scopeType = astClassFactory.getType(Scope.class);
+    public AnnotatedPredicate(ASTClassFactory astClassFactory, Class annotationClass){
+        annotationType = astClassFactory.getType(annotationClass);
     }
 
     @Override
@@ -41,12 +40,11 @@ public class ScopesPredicate implements Predicate<ASTAnnotation> {
         Collection<ASTAnnotation> annotations = input.getASTType().getAnnotations();
 
         for (ASTAnnotation astAnnotation : annotations) {
-            if(astAnnotation.getASTType().equals(scopeType)){
+            if(astAnnotation.getASTType().equals(annotationType)){
                 return true;
             }
         }
 
         return false;
     }
-
 }

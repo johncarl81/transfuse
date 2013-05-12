@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.bootstrap;
+package org.androidtransfuse.validation;
 
-import javax.inject.Scope;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
+import javax.tools.Diagnostic;
 
 /**
  * @author John Ericksen
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Scope
-public @interface BootstrapModule {
+public interface Validation {
+
+    Diagnostic.Kind getKind();
+
+    String getMessage();
+
+    Element getElement();
+
+    AnnotationMirror getAnnotation();
+
+    AnnotationValue getAnnotationValue();
 }

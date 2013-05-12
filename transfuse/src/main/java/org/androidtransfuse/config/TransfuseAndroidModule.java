@@ -40,6 +40,7 @@ import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.MessagerLogger;
 
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -86,6 +87,12 @@ public class TransfuseAndroidModule {
     @Singleton
     public Elements getElements(ProcessingEnvironment processingEnvironment){
         return new SynchronizedElements(processingEnvironment.getElementUtils());
+    }
+
+    @Provides
+    @Singleton
+    public Messager getMessenger(ProcessingEnvironment processingEnvironment){
+        return processingEnvironment.getMessager();
     }
 
     @Provides

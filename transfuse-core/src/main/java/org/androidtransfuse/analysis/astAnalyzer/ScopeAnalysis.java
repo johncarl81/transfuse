@@ -15,13 +15,19 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.ScopePredicate;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
-import java.util.Collection;
+import javax.inject.Inject;
+import javax.tools.Diagnostic;
 
 /**
  * Analysis to determine if the given type is scoped.
@@ -30,26 +36,38 @@ import java.util.Collection;
  */
 public class ScopeAnalysis extends ASTAnalysisAdaptor {
 
+    private final ScopePredicate scopePredicate;
+    private final Validator validator;
+
+    @Inject
+    public ScopeAnalysis(ScopePredicate scopePredicate, Validator validator) {
+        this.scopePredicate = scopePredicate;
+        this.validator = validator;
+    }
+
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
 
         if (injectionNode.getASTType().equals(concreteType)) {
 
-            ASTType scopedType = context.getInjectionNodeBuilders().getScope(injectionNode.getTypeSignature());
+            //type is recognized under a given scope
+            ASTType scopedType = context.getInjectionNodeBuilders().getScoped(injectionNode.getTypeSignature());
             if(scopedType != null){
                 ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopedType);
                 injectionNode.addAspect(scopeAspectFactory.buildAspect(context));
-                return;
             }
+            else{
+                //annotated type
+                ImmutableSet<ASTAnnotation> scopeAnnotations = FluentIterable.from(concreteType.getAnnotations()).filter(scopePredicate).toSet();
 
-            for (ASTType scopeType : context.getInjectionNodeBuilders().getScopes()) {
-                Collection<ASTAnnotation> annotations = concreteType.getAnnotations();
-                //todo: clean this up
-                for (ASTAnnotation annotation : annotations) {
-                    if(annotation.getASTType().equals(scopeType)){
-                        ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopeType);
+                if(scopeAnnotations.size() > 1){
+                    validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "Only one scoping may be defined")
+                            .element(concreteType).build());
+                }
+                for (ASTAnnotation scopeAnnotation : scopeAnnotations) {
+                    if(context.getInjectionNodeBuilders().containsScope(scopeAnnotation)){
+                        ScopeAspectFactory scopeAspectFactory = context.getInjectionNodeBuilders().getScopeAspectFactory(scopeAnnotation.getASTType());
                         injectionNode.addAspect(scopeAspectFactory.buildAspect(context));
-                        return;
                     }
                 }
             }

@@ -59,4 +59,8 @@ public class ASTElementBase implements ASTBase {
     public ASTAnnotation getASTAnnotation(Class annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
+
+    public Element getElement() {
+        return element;
+    }
 }

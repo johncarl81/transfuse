@@ -27,7 +27,7 @@ import org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilderFact
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.QualifierPredicate;
-import org.androidtransfuse.util.ScopesPredicate;
+import org.androidtransfuse.util.ScopePredicate;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -42,19 +42,19 @@ public class ProvidesProcessor implements MethodProcessor {
 
     private final ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory;
     private final QualifierPredicate qualifierPredicate;
-    private final ScopesPredicate scopesPredicate;
+    private final ScopePredicate scopePredicate;
     private final ASTClassFactory astClassFactory;
     private final GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder;
 
     @Inject
     public ProvidesProcessor(ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
                              QualifierPredicate qualifierPredicate,
-                             ScopesPredicate scopesPredicate,
+                             ScopePredicate scopePredicate,
                              ASTClassFactory astClassFactory,
                              GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.qualifierPredicate = qualifierPredicate;
-        this.scopesPredicate = scopesPredicate;
+        this.scopePredicate = scopePredicate;
         this.astClassFactory = astClassFactory;
         this.generatedProviderInjectionNodeBuilder = generatedProviderInjectionNodeBuilder;
     }
@@ -67,7 +67,7 @@ public class ProvidesProcessor implements MethodProcessor {
 
         ImmutableSet<ASTAnnotation> scopeAnnotations =
                 FluentIterable.from(astMethod.getAnnotations())
-                        .filter(scopesPredicate).toSet();
+                        .filter(scopePredicate).toSet();
 
         ASTAnnotation scope = null;
         if(scopeAnnotations.size() > 0){
@@ -84,11 +84,11 @@ public class ProvidesProcessor implements MethodProcessor {
                 FluentIterable.from(annotations)
                         .filter(Predicates.and(
                                 Predicates.not(qualifierPredicate),
-                                Predicates.not(scopesPredicate))).toSet();
+                                Predicates.not(scopePredicate))).toSet();
 
         ImmutableSet<ASTAnnotation> scopeAnnotations =
                 FluentIterable.from(annotations)
-                        .filter(scopesPredicate).toSet();
+                        .filter(scopePredicate).toSet();
 
 
         ASTType providesType = astClassFactory.getType(Provides.class);

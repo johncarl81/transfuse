@@ -91,8 +91,6 @@ public class ClassGenerationUtil {
 
         annotateGeneratedClass(definedClass);
 
-        log.info("Generated " + className);
-
         return definedClass;
     }
 
