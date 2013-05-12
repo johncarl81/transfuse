@@ -19,8 +19,11 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableASTImplementationFactory;
+import org.androidtransfuse.validation.ValidationBuilder;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import javax.tools.Diagnostic;
 
 /**
  * Associates the given return type with the annotated field as a binding.
@@ -30,16 +33,23 @@ import javax.inject.Inject;
 public class BindProcessor implements TypeProcessor {
 
     private final VariableASTImplementationFactory variableInjectionBuilderFactory;
+    private final Validator validator;
 
     @Inject
-    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory) {
+    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory, Validator validator) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
+        this.validator = validator;
     }
 
     @Override
-    public ModuleConfiguration process(ASTAnnotation bindAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
         ASTType type = bindAnnotation.getProperty("type", ASTType.class);
         ASTType to = bindAnnotation.getProperty("to", ASTType.class);
+
+        if(!to.inheritsFrom(type)){
+            validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Bind to parameter class must inherit from type parameter")
+                    .element(moduleType).annotation(bindAnnotation).value("to").build());
+        }
 
         return new BindingModuleConfiguration(type, to);
     }

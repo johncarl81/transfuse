@@ -94,7 +94,7 @@ public class ASTEmptyType implements ASTType {
 
     @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
-        return null;
+        return ImmutableSet.of();
     }
 
     @Override

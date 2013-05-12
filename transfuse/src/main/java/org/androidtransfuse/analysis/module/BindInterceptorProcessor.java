@@ -27,7 +27,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 public class BindInterceptorProcessor implements TypeProcessor {
 
     @Override
-    public ModuleConfiguration process(ASTAnnotation bindInterceptor) {
+    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindInterceptor) {
         ASTType annotation = bindInterceptor.getProperty("annotation", ASTType.class);
         ASTType interceptor = bindInterceptor.getProperty("interceptor", ASTType.class);
 

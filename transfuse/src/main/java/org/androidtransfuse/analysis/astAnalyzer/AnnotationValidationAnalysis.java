@@ -15,62 +15,114 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.analysis.AnalysisContext;
-import org.androidtransfuse.annotations.Extra;
+import org.androidtransfuse.analysis.astAnalyzer.validation.AnnotationValidator;
+import org.androidtransfuse.analysis.astAnalyzer.validation.AnnotationValidatorBuilder;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.validation.ValidationBuilder;
-import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.tools.Diagnostic;
+import java.util.Arrays;
 
 /**
  * @author John Ericksen
  */
 public class AnnotationValidationAnalysis implements ASTAnalysis {
 
-    private final Validator validator;
+    private final AnnotationValidator annotationValidator;
 
     @Inject
-    public AnnotationValidationAnalysis(Validator validator) {
-        this.validator = validator;
+    public AnnotationValidationAnalysis(AnnotationValidatorBuilder builder) {
+
+        //built in specialty qualifiers
+        builder.given(Extra.class).requires(Inject.class, "@Extra annotation must be accompanied by @Inject");
+        builder.given(Extra.class).parameterMatches("value", "^[a-zA-Z][a-zA-Z0-9]*$", "@Extra value parameter must follow Java Bean syntax");
+        builder.given(View.class).requires(Inject.class, "@View annotation must be accompanied by @Inject");
+        builder.given(Preference.class).requires(Inject.class, "@Preference annotation must be accompanied by @Inject");
+        builder.given(Resource.class).requires(Inject.class, "@Resource annotation must be accompanied by @Inject");
+        builder.given(SystemService.class).requires(Inject.class, "@SystemService annotation must be accompanied by @Inject");
+
+        //activity metadata
+        builder.given(Layout.class).requires(Arrays.asList(Activity.class, Fragment.class), "@Layout annotation must be accompanied by @Activity");
+        builder.given(LayoutHandler.class).requires(Arrays.asList(Activity.class, Fragment.class), "@LayoutHandler annotation must be accompanied by @Activity");
+        builder.given(MetaData.class).requires(Activity.class, "@MetaData annotation must be accompanied by @Activity");
+        builder.given(MetaDataSet.class).requires(Activity.class, "@MetaDataSet annotation must be accompanied by @Activity");
+        builder.given(Activity.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Activity name parameter must follow Java Bean syntax");
+        builder.given(Service.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Service name parameter must follow Java Bean syntax");
+        builder.given(Fragment.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Fragment name parameter must follow Java Bean syntax");
+        builder.given(BroadcastReceiver.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@BroadcastReceiver name parameter must follow Java Bean syntax");
+        builder.given(Application.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Application name parameter must follow Java Bean syntax");
+
+        //module metadata
+        builder.given(Bind.class).requires(TransfuseModule.class, "@Bind annotation must be accompanied by @TransfuseModule");
+        builder.given(Bindings.class).requires(TransfuseModule.class, "@Bindings annotation must be accompanied by @TransfuseModule");
+        builder.given(BindInterceptor.class).requires(TransfuseModule.class, "@BindInterceptor annotation must be accompanied by @TransfuseModule");
+        builder.given(BindInterceptors.class).requires(TransfuseModule.class, "@BindInterceptors annotation must be accompanied by @TransfuseModule");
+        builder.given(BindProvider.class).requires(TransfuseModule.class, "@BindProvider annotation must be accompanied by @TransfuseModule");
+        builder.given(BindProviders.class).requires(TransfuseModule.class, "@BindProviders annotation must be accompanied by @TransfuseModule");
+        builder.given(DefineScope.class).requires(TransfuseModule.class, "@DefineScope annotation must be accompanied by @TransfuseModule");
+        builder.given(DefineScopes.class).requires(TransfuseModule.class, "@DefineScopes annotation must be accompanied by @TransfuseModule");
+        builder.given(UsesPermission.class).requires(TransfuseModule.class, "@UsesPermission annotation must be accompanied by @TransfuseModule");
+        builder.given(UsesSdk.class).requires(TransfuseModule.class, "@UsesSdk annotation must be accompanied by @TransfuseModule");
+
+        builder.given(Provides.class).requires(TransfuseModule.class, "@Provides annotation must be accompanied by @TransfuseModule");
+
+        annotationValidator = builder.build();
     }
 
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType astType, AnalysisContext context) {
+
+        for (ASTAnnotation annotation : astType.getAnnotations()) {
+            validateAnnotation(annotation, astType, astType.getAnnotations());
+        }
+
         for (ASTConstructor astConstructor : astType.getConstructors()) {
-            validateExtraValue(astConstructor);
+            for (ASTAnnotation annotation : astConstructor.getAnnotations()) {
+                validateAnnotation(annotation, astConstructor, astConstructor.getAnnotations(), astType.getAnnotations());
+
+                for (ASTParameter astParameter : astConstructor.getParameters()) {
+                    validateParameter(astParameter, astConstructor, astType);
+                }
+            }
         }
     }
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
-        validateExtraValue(astMethod);
+        for (ASTAnnotation annotation : astMethod.getAnnotations()) {
+            validateAnnotation(annotation, astMethod, astMethod.getAnnotations(), concreteType.getAnnotations());
 
-        for (ASTParameter astParameter : astMethod.getParameters()) {
-            validateExtraValue(astParameter);
+            for (ASTParameter astParameter : astMethod.getParameters()) {
+                validateParameter(astParameter, astMethod, concreteType);
+            }
         }
     }
 
     @Override
     public void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context) {
-        validateExtraValue(astField);
+        for (ASTAnnotation annotation : astField.getAnnotations()) {
+            validateAnnotation(annotation, astField, astField.getAnnotations(), concreteType.getAnnotations());
+        }
     }
 
-    private void validateExtraValue(ASTBase astBase){
-        if(astBase.isAnnotated(Extra.class)){
-            ASTAnnotation extraAnnotation = astBase.getASTAnnotation(Extra.class);
-
-            String extraId = extraAnnotation.getProperty("value", String.class);
-
-            if(!extraId.matches("^[a-zA-Z][a-zA-Z0-9]*$")){
-                validator.add(ValidationBuilder.validator(Diagnostic.Kind.ERROR, "@Extra value must follow Java Bean syntax")
-                        .element(astBase)
-                        .annotation(extraAnnotation)
-                        .value("value")
-                        .build());
-            }
+    private void validateParameter(ASTParameter parameter, ASTBase containingAST, ASTType containingType){
+        for (ASTAnnotation paramAnnotation : parameter.getAnnotations()) {
+            validateAnnotation(paramAnnotation, parameter, parameter.getAnnotations(), containingAST.getAnnotations(), containingType.getAnnotations());
         }
+    }
+
+    private void validateAnnotation(ASTAnnotation annotation, ASTBase astBase, ImmutableSet<ASTAnnotation>... applicableAnnotations){
+        annotationValidator.validate(annotation, astBase, flatten(applicableAnnotations));
+    }
+
+    private ImmutableSet<ASTAnnotation> flatten(ImmutableSet<ASTAnnotation>... sets){
+        ImmutableSet.Builder<ASTAnnotation> combineBuilder = ImmutableSet.builder();
+        for (ImmutableSet<ASTAnnotation> set : sets) {
+            combineBuilder.addAll(set);
+        }
+        return combineBuilder.build();
     }
 }

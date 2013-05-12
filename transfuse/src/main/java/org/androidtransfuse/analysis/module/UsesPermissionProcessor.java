@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.processor.ManifestManager;
 
@@ -34,7 +35,7 @@ public class UsesPermissionProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTAnnotation bindAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
         String[] usesPermissions = bindAnnotation.getProperty("value", String[].class);
 
         return new UsesPermissionModuleConfiguration(usesPermissions);

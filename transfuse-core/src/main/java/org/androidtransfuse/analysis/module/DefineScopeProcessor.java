@@ -47,7 +47,7 @@ public class DefineScopeProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTAnnotation typeAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation) {
         ASTType annotation = typeAnnotation.getProperty("annotation", ASTType.class);
         ASTType scope = typeAnnotation.getProperty("scope", ASTType.class);
 

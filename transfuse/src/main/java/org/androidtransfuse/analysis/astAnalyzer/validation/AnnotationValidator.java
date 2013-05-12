@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.analysis.module;
+package org.androidtransfuse.analysis.astAnalyzer.validation;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTBase;
 
-/**
- * Module processing class to process all type annotation configurations.
- *
- * @author John Ericksen
- */
-public interface TypeProcessor {
+public interface AnnotationValidator{
 
-    /**
-     * Processes the found annotation configuration.
-     *
-     * @param moduleType input module type
-     * @param typeAnnotation input annotation
-     * @return module configuration
-     */
-    ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation);
+    void validate(ASTAnnotation annotation, ASTBase astBase, ImmutableSet<ASTAnnotation> applicableAnnotations);
 }

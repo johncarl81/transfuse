@@ -92,7 +92,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
             if(typeProcessors.containsKey(typeAnnotation.getASTType())){
                 TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
 
-                configurations.add(typeProcessor.process(typeAnnotation));
+                configurations.add(typeProcessor.process(type, typeAnnotation));
             }
         }
 

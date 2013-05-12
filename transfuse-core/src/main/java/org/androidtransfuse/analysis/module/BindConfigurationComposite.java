@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis.module;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Inject;
 
@@ -35,14 +36,14 @@ public class BindConfigurationComposite implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTAnnotation typeAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation) {
 
         ASTAnnotation[] values = typeAnnotation.getProperty("value", ASTAnnotation[].class);
 
         ModuleConfigurationComposite configurations = new ModuleConfigurationComposite();
 
         for (ASTAnnotation interceptorBinding : values) {
-            configurations.add(processor.process(interceptorBinding));
+            configurations.add(processor.process(moduleType, interceptorBinding));
         }
 
         return configurations;
