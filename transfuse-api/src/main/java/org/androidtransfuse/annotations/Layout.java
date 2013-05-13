@@ -21,10 +21,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used in conjunction with the {@code @Activity} annotation, defines the layout resource to use.  The generated
- * {@code onCreate()} method will call the {@code setContentView()} with the provided layout resource value.  If
- * additional functionality is required it is advised to review the {@code LayoutHandler} annotation and associated
- * {@code LayoutHandlerDelegate} interface.
+ * Used in conjunction with the `@Activity` annotation, defines the layout resource to use.  The generated
+ * `onCreate()` method will call the `setContentView()` with the provided layout resource value.  If
+ * additional functionality is required it is advised to review the `LayoutHandler` annotation and associated
+ * `LayoutHandlerDelegate` interface.
  *
  * @see LayoutHandler
  * @see org.androidtransfuse.layout.LayoutHandlerDelegate

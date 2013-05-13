@@ -21,19 +21,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Allows for multiple {@code @BindInterceptor} declarations to be provided on a {@code @TransfuseModule} class.</p>
+ * Allows for multiple `@BindInterceptor` declarations to be provided on a `@TransfuseModule` class.
  *
- * <p>Example:
- * <pre>
- *     {@code @TransfuseModule}
- *     {@literal @}BindInterceptors({
- *         {@code @BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class),}
- *         {@code @BindInterceptor(UIThread.class, UIThreadMethodInterceptor.class)}
- *     }
- *     public class Module{}
- * </pre>
- * </p>
+ * *Example:*
+ * [code,java]
+ * ----
+ * {@literal @}TransfuseModule
+ * {@literal @}BindInterceptors({
+ *     {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class),
+ *     {@literal @}BindInterceptor(UIThread.class, UIThreadMethodInterceptor.class)
+ *  }
+ * public class Module{}
+ * ----
  *
  * @author John Ericksen
  */

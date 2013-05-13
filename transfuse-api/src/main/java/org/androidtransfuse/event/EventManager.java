@@ -29,39 +29,41 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * <p>
  * Centralized Bus for registering, unregistering and triggering events.  An event may be any object and the EventManager
  * triggers observers based on the non-generic type of the event object.  Observers may be registered by calling
- * the {@code register()} method, which relates an observer to an event type.</p>
+ * the `register()` method, which relates an observer to an event type.
  *
- * <p>
- * Transfuse will generate the calls to {@code register()} and {@code unregister()} based on the {@code @Observes}
- * annotation.  Any method in an object managed by Transfuse annotated with {@code @Observes} will register a call
+ * Transfuse will generate the calls to `register()` and `unregister()` based on the `@Observes`
+ * annotation.  Any method in an object managed by Transfuse annotated with `@Observes` will register a call
  * to that method with the first parameter in the method as the Event type.
- * </p>
  *
- * <p>For instance:
- * <pre>
- *     {@code @Observes}
+ * For instance:
+ * [code,java]
+ * ----
+ *     {@literal @}Observes}
  *     public void drink(Coffee coffee){...}
- * </pre>
+ * ----
  *
- * will result in Transfuse generating a the following {@code EventObserver}:
- * <pre>
+ * will result in Transfuse generating a the following `EventObserver}:
+ *
+ * [code,java]
+ * ----
  *     public class DrinkCoffeeEventObserver<Coffee>{
  *         ...
  *         void trigger(Coffee coffee){
  *             managedInstance.drink(coffee);
  *         }
  *     }
- * </pre>
+ * ----
  *
  * and the following registration:
  *
- * <pre>
+ *
+ * [code,java]
+ * ----
  *     eventManager.register(Coffee.class, drinkCoffeeEventObserver);
- * </pre>
- * </p>
+ * ----
+ *
  *
  * @author John Ericksen
  */

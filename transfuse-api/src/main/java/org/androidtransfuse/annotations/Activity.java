@@ -21,16 +21,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * Defines a class to be a Transfuse Activity component.  For classes that do not extend the android.app.Activity
  * class this annotation activates the event systems, dependency injection features and manifest management.
- * Additionally, a {@code @Layout} may be defined which will be incorporated into the generated onCreate method.</p>
- * <p>
+ * Additionally, a `@Layout` may be defined which will be incorporated into the generated onCreate method.
+ *
  * For classes that do extend the android.app.Activity class, defining a class as a Transfuse Activity will simply
- * activate manifest management of the Activity.</p>
- * <p>
+ * activate manifest management of the Activity.
+ *
  * Under both cases you may define additional manifest metadata which will be associated with the Activity manifest
- * entry.</p>
+ * entry.
  *
  * @author John Ericksen
  */

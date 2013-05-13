@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Service {@code onRebind()} Lifecycle Event callback method annotation.  Registers the annotated method
- * to be called during the {@code onRebind()} Lifecycle Phase.
+ * Service `onRebind()` Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the `onRebind()` Lifecycle Phase.
  *
  * @author John Ericksen
  */

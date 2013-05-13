@@ -19,7 +19,7 @@ import org.androidtransfuse.util.TransfuseInjectionException;
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
- * Runnable Adapter which executes the {@code MethodInvocation.proceed()} method.
+ * Runnable Adapter which executes the `MethodInvocation.proceed()` method.
  */
 class MethodInvocationRunnable implements Runnable {
 

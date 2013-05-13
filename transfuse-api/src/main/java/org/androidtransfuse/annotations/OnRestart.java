@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Activity {@code onRestart()} Lifecycle Event callback method annotation.  Registers the annotated method
- * to be called during the {@code onRestart()} Lifecycle Phase.
+ * Activity `onRestart()` Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the `onRestart()` Lifecycle Phase.
  *
  * @author John Ericksen
  */

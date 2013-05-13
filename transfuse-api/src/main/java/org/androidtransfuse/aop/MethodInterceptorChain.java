@@ -103,7 +103,7 @@ public class MethodInterceptorChain {
     }
 
     /**
-     * Interface defining the {@code Method} to be invoked.
+     * Interface defining the `Method} to be invoked.
      */
     public interface MethodExecution {
 
@@ -111,14 +111,14 @@ public class MethodInterceptorChain {
         String INVOKE = "invoke";
 
         /**
-         * Looks up the represented class {@code Method}.
+         * Looks up the represented class `Method}.
          * @return Method
          * @throws Exception if an error occurs
          */
         Method getMethod() throws Exception;
 
         /**
-         * Invokes the represented {@code Method}.
+         * Invokes the represented `Method}.
          * @return value returned by the method
          * @throws Throwable if an error occurs
          */

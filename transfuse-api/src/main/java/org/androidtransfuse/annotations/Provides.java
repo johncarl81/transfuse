@@ -21,14 +21,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Configures a factory method to provide an instance of the return type for injection in a {@code @TransfuseManifest}
- * annotated configuration and binds it to the return type.</p>
+ * Configures a factory method to provide an instance of the return type for injection in a `@TransfuseManifest`
+ * annotated configuration and binds it to the return type.
  *
- * <p>
- * For instance, the following module configuration builds a {@code Telescope} object from a {@code Mirror},
- * {@code Tube} and {@code Eyepiece} object:
- * <pre>
+ * For instance, the following module configuration builds a `Telescope` object from a `Mirror`,
+ * `Tube` and `Eyepiece` object:
+ * [code,java]
+ * ----
  *     {@literal @}TransfuseModule
  *     public void ModuleExample{
  *         {@literal @}Provides
@@ -36,13 +35,12 @@ import java.lang.annotation.Target;
  *             return new SchmidtCassegrainTelescope(mirror, tube, eyepiece);
  *         }
  *     }
- * </pre>
- * </p>
+ * ----
  *
- * <p>
- * Qualifier annotations as well as scoping annotations may be used in addition to the {@code @Provides} annotation
+ *
+ * Qualifier annotations as well as scoping annotations may be used in addition to the `@Provides` annotation
  * for the desired effect.
- * </p>
+ *
  *
  * @author John Ericksen
  */

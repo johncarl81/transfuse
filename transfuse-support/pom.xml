@@ -97,14 +97,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                    <doclet>org.asciidoclet.Asciidoclet</doclet>
                     <docletArtifact>
-                        <groupId>org.umlgraph</groupId>
-                        <artifactId>doclet</artifactId>
-                        <version>5.1</version>
+                        <groupId>org.asciidoclet</groupId>
+                        <artifactId>asciidoclet</artifactId>
+                        <version>0.1.0-SNAPSHOT</version>
                     </docletArtifact>
-                    <additionalparam>-views</additionalparam>
-                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                    <linksource>true</linksource>
                 </configuration>
             </plugin>
         </plugins>

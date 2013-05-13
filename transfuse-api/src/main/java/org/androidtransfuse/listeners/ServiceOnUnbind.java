@@ -18,11 +18,10 @@ package org.androidtransfuse.listeners;
 import android.content.Intent;
 
 /**
- * <p>
- * Defines the Service onUnbind() Call-Through method.  Each defined method represents a method in the corresponding
- * Activity class.</p>
+ * Defines the `Service` `onUnbind()` Call-Through method.  Each defined method represents a method in the corresponding
+ * `Service` class.
  *
- * <p>Only one Call-Through component per type may be defined per injection graph.</p>
+ * Only one Call-Through component per type may be defined per injection graph.
  *
  * @author John Ericksen
  */

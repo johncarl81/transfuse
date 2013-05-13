@@ -21,34 +21,33 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * Defines an interface as a Transfuse Factory.  This annotation instructs Transfuse to generate an implementation
- * that builds the types specified as return values of the methods defined.</p>
+ * that builds the types specified as return values of the methods defined.
  *
- * <p>
- * Example:
- * <pre>
- *     {@code @Factory}
+ * *Example:*
+ * [code,java]
+ * ----
+ *     {@literal @}Factory
  *     public interface FactoryExample{
  *         BuildMe build();
  *     }
- * </pre>
- * </p>
- * <p>Transfuse will build the injection graph generation code within an implementation of {@code FactoryExample}.  In
+ *----
+ * Transfuse will build the injection graph generation code within an implementation of `FactoryExample`.  In
  * order to get an instance of the generated Factory, one must simply inject the Factory by the interface type.
  * Transfuse automatically binds the generated implementation to the interface:
- * <pre>
- *     {@code @Inject}
+ * [code,java]
+ * ----
+ *     {@literal @}Inject
  *     FactoryExample factory;
- * </pre>
- * </p>
- * <p>
+ * ----
+ *
  * If Dependency Injection is unavailable, one may get an instance of the generated Factory through the
- * {@code Factories} utility class:
- * <pre>
+ * `Factories` utility class:
+ * [code,java]
+ * ----
  *     FactoryExample factory = Factories.get(FactoryExample.class);
- * </pre>
- * </p>
+ * ----
+ *
  *
  * @see org.androidtransfuse.Factories
  *

@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 
 /**
  * The annotation representation of the Android Manifest MetaData XML tag.  Defining this annotation on a Transfuse
- * {@code @Activity}, {@code @Service}, or {@code @BroadcastReceiver} component will trigger Transfuse to generate
+ * `@Activity`, `@Service`, or `@BroadcastReceiver` component will trigger Transfuse to generate
  * the corresponding entry in the Android Manifest
  *
  * @author John Ericksen

@@ -23,12 +23,12 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * <p>Injection qualifier annotation specifying the injection should be drawn from the Bundle Extras by extra name.  Extras
+ * Injection qualifier annotation specifying the injection should be drawn from the Bundle Extras by extra name.  Extras
  * represent the contract of the construction of an Activity or Service and Transfuse uses these annotated fields
  * to build the IntentFactoryStrategy classes.  Extras can either be required or optional.  Required Extras will be
  * validated to be not-null whereas not-required Extras may be null.  Additionally, Required Extras will provided via
  * parameters in the constructor of the Activity or Service's IntentFactoryStrategy while non-required Extras will be
- * provided via optional setter methods.</p>
+ * provided via optional setter methods.
  *
  * @author John Ericksen
  */

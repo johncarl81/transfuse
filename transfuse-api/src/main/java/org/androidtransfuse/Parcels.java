@@ -20,7 +20,7 @@ import org.androidtransfuse.util.GeneratedCodeRepository;
 import org.androidtransfuse.util.ParcelableFactoryReflectionProxy;
 
 /**
- * Static utility class used to wrap an {@code @Parcel} annotated class with the generated {@code Parcelable} wrapper.
+ * Static utility class used to wrap an `@Parcel` annotated class with the generated `Parcelable` wrapper.
  *
  * @author John Ericksen
  */
@@ -59,7 +59,7 @@ public final class Parcels {
     }
 
     /**
-     * Wraps the input {@code @Parcel} annotated class with a {@code Parcelable} wrapper.
+     * Wraps the input `@Parcel` annotated class with a `Parcelable` wrapper.
      *
      * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
      * Transfuse$Parcels class.
@@ -73,14 +73,14 @@ public final class Parcels {
     }
 
     /**
-     * Factory class for building a Parcelable from the given input.
+     * Factory class for building a `Parcelable` from the given input.
      */
     public interface ParcelableFactory<T> {
 
         String BUILD_PARCELABLE = "buildParcelable";
 
         /**
-         * Build the corresponding Parcelable class.
+         * Build the corresponding `Parcelable` class.
          *
          * @param input input to wrap with a Parcelable
          * @return Parcelable instance

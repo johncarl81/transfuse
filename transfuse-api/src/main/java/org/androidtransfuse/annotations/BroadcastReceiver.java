@@ -21,18 +21,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * Defines a class to be a Transfuse Broadcast Receiver component.  For classes that do not extend the
- * {@code android.app.BroadcastReceiver} class this annotation activates the event systems, dependency injection features and
- * manifest management.</p>
+ * `android.app.BroadcastReceiver class this annotation activates the event systems, dependency injection features and
+ * manifest management.
  *
- * <p>
  * For classes that do extend the android.app.BroadcastReceiver class, defining a class as a Transfuse Service will simply
- * activate manifest management of the Broadcast Receiver.</p>
+ * activate manifest management of the Broadcast Receiver.
  *
- * <p>
  * Under both cases you may define additional manifest metadata which will be associated with the Broadcast Receiver manifest
- * entry.</p>
+ * entry.
  *
  * @author John Ericksen
  */

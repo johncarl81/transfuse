@@ -22,9 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * Defines the annotated method as a Call-Through method.  This means that the corresponding Android Context
- * method call including parameters and return value is mapped directly to the annotated method.</p>
+ * method call including parameters and return value is mapped directly to the annotated method.
  *
  * @author John Ericksen
  */

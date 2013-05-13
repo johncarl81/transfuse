@@ -20,7 +20,7 @@ import org.androidtransfuse.util.FactoryBuilderReflectionProxy;
 import org.androidtransfuse.util.GeneratedCodeRepository;
 
 /**
- * Static utility class which maps the {@code @Factory} annotated interface to the generated implementation.
+ * Static utility class which maps the `@Factory` annotated interface to the generated implementation.
  *
  * @author John Ericksen
  */
@@ -52,7 +52,7 @@ public final class Factories {
     }
 
     /**
-     * Returns an instance of the provided {@code @Factory} interface.
+     * Returns an instance of the provided `@Factory` interface.
      *
      * @param type Factory type
      * @param <T>

@@ -42,7 +42,7 @@ public final class Components {
     /**
      * Provides the corresponding generated Android Component class for the input Transfuse Component class.
      *
-     * @throws org.androidtransfuse.util.TransfuseRuntimeException if there was an error looking up the wrapped
+     * @throws `org.androidtransfuse.util.TransfuseRuntimeException` if there was an error looking up the wrapped
      * Transfuse$Components class.
      * @param type Transfuse Component class
      * @param <T>

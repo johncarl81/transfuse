@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Fragment {@code onDetach()} Lifecycle Event callback method annotation.  Registers the annotated method
- * to be called during the {@code onDetach()} Lifecycle Phase.
+ * Fragment `onDetach()` Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the `onDetach()` Lifecycle Phase.
  *
  * @author John Ericksen
  */

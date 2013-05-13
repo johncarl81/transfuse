@@ -21,9 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Defines a class to be a Transfuse Fragment component.  For classes that do not extend the {@code android.support.v4.app.Fragment}
- * class this annotation activates the event systems, dependency injection features and manifest management.</p>
+ * Defines a class to be a Transfuse Fragment component.  For classes that do not extend the `android.support.v4.app.Fragment`
+ * class this annotation activates the event systems, dependency injection features and manifest management.
  *
  * @author John Ericksen
  */

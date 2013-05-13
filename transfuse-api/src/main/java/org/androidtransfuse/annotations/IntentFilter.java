@@ -21,22 +21,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * The annotation representation of the Android Manifest IntentFilter tag.  This annotation may be used along with the
- * {@code @Activity}, {@code @Service}, or {@code @BroadcastReceiver} to define the Intents that may activate this
- * Component.</p>
+ * `@Activity`, `@Service`, or `@BroadcastReceiver` to define the Intents that may activate this
+ * Component.
  *
- * <p>
  * The following example demonstrates an Activity as the default home screen of an application available on the Launcher:
- * <pre>
- *     {@literal @}Activity}
-       {@literal @}IntentFilter({
-           {@literal @}Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
-           {@literal @}Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
-       })
-       public class Main {}
- * </pre>
- * </p>
+ * *Example:*
+ * [code,java]
+ * ----
+ *     {@literal @}Activity
+ *     {@literal @}IntentFilter({
+ *         {@literal @}Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
+ *         {@literal @}Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
+ *     })
+ *     public class Main {}
+ * ----
+ *
  *
  * @author John Ericksen
  */

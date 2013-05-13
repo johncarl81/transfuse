@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Defines the annotated field to be serialized using the {@code Activity.onSaveNonConfigurationInstance()} method
- * and deserialized using the {@code Activity.onCreate()} method.  This gracefully takes care of persisting configuration
+ * Defines the annotated field to be serialized using the `Activity.onSaveNonConfigurationInstance()` method
+ * and de-serialized using the `Activity.onCreate()` method.  This gracefully takes care of persisting configuration
  * data between screen orientation changes etc.
  */
 @Target(ElementType.FIELD)

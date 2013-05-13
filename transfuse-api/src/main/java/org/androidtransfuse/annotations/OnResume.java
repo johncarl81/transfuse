@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Activity and Fragment {@code onResume()} Lifecycle Event callback method annotation.  Registers the annotated method
- * to be called during the {@code onResume()} Lifecycle Phase.
+ * Activity and Fragment `onResume()` Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the `onResume()` Lifecycle Phase.
  *
  * @author John Ericksen
  */

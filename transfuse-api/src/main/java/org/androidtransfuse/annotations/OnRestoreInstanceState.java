@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Activity {@code onRestoreInstanceState()} callback method annotation.  Registers the annotated method
- * to be called if the {@code onRestoreInstanceState()} function is called.
+ * Activity `onRestoreInstanceState()` callback method annotation.  Registers the annotated method
+ * to be called if the `onRestoreInstanceState()` function is called.
  *
  * @author John Ericksen
  */

@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Activity {@code onStop()} Lifecycle Event callback method annotation.  Registers the annotated method
- * to be called during the {@code onStop()} Lifecycle Phase.
+ * Activity `onStop()` Lifecycle Event callback method annotation.  Registers the annotated method
+ * to be called during the `onStop()` Lifecycle Phase.
  *
  * @author John Ericksen
  */

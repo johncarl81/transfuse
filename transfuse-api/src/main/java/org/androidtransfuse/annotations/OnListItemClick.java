@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * ListActivity {@code onListItemClick()} callback method annotation.  Registers the annotated method
- * to be called if the {@code onListItemClick()} function is called.
+ * ListActivity `onListItemClick()` callback method annotation.  Registers the annotated method
+ * to be called if the `onListItemClick()` function is called.
  *
  * @author John Ericksen
  */

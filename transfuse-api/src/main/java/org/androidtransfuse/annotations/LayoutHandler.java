@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used in conjunction with the {@code @Activity} annotation, defines a {@code LayoutHandlerDelegate} to use to generate
+ * Used in conjunction with the `@Activity` annotation, defines a `LayoutHandlerDelegate` to use to generate
  * the view setup code.
  *
  * @see LayoutHandlerDelegate

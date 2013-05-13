@@ -23,40 +23,37 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Identifies a class to be wrapped by a Parcelable wrapper.  This wrapper will serialize an instance of the current
+ * Identifies a class to be wrapped by a `Parcelable` wrapper.  This wrapper will serialize an instance of the current
  * class to and from a Parcelable representation based on the public Java-Bean standard property Getters and Setters if
- * no ParcelConverter value is specified.  If a ParcelConverter is specified it will be used instead.</p>
- * <p>
- * The following types are available as property types, which correspond to the types accepted by the Android Bundle:
- * <ul>
- * <li>{@code byte}</li>
- * <li>{@code byte[]}</li>
- * <li>{@code double}</li>
- * <li>{@code double[]}</li>
- * <li>{@code float}</li>
- * <li>{@code float[]}</li>
- * <li>{@code int}</li>
- * <li>{@code int[]}</li>
- * <li>{@code long}</li>
- * <li>{@code long[]}</li>
- * <li>{@code String}</li>
- * <li>{@code String[]}</li>
- * <li>{@code IBinder}</li>
- * <li>{@code Bundle}</li>
- * <li>{@code Object[]}</li>
- * <li>{@code SparseArray}</li>
- * <li>{@code SparseBooleanArray}</li>
- * <li>{@code Exception}</li>
- * <li>Other classes annotated with {@code @Parcel}</li>
- * </ul></p>
+ * no `ParcelConverter` value is specified.  If a ParcelConverter is specified it will be used instead.
  *
- * <p>
- * Instances annotated with {@code @Parcel} may be used as extras when passing values between Components.  Transfuse
- * will automatically wrap and unwrap the given instance with the generated wrapper.</p>
- * <p>
- * Properties that should not be serialized can be annotated with the {@code @Transient} annotation on either the getter
- * or setter.  Transfuse will ignore {@code @Transient} annotated properties during Parcelable serialization.</p>
+ * The following types are available as property types, which correspond to the types accepted by the Android Bundle:
+ * 
+ * - `byte`
+ * - `byte[]`
+ * - `double`
+ * - `double[]`
+ * - `float`
+ * - `float[]`
+ * - `int`
+ * - `int[]`
+ * - `long`
+ * - `long[]`
+ * - `String`
+ * - `String[]`
+ * - `IBinder`
+ * - `Bundle`
+ * - `Object[]`
+ * - `SparseArray`
+ * - `SparseBooleanArray`
+ * - `Exception`
+ * - Other classes annotated with `@Parcel`
+ *
+ * Instances annotated with `@Parcel` may be used as extras when passing values between Components.  Transfuse
+ * will automatically wrap and unwrap the given instance with the generated wrapper.
+ *
+ * Properties that should not be serialized can be annotated with the `@Transient` annotation on either the getter
+ * or setter.  Transfuse will ignore `@Transient` annotated properties during Parcelable serialization.
  *
  * @author John Ericksen
  */
@@ -70,8 +67,8 @@ public @interface Parcel {
     Class<? extends ParcelConverter> value() default EmptyConverter.class;
 
     /**
-     * Noop ParcelConverte used as a empty placeholder for the Parcel.value annotation parameter.  Performs no mapping
-     * and throws {@code TransfuseRuntimeException}s upon calling any method.
+     * Noop ParcelConverter used as a empty placeholder for the Parcel.value annotation parameter.  Performs no mapping
+     * and throws `TransfuseRuntimeExceptions` upon calling any method.
      */
     class EmptyConverter implements ParcelConverter<Object> {
         @Override

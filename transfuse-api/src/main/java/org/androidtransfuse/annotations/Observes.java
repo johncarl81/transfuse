@@ -21,41 +21,37 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Defines a method to observe an event triggered via the {@code EventManager} class when registered.  The annotated
- * method must have one parameter which represents the type of event to be observed.</p>
+ * Defines a method to observe an event triggered via the `EventManager` class when registered.  The annotated
+ * method must have one parameter which represents the type of event to be observed.
  *
- * <p>
  * For Instance, The following class:
- * <pre>
+ * [code,java]
+ * ----
  *     public class Listener{
- *         {@code @Observes}
+ *         {@literal @}Observes
  *         public void listen(Event event){...}
  *     }
- * </pre>
+ * ----
  * When registered:
- * <pre>
+ * [code,java]
+ * ----
  *     eventManager.register(Event.class, listener);
- * </pre>
- * The {@code listen()} method is called when an event is triggered on the related EventManager class:
- * <pre>
+ * ----
+ * The `listen()` method is called when an event is triggered on the related EventManager class:
+ * [code,java]
+ * ----
  *     Event event = new Event();
  *     eventManager.trigger(event);
- * </pre>
+ * ----
  *
- * </p>
- *
- * <p>
  * Optionally, the parameter of the method may be annotated to achieve the same effect:
- * <pre>
- *     public void listen({@code @Observes} Event event){...}
- * </pre>
- * </p>
+ * [code,java]
+ * ----
+ *     public void listen({@literal @}Observes} Event event){...}
+ * ----
  *
- * <p>
  * Transfuse automatically performs this registration housekeeping with a default, global singleton version of the
- * EventManager if the annotated method appears on an instance  injected by Transfuse.
- * </p>
+ * `EventManager` if the annotated method appears on an instance  injected by Transfuse.
  *
  * @see org.androidtransfuse.event.EventManager
  *

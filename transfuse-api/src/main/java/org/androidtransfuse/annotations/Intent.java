@@ -21,10 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
  * The annotation representation of the Android Manifest Intent XML tag.  This annotation may be used along with the
- * {@code @Activity}, {@code @Service}, or {@code @BroadcastReceiver} to define the intents available through
- * the {@code IntentFilter} annotation.</p>
+ * `@Activity`, `@Service`, or `@BroadcastReceiver` to define the intents available through
+ * the `IntentFilter` annotation.
  *
  * @see IntentFilter
  *

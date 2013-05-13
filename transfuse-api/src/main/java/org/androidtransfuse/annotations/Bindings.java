@@ -21,19 +21,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Allows for multiple {@code @Bind} bindings to be provided on a {@code @TransfuseModule} class.</p>
+ * Allows for multiple `@Bind` bindings to be provided on a `@TransfuseModule` class.
  *
- * <p>Example:
- * <pre>
- *     {@code @TransfuseModule}
- *     {@literal @}Bindings({
- *         {@code @Bind(Cat.class, OrangeTabby.class),}
- *         {@code @Bind(Dog.class, BlackDoberman.class)}
- *     }
- *     public class Module{}
- * </pre>
- * </p>
+ * *Example:*
+ * [code,java]
+ * ----
+ * {@literal @}TransfuseModule}
+ * {@literal @}Bindings({
+ *     {@literal @}Bind(Cat.class, OrangeTabby.class),
+ *     {@literal @}Bind(Dog.class, BlackDoberman.class)
+ * }
+ * public class Module{}
+ * ----
  *
  * @author John Ericksen
  */

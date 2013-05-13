@@ -34,7 +34,7 @@ import java.util.Map;
  * Utility class unifying the creation of a basic class from a PackageClass
  *
  * Annotates the generated class with the recommended annotation:
- * {@code @Generated(value = "org.androidtransfuse.TransfuseAnnotationProcessor", date = "2001-07-04T12:08:56.235-0700")}
+ * `@Generated(value = "org.androidtransfuse.TransfuseAnnotationProcessor", date = "2001-07-04T12:08:56.235-0700")`
  *
  * @author John Ericksen
  */
@@ -95,8 +95,7 @@ public class ClassGenerationUtil {
     }
 
     /**
-     * Annotates the input class with the {@code @Generated} annotation
-     * defineClass
+     * Annotates the input class with the `@Generated` annotation
      *
      * @param definedClass input codemodel class
      */

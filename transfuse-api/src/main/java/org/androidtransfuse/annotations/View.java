@@ -23,14 +23,12 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * <p>
- * Injection qualifier annotation specifying which view is injected by resource id or tag.</p>
+ * Injection qualifier annotation specifying which view is injected by resource id or tag.
  *
- * <p>
  * Injecting with this qualifier will lookup in the relevant Activity or Fragment class the view element using the
- * {@code getViewById()} or {@code getViewByTag()} methods.  Additionally, as long as the
- * type is a dependent of the Android {@code View} class, the injected instance will be cast to the given type.
- * </p>
+ * `getViewById()` or `getViewByTag()` methods.  Additionally, as long as the
+ * type is a dependent of the Android `View` class, the injected instance will be cast to the given type.
+ *
  *
  * @author John Ericksen
  */
@@ -40,12 +38,12 @@ import static java.lang.annotation.ElementType.*;
 public @interface View {
 
     /**
-     * Resource id used to lookup the View via the {@code Activity.getViewById()} method.
+     * Resource id used to lookup the View via the `Activity.getViewById()` method.
      */
     int value() default -1;
 
     /**
-     * Resource tag used to lookup the View via the {@code Activity.getViewByTag()} method.
+     * Resource tag used to lookup the View via the `Activity.getViewByTag()` method.
      */
     String tag() default "";
 }

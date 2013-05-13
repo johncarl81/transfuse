@@ -21,19 +21,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- * Allows for multiple {@code @BindProvider} declarations to be provided on a {@code @TransfuseModule} class.</p>
+ * Allows for multiple `@BindProvider` declarations to be provided on a `@TransfuseModule` class.
  *
- * <p>Example:
- * <pre>
- *     {@code @TransfuseModule}
+ * *Example:*
+ * [code,java]
+ * ----
+ *     {@literal @}TransfuseModule
  *     {@literal @}BindProviders({
- *         {@code @BindProvider(Cat.class, OrangeTabbyProvider.class),}
- *         {@code @BindProvider(Dog.class, BlackDobermanProvider.class)}
+ *         {@literal @}BindProvider(Cat.class, OrangeTabbyProvider.class),
+ *         {@literal @}BindProvider(Dog.class, BlackDobermanProvider.class)
  *     }
  *     public class Module{}
- * </pre>
- * </p>
+ * ----
+ *
  *
  * @author John Ericksen
  */

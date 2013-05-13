@@ -24,7 +24,7 @@ import static java.lang.annotation.ElementType.*;
 
 /**
  * Injection qualifier annotation to specify which System Service to inject by name.  This annotation will tell Transfuse which
- * System Service to lookup via the {@code Context.getSystemService()} method.
+ * System Service to lookup via the `Context.getSystemService()` method.
  *
  * @author John Ericksen
  */

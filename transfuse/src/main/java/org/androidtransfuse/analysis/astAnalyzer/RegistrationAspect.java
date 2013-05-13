@@ -24,7 +24,7 @@ import java.util.List;
  * Aspect to associate an element (method, field or type) with a listener registration.  This triggers the code generator to
  * register the given element with the identified resource.  Typically this means generating an on*() like so:
  *
- * {@code resource.onClickListener(field);}
+ * `resource.onClickListener(field);`
  *
  * @author John Ericksen
  */

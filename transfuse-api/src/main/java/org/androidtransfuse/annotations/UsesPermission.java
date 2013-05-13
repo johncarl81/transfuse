@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 
 /**
  * The annotation representation of the Android Manifest uses-permission XML tag.  Defining this annotation on a
- * @code @TransfuseModule} will trigger Transfuse to generate the corresponding entry in the Android Manifest
+ * `@TransfuseModule` will trigger Transfuse to generate the corresponding entry in the Android Manifest
  *
  * @author John Ericksen
  */

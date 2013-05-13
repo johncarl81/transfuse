@@ -21,8 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Service {@code onTaskRemoved()} callback method annotation.  Registers the annotated method
- * to be called if the {@code onTaskRemoved()} function is called.
+ * Service `onTaskRemoved()` callback method annotation.  Registers the annotated method
+ * to be called if the `onTaskRemoved()` function is called.
  *
  * @author John Ericksen
  */
