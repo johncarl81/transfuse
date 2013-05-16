@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * that builds the types specified as return values of the methods defined.
  *
  * *Example:*
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}Factory
  *     public interface FactoryExample{
@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  * Transfuse will build the injection graph generation code within an implementation of `FactoryExample`.  In
  * order to get an instance of the generated Factory, one must simply inject the Factory by the interface type.
  * Transfuse automatically binds the generated implementation to the interface:
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}Inject
  *     FactoryExample factory;
@@ -43,7 +43,7 @@ import java.lang.annotation.Target;
  *
  * If Dependency Injection is unavailable, one may get an instance of the generated Factory through the
  * `Factories` utility class:
- * [code,java]
+ * [source,java]
  * ----
  *     FactoryExample factory = Factories.get(FactoryExample.class);
  * ----

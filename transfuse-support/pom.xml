@@ -97,9 +97,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doclet>org.asciidoclet.Asciidoclet</doclet>
+                    <doclet>org.asciidoctor.Asciidoclet</doclet>
                     <docletArtifact>
-                        <groupId>org.asciidoclet</groupId>
+                        <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoclet</artifactId>
                         <version>0.1.0-SNAPSHOT</version>
                     </docletArtifact>

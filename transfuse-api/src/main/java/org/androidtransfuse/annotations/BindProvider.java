@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * defined provider's `Provider.get()` method will be used to request an instance.
  *
  * *Example:*
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}TransfuseModule
  *     {@literal @}BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)

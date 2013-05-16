@@ -38,7 +38,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * to that method with the first parameter in the method as the Event type.
  *
  * For instance:
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}Observes}
  *     public void drink(Coffee coffee){...}
@@ -46,7 +46,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * will result in Transfuse generating a the following `EventObserver}:
  *
- * [code,java]
+ * [source,java]
  * ----
  *     public class DrinkCoffeeEventObserver<Coffee>{
  *         ...
@@ -59,7 +59,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * and the following registration:
  *
  *
- * [code,java]
+ * [source,java]
  * ----
  *     eventManager.register(Coffee.class, drinkCoffeeEventObserver);
  * ----

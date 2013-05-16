@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * method must have one parameter which represents the type of event to be observed.
  *
  * For Instance, The following class:
- * [code,java]
+ * [source,java]
  * ----
  *     public class Listener{
  *         {@literal @}Observes
@@ -33,19 +33,19 @@ import java.lang.annotation.Target;
  *     }
  * ----
  * When registered:
- * [code,java]
+ * [source,java]
  * ----
  *     eventManager.register(Event.class, listener);
  * ----
  * The `listen()` method is called when an event is triggered on the related EventManager class:
- * [code,java]
+ * [source,java]
  * ----
  *     Event event = new Event();
  *     eventManager.trigger(event);
  * ----
  *
  * Optionally, the parameter of the method may be annotated to achieve the same effect:
- * [code,java]
+ * [source,java]
  * ----
  *     public void listen({@literal @}Observes} Event event){...}
  * ----

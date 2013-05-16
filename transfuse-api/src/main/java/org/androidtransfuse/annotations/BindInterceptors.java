@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * Allows for multiple `@BindInterceptor` declarations to be provided on a `@TransfuseModule` class.
  *
  * *Example:*
- * [code,java]
+ * [source,java]
  * ----
  * {@literal @}TransfuseModule
  * {@literal @}BindInterceptors({

@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  *
  * For instance, the following module configuration builds a `Telescope` object from a `Mirror`,
  * `Tube` and `Eyepiece` object:
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}TransfuseModule
  *     public void ModuleExample{

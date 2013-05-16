@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.*;
  * instance a listener of the component
  *
  * As an example, one may register an anonymous inner class OnClick Listener as follows:
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}RegisterListener(R.id.button)
  *     View.OnClickListener listener = new View.OnClickListener() {
@@ -36,7 +36,7 @@ import static java.lang.annotation.ElementType.*;
  *     };
  * ----
  * Likewise, one may register an injected listener the same way:
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}RegisterListener(R.id.button)
  *     {@literal @}Inject

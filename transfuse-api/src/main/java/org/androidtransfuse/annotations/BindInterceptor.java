@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * the `MethodInterceptor` implementation.
  *
  * *Example:*
- * [code,java]
+ * [source,java]
  * ----
  * {@literal @}TransfuseModule
  * {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class)

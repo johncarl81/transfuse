@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  *
  * The following example demonstrates an Activity as the default home screen of an application available on the Launcher:
  * *Example:*
- * [code,java]
+ * [source,java]
  * ----
  *     {@literal @}Activity
  *     {@literal @}IntentFilter({
