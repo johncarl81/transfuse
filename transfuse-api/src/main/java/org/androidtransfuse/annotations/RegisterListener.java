@@ -29,19 +29,19 @@ import static java.lang.annotation.ElementType.*;
  *
  * As an example, one may register an anonymous inner class OnClick Listener as follows:
  * [source,java]
- * ----
- *     {@literal @}RegisterListener(R.id.button)
- *     View.OnClickListener listener = new View.OnClickListener() {
- *         public void onClick(View v) {...}
- *     };
- * ----
+ * --
+ * {@literal @}RegisterListener(R.id.button)
+ * View.OnClickListener listener = new View.OnClickListener() {
+ *    public void onClick(View v) {...}
+ * };
+ * --
  * Likewise, one may register an injected listener the same way:
  * [source,java]
- * ----
- *     {@literal @}RegisterListener(R.id.button)
- *     {@literal @}Inject
- *     ButtonOnClickListener listener;
- * ----
+ * --
+ * {@literal @}RegisterListener(R.id.button)
+ * {@literal @}Inject
+ * ButtonOnClickListener listener;
+ * --
  *
  *
  * @author John Ericksen

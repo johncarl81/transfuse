@@ -24,13 +24,13 @@ import java.lang.annotation.Target;
  * On a `@TransfuseModule` class, defining a binding with `@Bind` defines a relationship between two related classes
  * in which for each given type the class bound to will be used during injection.
  *
- * *Example:*
  * [source,java]
- * ----
+ * .*Example:*
+ * --
  * {@literal @}TransfuseModule
  * {@literal @}Bind(type=Cat.class, to=OrangeTabby.class)
  * public class Module{}
- * ----
+ * --
  *
  * In each instance where a `Cat` is injected, an instance of the `OrangeTabby` class will be used.
  *

@@ -23,16 +23,16 @@ import java.lang.annotation.Target;
 /**
  * Allows for multiple `@Bind` bindings to be provided on a `@TransfuseModule` class.
  *
- * *Example:*
  * [source,java]
- * ----
- * {@literal @}TransfuseModule}
+ * .*Example:*
+ * --
+ * {@literal @}TransfuseModule
  * {@literal @}Bindings({
  *     {@literal @}Bind(Cat.class, OrangeTabby.class),
  *     {@literal @}Bind(Dog.class, BlackDoberman.class)
  * }
  * public class Module{}
- * ----
+ * --
  *
  * @author John Ericksen
  */

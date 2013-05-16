@@ -27,15 +27,15 @@ import java.lang.annotation.Target;
  * For instance, the following module configuration builds a `Telescope` object from a `Mirror`,
  * `Tube` and `Eyepiece` object:
  * [source,java]
- * ----
- *     {@literal @}TransfuseModule
- *     public void ModuleExample{
- *         {@literal @}Provides
- *         public Telescope buildTelescope(Mirror mirror, Tube tube, Eyepiece eyepiece){
- *             return new SchmidtCassegrainTelescope(mirror, tube, eyepiece);
- *         }
+ * --
+ * {@literal @}TransfuseModule
+ * public void ModuleExample{
+ *     {@literal @}Provides
+ *     public Telescope buildTelescope(Mirror mirror, Tube tube, Eyepiece eyepiece){
+ *        return new SchmidtCassegrainTelescope(mirror, tube, eyepiece);
  *     }
- * ----
+ * }
+ * --
  *
  *
  * Qualifier annotations as well as scoping annotations may be used in addition to the `@Provides` annotation

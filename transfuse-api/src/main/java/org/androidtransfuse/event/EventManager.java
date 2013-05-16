@@ -39,30 +39,30 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * For instance:
  * [source,java]
- * ----
- *     {@literal @}Observes}
- *     public void drink(Coffee coffee){...}
- * ----
+ * --
+ * {@literal @}Observes
+ * public void drink(Coffee coffee){...}
+ * --
  *
- * will result in Transfuse generating a the following `EventObserver}:
+ * will result in Transfuse generating a the following `EventObserver`:
  *
  * [source,java]
- * ----
- *     public class DrinkCoffeeEventObserver<Coffee>{
- *         ...
- *         void trigger(Coffee coffee){
- *             managedInstance.drink(coffee);
- *         }
+ * --
+ * public class DrinkCoffeeEventObserver<Coffee>{
+ *     //...
+ *     void trigger(Coffee coffee){
+ *         managedInstance.drink(coffee);
  *     }
- * ----
+ * }
+ * --
  *
  * and the following registration:
  *
  *
  * [source,java]
- * ----
- *     eventManager.register(Coffee.class, drinkCoffeeEventObserver);
- * ----
+ * --
+ * eventManager.register(Coffee.class, drinkCoffeeEventObserver);
+ * --
  *
  *
  * @author John Ericksen

@@ -23,13 +23,13 @@ import java.lang.annotation.*;
  * On a `@TransfuseModule` class, specifying a `@BindInterceptor` associates an interceptor annotation to
  * the `MethodInterceptor` implementation.
  *
- * *Example:*
  * [source,java]
- * ----
+ * .*Example:*
+ * --
  * {@literal @}TransfuseModule
  * {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class)
  * public class Module{}
- * ----
+ * --
  *
  * Every time a method is annotated with `@Asynchronous`, Transfuse will wrap the method with the
  * `AsynchronousMethodInterceptor` Method Interceptor.

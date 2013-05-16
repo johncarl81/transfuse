@@ -25,13 +25,13 @@ import java.lang.annotation.*;
  * relationship between a class and a `Provider`.  Each time the given type is requested to be injected, the
  * defined provider's `Provider.get()` method will be used to request an instance.
  *
- * *Example:*
  * [source,java]
- * ----
- *     {@literal @}TransfuseModule
- *     {@literal @}BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)
- *     public class Module{}
- * ----
+ * .*Example:*
+ * --
+ * {@literal @}TransfuseModule
+ * {@literal @}BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)
+ * public class Module{}
+ * --
  *
  * In each instance where a `Cat` is injected, the return value from the get() method on an instance of the
  * `OrangeTabbyProvider` class will be used.

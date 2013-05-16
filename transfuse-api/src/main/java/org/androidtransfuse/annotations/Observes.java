@@ -26,29 +26,29 @@ import java.lang.annotation.Target;
  *
  * For Instance, The following class:
  * [source,java]
- * ----
- *     public class Listener{
- *         {@literal @}Observes
- *         public void listen(Event event){...}
- *     }
- * ----
+ * --
+ * public class Listener{
+ *     {@literal @}Observes
+ *     public void listen(Event event){...}
+ * }
+ * --
  * When registered:
  * [source,java]
- * ----
- *     eventManager.register(Event.class, listener);
- * ----
+ * --
+ * eventManager.register(Event.class, listener);
+ * --
  * The `listen()` method is called when an event is triggered on the related EventManager class:
  * [source,java]
- * ----
- *     Event event = new Event();
- *     eventManager.trigger(event);
- * ----
+ * --
+ * Event event = new Event();
+ * eventManager.trigger(event);
+ * --
  *
  * Optionally, the parameter of the method may be annotated to achieve the same effect:
  * [source,java]
- * ----
- *     public void listen({@literal @}Observes} Event event){...}
- * ----
+ * --
+ * public void listen({@literal @}Observes} Event event){...}
+ * --
  *
  * Transfuse automatically performs this registration housekeeping with a default, global singleton version of the
  * `EventManager` if the annotated method appears on an instance  injected by Transfuse.

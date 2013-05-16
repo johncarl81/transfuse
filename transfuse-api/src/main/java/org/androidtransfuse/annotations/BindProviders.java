@@ -23,16 +23,16 @@ import java.lang.annotation.Target;
 /**
  * Allows for multiple `@BindProvider` declarations to be provided on a `@TransfuseModule` class.
  *
- * *Example:*
  * [source,java]
- * ----
- *     {@literal @}TransfuseModule
- *     {@literal @}BindProviders({
- *         {@literal @}BindProvider(Cat.class, OrangeTabbyProvider.class),
- *         {@literal @}BindProvider(Dog.class, BlackDobermanProvider.class)
- *     }
- *     public class Module{}
- * ----
+ * .*Example:*
+ * --
+ * {@literal @}TransfuseModule
+ * {@literal @}BindProviders({
+ *     {@literal @}BindProvider(Cat.class, OrangeTabbyProvider.class),
+ *     {@literal @}BindProvider(Dog.class, BlackDobermanProvider.class)
+ * }
+ * public class Module{}
+ * --
  *
  *
  * @author John Ericksen

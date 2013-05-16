@@ -23,16 +23,16 @@ import java.lang.annotation.Target;
 /**
  * Allows for multiple `@BindInterceptor` declarations to be provided on a `@TransfuseModule` class.
  *
- * *Example:*
  * [source,java]
- * ----
+ * .*Example:*
+ * --
  * {@literal @}TransfuseModule
  * {@literal @}BindInterceptors({
  *     {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class),
  *     {@literal @}BindInterceptor(UIThread.class, UIThreadMethodInterceptor.class)
  *  }
  * public class Module{}
- * ----
+ * --
  *
  * @author John Ericksen
  */

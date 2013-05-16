@@ -26,16 +26,17 @@ import java.lang.annotation.Target;
  * Component.
  *
  * The following example demonstrates an Activity as the default home screen of an application available on the Launcher:
- * *Example:*
+ *
  * [source,java]
- * ----
- *     {@literal @}Activity
- *     {@literal @}IntentFilter({
- *         {@literal @}Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
- *         {@literal @}Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
- *     })
- *     public class Main {}
- * ----
+ * .*Example:*
+ * --
+ * {@literal @}Activity
+ * {@literal @}IntentFilter({
+ *     {@literal @}Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
+ *     {@literal @}Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
+ * })
+ * public class Main {}
+ * --
  *
  *
  * @author John Ericksen
