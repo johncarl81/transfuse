@@ -26,8 +26,8 @@ import java.lang.annotation.*;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}TransfuseModule
- * {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class)
+ * @TransfuseModule
+ * @BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class)
  * public class Module{}
  * --
  *

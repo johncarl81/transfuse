@@ -26,10 +26,10 @@ import java.lang.annotation.Target;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}TransfuseModule
- * {@literal @}BindInterceptors({
- *     {@literal @}BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class),
- *     {@literal @}BindInterceptor(UIThread.class, UIThreadMethodInterceptor.class)
+ * @TransfuseModule
+ * @BindInterceptors({
+ *     @BindInterceptor(Asynchronous.class, AsynchronousMethodInterceptor.class),
+ *     @BindInterceptor(UIThread.class, UIThreadMethodInterceptor.class)
  *  }
  * public class Module{}
  * --

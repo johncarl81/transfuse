@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}Factory
+ * @Factory
  * public interface FactoryExample{
  *     BuildMe build();
  * }
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * Transfuse automatically binds the generated implementation to the interface:
  * [source,java]
  * --
- * {@literal @}Inject
+ * @Inject
  * FactoryExample factory;
  * --
  *

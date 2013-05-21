@@ -26,10 +26,10 @@ import java.lang.annotation.Target;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}TransfuseModule
- * {@literal @}Bindings({
- *     {@literal @}Bind(Cat.class, OrangeTabby.class),
- *     {@literal @}Bind(Dog.class, BlackDoberman.class)
+ * @TransfuseModule
+ * @Bindings({
+ *     @Bind(Cat.class, OrangeTabby.class),
+ *     @Bind(Dog.class, BlackDoberman.class)
  * }
  * public class Module{}
  * --

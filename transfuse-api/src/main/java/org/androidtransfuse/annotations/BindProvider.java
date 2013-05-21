@@ -28,8 +28,8 @@ import java.lang.annotation.*;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}TransfuseModule
- * {@literal @}BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)
+ * @TransfuseModule
+ * @BindProvider(type=Cat.class, to=OrangeTabbyProvider.class)
  * public class Module{}
  * --
  *

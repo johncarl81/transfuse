@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  * [source,java]
  * --
  * public class Listener{
- *     {@literal @}Observes
+ *     @Observes
  *     public void listen(Event event){...}
  * }
  * --
@@ -47,7 +47,7 @@ import java.lang.annotation.Target;
  * Optionally, the parameter of the method may be annotated to achieve the same effect:
  * [source,java]
  * --
- * public void listen({@literal @}Observes} Event event){...}
+ * public void listen(@Observes} Event event){...}
  * --
  *
  * Transfuse automatically performs this registration housekeeping with a default, global singleton version of the

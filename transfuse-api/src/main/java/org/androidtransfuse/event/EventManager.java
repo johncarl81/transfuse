@@ -40,7 +40,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * For instance:
  * [source,java]
  * --
- * {@literal @}Observes
+ * @Observes
  * public void drink(Coffee coffee){...}
  * --
  *

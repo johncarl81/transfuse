@@ -28,9 +28,9 @@ import java.lang.annotation.Target;
  * `Tube` and `Eyepiece` object:
  * [source,java]
  * --
- * {@literal @}TransfuseModule
+ * @TransfuseModule
  * public void ModuleExample{
- *     {@literal @}Provides
+ *     @Provides
  *     public Telescope buildTelescope(Mirror mirror, Tube tube, Eyepiece eyepiece){
  *        return new SchmidtCassegrainTelescope(mirror, tube, eyepiece);
  *     }

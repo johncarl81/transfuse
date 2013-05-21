@@ -120,6 +120,7 @@
                         <version>0.1.0-SNAPSHOT</version>
                     </docletArtifact>
                     <linksource>true</linksource>
+                    <additionalparam>-include-basedir ${project.basedir}</additionalparam>
                 </configuration>
             </plugin>
             <plugin>

@@ -27,8 +27,8 @@ import java.lang.annotation.Target;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}TransfuseModule
- * {@literal @}Bind(type=Cat.class, to=OrangeTabby.class)
+ * @TransfuseModule
+ * @Bind(type=Cat.class, to=OrangeTabby.class)
  * public class Module{}
  * --
  *

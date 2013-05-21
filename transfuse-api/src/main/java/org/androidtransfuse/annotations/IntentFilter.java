@@ -30,10 +30,10 @@ import java.lang.annotation.Target;
  * [source,java]
  * .*Example:*
  * --
- * {@literal @}Activity
- * {@literal @}IntentFilter({
- *     {@literal @}Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
- *     {@literal @}Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
+ * @Activity
+ * @IntentFilter({
+ *     @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
+ *     @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
  * })
  * public class Main {}
  * --
