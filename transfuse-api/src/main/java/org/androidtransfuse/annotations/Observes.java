@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 
 /**
  * Defines a method to observe an event triggered via the `EventManager` class when registered.  The annotated
- * method must have one parameter which represents the type of event to be observed.
+ * method must have one and only one parameter which represents the type of event to be observed.
  *
  * For Instance, The following class:
  * [source,java]

@@ -43,7 +43,6 @@ import static java.lang.annotation.ElementType.*;
  * ButtonOnClickListener listener;
  * --
  *
- *
  * @author John Ericksen
  */
 @Target({FIELD, TYPE, METHOD})

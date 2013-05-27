@@ -20,6 +20,9 @@ import org.androidtransfuse.scope.Scope;
 import java.lang.annotation.*;
 
 /**
+ * Within a `@TransfuseModule` configuration, this annotation defines a `Scope` object to be used along with a
+ * declaring annotation.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)

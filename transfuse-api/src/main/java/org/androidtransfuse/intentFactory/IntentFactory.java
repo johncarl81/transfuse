@@ -22,7 +22,7 @@ import android.content.Intent;
 import javax.inject.Inject;
 
 /**
- * Factory for building an Android `Intent} from an input IntentStrategy.
+ * Factory for building an Android `Intent` from an input `IntentStrategy`.
  *
  * @author John Ericksen
  */

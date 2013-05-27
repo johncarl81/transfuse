@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates other annotations to be used as Event Listeners.
+ * Annotates other annotations to be used as Lifecycle Event Listeners.
  *
  * @author John Ericksen
  */

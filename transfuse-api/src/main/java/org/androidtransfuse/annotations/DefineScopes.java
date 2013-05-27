@@ -21,6 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Defines multiple `@Scope` configurations within one `@TransfuseModule` configuration.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)

@@ -23,6 +23,12 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
+/**
+ * Qualifier annotation to identify a scope to be injected.  To be used along with the `@Inject` annotation.
+ * Injected scope must be predefined in the `@TransfuseModule`.
+ *
+ * @author John Ericksen
+ */
 @Target({METHOD, CONSTRUCTOR, FIELD, PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier

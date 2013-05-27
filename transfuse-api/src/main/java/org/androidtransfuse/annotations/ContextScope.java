@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * Defines the scope of the annotated Type or `@Provides` type to be a Context-Scoped object.  This means that
- * there will be one instance of the given type injected during the lifecycle of a Context.
+ * there will be one instance of the given type injected during the lifecycle of an Android `Context`.
  */
 @Scope
 @Target({ElementType.TYPE, ElementType.METHOD})

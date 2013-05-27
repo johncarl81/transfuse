@@ -21,6 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Manually declares a class to be analyzed by Transfuse.  To be used when a class is not actively being compiled with
+ * the current source, for example: already compiled libraries.
+ *
+ * Must be declared along with a `@TransfuseModule` class.
+ *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)

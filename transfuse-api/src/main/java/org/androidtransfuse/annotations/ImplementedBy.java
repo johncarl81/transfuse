@@ -20,6 +20,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Defines, at the class level, a default implmenetation to be used when injecting the annotated class.
+ *
+ * For Instance, defining the following:
+ * [source,java]
+ * --
+ * @ImplementedBy(Albuquerque.class)
+ * public interface City{}
+ * --
+ * will result in an instance of `Albuquerque` to be injected for every City requested:
+ * [source,java]
+ * --
+ * @Inject
+ * City city; // albuquerque
+ * --
+ *
+ * @author John Ericksen
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ImplementedBy {

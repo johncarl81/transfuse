@@ -38,7 +38,6 @@ import java.lang.annotation.Target;
  * public class Main {}
  * --
  *
- *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
