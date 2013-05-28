@@ -52,6 +52,10 @@ public class TypeInvocationHelper {
         }
     }
 
+    public JExpression coerceType(Class targetType, TypedExpression typedExpression) {
+        return coerceType(astClassFactory.getType(targetType), typedExpression);
+    }
+
     public JExpression coerceType(ASTType targetType, TypedExpression typedExpression) {
         if (targetType.equals(typedExpression.getType())) {
             return typedExpression.getExpression();

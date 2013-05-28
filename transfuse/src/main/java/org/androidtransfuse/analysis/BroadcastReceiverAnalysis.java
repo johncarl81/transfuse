@@ -114,6 +114,15 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
     private void setupManifest(String name, BroadcastReceiver annotation, ASTType astType) {
 
+        Receiver manifestReceiver = buildReceiver(name, annotation);
+
+        manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(astType));
+        manifestReceiver.setMetaData(metaDataBuilder.buildMetaData(astType));
+
+        manifestManager.addBroadcastReceiver(manifestReceiver);
+    }
+    
+    protected Receiver buildReceiver(String name, BroadcastReceiver annotation){
         Receiver manifestReceiver = receiverProvider.get();
 
         manifestReceiver.setName(name);
@@ -124,10 +133,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         manifestReceiver.setEnabled(checkDefault(annotation.enabled(), true));
         manifestReceiver.setExported(checkDefault(annotation.exported(), true));
 
-        manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(astType));
-        manifestReceiver.setMetaData(metaDataBuilder.buildMetaData(astType));
-
-        manifestManager.addBroadcastReceiver(manifestReceiver);
+        return manifestReceiver;
     }
 
     private PackageClass buildPackageClass(ASTType astType, String className) {
@@ -147,7 +153,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
         @Override
         public void run(BroadcastReceiver annotation) {
-            //accessing this throws an exception, caught in TypeMiirrorUtil
+            //accessing this throws an exception, caught in TypeMirrorUtil
             annotation.type();
         }
     }

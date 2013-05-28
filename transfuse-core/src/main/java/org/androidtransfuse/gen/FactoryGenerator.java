@@ -97,7 +97,6 @@ public class FactoryGenerator {
 
             constructor.body().assign(scopesField, scopesParam);
 
-            //default constructor todo: use non-default to propogate scopes
             JMethod defaultConstructor = implClass.constructor(JMod.PUBLIC);
 
             defaultConstructor.body().assign(scopesField, JExpr._new(codeModel.ref(Scopes.class)));

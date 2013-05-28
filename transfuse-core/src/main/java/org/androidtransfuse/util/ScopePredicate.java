@@ -15,38 +15,18 @@
  */
 package org.androidtransfuse.util;
 
-import com.google.common.base.Predicate;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 
 import javax.inject.Inject;
 import javax.inject.Scope;
-import java.util.Collection;
 
 /**
  * @author John Ericksen
  */
-public class ScopePredicate implements Predicate<ASTAnnotation> {
-
-    private final ASTType scopeType;
+public class ScopePredicate extends AnnotatedPredicate {
 
     @Inject
     public ScopePredicate(ASTClassFactory astClassFactory){
-        scopeType = astClassFactory.getType(Scope.class);
+        super(astClassFactory, Scope.class);
     }
-
-    @Override
-    public boolean apply(ASTAnnotation input) {
-        Collection<ASTAnnotation> annotations = input.getASTType().getAnnotations();
-
-        for (ASTAnnotation astAnnotation : annotations) {
-            if(astAnnotation.getASTType().equals(scopeType)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 }

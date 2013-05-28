@@ -15,39 +15,20 @@
  */
 package org.androidtransfuse.util;
 
-import com.google.common.base.Predicate;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 
 import javax.inject.Inject;
 import javax.inject.Qualifier;
-import java.util.Collection;
 
 /**
  * Matches all annotations annotated with @Qualifier
  *
  * @author John Ericksen
  */
-public class QualifierPredicate implements Predicate<ASTAnnotation> {
-
-    private final ASTType qualifierType;
+public class QualifierPredicate extends AnnotatedPredicate {
 
     @Inject
     public QualifierPredicate(ASTClassFactory astClassFactory){
-        qualifierType = astClassFactory.getType(Qualifier.class);
-    }
-
-    @Override
-    public boolean apply(ASTAnnotation input) {
-        Collection<ASTAnnotation> annotations = input.getASTType().getAnnotations();
-
-        for (ASTAnnotation astAnnotation : annotations) {
-            if(astAnnotation.getASTType().equals(qualifierType)){
-                return true;
-            }
-        }
-
-        return false;
+        super(astClassFactory, Qualifier.class);
     }
 }

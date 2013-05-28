@@ -15,14 +15,14 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
+import com.sun.codemodel.*;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.ScopesGenerator;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
@@ -36,22 +36,32 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InjectionNode layoutHandlerInjectionNode;
     private final Logger logger;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
                                 /*@Assisted*/ InjectionNode layoutHandlerInjectionNode,
-                                Logger logger) {
+                                Logger logger,
+                                JCodeModel codeModel,
+                                UniqueVariableNamer namer) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;
         this.logger = logger;
+        this.codeModel = codeModel;
+        this.namer = namer;
     }
 
     @Override
     public void buildLayoutCall(JDefinedClass definedClass, JBlock block) {
 
         try {
-            //todo: wire in scopes
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, null);
+            // Scopes instance
+            JClass scopesRef = codeModel.ref(Scopes.class);
+            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
+
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, scopesVar);
 
             //LayoutHandlerDelegate.invokeLayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();

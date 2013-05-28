@@ -115,7 +115,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             fragmentClassName = buildPackageClass(astType, fragmentAnnotation.name());
 
             Layout layoutAnnotation = astType.getAnnotation(Layout.class);
-            //todo: fragment specific layout handler
 
             TypeMirror type = getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
 

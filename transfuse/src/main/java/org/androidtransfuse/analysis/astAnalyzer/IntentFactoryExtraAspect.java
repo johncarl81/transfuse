@@ -41,7 +41,6 @@ public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAs
     }
 
     public String getName() {
-        //todo: require simple extra names for Intent Factory parameters
         return name;
     }
 

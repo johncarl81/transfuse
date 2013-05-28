@@ -21,10 +21,13 @@ import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.manifest.Receiver;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.inject.Inject;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author John Ericksen
@@ -33,27 +36,45 @@ import javax.inject.Inject;
 public class BroadcastReceiverAnalysisTest {
 
     @Inject
-    private BroadcastReceiverAnalysis analysis;
+    private BroadcastReceiverAnalysis analyzer;
     @Inject
     private ASTClassFactory astClassFactory;
-    private ASTType broadcastReceiverType;
-
-    @BroadcastReceiver
-    public class BroadcastReceiverTarget {
-    }
 
     @Before
     public void setup() {
         Bootstraps.inject(this);
-
-        broadcastReceiverType = astClassFactory.getType(BroadcastReceiverTarget.class);
     }
 
     @Test
     public void testAnalysis() {
-        ComponentDescriptor analyze = analysis.analyze(broadcastReceiverType);
+        @BroadcastReceiver
+        class BroadcastReceiverTarget {
+        }
 
-        //todo:fill in
+        ASTType broadcastReceiverType = astClassFactory.getType(BroadcastReceiverTarget.class);
+        ComponentDescriptor analysis = analyzer.analyze(broadcastReceiverType);
+
+        assertEquals(android.content.BroadcastReceiver.class.getName(), analysis.getType());
+        assertEquals("org.androidtransfuse.analysis", analysis.getPackageClass().getPackage());
+        assertEquals("BroadcastReceiverAnalysisTest$1BroadcastReceiverTargetBroadcastReceiver", analysis.getPackageClass().getClassName());
+    }
+
+    @Test
+    public void testManifestEntry(){
+
+        @BroadcastReceiver(label = "label", permission = "permission", process = "process", icon = "icon", enabled = false, exported = false)
+        class BroadcastReceiverTarget {
+        }
+
+        Receiver receiver = analyzer.buildReceiver("name", BroadcastReceiverTarget.class.getAnnotation(BroadcastReceiver.class));
+
+        assertEquals("name", receiver.getName());
+        assertEquals("label", receiver.getLabel());
+        assertEquals("permission", receiver.getPermission());
+        assertEquals("process", receiver.getProcess());
+        assertEquals("icon", receiver.getIcon());
+        assertEquals(false, receiver.getEnabled()); //false is the non-default case
+        assertEquals(false, receiver.getExported()); //false is the non-default case
     }
 
 }

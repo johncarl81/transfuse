@@ -104,7 +104,6 @@ public class ParcelableGenerator {
                     buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, flags, propertyMutator, wrapped);
                 }
             } else {
-                //todo: inject ParcelConverter?
                 JClass converterType = codeModel.ref(parcelableDescriptor.getParcelConverterType().getName());
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
                         namer.generateName(parcelableDescriptor.getParcelConverterType()), JExpr._new(converterType));

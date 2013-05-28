@@ -19,6 +19,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
+import org.androidtransfuse.gen.invocationBuilder.TypeInvocationHelper;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
@@ -40,18 +41,21 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     private final TypedExpressionFactory typedExpressionFactory;
     private final InjectionNode contextScopeHolder;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
+    private final TypeInvocationHelper invocationHelper;
 
     @Inject
     public ContextScopeVariableBuilder(/*@Assisted*/ InjectionNode contextScopeHolder,
                                        JCodeModel codeModel,
                                        ProviderGenerator providerGenerator,
                                        TypedExpressionFactory typedExpressionFactory,
-                                       InjectionExpressionBuilder injectionExpressionBuilder) {
+                                       InjectionExpressionBuilder injectionExpressionBuilder,
+                                       TypeInvocationHelper invocationHelper) {
         this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
         this.typedExpressionFactory = typedExpressionFactory;
         this.contextScopeHolder = contextScopeHolder;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
+        this.invocationHelper = invocationHelper;
     }
 
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
@@ -63,8 +67,8 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
         TypedExpression contextScopeHolderExpression = injectionExpressionBuilder.buildVariable(injectionBuilderContext, this.contextScopeHolder);
-        //todo:coerce type?
-        JExpression cast = JExpr.cast(codeModel.ref(ContextScopeHolder.class), contextScopeHolderExpression.getExpression());
+
+        JExpression cast = invocationHelper.coerceType(ContextScopeHolder.class, contextScopeHolderExpression);
         JExpression scopeVar = cast.invoke(ContextScopeHolder.GET_SCOPE);
 
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(buildScopeKey(injectionNode)).arg(provider);
