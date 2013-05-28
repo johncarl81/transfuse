@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c94734" href="./TransactionProcessorComposite.html" title="org.androidtransfuse.processor.TransactionProcessorComposite" alt="" coords="16,118,269,143"/>
-<area shape="rect" id="c94737" href="./TransactionProcessorChain.html" title="org.androidtransfuse.processor.TransactionProcessorChain" alt="" coords="315,118,496,143"/>
-<area shape="rect" id="c94754" href="./TransactionProcessor.html" title="org.androidtransfuse.processor.TransactionProcessor" alt="" coords="550,11,741,53"/>
-<area shape="rect" id="c94764" href="./TransactionProcessorPredefined.html" title="org.androidtransfuse.processor.TransactionProcessorPredefined" alt="" coords="541,118,750,143"/>
-<area shape="rect" id="c94768" href="./TransactionProcessorPool.html" title="org.androidtransfuse.processor.TransactionProcessorPool" alt="" coords="794,118,1011,143"/>
-<area shape="rect" id="c94772" href="./TransactionProcessorChannel.html" title="org.androidtransfuse.processor.TransactionProcessorChannel" alt="" coords="1056,118,1320,143"/>
-</map>

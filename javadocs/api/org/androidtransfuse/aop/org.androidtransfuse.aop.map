@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c1004" href="./AsynchronousMethodInterceptor.html" title="org.androidtransfuse.aop.AsynchronousMethodInterceptor" alt="" coords="15,19,225,45"/>
-<area shape="rect" id="c1005" href="./UIThreadMethodInterceptor.html" title="org.androidtransfuse.aop.UIThreadMethodInterceptor" alt="" coords="269,19,449,45"/>
-<area shape="rect" id="c1006" href="./MethodInterceptorChain.html" title="org.androidtransfuse.aop.MethodInterceptorChain" alt="" coords="493,19,653,45"/>
-<area shape="rect" id="c1007" href="./MethodInterceptorChain.MethodExecution.html" title="org.androidtransfuse.aop.MethodInterceptorChain.MethodExecution" alt="" coords="698,11,819,53"/>
-</map>

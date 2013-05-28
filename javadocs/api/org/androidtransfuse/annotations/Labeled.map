@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c2604" href="./Labeled.html" title="org.androidtransfuse.annotations.Labeled" alt="" coords="375,11,460,53"/>
-<area shape="rect" id="c2619" href="./LaunchMode.html" title="org.androidtransfuse.annotations.LaunchMode" alt="" coords="15,113,121,154"/>
-<area shape="rect" id="c2620" href="./WindowSoftInputMode.html" title="org.androidtransfuse.annotations.WindowSoftInputMode" alt="" coords="165,113,318,154"/>
-<area shape="rect" id="c2629" href="./ConfigChanges.html" title="org.androidtransfuse.annotations.ConfigChanges" alt="" coords="362,113,473,154"/>
-<area shape="rect" id="c2630" href="./UIOptions.html" title="org.androidtransfuse.annotations.UIOptions" alt="" coords="517,113,622,154"/>
-<area shape="rect" id="c2651" href="./ScreenOrientation.html" title="org.androidtransfuse.annotations.ScreenOrientation" alt="" coords="667,113,792,154"/>
-</map>

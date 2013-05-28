@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c64697" href="./ASTMethodUniqueSignatureDecorator.html" title="org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator" alt="" coords="16,219,259,245"/>
-<area shape="rect" id="c64703" href="./ASTBase.html" title="org.androidtransfuse.adapter.ASTBase" alt="" coords="329,11,415,53"/>
-<area shape="rect" id="c64706" href="./ASTMethod.html" title="org.androidtransfuse.adapter.ASTMethod" alt="" coords="327,113,417,154"/>
-<area shape="rect" id="c64718" href="./element/ASTElementMethod.html" title="org.androidtransfuse.adapter.element.ASTElementMethod" alt="" coords="303,219,441,245"/>
-<area shape="rect" id="c64737" href="./classes/ASTClassMethod.html" title="org.androidtransfuse.adapter.classes.ASTClassMethod" alt="" coords="485,219,609,245"/>
-</map>

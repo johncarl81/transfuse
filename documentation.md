@@ -843,6 +843,5 @@ public class Example extends Activity {
 [Main Javadocs][3]
 
 [1]: http://www.jcp.org/en/jsr/detail?id=330
-[2]: javadocs/api/index.html
-[3]: javadocs/main/index.html
-
+[2]: https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse-api/{{site.currentVersion}}/transfuse-api-{{site.currentVersion}}-javadoc.jar/!/index.html
+[3]: https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse/{{site.currentVersion}}/transfuse-{{site.currentVersion}}-javadoc.jar/!/index.html

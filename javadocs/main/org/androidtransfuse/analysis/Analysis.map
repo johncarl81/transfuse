@@ -1,9 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c36594" href="./Analysis.html" title="org.androidtransfuse.analysis.Analysis" alt="" coords="515,11,610,53"/>
-<area shape="rect" id="c36595" href="./FragmentAnalysis.html" title="org.androidtransfuse.analysis.FragmentAnalysis" alt="" coords="16,118,141,143"/>
-<area shape="rect" id="c36596" href="./BroadcastReceiverAnalysis.html" title="org.androidtransfuse.analysis.BroadcastReceiverAnalysis" alt="" coords="187,118,368,143"/>
-<area shape="rect" id="c36599" href="./ParcelableAnalysis.html" title="org.androidtransfuse.analysis.ParcelableAnalysis" alt="" coords="413,118,545,143"/>
-<area shape="rect" id="c36600" href="./ActivityAnalysis.html" title="org.androidtransfuse.analysis.ActivityAnalysis" alt="" coords="589,118,704,143"/>
-<area shape="rect" id="c36604" href="./ApplicationAnalysis.html" title="org.androidtransfuse.analysis.ApplicationAnalysis" alt="" coords="749,118,883,143"/>
-<area shape="rect" id="c36606" href="./ServiceAnalysis.html" title="org.androidtransfuse.analysis.ServiceAnalysis" alt="" coords="928,118,1043,143"/>
-</map>

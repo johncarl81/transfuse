@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="c9876" href="./ServiceIntentFactoryStrategy.html" title="org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy" alt="" coords="15,214,206,239"/>
-<area shape="rect" id="c9877" href="./IntentFactoryStrategy.html" title="org.androidtransfuse.intentFactory.IntentFactoryStrategy" alt="" coords="155,11,301,53"/>
-<area shape="rect" id="c9880" href="./AbstractIntentFactoryStrategy.html" title="org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy" alt="" coords="130,118,326,143"/>
-<area shape="rect" id="c9881" href="./ActivityIntentFactoryStrategy.html" title="org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy" alt="" coords="250,214,441,239"/>
-</map>
