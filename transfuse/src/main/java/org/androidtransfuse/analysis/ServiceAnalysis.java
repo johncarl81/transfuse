@@ -151,6 +151,15 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     private void setupManifest(String name, Service serviceAnnotation, ASTType type) {
+        org.androidtransfuse.model.manifest.Service manifestService = buildService(name, serviceAnnotation);
+
+        manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+        manifestService.setMetaData(metadataBuilder.buildMetaData(type));
+
+        manifestManager.addService(manifestService);
+    }
+
+    protected org.androidtransfuse.model.manifest.Service buildService(String name, Service serviceAnnotation){
         org.androidtransfuse.model.manifest.Service manifestService = manifestServiceProvider.get();
 
         manifestService.setName(name);
@@ -158,12 +167,10 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         manifestService.setExported(checkDefault(serviceAnnotation.exported(), true));
         manifestService.setIcon(checkBlank(serviceAnnotation.icon()));
         manifestService.setLabel(checkBlank(serviceAnnotation.label()));
-        manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-        manifestService.setMetaData(metadataBuilder.buildMetaData(type));
         manifestService.setPermission(checkBlank(serviceAnnotation.permission()));
         manifestService.setProcess(checkBlank(serviceAnnotation.process()));
 
-        manifestManager.addService(manifestService);
+        return manifestService;
     }
 
     private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType, AnalysisContext context) {

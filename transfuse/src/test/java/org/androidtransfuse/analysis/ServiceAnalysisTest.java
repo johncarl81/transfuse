@@ -26,6 +26,8 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author John Ericksen
  */
@@ -36,24 +38,39 @@ public class ServiceAnalysisTest {
     private ServiceAnalysis serviceAnalysis;
     @Inject
     private ASTClassFactory astClassFactory;
-    private ASTType serviceTargetType;
-
-    @Service
-    public class ServiceAnalysisTarget {
-    }
 
     @Before
     public void setup() {
         Bootstraps.inject(this);
-
-        serviceTargetType = astClassFactory.getType(ServiceAnalysisTarget.class);
     }
 
     @Test
     public void testAnalysis() {
+        @Service
+        class ServiceAnalysisTarget {}
+
+        ASTType serviceTargetType = astClassFactory.getType(ServiceAnalysisTarget.class);
+
         ComponentDescriptor componentDescriptor = serviceAnalysis.analyze(serviceTargetType);
 
-        //todo:fill in
+        assertEquals(android.app.Service.class.getName(), componentDescriptor.getType());
+        assertEquals("org.androidtransfuse.analysis", componentDescriptor.getPackageClass().getPackage());
+        assertEquals("ServiceAnalysisTest$1ServiceAnalysisTargetService", componentDescriptor.getPackageClass().getClassName());
     }
 
+    @Test
+    public void testManifestEntry(){
+        @Service(enabled = false, exported = false, icon = "icon", label = "label", permission = "permission", process = "process")
+        class ServiceAnalysisTarget{}
+
+        org.androidtransfuse.model.manifest.Service service = serviceAnalysis.buildService("name", ServiceAnalysisTarget.class.getAnnotation(Service.class));
+
+        assertEquals("name", service.getName());
+        assertEquals("label", service.getLabel());
+        assertEquals("permission", service.getPermission());
+        assertEquals("process", service.getProcess());
+        assertEquals("icon", service.getIcon());
+        assertEquals(false, service.getEnabled()); //false is the non-default case
+        assertEquals(false, service.getExported()); //false is the non-default case
+    }
 }
