@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -77,9 +78,8 @@ public class PreferenceVariableBuilder implements VariableBuilder {
             PrefGetBuilder getBuilder = accessorMethods.get(preferenceType);
             return preferences.invoke(getBuilder.getName()).arg(preferenceName).arg(getBuilder.getLit());
         }
-        //todo: throw exception?
-        return preferences;
 
+        throw new TransfuseAnalysisException("Unable to find preference accessor method for " + preferenceType);
     }
 
     private static final class PrefGetBuilder {

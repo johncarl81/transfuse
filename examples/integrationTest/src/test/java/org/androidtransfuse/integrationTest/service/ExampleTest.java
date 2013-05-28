@@ -83,7 +83,7 @@ public class ExampleTest {
     @Ignore
     public void testOnTrimMemory(){
         assertFalse(example.isOnTrimMemoryCalled());
-        //todo:exampleService.onTrimMemory();
+        //exampleService.onTrimMemory();
         assertTrue(example.isOnTrimMemoryCalled());
     }
 
@@ -91,7 +91,7 @@ public class ExampleTest {
     @Ignore
     public void testOnTaskRemoved(){
         assertFalse(example.isOnTaskRemoved());
-        //todo:exampleService.onTaskRemoved();
+        //exampleService.onTaskRemoved();
         assertTrue(example.isOnTaskRemoved());
     }
 

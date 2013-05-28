@@ -182,6 +182,15 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     }
 
     private void setupManifest(String name, Activity activityAnnotation, ASTType type) {
+        org.androidtransfuse.model.manifest.Activity manifestActivity = buildManifestEntry(name, activityAnnotation);
+
+        manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+        manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
+
+        manifestManager.addActivity(manifestActivity);
+    }
+
+    protected org.androidtransfuse.model.manifest.Activity buildManifestEntry(String name, Activity activityAnnotation) {
         org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
 
         manifestActivity.setName(name);
@@ -207,10 +216,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         manifestActivity.setTheme(checkBlank(activityAnnotation.theme()));
         manifestActivity.setUiOptions(checkDefault(activityAnnotation.uiOptions(), UIOptions.NONE));
         manifestActivity.setWindowSoftInputMode(checkDefault(activityAnnotation.windowSoftInputMode(), WindowSoftInputMode.STATE_UNSPECIFIED));
-        manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-        manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
 
-        manifestManager.addActivity(manifestActivity);
+        return manifestActivity;
     }
 
     private String concatenate(ConfigChanges[] configChanges) {

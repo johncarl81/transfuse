@@ -67,7 +67,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitTypeVariable(TypeVariable typeVariable, Void v) {
-        return new ASTEmptyType(typeVariable.toString());
+        return typeVariable.getUpperBound().accept(this, null);
     }
 
     @Override

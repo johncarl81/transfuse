@@ -191,13 +191,7 @@ public class VirtualProxyGenerator {
         // public <type> <method_name> ( <parameters...>)
         JType returnType;
         if (method.getReturnType() != null) {
-            //todo: fix this "no type"
-            if(method.getReturnType().getClass().equals(ASTEmptyType.class)){
-                returnType = codeModel.ref(Object.class);
-            }
-            else{
-                returnType = codeModel.ref(method.getReturnType().getName());
-            }
+            returnType = codeModel.ref(method.getReturnType().getName());
         } else {
             returnType = codeModel.VOID;
         }

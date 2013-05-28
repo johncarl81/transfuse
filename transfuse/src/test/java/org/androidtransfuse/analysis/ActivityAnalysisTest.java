@@ -18,19 +18,10 @@ package org.androidtransfuse.analysis;
 import android.app.Activity;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.targets.MockActivityDelegate;
-import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
-import org.androidtransfuse.config.ConfigurationScope;
-import org.androidtransfuse.config.EnterableScope;
-import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.manifest.Application;
-import org.androidtransfuse.model.manifest.Manifest;
-import org.androidtransfuse.model.r.RResource;
-import org.androidtransfuse.scope.ScopeKey;
-import org.androidtransfuse.util.EmptyRResource;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,25 +42,10 @@ public class ActivityAnalysisTest {
     private ActivityAnalysis activityAnalysis;
     @Inject
     private ASTClassFactory astClassFactory;
-    @Inject
-    @ScopeReference(ConfigurationScope.class)
-    private EnterableScope configurationScope;
 
     @Before
     public void setup() {
         Bootstraps.inject(this);
-
-        Manifest manifest = new Manifest();
-        manifest.getApplications().add(new Application());
-
-        configurationScope.seed(ScopeKey.of(RResource.class), new EmptyRResource());
-        configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
-        configurationScope.enter();
-    }
-
-    @After
-    public void tearDown() {
-        configurationScope.exit();
     }
 
     @Test
@@ -79,6 +55,42 @@ public class ActivityAnalysisTest {
 
         assertEquals(Activity.class.getName(), activityDescriptor.getType());
 
-        //todo:fill in
+        assertEquals(MockActivityDelegate.class.getPackage().getName(), activityDescriptor.getPackageClass().getPackage());
+    }
+
+    @Test
+    public void testManifestEntry(){
+        @org.androidtransfuse.annotations.Activity(label = "label", process = "process", icon = "icon", permission = "permission", exported = Exported.FALSE,
+                allowTaskReparenting = true, alwaysRetainTaskState = true, clearTaskOnLaunch = true, configChanges = {ConfigChanges.NAVIGATION, ConfigChanges.KEYBOARD}, enabled = false,
+                excludeFromRecents = true, finishOnTaskLaunch = true, hardwareAccelerated = true, launchMode = LaunchMode.SINGLE_INSTANCE, multiprocess = true,
+                noHistory = true, screenOrientation = ScreenOrientation.LANDSCAPE, stateNotNeeded = true, taskAffinity = "taskAffinity", theme = "theme",
+                uiOptions = UIOptions.SPLIT_ACTION_BAR_WHEN_NARROW, windowSoftInputMode = WindowSoftInputMode.ADJUST_RESIZE)
+        class ActivityAnalysisTarget {}
+
+        org.androidtransfuse.model.manifest.Activity activity = activityAnalysis.buildManifestEntry("name", ActivityAnalysisTarget.class.getAnnotation(org.androidtransfuse.annotations.Activity.class));
+
+        assertEquals("name", activity.getName());
+        assertEquals("label", activity.getLabel());
+        assertEquals("process", activity.getProcess());
+        assertEquals("icon", activity.getIcon());
+        assertEquals("permission", activity.getPermission());
+        assertEquals(false, activity.getExported());
+        assertEquals(true, activity.getAllowTaskReparenting());
+        assertEquals(true, activity.getAlwaysRetainTaskState());
+        assertEquals(true, activity.getClearTaskOnLaunch());
+        assertEquals("navigation|keyboard", activity.getConfigChanges());
+        assertEquals(false, activity.getEnabled());
+        assertEquals(true, activity.getExcludeFromRecents());
+        assertEquals(true, activity.getFinishOnTaskLaunch());
+        assertEquals(true, activity.getHardwareAccelerated());
+        assertEquals(LaunchMode.SINGLE_INSTANCE, activity.getLaunchMode());
+        assertEquals(true, activity.getMultiprocess());
+        assertEquals(true, activity.getNoHistory());
+        assertEquals(ScreenOrientation.LANDSCAPE, activity.getScreenOrientation());
+        assertEquals(true, activity.getStateNotNeeded());
+        assertEquals("taskAffinity", activity.getTaskAffinity());
+        assertEquals("theme", activity.getTheme());
+        assertEquals(UIOptions.SPLIT_ACTION_BAR_WHEN_NARROW, activity.getUiOptions());
+        assertEquals(WindowSoftInputMode.ADJUST_RESIZE, activity.getWindowSoftInputMode());
     }
 }
