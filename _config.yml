@@ -1,8 +1,8 @@
-# jekyll configuration
+jekyll configuration
 
 title: "Transfuse"
 pygments: true
 
-currentVersion: "0.1.2"
+currentVersion: "0.2.0"
 
 # end of configuration
