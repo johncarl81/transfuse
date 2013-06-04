@@ -38,7 +38,7 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
 
         //built in specialty qualifiers
         builder.given(Extra.class).requires(Inject.class, "@Extra annotation must be accompanied by @Inject");
-        builder.given(Extra.class).parameterMatches("value", "^[a-zA-Z][a-zA-Z0-9]*$", "@Extra value parameter must follow Java Bean syntax");
+        builder.given(Extra.class).parameterMatches("value", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Extra value parameter must follow Java Bean syntax");
         builder.given(View.class).requires(Inject.class, "@View annotation must be accompanied by @Inject");
         builder.given(Preference.class).requires(Inject.class, "@Preference annotation must be accompanied by @Inject");
         builder.given(Resource.class).requires(Inject.class, "@Resource annotation must be accompanied by @Inject");
@@ -49,11 +49,11 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
         builder.given(LayoutHandler.class).requires(Arrays.asList(Activity.class, Fragment.class), "@LayoutHandler annotation must be accompanied by @Activity");
         builder.given(MetaData.class).requires(Activity.class, "@MetaData annotation must be accompanied by @Activity");
         builder.given(MetaDataSet.class).requires(Activity.class, "@MetaDataSet annotation must be accompanied by @Activity");
-        builder.given(Activity.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Activity name parameter must follow Java Bean syntax");
-        builder.given(Service.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Service name parameter must follow Java Bean syntax");
-        builder.given(Fragment.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Fragment name parameter must follow Java Bean syntax");
-        builder.given(BroadcastReceiver.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@BroadcastReceiver name parameter must follow Java Bean syntax");
-        builder.given(Application.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9]*$", "@Application name parameter must follow Java Bean syntax");
+        builder.given(Activity.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Activity name parameter must follow Java Bean syntax");
+        builder.given(Service.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Service name parameter must follow Java Bean syntax");
+        builder.given(Fragment.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Fragment name parameter must follow Java Bean syntax");
+        builder.given(BroadcastReceiver.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@BroadcastReceiver name parameter must follow Java Bean syntax");
+        builder.given(Application.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Application name parameter must follow Java Bean syntax");
 
         //module metadata
         builder.given(Bind.class).requires(TransfuseModule.class, "@Bind annotation must be accompanied by @TransfuseModule");
