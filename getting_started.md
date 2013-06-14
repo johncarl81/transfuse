@@ -22,7 +22,7 @@ Use the Maven archetype to run a new Android project, creating a basic Android a
 mvn archetype:generate \
   -DarchetypeArtifactId=android-quickstart \
   -DarchetypeGroupId=de.akquinet.android.archetypes \
-  -DarchetypeVersion=1.0.8 \
+  -DarchetypeVersion=1.0.10 \
   -DgroupId=org.androidtransfuse \
   -DartifactId=hello-transfuse
 
