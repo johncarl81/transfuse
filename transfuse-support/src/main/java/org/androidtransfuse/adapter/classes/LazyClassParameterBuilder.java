@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Arrays;
 
@@ -41,7 +42,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
         this.astClassFactory = astClassFactory;
     }
 
-    public ImmutableSet<ASTType> buildGenericParameters() {
+    public synchronized ImmutableSet<ASTType> buildGenericParameters() {
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
@@ -80,6 +81,8 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
             }
         } else if(type instanceof TypeVariable){
             return getClass(((TypeVariable) type).getBounds()[0]);
+        } else if(type instanceof WildcardType){
+            return getClass(((WildcardType) type).getUpperBounds()[0]);
         } else {
             return null;
         }

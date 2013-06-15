@@ -39,7 +39,7 @@ public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
     }
 
-    public ImmutableSet<ASTType> buildGenericParameters() {
+    public synchronized ImmutableSet<ASTType> buildGenericParameters() {
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
