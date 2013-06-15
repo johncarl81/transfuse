@@ -77,7 +77,7 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
             ASTType parameterType = parameterTypedExpressionEntry.getKey().getASTType();
             TypedExpression expression = parameterTypedExpressionEntry.getValue();
 
-            ImmutableSet<ASTAnnotation> qualifiers = FluentIterable.from(parameter.getAnnotations()).filter(qualifierPredicate).toSet();
+            ImmutableSet<ASTAnnotation> qualifiers = FluentIterable.from(parameter.getAnnotations()).filter(qualifierPredicate).toImmutableSet();
 
             if(qualifiers.isEmpty()){
                 injectionNodeBuilders.putType(new InjectionSignature(parameterType), buildExpression(expression));

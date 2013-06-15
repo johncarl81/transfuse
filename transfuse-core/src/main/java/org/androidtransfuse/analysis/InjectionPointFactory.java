@@ -145,7 +145,7 @@ public class InjectionPointFactory {
     public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
 
         ImmutableSet<ASTAnnotation> qualifiers =
-                FluentIterable.from(annotations).filter(qualifierPredicate).toSet();
+                FluentIterable.from(annotations).filter(qualifierPredicate).toImmutableSet();
 
         InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
 

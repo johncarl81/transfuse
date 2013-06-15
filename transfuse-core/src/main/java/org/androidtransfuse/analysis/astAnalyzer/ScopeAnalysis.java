@@ -56,7 +56,7 @@ public class ScopeAnalysis extends ASTAnalysisAdaptor {
             }
             else{
                 //annotated type
-                ImmutableSet<ASTAnnotation> scopeAnnotations = FluentIterable.from(concreteType.getAnnotations()).filter(scopePredicate).toSet();
+                ImmutableSet<ASTAnnotation> scopeAnnotations = FluentIterable.from(concreteType.getAnnotations()).filter(scopePredicate).toImmutableSet();
 
                 if(scopeAnnotations.size() > 1){
                     validator.error("Only one scoping may be defined")

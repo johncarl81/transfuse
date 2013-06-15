@@ -53,7 +53,7 @@ public class ASTElementAnnotation implements ASTAnnotation {
     public ImmutableSet<String> getPropertyNames() {
         return FluentIterable.from(annotationMirror.getElementValues().keySet())
                 .transform(new ExtractElementName())
-                .toSet();
+                .toImmutableSet();
     }
 
     public AnnotationMirror getAnnotationMirror() {
