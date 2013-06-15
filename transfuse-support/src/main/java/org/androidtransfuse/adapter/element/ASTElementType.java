@@ -133,7 +133,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     private void loadInterfaces() {
         interfaces = FluentIterable.from(typeElement.getInterfaces())
                 .transform(astTypeBuilderVisitor)
-                .toSet();
+                .toImmutableSet();
     }
 
     @Override
