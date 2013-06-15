@@ -748,41 +748,41 @@ If there is a parameter that the user does not want serialized, annotate the get
 Parcels are useful when passing data between Android components.  Therefore, when using the IntentFactory, Transfuse will automatically detect if a class is annotated with @Parcel and wrap it with the appropriate Parcelable implementation.
 
 <hr/>
-#### Injector
+#### @Factory
 
-There may be a need to build a dependency graph of a given type outside of a Transfuse dependency graph.  To solve this, Transfuse offers the capability to define an Injector.  To define an Injector, simply define an interface, including methods that return the type of the values users require built and annotate it with @Injector.  Transfuse will read the interface and implement the appropriate injections.
+There may be a need to build a dependency graph of a given type outside of a Transfuse dependency graph.  To solve this, Transfuse offers the capability to define a Factory.  To define an Factory, simply define an interface, including methods that return the type of the values users require built and annotate it with @Factory.  Transfuse will read the interface and implement the appropriate injections.
 
 For instance, the following interface returns an Example type:
 
 {% highlight java %}
-@Injector
-public interface TransfuseInjector{
+@Factory
+public interface TransfuseFactory{
     Example getExample();
 }
 {% endhighlight %}
 
-To use it, inject the Injector or reference the built Injector directly:
+To use it, inject the Factory or reference the built Factory directly:
 
 {% highlight java %}
 public class ExampleUsage{
 
-    @Inject TransfuseInjector injector;
+    @Inject TransfuseFactory factory;
 
     public void use(){
-        Example example = injector.getExample();
+        Example example = factory.getExample();
     }
 
     public void staticUsage(){
-        Example example = Injectors.get(TransfuseInjector.class).getExample();
+        Example example = Factories.get(TransfuseFactory.class).getExample();
     }
 }
 {% endhighlight %}
 
-Injectors may also be used as a factory with input parameters.  This is analagous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to concretely map parameters. 
+Factories may also be used as a factory with input parameters.  This is analagous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to concretely map parameters. 
 
 {% highlight java %}
-@Injector
-public interface AssistedInjector {
+@Factory
+public interface AssistedFactory {
     AssistedTarget buildTarget(AssistedDependency dependency);
     AssistedDoubleTarget buildTarget(@Named("one") AssistedDependency dependencyOne,
                                       @Named("two") AssistedDependency dependencyTwo);
