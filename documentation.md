@@ -482,7 +482,7 @@ Transfuse implements [JSR-330][1], the same standard many of the leading DI fram
 
 ##### @Inject
 
-Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, package private, protected or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, package private or protected injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs, it may significantly affect performance.
+Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, protected, package private or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, protected or package private injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs, it may significantly affect performance.
 
 <div class="note">
 <h5>Note</h5>
@@ -524,15 +524,72 @@ To map a Provider to a type, define the Provider binding in the TransfuseModule:
 public class Module{}
 {% endhighlight %}
 
+##### Scopes
 
-##### @Singleton
+###### @Singleton
 
 Any class annotated with @Singleton will, when injected, reference a single instance in the runtime.  This makes it easy to define singletons in the application, eliminating the boilerplate of defining the singleton behavior:
 
 {% highlight java %}
 @Singleton
-public class SingletonExample{
-    ...
+public class SingletonExample{ }
+{% endhighlight %}
+
+###### @ContextScope
+
+With the need to instantiate one, and only one, instance of a class per Context, Transfuse allows the declaration of a Context singleton via the `@ContextScope` annotation.  Any object annotated with this will be scoped to the Context in which it was originally instantiated.
+
+##### Custom Scopes
+
+Defining a custom scope is easy and especially useful when defining the lifecycle of objects in Transfuse.  A scope is an object implementing the `Scope` interface:
+
+{% highlight java %}
+public class MapScope implements Scope {
+
+    private ConcurrentMap<ScopeKey<?>, Object> values = new ConcurrentHashMap<ScopeKey<?>, Object>();
+
+    @Override
+    public <T> T getScopedObject(final ScopeKey<T> key, final Provider<T> provider) {
+        Object current = values.get(key);
+        if (current == null) {
+            Object value = provider.get();
+            current = values.putIfAbsent(key, value);
+            if(current == null){
+                current = value;
+            }
+        }
+        return (T) current;
+    }
+}
+{% endhighlight %}
+
+It is important to consider concurrency when defining scopes as they can be used via multiple threads at once.  The example above demonstrates double checked locking with the ConcurrentMap.
+
+Scopes are defined in Transfuse via the `@TransfuseModule` and `@DefineScope` annotation.  A separate, unique identifying annotation must be declared for each scope:
+
+{% highlight java %}
+@TransfuseModule
+@DefineScope(annotation = SimpleScope.class, scope = MapScope.class)
+public class TransfuseAndroidModule {}
+{% endhighlight %}
+
+Scopes may be injected to be used directly:
+
+{% highlight java %}
+@Activity
+public class Example {
+    @Inject @ScopeReference(SimpleScope.class)
+    MapScope scope;
+}
+{% endhighlight %}
+
+An object in Transfuse may be identified as scoped by either annotating the class (as demonstrated in the `@Singleton` example above) or through the `@Provides` annotation:
+
+{% highlight java %}
+@TransfuseModule
+public class TransfuseAndroidModule {
+    @Provides @SimpleScope
+    public Example getScoped(){...}
 }
 {% endhighlight %}
 
@@ -559,9 +616,49 @@ Android andoid // injected Andy
 {% endhighlight %}
 
 
-##### @Named
+##### Qualifiers
 
-Named support is pending.
+Qualifer annotation allow the developer to distingush between different instances of the same type within Transfuse.  For instance, it is common to define configuration paramters in Strings.  In this example, qualfier annotation allow the developer to determine which instance should be injected.  Qualifier annotations are configured along with the `@Provides` annotation in the `@TransfuseModule`:
+
+{% highlight java %}
+@TransfuseModule
+public class TransfuseAndroidModule {
+    @Provides @Username
+    public String getUsername(){...}
+    @Provides @Password
+    public String getPassword(){...}
+}
+{% endhighlight %}
+
+These objects can be injected by using the defined annotations:
+
+{% highlight java %}
+@Activity
+public class Example {
+    @Inject @Username
+    String username;
+    @Inject @Password
+    String password;
+}
+{% endhighlight %}
+
+Built into JSR330 is the `@Named` annotation, which is fully supported by Transfuse.  This is an extreemly convienient, predefined qualifier annotation:
+
+{% highlight java %}
+@TransfuseModule
+public class TransfuseAndroidModule {
+    @Provides @Named("username")
+    public String getUsername(){...}
+}
+{% endhighlight %}
+
+{% highlight java %}
+@Activity
+public class Example {
+    @Inject @Named("username")
+    String username;
+}
+{% endhighlight %}
 
 ##### Advanced
 
@@ -569,9 +666,6 @@ For completeness, Transfuse allows the declaration of dependency cycles.  For Tr
 
 
 
-###### @ContextScope
-
-With the need to instantiate one, and only one, instance of a class per Context, Transfuse allows the declaration of a Context singleton.
 
 <hr/>
 
