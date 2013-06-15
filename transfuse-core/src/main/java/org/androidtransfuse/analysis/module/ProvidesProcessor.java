@@ -66,11 +66,11 @@ public class ProvidesProcessor implements MethodProcessor {
 
         ImmutableSet<ASTAnnotation> qualifierAnnotations =
                 FluentIterable.from(astMethod.getAnnotations())
-                        .filter(qualifierPredicate).toSet();
+                        .filter(qualifierPredicate).toImmutableSet();
 
         ImmutableSet<ASTAnnotation> scopeAnnotations =
                 FluentIterable.from(astMethod.getAnnotations())
-                        .filter(scopePredicate).toSet();
+                        .filter(scopePredicate).toImmutableSet();
 
         ASTAnnotation scope = null;
         if(scopeAnnotations.size() > 0){
@@ -87,11 +87,11 @@ public class ProvidesProcessor implements MethodProcessor {
                 FluentIterable.from(annotations)
                         .filter(Predicates.and(
                                 Predicates.not(qualifierPredicate),
-                                Predicates.not(scopePredicate))).toSet();
+                                Predicates.not(scopePredicate))).toImmutableSet();
 
         ImmutableSet<ASTAnnotation> scopeAnnotations =
                 FluentIterable.from(annotations)
-                        .filter(scopePredicate).toSet();
+                        .filter(scopePredicate).toImmutableSet();
 
 
         ASTType providesType = astClassFactory.getType(Provides.class);

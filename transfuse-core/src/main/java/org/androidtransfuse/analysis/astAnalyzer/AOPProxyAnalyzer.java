@@ -57,7 +57,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
                         public boolean apply(ASTMethod method) {
                             return !ASTAccessModifier.PRIVATE.equals(method.getAccessModifier());
                         }
-                    }).toSet();
+                    }).toImmutableSet();
 
                     addInterceptor(injectionNode, nonPrivateMethods, getInterceptorInjectionNode(annotation, context));
                 }
