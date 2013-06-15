@@ -154,7 +154,7 @@ public class ASTElementFactory {
     private ImmutableSet<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
         return FluentIterable.from(mirrorTypes)
                 .transform(astTypeBuilderVisitor)
-                .toSet();
+                .toImmutableSet();
     }
 
     /**
