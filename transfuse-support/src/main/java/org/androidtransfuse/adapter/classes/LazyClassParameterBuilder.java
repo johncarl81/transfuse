@@ -52,7 +52,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
     private ImmutableSet<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
                 .transform(this)
-                .toSet();
+                .toImmutableSet();
     }
 
     @Override
