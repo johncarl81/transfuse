@@ -27,7 +27,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -143,7 +145,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         fragmentDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildFragmentMethodBuilder(layout, onCreateViewMethod));
 
-        fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
 
         //onActivityCreated
         fragmentDescriptor.addGenerators(buildEventMethod(OnActivityCreated.class, "onActivityCreated", Bundle.class));

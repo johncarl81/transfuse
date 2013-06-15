@@ -48,7 +48,7 @@ public final class Factories {
             };
 
     private Factories() {
-        // private utility class constructor
+        // private utility class constructor.
     }
 
     /**

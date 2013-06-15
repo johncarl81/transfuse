@@ -44,8 +44,6 @@ public class InjectionTest {
 
     @Test
     public void testStaticInjection() {
-        assertNotNull(injection.getStaticInjectionTarget());
-        assertNotNull(injection.getStaticInjectionLoop());
         assertNotNull(injection.getStaticInjectionProvider());
     }
 

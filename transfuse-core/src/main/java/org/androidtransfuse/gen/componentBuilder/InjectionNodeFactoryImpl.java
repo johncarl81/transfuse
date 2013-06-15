@@ -40,6 +40,7 @@ import java.util.Map;
  */
 public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
 
+    private final ImmutableSet<ASTAnnotation> annotations;
     private final ASTType astType;
     private final AnalysisContext context;
     private final InjectionPointFactory injectionPointFactory;
@@ -47,11 +48,13 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     private final QualifierPredicate qualifierPredicate;
 
     @Inject
-    public InjectionNodeFactoryImpl(/*@Assisted*/ ASTType astType,
+    public InjectionNodeFactoryImpl(/*@Assisted*/ ImmutableSet<ASTAnnotation> annotations,
+                                    /*@Assisted*/ ASTType astType,
                                     /*@Assisted*/ AnalysisContext context,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableFactoryBuilderFactory2 injectionBindingBuilder,
                                     QualifierPredicate qualifierPredicate) {
+        this.annotations = annotations;
         this.astType = astType;
         this.context = context;
         this.injectionPointFactory = injectionPointFactory;
@@ -63,7 +66,7 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     public InjectionNode buildInjectionNode(MethodDescriptor onCreateMethodDescriptor) {
         buildVariableBuilderMap(onCreateMethodDescriptor, context.getInjectionNodeBuilders());
 
-        return injectionPointFactory.buildInjectionNode(astType, context);
+        return injectionPointFactory.buildInjectionNode(annotations, astType, context);
     }
 
     private void buildVariableBuilderMap(MethodDescriptor methodDescriptor, InjectionNodeBuilderRepository injectionNodeBuilders) {

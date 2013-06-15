@@ -17,7 +17,9 @@ package org.androidtransfuse.analysis;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -111,7 +113,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         //onCreate
         applicationDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
 
-        applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
 
         //onLowMemory
         applicationDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));

@@ -18,7 +18,9 @@ package org.androidtransfuse.analysis;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -244,7 +246,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
         activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
 
-        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(astType, context));
+        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
 
         activityDescriptor.addGenerators(activityComponentBuilderRepository.build().getGenerators(activityType));
 

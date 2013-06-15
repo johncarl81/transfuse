@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
+import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -39,7 +41,7 @@ public class InjectionNodeImplFactory {
         this.qualifierPredicate = qualifierPredicate;
     }
 
-    public InjectionNodeFactory buildInjectionNodeFactory(ASTType returnType, AnalysisContext context) {
-        return new InjectionNodeFactoryImpl(returnType, context, injectionPointFactory, injectionBindingBuilder, qualifierPredicate);
+    public InjectionNodeFactory buildInjectionNodeFactory(ImmutableSet<ASTAnnotation> annotations, ASTType returnType, AnalysisContext context) {
+        return new InjectionNodeFactoryImpl(annotations, returnType, context, injectionPointFactory, injectionBindingBuilder, qualifierPredicate);
     }
 }

@@ -99,7 +99,8 @@ public class FactoryGenerator {
 
             JMethod defaultConstructor = implClass.constructor(JMod.PUBLIC);
 
-            defaultConstructor.body().assign(scopesField, JExpr._new(codeModel.ref(Scopes.class)));
+            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            defaultConstructor.body().assign(scopesField, scopesBuildInvocation);
 
             implClass._implements(interfaceClass);
 
@@ -111,7 +112,7 @@ public class FactoryGenerator {
                 InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
                 injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
                 AnalysisContext context = analysisContextFactory.buildAnalysisContext(injectionNodeBuilderRepository);
-                InjectionNodeFactory injectionNodeFactory = injectionNodeImplFactory.buildInjectionNodeFactory(interfaceMethod.getReturnType(), context);
+                InjectionNodeFactory injectionNodeFactory = injectionNodeImplFactory.buildInjectionNodeFactory(interfaceMethod.getAnnotations(), interfaceMethod.getReturnType(), context);
 
                 //Injections
                 InjectionNode returnType = injectionNodeFactory.buildInjectionNode(methodDescriptor);

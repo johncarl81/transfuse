@@ -16,7 +16,9 @@
 package org.androidtransfuse.integrationTest.inject;
 
 import org.androidtransfuse.annotations.Factory;
+import org.androidtransfuse.integrationTest.IntegrationModule;
 
+import javax.inject.Named;
 import javax.inject.Provider;
 
 /**
@@ -34,4 +36,7 @@ public interface TargetFactory {
     LoopThree getLoopThree();
 
     Provider<LoopThree> getLoopThreeProvider();
+
+    @Named(IntegrationModule.ONE)
+    String getOne();
 }

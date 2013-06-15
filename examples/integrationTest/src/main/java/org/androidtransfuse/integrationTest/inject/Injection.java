@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import org.androidtransfuse.Factories;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.inject.LibraryDependency1;
@@ -148,14 +147,6 @@ public class Injection extends InjectionBase {
 
     public Provider<ProvidedInjectTarget> getProvidedInjectTargetProvider() {
         return providedInjectTargetProvider;
-    }
-
-    public InjectTarget getStaticInjectionTarget() {
-        return Factories.get(TargetFactory.class).getTarget();
-    }
-
-    public LoopOne getStaticInjectionLoop() {
-        return Factories.get(TargetFactory.class).getLoop();
     }
 
     public Provider<LoopThree> getStaticInjectionProvider() {

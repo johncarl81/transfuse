@@ -81,6 +81,9 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                     moduleProcessor.process(moduleType);
                 }
 
+                //scopes utility
+                coreFactory.buildScopesGenerator().generate();
+
                 ImmutableSet.Builder<ASTType> factoryTypesBuilder = ImmutableSet.builder();
                 factoryTypesBuilder.addAll(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Factory.class)));
                 factoryTypesBuilder.addAll(coreFactory.getModuleRepository().getInstalledAnnotatedWith(Factory.class));
