@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.analysis;
 
+import android.app.*;
 import android.content.Context;
 import android.content.res.Configuration;
 import com.google.common.collect.ImmutableSet;
@@ -27,6 +28,7 @@ import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
@@ -84,27 +86,42 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     public ComponentDescriptor analyze(ASTType astType) {
         Application applicationAnnotation = astType.getAnnotation(Application.class);
 
-        PackageClass inputType = astType.getPackageClass();
-        PackageClass applicationClassName;
 
-        if (StringUtils.isBlank(applicationAnnotation.name())) {
-            applicationClassName = inputType.append("Application");
+        PackageClass applicationClassName;
+        ComponentDescriptor applicationDescriptor = null;
+
+        if (astType.extendsFrom(astClassFactory.getType(android.app.Application.class))) {
+            //vanilla Android Application
+            PackageClass activityPackageClass = astType.getPackageClass();
+            applicationClassName = buildPackageClass(astType, activityPackageClass.getClassName());
         } else {
-            applicationClassName = inputType.replaceName(applicationAnnotation.name());
+
+            applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
+
+            applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+
+            //analyze delegate
+            AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
+
+            //application generation profile
+            setupApplicationProfile(applicationDescriptor, astType, analysisContext);
         }
 
-        ComponentDescriptor applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
-
-        //analyze delegate
-        AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
-
-        //application generation profile
-        setupApplicationProfile(applicationDescriptor, astType, analysisContext);
-
         //add manifest elements
-        setupManifest(applicationAnnotation, applicationDescriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation.label());
+        setupManifest(applicationAnnotation, applicationClassName.getFullyQualifiedName(), applicationAnnotation.label());
 
         return applicationDescriptor;
+    }
+
+    private PackageClass buildPackageClass(ASTType input, String applicationNAme) {
+
+        PackageClass inputPackageClass = input.getPackageClass();
+
+        if (StringUtils.isBlank(applicationNAme)) {
+            return inputPackageClass.append("Application");
+        } else {
+            return inputPackageClass.replaceName(applicationNAme);
+        }
     }
 
     private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType, AnalysisContext context) {
