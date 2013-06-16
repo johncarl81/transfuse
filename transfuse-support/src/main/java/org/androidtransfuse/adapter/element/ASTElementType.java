@@ -15,16 +15,12 @@
  */
 package org.androidtransfuse.adapter.element;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import java.util.List;
 
 /**
  * Element specific AST Type
@@ -35,23 +31,28 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     private final TypeElement typeElement;
     private final PackageClass packageClass;
-    private final ASTElementConverterFactory astElementConverterFactory;
-    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
-    private ImmutableSet<ASTMethod> methods = null;
-    private ImmutableSet<ASTConstructor> constructors = null;
-    private ImmutableSet<ASTField> fields = null;
-    private ImmutableSet<ASTType> interfaces = null;
-    private ASTType superClass = null;
+    private final ImmutableSet<ASTMethod> methods;
+    private final ImmutableSet<ASTConstructor> constructors;
+    private final ImmutableSet<ASTField> fields;
+    private final ImmutableSet<ASTType> interfaces;
+    private final ASTType superClass;
 
-    public ASTElementType(TypeElement typeElement,
-                          PackageClass packageClass,
-                          ImmutableSet<ASTAnnotation> annotations,
-                          ASTElementConverterFactory astElementConverterFactory, ASTTypeBuilderVisitor astTypeBuilderVisitor) {
+    public ASTElementType(PackageClass packageClass,
+                          TypeElement typeElement,
+                          ImmutableSet<ASTConstructor> constructors,
+                          ImmutableSet<ASTMethod> methods,
+                          ImmutableSet<ASTField> fields,
+                          ASTType superClass,
+                          ImmutableSet<ASTType> interfaces,
+                          ImmutableSet<ASTAnnotation> annotations) {
         super(typeElement, annotations);
-        this.typeElement = typeElement;
         this.packageClass = packageClass;
-        this.astElementConverterFactory = astElementConverterFactory;
-        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
+        this.typeElement = typeElement;
+        this.constructors = constructors;
+        this.methods = methods;
+        this.fields = fields;
+        this.superClass = superClass;
+        this.interfaces = interfaces;
     }
 
     @Override
@@ -60,47 +61,23 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public synchronized PackageClass getPackageClass() {
+    public PackageClass getPackageClass() {
         return packageClass;
     }
 
     @Override
-    public synchronized ImmutableSet<ASTMethod> getMethods() {
-        if(methods == null){
-            loadMethods();
-        }
+    public ImmutableSet<ASTMethod> getMethods() {
         return methods;
     }
 
-    private void loadMethods() {
-        ImmutableSet.Builder<ASTMethod> methodsBuilder = ImmutableSet.builder();
-        methods = methodsBuilder.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class)).build();
-    }
-
     @Override
-    public synchronized ImmutableSet<ASTField> getFields() {
-        if(fields == null){
-            loadFields();
-        }
+    public ImmutableSet<ASTField> getFields() {
         return fields;
     }
 
-    private void loadFields() {
-        ImmutableSet.Builder<ASTField> fieldsBuilder = ImmutableSet.builder();
-        fields = fieldsBuilder.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class)).build();
-    }
-
     @Override
-    public synchronized ImmutableSet<ASTConstructor> getConstructors() {
-        if(constructors == null){
-            loadConstructors();
-        }
+    public ImmutableSet<ASTConstructor> getConstructors() {
         return constructors;
-    }
-
-    private void loadConstructors() {
-        ImmutableSet.Builder<ASTConstructor> constructorsBuilder = ImmutableSet.builder();
-        constructors = constructorsBuilder.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class)).build();
     }
 
     @Override
@@ -109,31 +86,13 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public synchronized ASTType getSuperClass() {
-        if(superClass == null){
-            loadSuperclass();
-        }
+    public ASTType getSuperClass() {
         return superClass;
     }
 
-    private void loadSuperclass() {
-        if (typeElement.getSuperclass() != null) {
-            superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
-        }
-    }
-
     @Override
-    public synchronized ImmutableSet<ASTType> getInterfaces() {
-        if(interfaces == null){
-            loadInterfaces();
-        }
+    public ImmutableSet<ASTType> getInterfaces() {
         return interfaces;
-    }
-
-    private void loadInterfaces() {
-        interfaces = FluentIterable.from(typeElement.getInterfaces())
-                .transform(astTypeBuilderVisitor)
-                .toImmutableSet();
     }
 
     @Override
@@ -188,17 +147,5 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public String toString() {
         return getName();
-    }
-
-    public Element getElement() {
-        return typeElement;
-    }
-
-    private <T extends ASTBase> List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType) {
-        return FluentIterable
-                .from(enclosedElements)
-                .transform(astElementConverterFactory.buildASTElementConverter(astType))
-                .filter(Predicates.notNull())
-                .toImmutableList();
     }
 }

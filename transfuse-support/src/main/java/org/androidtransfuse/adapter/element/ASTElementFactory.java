@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter.element;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -83,16 +84,41 @@ public class ASTElementFactory {
     private ASTType buildType(TypeElement typeElement) {
         //build placeholder for ASTElementType and contained data structures to allow for children population
         //while avoiding back link loops
-
         PackageClass packageClass = buildPackageClass(typeElement);
 
         ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
         typeCache.put(typeElement, astTypeProxy);
 
+        ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTMethod> methods = ImmutableSet.builder();
+
+        ASTType superClass = null;
+        if (typeElement.getSuperclass() != null) {
+            superClass = typeElement.getSuperclass().accept(astTypeBuilderVisitor, null);
+        }
+
+        ImmutableSet<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
+                .transform(astTypeBuilderVisitor)
+                .toImmutableSet();
+
         ImmutableSet.Builder<ASTAnnotation> annotations = ImmutableSet.builder();
+
+        //iterate and build the contained elements within this TypeElement
+        constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
+        fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
+        methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
+
         annotations.addAll(getAnnotations(typeElement));
 
-        ASTType astType = new ASTElementType(typeElement, packageClass, annotations.build(), astElementConverterFactory, astTypeBuilderVisitor);
+        ASTType astType = new ASTElementType(packageClass,
+                typeElement,
+                constructors.build(),
+                methods.build(),
+                fields.build(),
+                superClass,
+                interfaces,
+                annotations.build());
 
         astTypeProxy.load(astType);
 
@@ -107,6 +133,14 @@ public class ASTElementFactory {
         String name = typeElement.getQualifiedName().toString().substring(pkg.length() + 1);
 
         return new PackageClass(pkg, name);
+    }
+
+    private <T extends ASTBase> List<T> transformAST(List<? extends Element> enclosedElements, Class<T> astType) {
+        return FluentIterable
+                .from(enclosedElements)
+                .transform(astElementConverterFactory.buildASTElementConverter(astType))
+                .filter(Predicates.notNull())
+                .toImmutableList();
     }
 
     /**
