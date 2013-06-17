@@ -24,6 +24,7 @@ import org.androidtransfuse.util.Generated;
 import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,14 +50,12 @@ public class ClassGenerationUtil {
 
     // ISO 8601 standard date format
     private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
-    private final JCodeModel codeModel;
-    private final Logger log;
+    private final Provider<JCodeModel> codeModelProvider;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public ClassGenerationUtil(JCodeModel codeModel, Logger log, UniqueVariableNamer namer) {
-        this.codeModel = codeModel;
-        this.log = log;
+    public ClassGenerationUtil(Provider<JCodeModel> codeModelProvider, UniqueVariableNamer namer) {
+        this.codeModelProvider = codeModelProvider;
         this.namer = namer;
     }
 
@@ -79,7 +78,7 @@ public class ClassGenerationUtil {
         // Avoid prohibited package names
         String packageName = getPackage(className.getPackage());
 
-        JPackage jPackage = codeModel._package(packageName);
+        JPackage jPackage = codeModelProvider.get()._package(packageName);
         String name;
         if(enforceUniqueName){
             name = namer.generateClassName(className.getClassName());

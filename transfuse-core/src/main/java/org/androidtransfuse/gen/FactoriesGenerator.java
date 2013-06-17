@@ -85,7 +85,7 @@ public class FactoriesGenerator {
             JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, namer.generateClassName(astType));
             factoryClass._implements(codeModel.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
 
-            //getter without scopes
+            //getter without given scopes
             JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
 
             getMethod.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()));

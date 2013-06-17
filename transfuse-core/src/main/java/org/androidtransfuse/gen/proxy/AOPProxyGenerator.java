@@ -29,6 +29,7 @@ import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -43,20 +44,22 @@ public class AOPProxyGenerator {
     private static final String AOPPROXY_EXT = "$AOPProxy";
     private static final String METHOD_INTERCEPTOR_INVOKE = "invoke";
 
-    private final JCodeModel codeModel;
+    private final Provider<JCodeModel> codeModelProvider;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
     private final Validator validator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil, Validator validator) {
-        this.codeModel = codeModel;
+    public AOPProxyGenerator(Provider<JCodeModel> codeModelProvider, UniqueVariableNamer namer, ClassGenerationUtil generationUtil, Validator validator) {
+        this.codeModelProvider = codeModelProvider;
         this.namer = namer;
         this.generationUtil = generationUtil;
         this.validator = validator;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
+        JCodeModel codeModel = codeModelProvider.get();
+
         AOPProxyAspect aopProxyAspect = injectionNode.getAspect(AOPProxyAspect.class);
         JDefinedClass definedClass;
 
@@ -99,7 +102,7 @@ public class AOPProxyGenerator {
             Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields = new HashMap<ASTMethod, Map<InjectionNode, JFieldVar>>();
             for (Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry : aopProxyAspect.getMethodInterceptors().entrySet()) {
 
-                buildMethodInterceptor(definedClass, proxyConstructorInjectionPoint, constructor, constructorBody, interceptorFields, methodInterceptorEntry);
+                buildMethodInterceptor(codeModel, definedClass, proxyConstructorInjectionPoint, constructor, constructorBody, interceptorFields, methodInterceptorEntry);
             }
 
         } catch (JClassAlreadyExistsException e) {
@@ -130,7 +133,7 @@ public class AOPProxyGenerator {
         return proxyInjectionNode;
     }
 
-    private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
+    private void buildMethodInterceptor(JCodeModel codeModel, JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
         ASTMethod method = methodInterceptorEntry.getKey();
 
         if (method.getAccessModifier().equals(ASTAccessModifier.PRIVATE)) {
@@ -182,7 +185,7 @@ public class AOPProxyGenerator {
             paramArray.add(parameterMap.get(astParameter));
         }
 
-        JInvocation interceptorInvocation = buildInterceptorChain(definedClass, method, parameterMap, methodInterceptorEntry.getValue(), interceptorNameMap).invoke(METHOD_INTERCEPTOR_INVOKE);
+        JInvocation interceptorInvocation = buildInterceptorChain(codeModel, definedClass, method, parameterMap, methodInterceptorEntry.getValue(), interceptorNameMap).invoke(METHOD_INTERCEPTOR_INVOKE);
         interceptorInvocation.arg(paramArray);
 
         if (method.getReturnType().equals(ASTVoidType.VOID)) {
@@ -192,7 +195,7 @@ public class AOPProxyGenerator {
         }
     }
 
-    private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
+    private JExpression buildInterceptorChain(JCodeModel codeModel, JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
 
         try {
             JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, namer.generateClassName(MethodInterceptorChain.MethodExecution.class));

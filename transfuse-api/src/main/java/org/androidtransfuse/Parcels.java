@@ -29,7 +29,7 @@ public final class Parcels {
     public static final String PARCELS_NAME = "Parcels";
     public static final String PARCELS_REPOSITORY_NAME = "Transfuse$Parcels";
     public static final String PARCELS_PACKAGE = "org.androidtransfuse";
-    public static final String IMPL_EXT = "Factory";
+    public static final String IMPL_EXT = "$Parcel";
 
     private static final GeneratedCodeRepository<ParcelableFactory> REPOSITORY =
             new GeneratedCodeRepository<ParcelableFactory>(PARCELS_PACKAGE, PARCELS_REPOSITORY_NAME) {

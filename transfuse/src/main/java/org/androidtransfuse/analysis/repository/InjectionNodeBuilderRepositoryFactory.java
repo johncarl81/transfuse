@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JExpr;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 
@@ -77,14 +78,17 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final Set<ASTType> installedComponents = new HashSet<ASTType>();
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
+    private final ScopeAspectFactoryRepositoryProvider scopeAspectFactoryRepositoryProvider;
     private final InjectionNodeBuilderRepository moduleRepository;
 
     @Inject
     public InjectionNodeBuilderRepositoryFactory(InjectionBindingBuilder injectionBindingBuilder,
                                                  Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                                                 ScopeAspectFactoryRepositoryProvider scopeAspectFactoryRepositoryProvider) {
+                                                 ScopeAspectFactoryRepositoryProvider scopeAspectFactoryRepositoryProvider,
+                                                 ASTClassFactory astClassFactory) {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
+        this.scopeAspectFactoryRepositoryProvider = scopeAspectFactoryRepositoryProvider;
 
         ImmutableMap.Builder<String, ASTType> systemServiceBuilder = ImmutableMap.builder();
         //mapping to class by string to avoid differences in Android platform compilation problems.
@@ -123,10 +127,7 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
 
         systemServices = systemServiceBuilder.build();
 
-        moduleRepository = injectionNodeBuilderRepositoryProvider.get();
-
-        //Default scopes
-        moduleRepository.addRepository(scopeAspectFactoryRepositoryProvider.get());
+        moduleRepository = new InjectionNodeBuilderRepository(astClassFactory);
     }
 
     public InjectionNodeBuilderRepository buildApplicationInjections() {
@@ -153,6 +154,8 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     public InjectionNodeBuilderRepository buildModuleConfiguration() {
         InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         repository.addRepository(moduleRepository);
+        repository.addRepository(scopeAspectFactoryRepositoryProvider.get());
+        repository.addRepository(injectionNodeBuilderRepositoryProvider.get());
 
         return repository;
     }

@@ -84,7 +84,7 @@ public class CoreFactory {
     public CoreFactory(Elements elements, Messager messager, Filer filer) {
         this.elements = elements;
         this.filer = filer;
-        this.generationUtil = new ClassGenerationUtil(codeModel, new MessagerLogger(messager), namer);
+        this.generationUtil = new ClassGenerationUtil(Providers.of(codeModel), namer);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(namer, generationUtil);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
         this.validator = new Validator(messager);
@@ -131,7 +131,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil, validator);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(Providers.of(codeModel), namer, generationUtil, validator);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
