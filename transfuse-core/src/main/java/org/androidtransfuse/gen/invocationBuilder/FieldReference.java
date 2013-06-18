@@ -19,12 +19,12 @@ import org.androidtransfuse.adapter.ASTType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class FieldGetter {
+public class FieldReference {
     private final ASTType returnType;
     private final ASTType variableType;
     private final String name;
 
-    public FieldGetter(ASTType returnType, ASTType variableType, String name) {
+    public FieldReference(ASTType returnType, ASTType variableType, String name) {
         this.returnType = returnType;
         this.variableType = variableType;
         this.name = name;
@@ -47,10 +47,10 @@ public class FieldGetter {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof FieldGetter)) {
+        if (!(o instanceof FieldReference)) {
             return false;
         }
-        FieldGetter that = (FieldGetter) o;
+        FieldReference that = (FieldReference) o;
         return new EqualsBuilder().append(name, that.name).append(variableType, that.variableType).isEquals();
     }
 

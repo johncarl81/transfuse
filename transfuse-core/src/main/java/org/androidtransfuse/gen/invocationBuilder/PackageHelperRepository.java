@@ -19,6 +19,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
+import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -35,16 +36,21 @@ public class PackageHelperRepository {
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
 
     public synchronized ProtectedAccessorMethod getConstructorCall(ConstructorInjectionPoint constructorInjectionPoint) {
+        List<ASTType> parameterTypes = new ArrayList<ASTType>();
+        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()){
+            parameterTypes.add(injectionNode.getASTType());
+        }
+        ConstructorCall constructorCall = new ConstructorCall(constructorInjectionPoint.getContainingType(), parameterTypes);
 
         PackageClass containedPackageClass = constructorInjectionPoint.getContainingType().getPackageClass();
         PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
-        if (!helperClass.getConstructorMapping().containsKey(constructorInjectionPoint)) {
+        if (!helperClass.getConstructorMapping().containsKey(constructorCall)) {
             String helperMethod = PRE_METHOD + containedPackageClass.getClassName() + "$INIT";
-            helperClass.getConstructorMapping().put(constructorInjectionPoint, helperMethod);
+            helperClass.getConstructorMapping().put(constructorCall, helperMethod);
         }
 
-        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getConstructorMapping().get(constructorInjectionPoint));
+        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getConstructorMapping().get(constructorCall));
     }
 
     public synchronized ProtectedAccessorMethod getMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes) {
@@ -68,31 +74,32 @@ public class PackageHelperRepository {
     }
 
     public synchronized ProtectedAccessorMethod getFieldGetter(ASTType returnType, ASTType variableType, String name) {
-        FieldGetter fieldGetter = new FieldGetter(returnType, variableType, name);
+        FieldReference fieldReference = new FieldReference(returnType, variableType, name);
 
         PackageClass containedPackageClass = variableType.getPackageClass();
         PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
-        if (!helperClass.getFieldGetMapping().containsKey(fieldGetter)) {
+        if (!helperClass.getFieldGetMapping().containsKey(fieldReference)) {
             String accessorMethod = PRE_METHOD + containedPackageClass.getClassName() + "$FG$" + name;
-            helperClass.getFieldGetMapping().put(fieldGetter, accessorMethod);
+            helperClass.getFieldGetMapping().put(fieldReference, accessorMethod);
         }
 
-        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getFieldGetMapping().get(fieldGetter));
+        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getFieldGetMapping().get(fieldReference));
     }
 
 
     public synchronized ProtectedAccessorMethod getFieldSetter(FieldInjectionPoint fieldInjectionPoint) {
+        FieldReference fieldReference = new FieldReference(fieldInjectionPoint.getInjectionNode().getASTType(), fieldInjectionPoint.getContainingType(), fieldInjectionPoint.getName());
 
         PackageClass containedPackageClass = fieldInjectionPoint.getContainingType().getPackageClass();
         PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
-        if (!helperClass.getFieldSetMapping().containsKey(fieldInjectionPoint)) {
+        if (!helperClass.getFieldSetMapping().containsKey(fieldReference)) {
             String accessorMethod = PRE_METHOD + containedPackageClass.getClassName().replace('.', '$') + "$FS$" + fieldInjectionPoint.getName();
-            helperClass.getFieldSetMapping().put(fieldInjectionPoint, accessorMethod);
+            helperClass.getFieldSetMapping().put(fieldReference, accessorMethod);
         }
 
-        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getFieldSetMapping().get(fieldInjectionPoint));
+        return new ProtectedAccessorMethod(helperClass.getName(), helperClass.getFieldSetMapping().get(fieldReference));
     }
 
     protected Collection<PackageHelperDescriptor> getPackageHelpers() {

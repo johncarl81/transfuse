@@ -16,8 +16,6 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import org.androidtransfuse.adapter.PackageClass;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +26,9 @@ import java.util.Map;
 public class PackageHelperDescriptor {
 
     private final PackageClass name;
-    private final Map<ConstructorInjectionPoint, String> constructorMapping = new HashMap<ConstructorInjectionPoint, String>();
-    private final Map<FieldInjectionPoint, String> fieldSetMapping = new HashMap<FieldInjectionPoint, String>();
-    private final Map<FieldGetter, String> fieldGetMapping = new HashMap<FieldGetter, String>();
+    private final Map<ConstructorCall, String> constructorMapping = new HashMap<ConstructorCall, String>();
+    private final Map<FieldReference, String> fieldSetMapping = new HashMap<FieldReference, String>();
+    private final Map<FieldReference, String> fieldGetMapping = new HashMap<FieldReference, String>();
     private final Map<MethodCall, String> methodCallMapping = new HashMap<MethodCall, String>();
 
     public PackageHelperDescriptor(PackageClass name) {
@@ -41,15 +39,15 @@ public class PackageHelperDescriptor {
         return name;
     }
 
-    public Map<ConstructorInjectionPoint, String> getConstructorMapping() {
+    public Map<ConstructorCall, String> getConstructorMapping() {
         return constructorMapping;
     }
 
-    public Map<FieldInjectionPoint, String> getFieldSetMapping() {
+    public Map<FieldReference, String> getFieldSetMapping() {
         return fieldSetMapping;
     }
 
-    public Map<FieldGetter, String> getFieldGetMapping() {
+    public Map<FieldReference, String> getFieldGetMapping() {
         return fieldGetMapping;
     }
 

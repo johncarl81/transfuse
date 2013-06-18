@@ -22,9 +22,6 @@ import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -56,7 +53,7 @@ public class PackageHelperGenerator {
             JDefinedClass packageHelperClass = buildPackageHelper(packageHelper.getName());
 
             //constructor
-            for (Map.Entry<ConstructorInjectionPoint, String> constructorEntry : packageHelper.getConstructorMapping().entrySet()) {
+            for (Map.Entry<ConstructorCall, String> constructorEntry : packageHelper.getConstructorMapping().entrySet()) {
                 buildConstructorCall(constructorEntry.getKey(), constructorEntry.getValue(), packageHelperClass);
             }
 
@@ -71,7 +68,7 @@ public class PackageHelperGenerator {
             }
 
             //field get
-            for (Map.Entry<FieldGetter, String> fieldGetEntry : packageHelper.getFieldGetMapping().entrySet()) {
+            for (Map.Entry<FieldReference, String> fieldGetEntry : packageHelper.getFieldGetMapping().entrySet()) {
                 ASTType returnType = fieldGetEntry.getKey().getReturnType();
                 ASTType variableType = fieldGetEntry.getKey().getVariableType();
                 String name = fieldGetEntry.getKey().getName();
@@ -80,20 +77,20 @@ public class PackageHelperGenerator {
             }
 
             //field set
-            for (Map.Entry<FieldInjectionPoint, String> fieldSetEntry : packageHelper.getFieldSetMapping().entrySet()) {
+            for (Map.Entry<FieldReference, String> fieldSetEntry : packageHelper.getFieldSetMapping().entrySet()) {
                 buildFieldSet(fieldSetEntry.getKey(), fieldSetEntry.getValue(), packageHelperClass);
             }
         }
     }
 
-    private void buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = codeModel.ref(constructorInjectionPoint.getContainingType().getName());
+    private void buildConstructorCall(ConstructorCall constructorCall, String accessorMethodName, JDefinedClass helperClass) {
+        JClass returnTypeRef = codeModel.ref(constructorCall.getType().getName());
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
         JInvocation constructorInvocation = JExpr._new(returnTypeRef);
-        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
-            JClass paramRef = codeModel.ref(injectionNode.getASTType().getName());
+        for (ASTType paramType : constructorCall.getParamTypes()) {
+            JClass paramRef = codeModel.ref(paramType.getName());
             JVar param = accessorMethod.param(paramRef, namer.generateName(paramRef));
             constructorInvocation.arg(param);
         }
@@ -136,19 +133,19 @@ public class PackageHelperGenerator {
         body._return(variableParam.ref(name));
     }
 
-    private void buildFieldSet(FieldInjectionPoint fieldInjectionPoint, String accessorMethodName, JDefinedClass helperClass) {
+    private void buildFieldSet(FieldReference fieldReference, String accessorMethodName, JDefinedClass helperClass) {
         //get, ClassName, FS, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID, accessorMethodName);
 
-        JClass containerType = codeModel.ref(fieldInjectionPoint.getContainingType().getName());
+        JClass containerType = codeModel.ref(fieldReference.getVariableType().getName());
         JVar containerParam = accessorMethod.param(containerType, namer.generateName(containerType));
 
-        JClass inputType = codeModel.ref(fieldInjectionPoint.getInjectionNode().getASTType().getName());
+        JClass inputType = codeModel.ref(fieldReference.getReturnType().getName());
         JVar inputParam = accessorMethod.param(inputType, namer.generateName(inputType));
 
         JBlock body = accessorMethod.body();
 
-        body.assign(containerParam.ref(fieldInjectionPoint.getName()), inputParam);
+        body.assign(containerParam.ref(fieldReference.getName()), inputParam);
     }
 
     private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
