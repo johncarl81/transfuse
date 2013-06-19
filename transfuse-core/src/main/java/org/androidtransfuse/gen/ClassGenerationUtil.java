@@ -100,7 +100,7 @@ public class ClassGenerationUtil {
      */
     private void annotateGeneratedClass(JDefinedClass definedClass) {
         definedClass.annotate(Generated.class)
-                .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor"/*TransfuseAnnotationProcessor.class.getName()*/)
+                .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor")
                 .param("date", iso8601.format(new Date()));
     }
 }
