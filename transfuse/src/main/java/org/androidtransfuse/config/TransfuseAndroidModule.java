@@ -62,8 +62,7 @@ import java.util.Map;
         @BindProvider(type = XStream.class, provider = XStreamProvider.class),
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
-        @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class, scope = ConfigurationScope.class),
-        @BindProvider(type = JCodeModel.class, provider = JCodeModelProvider.class, scope = CodeGenerationScope.class)
+        @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class)
 })
 @Install({
         ASTFactory.class,
@@ -82,6 +81,12 @@ public class TransfuseAndroidModule {
     public static final String SCOPES_UTIL_TRANSACTION_WORKER = "scopesUtilTransactionWorker";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
+
+    @Provides
+    @CodeGenerationScope
+    public JCodeModel getJCodeModel(){
+        return new JCodeModel();
+    }
 
     @Provides
     @Singleton
