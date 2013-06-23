@@ -15,18 +15,36 @@
  */
 package org.androidtransfuse.scope;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * @author John Ericksen
  */
 public class ScopeKey<T> {
 
+    public static final String GET_METHOD = "get";
+    private static final ConcurrentMap<String, ScopeKey<?>> SCOPE_CACHE = new ConcurrentHashMap<String, ScopeKey<?>>();
     private final String signature;
 
-    public ScopeKey(String signature){
+    private ScopeKey(String signature){
         if(signature == null){
             throw new NullPointerException("ScopeKey signature cannot be null");
         }
         this.signature = signature;
+    }
+
+    public static <S> ScopeKey<S> get(Class<S> clazz, String signature){
+        ScopeKey result = SCOPE_CACHE.get(signature);
+        if (result == null) {
+            ScopeKey value = new ScopeKey(signature);
+            result = SCOPE_CACHE.putIfAbsent(signature, value);
+            if (result == null) {
+                result = value;
+            }
+        }
+
+        return result;
     }
 
     public static <S> ScopeKey<S> of(Class<S> clazz){

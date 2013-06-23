@@ -75,6 +75,6 @@ public class SingletonScopeBuilder implements VariableBuilder {
 
         JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
 
-        return JExpr._new(codeModel.ref(ScopeKey.class).narrow(injectionNodeClassRef)).arg(JExpr.lit(signature.buildScopeKeySignature()));
+        return codeModel.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }
 }
