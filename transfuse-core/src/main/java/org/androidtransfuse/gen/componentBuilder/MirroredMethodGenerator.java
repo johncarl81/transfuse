@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
@@ -28,27 +29,27 @@ import javax.inject.Inject;
 public class MirroredMethodGenerator implements MethodGenerator {
     private final ASTMethod overrideMethod;
     private final boolean superCall;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public MirroredMethodGenerator(/*@Assisted*/ ASTMethod overrideMethod, /*@Assisted*/ boolean superCall, JCodeModel codeModel, UniqueVariableNamer variableNamer) {
+    public MirroredMethodGenerator(/*@Assisted*/ ASTMethod overrideMethod, /*@Assisted*/ boolean superCall, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer) {
         this.overrideMethod = overrideMethod;
         this.superCall = superCall;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
     }
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        JMethod method = definedClass.method(JMod.PUBLIC, codeModel.ref(overrideMethod.getReturnType().getName()), overrideMethod.getName());
+        JMethod method = definedClass.method(JMod.PUBLIC, generationUtil.ref(overrideMethod.getReturnType()), overrideMethod.getName());
         method.annotate(Override.class);
 
         MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, overrideMethod);
 
         //parameters
         for (ASTParameter astParameter : overrideMethod.getParameters()) {
-            JVar param = method.param(codeModel.ref(astParameter.getASTType().getName()), variableNamer.generateName(astParameter.getASTType()));
+            JVar param = method.param(generationUtil.ref(astParameter.getASTType()), variableNamer.generateName(astParameter.getASTType()));
             methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
         }
 

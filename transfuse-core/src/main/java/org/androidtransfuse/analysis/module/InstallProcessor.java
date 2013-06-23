@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 /**
  * @author John Ericksen
@@ -45,7 +46,7 @@ public class InstallProcessor implements TypeProcessor {
         private final ASTType[] types;
 
         private InstallModuleConfiguration(ASTType[] types) {
-            this.types = types;
+            this.types = Arrays.copyOf(types, types.length);
         }
 
         @Override

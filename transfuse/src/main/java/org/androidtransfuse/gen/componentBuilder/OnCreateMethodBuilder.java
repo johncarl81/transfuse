@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
@@ -33,14 +34,16 @@ import java.util.List;
 public class OnCreateMethodBuilder implements MethodBuilder {
 
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final ASTMethod onCreateASTMethod;
     private final UniqueVariableNamer namer;
     private final LayoutBuilder layoutBuilder;
 
     @Inject
-    public OnCreateMethodBuilder(/*@Assisted*/ ASTMethod onCreateASTMethod, /*@Assisted*/ LayoutBuilder layoutBuilder, JCodeModel codeModel, UniqueVariableNamer namer) {
+    public OnCreateMethodBuilder(/*@Assisted*/ ASTMethod onCreateASTMethod, /*@Assisted*/ LayoutBuilder layoutBuilder, JCodeModel codeModel, ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.onCreateASTMethod = onCreateASTMethod;
+        this.generationUtil = generationUtil;
         this.namer = namer;
         this.layoutBuilder = layoutBuilder;
     }
@@ -54,7 +57,7 @@ public class OnCreateMethodBuilder implements MethodBuilder {
         List<JVar> parameters = new ArrayList<JVar>();
 
         for (ASTParameter methodArgument : onCreateASTMethod.getParameters()) {
-            JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), namer.generateName(methodArgument.getASTType()));
+            JVar param = onCreateMethod.param(generationUtil.ref(methodArgument.getASTType()), namer.generateName(methodArgument.getASTType()));
             parameters.add(param);
             onCreateMethodDescriptorBuilder.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
         }

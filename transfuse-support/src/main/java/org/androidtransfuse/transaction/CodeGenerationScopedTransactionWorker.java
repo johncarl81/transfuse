@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * @author John Ericksen
  */
-public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R> implements TransactionWorker<V, R> {
+public class CodeGenerationScopedTransactionWorker<V, R> extends AbstractCompletionTransactionWorker<V, R> {
 
     private final JCodeModel codeModel;
     private final CodeWriter codeWriter;

@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -35,14 +36,14 @@ import java.util.Map;
 public class NonConfigurationInstanceGenerator implements ExpressionVariableDependentGenerator {
 
     private final UniqueVariableNamer namer;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final InvocationBuilder invocationBuilder;
     private final TypedExpressionFactory typeExpressionFactory;
 
     @Inject
-    public NonConfigurationInstanceGenerator(UniqueVariableNamer namer, JCodeModel codeModel, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
+    public NonConfigurationInstanceGenerator(UniqueVariableNamer namer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
         this.namer = namer;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.invocationBuilder = invocationBuilder;
         this.typeExpressionFactory = typeExpressionFactory;
     }
@@ -119,7 +120,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
             NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
             for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                 //add all fields to constructor in order
-                JClass fieldNodeType = codeModel.ref(fieldInjectionPoint.getInjectionNode().getASTType().getName());
+                JClass fieldNodeType = generationUtil.ref(fieldInjectionPoint.getInjectionNode().getASTType());
                 JVar param = constructor.param(fieldNodeType, namer.generateName(fieldInjectionPoint.getInjectionNode()));
                 JFieldVar field = nonConfigurationInstance.field(JMod.PRIVATE, fieldNodeType, namer.generateName(injectionNode));
                 constructor.body().assign(field, param);

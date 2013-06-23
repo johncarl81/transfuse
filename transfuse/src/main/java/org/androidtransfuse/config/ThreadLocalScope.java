@@ -18,7 +18,6 @@ package org.androidtransfuse.config;
 import org.androidtransfuse.scope.ScopeKey;
 
 import javax.inject.Provider;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
-@Singleton
 public class ThreadLocalScope implements EnterableScope {
 
     private final ThreadLocal<Map<ScopeKey<?>, Object>> values = new ThreadLocal<Map<ScopeKey<?>, Object>>();

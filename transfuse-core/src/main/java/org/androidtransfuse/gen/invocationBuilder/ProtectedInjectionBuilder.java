@@ -15,8 +15,11 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JInvocation;
+import com.sun.codemodel.JStatement;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
@@ -32,21 +35,21 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     ;
 
     private final PackageHelperRepository packageHelperGenerator;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final TypeInvocationHelper invocationHelper;
 
     @Inject
-    public ProtectedInjectionBuilder(PackageHelperRepository packageHelperGenerator, JCodeModel codeModel, TypeInvocationHelper invocationHelper) {
+    public ProtectedInjectionBuilder(PackageHelperRepository packageHelperGenerator, ClassGenerationUtil generationUtil, TypeInvocationHelper invocationHelper) {
         this.packageHelperGenerator = packageHelperGenerator;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.invocationHelper = invocationHelper;
     }
 
     @Override
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, JType type) {
+    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getConstructorCall(constructorInjectionPoint);
-        JInvocation invocation = accessorMethod.invoke(codeModel);
+        JInvocation invocation = accessorMethod.invoke(generationUtil);
         for (JExpression parameter : parameters) {
             invocation.arg(parameter);
         }
@@ -58,7 +61,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getMethodCall(returnType, targetExpressionType, methodName, injectionNodeType);
-        JInvocation invocation = accessorMethod.invoke(codeModel).arg(targetExpression);
+        JInvocation invocation = accessorMethod.invoke(generationUtil).arg(targetExpression);
         for (JExpression parameter : parameters) {
             invocation.arg(parameter);
         }
@@ -69,14 +72,14 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldGetter(returnType, variableType, name);
-        return accessorMethod.invoke(codeModel).arg(variable);
+        return accessorMethod.invoke(generationUtil).arg(variable);
     }
 
     @Override
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldSetter(fieldInjectionPoint);
-        return accessorMethod.invoke(codeModel)
+        return accessorMethod.invoke(generationUtil)
                 .arg(variable)
                 .arg(invocationHelper.coerceType(fieldInjectionPoint.getInjectionNode().getASTType(), expression));
     }

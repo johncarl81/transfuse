@@ -18,7 +18,6 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
-import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -31,7 +30,7 @@ import java.util.List;
  */
 public interface ModifierInjectionBuilder {
 
-    JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, JType type);
+    JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type);
 
     JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name);
 

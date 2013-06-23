@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
@@ -37,7 +38,7 @@ import javax.inject.Inject;
  */
 public class VariableInjectionBuilder implements VariableBuilder {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final AOPProxyGenerator aopProxyGenerator;
@@ -48,7 +49,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private final Validator validator;
 
     @Inject
-    public VariableInjectionBuilder(JCodeModel codeModel,
+    public VariableInjectionBuilder(ClassGenerationUtil generationUtil,
                                     UniqueVariableNamer variableNamer,
                                     InvocationBuilder injectionInvocationBuilder,
                                     AOPProxyGenerator aopProxyGenerator,
@@ -57,7 +58,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     ExceptionWrapper exceptionWrapper,
                                     ExpressionMatchingIterableFactory generatorFactory,
                                     Validator validator) {
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.aopProxyGenerator = aopProxyGenerator;
@@ -79,7 +80,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
             injectionExpressionBuilder.setupInjectionRequirements(injectionBuilderContext, proxyableInjectionNode);
 
-            final JType nodeType = codeModel.parseType(proxyableInjectionNode.getClassName());
+            final ASTType nodeType = proxyableInjectionNode.getASTType();
 
             final ASTInjectionAspect injectionAspect = proxyableInjectionNode.getAspect(ASTInjectionAspect.class);
             JBlock block = injectionBuilderContext.getBlock();
@@ -110,9 +111,9 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                         nodeType);
 
                                 if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
-                                    return injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(proxyableInjectionNode), constructionExpression);
+                                    return injectionBuilderContext.getBlock().decl(generationUtil.ref(nodeType), variableNamer.generateName(proxyableInjectionNode), constructionExpression);
                                 } else {
-                                    JVar variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, nodeType, variableNamer.generateName(proxyableInjectionNode));
+                                    JVar variableRef = injectionBuilderContext.getDefinedClass().field(JMod.PRIVATE, generationUtil.ref(nodeType), variableNamer.generateName(proxyableInjectionNode));
                                     block.assign(variableRef, constructionExpression);
                                     return variableRef;
                                 }

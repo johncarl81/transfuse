@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.FactoriesGenerator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -31,21 +31,21 @@ import javax.inject.Inject;
 public class FactoryVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private final ASTType factoryType;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public FactoryVariableBuilder(/*@Assisted*/ ASTType factoryType, TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel) {
+    public FactoryVariableBuilder(/*@Assisted*/ ASTType factoryType, TypedExpressionFactory typedExpressionFactory, ClassGenerationUtil generationUtil) {
         super(factoryType, typedExpressionFactory);
         this.factoryType = factoryType;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     @Override
     public JExpression buildExpression(InjectionBuilderContext context, InjectionNode injectionNode) {
 
-        JExpression factoryClass = codeModel.ref(factoryType.getName()).dotclass();
+        JExpression factoryClass = generationUtil.ref(factoryType).dotclass();
 
-        return codeModel.ref(FactoriesGenerator.FACTORIES_NAME.getFullyQualifiedName())
+        return generationUtil.ref(FactoriesGenerator.FACTORIES_NAME)
                 .staticInvoke(FactoriesGenerator.GET_METHOD)
                 .arg(factoryClass)
                 .arg(context.getScopeVar());

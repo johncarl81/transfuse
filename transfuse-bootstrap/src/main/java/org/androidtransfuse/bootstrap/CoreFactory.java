@@ -47,6 +47,7 @@ import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 import org.androidtransfuse.util.Providers;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopePredicate;
+import org.androidtransfuse.util.VirtualProxyException;
 import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
@@ -91,7 +92,7 @@ public class CoreFactory {
 
     public ASTElementConverterFactory buildConverterFactory() {
         ConcreteASTFactory astFactory = new ConcreteASTFactory();
-        ASTElementFactoryProvider astElementFactoryProvider = new ASTElementFactoryProvider();
+        ASTElementFactoryVProxy astElementFactoryProvider = new ASTElementFactoryVProxy();
         ASTTypeBuilderVisitor astTypeBuilderVisitor = new ASTTypeBuilderVisitor(astElementFactoryProvider);
         ElementConverterFactory elementConverterFactory =
                 new ElementConverterFactory(astTypeBuilderVisitor, astElementFactoryProvider, astFactory);
@@ -101,9 +102,7 @@ public class CoreFactory {
         //wire lazy injections
         astFactory.setElementConverterFactory(elementConverterFactory);
         astFactory.setAstElementFactoryProvider(astElementFactoryProvider);
-        astElementFactoryProvider.setAstElementConverterFactory(astElementConverterFactory);
-        astElementFactoryProvider.setAstFactory(astFactory);
-        astElementFactoryProvider.setAstTypeBuilderVisitor(astTypeBuilderVisitor);
+        astElementFactoryProvider.load(Providers.of(new ASTElementFactory(elements, astFactory, astTypeBuilderVisitor, astElementConverterFactory)));
 
         return astElementConverterFactory;
     }
@@ -118,7 +117,7 @@ public class CoreFactory {
     }
 
     public ScopesGenerator buildScopesGenerator() {
-        return new ScopesGenerator(codeModel, generationUtil, getModuleRepository(), namer);
+        return new ScopesGenerator(generationUtil, getModuleRepository(), namer);
     }
 
     private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
@@ -133,19 +132,19 @@ public class CoreFactory {
         AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil, validator);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
-        ExceptionWrapper exceptionWrapper = new ExceptionWrapper(codeModel);
-        ExpressionMatchingIterableFactory generatorFactory = new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory)));
+        ExceptionWrapper exceptionWrapper = new ExceptionWrapper(generationUtil);
+        ExpressionMatchingIterableFactory generatorFactory = new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil)));
 
         return new VariableInjectionBuilder(
-                        codeModel,
-                        namer,
-                        buildInvocationBuilder(),
-                        aopProxyGenerator,
-                        injectionExpressionBuilder,
-                        typedExpressionFactory,
-                        exceptionWrapper,
-                        generatorFactory,
-                        validator);
+                generationUtil,
+                namer,
+                buildInvocationBuilder(),
+                aopProxyGenerator,
+                injectionExpressionBuilder,
+                typedExpressionFactory,
+                exceptionWrapper,
+                generatorFactory,
+                validator);
     }
 
     private Analyzer buildAnalyser(){
@@ -204,7 +203,7 @@ public class CoreFactory {
 
         InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
-        SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer), typedExpressionFactory, namer);
+        SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer), generationUtil, typedExpressionFactory, namer);
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
 
@@ -216,9 +215,9 @@ public class CoreFactory {
             @Override
             public ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
                 if(modifier.equals(ASTAccessModifier.PUBLIC)){
-                    return new PublicInjectionBuilder(new TypeInvocationHelper(codeModel, astClassFactory));
+                    return new PublicInjectionBuilder(new TypeInvocationHelper(astClassFactory, generationUtil), generationUtil);
                 }
-                return new PrivateInjectionBuilder(codeModel);
+                return new PrivateInjectionBuilder(generationUtil);
             }
         });
     }
@@ -252,8 +251,8 @@ public class CoreFactory {
                     buildInvocationBuilder(),
                     injectionExpressionBuilder,
                     typedExpressionFactory,
-                    new ExceptionWrapper(codeModel),
-                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(codeModel, astClassFactory))),
+                    new ExceptionWrapper(generationUtil),
+                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
                     validator);
             this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
         }
@@ -278,9 +277,9 @@ public class CoreFactory {
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
         ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder(), validator);
 
-        ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, codeModel, buildAnalyser());
+        ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, generationUtil, buildAnalyser());
 
-        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, namer);
+        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, namer, generationUtil);
 
         DefineScopeProcessor defineScopeProcessor = new DefineScopeProcessor(astClassFactory, scopeInjectionFactory, scopeAspectFactoryFactory);
 
@@ -296,8 +295,8 @@ public class CoreFactory {
                 new AnalysisContextFactory(buildAnalysisRepository()),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
-                new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), new QualifierPredicate(astClassFactory)),
-                new MirroredMethodGeneratorFactory(namer, codeModel),
+                new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), new QualifierPredicate(astClassFactory)),
+                new MirroredMethodGeneratorFactory(namer, generationUtil),
                 generationUtil,
                 namer,
                 validator);
@@ -316,7 +315,7 @@ public class CoreFactory {
         InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
         for (ASTType factoryType : factories) {
             repository.putType(factoryType,
-                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, codeModel, buildAnalyser()), buildAnalyser()));
+                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), buildAnalyser()));
         }
 
         moduleRepository.addModuleRepository(repository);
@@ -368,31 +367,20 @@ public class CoreFactory {
         }
     }
 
-    private final class ASTElementFactoryProvider implements Provider<ASTElementFactory>{
+    private static final class ASTElementFactoryVProxy implements Provider<ASTElementFactory>{
 
-        private ASTFactory astFactory;
-        private ASTTypeBuilderVisitor astTypeBuilderVisitor;
-        private ASTElementConverterFactory astElementConverterFactory;
-        private ASTElementFactory astElementFactory = null;
+        private Provider<ASTElementFactory> delegate;
 
         @Override
-        public synchronized ASTElementFactory get() {
-            if(astElementFactory == null){
-                astElementFactory = new ASTElementFactory(elements, astFactory, astTypeBuilderVisitor, astElementConverterFactory);
+        public ASTElementFactory get() {
+            if (delegate == null) {
+                throw new VirtualProxyException("Trying to use a proxied instance before initialization");
             }
-            return astElementFactory;
+            return delegate.get();
         }
 
-        public void setAstFactory(ASTFactory astFactory) {
-            this.astFactory = astFactory;
-        }
-
-        public void setAstTypeBuilderVisitor(ASTTypeBuilderVisitor astTypeBuilderVisitor) {
-            this.astTypeBuilderVisitor = astTypeBuilderVisitor;
-        }
-
-        public void setAstElementConverterFactory(ASTElementConverterFactory astElementConverterFactory) {
-            this.astElementConverterFactory = astElementConverterFactory;
+        private void load(Provider<ASTElementFactory> delegate) {
+            this.delegate = delegate;
         }
     }
 

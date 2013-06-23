@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 
 import javax.inject.Inject;
@@ -26,16 +26,16 @@ import javax.inject.Inject;
  */
 public class MirroredMethodGeneratorFactory {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public MirroredMethodGeneratorFactory(UniqueVariableNamer variableNamer, JCodeModel codeModel) {
+    public MirroredMethodGeneratorFactory(UniqueVariableNamer variableNamer, ClassGenerationUtil generationUtil) {
         this.variableNamer = variableNamer;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     public MirroredMethodGenerator buildMirroredMethodGenerator(ASTMethod interfaceMethod, boolean superCall) {
-        return new MirroredMethodGenerator(interfaceMethod, superCall, codeModel, variableNamer);
+        return new MirroredMethodGenerator(interfaceMethod, superCall, generationUtil, variableNamer);
     }
 }

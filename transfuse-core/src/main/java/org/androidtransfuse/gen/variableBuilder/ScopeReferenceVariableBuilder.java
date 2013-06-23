@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
@@ -30,19 +30,19 @@ import org.androidtransfuse.scope.Scopes;
 public class ScopeReferenceVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private final ASTType scopeAnnotation;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     public ScopeReferenceVariableBuilder(ASTType scopeAnnotation,
                                          TypedExpressionFactory typedExpressionFactory,
-                                         JCodeModel codeModel) {
+                                         ClassGenerationUtil generationUtil) {
         super(Scope.class, typedExpressionFactory);
         this.scopeAnnotation = scopeAnnotation;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     @Override
     public JExpression buildExpression(InjectionBuilderContext context, InjectionNode injectionNode) {
         JExpression scopesVar = context.getScopeVar();
-        return scopesVar.invoke(Scopes.GET_SCOPE).arg(codeModel.ref(scopeAnnotation.getName()).dotclass());
+        return scopesVar.invoke(Scopes.GET_SCOPE).arg(generationUtil.ref(scopeAnnotation).dotclass());
     }
 }

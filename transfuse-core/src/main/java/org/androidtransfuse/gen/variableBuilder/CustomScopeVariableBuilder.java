@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -37,16 +38,19 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
     private final TypedExpressionFactory typedExpressionFactory;
     private final ProviderGenerator providerGenerator;
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
 
     public CustomScopeVariableBuilder(ASTType scopeKey,
                                       TypedExpressionFactory typedExpressionFactory,
                                       ProviderGenerator providerGenerator,
                                       JCodeModel codeModel,
+                                      ClassGenerationUtil generationUtil,
                                       UniqueVariableNamer namer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.providerGenerator = providerGenerator;
         this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.namer = namer;
         this.scopeKey = scopeKey;
     }
@@ -61,11 +65,11 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
         JExpression scopesVar = injectionBuilderContext.getScopeVar();
-        JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(codeModel.ref(scopeKey.getName()).dotclass());
+        JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(generationUtil.ref(scopeKey).dotclass());
 
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(buildScopeKey(injectionNode)).arg(provider);
 
-        JVar decl = injectionBuilderContext.getBlock().decl(codeModel.ref(injectionNode.getClassName()),
+        JVar decl = injectionBuilderContext.getBlock().decl(generationUtil.ref(injectionNode.getASTType()),
                 namer.generateName(injectionNode), expression);
 
         return typedExpressionFactory.build(injectionNode.getASTType(), decl);
@@ -74,7 +78,7 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
     private JInvocation buildScopeKey(InjectionNode injectionNode){
         InjectionSignature signature = injectionNode.getTypeSignature();
 
-        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+        JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
         return codeModel.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }

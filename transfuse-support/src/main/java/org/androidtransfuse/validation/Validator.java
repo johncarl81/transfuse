@@ -47,7 +47,7 @@ public class Validator {
         return new ValidationBuilder(Diagnostic.Kind.ERROR, message);
     }
 
-    public class ValidationBuilder{
+    public final class ValidationBuilder{
         private Diagnostic.Kind kind;
         private String message;
         private Element element;

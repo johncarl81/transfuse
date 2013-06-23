@@ -27,11 +27,11 @@ import java.util.List;
  */
 public class ExceptionWrapper {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public ExceptionWrapper(JCodeModel codeModel) {
-        this.codeModel = codeModel;
+    public ExceptionWrapper(ClassGenerationUtil generationUtil) {
+        this.generationUtil = generationUtil;
     }
 
     public <T> T wrapException(JBlock block, List<ASTType> throwsTypes, BlockWriter<T> blockWriter) throws ClassNotFoundException, JClassAlreadyExistsException {
@@ -46,10 +46,10 @@ public class ExceptionWrapper {
 
         if (tryBlock != null) {
             for (ASTType throwsType : throwsTypes) {
-                JCatchBlock catchBlock = tryBlock._catch(codeModel.ref(throwsType.getName()));
+                JCatchBlock catchBlock = tryBlock._catch(generationUtil.ref(throwsType));
                 JVar exceptionParam = catchBlock.param("e");
 
-                catchBlock.body()._throw(JExpr._new(codeModel.ref(TransfuseInjectionException.class))
+                catchBlock.body()._throw(JExpr._new(generationUtil.ref(TransfuseInjectionException.class))
                         .arg(JExpr.lit(throwsType.getName() + " while performing dependency injection"))
                         .arg(exceptionParam));
             }

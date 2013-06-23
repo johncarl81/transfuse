@@ -22,7 +22,6 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Arrays;
 

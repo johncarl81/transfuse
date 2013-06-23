@@ -36,13 +36,13 @@ public class ParcelsGenerator {
     public static final PackageClass REPOSITORY_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_REPOSITORY_NAME);
     private static final String MAP_NAME = "parcelWrappers";
 
-    private final ClassGenerationUtil classGenerationUtil;
+    private final ClassGenerationUtil generationUtil;
     private final JCodeModel codeModel;
     private final UniqueVariableNamer uniqueVariableNamer;
 
     @Inject
-    public ParcelsGenerator(ClassGenerationUtil classGenerationUtil, JCodeModel codeModel, UniqueVariableNamer uniqueVariableNamer) {
-        this.classGenerationUtil = classGenerationUtil;
+    public ParcelsGenerator(ClassGenerationUtil generationUtil, JCodeModel codeModel, UniqueVariableNamer uniqueVariableNamer) {
+        this.generationUtil = generationUtil;
         this.codeModel = codeModel;
         this.uniqueVariableNamer = uniqueVariableNamer;
     }
@@ -50,7 +50,7 @@ public class ParcelsGenerator {
     public void generate(Map<Provider<ASTType>, JDefinedClass> generated) {
 
         try {
-            JDefinedClass parcelsDefinedClass = classGenerationUtil.defineClass(REPOSITORY_NAME);
+            JDefinedClass parcelsDefinedClass = generationUtil.defineClass(REPOSITORY_NAME);
 
             parcelsDefinedClass._implements(Repository.class);
 
@@ -63,7 +63,7 @@ public class ParcelsGenerator {
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : generated.entrySet()) {
 
-                JClass type = codeModel.ref(astTypeJDefinedClassEntry.getKey().get().getName());
+                JClass type = generationUtil.ref(astTypeJDefinedClassEntry.getKey().get());
 
                 String innerClassName = uniqueVariableNamer.generateClassName(astTypeJDefinedClassEntry.getValue()) + Parcels.IMPL_EXT;
 

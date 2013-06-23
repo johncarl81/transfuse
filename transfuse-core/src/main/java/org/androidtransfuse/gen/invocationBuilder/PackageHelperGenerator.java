@@ -84,13 +84,13 @@ public class PackageHelperGenerator {
     }
 
     private void buildConstructorCall(ConstructorCall constructorCall, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = codeModel.ref(constructorCall.getType().getName());
+        JClass returnTypeRef = generationUtil.ref(constructorCall.getType());
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
         JInvocation constructorInvocation = JExpr._new(returnTypeRef);
         for (ASTType paramType : constructorCall.getParamTypes()) {
-            JClass paramRef = codeModel.ref(paramType.getName());
+            JClass paramRef = generationUtil.ref(paramType);
             JVar param = accessorMethod.param(paramRef, namer.generateName(paramRef));
             constructorInvocation.arg(param);
         }
@@ -100,16 +100,16 @@ public class PackageHelperGenerator {
 
 
     private void buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        JClass returnTypeRef = generationUtil.ref(returnType);
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
-        JClass targetRef = codeModel.ref(targetExpressionsType.getName());
+        JClass targetRef = generationUtil.ref(targetExpressionsType);
         JVar targetParam = accessorMethod.param(targetRef, namer.generateName(targetRef));
         JInvocation invocation = targetParam.invoke(methodName);
 
         for (ASTType argType : argTypes) {
-            JClass ref = codeModel.ref(argType.getName());
+            JClass ref = generationUtil.ref(argType);
             JVar param = accessorMethod.param(ref, namer.generateName(ref));
             invocation.arg(param);
         }
@@ -122,11 +122,11 @@ public class PackageHelperGenerator {
     }
 
     private void buildFieldGet(ASTType returnType, ASTType variableType, String name, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = codeModel.ref(returnType.getName());
+        JClass returnTypeRef = generationUtil.ref(returnType);
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
-        JClass variableTypeRef = codeModel.ref(variableType.getName());
+        JClass variableTypeRef = generationUtil.ref(variableType);
         JVar variableParam = accessorMethod.param(variableTypeRef, namer.generateName(variableTypeRef));
         JBlock body = accessorMethod.body();
 
@@ -137,10 +137,10 @@ public class PackageHelperGenerator {
         //get, ClassName, FS, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, codeModel.VOID, accessorMethodName);
 
-        JClass containerType = codeModel.ref(fieldReference.getVariableType().getName());
+        JClass containerType = generationUtil.ref(fieldReference.getVariableType());
         JVar containerParam = accessorMethod.param(containerType, namer.generateName(containerType));
 
-        JClass inputType = codeModel.ref(fieldReference.getReturnType().getName());
+        JClass inputType = generationUtil.ref(fieldReference.getReturnType());
         JVar inputParam = accessorMethod.param(inputType, namer.generateName(inputType));
 
         JBlock body = accessorMethod.body();

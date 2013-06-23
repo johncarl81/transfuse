@@ -22,6 +22,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
@@ -35,12 +36,14 @@ import javax.inject.Inject;
 public class OnReceiveMethodBuilder implements MethodBuilder {
 
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final ASTClassFactory astClassFactory;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public OnReceiveMethodBuilder(JCodeModel codeModel, ASTClassFactory astClassFactory, UniqueVariableNamer namer) {
+    public OnReceiveMethodBuilder(JCodeModel codeModel, ClassGenerationUtil generationUtil, ASTClassFactory astClassFactory, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.astClassFactory = astClassFactory;
         this.namer = namer;
     }
@@ -55,7 +58,7 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
             MethodDescriptorBuilder methodDescriptor = new MethodDescriptorBuilder(onReceiveMethod, onReceiveASTMethod);
 
             for (ASTParameter astParameter : onReceiveASTMethod.getParameters()) {
-                JVar param = onReceiveMethod.param(codeModel.ref(astParameter.getASTType().getName()), namer.generateName(astParameter.getASTType()));
+                JVar param = onReceiveMethod.param(generationUtil.ref(astParameter.getASTType()), namer.generateName(astParameter.getASTType()));
                 methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
             }
 

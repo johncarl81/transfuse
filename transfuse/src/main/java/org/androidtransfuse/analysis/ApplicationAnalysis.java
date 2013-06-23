@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis;
 
-import android.app.*;
 import android.content.Context;
 import android.content.res.Configuration;
 import com.google.common.collect.ImmutableSet;
@@ -28,7 +27,6 @@ import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;

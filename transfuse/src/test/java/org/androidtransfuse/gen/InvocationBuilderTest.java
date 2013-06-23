@@ -17,7 +17,6 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
@@ -113,7 +112,7 @@ public class InvocationBuilderTest {
 
     @Test
     public void testConstructorCall() throws ClassNotFoundException, JClassAlreadyExistsException {
-        JType type = mock(JType.class);
+        ASTType type = mock(ASTType.class);
         ASTType containingType = mock(ASTType.class);
         JExpression variable = mock(JExpression.class);
         Iterable parameters = mock(Iterable.class);

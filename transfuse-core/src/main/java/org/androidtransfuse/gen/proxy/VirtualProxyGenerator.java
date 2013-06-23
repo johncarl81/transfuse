@@ -131,14 +131,14 @@ public class VirtualProxyGenerator {
             JDefinedClass definedClass = generationUtil.defineClass(descriptor.getProxyName());
 
             //define delegate
-            JClass delegateClass = codeModel.ref(descriptor.getDelegate().getName());
+            JClass delegateClass = generationUtil.ref(descriptor.getDelegate());
 
             Set<ASTType> proxyInterfaces = descriptor.getProxyInterfaces();
 
             JFieldVar delegateField = definedClass.field(JMod.PRIVATE, delegateClass, DELEGATE_NAME,
                     JExpr._null());
 
-            definedClass._implements(codeModel.ref(DelayedLoad.class).narrow(delegateClass));
+            definedClass._implements(generationUtil.ref(DelayedLoad.class).narrow(delegateClass));
 
             JMethod delayedLoadMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, DelayedLoad.LOAD_METHOD);
             JVar delegateParam = delayedLoadMethod.param(delegateClass, DELEGATE_LOAD_METHOD_PARAM_NAME);
@@ -147,14 +147,14 @@ public class VirtualProxyGenerator {
             JMethod delegateCheckMethod = definedClass.method(JMod.PRIVATE, codeModel.VOID, CHECK_DELEGATE);
             JBlock delegateNullBlock = delegateCheckMethod.body()._if(delegateField.eq(JExpr._null()))._then();
 
-            delegateNullBlock._throw(JExpr._new(codeModel.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
+            delegateNullBlock._throw(JExpr._new(generationUtil.ref(VirtualProxyException.class)).arg(PROXY_NOT_INITIALIZED));
 
 
             Set<MethodSignature> methodSignatures = new HashSet<MethodSignature>();
 
             //implements interfaces
             for (ASTType interfaceType : proxyInterfaces) {
-                definedClass._implements(codeModel.ref(interfaceType.getName()));
+                definedClass._implements(generationUtil.ref(interfaceType));
 
                 //implement methods
                 for (ASTMethod method : interfaceType.getMethods()) {
@@ -191,7 +191,7 @@ public class VirtualProxyGenerator {
         // public <type> <method_name> ( <parameters...>)
         JType returnType;
         if (method.getReturnType() != null) {
-            returnType = codeModel.ref(method.getReturnType().getName());
+            returnType = generationUtil.ref(method.getReturnType());
         } else {
             returnType = codeModel.VOID;
         }
@@ -201,7 +201,7 @@ public class VirtualProxyGenerator {
         Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
-                    methodDeclaration.param(codeModel.ref(parameter.getASTType().getName()),
+                    methodDeclaration.param(generationUtil.ref(parameter.getASTType()),
                             namer.generateName(parameter.getASTType())));
         }
 

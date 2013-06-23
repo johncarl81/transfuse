@@ -114,16 +114,15 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     }
 
     @Singleton
-    public static class InjectionNodeRepository{
+    public static final class InjectionNodeRepository{
 
-        protected final Set<ASTType> installedComponents = new HashSet<ASTType>();
-        protected final InjectionNodeBuilderRepository moduleRepository;
+        private final Set<ASTType> installedComponents = new HashSet<ASTType>();
+        private final InjectionNodeBuilderRepository moduleRepository;
 
         @Inject
         public InjectionNodeRepository(InjectionNodeBuilderRepository moduleRepository){
             this.moduleRepository = moduleRepository;
         }
-
     }
 
     private final InjectionNodeRepository repository;
@@ -143,24 +142,24 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     }
 
     public InjectionNodeBuilderRepository buildApplicationInjections() {
-        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
+        InjectionNodeBuilderRepository builderRepository = injectionNodeBuilderRepositoryProvider.get();
         //resources
-        repository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
+        builderRepository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
 
         //menu inflater
-        repository.putType(MenuInflater.class, injectionBindingBuilder.dependency(android.app.Activity.class).invoke(MenuInflater.class, "getMenuInflater").build());
+        builderRepository.putType(MenuInflater.class, injectionBindingBuilder.dependency(android.app.Activity.class).invoke(MenuInflater.class, "getMenuInflater").build());
 
         //system services
         for (Map.Entry<String, ASTType> systemServiceEntry : SYSTEM_SERVICES.entrySet()) {
-            repository.putType(systemServiceEntry.getValue(),
+            builderRepository.putType(systemServiceEntry.getValue(),
                     injectionBindingBuilder.dependency(Context.class).invoke(Object.class, "getSystemService").arg(JExpr.lit(systemServiceEntry.getKey())).build());
         }
 
-        repository.putType(SharedPreferences.class,
+        builderRepository.putType(SharedPreferences.class,
                 injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").dependencyArg(Context.class).build());
 
 
-        return repository;
+        return builderRepository;
     }
 
     public InjectionNodeBuilderRepository buildModuleConfiguration() {

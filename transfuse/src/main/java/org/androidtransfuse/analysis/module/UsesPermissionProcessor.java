@@ -21,6 +21,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.processor.ManifestManager;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 /**
  * @author John Ericksen
@@ -46,7 +47,7 @@ public class UsesPermissionProcessor implements TypeProcessor {
         private final String[] usesPermissions;
 
         private UsesPermissionModuleConfiguration(String[] usesPermissions) {
-            this.usesPermissions = usesPermissions;
+            this.usesPermissions = Arrays.copyOf(usesPermissions, usesPermissions.length);
         }
 
 

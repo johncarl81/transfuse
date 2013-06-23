@@ -15,10 +15,8 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JPackage;
+import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Generated;
 
@@ -89,6 +87,26 @@ public class ClassGenerationUtil {
         annotateGeneratedClass(definedClass);
 
         return definedClass;
+    }
+
+    public JClass ref(PackageClass packageClass){
+        return ref(packageClass.getCanonicalName());
+    }
+
+    public JClass ref(ASTType astType){
+        String typeName = astType.getName();
+        if(astType.isArray()){
+            return ref(typeName.substring(0, typeName.length() - 2)).array();
+        }
+        return ref(typeName);
+    }
+
+    public JClass ref(String typeName){
+        return codeModel.ref(typeName);
+    }
+
+    public JClass ref(Class<?> clazz) {
+        return codeModel.ref(clazz);
     }
 
     /**

@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
@@ -32,15 +33,17 @@ import java.util.List;
 public class PublicInjectionBuilder implements ModifierInjectionBuilder {
 
     private final TypeInvocationHelper invocationHelper;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public PublicInjectionBuilder(TypeInvocationHelper invocationHelper) {
+    public PublicInjectionBuilder(TypeInvocationHelper invocationHelper, ClassGenerationUtil generationUtil) {
         this.invocationHelper = invocationHelper;
+        this.generationUtil = generationUtil;
     }
 
     @Override
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, JType type) {
-        JInvocation constructorInvocation = JExpr._new(type);
+    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
+        JInvocation constructorInvocation = JExpr._new(generationUtil.ref(type));
 
         for (JExpression parameter : parameters) {
             constructorInvocation.arg(parameter);

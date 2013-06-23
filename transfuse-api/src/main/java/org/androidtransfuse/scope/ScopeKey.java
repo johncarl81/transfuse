@@ -21,23 +21,29 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author John Ericksen
  */
-public class ScopeKey<T> {
+public final class ScopeKey<T> {
 
     public static final String GET_METHOD = "get";
+
     private static final ConcurrentMap<String, ScopeKey<?>> SCOPE_CACHE = new ConcurrentHashMap<String, ScopeKey<?>>();
     private final String signature;
+    private final Class<T> clazz;
 
-    private ScopeKey(String signature){
+    private ScopeKey(Class<T> clazz, String signature){
         if(signature == null){
             throw new NullPointerException("ScopeKey signature cannot be null");
         }
+        if(clazz == null){
+            throw new NullPointerException("ScopeKey class cannot be null");
+        }
         this.signature = signature;
+        this.clazz = clazz;
     }
 
     public static <S> ScopeKey<S> get(Class<S> clazz, String signature){
         ScopeKey result = SCOPE_CACHE.get(signature);
         if (result == null) {
-            ScopeKey value = new ScopeKey(signature);
+            ScopeKey<S> value = new ScopeKey<S>(clazz, signature);
             result = SCOPE_CACHE.putIfAbsent(signature, value);
             if (result == null) {
                 result = value;
@@ -47,12 +53,12 @@ public class ScopeKey<T> {
         return result;
     }
 
-    public static <S> ScopeKey<S> of(Class<S> clazz){
-        return new ScopeKey<S>(clazz.getName());
+    public static <S> ScopeKey<S> of(Class<S> inputClazz){
+        return get(inputClazz, inputClazz.getName());
     }
 
     public ScopeKey<T> annotatedBy(String annotation){
-        return new ScopeKey<T>(this.signature + annotation);
+        return get(clazz, this.signature + annotation);
     }
 
     @Override

@@ -101,7 +101,7 @@ public class ProviderGenerator {
     protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode, String extension) {
 
         try {
-            JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+            JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
             JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(extension), true);
 
@@ -117,7 +117,7 @@ public class ProviderGenerator {
     protected JDefinedClass fillInProvider(InjectionNode injectionNode, JDefinedClass providerClass) {
 
         try{
-            JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+            JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
             //scope holder definition
             JFieldVar scopesField = providerClass.field(JMod.PRIVATE, Scopes.class, namer.generateName(Scopes.class));

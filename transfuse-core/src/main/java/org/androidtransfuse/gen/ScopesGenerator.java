@@ -34,14 +34,12 @@ public class ScopesGenerator {
     public static final String GET_INSTANCE = "getInstance";
     public static final String BUILD_METHOD = "build";
 
-    private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository repository;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public ScopesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, ModuleRepository repository, UniqueVariableNamer namer) {
-        this.codeModel = codeModel;
+    public ScopesGenerator(ClassGenerationUtil generationUtil, ModuleRepository repository, UniqueVariableNamer namer) {
         this.generationUtil = generationUtil;
         this.repository = repository;
         this.namer = namer;
@@ -61,7 +59,7 @@ public class ScopesGenerator {
 
             JBlock buildMethodBody = buildMethod.body();
 
-            buildMethodBody._return(buildScopes(repository, codeModel, namer, buildMethodBody));
+            buildMethodBody._return(buildScopes(repository, generationUtil, namer, buildMethodBody));
 
             // static get instance method
             JFieldVar instance = scopesUtil.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, Scopes.class, "INSTANCE", JExpr.invoke(buildMethod));
@@ -75,13 +73,13 @@ public class ScopesGenerator {
         }
     }
 
-    public static JVar buildScopes(ModuleRepository repository, JCodeModel codeModel, UniqueVariableNamer namer, JBlock injectorBlock) {
-        JClass scopesRef = codeModel.ref(Scopes.class);
+    public static JVar buildScopes(ModuleRepository repository, ClassGenerationUtil generationUtil, UniqueVariableNamer namer, JBlock injectorBlock) {
+        JClass scopesRef = generationUtil.ref(Scopes.class);
         JVar scopesVar = injectorBlock.decl(scopesRef, namer.generateName(Scopes.class), JExpr._new(scopesRef));
 
         for (Map.Entry<ASTType, ASTType> scopeTypeEntry : repository.buildModuleConfiguration().getScopeAnnotations().entrySet()) {
-            JExpression annotation = codeModel.ref(scopeTypeEntry.getKey().getName()).dotclass();
-            JClass scopeType = codeModel.ref(scopeTypeEntry.getValue().getName());
+            JExpression annotation = generationUtil.ref(scopeTypeEntry.getKey()).dotclass();
+            JClass scopeType = generationUtil.ref(scopeTypeEntry.getValue());
 
             injectorBlock.invoke(scopesVar, Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
         }

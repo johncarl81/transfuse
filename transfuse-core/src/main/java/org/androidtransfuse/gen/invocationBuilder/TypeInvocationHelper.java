@@ -15,13 +15,13 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -32,13 +32,13 @@ import java.util.Map;
  */
 public class TypeInvocationHelper {
 
-    private JCodeModel codeModel;
     private ASTClassFactory astClassFactory;
+    private ClassGenerationUtil generationUtil;
 
     @Inject
-    public TypeInvocationHelper(JCodeModel codeModel, ASTClassFactory astClassFactory) {
-        this.codeModel = codeModel;
+    public TypeInvocationHelper(ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.astClassFactory = astClassFactory;
+        this.generationUtil = generationUtil;
     }
 
     public <T> JExpression getExpression(ASTType type, Map<T, TypedExpression> expressionMap, T parameter) {
@@ -61,7 +61,7 @@ public class TypeInvocationHelper {
             return typedExpression.getExpression();
         }
         if (targetType.inheritsFrom(typedExpression.getType())) {
-            return JExpr.cast(codeModel.ref(targetType.getName()), typedExpression.getExpression());
+            return JExpr.cast(generationUtil.ref(targetType), typedExpression.getExpression());
         }
         if (targetType instanceof ASTPrimitiveType) {
             ASTPrimitiveType primitiveTargetType = (ASTPrimitiveType) targetType;
@@ -69,7 +69,7 @@ public class TypeInvocationHelper {
             ASTType objectType = astClassFactory.getType(primitiveTargetType.getObjectClass());
 
             if (objectType.inheritsFrom(typedExpression.getType())) {
-                return JExpr.cast(codeModel.ref(objectType.getName()), typedExpression.getExpression());
+                return JExpr.cast(generationUtil.ref(objectType), typedExpression.getExpression());
             }
         }
         throw new TransfuseAnalysisException("Non-coercible types encountered");

@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.scopeBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.ProviderGenerator;
@@ -38,6 +39,7 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
     private final ProviderGenerator providerGenerator;
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final TypedExpressionFactory typedExpressionFactory;
     private final InjectionNode contextScopeHolder;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
@@ -47,11 +49,13 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     public ContextScopeVariableBuilder(/*@Assisted*/ InjectionNode contextScopeHolder,
                                        JCodeModel codeModel,
                                        ProviderGenerator providerGenerator,
+                                       ClassGenerationUtil generationUtil,
                                        TypedExpressionFactory typedExpressionFactory,
                                        InjectionExpressionBuilder injectionExpressionBuilder,
                                        TypeInvocationHelper invocationHelper) {
         this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
+        this.generationUtil = generationUtil;
         this.typedExpressionFactory = typedExpressionFactory;
         this.contextScopeHolder = contextScopeHolder;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
@@ -79,7 +83,7 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
     private JInvocation buildScopeKey(InjectionNode injectionNode){
         InjectionSignature signature = injectionNode.getTypeSignature();
 
-        JClass injectionNodeClassRef = codeModel.ref(injectionNode.getClassName());
+        JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
         return codeModel.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }

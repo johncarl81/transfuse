@@ -79,11 +79,11 @@ public class FactoriesGenerator {
 
         for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
             ASTType astType = astTypeJDefinedClassEntry.getKey().get();
-            JClass interfaceClass = codeModel.ref(astType.getName());
+            JClass interfaceClass = generationUtil.ref(astType);
 
             //factory builder
             JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, namer.generateClassName(astType));
-            factoryClass._implements(codeModel.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
+            factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
 
             //getter without given scopes
             JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);

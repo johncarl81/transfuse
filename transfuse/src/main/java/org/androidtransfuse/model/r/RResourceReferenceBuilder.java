@@ -16,9 +16,9 @@
 package org.androidtransfuse.model.r;
 
 import com.sun.codemodel.JClass;
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 
 import javax.inject.Inject;
 
@@ -27,12 +27,12 @@ import javax.inject.Inject;
  */
 public class RResourceReferenceBuilder {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final RResource rResource;
 
     @Inject
-    public RResourceReferenceBuilder(JCodeModel codeModel, RResource rResource) {
-        this.codeModel = codeModel;
+    public RResourceReferenceBuilder(ClassGenerationUtil generationUtil, RResource rResource) {
+        this.generationUtil = generationUtil;
         this.rResource = rResource;
     }
 
@@ -43,7 +43,7 @@ public class RResourceReferenceBuilder {
     public JExpression buildReference(ResourceIdentifier viewResourceIdentifier) {
         ASTType rInnerType = viewResourceIdentifier.getRInnerType();
 
-        JClass rInnerRef = codeModel.ref(rInnerType.getName());
+        JClass rInnerRef = generationUtil.ref(rInnerType);
 
         return rInnerRef.staticRef(viewResourceIdentifier.getName());
     }

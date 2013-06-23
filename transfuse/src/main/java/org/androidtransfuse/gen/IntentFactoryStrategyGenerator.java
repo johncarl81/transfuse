@@ -92,13 +92,13 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             javadocComments.append("Strategy Class for generating Intent for " + descriptor.getPackageClass().getClassName());
 
             constructorBody.add(JExpr.invoke("super")
-                    .arg(codeModel.ref(descriptor.getPackageClass().getFullyQualifiedName()).dotclass())
+                    .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
                     .arg(JExpr._new(codeModel._ref(Bundle.class)))
             );
 
             for (IntentFactoryExtraAspect extra : extras) {
                 if (extra.isRequired()) {
-                    JVar extraParam = constructor.param(codeModel.ref(extra.getType().getName()), extra.getName());
+                    JVar extraParam = constructor.param(generationUtil.ref(extra.getType()), extra.getName());
 
                     constructorBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
 
@@ -106,7 +106,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                 } else {
                     //setter for non-required extra
                     JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
-                    JVar extraParam = setterMethod.param(codeModel.ref(extra.getType().getName()), extra.getName());
+                    JVar extraParam = setterMethod.param(generationUtil.ref(extra.getType()), extra.getName());
 
                     JBlock setterBody = setterMethod.body();
                     setterBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
@@ -147,7 +147,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {
-            JInvocation wrappedParcel = codeModel.ref(ParcelsGenerator.PARCELS_NAME.toString())
+            JInvocation wrappedParcel = generationUtil.ref(ParcelsGenerator.PARCELS_NAME)
                     .staticInvoke(ParcelableGenerator.WRAP_METHOD).arg(extraParam);
 
             return extras.invoke("putParcelable").arg(name).arg(wrappedParcel);

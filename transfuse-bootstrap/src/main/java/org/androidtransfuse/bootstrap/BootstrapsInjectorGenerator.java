@@ -65,7 +65,7 @@ public class BootstrapsInjectorGenerator {
     public void generate(InjectionNode injectionNode){
 
         try {
-            JClass nodeClass = codeModel.ref(injectionNode.getClassName());
+            JClass nodeClass = generationUtil.ref(injectionNode.getASTType());
 
             // add injector class
             JDefinedClass innerInjectorClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(Bootstraps.IMPL_EXT));
@@ -77,7 +77,7 @@ public class BootstrapsInjectorGenerator {
             JBlock injectorBlock = method.body();
 
             //define root scope holder
-            JVar scopesVar = ScopesGenerator.buildScopes(repository, codeModel, namer, injectorBlock);
+            JVar scopesVar = ScopesGenerator.buildScopes(repository, generationUtil, namer, injectorBlock);
 
             injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 

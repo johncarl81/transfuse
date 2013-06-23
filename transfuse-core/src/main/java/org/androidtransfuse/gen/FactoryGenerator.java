@@ -87,7 +87,7 @@ public class FactoryGenerator {
 
         try {
             JDefinedClass implClass = generationUtil.defineClass(descriptor.getPackageClass().append(Factories.IMPL_EXT));
-            JClass interfaceClass = codeModel.ref(descriptor.getName());
+            JClass interfaceClass = generationUtil.ref(descriptor);
 
             //scope holder definition
             JFieldVar scopesField = implClass.field(JMod.PRIVATE, Scopes.class, namer.generateName(Scopes.class));

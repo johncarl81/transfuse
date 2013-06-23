@@ -71,7 +71,7 @@ public class ParcelableGenerator {
 
     public JDefinedClass generateParcelable(ASTType type, ParcelableDescriptor parcelableDescriptor) {
         try {
-            JType inputType = codeModel.ref(type.getName());
+            JType inputType = generationUtil.ref(type);
 
             JDefinedClass parcelableClass = generationUtil.defineClass(type.getPackageClass().append(PARCELABLE_EXT));
             parcelableClass._implements(Parcelable.class)
@@ -104,7 +104,7 @@ public class ParcelableGenerator {
                     buildWriteToParcel(writeToParcelMethod.body(), wtParcelParam, flags, propertyMutator, wrapped);
                 }
             } else {
-                JClass converterType = codeModel.ref(parcelableDescriptor.getParcelConverterType().getName());
+                JClass converterType = generationUtil.ref(parcelableDescriptor.getParcelConverterType());
                 JFieldVar converterField = parcelableClass.field(JMod.PRIVATE, converterType,
                         namer.generateName(parcelableDescriptor.getParcelConverterType()), JExpr._new(converterType));
 
@@ -159,7 +159,7 @@ public class ParcelableGenerator {
 
     private void buildReadFromParcel(JDefinedClass parcelableClass, JBlock parcelConstructorBody, JFieldVar wrapped, GetterSetterMethodPair propertyGetter, JVar parcelParam) {
         ASTType returnType = propertyGetter.getGetter().getReturnType();
-        JClass returnJClassRef = codeModel.ref(returnType.getName());
+        JClass returnJClassRef = generationUtil.ref(returnType);
         if (parceableModifier.containsKey(returnType)) {
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(parcelParam.invoke(parceableModifier.get(returnType).getReadMethod()));
@@ -179,7 +179,7 @@ public class ParcelableGenerator {
                     .arg(JExpr.cast(returnJClassRef, parcelParam.invoke("readSerializable")));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
 
-            JClass wrapperRef = codeModel.ref(ParcelWrapper.class).narrow(codeModel.ref(returnType.getName()));
+            JClass wrapperRef = codeModel.ref(ParcelWrapper.class).narrow(generationUtil.ref(returnType));
 
             parcelConstructorBody.invoke(wrapped, propertyGetter.getSetter().getName())
                     .arg(((JExpression) JExpr.cast(wrapperRef, parcelParam.invoke("readParcelable")
@@ -211,7 +211,7 @@ public class ParcelableGenerator {
                     .arg(wrapped.invoke(propertyMutator.getGetter().getName()));
         } else if (returnType.isAnnotated(org.androidtransfuse.annotations.Parcel.class)) {
 
-            JInvocation wrappedParcel = codeModel.ref(ParcelsGenerator.PARCELS_NAME.toString())
+            JInvocation wrappedParcel = generationUtil.ref(ParcelsGenerator.PARCELS_NAME)
                     .staticInvoke(WRAP_METHOD).arg(wrapped.invoke(propertyMutator.getGetter().getName()));
 
             body.invoke(parcel, "writeParcelable").arg(wrappedParcel)

@@ -24,6 +24,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.event.WeakObserver;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -43,16 +44,19 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     private static final String SUPER_REF = "super";
 
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InvocationBuilder invocationBuilder;
 
     @Inject
     public ObservesRegistrationGenerator(JCodeModel codeModel,
+                                         ClassGenerationUtil generationUtil,
                                          UniqueVariableNamer namer,
                                          InjectionFragmentGenerator injectionFragmentGenerator,
                                          InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.namer = namer;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.invocationBuilder = invocationBuilder;
@@ -99,8 +103,8 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                 for (ASTType event : aspect.getEvents()) {
 
                     //generate WeakObserver<E, T> (E = event, T = target injection node)
-                    JClass eventRef = codeModel.ref(event.getName());
-                    JClass targetRef = codeModel.ref(typedExpression.getType().getName());
+                    JClass eventRef = generationUtil.ref(event);
+                    JClass targetRef = generationUtil.ref(typedExpression.getType());
 
                     JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateClassName(typedExpression.getType()));
 

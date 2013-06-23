@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -29,18 +29,18 @@ import javax.inject.Inject;
 public class VariableFactoryBuilderFactory2 {
 
     private final TypedExpressionFactory typedExpressionFactory;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final Analyzer analyzer;
 
     @Inject
-    public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory, JCodeModel codeModel, Analyzer analyzer) {
+    public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory, ClassGenerationUtil generationUtil, Analyzer analyzer) {
         this.typedExpressionFactory = typedExpressionFactory;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.analyzer = analyzer;
     }
 
     public FactoryVariableBuilder buildFactoryVariableBuilder(ASTType factoryType) {
-        return new FactoryVariableBuilder(factoryType, typedExpressionFactory, codeModel);
+        return new FactoryVariableBuilder(factoryType, typedExpressionFactory, generationUtil);
     }
 
     public IndependentInjectionNodeBuilder buildInjectionNodeBuilder(ExpressionVariableBuilderWrapper wrapper) {

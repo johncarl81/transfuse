@@ -68,7 +68,7 @@ public class AOPProxyGenerator {
             definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(AOPPROXY_EXT), true);
 
             //extending injectionNode
-            definedClass._extends(codeModel.ref(injectionNode.getClassName()));
+            definedClass._extends(generationUtil.ref(injectionNode.getASTType()));
 
             //copy constructor elements and add aop interceptors
             JMethod constructor = definedClass.constructor(JMod.PUBLIC);
@@ -76,7 +76,7 @@ public class AOPProxyGenerator {
             //converting exceptions into runtime exceptions
             proxyConstructorInjectionPoint.addThrows(constructorInjectionPoint.getThrowsTypes());
             for (ASTType throwType : constructorInjectionPoint.getThrowsTypes()) {
-                constructor._throws(codeModel.ref(throwType.getName()));
+                constructor._throws(generationUtil.ref(throwType));
             }
 
             JBlock constructorBody = constructor.body();
@@ -84,7 +84,7 @@ public class AOPProxyGenerator {
             List<JVar> superArguments = new ArrayList<JVar>();
             for (InjectionNode node : constructorInjectionPoint.getInjectionNodes()) {
                 String paramName = namer.generateName(node);
-                JVar param = constructor.param(codeModel.ref(node.getClassName()), paramName);
+                JVar param = constructor.param(generationUtil.ref(node.getASTType()), paramName);
                 superArguments.add(param);
                 proxyConstructorInjectionPoint.addInjectionNode(node);
             }
@@ -148,11 +148,11 @@ public class AOPProxyGenerator {
         for (InjectionNode interceptorInjectionNode : methodInterceptorEntry.getValue()) {
             String interceptorInstanceName = namer.generateName(interceptorInjectionNode);
 
-            JFieldVar interceptorField = definedClass.field(JMod.PRIVATE, codeModel.ref(interceptorInjectionNode.getClassName()), interceptorInstanceName);
+            JFieldVar interceptorField = definedClass.field(JMod.PRIVATE, generationUtil.ref(interceptorInjectionNode.getASTType()), interceptorInstanceName);
 
             injectionNodeInstanceNameMap.put(interceptorInjectionNode, interceptorField);
 
-            JVar interceptorParam = constructor.param(codeModel.ref(interceptorInjectionNode.getClassName()), namer.generateName(interceptorInjectionNode));
+            JVar interceptorParam = constructor.param(generationUtil.ref(interceptorInjectionNode.getASTType()), namer.generateName(interceptorInjectionNode));
 
             constructorBody.assign(interceptorField, interceptorParam);
 
@@ -169,7 +169,7 @@ public class AOPProxyGenerator {
         Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
-                    methodDeclaration.param(JMod.FINAL, codeModel.ref(parameter.getASTType().getName()),
+                    methodDeclaration.param(JMod.FINAL, generationUtil.ref(parameter.getASTType()),
                             namer.generateName(parameter.getASTType())));
         }
 
@@ -220,7 +220,7 @@ public class AOPProxyGenerator {
             getMethod._throws(NoSuchMethodException.class);
 
             for (ASTParameter astParameter : method.getParameters()) {
-                getMethodInvocation.arg(codeModel.ref(astParameter.getASTType().getName()).dotclass());
+                getMethodInvocation.arg(generationUtil.ref(astParameter.getASTType()).dotclass());
             }
 
             //invoke()
@@ -229,7 +229,7 @@ public class AOPProxyGenerator {
 
             //add all throws of contained method
             for (ASTType throwable : method.getThrowsTypes()) {
-                invokeMethod._throws(codeModel.ref(throwable.getName()));
+                invokeMethod._throws(generationUtil.ref(throwable));
             }
 
             JInvocation superCall = definedClass.staticRef(SUPER_REF).invoke(method.getName());

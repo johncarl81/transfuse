@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 
 import javax.inject.Inject;
@@ -28,15 +28,15 @@ import javax.inject.Inject;
 public class ScopeReferenceInjectionFactory {
 
     private final TypedExpressionFactory typedExpressionFactory;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final Analyzer analyzer;
 
     @Inject
     public ScopeReferenceInjectionFactory(TypedExpressionFactory typedExpressionFactory,
-                                          JCodeModel codeModel,
+                                          ClassGenerationUtil generationUtil,
                                           Analyzer analyzer) {
         this.typedExpressionFactory = typedExpressionFactory;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.analyzer = analyzer;
     }
 
@@ -45,6 +45,6 @@ public class ScopeReferenceInjectionFactory {
     }
 
     public ScopeReferenceVariableBuilder buildVariableBuilder(ASTType scopeAnnotation) {
-        return new ScopeReferenceVariableBuilder(scopeAnnotation, typedExpressionFactory, codeModel);
+        return new ScopeReferenceVariableBuilder(scopeAnnotation, typedExpressionFactory, generationUtil);
     }
 }

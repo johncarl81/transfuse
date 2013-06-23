@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.scopeBuilder;
 
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -32,19 +33,22 @@ public class CustomScopeAspectFactoryFactory {
     private final ProviderGenerator providerGenerator;
     private final UniqueVariableNamer namer;
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public CustomScopeAspectFactoryFactory(JCodeModel codeModel,
                                            ProviderGenerator providerGenerator,
                                            TypedExpressionFactory typedExpressionFactory,
-                                           UniqueVariableNamer namer) {
+                                           UniqueVariableNamer namer,
+                                           ClassGenerationUtil generationUtil) {
         this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
         this.typedExpressionFactory = typedExpressionFactory;
         this.namer = namer;
+        this.generationUtil = generationUtil;
     }
 
     public ScopeAspectFactory buildScopeBuilder(ASTType key) {
-        return new CustomScopeAspectFactory(key, typedExpressionFactory, providerGenerator, namer, codeModel);
+        return new CustomScopeAspectFactory(key, typedExpressionFactory, providerGenerator, namer, codeModel, generationUtil);
     }
 }

@@ -59,7 +59,7 @@ public class ComponentGenerator  {
         try {
             final JDefinedClass definedClass = generationUtil.defineClass(descriptor.getPackageClass());
 
-            definedClass._extends(codeModel.ref(descriptor.getType()));
+            definedClass._extends(generationUtil.ref(descriptor.getType()));
 
             MethodDescriptor initMethodDescriptor = descriptor.getInitMethodBuilder().buildMethod(definedClass);
 

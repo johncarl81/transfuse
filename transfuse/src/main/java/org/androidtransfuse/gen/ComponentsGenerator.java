@@ -66,7 +66,7 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
             JBlock componentsRegistrationBlock = componentsRepositoryClass.constructor(JMod.PUBLIC).body();
 
             for (Map.Entry<Provider<ASTType>, JDefinedClass> componentEntry : components.entrySet()) {
-                JClass componentClass = codeModel.ref(componentEntry.getKey().get().getName());
+                JClass componentClass = generationUtil.ref(componentEntry.getKey().get());
                 JClass androidClass = componentEntry.getValue();
 
                 if(androidClass != null){

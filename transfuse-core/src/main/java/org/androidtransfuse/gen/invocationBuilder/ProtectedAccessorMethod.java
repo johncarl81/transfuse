@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 
 /**
  * @author John Ericksen
@@ -32,7 +32,7 @@ public class ProtectedAccessorMethod {
         this.method = method;
     }
 
-    public JInvocation invoke(JCodeModel codeModel) {
-        return codeModel.ref(helperClass.getFullyQualifiedName()).staticInvoke(method);
+    public JInvocation invoke(ClassGenerationUtil generationUtil) {
+        return generationUtil.ref(helperClass).staticInvoke(method);
     }
 }

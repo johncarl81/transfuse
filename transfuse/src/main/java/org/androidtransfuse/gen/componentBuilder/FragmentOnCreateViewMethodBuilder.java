@@ -24,6 +24,7 @@ import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.config.Nullable;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
@@ -38,6 +39,7 @@ import javax.inject.Inject;
 public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final ASTMethod onCreateViewMethod;
     private final UniqueVariableNamer namer;
     private final ASTClassFactory astClassFactory;
@@ -48,11 +50,13 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     public FragmentOnCreateViewMethodBuilder(/*@Assisted*/ @Nullable Integer layout,
                                              /*@Assisted*/ ASTMethod onCreateViewMethod,
                                              JCodeModel codeModel,
+                                             ClassGenerationUtil generationUtil,
                                              UniqueVariableNamer namer,
                                              ASTClassFactory astClassFactory,
                                              RResourceReferenceBuilder rResourceReferenceBuilder) {
         this.codeModel = codeModel;
         this.onCreateViewMethod = onCreateViewMethod;
+        this.generationUtil = generationUtil;
         this.namer = namer;
         this.astClassFactory = astClassFactory;
         this.layout = layout;
@@ -66,7 +70,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
         MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateViewMethod);
 
         for (ASTParameter methodArgument : onCreateViewMethod.getParameters()) {
-            JVar param = onCreateMethod.param(codeModel.ref(methodArgument.getASTType().getName()), namer.generateName(methodArgument.getASTType()));
+            JVar param = onCreateMethod.param(generationUtil.ref(methodArgument.getASTType()), namer.generateName(methodArgument.getASTType()));
             onCreateMethodDescriptorBuilder.putParameter(methodArgument, new TypedExpression(methodArgument.getASTType(), param));
         }
 

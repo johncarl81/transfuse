@@ -20,6 +20,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTVoidType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -33,17 +34,17 @@ import java.util.Map;
 public class ActivityDelegateRegistrationGenerator implements RegistrationGenerator {
 
     private final ImmutableList<ASTMethod> methods;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
     private final ActivityDelegateASTReference activityDelegateASTReference;
 
     @Inject
     public ActivityDelegateRegistrationGenerator(/*@Assisted*/ ActivityDelegateASTReference activityDelegateASTReference,
                                                  /*@Assisted*/ ImmutableList<ASTMethod> methods,
-                                                 JCodeModel codeModel,
+                                                 ClassGenerationUtil generationUtil,
                                                  UniqueVariableNamer namer) {
         this.methods = methods;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.namer = namer;
         this.activityDelegateASTReference = activityDelegateASTReference;
     }
@@ -53,12 +54,12 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
 
         for (ASTMethod method : methods) {
             //mirror method
-            JMethod implementedMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(method.getReturnType().getName()), method.getName());
+            JMethod implementedMethod = definedClass.method(JMod.PUBLIC, generationUtil.ref(method.getReturnType()), method.getName());
             implementedMethod.annotate(Override.class);
 
             Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
             for (ASTParameter astParameter : method.getParameters()) {
-                JVar param = implementedMethod.param(codeModel.ref(astParameter.getASTType().getName()), namer.generateName(astParameter.getASTType()));
+                JVar param = implementedMethod.param(generationUtil.ref(astParameter.getASTType()), namer.generateName(astParameter.getASTType()));
                 parameterMap.put(astParameter, param);
             }
 

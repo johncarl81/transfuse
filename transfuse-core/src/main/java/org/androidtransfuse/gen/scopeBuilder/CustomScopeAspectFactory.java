@@ -19,6 +19,7 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.CustomScopeVariableBuilder;
@@ -34,17 +35,24 @@ public class CustomScopeAspectFactory implements ScopeAspectFactory {
     private final ProviderGenerator providerGenerator;
     private final UniqueVariableNamer namer;
     private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
-    public CustomScopeAspectFactory(ASTType scopeKey, TypedExpressionFactory typedExpressionFactory, ProviderGenerator providerGenerator, UniqueVariableNamer namer, JCodeModel codeModel) {
+    public CustomScopeAspectFactory(ASTType scopeKey,
+                                    TypedExpressionFactory typedExpressionFactory,
+                                    ProviderGenerator providerGenerator,
+                                    UniqueVariableNamer namer,
+                                    JCodeModel codeModel,
+                                    ClassGenerationUtil generationUtil) {
         this.scopeKey = scopeKey;
         this.typedExpressionFactory = typedExpressionFactory;
         this.providerGenerator = providerGenerator;
         this.namer = namer;
         this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     @Override
     public ScopeAspect buildAspect(AnalysisContext context) {
-        return new ScopeAspect(new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, namer));
+        return new ScopeAspect(new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, generationUtil, namer));
     }
 }
