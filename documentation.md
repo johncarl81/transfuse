@@ -225,6 +225,30 @@ public class Example implements ActivityOnKeyDownListener{
 }
 {% endhighlight %}
 
+Call-Through event objects can also be injected an annotated at the field of method level.  This allows you to share Call-Through event objects:
+
+{% highlight java %}
+@Activity
+public class One {
+    @Inject @RegisterListener MenuListener listener;
+}
+{% endhighlight %}
+
+{% highlight java %}
+@Activity
+public class Two {
+    @Inject @RegisterListener MenuListener listener;
+}
+{% endhighlight %}
+
+The MenuListener Call-Through object:
+
+{% highlight java %}
+public class MenuListener implements ActivityMenuComponent{
+    //...
+}
+{% endhighlight %}
+
 The following interfaces are available to handle Call-Through Events:
 
 {% highlight java %}
