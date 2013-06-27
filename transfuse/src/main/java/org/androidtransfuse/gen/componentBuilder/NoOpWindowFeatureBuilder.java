@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.integrationTest;
+package org.androidtransfuse.gen.componentBuilder;
 
-import android.view.Window;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.WindowFeature;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JDefinedClass;
 
 /**
  * @author John Ericksen
  */
-@Activity(label = "About")
-@Layout(R.layout.about)
-@WindowFeature(Window.FEATURE_NO_TITLE)
-public class About {
+public class NoOpWindowFeatureBuilder implements WindowFeatureBuilder {
+    @Override
+    public void builderWindowFeatureCall(JDefinedClass definedClass, JBlock block) {
+        //noop
+    }
 }
