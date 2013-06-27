@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.integrationTest;
+package org.androidtransfuse.annotations;
 
-import android.view.Window;
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Layout;
-import org.androidtransfuse.annotations.WindowFeature;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author John Ericksen
  */
-@Activity(label = "About")
-@Layout(R.layout.about)
-@WindowFeature(Window.FEATURE_NO_TITLE)
-public class About {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface WindowFeature {
+
+    int[] value();
 }

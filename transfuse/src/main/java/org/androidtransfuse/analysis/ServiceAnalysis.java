@@ -179,7 +179,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         ASTMethod onCreateASTMethod = getASTMethod("onCreate");
 
-        serviceDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpLayoutBuilder()));
+        serviceDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpWindowFeatureBuilder(), new NoOpLayoutBuilder()));
 
         serviceDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
 
