@@ -41,7 +41,7 @@ public interface ComponentBuilderFactory {
 
     LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
 
-    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, LayoutBuilder layoutBuilder);
+    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, WindowFeatureBuilder windowFeatureBuilder, LayoutBuilder layoutBuilder);
 
     FragmentOnCreateViewMethodBuilder buildFragmentMethodBuilder(Integer layout, ASTMethod method);
 

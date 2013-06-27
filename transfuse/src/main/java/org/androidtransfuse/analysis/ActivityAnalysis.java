@@ -243,8 +243,18 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
         }
 
+        WindowFeatureBuilder windowFeatureBuilder;
+        if(astType.isAnnotated(WindowFeature.class)){
+            ASTAnnotation windowFeatureAnnotation = astType.getASTAnnotation(WindowFeature.class);
+            Integer[] values = windowFeatureAnnotation.getProperty("value", Integer[].class);
+            windowFeatureBuilder = new WindowFeatureBuilderImpl(values);
+        }
+        else{
+            windowFeatureBuilder = new NoOpWindowFeatureBuilder();
+        }
+
         ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
-        activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, layoutBuilder));
+        activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, windowFeatureBuilder, layoutBuilder));
 
         activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
 
