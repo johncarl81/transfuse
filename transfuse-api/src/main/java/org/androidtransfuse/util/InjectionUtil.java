@@ -30,17 +30,10 @@ import java.security.PrivilegedActionException;
  */
 public final class InjectionUtil {
 
-    private static final InjectionUtil INSTANCE = new InjectionUtil();
-
-    public static final String GET_INSTANCE_METHOD = "getInstance";
     public static final String GET_FIELD_METHOD = "getField";
     public static final String SET_FIELD_METHOD = "setField";
     public static final String CALL_METHOD_METHOD = "callMethod";
     public static final String CALL_CONSTRUCTOR_METHOD = "callConstructor";
-
-    public static InjectionUtil getInstance() {
-        return INSTANCE;
-    }
 
     private InjectionUtil() {
         //singleton constructor
@@ -55,7 +48,7 @@ public final class InjectionUtil {
      * @param <T> type parameter
      * @return field value
      */
-    public <T> T getField(Class<T> returnType, Class<?> targetClass, Object target, String field) {
+    public static <T> T getField(Class<T> returnType, Class<?> targetClass, Object target, String field) {
         try {
             Field declaredField = targetClass.getDeclaredField(field);
 
@@ -95,7 +88,7 @@ public final class InjectionUtil {
      * @param field name of the field
      * @param value object to update the field to
      */
-    public void setField(Class<?> targetClass, Object target, String field, Object value) {
+    public static void setField(Class<?> targetClass, Object target, String field, Object value) {
         try {
             Field classField = targetClass.getDeclaredField(field);
 
@@ -143,7 +136,7 @@ public final class InjectionUtil {
      * @param <T> relating type parameter
      * @return method return value
      */
-    public <T> T callMethod(Class<T> retClass, Class<?> targetClass, Object target, String method, Class[] argClasses, Object[] args) {
+    public static <T> T callMethod(Class<T> retClass, Class<?> targetClass, Object target, String method, Class[] argClasses, Object[] args) {
         try {
             Method classMethod = targetClass.getDeclaredMethod(method, argClasses);
 
@@ -185,7 +178,7 @@ public final class InjectionUtil {
      * @param <T> relating type parameter
      * @return instance created by constructor
      */
-    public <T> T callConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
+    public static <T> T callConstructor(Class<T> targetClass, Class[] argClasses, Object[] args) {
         T output;
 
         try {

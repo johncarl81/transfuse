@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.util;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -28,12 +27,6 @@ import static org.junit.Assert.*;
 public class InjectionUtilTest {
 
     private static final String TEST_VALUE = "hello";
-    private InjectionUtil injectionUtil;
-
-    @Before
-    public void setup() {
-        injectionUtil = InjectionUtil.getInstance();
-    }
 
     @Test
     public void testGetField(){
@@ -41,7 +34,7 @@ public class InjectionUtilTest {
 
         target.setValue(TEST_VALUE);
 
-        String value = injectionUtil.getField(String.class, Target.class, target, "value");
+        String value = InjectionUtil.getField(String.class, Target.class, target, "value");
 
         assertEquals(TEST_VALUE, value);
     }
@@ -52,7 +45,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.callMethod(Void.class, Target.class, target, "setPrivateValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        InjectionUtil.callMethod(Void.class, Target.class, target, "setPrivateValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -64,7 +57,7 @@ public class InjectionUtilTest {
         assertNull(target.getValue());
         target.setValue(TEST_VALUE);
 
-        assertEquals(TEST_VALUE, injectionUtil.callMethod(String.class, Target.class, target, "getPrivateValue", new Class[]{}, new Object[]{}));
+        assertEquals(TEST_VALUE, InjectionUtil.callMethod(String.class, Target.class, target, "getPrivateValue", new Class[]{}, new Object[]{}));
     }
 
     @Test
@@ -73,14 +66,14 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.callMethod(Void.class, TargetSuper.class, target, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
+        InjectionUtil.callMethod(Void.class, TargetSuper.class, target, "setSuperValue", new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
 
     @Test
     public void testPrivateConstructorInjection() {
-        Target target = injectionUtil.callConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
+        Target target = InjectionUtil.callConstructor(Target.class, new Class[]{String.class}, new Object[]{TEST_VALUE});
 
         assertEquals(target.getValue(), TEST_VALUE);
     }
@@ -91,7 +84,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setField(Target.class, target, "value", TEST_VALUE);
+        InjectionUtil.setField(Target.class, target, "value", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getValue());
     }
@@ -102,7 +95,7 @@ public class InjectionUtilTest {
 
         assertNull(target.getValue());
 
-        injectionUtil.setField(TargetSuper.class, target, "superValue", TEST_VALUE);
+        InjectionUtil.setField(TargetSuper.class, target, "superValue", TEST_VALUE);
 
         assertEquals(TEST_VALUE, target.getSuperValue());
     }
@@ -110,8 +103,6 @@ public class InjectionUtilTest {
     @Test
     public void verifyMethodNames() throws NoSuchMethodException {
 
-        Method getInstanceMethod = InjectionUtil.class.getMethod(InjectionUtil.GET_INSTANCE_METHOD);
-        assertNotNull(getInstanceMethod);
         Method callConstructorMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_CONSTRUCTOR_METHOD, Class.class, Class[].class, Object[].class);
         assertNotNull(callConstructorMethod);
         Method callMethodMethod = InjectionUtil.class.getMethod(InjectionUtil.CALL_METHOD_METHOD, Class.class, Class.class, Object.class, String.class, Class[].class, Object[].class);

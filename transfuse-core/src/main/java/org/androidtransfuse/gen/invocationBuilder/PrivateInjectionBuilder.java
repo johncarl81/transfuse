@@ -45,7 +45,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
-        JInvocation constructorInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.CALL_CONSTRUCTOR_METHOD)
+        JInvocation constructorInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.CALL_CONSTRUCTOR_METHOD)
                 .arg(generationUtil.ref(type).dotclass());
 
         //add classes
@@ -66,7 +66,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
 
         JClass targetType = generationUtil.ref(targetExpressionType.getName());
         //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)
-        JInvocation methodInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.CALL_METHOD_METHOD)
+        JInvocation methodInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.CALL_METHOD_METHOD)
                 .arg(generationUtil.ref(returnType.getName()).dotclass())
                 .arg(targetType.dotclass())
                 .arg(targetExpression)
@@ -87,7 +87,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
 
     @Override
     public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
-        return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.GET_FIELD_METHOD)
+        return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_FIELD_METHOD)
                 .arg(generationUtil.ref(returnType).dotclass())
                 .arg(generationUtil.ref(variableType).dotclass())
                 .arg(variable)
@@ -98,7 +98,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
         JClass variableType = generationUtil.ref(fieldInjectionPoint.getContainingType());
 
-        return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_INSTANCE_METHOD).invoke(InjectionUtil.SET_FIELD_METHOD)
+        return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
                 .arg(variableType.dotclass())
                 .arg(variable)
                 .arg(fieldInjectionPoint.getName())
