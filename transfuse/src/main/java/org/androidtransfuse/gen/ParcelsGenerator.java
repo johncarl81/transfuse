@@ -52,10 +52,11 @@ public class ParcelsGenerator {
         try {
             JDefinedClass parcelsDefinedClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            parcelsDefinedClass._implements(Repository.class);
+            JClass parcelableFactoryWildcard = generationUtil.ref(Parcels.ParcelableFactory.class).narrow(codeModel.wildcard());
+            parcelsDefinedClass._implements(generationUtil.ref(Repository.class).narrow(parcelableFactoryWildcard));
 
-            JClass mapRef = codeModel.ref(Map.class).narrow(Class.class, Parcels.ParcelableFactory.class);
-            JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class, Parcels.ParcelableFactory.class);
+            JClass mapRef = codeModel.ref(Map.class).narrow(Class.class).narrow(parcelableFactoryWildcard);
+            JClass hashMapRef = codeModel.ref(HashMap.class).narrow(Class.class).narrow(parcelableFactoryWildcard);
 
             JFieldVar parcelWrappers = parcelsDefinedClass.field(JMod.PRIVATE | JMod.FINAL, mapRef, MAP_NAME, JExpr._new(hashMapRef));
 

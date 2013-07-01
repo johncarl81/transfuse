@@ -75,8 +75,6 @@ public final class Bootstraps {
     public abstract static class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
         private final Map<Class<? extends Annotation> , Map<Class, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<Class, Object>>();
 
-        public abstract void inject(T input);
-
         public <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> bindType, S instance){
             if(!scoped.containsKey(scope)){
                 scoped.put(scope, new HashMap<Class, Object>());
