@@ -24,7 +24,6 @@ import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
-import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
 import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
@@ -32,6 +31,9 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.parceler.Parcel;
+import org.parceler.internal.ParcelableGenerator;
+import org.parceler.internal.ParcelsGenerator;
 
 import javax.inject.Inject;
 import java.io.Serializable;

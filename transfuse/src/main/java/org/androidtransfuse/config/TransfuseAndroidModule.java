@@ -71,8 +71,6 @@ import java.util.Map;
         InjectionBuilderContextFactory.class})
 public class TransfuseAndroidModule {
 
-    public static final String PARCELS_TRANSACTION_WORKER = "parcelsTransactionWorker";
-    public static final String PARCEL_TRANSACTION_WORKER = "parcelTransactionWorker";
     public static final String FACTORY_TRANSACTION_WORKER = "factoryTransactionWorker";
     public static final String FACTORIES_TRANSACTION_WORKER = "factoriessTransactionWorker";
     public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
@@ -148,15 +146,6 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
-    @Named(PARCEL_TRANSACTION_WORKER)
-    public TransactionWorker<Provider<ASTType>, JDefinedClass> getParcelTransactionWorker(JCodeModel codeModel,
-                                                                                                       FilerSourceCodeWriter codeWriter,
-                                                                                                       FilerResourceWriter resourceWriter,
-                                                                                                       ParcelTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
     @Named(FACTORY_TRANSACTION_WORKER)
     public TransactionWorker<Provider<ASTType>, JDefinedClass> getFactoryTransactionWorker(JCodeModel codeModel,
                                                                                                         FilerSourceCodeWriter codeWriter,
@@ -171,15 +160,6 @@ public class TransfuseAndroidModule {
                                                                                                                        FilerSourceCodeWriter codeWriter,
                                                                                                                        FilerResourceWriter resourceWriter,
                                                                                                                        FactoriesTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(PARCELS_TRANSACTION_WORKER)
-    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getParcelsTransactionWorker(JCodeModel codeModel,
-                                                                                                                   FilerSourceCodeWriter codeWriter,
-                                                                                                                   FilerResourceWriter resourceWriter,
-                                                                                                                   ParcelsTransactionWorker worker) {
         return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
     }
 
@@ -222,20 +202,5 @@ public class TransfuseAndroidModule {
                 new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(factoryProcessor, factoriesProcessor, factoriesTransactionFactory);
 
         return new FactoryProcessor(processor, factoryProcessor, factoryTransactionFactory);
-    }
-
-    @Provides
-    public ParcelProcessor getParcelProcessor(ParcelTransactionFactory parcelTransactionFactory,
-                                              ParcelsTransactionFactory parcelsTransactionFactory) {
-
-        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> parcelProcessor =
-                new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
-        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> parcelsProcessor =
-                new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
-
-        TransactionProcessor processor =
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(parcelProcessor, parcelsProcessor, parcelsTransactionFactory);
-
-        return new ParcelProcessor(processor, parcelProcessor, parcelTransactionFactory);
     }
 }

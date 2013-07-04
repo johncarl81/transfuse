@@ -25,7 +25,7 @@ import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.ExtraUtil;
-import org.androidtransfuse.util.ParcelWrapper;
+import org.parceler.ParcelWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Named;

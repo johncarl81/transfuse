@@ -34,7 +34,6 @@ public class ScopedTransactionFactory {
 
     @Inject
     public ScopedTransactionFactory(
-            //@Named(TestTransfuseAndroidModule.CODE_GENERATION_SCOPE)
             @ScopeReference(CodeGenerationScope.class) EnterableScope codeGenerationScope) {
         this.codeGenerationScope = codeGenerationScope;
     }

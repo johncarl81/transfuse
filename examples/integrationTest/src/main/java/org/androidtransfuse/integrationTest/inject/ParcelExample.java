@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.integrationTest.SerializableValue;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.parceler.Parcel;
 
 /**
  * @author John Ericksen

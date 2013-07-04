@@ -22,9 +22,9 @@ import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Extra;
-import org.androidtransfuse.annotations.Parcel;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.parceler.Parcel;
 
 import javax.inject.Inject;
 

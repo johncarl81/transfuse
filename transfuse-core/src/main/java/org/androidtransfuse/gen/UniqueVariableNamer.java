@@ -104,6 +104,7 @@ public class UniqueVariableNamer {
 
         builder.append('$');
         builder.append(nullSafeIterGet(nameRoot));
+        //todo: better global unique naming
         return builder.toString();
     }
 

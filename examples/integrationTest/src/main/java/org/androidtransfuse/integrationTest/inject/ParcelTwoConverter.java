@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
-import org.androidtransfuse.annotations.ParcelConverter;
+import org.parceler.ParcelConverter;
 
 /**
  * @author John Ericksen
