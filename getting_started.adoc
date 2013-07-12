@@ -7,7 +7,7 @@ postsExpanded: false
 
 === Getting Started
 
-The code produced by this tutorial is located at [https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid]
+The code produced by this tutorial is located at https://github.com/johncarl81/transfuse/tree/master/examples/helloAndroid
 
 ==== Prerequisites
 
