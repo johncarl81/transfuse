@@ -5,9 +5,9 @@ documentationExpanded: true
 postsExpanded: false
 ---
 
-### Documentation
+=== Documentation
 
-#### Introduction
+==== Introduction
 
 The Android API has a common theme throughout its components; each component must be implemented as an extension of a base component.  Although this approach works, it has subtle side effects. If the component implements many separate features, the component class quickly becomes a mismatch of behavior, resulting in hard-to-read and hard-to-test classes. Also, any third party library based on the component lifecycle or functionality provided by a Context must extend the given component class.  Because of Java's single extension policy, this action makes these third party libraries that leverage Context components incompatible with each other.
 
@@ -15,11 +15,11 @@ Additionally, each component must be registered individually in the AndroidManif
 
 Transfuse resolves these issues in a number of different ways.  First, Transfuse changes the model of Android components into POJOs, allowing users to develop components the way they want.  There is no need to keep extending Activity, Service, etc. in order to implement the corresponding component.  Now, all that is necessary is to annotate the component classes to register them in the Android application.  This registration action tells Transfuse to add the component to the Android Manifest, essentially eliminating manual editing and management of the Manifest.
 
-Transfuse also offers a compile time Dependency Injection (DI) framework based on [JSR-330][1].  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
+Transfuse also offers a compile time Dependency Injection (DI) framework based on http://www.jcp.org/en/jsr/detail?id=330[JSR-330].  This is the same standard implemented by the leading DI frameworks Guice, Spring, Seam, etc. DI allows the elimination of boilerplate plumbing code in the application, and also encourages well-formed application architecture.  However, Transfuse implements DI differently than the previously mentioned frameworks, in that it performs all analysis and code generation during compile time.  This reduces the critical startup time of an application, especially any lag based on runtime startup of Transfuse.
 
 It is Transfuse's mission to make Android a better API using performance sensitive techniques.
 
-#### High level
+==== High level
 
 A Transfuse application is built using a series of components analogous to the set of Android components.  These components are declared using the Transfuse API annotations on the class type level.
 
@@ -27,13 +27,14 @@ Transfuse moves the declaration of Manifest metadata to the component class leve
 
 Each Transfuse component has a corresponding lifecycle built upon the standard lifecycle of the corresponding Android component.  This lifecycle is implemented by lifecycle events.  Any Transfuse event may be handled on the component, or at any instance, injected into it.
 
-Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the <a href="#dependency_injection_di">Dependency Injection section</a>.
+Available to each component is Dependency Injection generated at compile time.  This feature is covered in depth in the link:#dependency_injection_di[Dependency Injection section].
 
-#### Components
+==== Components
 
 The Transfuse components are analogous to the standard set of Android components:  The Activity, Service, Application, and Broadcast Receiver.  Each of these components are defined by annotating a class as follows:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class ExampleActivity {}
 @Service
@@ -41,33 +42,36 @@ public class ExampleService {}
 @BroadcastReceiver
 public class ExampleBroadcastReceiver {}
 
-{% endhighlight %} 
+-- 
 
 These annotations tell Transfuse to use the class as an Android component.  This turns on a number of features, such as DI and event mapping.
 
-<hr/>
+'''
 
-#### @Activity
+==== @Activity
 
 Annotating an Activity class begins the process of developing a Transfuse application.  A common next step is to associate the Activity with a layout.  In standard Android, this is done by defining the layout in the onCreate() method.  Transfuse allows the user to define the layout by annotating the @Activity class like so:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @Layout(R.id.example_layout)
 public class Example {}
-{% endhighlight %}
+--
 
 Transfuse follows the convention of declaring the layout directly after the super.onCreate() call in the root Activity.
 
 If the use cases require a more advanced layout declaration, like defining the layout programmatically, use the @LayoutHandler annotation and LayoutHandlerDelegate interface:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @LayoutHandler(LunchTimeLayoutDelegate.class)
 public class Example{}
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
     @Inject Activity activity;
 
@@ -81,51 +85,50 @@ public class LunchTimeLayoutDelegate implements LayoutHandlerDelegate{
     }
     ...
 }
-{% endhighlight %}
+--
 
 A key feature of Transfuse is defining the AndroidManifest.xml metadata within the Java class declaration.  All manifest metadata is available either as parameters of the @Activity annotation or as additional annotations on the class level.  This follows the DRY principle, keeping the declaration and configuration of the Activity in one place.
 
 As an example, the label can be set to an Activity as follows:
 
-{% highlight java %}
+[source,java]
+--
 @Activity(label = "Transfuse Example")
 public class Example {}
-{% endhighlight %}
+--
 
 Transfuse adds this property to the AndroidManifest.xml, resulting in the following entry in the AndroidManifest.xml:
 
-{% highlight xml %}
+[source,xml]
 <activity t:tag="+,l,n" android:label="Transfuse Example" android:name=".ExampleActivity">
 </activity>
-{% endhighlight %}
 
-<div class="note">
-<h5>Note</h5>
-To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
-</div>
+NOTE: To track changes to the manifest, Transfuse adds to the managed xml tags the t:tag parameter.
 
 In addition to the manifest activity properties, users are able to define IntentFilters on the class which will be added to the AndroidManifest.xml file:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @IntentFilter({
     @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
     @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })
 public class Example {}
-{% endhighlight %}
+--
 
 This sets up the Activity as the home screen and adds it to the list of applications on the phone.
 
 Now that the basic Activity has been set up and declared in the Manifest, let's look at wiring the components up through the events raised by the Android system.
 
-##### Lifecycle Events
+===== Lifecycle Events
 
 Transfuse makes the entire Activity lifecycle available through a set of annotations.  Users may annotate zero, one, or many methods in the class.  In turn, these will be called during that lifecycle event.
 
 In the example class below, the log() method is executed during the onCreate phase of the Activity lifecycle:
 
-{% highlight java %}
+[source,java]
+--
 @Activity(label = "Transfuse Example")
 @Layout(R.id.example_layout)
 @IntentFilter({
@@ -138,18 +141,16 @@ public class Example {
         Log.i("Example Info", "OnCreate called");
     }
 }
-{% endhighlight %}
+--
 
-<div class="note">
-<h5>Note</h5>
-Lifecycle events will not be called in any predefined order.
-</div>
+NOTE:Lifecycle events will not be called in any predefined order.
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
 
 The following are lifecycle events supported by @Activity components:
 
-{% highlight java %}
+[source,java]
+--
 @OnCreate
 @OnStart
 @OnPause
@@ -159,11 +160,12 @@ The following are lifecycle events supported by @Activity components:
 @OnBackPressed
 @OnSaveInstanceState
 @OnRestoreInstanceState
-{% endhighlight %}
+--
 
 Optionally, parameters may be added to the annotated lifecycle event methods that match the mapped event method.  For instance, the onCreate() method has a Bundle parameter.  If this parameter is added to the annotated method, the bundle from the original onCreate() method will be passed in like the following:
 
-{% highlight java %}
+[source,java]
+--
 @Activity(label = "Transfuse Example")
 @Layout(R.id.example_layout)
 @IntentFilter({
@@ -176,14 +178,15 @@ public class Example {
         Log.i("Example Info", "OnCreate called with value: " + bundle.get("value"));
     }
 }
-{% endhighlight %}
+--
 
 
-##### Listener Registration
+===== Listener Registration
 
 Another common event to be raised by the Android system are by listeners on View components.  Users can easily define and register any of the listeners in the Android ecosystem with the corresponding View object.  The following example associates an anonymous inner OnClickListener with the R.id.button View object:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @Layout(R.id.example_layout)
 public class Example{
@@ -194,13 +197,14 @@ public class Example{
         }
     };
 }
-{% endhighlight %}
+--
 
 Transfuse contains a mapping of Listener type to registration method.  This allows Transfuse to register Listeners by type depending upon the view referenced.
 
 Optionally, the specific Listener type may be specified in the RegisterListner annotation.  This is useful for Listeners that implement multiple types.
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @Layout(R.id.example_layout)
 public class Example{
@@ -208,14 +212,15 @@ public class Example{
     @RegisterListener(value = R.id.button5, interfaces = View.OnLongClickListener.class)
     MultipleListener listener;
 }
-{% endhighlight %}
+--
 
 
-##### Call-Through Events
+===== Call-Through Events
 
 Transfuse offers the concept of Call-Through events, for circumstances where either a return value is expected from an event or multiple event methods are closely associated.  Call-Through events are defined by an interface and mirrors the Activity event method.  For instance, to handle the onKeyDown event from an Activity an injected component (or the root annotated Activity) must implement the ActivityOnKeyDownListener interface and be annotated with the @RegisterListener annotation:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 @RegisterListener
 public class Example implements ActivityOnKeyDownListener{
@@ -223,35 +228,39 @@ public class Example implements ActivityOnKeyDownListener{
         Log.i("Key Pressed", keycode);
     }
 }
-{% endhighlight %}
+--
 
 Call-Through event objects can also be injected an annotated at the field of method level.  This allows you to share Call-Through event objects:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class One {
     @Inject @RegisterListener MenuListener listener;
 }
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Two {
     @Inject @RegisterListener MenuListener listener;
 }
-{% endhighlight %}
+--
 
 The MenuListener Call-Through object:
 
-{% highlight java %}
+[source,java]
+--
 public class MenuListener implements ActivityMenuComponent{
     //...
 }
-{% endhighlight %}
+--
 
 The following interfaces are available to handle Call-Through Events:
 
-{% highlight java %}
+[source,java]
+--
 ActivityMenuComponent
 ActivityOnKeyDownListener
 ActivityOnKeyLongPressListener
@@ -259,19 +268,20 @@ ActivityOnKeyMultipleListener
 ActivityOnKeyUpListener
 ActivityOnTouchEventListener
 ActivityOnTrackballEventListener
-{% endhighlight %}
+--
 
-##### Injection Qualifiers
+===== Injection Qualifiers
 
 There are a number of qualified injections available within the Activity injection graph.  Each qualifier designates a different source to draw the injection from.
 
-###### @Extra
+====== @Extra
 
 Android defines Extras as data points in a Bundle.  Extras are used to communicate from Context to Context across the Intent.  Transfuse allows users to define Extras as injection qualifiers and takes care of the deserialization from the Bundle in the onCreate() method.  Extras are defined by a String name, the Type, and may be declared optional.  Using the @Extra qualifier along with the IntentFactory helps enforce the contract specified by the Intent.
 
 The following Extra injection;
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @Extra("one")
@@ -279,100 +289,108 @@ public class Example{
     @Inject @Extra(value = "two", optional = true)
     String two;
 }
-{% endhighlight %}
+--
 
 Firstly, requires a string value named "one" to be provided in the Bundle while starting the Example Activity, and secondly has the option to inject an extra String value named "two."  If the Extra "two" is not provided in the Intent starting the Example Activity, "two" will be null.
 
-###### @Resource
+====== @Resource
 
 The Resource qualifier specifies the given injection draws from the Application's Resources found on the Context.getResources() method call.  Each resource is looked up by name and by type.  For instance, the following injection
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @Resource(R.string.app_name)
     String appName;
 }
-{% endhighlight %}
+--
  
 looks up the appName resource by String type
 
-{% highlight java %}
+[source,java]
+--
 getApplication().getResources().getString(R.string.app_name);
-{% endhighlight  %}
+--
 
-###### @View
+====== @View
 
 The View qualifier identifies the widget to inject from the view hierarchy set up during the onCreate phase.  As an example, look up a TextView by id with the following:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @View(R.id.viewText)
     ViewText viewText;
 }
-{% endhighlight %}
+--
 
 Optionally the view may be injected by tag value:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @View(tag = "taggedView")
     ViewText viewText;
 }
-{% endhighlight %}
+--
 
 The View qualifier does perform the necessary casting from the getViewById() method, but makes the assumption that the type declared is correct.  This may cause issues when the type is incorrectly associated with the given View widget.
 
-##### @Preference
+===== @Preference
 
 The Preference qualifier draws a value by type and name from the application's shared preferences.  The following example highlights injecting a preference named "favorite_color" and String type:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @Preference(value = "favorite_color", default = "green")
     String favColor;
 }
-{% endhighlight %}
+--
 
 A default value must be provided with each preference injection.  These defaults will only be used if the preference is not specified.
 
-###### @SystemService
+====== @SystemService
 
 All system services are mapped into the injection context by type:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject
     LocationManager locationManager;
 }
-{% endhighlight %}
+--
 
 Optionally users may inject into a base type of the given system service, but the system service type must be specified.  This may be helpful if the given system service is not mapped by Transfuse by type:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example{
     @Inject @SystemService(Context.LOCATION_SERVICE)
     LocationManager locationManager;
 }
-{% endhighlight %}
+--
 
-##### @NonConfigurationInstance
+===== @NonConfigurationInstance
 
-Annotating a field with NonConfigurationInstance will enable Activity persistence on the field value.  Specifically, this retains the given field instance by serializing it into a bundle in the onSaveInstanceState() method call and deserializes it from the Bundle in the onCreate() method call.  If the field is a <a href="#parcel">Parcel</a> Transfuse will wrap it with the appropriate generated parcelable object.
+Annotating a field with NonConfigurationInstance will enable Activity persistence on the field value.  Specifically, this retains the given field instance by serializing it into a bundle in the onSaveInstanceState() method call and deserializes it from the Bundle in the onCreate() method call.  If the field is a link:#parcel[Parcel] Transfuse will wrap it with the appropriate generated parcelable object.
 
-<hr/>
-#### @Fragment
+'''
+==== @Fragment
 
 Annotating a class with the Fragment annotation tells Transfuse to use the class as an Android Fragment.  Fragments are unique out of the Transfuse components because they almost always need to be referenced by class.  To use the generated Fragment one needs to know the class name of the generated Fragment.  If a name is not specified in the Fragment annotation, then Transfuse will default the generated class name to the name of the annotated class concatenated with "Fragment."  Otherwise, the class may be named anything that does not collide with any existing class name.
 
 Fragments map lifecycle events associated with the following annotations:
 
-{% highlight java %}
+[source,java]
+--
 @OnCreateView
 @OnActivityCreated
 @OnStart
@@ -384,43 +402,44 @@ Fragments map lifecycle events associated with the following annotations:
 @OnDetach
 @OnLowMemory
 @OnConfigurationChanged
-{% endhighlight %}
+--
 
-<div class="note">
-<h5>Note</h5>
-Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
-</div>
+NOTE:Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
 
 
-<hr/>
-#### @Service
+'''
+==== @Service
 
 Annotating a class with the Service annotation tells Transfuse to use the class as an Android Service.  As with the Activity annotation, annotating a Service class will allow users to define all manifest metadata on the class level.  This includes IntentFilters and MetaData:
 
-{% highlight java %}
+[source,java]
+--
 @Service
 @IntentFilter(@Intent(type=IntentType.ACTION, name="arbitraryIntent"))
 public class ExampleService {}
-{% endhighlight %}
+--
 
 Transfuse Service classes have the following lifecycle events defined, analogous to the Android lifecycle events:
 
-{% highlight java %}
+[source,java]
+--
 @OnCreate
 @OnDestroy
-{% endhighlight %}
+--
 
 Keep in mind that the onStartCommand lifecycle event is favored over the depreciated onStart event.  Transfuse support this by mapping the onStartCommand method through a call-through event on the following interface:
 
-{% highlight java %}
+[source,java]
+--
 ServiceOnStartCommand
-{% endhighlight %}
+--
 
-Service may be injected as described in the <a href="#dependency_injection_di">Injection section</a>:
+Service may be injected as described in the link:#dependency_injection_di[Injection section]:
 
-{% highlight java %}
+[source,java]
+--
 @Service
 public class ExampleService {
     @Inject
@@ -428,17 +447,18 @@ public class ExampleService {
         ...
     }
 }
-{% endhighlight %}
+--
 
-<hr/>
+'''
 
-#### @BroadcastReceiver
+==== @BroadcastReceiver
 
 Annotating a class with the BroadcastReceiver annotation activates the class as an Android Broadcast Receiver component.
 
 The most important event handled by the Broadcast Receiver is OnReceieve.  Transfuse maps this event to the @OnReceive annotation.  As with the other components, users may define the Manifest metadata on the class level.  This means that the intents that the broadcast receiver responds to are defined at the class level.
 
-{% highlight java %}
+[source,java]
+--
 @BroadcastReceiver
 @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_BOOT_COMPLETED)
 public class Startup{
@@ -446,34 +466,36 @@ public class Startup{
     public void bootup(){
     }
 }
-{% endhighlight %}
+--
 
-<hr/>
+'''
 
-#### @Application
+==== @Application
 
 Annotating a class with the Activity annotation activates the class as an Android Application component.  There may be only one of these components through a Transfuse application.
 
 The annotated application class has the following lifecycle events available via the lifecycle event annotations:
 
-{% highlight java %}
+[source,java]
+--
 @OnCreate
 @OnLowMemory
 @OnTerminate
 @OnConfigurationChanged
-{% endhighlight %}
+--
 
 These annotations correspond to the similarly named lifecycle events available on the Application class.
 
-<hr/>
+'''
 
-#### Intent Factory
+==== Intent Factory
 
 Both Service and Activities may be started with a set of named Extras.  These Extras represent a contract on the intent used to start the given component.  To enforce this contract, Transfuse offers an Intent Factory to build intents based on a structured parameter; the Intent Strategy.  An Intent Strategy is generated for each component defined in Transfuse.
 
 The following Activity has two types of Extras, required and optional:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class ExtraActivity{
     @Inject @Extra("name") 
@@ -481,11 +503,12 @@ public class ExtraActivity{
     @Inject @Extra(value="age", optional=true)
     Integer age;
 }
-{% endhighlight %}
+--
 
 Users may build and start the ExtraActivity with the IntentFactory:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class CallingActivity{
     @Inject
@@ -494,40 +517,39 @@ public class CallingActivity{
         intentFactory.start(new ExtraActivityIntentStrategy("Andy").setAge(42));
     }
 }
-{% endhighlight %}
+--
 
 Required injections are given using the IntentStrategy constructor as optional parameters are given using setters.
 
-<hr/>
+'''
 
-#### Dependency Injection (DI)
+==== Dependency Injection (DI)
 
 Transfuse implements [JSR-330][1], the same standard many of the leading DI frameworks implement.  The following annotations are available:
 
-##### @Inject
+===== @Inject
 
 Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, protected, package private or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, protected or package private injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs, it may significantly affect performance.
 
-<div class="note">
-<h5>Note</h5>
-This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
-</div>
+NOTE:This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
 
-##### Provider
+===== Provider
 
 Providers may be used to manually resolve the dependencies of a class. The Provider will be used to resolve both the injection of the Provider and the injection of the type the Provider returns:
 
 Provider:
-{% highlight java %}
+[source,java]
+--
 public void ExampleProvider implements Provider<Example>
     public Example get(){
         return new Example();
     }
 }
-{% endhighlight %}
+--
 
 Injections:
-{% highlight java %}
+[source,java]
+--
 public void TestInjections{
     @Inject
     Example example; //calls .get() to resolve example
@@ -536,38 +558,42 @@ public void TestInjections{
     @Inject
     ExampleProvider concreteInjection;
 }
-{% endhighlight %}
+--
 
 To map a Provider to a type, define the Provider binding in the TransfuseModule:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 @BindProviders({
     @BindProvider(type = Example.class, provider = ExampleProvider.class)
 })
 public class Module{}
-{% endhighlight %}
+--
 
-##### Scopes
+===== Scopes
 
-###### @Singleton
+====== @Singleton
 
 Any class annotated with @Singleton will, when injected, reference a single instance in the runtime.  This makes it easy to define singletons in the application, eliminating the boilerplate of defining the singleton behavior:
 
-{% highlight java %}
+[source,java]
+--
 @Singleton
 public class SingletonExample{ }
-{% endhighlight %}
+--
 
-###### @ContextScope
+====== @ContextScope
 
-With the need to instantiate one, and only one, instance of a class per Context, Transfuse allows the declaration of a Context singleton via the `@ContextScope` annotation.  Any object annotated with this will be scoped to the Context in which it was originally instantiated.
+With the need to instantiate one, and only one, instance of a class per Context, Transfuse allows the declaration of a Context singleton via the +
+@ContextScope+ annotation.  Any object annotated with this will be scoped to the Context in which it was originally instantiated.
 
-##### Custom Scopes
+===== Custom Scopes
 
-Defining a custom scope is easy and especially useful when defining the lifecycle of objects in Transfuse.  A scope is an object implementing the `Scope` interface:
+Defining a custom scope is easy and especially useful when defining the lifecycle of objects in Transfuse.  A scope is an object implementing the +Scope+ interface:
 
-{% highlight java %}
+[source,java]
+--
 public class MapScope implements Scope {
 
     private ConcurrentMap<ScopeKey<?>, Object> values = new ConcurrentHashMap<ScopeKey<?>, Object>();
@@ -585,66 +611,73 @@ public class MapScope implements Scope {
         return (T) current;
     }
 }
-{% endhighlight %}
+--
 
 It is important to consider concurrency when defining scopes as they can be used via multiple threads at once.  The example above demonstrates double checked locking with the ConcurrentMap.
 
-Scopes are defined in Transfuse via the `@TransfuseModule` and `@DefineScope` annotation.  A separate, unique identifying annotation must be declared for each scope:
+Scopes are defined in Transfuse via the +@TransfuseModule+ and +@DefineScope+ annotation.  A separate, unique identifying annotation must be declared for each scope:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 @DefineScope(annotation = SimpleScope.class, scope = MapScope.class)
 public class TransfuseAndroidModule {}
-{% endhighlight %}
+--
 
 Scopes may be injected to be used directly:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example {
     @Inject @ScopeReference(SimpleScope.class)
     MapScope scope;
 }
-{% endhighlight %}
+--
 
-An object in Transfuse may be identified as scoped by either annotating the class (as demonstrated in the `@Singleton` example above) or through the `@Provides` annotation:
+An object in Transfuse may be identified as scoped by either annotating the class (as demonstrated in the +@Singleton+ example above) or through the +@Provides+ annotation:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 public class TransfuseAndroidModule {
     @Provides @SimpleScope
     public Example getScoped(){...}
 }
-{% endhighlight %}
+--
 
-##### @ImplementedBy
+===== @ImplementedBy
 
 Annotating a class with @ImplementedBy configures Transfuse to inject the given annotation type whenever the annotated type is injected.  This is much like the @Bind module configuration, but @ImplemnetedBy is located on the type instead of within the @TransfuseModule class.
 
 An example of this is as follows:
 
-{% highlight java %}
+[source,java]
+--
 @ImplementedBy(Andy.class)
 public interface Android {}
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 public class Andy implements Android {}
-{% endhighlight %}
+--
 
 The following injection would inject Andy in place of Android:
 
-{% highlight java %}
+[source,java]
+--
 @Inject
 Android andoid // injected Andy
-{% endhighlight %}
+--
 
 
-##### Qualifiers
+===== Qualifiers
 
-Qualifer annotation allow the developer to distingush between different instances of the same type within Transfuse.  For instance, it is common to define configuration paramters in Strings.  In this example, qualfier annotation allow the developer to determine which instance should be injected.  Qualifier annotations are configured along with the `@Provides` annotation in the `@TransfuseModule`:
+Qualifer annotation allow the developer to distingush between different instances of the same type within Transfuse.  For instance, it is common to define configuration paramters in Strings.  In this example, qualfier annotation allow the developer to determine which instance should be injected.  Qualifier annotations are configured along with the +@Provides+ annotation in the +@TransfuseModule+:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 public class TransfuseAndroidModule {
     @Provides @Username
@@ -652,11 +685,12 @@ public class TransfuseAndroidModule {
     @Provides @Password
     public String getPassword(){...}
 }
-{% endhighlight %}
+--
 
 These objects can be injected by using the defined annotations:
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example {
     @Inject @Username
@@ -664,62 +698,63 @@ public class Example {
     @Inject @Password
     String password;
 }
-{% endhighlight %}
+--
 
-Built into JSR330 is the `@Named` annotation, which is fully supported by Transfuse.  This is an extreemly convienient, predefined qualifier annotation:
+Built into JSR330 is the +@Named+ annotation, which is fully supported by Transfuse.  This is an extreemly convienient, predefined qualifier annotation:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 public class TransfuseAndroidModule {
     @Provides @Named("username")
     public String getUsername(){...}
 }
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 @Activity
 public class Example {
     @Inject @Named("username")
     String username;
 }
-{% endhighlight %}
+--
 
-##### Advanced
+===== Advanced
 
 For completeness, Transfuse allows the declaration of dependency cycles.  For Transfuse to instantiate dependency cycles, at least one dependency in the loop must be injected via an interface.
 
 
 
 
-<hr/>
+'''
 
-#### Method Interceptors
+==== Method Interceptors
 
 Transfuse offers a basic Aspect Oriented Programming (AOP) facility of method interception.  This feature is based on the AOPAlliance MethodInterceptor specification.  There are several useful method interceptors defined by Transfuse:
 
-##### @Asynchronous
+===== @Asynchronous
 
 Annotating a method with @Asynchronous tells Transfuse to proxy the execution of the method and to execute it within its own thread.  The method will execute and the calling thread will return immediately.
 
-##### @UIThread
+===== @UIThread
 
 Annotating a method with @UIthread will execute the given method through an Android Handler.  This puts the execution of the method back on the UI thread.
 
-<div class="note">
-<h5>Note</h5>
-If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
-</div>
+NOTE:If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
 
 Example:
 
-{% highlight java %}
+[source,java]
+--
 @Target(METHOD)
 public @interface Log {}
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 public class LogInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -730,67 +765,72 @@ public class LogInterceptor implements MethodInterceptor {
         return ret;
     }
 }
-{% endhighlight %}
+--
 
 This example shows an interceptor that logs the starting and ending points of a method call.  All that is needed to use this method is to annotate a method like so:
 
-{% highlight java %}
+[source,java]
+--
 public class Example{
     @Log
     public void methodCall() {
     }
 }
-{% endhighlight %}
+--
 
-These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the <a href="#configuration">Configuration section</a> for more details.
+These are associated in the TransfuseModule with the @BindInterceptor annotation.  See the link:#configuration[Configuration section] for more details.
 
 Annotating a class (as opposed to a method in a class) will configure Transfuse to apply the given aspect to all public methods defined on the class.
 
-<hr/>
+'''
 
-#### Configuration
+==== Configuration
 
 Transfuse's DI and Method Interception may be configured by defining a Transfuse Module.  This entails annotating a interface with @TransfuseModule and specifying one of the configuration options.
 
 To specify a specific binding from one injection type to a concrete type, use the @Bind annotation:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 @Bindings({
     @Bind(type=Example.class, to=ExampleImpl.class)
 })
 public interface Module{}
-{% endhighlight %}
+--
 
 This tells Transfuse to instantiate an instance of ExampleImpl and inject it every time a Example type is requested for injection.
 
 To specify a Provider to be used as a source for a binding, use the @BindProvider annotation:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 @BindProviders({
     @BindProvider(type=Example.class, provider=ExampleProvider.class
 })
 public interface Module{}
-{% endhighlight %}
+--
 
 Transfuse will use ExampleProvider's get() method to instantiate Example each time Example is requested for injection.
 
 To associate a method interceptor with an annotation use the @BindInterceptor annotation:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 @BindInterceptors({
     @BindInterceptor(annotation = Log.class, interceptor = LogInterceptor.class)
 })
 public interface Module{}
-{% endhighlight %}
+--
 
 This is requred to use the given method interceptor each time the corresponding annotation is used.
 
 Another flavor of configuration is available by the @Provides annotation.  @Provides configures a method in the Module to be called for the given return type:
 
-{% highlight java %}
+[source,java]
+--
 @TransfuseModule
 public interface Module{
     @Provides 
@@ -798,17 +838,18 @@ public interface Module{
         return new ExampleProvides(dependency);
     }
 }
-{% endhighlight %}
+--
 
-<hr/>
+'''
 
-#### Events
+==== Events
 
 Transfuse offers a global event bus in addition to the mapping of the Android lifecycle and call-through events.
 
 Any type may be used as an event.  Event observer methods may be defined by either annotating the method or the parameter of a method in a component or injected class with the @Observes annotation:
 
-{% highlight java %}
+[source,java]
+--
 public class Event{}
 
 public class ListenerExample{
@@ -817,11 +858,12 @@ public class ListenerExample{
 
     public void observeEvent2(@Observes Event event){}
 }
-{% endhighlight %}
+--
 
 Events are triggered by using the EventManager.trigger() method.  Simply call this method with the given event and all the available annotated methods will be triggered.
 
-{% highlight java %}
+[source,java]
+--
 public class Trigger{
     @Inject
     EventManager eventManager;
@@ -830,16 +872,17 @@ public class Trigger{
         eventManager.trigger(new Event());
     }
 }
-{% endhighlight %}
+--
 
 Keep in mind that events may contain any relevant data and behavior.  It is completely definable by the user.  Also, the Observing methods are not called in any particular order, so make sure that the operations are not dependent on each other.
 
-<hr/>
-#### @Parcel
+'''
+==== @Parcel
 
 Transfuse offers a new way of defining Parcelable classes.  The typical implementation of a Parcelable class in Android is riddled with boilerplate.  Not only do users have to define the serialization manually, but also must define a public static final CREATOR class that implements the Parcelable.Creator interface.  Transfuse takes care of all of this.  Simply annotate the class with the @Parcel annotation.  Transfuse will detect all java bean format getter/setter pairs, map it to the designated Bundle serialization method, and produce a Parcelable class:
 
-{% highlight java %}
+[source,java]
+--
 @Parcel
 public void CleanParcel{
     private String name;
@@ -858,30 +901,32 @@ public void CleanParcel{
         this.age = age;
     }
 }
-{% endhighlight %}
+--
 
 
 If there is a parameter that the user does not want serialized, annotate the getter or setter with @Transient.
 
 Parcels are useful when passing data between Android components.  Therefore, when using the IntentFactory, Transfuse will automatically detect if a class is annotated with @Parcel and wrap it with the appropriate Parcelable implementation.
 
-<hr/>
-#### @Factory
+'''
+==== @Factory
 
 There may be a need to build a dependency graph of a given type outside of a Transfuse dependency graph.  To solve this, Transfuse offers the capability to define a Factory.  To define an Factory, simply define an interface, including methods that return the type of the values users require built and annotate it with @Factory.  Transfuse will read the interface and implement the appropriate injections.
 
 For instance, the following interface returns an Example type:
 
-{% highlight java %}
+[source,java]
+--
 @Factory
 public interface TransfuseFactory{
     Example getExample();
 }
-{% endhighlight %}
+--
 
 To use it, inject the Factory or reference the built Factory directly:
 
-{% highlight java %}
+[source,java]
+--
 public class ExampleUsage{
 
     @Inject TransfuseFactory factory;
@@ -894,56 +939,54 @@ public class ExampleUsage{
         Example example = Factories.get(TransfuseFactory.class).getExample();
     }
 }
-{% endhighlight %}
+--
 
 Factories may also be used as a factory with input parameters.  This is analagous to Guice's Asssisted Injecton capability.  If multiple inputs of the same type exsit, binding annotations can be used to concretely map parameters. 
 
-{% highlight java %}
+[source,java]
+--
 @Factory
 public interface AssistedFactory {
     AssistedTarget buildTarget(AssistedDependency dependency);
     AssistedDoubleTarget buildTarget(@Named("one") AssistedDependency dependencyOne,
                                       @Named("two") AssistedDependency dependencyTwo);
 }
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 public class AssistedTarget {
     @Inject
     AssistedDependency dependency;
 }
-{% endhighlight %}
+--
 
-{% highlight java %}
+[source,java]
+--
 public class AssistedDoubleTarget {
     @Inject @Named("one")
     AssistedDependency dependencyOne;
     @Inject @Named("two")
     AssistedDependency dependencyTwo;
 }
-{% endhighlight %}
+--
 
-<hr/>
+'''
 
-#### Legacy Support
+==== Legacy Support
 
 In an ideal world, users are able to develop a new application.  Realistically however, users are often stuck with a legacy code base.  Transfuse anticipates this, and the AndroidManifest.xml management is flexible enough to mix Transfuse components with regular Android components.  The following options are available when dealing with legacy Android applications:
 
-<ul class="square">
-<li>
+* Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them.
 
-Define Android components as normal, and register them in the AndroidManifest.xml.  By using this option, users will not be able to use a majority of Transfuse's features and Transfuse will not register the component in the AndroidManifest.xml file.  However, if a component is manually added to the AndroidManifest.xml file, Transfuse will detect the additions, preserve them and work around them. </li>
+* Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.
 
-<li> Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.</li></ul>
-
-<div class="note">
-<h5>Note</h5>
-DI and the other code generation features are not available on legacy Android components.
-</div>
+NOTE:DI and the other code generation features are not available on legacy Android components.
 
 The second option looks like the following:
 
-{% highlight java %}
+[source,java]
+--
 @Activity(label = "Transfuse Example")
 @IntentFilter({
         @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
@@ -952,14 +995,9 @@ The second option looks like the following:
 public class Example extends Activity {
     ...
 }
-{% endhighlight %}
+--
 
 
-#### Reference
-[API Javadocs][2]
+==== Reference
+https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse-api/{{site.currentVersion}}/transfuse-api-{{site.currentVersion}}-javadoc.jar/!/index.html[API Javadocs]
 
-[Main Javadocs][3]
-
-[1]: http://www.jcp.org/en/jsr/detail?id=330
-[2]: https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse-api/{{site.currentVersion}}/transfuse-api-{{site.currentVersion}}-javadoc.jar/!/index.html
-[3]: https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse/{{site.currentVersion}}/transfuse-{{site.currentVersion}}-javadoc.jar/!/index.html
