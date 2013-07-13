@@ -5,4 +5,9 @@ pygments: true
 
 currentVersion: "0.2.1"
 
+asciidoctor:
+  attributes:
+    - idseparator=_
+    - source-highlighter=coderay
+
 # end of configuration
