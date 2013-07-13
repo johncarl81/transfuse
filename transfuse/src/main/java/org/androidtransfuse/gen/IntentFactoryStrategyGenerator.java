@@ -22,6 +22,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
@@ -32,8 +33,7 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.parceler.Parcel;
-import org.parceler.internal.ParcelableGenerator;
-import org.parceler.internal.ParcelsGenerator;
+import org.parceler.Parcels;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -44,6 +44,9 @@ import java.util.*;
  * @author John Ericksen
  */
 public class IntentFactoryStrategyGenerator implements ExpressionVariableDependentGenerator {
+
+    private static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
+    public static final String WRAP_METHOD = "wrap";
 
     private static final String STRATEGY_EXT = "Strategy";
 
@@ -149,8 +152,8 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {
-            JInvocation wrappedParcel = generationUtil.ref(ParcelsGenerator.PARCELS_NAME)
-                    .staticInvoke(ParcelableGenerator.WRAP_METHOD).arg(extraParam);
+            JInvocation wrappedParcel = generationUtil.ref(PARCELS_NAME)
+                    .staticInvoke(WRAP_METHOD).arg(extraParam);
 
             return extras.invoke("putParcelable").arg(name).arg(wrappedParcel);
         }

@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>org.parceler</groupId>
-            <artifactId>parceler</artifactId>
+            <artifactId>parceler-api</artifactId>
             <version>0.1.0</version>
         </dependency>
         <dependency>
