@@ -997,9 +997,6 @@ public class Example extends Activity {
 }
 --
 
-test text
-
-
 ==== Reference
 https://oss.sonatype.org/service/local/repositories/releases/archive/org/androidtransfuse/transfuse-api/{{site.currentVersion}}/transfuse-api-{{site.currentVersion}}-javadoc.jar/!/index.html[API Javadocs]
 
