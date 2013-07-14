@@ -58,7 +58,7 @@ Try Transfuse by downloading from http://search.maven.org/#search%7Cga%7C1%7Cg%3
 
 via git:
 
-[source,bash]
+[source]
 --
 git clone git@github.com:johncarl81/transfuse.git
 --
