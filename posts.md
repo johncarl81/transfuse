@@ -8,7 +8,7 @@ postsExpanded: true
 
 ### Transfuse Technical Blog
 
-<ul>
+<ul class="nav">
 	{% for post in site.posts %}
 	<li>
 		<h4><a href="{{ post.url }}" class="title" title="{{ post.title }}">{{ post.title }}</a></h4>

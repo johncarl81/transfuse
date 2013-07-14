@@ -23,7 +23,6 @@
 	<link rel="stylesheet" type="text/css" href="{{page.root}}css/coderay.css"/>
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
-	<script src="{{page.root}}js/scroll.js"></script>
 
 </head>
 <body>
@@ -42,18 +41,18 @@
 
 	<div class="three columns">
 		<nav>
-			<ul>
+			<ul class="nav">
 				<li><a href="{{page.root}}index.html">About</a></li>
 				<li><a href="{{page.root}}getting_started.html">Getting Started</a></li>
 				<li><span id="poststoggle" class="arrow arrowright"></span><a href="{{page.root}}posts.html">Blog</a>
-					<ul id="posts" class="posts">
+					<ul id="posts" class="posts nav">
 					{% for post in site.posts limit: 5 %}
 						<li><a href="{{ post.url }}">{{ post.shortTitle }}</a></li>
 					{% endfor %}
 					</ul>
 				</li>
 				<li><span id="documentationtoggle" class="arrow arrowright"></span><a href="{{page.root}}documentation.html">Documentation</a>
-					<ul id="documentation">
+					<ul id="documentation" class="nav">
 						<li><a href="{{page.root}}documentation.html#introduction">Introduction</a></li>
 						<li><a href="{{page.root}}documentation.html#_activity">@Activity</a></li>
 						<li><a href="{{page.root}}documentation.html#_fragment">@Fragment</a></li>

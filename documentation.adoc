@@ -143,7 +143,7 @@ public class Example {
 }
 --
 
-NOTE:Lifecycle events will not be called in any predefined order.
+NOTE: Lifecycle events will not be called in any predefined order.
 
 During the onCreate lifecycle phase the log() method will be called.  Each method annotated by the given lifecycle event annotation is added to the generated component in that lifecycle method.  
 
@@ -404,7 +404,7 @@ Fragments map lifecycle events associated with the following annotations:
 @OnConfigurationChanged
 --
 
-NOTE:Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
+NOTE: Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
 
@@ -531,7 +531,7 @@ Transfuse implements [JSR-330][1], the same standard many of the leading DI fram
 
 Transfuse allows users to inject into the constructor, methods and fields of a class.  These injections may be public, protected, package private or private.  Users should prefer (in order) constructor injection, method, and then field injection.  Likewise, for performance reasons, users should prefer public, protected or package private injections over private.  Private injections requires Transfuse to use reflection at runtime and for large dependency graphs, it may significantly affect performance.
 
-NOTE:This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
+NOTE: This documentation highlights using package private field injection because it is the most succinct.  Public constructor injection should be preferred.
 
 ===== Provider
 
@@ -741,7 +741,7 @@ Annotating a method with @Asynchronous tells Transfuse to proxy the execution of
 
 Annotating a method with @UIthread will execute the given method through an Android Handler.  This puts the execution of the method back on the UI thread.
 
-NOTE:If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
+NOTE: If a return value is declared on the intercepted method, the Asynchronous and UIThread interceptors will return null.
 
 Custom method interceptors may be defined by associating a MethodInterceptor class with a custom annotation.  
 
@@ -981,7 +981,7 @@ In an ideal world, users are able to develop a new application.  Realistically h
 
 * Define Android components as normal, and annotate it to be managed in the AndroidManifest.xml by Transfuse.  Transfuse detects if the annotated component extends an Android component, and if so, it will add it to the manifest.
 
-NOTE:DI and the other code generation features are not available on legacy Android components.
+NOTE: DI and the other code generation features are not available on legacy Android components.
 
 The second option looks like the following:
 

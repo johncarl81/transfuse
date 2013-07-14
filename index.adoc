@@ -25,18 +25,17 @@ Using Transfuse, an Android Activity looks like the following:
 
 [source,java]
 --
-// Example Transfuse Activity
 @Activity(label = "@string/app_name")
-@Layout(R.layout.main)
-public class HelloTransfuse {
+@Layout(R.layout.main) // <4>
+public class HelloTransfuse { // <1> 
 
-    @Inject @View(R.id.textview)
+    @Inject @View(R.id.textview) // <3>
     private TextView textView;
 
     @Inject @Resource(R.string.hello)
     private String helloText;
 
-    @OnCreate
+    @OnCreate // <2>
     public void hello() {
         textView.setText(helloText);
     }
@@ -44,10 +43,10 @@ public class HelloTransfuse {
 --
 
 
-* Now, Activities no longer extend the android.app.Activity class.
-* The Android Activity lifecycle is handled via lightweight events.  Any component within the injection graph may define event methods to be called during those phases of the lifecycle.
-* All specialty injections, such as injecting View elements, are designated with qualifier injections (@View, @Resource, etc.).
-* Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.  This puts all the relevant information regarding the Activity in one place.  Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.
+<1> Now, Activities no longer extend the android.app.Activity class.
+<2> The Android Activity lifecycle is handled via lightweight events.  Any component within the injection graph may define event methods to be called during those phases of the lifecycle.
+<3> All specialty injections, such as injecting View elements, are designated with qualifier injections (@View, @Resource, etc.).
+<4> Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.  This puts all the relevant information regarding the Activity in one place.  Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.
 
 Read more about the features in the link:documentation.html[Documentation] section.
 
