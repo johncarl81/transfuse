@@ -5,6 +5,7 @@ if [ "$POST_BUILD" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 	#Set git user
 	git config --global user.email "johncarl81@gmail.com"
 	git config --global user.name "Travis"
+	git config --global push.default simple
 
 	echo -e "Cloning gh-pages\n"
 	git clone -b gh-pages https://${GH_TOKEN}@github.com/johncarl81/transfuse.git site
@@ -20,7 +21,7 @@ if [ "$POST_BUILD" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
 	echo -e "Committing site\n"
 	git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER"
-	git push origin current
+	git push origin
 
 	rm -rf site
 
