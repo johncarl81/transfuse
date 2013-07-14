@@ -61,7 +61,7 @@ public class ExtraInjectionTest {
         assertEquals(EXTRA_TWO_VALUE, extraInjection.getExtraTwo());
         assertEquals(EXTRA_THREE_VALUE, extraInjection.getExtraThree());
         assertEquals(EXTRA_FOUR_VALUE, extraInjection.getExtraFour().getValue());
-        //TODO: assertEquals(parcelExample, extraInjection.getParcelExample());
+        assertEquals(parcelExample, extraInjection.getParcelExample());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ExtraInjectionTest {
         assertEquals(EXTRA_TWO_VALUE, extraInjection.getExtraTwo());
         assertNull(extraInjection.getExtraThree());
         assertEquals(EXTRA_FOUR_VALUE, extraInjection.getExtraFour().getValue());
-        //TODO: assertEquals(parcelExample, extraInjection.getParcelExample());
+        assertEquals(parcelExample, extraInjection.getParcelExample());
     }
 
     @Test(expected = TransfuseInjectionException.class)
@@ -85,7 +85,7 @@ public class ExtraInjectionTest {
         ExtraInjectionActivity extraInjectionActivity = new ExtraInjectionActivity();
 
         IntentFactory intentFactory = new IntentFactory(extraInjectionActivity);
-        Intent callingIntent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(serializableValue, extraOneValue/*TODO:, inputParcelExample*/, extraTwoValue)
+        Intent callingIntent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(serializableValue, extraOneValue, inputParcelExample, extraTwoValue)
                 .setExtraThree(extraThreeValue));
 
         extraInjectionActivity.setIntent(callingIntent);
