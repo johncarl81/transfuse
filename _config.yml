@@ -3,7 +3,7 @@
 title: "Transfuse"
 pygments: true
 
-currentVersion: "0.2.1"
+currentVersion: "0.2.2"
 
 asciidoctor:
   attributes:
