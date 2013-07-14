@@ -51,9 +51,9 @@ public class ExtraInjection {
     @Extra(value = EXTRA_FOUR)
     private SerializableValue extraFour;
 
-    @Inject
+    /*TODO: @Inject
     @Extra(value = EXTRA_PARCELABLE)
-    private ParcelExample parcelExample;
+    private ParcelExample parcelExample;*/
 
     @Inject
     @View(R.id.extrasText)
@@ -73,7 +73,7 @@ public class ExtraInjection {
         output(builder, EXTRA_TWO, extraTwo);
         output(builder, EXTRA_THREE, extraThree);
         output(builder, EXTRA_FOUR, extraFour);
-        output(builder, EXTRA_PARCELABLE, parcelExample);
+        //TODO: output(builder, EXTRA_PARCELABLE, parcelExample);
 
         textView.setText(builder.toString());
     }
@@ -106,7 +106,7 @@ public class ExtraInjection {
         return extraFour;
     }
 
-    public ParcelExample getParcelExample() {
+    /*TODO: public ParcelExample getParcelExample() {
         return parcelExample;
-    }
+    }*/
 }
