@@ -5,7 +5,7 @@ table.CodeRay td.line-numbers { text-align: right; color: #999; border-right: 1p
 span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inline-block; margin-right: 0.5em; padding-right: 0.5em; }
 .CodeRay td.line-numbers strong, .CodeRay span.line-numbers strong { font-weight: normal; }
 .CodeRay .debug { color: white !important; background: blue !important; }
-.CodeRay .annotation { color: #007; }
+.CodeRay .annotation { color: #008000; }
 .CodeRay .attribute-name { color: #f08; }
 .CodeRay .attribute-value { color: #700; }
 .CodeRay .binary { color: #509; }

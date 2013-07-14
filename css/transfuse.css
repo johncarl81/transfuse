@@ -85,19 +85,35 @@ ul.nav {
 }
 
 .conum {
-    background-color: #222222;
-    border-radius: 100px 100px 100px 100px;
-    color: white !important;
     display: inline-block;
-    font-family: Arial,sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: bold;
-    height: 20px;
-    letter-spacing: -1px;
-    line-height: 20px;
-    position: relative;
+    color: white !important;
+    background-color: #222;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    -ms-border-radius: 100px;
+    -o-border-radius: 100px;
+    border-radius: 100px;
     text-align: center;
-    top: -2px;
     width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 20px;
+    font-family: Arial, sans-serif;
+    font-style: normal;
+    position: relative;
+    top: -2px;
+    letter-spacing: -1px
+}
+
+.conum * {
+    color: white !important
+}
+
+.conum:empty {
+    display: none
+}
+
+pre .comment .conum {
+    left: -20px
 }
