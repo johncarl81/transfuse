@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$POST_BUILD" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] then
+if [ "$POST_BUILD" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
 	echo -e "Cloning gh-pages\n"
 	git clone -b gh-pages https://${GH_TOKEN}@github.com/johncarl81/transfuse.git site
