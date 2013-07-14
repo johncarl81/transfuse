@@ -17,7 +17,7 @@ Transfuse requires a Java 6 (or greater) JDK and the http://developer.android.co
 
 Use the Maven archetype to run a new Android project, creating a basic Android application:
 
-[source,bash]
+[source]
 --
 mvn archetype:generate \
   -DarchetypeArtifactId=android-quickstart \
@@ -113,7 +113,7 @@ Although syntactically different than the standard Android Activity, this should
 
 Transfuse requires a full build to generate the necessary class files and resources. Use Maven or Ant to cleanly build projects each time to deploy applications.
 
-[source,bash]
+[source]
 mvn clean package android:deploy
 
 
