@@ -4,7 +4,7 @@
 
 Transfuse is a dependency injection and integration library for Google Android.  Transfuse extends the Android API to create a more natural, flexible and maintainable mobile platform.
 
-Transfuse offers a number of attractive features including Manifest management, JSR330 Dependency Injection, Java Bean style Android components and much more.  Interested?  Check out  http://androidtransfuse.org/[the website] for details.
+Transfuse offers a number of attractive features including Manifest management, http://jcp.org/en/jsr/detail?id=330[JSR330] Dependency Injection, Java Bean style Android components and much more.  Interested?  Check out  http://androidtransfuse.org/[the website] for details.
 
 == Getting Transfuse
 
