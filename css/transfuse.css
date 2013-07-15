@@ -121,10 +121,6 @@ ul.nav {
     display: none;
 }
 
-pre .comment .conum {
-    left: -20px;
-}
-
 .hdlist > table, .colist > table {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;

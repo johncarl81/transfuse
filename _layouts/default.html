@@ -168,5 +168,10 @@ function setupToggle(expanded, toggleId, toggleBodyId){
 setupToggle({{page.documentationExpanded}}, '#documentationtoggle', '#documentation');
 setupToggle({{page.postsExpanded}}, '#poststoggle', '#posts');
 
+$('.CodeRay').each(function(){
+	$(this).html($(this).html().replace(/&lt;(\d)&gt;/g, '<i class="conum" data-value="$1"></i><b>$1</b>'));	
+});
+
+
 </script>
 </body>
