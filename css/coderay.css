@@ -49,7 +49,7 @@ span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inlin
 .CodeRay .predefined { color: #369; }
 .CodeRay .preprocessor { color: #579; }
 .CodeRay .pseudo-class { color: #00C; }
-.CodeRay .predefined-type { color: #074; font-weight: bold;}
+.CodeRay .predefined-type { color: #074; }
 .CodeRay .reserved, .keyword  { color: #000; }
 .CodeRay .key { color: #808; }
 .CodeRay .key .delimiter { color: #606; }

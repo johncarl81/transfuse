@@ -30,10 +30,10 @@ Using Transfuse, an Android Activity looks like the following:
 public class HelloTransfuse { // <1> 
 
     @Inject @View(R.id.textview) // <3>
-    private TextView textView;
+    TextView textView;
 
     @Inject @Resource(R.string.hello)
-    private String helloText;
+    String helloText;
 
     @OnCreate // <2>
     public void hello() {
