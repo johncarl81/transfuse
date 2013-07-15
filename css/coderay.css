@@ -5,7 +5,7 @@ table.CodeRay td.line-numbers { text-align: right; color: #999; border-right: 1p
 span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inline-block; margin-right: 0.5em; padding-right: 0.5em; }
 .CodeRay td.line-numbers strong, .CodeRay span.line-numbers strong { font-weight: normal; }
 .CodeRay .debug { color: white !important; background: blue !important; }
-.CodeRay .annotation { color: #008000; }
+.CodeRay .annotation { color: #008000; font-weight: bold;}
 .CodeRay .attribute-name { color: #f08; }
 .CodeRay .attribute-value { color: #700; }
 .CodeRay .binary { color: #509; }
@@ -13,7 +13,7 @@ span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inlin
 .CodeRay .char { color: #04D; }
 .CodeRay .char .content { color: #04D; }
 .CodeRay .char .delimiter { color: #039; }
-.CodeRay .class { color: #458; }
+.CodeRay .class { color: #458; font-weight: bold;}
 .CodeRay .complex { color: #A08; }
 .CodeRay .constant { color: teal; }
 .CodeRay .color { color: #0A0; }
@@ -49,7 +49,7 @@ span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inlin
 .CodeRay .predefined { color: #369; }
 .CodeRay .preprocessor { color: #579; }
 .CodeRay .pseudo-class { color: #00C; }
-.CodeRay .predefined-type { color: #074; }
+.CodeRay .predefined-type { color: #074; font-weight: bold;}
 .CodeRay .reserved, .keyword  { color: #000; }
 .CodeRay .key { color: #808; }
 .CodeRay .key .delimiter { color: #606; }
@@ -72,9 +72,9 @@ span.line-numbers { border-right: 1px solid #E5E5E5; color: #999; display: inlin
 .CodeRay .symbol { color: #990073; }
 .CodeRay .symbol .content { color: #A60; }
 .CodeRay .symbol .delimiter { color: #630; }
-.CodeRay .tag, .CodeRay .attribute-name { color: #070; }
+.CodeRay .tag, .CodeRay .attribute-name { color: #070; font-weight: bold;}
 .CodeRay .tag-special { color: #D70; }
-.CodeRay .type { color: #339; }
+.CodeRay .type { color: #339; font-weight: bold;}
 .CodeRay .variable  { color: #036; }
 .CodeRay .insert { background: #afa; }
 .CodeRay .delete { background: #faa; }
