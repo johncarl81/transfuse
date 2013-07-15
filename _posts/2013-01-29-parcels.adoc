@@ -12,7 +12,7 @@ root: ../../../
 === Transfuse Technical Blog
 
 ==== Generated Parcelables
-January 29, 2013
+_January 29, 2013_
 
 One of my favorite rough spots in Android to rag on is the Parcelable.  Parcelable classes are used by Android as a high-performance serialization option, especially useful when passing data between Activities/Contexts.  What is so rough about Parcelable classes are the API requirements.  Yes, Parcelable is an interface that defines the contract, but Android expects more!  Android requires that if your class is a Parcelable (and you're using it as such) then you have to define a:
 

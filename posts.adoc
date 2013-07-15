@@ -1,0 +1,15 @@
+---
+layout: default
+title: Transfuse
+documentationExpanded: false
+postsExpanded: true
+---
+
+
+### Transfuse Technical Blog
+
+{% for post in site.posts %}
+==== link:{{ post.url }}[{{post.title}}]
+_{{ post.date | date: '%b' }} {{ post.date | date: '%d' }} {{ post.date | date: '%Y' }}_
+{{ post.excerpt }} link:{{ post.url }}[Read more...]
+{% endfor %}
