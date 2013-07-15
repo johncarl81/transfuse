@@ -9,5 +9,6 @@ asciidoctor:
   attributes:
     - idseparator=_
     - source-highlighter=coderay
+    - icons=font
 
 # end of configuration

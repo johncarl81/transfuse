@@ -1,5 +1,5 @@
 code {
-    font-family: 'Source Code Pro', monspace, courier new; !important
+    font-family: 'Source Code Pro', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace; !important
 }
 
 nav ul li a, nav ul li a:visited, nav ul li a:active {
@@ -23,7 +23,7 @@ div.note  {
     border: 1px solid #D9D9BF; border-radius: 3px 3px 3px 3px; 
     margin: 0 0 9px; 
     padding: 20px 10px 20px 56px;
-    background: url("../images/note.png") no-repeat scroll 10px 10px #FFFFE0;
+    background: url('../images/note.png') no-repeat scroll 10px 10px #FFFFE0;
 }
 
 #socialwidget {
@@ -31,7 +31,7 @@ div.note  {
 }
 
 .arrow {
-    background: url("../images/arrows.png");
+    background: url('../images/arrows.png');
     height: 12px;
     width: 12px;
     position: absolute;
@@ -67,7 +67,7 @@ ol {
 
 ul {
 
-    list-style: square; 
+    list-style: disc; 
     padding: 0 0 0 20px;
 }
 
@@ -111,9 +111,40 @@ ul.nav {
 }
 
 .conum:empty {
-    display: none
+    display: none;
+}
+pre .comment .conum {
+    left: -20px;
 }
 
-pre .comment .conum {
-    left: -20px
+.hdlist > table, .colist > table {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+}
+.hdlist > table > tbody > tr, .colist > table > tbody > tr {
+    background: none repeat scroll 0 0 transparent;
+}
+td.hdlist1 {
+    font-weight: bold;
+    padding-right: 0.8em;
+    vertical-align: top;
+}
+.literalblock + .colist, .listingblock + .colist {
+    margin-top: -0.5em;
+}
+.colist > table tr > td:first-of-type {
+    line-height: 1;
+    padding: 0 0.8em;
+}
+.colist > table tr > td:last-of-type {
+    padding: 0.25em 0;
+}
+
+table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoot tr td {
+    display: table-cell;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-weight: bold;
 }
