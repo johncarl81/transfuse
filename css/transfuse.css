@@ -1,5 +1,6 @@
 code {
-    font-family: 'Source Code Pro', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace; !important
+    font-family: 'Source Code Pro', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace;
+!important
 }
 
 nav ul li a, nav ul li a:visited, nav ul li a:active {
@@ -12,16 +13,17 @@ nav ul li a, nav ul li a:visited, nav ul li a:active {
 }
 
 img {
-    vertical-align:text-bottom;
-} 
+    vertical-align: text-bottom;
+}
 
 #footer {
     height: 200px;
 }
 
-div.note  { 
-    border: 1px solid #D9D9BF; border-radius: 3px 3px 3px 3px; 
-    margin: 0 0 9px; 
+div.note {
+    border: 1px solid #D9D9BF;
+    border-radius: 3px 3px 3px 3px;
+    margin: 0 0 9px;
     padding: 20px 10px 20px 56px;
     background: url('../images/note.png') no-repeat scroll 10px 10px #FFFFE0;
 }
@@ -61,13 +63,13 @@ div.note  {
     overflow: auto;
 }
 
-ol { 
-    list-style: decimal; 
+ol {
+    list-style: decimal;
 }
 
 ul {
 
-    list-style: disc; 
+    list-style: disc;
     padding: 0 0 0 20px;
 }
 
@@ -76,22 +78,19 @@ ul p {
 }
 
 ul.nav {
-    list-style:none;
+    list-style: none;
     padding: 0;
 }
 
-.icon .title{
-    display:none;
+.icon .title {
+    display: none;
 }
 
 .conum {
     display: inline-block;
     color: white !important;
-    background-color: #222;
+    background-color: #222222;
     -webkit-border-radius: 100px;
-    -moz-border-radius: 100px;
-    -ms-border-radius: 100px;
-    -o-border-radius: 100px;
     border-radius: 100px;
     text-align: center;
     width: 20px;
@@ -103,16 +102,25 @@ ul.nav {
     font-style: normal;
     position: relative;
     top: -2px;
-    letter-spacing: -1px
+    letter-spacing: -1px;
 }
 
 .conum * {
-    color: white !important
+    color: white !important;
 }
 
-.conum:empty {
+.conum + b {
     display: none;
 }
+
+.conum:after {
+    content: attr(data-value);
+}
+
+.conum:not([data-value]):empty {
+    display: none;
+}
+
 pre .comment .conum {
     left: -20px;
 }
@@ -121,21 +129,26 @@ pre .comment .conum {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;
 }
+
 .hdlist > table > tbody > tr, .colist > table > tbody > tr {
     background: none repeat scroll 0 0 transparent;
 }
+
 td.hdlist1 {
     font-weight: bold;
     padding-right: 0.8em;
     vertical-align: top;
 }
+
 .literalblock + .colist, .listingblock + .colist {
     margin-top: -0.5em;
 }
+
 .colist > table tr > td:first-of-type {
     line-height: 1;
     padding: 0 0.8em;
 }
+
 .colist > table tr > td:last-of-type {
     padding: 0.25em 0;
 }
@@ -145,6 +158,6 @@ table thead tr th, table tfoot tr th, table tbody tr td, table tr td, table tfoo
     line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6{
+h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
