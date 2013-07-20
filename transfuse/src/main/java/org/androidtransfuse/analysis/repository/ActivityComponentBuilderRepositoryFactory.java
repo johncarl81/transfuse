@@ -103,6 +103,8 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
         // onBackPressed
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
+        //onActivityResult
+        activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", int.class, int.class, android.content.Intent.class));
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
@@ -128,9 +130,9 @@ public class ActivityComponentBuilderRepositoryFactory {
         return activityCallbackGenerators.build();
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, Class... args) {
 
-        ASTMethod method = getASTMethod(methodName);
+        ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
         return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,

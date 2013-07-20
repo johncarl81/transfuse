@@ -22,6 +22,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.integrationTest.activity.ManifestManagedActivity;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.Preferences;
+import org.androidtransfuse.integrationTest.activtyResult.ResultOne;
 import org.androidtransfuse.integrationTest.aop.AOP;
 import org.androidtransfuse.integrationTest.broadcastReceiver.ToastTrigger;
 import org.androidtransfuse.integrationTest.fragments.FragmentMain;
@@ -92,7 +93,8 @@ public class Main {
                 createLI(Components.get(SaveInstanceState.class), "Save Instance State"),
                 createLI(Components.get(NonConfigInstance.class), "NonConfiguration AsyncTask"),
                 createLI(Components.get(Listeners.class), "Activity Listeners"),
-                createLI(Components.get(Menu.class), "Menu")
+                createLI(Components.get(Menu.class), "Menu"),
+                createLI(Components.get(ResultOne.class), "Activity Result")
         }));
 
         Collections.sort(values);
