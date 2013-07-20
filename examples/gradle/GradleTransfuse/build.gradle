@@ -22,7 +22,7 @@ configurations {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:13.0.+'
+    transfuse 'com.google.android:support-v4:r7'
     transfuse 'org.androidtransfuse:transfuse:0.2.2'
     transfuse 'com.google.android:android:2.1_r1'
     transfuse 'com.google.android:support-v4:r7'
