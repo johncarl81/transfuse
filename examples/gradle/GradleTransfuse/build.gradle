@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.5.+'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+configurations {
+    compile
+    transfuse.extendsFrom(compile)
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:13.0.+'
+    transfuse 'org.androidtransfuse:transfuse:0.2.2'
+    transfuse 'com.google.android:android:2.1_r1'
+    transfuse 'com.google.android:support-v4:r7'
+    compile 'org.androidtransfuse:transfuse-api:0.2.2'
+}
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "17.0.0"
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 16
+    }
+
+    sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+    }
+}
+
+afterEvaluate { project ->
+    android.applicationVariants.each { variant ->
+
+        aptOutput = file("${project.buildDir}/source/apt_generated/${variant.dirName}")
+        aptOutput.mkdirs()
+        variant.javaCompile.options.compilerArgs += [
+                '-processor', 'org.androidtransfuse.TransfuseAnnotationProcessor,org.parceler.ParcelAnnotationProcessor',
+                '-processorpath', configurations.transfuse.asPath,
+                '-s', aptOutput
+        ]
+    }
+}

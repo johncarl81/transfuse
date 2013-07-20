@@ -1,7 +1,8 @@
-.idea/*
-_site/*
+.idea
+.gradle
 *~
 *.iml
+build
 build.sh
 target
 examples/helloAndroid/gen/

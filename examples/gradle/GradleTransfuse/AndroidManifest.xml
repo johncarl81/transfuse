@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest t:tag="+" xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android" package="org.gradletransfuse" android:versionCode="1" android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
+    <application t:tag="+,n" android:name="android.app.Application">
+        <activity t:tag="+,n" android:name=".MainActivity">
+            <intent-filter t:tag="+">
+                <action t:tag="+,n" android:name="android.intent.action.MAIN"/>
+                <category t:tag="+,n" android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
