@@ -10,10 +10,6 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
-    mavenLocal()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
 }
 
 configurations {
@@ -22,11 +18,13 @@ configurations {
 }
 
 dependencies {
-    transfuse 'com.google.android:support-v4:r7'
+    compile 'com.google.android:support-v4:r7'
     transfuse 'org.androidtransfuse:transfuse:0.2.2'
     transfuse 'com.google.android:android:2.1_r1'
     transfuse 'com.google.android:support-v4:r7'
+    transfuse 'org.parceler:parceler:0.1.1'
     compile 'org.androidtransfuse:transfuse-api:0.2.2'
+    compile 'org.parceler:parceler-api:0.1.1'
 }
 
 android {
