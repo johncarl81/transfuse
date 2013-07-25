@@ -9,3 +9,4 @@ examples/helloAndroid/gen/
 examples/integrationTest/gen/
 tmp
 out
+local.properties
