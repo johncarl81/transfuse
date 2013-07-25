@@ -47,7 +47,6 @@ afterEvaluate { project ->
         aptOutput = file("${project.buildDir}/source/apt_generated/${variant.dirName}")
         aptOutput.mkdirs()
         variant.javaCompile.options.compilerArgs += [
-                '-processor', 'org.androidtransfuse.TransfuseAnnotationProcessor,org.parceler.ParcelAnnotationProcessor',
                 '-processorpath', configurations.transfuse.asPath,
                 '-s', aptOutput
         ]
