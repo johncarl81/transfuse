@@ -43,7 +43,8 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
                                      RegistrationAnalyzer registrationAnalysis,
                                      DeclareFieldAnalysis declareFieldAnalysis,
                                      ObservesAnalysis observesAnalysis,
-                                     NonConfigurationAnalysis nonConfigurationAnalysis, AnnotationValidationAnalysis annotationValidationAnalysis) {
+                                     NonConfigurationAnalysis nonConfigurationAnalysis,
+                                     AnnotationValidationAnalysis annotationValidationAnalysis) {
         this.aopProxyAnalyzer = aopProxyAnalyzer;
         this.injectionAnalyzer = injectionAnalyzer;
         this.methodCallbackAnalysis = methodCallbackAnalysis;

@@ -99,7 +99,7 @@ public class ProvidesProcessor implements MethodProcessor {
         for (ASTAnnotation annotation : nonQualifierAnnotations) {
             if(!annotation.getASTType().equals(providesType)){
                 //error
-                validator.error("@Provides methods may only be anntated with scope or qualifier annotations")
+                validator.error("@Provides methods may only be annotated with scope or qualifier annotations")
                         .element(astMethod).annotation(annotation).build();
             }
         }
