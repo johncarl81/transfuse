@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTUtils;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import java.lang.annotation.Annotation;
 
 /**
@@ -48,6 +49,10 @@ public class ASTElementBase implements ASTBase {
 
     public String getName() {
         return element.getSimpleName().toString();
+    }
+
+    public boolean isFinal(){
+        return element.getModifiers().contains(Modifier.FINAL);
     }
 
     @Override

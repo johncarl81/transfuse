@@ -87,6 +87,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isFinal() {
+        return delegate.isFinal();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return delegate.getSuperClass();
     }

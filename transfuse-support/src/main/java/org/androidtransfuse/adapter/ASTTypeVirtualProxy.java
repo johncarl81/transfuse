@@ -51,6 +51,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public boolean isFinal() {
+        return getProxy().isFinal();
+    }
+
+    @Override
     public ImmutableSet<ASTField> getFields() {
         return getProxy().getFields();
     }

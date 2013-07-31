@@ -100,6 +100,12 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public boolean isFinal() {
+        return true;
+    }
+
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return ImmutableSet.of();
     }

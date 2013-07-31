@@ -36,6 +36,11 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
+    public boolean isFinal() {
+        return method.isFinal();
+    }
+
+    @Override
     public List<ASTParameter> getParameters() {
         return method.getParameters();
     }

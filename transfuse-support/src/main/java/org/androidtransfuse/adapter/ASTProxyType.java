@@ -49,6 +49,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public boolean isFinal() {
+        return proxyASTType.isFinal();
+    }
+
+    @Override
     public String getName() {
         return name;
     }

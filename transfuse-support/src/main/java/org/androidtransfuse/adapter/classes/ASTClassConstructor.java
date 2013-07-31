@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
@@ -82,5 +83,10 @@ public class ASTClassConstructor implements ASTConstructor {
     @Override
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
+
+    @Override
+    public boolean isFinal() {
+        return Modifier.isFinal(constructor.getModifiers());
     }
 }

@@ -22,6 +22,7 @@ import org.androidtransfuse.util.AccessibleElementPrivilegedAction;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 
@@ -71,6 +72,11 @@ public class ASTClassField implements ASTField {
 
     public ASTAccessModifier getAccessModifier() {
         return modifier;
+    }
+
+    @Override
+    public boolean isFinal() {
+        return Modifier.isFinal(field.getModifiers());
     }
 
     @Override

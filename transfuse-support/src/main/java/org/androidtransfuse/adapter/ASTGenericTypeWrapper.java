@@ -67,6 +67,11 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.isInterface();
     }
 
+    @Override
+    public boolean isFinal() {
+        return astType.isFinal();
+    }
+
     public ASTType getSuperClass() {
         return astType.getSuperClass();
     }

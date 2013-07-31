@@ -68,6 +68,11 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
+    public boolean isFinal() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }

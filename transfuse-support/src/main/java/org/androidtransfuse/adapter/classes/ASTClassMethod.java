@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
@@ -64,6 +65,10 @@ public class ASTClassMethod implements ASTMethod {
     @Override
     public String getName() {
         return method.getName();
+    }
+
+    public boolean isFinal(){
+        return Modifier.isFinal(method.getModifiers());
     }
 
     @Override

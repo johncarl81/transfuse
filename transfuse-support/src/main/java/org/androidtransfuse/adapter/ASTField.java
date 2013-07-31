@@ -37,6 +37,13 @@ public interface ASTField extends ASTBase {
     ASTAccessModifier getAccessModifier();
 
     /**
+     * Determines if the current field is final.
+     *
+     * @return field is final
+     */
+    boolean isFinal();
+
+    /**
      * Supplies the constant value for this field (if one exists)
      * <p/>
      * IE: static String value = "constant"

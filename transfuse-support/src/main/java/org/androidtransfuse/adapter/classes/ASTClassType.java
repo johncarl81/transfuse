@@ -22,6 +22,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
 
 /**
  * Class specific AST Type
@@ -95,6 +96,11 @@ public class ASTClassType implements ASTType {
     @Override
     public boolean isInterface() {
         return clazz.isInterface();
+    }
+
+    @Override
+    public boolean isFinal() {
+        return Modifier.isFinal(clazz.getModifiers());
     }
 
     @Override

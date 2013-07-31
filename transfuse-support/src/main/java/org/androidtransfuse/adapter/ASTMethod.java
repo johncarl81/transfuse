@@ -53,4 +53,11 @@ public interface ASTMethod extends ASTBase {
      * @return throw types
      */
     ImmutableSet<ASTType> getThrowsTypes();
+
+    /**
+     * Determines if the current method is final
+     *
+     * @return final status
+     */
+    boolean isFinal();
 }

@@ -61,6 +61,13 @@ public interface ASTType extends ASTBase {
     boolean isInterface();
 
     /**
+     * Determines if the given AST type is final
+     *
+     * @return final status
+     */
+    boolean isFinal();
+
+    /**
      * Supplies the super class (by extension) of this type
      *
      * @return supertype

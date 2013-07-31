@@ -46,4 +46,11 @@ public interface ASTConstructor extends ASTBase {
      * @return throw types
      */
     ImmutableSet<ASTType> getThrowsTypes();
+
+    /**
+     * Determines if the current constructor is final
+     *
+     * @return final status
+     */
+    boolean isFinal();
 }
