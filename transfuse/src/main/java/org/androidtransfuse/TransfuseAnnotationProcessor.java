@@ -105,7 +105,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         super.init(processingEnv);
 
         Bootstraps.getInjector(TransfuseAnnotationProcessor.class)
-                .add(Singleton.class, ProcessingEnvironment.class, processingEnv)
+                .add(Singleton.class, ScopeKey.of(ProcessingEnvironment.class), processingEnv)
                 .inject(this);
     }
 

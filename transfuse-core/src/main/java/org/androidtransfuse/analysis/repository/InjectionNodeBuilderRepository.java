@@ -35,7 +35,6 @@ import java.util.Set;
 public class InjectionNodeBuilderRepository {
 
     private final Map<Matcher<InjectionSignature>, InjectionNodeBuilder> typeQualifierBindings = new HashMap<Matcher<InjectionSignature>, InjectionNodeBuilder>();
-    private final Map<InjectionSignature, InjectionNodeBuilder> typeBindings = new HashMap<InjectionSignature, InjectionNodeBuilder>();
     private final Map<ASTType, ScopeAspectFactory> scopeVariableBuilderMap = new HashMap<ASTType, ScopeAspectFactory>();
     private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
     private final Map<InjectionSignature, ASTType> scoping = new HashMap<InjectionSignature, ASTType>();
@@ -60,7 +59,7 @@ public class InjectionNodeBuilderRepository {
     }
 
     public void putType(InjectionSignature injectionSignature, InjectionNodeBuilder variableBuilder) {
-        this.typeBindings.put(injectionSignature, variableBuilder);
+        putSignatureMatcher(Matchers.signature(injectionSignature), variableBuilder);
     }
 
     public void putSignatureMatcher(Matcher<InjectionSignature> matcher, InjectionNodeBuilder variableBuilder) {
@@ -69,10 +68,6 @@ public class InjectionNodeBuilderRepository {
 
     public Map<Matcher<InjectionSignature>, InjectionNodeBuilder> getTypeQualifierBindings() {
         return typeQualifierBindings;
-    }
-
-    public Map<InjectionSignature, InjectionNodeBuilder> getTypeBindings() {
-        return typeBindings;
     }
 
     public Set<ASTType> getScopes() {
@@ -130,7 +125,6 @@ public class InjectionNodeBuilderRepository {
 
     public void addRepository(InjectionNodeBuilderRepository repository){
         this.typeQualifierBindings.putAll(repository.getTypeQualifierBindings());
-        this.typeBindings.putAll(repository.getTypeBindings());
         this.scopeVariableBuilderMap.putAll(repository.getScopeVariableBuilderMap());
         this.scopeAnnotations.putAll(repository.getScopeAnnotations());
         this.scoping.putAll(repository.getScoping());

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.bootstrap;
 
+import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.lang.annotation.Annotation;
@@ -38,8 +39,8 @@ public class BootstrapInjectorReflectionProxy<T> implements Bootstraps.Bootstrap
     }
 
     @Override
-    public <S> Bootstraps.BootstrapInjector<T> add(Class<? extends Annotation> annotation, Class<S> singletonClass, S singleton) {
-        return injector.add(annotation, singletonClass, singleton);
+    public <S> Bootstraps.BootstrapInjector<T> add(Class<? extends Annotation> annotation, ScopeKey<S> scopeKey, S singleton) {
+        return injector.add(annotation, scopeKey, singleton);
     }
 
     @Override

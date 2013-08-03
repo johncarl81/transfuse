@@ -69,27 +69,28 @@ public final class Bootstraps {
 
         void inject(T input);
 
-        <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> singletonClass, S singleton);
+        <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, ScopeKey<S> bindType, S instance);
     }
 
     public abstract static class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
-        private final Map<Class<? extends Annotation> , Map<Class, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<Class, Object>>();
+        private final Map<Class<? extends Annotation> , Map<ScopeKey, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<ScopeKey, Object>>();
 
-        public <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, Class<S> bindType, S instance){
+        public <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, ScopeKey<S> bindType, S instance){
             if(!scoped.containsKey(scope)){
-                scoped.put(scope, new HashMap<Class, Object>());
+                scoped.put(scope, new HashMap<ScopeKey, Object>());
             }
             scoped.get(scope).put(bindType, instance);
             return this;
         }
 
+        @SuppressWarnings("unchecked")
         protected void scopeSingletons(Scopes scopes){
-            for (Map.Entry<Class<? extends Annotation>, Map<Class, Object>> scopedEntry : scoped.entrySet()) {
+            for (Map.Entry<Class<? extends Annotation>, Map<ScopeKey, Object>> scopedEntry : scoped.entrySet()) {
                 Scope scope = scopes.getScope(scopedEntry.getKey());
 
                 if(scope != null){
-                    for (Map.Entry<Class, Object> scopingEntry : scopedEntry.getValue().entrySet()) {
-                        scope.getScopedObject(ScopeKey.of(scopingEntry.getKey()), Providers.of(scopingEntry.getValue()));
+                    for (Map.Entry<ScopeKey, Object> scopingEntry : scopedEntry.getValue().entrySet()) {
+                        scope.getScopedObject(scopingEntry.getKey(), Providers.of(scopingEntry.getValue()));
                     }
                 }
             }

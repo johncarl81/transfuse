@@ -161,13 +161,6 @@ public class InjectionPointFactory {
             return typeQualifierBuilder.buildInjectionNode(injectionSignature, context);
         }
 
-        //check type
-        InjectionNodeBuilder typeBindingBuilder = repository.getTypeBindings().get(injectionSignature);
-
-        if (typeBindingBuilder != null) {
-            return typeBindingBuilder.buildInjectionNode(injectionSignature, context);
-        }
-
         if(injectionSignature.getAnnotations().size() > 0){
             throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + injectionSignature);
         }

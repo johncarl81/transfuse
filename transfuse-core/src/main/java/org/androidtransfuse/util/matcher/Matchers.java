@@ -16,6 +16,7 @@
 package org.androidtransfuse.util.matcher;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.InjectionSignature;
 
 /**
  * Matcher builder utility class.
@@ -34,5 +35,9 @@ public final class Matchers {
 
     public static InjectionSignatureMatcherBuilder annotated(){
         return new InjectionSignatureMatcherBuilder(new MatchAny());
+    }
+
+    public static Matcher<InjectionSignature> signature(InjectionSignature injectionSignature) {
+        return type(injectionSignature.getType()).annotated().byAnnotation(injectionSignature.getAnnotations()).build();
     }
 }

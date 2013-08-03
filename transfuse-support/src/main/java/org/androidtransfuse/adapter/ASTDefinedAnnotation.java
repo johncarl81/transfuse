@@ -24,9 +24,9 @@ import com.google.common.collect.ImmutableSet;
 public class ASTDefinedAnnotation implements ASTAnnotation {
 
     private final ASTType type;
-    private final ImmutableMap<String, Object> properties;
+    private final ImmutableMap<String, ?> properties;
 
-    public ASTDefinedAnnotation(ASTType type, ImmutableMap<String, Object> properties) {
+    public ASTDefinedAnnotation(ASTType type, ImmutableMap<String, ?> properties) {
         this.type = type;
         this.properties = properties;
     }
