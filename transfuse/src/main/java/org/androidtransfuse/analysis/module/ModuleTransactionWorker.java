@@ -52,7 +52,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    UsesSdkProcessor usesSdkProcessor,
                                    DefineScopeProcessor defineScopeProcessor,
                                    ModuleRepository moduleRepository,
-                                   Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
+                                   Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
+                                   NamespaceProcessor namespaceProcessor) {
         this.moduleRepository = moduleRepository;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
@@ -76,6 +77,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScope.class), defineScopeProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScopes.class),
                 configurationFactory.buildConfigurationComposite(defineScopeProcessor));
+        typeProcessorsBuilder.put(astClassFactory.getType(Namespace.class), namespaceProcessor);
 
 
         typeProcessors = typeProcessorsBuilder.build();

@@ -49,7 +49,8 @@ public class ModuleProcessor {
                            DefineScopeProcessor defineScopeProcessor,
                            InstallProcessor installComponentProcessor,
                            ModuleRepository moduleRepository,
-                           Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
+                           Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
+                           NamespaceProcessor namespaceProcessor) {
         this.moduleRepository = moduleRepository;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         ImmutableMap.Builder<ASTType, MethodProcessor> methodProcessorsBuilder = ImmutableMap.builder();
@@ -69,6 +70,7 @@ public class ModuleProcessor {
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScopes.class),
                 configurationFactory.buildConfigurationComposite(defineScopeProcessor));
         typeProcessorsBuilder.put(astClassFactory.getType(Install.class), installComponentProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(Namespace.class), namespaceProcessor);
 
 
         typeProcessors = typeProcessorsBuilder.build();

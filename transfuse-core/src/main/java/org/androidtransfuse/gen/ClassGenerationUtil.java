@@ -48,11 +48,17 @@ public class ClassGenerationUtil {
     private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
+    private final String namespace;
 
     @Inject
     public ClassGenerationUtil(JCodeModel codeModel, UniqueVariableNamer namer) {
+        this(codeModel, namer, null);
+    }
+
+    public ClassGenerationUtil(JCodeModel codeModel, UniqueVariableNamer namer, String namespace) {
         this.codeModel = codeModel;
         this.namer = namer;
+        this.namespace = namespace;
     }
 
     public String getPackage(String inputPackage){
@@ -77,7 +83,14 @@ public class ClassGenerationUtil {
         JPackage jPackage = codeModel._package(packageName);
         String name;
         if(enforceUniqueName){
-            name = namer.generateClassName(className.getClassName());
+            String inputClassName;
+            if(namespace != null){
+                inputClassName = className.getClassName() + "$" + namespace;
+            }
+            else{
+                inputClassName = className.getClassName();
+            }
+            name = namer.generateClassName(inputClassName);
         }
         else{
             name = className.getClassName();

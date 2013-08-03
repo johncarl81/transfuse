@@ -84,7 +84,7 @@ public class CoreFactory {
     public CoreFactory(Elements elements, Messager messager, Filer filer) {
         this.elements = elements;
         this.filer = filer;
-        this.generationUtil = new ClassGenerationUtil(codeModel, namer);
+        this.generationUtil = new ClassGenerationUtil(codeModel, namer, "BOOTSTRAP");
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(namer, generationUtil);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
         this.validator = new Validator(messager);
@@ -285,7 +285,9 @@ public class CoreFactory {
 
         InstallProcessor installProcessor = new InstallProcessor(moduleRepository);
 
-        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor, moduleRepository, buildInjectionNodeRepositoryProvider());
+        NamespaceProcessor namespaceProcessor = new NamespaceProcessor(astClassFactory, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), typedExpressionFactory);
+
+        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor, moduleRepository, buildInjectionNodeRepositoryProvider(), namespaceProcessor);
     }
 
     public FactoryGenerator buildFactoryGenerator() {
