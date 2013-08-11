@@ -91,7 +91,6 @@ public class ManifestLocator {
             dummySourceFilePath = "file://" + dummySourceFilePath;
         }
 
-
         logger.info("Dummy source file: " + dummySourceFilePath);
 
         URI cleanURI = new URI(dummySourceFilePath);

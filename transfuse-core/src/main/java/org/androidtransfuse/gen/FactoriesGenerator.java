@@ -34,20 +34,21 @@ import java.util.Map;
  */
 public class FactoriesGenerator {
 
-    public static final PackageClass FACTORIES_NAME = new PackageClass(Factories.FACTORIES_PACKAGE, Factories.FACTORIES_NAME);
     private static final PackageClass REPOSITORY_NAME = new PackageClass(Factories.FACTORIES_PACKAGE, Factories.FACTORIES_REPOSITORY_NAME);
-    public static final String GET_METHOD = "get";
+    private static final String GET_METHOD = "get";
     private static final String MAP_NAME = "factories";
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
+    private final UniqueClassNamer classNamer;
+    private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public FactoriesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
+    public FactoriesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, UniqueClassNamer classNamer, UniqueVariableNamer variableNamer) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
-        this.namer = namer;
+        this.classNamer = classNamer;
+        this.variableNamer = variableNamer;
     }
 
     public JDefinedClass generateFactories(Map<Provider<ASTType>, JDefinedClass> processedAggregate) {
@@ -82,7 +83,7 @@ public class FactoriesGenerator {
             JClass interfaceClass = generationUtil.ref(astType);
 
             //factory builder
-            JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, namer.generateClassName(astType));
+            JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.generateClassName(astType).build().getClassName());
             factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
 
             //getter without given scopes
@@ -92,7 +93,7 @@ public class FactoriesGenerator {
 
             //getter with scopes
             JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-            JVar scopes = getMethodWithScopes.param(codeModel.ref(Scopes.class), namer.generateName(Scopes.class));
+            JVar scopes = getMethodWithScopes.param(codeModel.ref(Scopes.class), variableNamer.generateName(Scopes.class));
 
             getMethodWithScopes.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(scopes));
 

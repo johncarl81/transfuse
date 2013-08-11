@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -46,10 +47,10 @@ public class VirtualProxyGenerator {
     private static final String DELEGATE_LOAD_METHOD_PARAM_NAME = "delegateInput";
     private static final String CHECK_DELEGATE = "checkDelegate";
     private static final String PROXY_NOT_INITIALIZED = "Trying to use a proxied instance before initialization";
-    private static final String VPROXY_EXT = "$VProxy";
+    private static final String VPROXY_EXT = "VProxy";
 
     private final JCodeModel codeModel;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
     private final VirtualProxyGeneratorCache cache;
@@ -58,19 +59,19 @@ public class VirtualProxyGenerator {
     public static final class VirtualProxyGeneratorCache {
 
         private final Map<ASTType, VirtualProxyDescriptor> descriptorCache = new HashMap<ASTType, VirtualProxyDescriptor>();
-        private final UniqueVariableNamer namer;
-        private final ClassGenerationUtil generationUtil;
+        private final UniqueClassNamer classNamer;
 
         @Inject
-        public VirtualProxyGeneratorCache(UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
-            this.namer = namer;
-            this.generationUtil = generationUtil;
+        public VirtualProxyGeneratorCache(UniqueClassNamer classNamer) {
+            this.classNamer = classNamer;
         }
 
         public synchronized VirtualProxyDescriptor getCached(InjectionNode injectionNode) {
             if (!descriptorCache.containsKey(injectionNode.getASTType())) {
-                PackageClass proxyName = new PackageClass(generationUtil.getPackage(injectionNode.getASTType().getPackageClass().getPackage()),
-                        namer.generateClassName(injectionNode.getASTType().getPackageClass().append(VPROXY_EXT).getClassName()));
+                PackageClass proxyName = classNamer.generateClassName(injectionNode.getASTType().getPackageClass())
+                        .append(VPROXY_EXT)
+                        .namespaced()
+                        .build();
                 VirtualProxyDescriptor descriptor = new VirtualProxyDescriptor(proxyName, injectionNode.getASTType());
                 descriptorCache.put(injectionNode.getASTType(), descriptor);
             }
@@ -102,9 +103,9 @@ public class VirtualProxyGenerator {
     }
 
     @Inject
-    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil, VirtualProxyGeneratorCache cache) {
+    public VirtualProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil, VirtualProxyGeneratorCache cache) {
         this.codeModel = codeModel;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
         this.cache = cache;
@@ -202,7 +203,7 @@ public class VirtualProxyGenerator {
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
                     methodDeclaration.param(generationUtil.ref(parameter.getASTType()),
-                            namer.generateName(parameter.getASTType())));
+                            variableNamer.generateName(parameter.getASTType())));
         }
 
         //define method body

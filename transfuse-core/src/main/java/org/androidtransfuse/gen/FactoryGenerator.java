@@ -20,6 +20,7 @@ import org.androidtransfuse.Factories;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
@@ -51,7 +52,8 @@ public class FactoryGenerator {
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository injectionNodeBuilderRepositoryFactory;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
     private final Validator validator;
 
     @Inject
@@ -63,7 +65,8 @@ public class FactoryGenerator {
                             InjectionNodeImplFactory injectionNodeImplFactory,
                             MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory,
                             ClassGenerationUtil generationUtil,
-                            UniqueVariableNamer namer,
+                            UniqueVariableNamer variableNamer,
+                            UniqueClassNamer classNamer,
                             Validator validator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
@@ -73,7 +76,8 @@ public class FactoryGenerator {
         this.mirroredMethodGeneratorFactory = mirroredMethodGeneratorFactory;
         this.generationUtil = generationUtil;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
         this.validator = validator;
     }
 
@@ -86,14 +90,20 @@ public class FactoryGenerator {
         }
 
         try {
-            JDefinedClass implClass = generationUtil.defineClass(descriptor.getPackageClass().append(Factories.IMPL_EXT));
+            PackageClass factoryClassName = classNamer.generateClassName(descriptor.getPackageClass())
+                    .namespaced()
+                    .append(Factories.IMPL_EXT)
+                    .setNumbered(false)
+                    .build();
+
+            JDefinedClass implClass = generationUtil.defineClass(factoryClassName);
             JClass interfaceClass = generationUtil.ref(descriptor);
 
             //scope holder definition
-            JFieldVar scopesField = implClass.field(JMod.PRIVATE, Scopes.class, namer.generateName(Scopes.class));
+            JFieldVar scopesField = implClass.field(JMod.PRIVATE, Scopes.class, variableNamer.generateName(Scopes.class));
 
             JMethod constructor = implClass.constructor(JMod.PUBLIC);
-            JVar scopesParam = constructor.param(Scopes.class, namer.generateName(Scopes.class));
+            JVar scopesParam = constructor.param(Scopes.class, variableNamer.generateName(Scopes.class));
 
             constructor.body().assign(scopesField, scopesParam);
 

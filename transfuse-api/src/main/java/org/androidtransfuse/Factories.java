@@ -26,10 +26,9 @@ import org.androidtransfuse.util.GeneratedCodeRepository;
  */
 public final class Factories {
 
-    public static final String FACTORIES_NAME = "Factories";
-    public static final String FACTORIES_REPOSITORY_NAME = "Transfuse$Factories";
+    public static final String FACTORIES_REPOSITORY_NAME = "Transfuse" + GeneratedCodeRepository.SEPARATOR + "Factories";
     public static final String FACTORIES_PACKAGE = "org.androidtransfuse";
-    public static final String IMPL_EXT = "$Factory";
+    public static final String IMPL_EXT = "Factory";
 
     private static final GeneratedCodeRepository<FactoryBuilder> REPOSITORY =
             new GeneratedCodeRepository<FactoryBuilder>(FACTORIES_PACKAGE, FACTORIES_REPOSITORY_NAME) {
@@ -38,7 +37,7 @@ public final class Factories {
                 public FactoryBuilder findClass(Class clazz) {
 
                     try {
-                        Class factoryClass = Class.forName(clazz.getName() + IMPL_EXT);
+                        Class factoryClass = Class.forName(clazz.getName() + GeneratedCodeRepository.SEPARATOR + IMPL_EXT);
                         return new FactoryBuilderReflectionProxy(factoryClass);
                     } catch (ClassNotFoundException e) {
                         return null;

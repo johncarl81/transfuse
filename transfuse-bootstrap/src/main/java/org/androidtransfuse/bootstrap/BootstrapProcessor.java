@@ -32,7 +32,6 @@ import org.androidtransfuse.gen.FactoryGenerator;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Providers;
 
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Provider;
@@ -50,18 +49,11 @@ import static com.google.common.collect.Collections2.transform;
 /**
  * @author John Ericksen
  */
-@SupportedAnnotations({Bootstrap.class, BootstrapModule.class})
+@SupportedAnnotations({Bootstrap.class, BootstrapModule.class, Namespace.class})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BootstrapProcessor extends AnnotationProcessorBase {
 
-    private CoreFactory coreFactory;
     private boolean ran = false;
-
-    @Override
-    public void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-        coreFactory = new CoreFactory(processingEnv.getElementUtils(), processingEnv.getMessager(), processingEnv.getFiler());
-    }
 
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
@@ -69,10 +61,19 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
         if(!ran){
 
             try {
+                Set<? extends Element> namespaceElements = roundEnvironment.getElementsAnnotatedWith(Namespace.class);
+
+                String namespace = null;
+                if(namespaceElements.size() > 0){
+                    Element namespaceElement = namespaceElements.iterator().next();
+                    namespace = namespaceElement.getAnnotation(Namespace.class).value();
+                }
+
+                CoreFactory coreFactory = new CoreFactory(processingEnv.getElementUtils(), processingEnv.getMessager(), processingEnv.getFiler(), namespace);
 
                 InjectionPointFactory injectionPointFactory = coreFactory.buildInjectionPointFactory();
 
-                Collection<? extends ASTType> moduleTypes =  wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(BootstrapModule.class));
+                Collection<? extends ASTType> moduleTypes =  wrapASTCollection(coreFactory, roundEnvironment.getElementsAnnotatedWith(BootstrapModule.class));
 
                 //configure injections
                 ModuleProcessor moduleProcessor = coreFactory.buildModuleProcessor();
@@ -85,7 +86,7 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                 coreFactory.buildScopesGenerator().generate();
 
                 ImmutableSet.Builder<ASTType> factoryTypesBuilder = ImmutableSet.builder();
-                factoryTypesBuilder.addAll(wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Factory.class)));
+                factoryTypesBuilder.addAll(wrapASTCollection(coreFactory, roundEnvironment.getElementsAnnotatedWith(Factory.class)));
                 factoryTypesBuilder.addAll(coreFactory.getModuleRepository().getInstalledAnnotatedWith(Factory.class));
 
                 ImmutableSet<ASTType> factoryTypes = factoryTypesBuilder.build();
@@ -99,7 +100,7 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                     factoryAggregate.put(Providers.of(factoryType), generated);
                 }
 
-                Collection<? extends ASTType> astTypes = wrapASTCollection(roundEnvironment.getElementsAnnotatedWith(Bootstrap.class));
+                Collection<? extends ASTType> astTypes = wrapASTCollection(coreFactory, roundEnvironment.getElementsAnnotatedWith(Bootstrap.class));
                 BootstrapsInjectorGenerator bootstrapsInjectorGenerator = coreFactory.buildBootstrapsInjectorGenerator();
 
                 AnalysisContext context = coreFactory.buildAnalysisContext();
@@ -127,7 +128,7 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
         return true;
     }
 
-    private Collection<ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
+    private Collection<ASTType> wrapASTCollection(CoreFactory coreFactory, Collection<? extends Element> elementCollection) {
         ASTElementConverterFactory converterFactory = coreFactory.buildConverterFactory();
 
         return transform(elementCollection, converterFactory.buildASTElementConverter(ASTType.class));

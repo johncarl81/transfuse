@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.GeneratedCodeRepository;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -31,7 +32,7 @@ import java.util.*;
 public class PackageHelperRepository {
 
     private static final String PRE_METHOD = "access";
-    private static final String PACKAGE_HELPER_NAME = "Transfuse$PackageHelper";
+    private static final String PACKAGE_HELPER_NAME = "Transfuse" + GeneratedCodeRepository.SEPARATOR + "PackageHelper";
 
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
 

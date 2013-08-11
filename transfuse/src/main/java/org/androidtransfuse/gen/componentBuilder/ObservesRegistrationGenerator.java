@@ -24,10 +24,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;
 import org.androidtransfuse.event.WeakObserver;
-import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.InjectionFragmentGenerator;
-import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
@@ -45,19 +42,22 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InvocationBuilder invocationBuilder;
 
     @Inject
     public ObservesRegistrationGenerator(JCodeModel codeModel,
                                          ClassGenerationUtil generationUtil,
-                                         UniqueVariableNamer namer,
+                                         UniqueVariableNamer variableNamer,
+                                         UniqueClassNamer classNamer,
                                          InjectionFragmentGenerator injectionFragmentGenerator,
                                          InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.invocationBuilder = invocationBuilder;
     }
@@ -106,11 +106,11 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                     JClass eventRef = generationUtil.ref(event);
                     JClass targetRef = generationUtil.ref(typedExpression.getType());
 
-                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, namer.generateClassName(typedExpression.getType()));
+                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, classNamer.generateClassName(typedExpression.getType()).build().getClassName());
 
                     //match default constructor public WeakObserver(T target){
                     JMethod constructor = observerClass.constructor(JMod.PUBLIC);
-                    JVar constTargetParam = constructor.param(targetRef, namer.generateName(targetRef));
+                    JVar constTargetParam = constructor.param(targetRef, variableNamer.generateName(targetRef));
                     constructor.body().invoke(SUPER_REF).arg(constTargetParam);
 
                     observerClass._extends(
@@ -121,8 +121,8 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
                     JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
                     triggerMethod.annotate(Override.class);
-                    JVar eventParam = triggerMethod.param(eventRef, namer.generateName(event));
-                    JVar targetParam = triggerMethod.param(targetRef, namer.generateName(typedExpression.getType()));
+                    JVar eventParam = triggerMethod.param(eventRef, variableNamer.generateName(event));
+                    JVar targetParam = triggerMethod.param(targetRef, variableNamer.generateName(typedExpression.getType()));
                     JBlock triggerBody = triggerMethod.body();
 
                     Set<JExpression> parameters = new HashSet<JExpression>();
@@ -139,7 +139,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                                 targetParam));
                     }
 
-                    JVar observer = block.decl(observerClass, namer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
+                    JVar observer = block.decl(observerClass, variableNamer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));
 
                     observerTuples.put(eventRef, observer);
                 }

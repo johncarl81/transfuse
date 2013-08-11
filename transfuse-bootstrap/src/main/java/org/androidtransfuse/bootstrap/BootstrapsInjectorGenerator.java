@@ -18,10 +18,7 @@ package org.androidtransfuse.bootstrap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.InjectionFragmentGenerator;
-import org.androidtransfuse.gen.ScopesGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Repository;
@@ -39,7 +36,8 @@ public class BootstrapsInjectorGenerator {
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
     private final InjectionFragmentGenerator injectionGenerator;
     private final ExistingVariableInjectionBuilderFactory variableBuilderFactory;
     private final ModuleRepository repository;
@@ -50,13 +48,15 @@ public class BootstrapsInjectorGenerator {
 
     public BootstrapsInjectorGenerator(JCodeModel codeModel,
                                        ClassGenerationUtil generationUtil,
-                                       UniqueVariableNamer namer,
+                                       UniqueVariableNamer variableNamer,
+                                       UniqueClassNamer classNamer,
                                        InjectionFragmentGenerator injectionGenerator,
                                        ExistingVariableInjectionBuilderFactory variableBuilderFactory,
                                        ModuleRepository repository) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
         this.injectionGenerator = injectionGenerator;
         this.variableBuilderFactory = variableBuilderFactory;
         this.repository = repository;
@@ -68,7 +68,12 @@ public class BootstrapsInjectorGenerator {
             JClass nodeClass = generationUtil.ref(injectionNode.getASTType());
 
             // add injector class
-            JDefinedClass innerInjectorClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(Bootstraps.IMPL_EXT));
+            PackageClass bootstrapClassName = classNamer.generateClassName(injectionNode)
+                    .append(Bootstraps.IMPL_EXT)
+                    .setNumbered(false)
+                    .build();
+
+            JDefinedClass innerInjectorClass = generationUtil.defineClass(bootstrapClassName);
 
             innerInjectorClass._extends(codeModel.ref(Bootstraps.BootstrapsInjectorAdapter.class).narrow(nodeClass));
 
@@ -77,7 +82,7 @@ public class BootstrapsInjectorGenerator {
             JBlock injectorBlock = method.body();
 
             //define root scope holder
-            JVar scopesVar = ScopesGenerator.buildScopes(repository, generationUtil, namer, injectorBlock);
+            JVar scopesVar = ScopesGenerator.buildScopes(repository, generationUtil, variableNamer, injectorBlock);
 
             injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 

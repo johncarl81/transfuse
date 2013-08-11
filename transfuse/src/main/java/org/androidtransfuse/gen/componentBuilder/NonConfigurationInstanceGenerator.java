@@ -17,9 +17,11 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InvocationBuilder;
+import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.*;
@@ -35,14 +37,16 @@ import java.util.Map;
  */
 public class NonConfigurationInstanceGenerator implements ExpressionVariableDependentGenerator {
 
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final InvocationBuilder invocationBuilder;
     private final TypedExpressionFactory typeExpressionFactory;
 
     @Inject
-    public NonConfigurationInstanceGenerator(UniqueVariableNamer namer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
-        this.namer = namer;
+    public NonConfigurationInstanceGenerator(UniqueVariableNamer variableNamer, UniqueClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
         this.generationUtil = generationUtil;
         this.invocationBuilder = invocationBuilder;
         this.typeExpressionFactory = typeExpressionFactory;
@@ -57,7 +61,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
             if (!nonConfigurationComponents.isEmpty()) {
 
                 //generate holder type
-                JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, namer.generateClassName("NonConfigurationInstance"));
+                JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.generateClassName(new PackageClass(null, "NonConfigurationInstance")).build().getClassName());
 
                 JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
                 Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);
@@ -65,7 +69,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                 //add on create init
                 //super.getLastNonConfigurationInstance()
                 JBlock body = methodDescriptor.getMethod().body();
-                JVar bodyVar = body.decl(nonConfigurationInstance, namer.generateName(nonConfigurationInstance), JExpr.cast(nonConfigurationInstance, JExpr.invoke("getLastNonConfigurationInstance")));
+                JVar bodyVar = body.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance), JExpr.cast(nonConfigurationInstance, JExpr.invoke("getLastNonConfigurationInstance")));
                 JBlock conditional = body._if(bodyVar.ne(JExpr._null()))._then();
 
                 //assign variables
@@ -89,7 +93,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
 
 
                 JInvocation construction = JExpr._new(nonConfigurationInstance);
-                JVar instanceDecl = methodBody.decl(nonConfigurationInstance, namer.generateName(nonConfigurationInstance)
+                JVar instanceDecl = methodBody.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance)
                         , construction);
 
                 for (InjectionNode injectionNode : nonConfigurationComponents) {
@@ -121,8 +125,8 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
             for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                 //add all fields to constructor in order
                 JClass fieldNodeType = generationUtil.ref(fieldInjectionPoint.getInjectionNode().getASTType());
-                JVar param = constructor.param(fieldNodeType, namer.generateName(fieldInjectionPoint.getInjectionNode()));
-                JFieldVar field = nonConfigurationInstance.field(JMod.PRIVATE, fieldNodeType, namer.generateName(injectionNode));
+                JVar param = constructor.param(fieldNodeType, variableNamer.generateName(fieldInjectionPoint.getInjectionNode()));
+                JFieldVar field = nonConfigurationInstance.field(JMod.PRIVATE, fieldNodeType, variableNamer.generateName(injectionNode));
                 constructor.body().assign(field, param);
                 fieldMap.put(fieldInjectionPoint, field);
             }

@@ -22,6 +22,7 @@ import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -40,18 +41,20 @@ public class AOPProxyGenerator {
 
     private static final String SUPER_REF = "super";
     private static final String CLASS_GET_METHOD = "getMethod";
-    private static final String AOPPROXY_EXT = "$AOPProxy";
+    private static final String AOPPROXY_EXT = "AOPProxy";
     private static final String METHOD_INTERCEPTOR_INVOKE = "invoke";
 
     private final JCodeModel codeModel;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final Validator validator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil, Validator validator) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, UniqueClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
         this.codeModel = codeModel;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
         this.generationUtil = generationUtil;
         this.validator = validator;
     }
@@ -65,7 +68,12 @@ public class AOPProxyGenerator {
         ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), ASTAccessModifier.PUBLIC);
 
         try {
-            definedClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(AOPPROXY_EXT), true);
+            PackageClass aopClassName = classNamer.generateClassName(injectionNode.getASTType().getPackageClass())
+                    .namespaced()
+                    .append(AOPPROXY_EXT)
+                    .build();
+
+            definedClass = generationUtil.defineClass(aopClassName);
 
             //extending injectionNode
             definedClass._extends(generationUtil.ref(injectionNode.getASTType()));
@@ -83,7 +91,7 @@ public class AOPProxyGenerator {
 
             List<JVar> superArguments = new ArrayList<JVar>();
             for (InjectionNode node : constructorInjectionPoint.getInjectionNodes()) {
-                String paramName = namer.generateName(node);
+                String paramName = variableNamer.generateName(node);
                 JVar param = constructor.param(generationUtil.ref(node.getASTType()), paramName);
                 superArguments.add(param);
                 proxyConstructorInjectionPoint.addInjectionNode(node);
@@ -146,13 +154,13 @@ public class AOPProxyGenerator {
 
         //setup interceptor fields
         for (InjectionNode interceptorInjectionNode : methodInterceptorEntry.getValue()) {
-            String interceptorInstanceName = namer.generateName(interceptorInjectionNode);
+            String interceptorInstanceName = variableNamer.generateName(interceptorInjectionNode);
 
             JFieldVar interceptorField = definedClass.field(JMod.PRIVATE, generationUtil.ref(interceptorInjectionNode.getASTType()), interceptorInstanceName);
 
             injectionNodeInstanceNameMap.put(interceptorInjectionNode, interceptorField);
 
-            JVar interceptorParam = constructor.param(generationUtil.ref(interceptorInjectionNode.getASTType()), namer.generateName(interceptorInjectionNode));
+            JVar interceptorParam = constructor.param(generationUtil.ref(interceptorInjectionNode.getASTType()), variableNamer.generateName(interceptorInjectionNode));
 
             constructorBody.assign(interceptorField, interceptorParam);
 
@@ -170,7 +178,7 @@ public class AOPProxyGenerator {
         for (ASTParameter parameter : method.getParameters()) {
             parameterMap.put(parameter,
                     methodDeclaration.param(JMod.FINAL, generationUtil.ref(parameter.getASTType()),
-                            namer.generateName(parameter.getASTType())));
+                            variableNamer.generateName(parameter.getASTType())));
         }
 
         //aop interceptor
@@ -195,7 +203,7 @@ public class AOPProxyGenerator {
     private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
 
         try {
-            JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, namer.generateClassName(MethodInterceptorChain.MethodExecution.class));
+            JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, classNamer.generateClassName(MethodInterceptorChain.MethodExecution.class).build().getClassName());
             methodExecutionClass._implements(MethodInterceptorChain.MethodExecution.class);
 
             //setup constructor with needed parameters
@@ -204,8 +212,8 @@ public class AOPProxyGenerator {
             List<JExpression> methodParameters = new ArrayList<JExpression>();
             for (ASTParameter parameter : method.getParameters()) {
                 JType parameterType = parameterMap.get(parameter).type();
-                JVar param = constructor.param(parameterType, namer.generateName(parameterType));
-                JFieldVar field = methodExecutionClass.field(JMod.PRIVATE, parameterType, namer.generateName(parameterType));
+                JVar param = constructor.param(parameterType, variableNamer.generateName(parameterType));
+                JFieldVar field = methodExecutionClass.field(JMod.PRIVATE, parameterType, variableNamer.generateName(parameterType));
                 constructorBody.assign(field, param);
                 methodParameters.add(field);
             }

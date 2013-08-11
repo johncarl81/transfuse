@@ -120,10 +120,20 @@ public class PackageClass {
      * Appends to the class name the given input
      *
      * @param addName input to be appended
-     * @return this for method chaining
+     * @return the updated immutable package class
      */
     public PackageClass append(String addName) {
         return new PackageClass(pkg, fileName + addName);
+    }
+
+    /**
+     * Preprends to the class name the given input
+     *
+     * @param prepend
+     * @return the updated immutable package class
+     */
+    public PackageClass prepend(String prepend) {
+        return new PackageClass(pkg, prepend + fileName);
     }
 
     /**
@@ -165,5 +175,9 @@ public class PackageClass {
             return fileName;
         }
         return pkg + "." + fileName;
+    }
+
+    public PackageClass replacePackage(String inputPackage) {
+        return new PackageClass(inputPackage, fileName);
     }
 }

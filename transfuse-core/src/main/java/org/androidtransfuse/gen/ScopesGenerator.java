@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.util.GeneratedCodeRepository;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 public class ScopesGenerator {
 
-    public static final PackageClass TRANSFUSE_SCOPES_UTIL = new PackageClass("org.androidtransfuse", "Transfuse$ScopesUtil");
+    public static final PackageClass TRANSFUSE_SCOPES_UTIL = new PackageClass("org.androidtransfuse", "Transfuse" + GeneratedCodeRepository.SEPARATOR + "ScopesUtil");
     public static final String GET_INSTANCE = "getInstance";
     public static final String BUILD_METHOD = "build";
 

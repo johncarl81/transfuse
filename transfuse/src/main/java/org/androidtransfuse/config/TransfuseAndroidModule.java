@@ -26,6 +26,7 @@ import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.BootstrapModule;
+import org.androidtransfuse.bootstrap.Namespace;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
@@ -69,6 +70,7 @@ import java.util.Map;
         InjectionNodeBuilderRepositoryFactory.class,
         VariableExpressionBuilderFactory.class,
         InjectionBuilderContextFactory.class})
+@Namespace("Transfuse")
 public class TransfuseAndroidModule {
 
     public static final String FACTORY_TRANSACTION_WORKER = "factoryTransactionWorker";

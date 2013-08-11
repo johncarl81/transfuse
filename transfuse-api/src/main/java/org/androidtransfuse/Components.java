@@ -24,7 +24,7 @@ import org.androidtransfuse.util.GeneratedCodeRepository;
  */
 public final class Components {
 
-    public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse$Components";
+    public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse" + GeneratedCodeRepository.SEPARATOR + "Components";
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
 
     private static final GeneratedCodeRepository<Class> REPOSITORY =
@@ -43,7 +43,7 @@ public final class Components {
      * Provides the corresponding generated Android Component class for the input Transfuse Component class.
      *
      * @throws `org.androidtransfuse.util.TransfuseRuntimeException` if there was an error looking up the wrapped
-     * Transfuse$Components class.
+     * Transfuse$$Components class.
      * @param type Transfuse Component class
      * @param <T>
      * @return class Android Component class

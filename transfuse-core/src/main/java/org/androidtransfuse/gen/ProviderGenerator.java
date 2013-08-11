@@ -17,6 +17,7 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
@@ -35,8 +36,8 @@ import java.util.Map;
  */
 public class ProviderGenerator {
 
-    private static final String SCOPED_EXTENSION = "$Provider";
-    private static final String UNSCOPED_EXTENSION = "$UnscopedProvider";
+    private static final String SCOPED_EXTENSION = "Provider";
+    private static final String UNSCOPED_EXTENSION = "UnscopedProvider";
 
     private static final String GET_METHOD = "get";
 
@@ -44,7 +45,8 @@ public class ProviderGenerator {
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
+    private final UniqueVariableNamer variableNamer;
+    private final UniqueClassNamer classNamer;
 
     @Singleton
     public static class ProviderCache {
@@ -68,12 +70,13 @@ public class ProviderGenerator {
     }
 
     @Inject
-    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
+    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, UniqueClassNamer classNamer) {
         this.cache = cache;
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.generationUtil = generationUtil;
-        this.namer = namer;
+        this.variableNamer = variableNamer;
+        this.classNamer = classNamer;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode, boolean removeScope) {
@@ -103,7 +106,12 @@ public class ProviderGenerator {
         try {
             JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
-            JDefinedClass providerClass = generationUtil.defineClass(injectionNode.getASTType().getPackageClass().append(extension), true);
+            PackageClass providerClassName = classNamer.generateClassName(injectionNode.getASTType())
+                    .append(extension)
+                    .namespaced()
+                    .build();
+
+            JDefinedClass providerClass = generationUtil.defineClass(providerClassName);
 
             providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
 
@@ -120,10 +128,10 @@ public class ProviderGenerator {
             JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
             //scope holder definition
-            JFieldVar scopesField = providerClass.field(JMod.PRIVATE, Scopes.class, namer.generateName(Scopes.class));
+            JFieldVar scopesField = providerClass.field(JMod.PRIVATE, Scopes.class, variableNamer.generateName(Scopes.class));
 
             JMethod constructor = providerClass.constructor(JMod.PUBLIC);
-            JVar scopesParam = constructor.param(Scopes.class, namer.generateName(Scopes.class));
+            JVar scopesParam = constructor.param(Scopes.class, variableNamer.generateName(Scopes.class));
 
             constructor.body().assign(scopesField, scopesParam);
 

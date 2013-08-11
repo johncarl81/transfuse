@@ -71,7 +71,8 @@ public class CoreFactory {
     private final VirtualProxyGenerator.VirtualProxyGeneratorCache virtualProxyCache;
     private final ASTClassFactory astClassFactory = new ASTClassFactory(new ConcreteASTFactory());
     private final TypedExpressionFactory typedExpressionFactory = new TypedExpressionFactory(astClassFactory);
-    private final UniqueVariableNamer namer = new UniqueVariableNamer();
+    private final UniqueVariableNamer variableNamer = new UniqueVariableNamer();
+    private final UniqueClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
     private final Filer filer;
@@ -81,11 +82,12 @@ public class CoreFactory {
 
     private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
 
-    public CoreFactory(Elements elements, Messager messager, Filer filer) {
+    public CoreFactory(Elements elements, Messager messager, Filer filer, String namespace) {
         this.elements = elements;
         this.filer = filer;
-        this.generationUtil = new ClassGenerationUtil(codeModel, namer, "BOOTSTRAP");
-        this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(namer, generationUtil);
+        this.classNamer = new UniqueClassNamer(namespace);
+        this.generationUtil = new ClassGenerationUtil(codeModel);
+        this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(classNamer);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
         this.validator = new Validator(messager);
     }
@@ -117,7 +119,7 @@ public class CoreFactory {
     }
 
     public ScopesGenerator buildScopesGenerator() {
-        return new ScopesGenerator(generationUtil, getModuleRepository(), namer);
+        return new ScopesGenerator(generationUtil, getModuleRepository(), variableNamer);
     }
 
     private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
@@ -129,7 +131,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, namer, generationUtil, validator);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, variableNamer, classNamer, generationUtil, validator);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(generationUtil);
@@ -137,7 +139,7 @@ public class CoreFactory {
 
         return new VariableInjectionBuilder(
                 generationUtil,
-                namer,
+                variableNamer,
                 buildInvocationBuilder(),
                 aopProxyGenerator,
                 injectionExpressionBuilder,
@@ -181,13 +183,13 @@ public class CoreFactory {
         };
 
         GeneratedProviderBuilderFactory generatedProviderBuilderFactory = new GeneratedProviderBuilderFactory(providerGeneratorProvider,
-                Providers.of(namer), Providers.of(typedExpressionFactory));
+                Providers.of(variableNamer), Providers.of(typedExpressionFactory));
 
         return new GeneratedProviderInjectionNodeBuilder(generatedProviderBuilderFactory, buildInjectionPointFactory(), buildAnalyser());
     }
 
     private ProviderGenerator buildProviderGenerator(){
-        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer);
+        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, variableNamer, classNamer);
     }
 
     private AnalysisRepository buildAnalysisRepository(){
@@ -203,7 +205,7 @@ public class CoreFactory {
 
         InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
-        SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, namer), generationUtil, typedExpressionFactory, namer);
+        SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, variableNamer, classNamer), generationUtil, typedExpressionFactory, variableNamer);
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
 
@@ -238,7 +240,7 @@ public class CoreFactory {
         InjectionBuilderContextFactory injectionBuilderContextFactory = new InjectionBuilderContextFactoryImpl();
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
-        VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
+        VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, variableNamer, astClassFactory, generationUtil, virtualProxyCache);
 
         return new InjectionFragmentGenerator(injectionBuilderContextFactory, injectionExpressionBuilder, virtualProxyGenerator);
     }
@@ -254,7 +256,7 @@ public class CoreFactory {
                     new ExceptionWrapper(generationUtil),
                     new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
                     validator);
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, namer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
+            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, classNamer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
         }
         return bootstrapsInjectorGenerator;
     }
@@ -279,15 +281,13 @@ public class CoreFactory {
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, generationUtil, buildAnalyser());
 
-        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, namer, generationUtil);
+        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, variableNamer, generationUtil);
 
         DefineScopeProcessor defineScopeProcessor = new DefineScopeProcessor(astClassFactory, scopeInjectionFactory, scopeAspectFactoryFactory);
 
         InstallProcessor installProcessor = new InstallProcessor(moduleRepository);
 
-        NamespaceProcessor namespaceProcessor = new NamespaceProcessor(astClassFactory, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), typedExpressionFactory);
-
-        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor, moduleRepository, buildInjectionNodeRepositoryProvider(), namespaceProcessor);
+        return new ModuleProcessor(bindProcessor, bindProviderProcessor,  bindingConfigurationFactory, providesProcessor, astClassFactory, defineScopeProcessor, installProcessor, moduleRepository, buildInjectionNodeRepositoryProvider());
     }
 
     public FactoryGenerator buildFactoryGenerator() {
@@ -297,19 +297,24 @@ public class CoreFactory {
                 new AnalysisContextFactory(buildAnalysisRepository()),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
-                new InjectionNodeImplFactory(buildInjectionPointFactory(), new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), new QualifierPredicate(astClassFactory)),
-                new MirroredMethodGeneratorFactory(namer, generationUtil),
+                new InjectionNodeImplFactory(buildInjectionPointFactory(),
+                        new VariableFactoryBuilderFactory2(typedExpressionFactory,
+                                generationUtil,
+                                buildAnalyser(),
+                                classNamer),
+                        new QualifierPredicate(astClassFactory)),
+                new MirroredMethodGeneratorFactory(variableNamer, generationUtil),
                 generationUtil,
-                namer,
-                validator);
+                variableNamer,
+                classNamer, validator);
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {
-        return new FactoriesGenerator(codeModel, generationUtil, namer);
+        return new FactoriesGenerator(codeModel, generationUtil, classNamer, variableNamer);
     }
 
     public VirtualProxyGenerator buildVirtualProxyGenerator(){
-        return new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
+        return new VirtualProxyGenerator(codeModel, variableNamer, astClassFactory, generationUtil, virtualProxyCache);
     }
 
     public void registerFactories(Collection<? extends ASTType> factories) {
@@ -317,7 +322,7 @@ public class CoreFactory {
         InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
         for (ASTType factoryType : factories) {
             repository.putType(factoryType,
-                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), buildAnalyser()));
+                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser(), classNamer), buildAnalyser()));
         }
 
         moduleRepository.addModuleRepository(repository);
@@ -406,8 +411,8 @@ public class CoreFactory {
         @Override
         public VirtualProxyExpressionDecorator buildVirtualProxyExpressionDecorator(VariableExpressionBuilder decorator) {
 
-            ProxyVariableBuilder proxyVariableBuilder = new ProxyVariableBuilder(namer);
-            VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, namer, astClassFactory, generationUtil, virtualProxyCache);
+            ProxyVariableBuilder proxyVariableBuilder = new ProxyVariableBuilder(variableNamer);
+            VirtualProxyGenerator virtualProxyGenerator = new VirtualProxyGenerator(codeModel, variableNamer, astClassFactory, generationUtil, virtualProxyCache);
 
             return new VirtualProxyExpressionDecorator(decorator, proxyVariableBuilder, virtualProxyGenerator, typedExpressionFactory);
         }

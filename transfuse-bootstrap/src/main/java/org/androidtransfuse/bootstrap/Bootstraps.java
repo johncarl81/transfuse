@@ -31,10 +31,10 @@ import java.util.Map;
 public final class Bootstraps {
 
     public static final String BOOTSTRAPS_INJECTOR_PACKAGE = "org.androidtransfuse.bootstrap";
-    public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps$Factory";
+    public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps" + GeneratedCodeRepository.SEPARATOR + "Factory";
     public static final String BOOTSTRAPS_INJECTOR_METHOD = "inject";
     public static final String BOOTSTRAPS_INJECTOR_GET = "get";
-    public static final String IMPL_EXT = "$Bootstrap";
+    public static final String IMPL_EXT = "Bootstrap";
 
     private static final GeneratedCodeRepository<BootstrapInjector> REPOSITORY =
             new GeneratedCodeRepository<BootstrapInjector>(BOOTSTRAPS_INJECTOR_PACKAGE, BOOTSTRAPS_INJECTOR_NAME) {
@@ -42,7 +42,7 @@ public final class Bootstraps {
                 public BootstrapInjector findClass(Class clazz) {
 
                     try {
-                        Class bootstrapClass = Class.forName(clazz.getName() + IMPL_EXT);
+                        Class bootstrapClass = Class.forName(clazz.getName() + GeneratedCodeRepository.SEPARATOR + IMPL_EXT);
                         return new BootstrapInjectorReflectionProxy(bootstrapClass);
                     } catch (ClassNotFoundException e) {
                         return null;

@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -31,16 +32,21 @@ public class VariableFactoryBuilderFactory2 {
     private final TypedExpressionFactory typedExpressionFactory;
     private final ClassGenerationUtil generationUtil;
     private final Analyzer analyzer;
+    private final UniqueClassNamer classNamer;
 
     @Inject
-    public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory, ClassGenerationUtil generationUtil, Analyzer analyzer) {
+    public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory,
+                                          ClassGenerationUtil generationUtil,
+                                          Analyzer analyzer,
+                                          UniqueClassNamer classNamer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.generationUtil = generationUtil;
         this.analyzer = analyzer;
+        this.classNamer = classNamer;
     }
 
     public FactoryVariableBuilder buildFactoryVariableBuilder(ASTType factoryType) {
-        return new FactoryVariableBuilder(factoryType, typedExpressionFactory, generationUtil);
+        return new FactoryVariableBuilder(factoryType, typedExpressionFactory, generationUtil, classNamer);
     }
 
     public IndependentInjectionNodeBuilder buildInjectionNodeBuilder(ExpressionVariableBuilderWrapper wrapper) {
