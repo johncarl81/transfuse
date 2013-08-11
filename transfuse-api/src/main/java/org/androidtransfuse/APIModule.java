@@ -19,16 +19,21 @@ package org.androidtransfuse;
  * @author John Ericksen
  */
 
-import org.androidtransfuse.annotations.Asynchronous;
-import org.androidtransfuse.annotations.BindInterceptor;
-import org.androidtransfuse.annotations.BindInterceptors;
-import org.androidtransfuse.annotations.UIThread;
+import android.os.Handler;
+import android.os.Looper;
+import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 
+@TransfuseModule
 @BindInterceptors({
     @BindInterceptor(annotation = Asynchronous.class, interceptor = AsynchronousMethodInterceptor.class),
     @BindInterceptor(annotation = UIThread.class, interceptor = UIThreadMethodInterceptor.class)
 })
 public class APIModule {
+
+    @Provides
+    public Handler getHandler(){
+        return new Handler(Looper.getMainLooper());
+    }
 }
