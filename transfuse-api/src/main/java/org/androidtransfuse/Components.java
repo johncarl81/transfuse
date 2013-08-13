@@ -16,6 +16,7 @@
 package org.androidtransfuse;
 
 import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.Namer;
 
 /**
  * Static utility class which maps Transfuse Components to the generated Android Components.
@@ -24,7 +25,7 @@ import org.androidtransfuse.util.GeneratedCodeRepository;
  */
 public final class Components {
 
-    public static final String COMPONENTS_REPOSITORY_NAME = "Transfuse" + GeneratedCodeRepository.SEPARATOR + "Components";
+    public static final String COMPONENTS_REPOSITORY_NAME = Namer.name("Transfuse").append("Components").build();
     public static final String COMPONENTS_PACKAGE = "org.androidtransfuse";
 
     private static final GeneratedCodeRepository<Class> REPOSITORY =

@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.gen;
 
-import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.Namer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,19 +34,19 @@ public class VariableNamerTest {
 
     @Test
     public void testBuildName() {
-        Assert.assertEquals("fieldInjectable" + GeneratedCodeRepository.SEPARATOR + "0", variableNamer.generateName(FieldInjectable.class));
+        Assert.assertEquals(Namer.name("fieldInjectable").append("0").build(), variableNamer.generateName(FieldInjectable.class));
     }
 
     @Test
     public void testMultipleNames() {
-        Assert.assertEquals("fieldInjectable" + GeneratedCodeRepository.SEPARATOR + "0", variableNamer.generateName(FieldInjectable.class));
-        Assert.assertEquals("fieldInjectable" + GeneratedCodeRepository.SEPARATOR + "1", variableNamer.generateName(FieldInjectable.class));
-        Assert.assertEquals("fieldInjectable" + GeneratedCodeRepository.SEPARATOR + "2", variableNamer.generateName(FieldInjectable.class));
+        Assert.assertEquals(Namer.name("fieldInjectable").append("0").build(), variableNamer.generateName(FieldInjectable.class));
+        Assert.assertEquals(Namer.name("fieldInjectable").append("1").build(), variableNamer.generateName(FieldInjectable.class));
+        Assert.assertEquals(Namer.name("fieldInjectable").append("2").build(), variableNamer.generateName(FieldInjectable.class));
     }
 
     @Test
     public void testSmallClassName() {
-        Assert.assertEquals("a" + GeneratedCodeRepository.SEPARATOR + "0", variableNamer.generateName(A.class));
+        Assert.assertEquals(Namer.name("a").append("0").build(), variableNamer.generateName(A.class));
     }
 
 

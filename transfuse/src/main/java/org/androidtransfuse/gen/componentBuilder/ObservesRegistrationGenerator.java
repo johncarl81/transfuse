@@ -43,7 +43,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InvocationBuilder invocationBuilder;
 
@@ -51,7 +51,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     public ObservesRegistrationGenerator(JCodeModel codeModel,
                                          ClassGenerationUtil generationUtil,
                                          UniqueVariableNamer variableNamer,
-                                         UniqueClassNamer classNamer,
+                                         ClassNamer classNamer,
                                          InjectionFragmentGenerator injectionFragmentGenerator,
                                          InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
@@ -106,7 +106,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                     JClass eventRef = generationUtil.ref(event);
                     JClass targetRef = generationUtil.ref(typedExpression.getType());
 
-                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, classNamer.generateClassName(typedExpression.getType()).build().getClassName());
+                    JDefinedClass observerClass = definedClass._class(JMod.PROTECTED | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(typedExpression.getType()).build().getClassName());
 
                     //match default constructor public WeakObserver(T target){
                     JMethod constructor = observerClass.constructor(JMod.PUBLIC);

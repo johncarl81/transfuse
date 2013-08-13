@@ -37,7 +37,6 @@ public class BootstrapsInjectorGenerator {
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
     private final InjectionFragmentGenerator injectionGenerator;
     private final ExistingVariableInjectionBuilderFactory variableBuilderFactory;
     private final ModuleRepository repository;
@@ -49,14 +48,12 @@ public class BootstrapsInjectorGenerator {
     public BootstrapsInjectorGenerator(JCodeModel codeModel,
                                        ClassGenerationUtil generationUtil,
                                        UniqueVariableNamer variableNamer,
-                                       UniqueClassNamer classNamer,
                                        InjectionFragmentGenerator injectionGenerator,
                                        ExistingVariableInjectionBuilderFactory variableBuilderFactory,
                                        ModuleRepository repository) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
-        this.classNamer = classNamer;
         this.injectionGenerator = injectionGenerator;
         this.variableBuilderFactory = variableBuilderFactory;
         this.repository = repository;
@@ -68,9 +65,8 @@ public class BootstrapsInjectorGenerator {
             JClass nodeClass = generationUtil.ref(injectionNode.getASTType());
 
             // add injector class
-            PackageClass bootstrapClassName = classNamer.generateClassName(injectionNode)
+            PackageClass bootstrapClassName = ClassNamer.className(injectionNode)
                     .append(Bootstraps.IMPL_EXT)
-                    .setNumbered(false)
                     .build();
 
             JDefinedClass innerInjectorClass = generationUtil.defineClass(bootstrapClassName);

@@ -19,6 +19,7 @@ import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.Namer;
 import org.androidtransfuse.util.Providers;
 
 import java.lang.annotation.Annotation;
@@ -31,7 +32,7 @@ import java.util.Map;
 public final class Bootstraps {
 
     public static final String BOOTSTRAPS_INJECTOR_PACKAGE = "org.androidtransfuse.bootstrap";
-    public static final String BOOTSTRAPS_INJECTOR_NAME = "Bootstraps" + GeneratedCodeRepository.SEPARATOR + "Factory";
+    public static final String BOOTSTRAPS_INJECTOR_NAME = Namer.name("Bootstraps").append("Factory").build();
     public static final String BOOTSTRAPS_INJECTOR_METHOD = "inject";
     public static final String BOOTSTRAPS_INJECTOR_GET = "get";
     public static final String IMPL_EXT = "Bootstrap";
@@ -42,7 +43,7 @@ public final class Bootstraps {
                 public BootstrapInjector findClass(Class clazz) {
 
                     try {
-                        Class bootstrapClass = Class.forName(clazz.getName() + GeneratedCodeRepository.SEPARATOR + IMPL_EXT);
+                        Class bootstrapClass = Class.forName(Namer.name(clazz.getName()).append(IMPL_EXT).build());
                         return new BootstrapInjectorReflectionProxy(bootstrapClass);
                     } catch (ClassNotFoundException e) {
                         return null;

@@ -22,7 +22,7 @@ import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.UniqueClassNamer;
+import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -46,12 +46,12 @@ public class AOPProxyGenerator {
 
     private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final Validator validator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, UniqueClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
+    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
         this.codeModel = codeModel;
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
@@ -68,7 +68,7 @@ public class AOPProxyGenerator {
         ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), ASTAccessModifier.PUBLIC);
 
         try {
-            PackageClass aopClassName = classNamer.generateClassName(injectionNode.getASTType().getPackageClass())
+            PackageClass aopClassName = classNamer.numberedClassName(injectionNode.getASTType().getPackageClass())
                     .namespaced()
                     .append(AOPPROXY_EXT)
                     .build();
@@ -203,7 +203,7 @@ public class AOPProxyGenerator {
     private JExpression buildInterceptorChain(JDefinedClass definedClass, ASTMethod method, Map<ASTParameter, JVar> parameterMap, Set<InjectionNode> interceptors, Map<InjectionNode, JFieldVar> interceptorNameMap) {
 
         try {
-            JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, classNamer.generateClassName(MethodInterceptorChain.MethodExecution.class).build().getClassName());
+            JDefinedClass methodExecutionClass = definedClass._class(JMod.PRIVATE | JMod.FINAL, classNamer.numberedClassName(MethodInterceptorChain.MethodExecution.class).build().getClassName());
             methodExecutionClass._implements(MethodInterceptorChain.MethodExecution.class);
 
             //setup constructor with needed parameters

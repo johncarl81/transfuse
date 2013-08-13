@@ -20,8 +20,8 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.gen.InvocationBuilder;
-import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.*;
@@ -38,13 +38,13 @@ import java.util.Map;
 public class NonConfigurationInstanceGenerator implements ExpressionVariableDependentGenerator {
 
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final InvocationBuilder invocationBuilder;
     private final TypedExpressionFactory typeExpressionFactory;
 
     @Inject
-    public NonConfigurationInstanceGenerator(UniqueVariableNamer variableNamer, UniqueClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
+    public NonConfigurationInstanceGenerator(UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory) {
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.generationUtil = generationUtil;
@@ -61,7 +61,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
             if (!nonConfigurationComponents.isEmpty()) {
 
                 //generate holder type
-                JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.generateClassName(new PackageClass(null, "NonConfigurationInstance")).build().getClassName());
+                JDefinedClass nonConfigurationInstance = definedClass._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(new PackageClass(null, "NonConfigurationInstance")).build().getClassName());
 
                 JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
                 Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);

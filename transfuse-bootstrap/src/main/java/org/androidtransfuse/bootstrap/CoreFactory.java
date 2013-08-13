@@ -72,7 +72,7 @@ public class CoreFactory {
     private final ASTClassFactory astClassFactory = new ASTClassFactory(new ConcreteASTFactory());
     private final TypedExpressionFactory typedExpressionFactory = new TypedExpressionFactory(astClassFactory);
     private final UniqueVariableNamer variableNamer = new UniqueVariableNamer();
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final ProviderGenerator.ProviderCache providerCache = new ProviderGenerator.ProviderCache();
     private final Filer filer;
@@ -85,7 +85,7 @@ public class CoreFactory {
     public CoreFactory(Elements elements, Messager messager, Filer filer, String namespace) {
         this.elements = elements;
         this.filer = filer;
-        this.classNamer = new UniqueClassNamer(namespace);
+        this.classNamer = new ClassNamer(namespace);
         this.generationUtil = new ClassGenerationUtil(codeModel);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(classNamer);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
@@ -256,7 +256,7 @@ public class CoreFactory {
                     new ExceptionWrapper(generationUtil),
                     new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
                     validator);
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, classNamer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
+            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
         }
         return bootstrapsInjectorGenerator;
     }
@@ -300,8 +300,7 @@ public class CoreFactory {
                 new InjectionNodeImplFactory(buildInjectionPointFactory(),
                         new VariableFactoryBuilderFactory2(typedExpressionFactory,
                                 generationUtil,
-                                buildAnalyser(),
-                                classNamer),
+                                buildAnalyser()),
                         new QualifierPredicate(astClassFactory)),
                 new MirroredMethodGeneratorFactory(variableNamer, generationUtil),
                 generationUtil,
@@ -322,7 +321,7 @@ public class CoreFactory {
         InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
         for (ASTType factoryType : factories) {
             repository.putType(factoryType,
-                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser(), classNamer), buildAnalyser()));
+                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), buildAnalyser()));
         }
 
         moduleRepository.addModuleRepository(repository);

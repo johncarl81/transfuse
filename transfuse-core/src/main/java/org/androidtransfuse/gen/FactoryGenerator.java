@@ -53,7 +53,7 @@ public class FactoryGenerator {
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository injectionNodeBuilderRepositoryFactory;
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final Validator validator;
 
     @Inject
@@ -66,7 +66,7 @@ public class FactoryGenerator {
                             MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory,
                             ClassGenerationUtil generationUtil,
                             UniqueVariableNamer variableNamer,
-                            UniqueClassNamer classNamer,
+                            ClassNamer classNamer,
                             Validator validator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
@@ -81,20 +81,26 @@ public class FactoryGenerator {
         this.validator = validator;
     }
 
+    public static PackageClass getFactoryName(ASTType factoryType) {
+        return getFactoryName(factoryType.getPackageClass());
+    }
+
+    public static PackageClass getFactoryName(PackageClass packageClass){
+        return ClassNamer.className(packageClass)
+                .namespaced()
+                .append(Factories.IMPL_EXT)
+                .build();
+    }
+
     public JDefinedClass generate(ASTType descriptor) {
 
         if (descriptor.isConcreteClass()) {
-            validator.error("@Factory annotated class must be an interface")
-                                           .element(descriptor).build();
+            validator.error("@Factory annotated class must be an interface").element(descriptor).build();
             throw new TransfuseAnalysisException("Unable to build factory from concrete class: " + descriptor.getName());
         }
 
         try {
-            PackageClass factoryClassName = classNamer.generateClassName(descriptor.getPackageClass())
-                    .namespaced()
-                    .append(Factories.IMPL_EXT)
-                    .setNumbered(false)
-                    .build();
+            PackageClass factoryClassName = getFactoryName(descriptor.getPackageClass());
 
             JDefinedClass implClass = generationUtil.defineClass(factoryClassName);
             JClass interfaceClass = generationUtil.ref(descriptor);

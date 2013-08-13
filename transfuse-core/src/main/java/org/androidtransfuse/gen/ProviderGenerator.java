@@ -46,7 +46,7 @@ public class ProviderGenerator {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
 
     @Singleton
     public static class ProviderCache {
@@ -70,7 +70,7 @@ public class ProviderGenerator {
     }
 
     @Inject
-    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, UniqueClassNamer classNamer) {
+    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
         this.cache = cache;
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
@@ -106,7 +106,7 @@ public class ProviderGenerator {
         try {
             JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
-            PackageClass providerClassName = classNamer.generateClassName(injectionNode.getASTType())
+            PackageClass providerClassName = classNamer.numberedClassName(injectionNode.getASTType())
                     .append(extension)
                     .namespaced()
                     .build();

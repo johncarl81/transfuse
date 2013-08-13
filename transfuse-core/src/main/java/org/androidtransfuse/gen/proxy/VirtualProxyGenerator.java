@@ -21,8 +21,8 @@ import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.VirtualProxyAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -59,16 +59,16 @@ public class VirtualProxyGenerator {
     public static final class VirtualProxyGeneratorCache {
 
         private final Map<ASTType, VirtualProxyDescriptor> descriptorCache = new HashMap<ASTType, VirtualProxyDescriptor>();
-        private final UniqueClassNamer classNamer;
+        private final ClassNamer classNamer;
 
         @Inject
-        public VirtualProxyGeneratorCache(UniqueClassNamer classNamer) {
+        public VirtualProxyGeneratorCache(ClassNamer classNamer) {
             this.classNamer = classNamer;
         }
 
         public synchronized VirtualProxyDescriptor getCached(InjectionNode injectionNode) {
             if (!descriptorCache.containsKey(injectionNode.getASTType())) {
-                PackageClass proxyName = classNamer.generateClassName(injectionNode.getASTType().getPackageClass())
+                PackageClass proxyName = classNamer.numberedClassName(injectionNode.getASTType().getPackageClass())
                         .append(VPROXY_EXT)
                         .namespaced()
                         .build();

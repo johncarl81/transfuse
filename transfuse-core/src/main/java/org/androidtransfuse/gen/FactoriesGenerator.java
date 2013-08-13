@@ -40,11 +40,11 @@ public class FactoriesGenerator {
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueClassNamer classNamer;
+    private final ClassNamer classNamer;
     private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public FactoriesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, UniqueClassNamer classNamer, UniqueVariableNamer variableNamer) {
+    public FactoriesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.classNamer = classNamer;
@@ -83,7 +83,7 @@ public class FactoriesGenerator {
             JClass interfaceClass = generationUtil.ref(astType);
 
             //factory builder
-            JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.generateClassName(astType).build().getClassName());
+            JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(astType).build().getClassName());
             factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
 
             //getter without given scopes

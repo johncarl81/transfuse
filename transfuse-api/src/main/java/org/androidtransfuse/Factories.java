@@ -18,6 +18,7 @@ package org.androidtransfuse;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.FactoryBuilderReflectionProxy;
 import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.Namer;
 
 /**
  * Static utility class which maps the `@Factory` annotated interface to the generated implementation.
@@ -26,7 +27,7 @@ import org.androidtransfuse.util.GeneratedCodeRepository;
  */
 public final class Factories {
 
-    public static final String FACTORIES_REPOSITORY_NAME = "Transfuse" + GeneratedCodeRepository.SEPARATOR + "Factories";
+    public static final String FACTORIES_REPOSITORY_NAME = Namer.name("Transfuse").append("Factories").build();
     public static final String FACTORIES_PACKAGE = "org.androidtransfuse";
     public static final String IMPL_EXT = "Factory";
 
@@ -37,7 +38,7 @@ public final class Factories {
                 public FactoryBuilder findClass(Class clazz) {
 
                     try {
-                        Class factoryClass = Class.forName(clazz.getName() + GeneratedCodeRepository.SEPARATOR + IMPL_EXT);
+                        Class factoryClass = Class.forName(Namer.name(clazz.getName()).append(IMPL_EXT).build());
                         return new FactoryBuilderReflectionProxy(factoryClass);
                     } catch (ClassNotFoundException e) {
                         return null;

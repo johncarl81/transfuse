@@ -18,7 +18,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.util.GeneratedCodeRepository;
+import org.androidtransfuse.util.Namer;
 
 import javax.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,9 +74,7 @@ public class UniqueVariableNamer {
 
         String nameRoot = builder.toString();
 
-        builder.append(GeneratedCodeRepository.SEPARATOR);
-        builder.append(nullSafeIterGet(nameRoot));
-        return builder.toString();
+        return Namer.name(nameRoot).append(nullSafeIterGet(nameRoot)).build();
     }
 
     private int nullSafeIterGet(String name){

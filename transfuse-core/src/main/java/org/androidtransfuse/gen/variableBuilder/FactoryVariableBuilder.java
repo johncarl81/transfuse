@@ -18,12 +18,11 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
-import org.androidtransfuse.Factories;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.FactoryGenerator;
 import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.UniqueClassNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -36,27 +35,21 @@ public class FactoryVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private final ASTType factoryType;
     private final ClassGenerationUtil generationUtil;
-    private final UniqueClassNamer classNamer;
 
     @Inject
     public FactoryVariableBuilder(/*@Assisted*/ ASTType factoryType,
                                   TypedExpressionFactory typedExpressionFactory,
-                                  ClassGenerationUtil generationUtil,
-                                  UniqueClassNamer classNamer) {
+                                  ClassGenerationUtil generationUtil) {
         super(factoryType, typedExpressionFactory);
         this.factoryType = factoryType;
         this.generationUtil = generationUtil;
-        this.classNamer = classNamer;
     }
 
     @Override
     public JExpression buildExpression(InjectionBuilderContext context, InjectionNode injectionNode) {
 
-        PackageClass factoryClassName = classNamer.generateClassName(factoryType)
-                .namespaced()
-                .append(Factories.IMPL_EXT)
-                .setNumbered(false)
-                .build();
+
+        PackageClass factoryClassName = FactoryGenerator.getFactoryName(factoryType);
 
         JClass factoryRef = generationUtil.ref(factoryClassName);
 

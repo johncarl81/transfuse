@@ -23,8 +23,6 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class GeneratedCodeRepository<T> {
 
-    public static final String SEPARATOR = "$$";
-
     private ConcurrentMap<Class, T> generatedMap = new ConcurrentHashMap<Class, T>();
 
     public GeneratedCodeRepository(String repositoryPackage, String repositoryName) {
