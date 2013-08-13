@@ -53,7 +53,6 @@ public class FactoryGenerator {
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository injectionNodeBuilderRepositoryFactory;
     private final UniqueVariableNamer variableNamer;
-    private final ClassNamer classNamer;
     private final Validator validator;
 
     @Inject
@@ -66,7 +65,6 @@ public class FactoryGenerator {
                             MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory,
                             ClassGenerationUtil generationUtil,
                             UniqueVariableNamer variableNamer,
-                            ClassNamer classNamer,
                             Validator validator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
@@ -77,7 +75,6 @@ public class FactoryGenerator {
         this.generationUtil = generationUtil;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.variableNamer = variableNamer;
-        this.classNamer = classNamer;
         this.validator = validator;
     }
 

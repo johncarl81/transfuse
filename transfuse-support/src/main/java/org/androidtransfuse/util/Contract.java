@@ -32,11 +32,11 @@ public final class Contract {
      * Throw a null pointer exception if object is null
      * @param object the object to test
      * @param objectName the name of the object
-     * @throws NullPointerException if the passed object is null
+     * @throws IllegalArgumentException if the passed object is null
      */
     public static void notNull(final Object object, final String objectName) {
         if (object == null) {
-            throw new NullPointerException("expecting non-null value for " + maskNullArgument(objectName));
+            throw new IllegalArgumentException("expecting non-null value for " + maskNullArgument(objectName));
         }
     }
 
@@ -46,8 +46,7 @@ public final class Contract {
      * @param collection2 the second collection
      * @param collection1Name the name of the first collection
      * @param collection2Name the name of the second collection
-     * @throws NullPointerException if collection1 or collection2 are null
-     * @throws IllegalArgumentException if the collections don't agree on the number of elements
+     * @throws IllegalArgumentException if collection1 or collection2 are null or if the collections don't agree on the number of elements
      */
     public static void sameSize(final Collection<?> collection1, final Collection<?> collection2, final String collection1Name, final String collection2Name) {
         notNull(collection1, collection1Name);
@@ -63,8 +62,7 @@ public final class Contract {
      * @param collection the collection to check
      * @param size the size of the collection
      * @param collectionName the name of the collection
-     * @throws NullPointerException if collection is null
-     * @throws IllegalArgumentException if the collection size is not as expected
+     * @throws IllegalArgumentException if collection is null or if the collection size is not as expected
      */
     public static void atSize(final Collection<?> collection, final int size, final String collectionName) {
         notNull(collection, collectionName);
@@ -79,8 +77,7 @@ public final class Contract {
      * Check that a collection is not empty
      * @param collection the collection to check
      * @param collectionName the name of the collection
-     * @throws NullPointerException if collection is null
-     * @throws IllegalArgumentException if the collection is empty
+     * @throws IllegalArgumentException if collection is null or if the collection is empty
      */
     public static void notEmpty(final Collection<?> collection, final String collectionName) {
         notNull(collection, collectionName);
@@ -94,8 +91,7 @@ public final class Contract {
      * Check that an array is not empty
      * @param array the array to check
      * @param arrayName the name of the array
-     * @throws NullPointerException if array is null
-     * @throws IllegalArgumentException if the array is empty
+     * @throws IllegalArgumentException if array is null or if the array is empty
      */
     public static void notEmpty(final Object[] array, final String arrayName) {
         notNull(array, arrayName);
@@ -111,8 +107,7 @@ public final class Contract {
      * @param array2 the second array
      * @param array1Name the name of the first array
      * @param array2Name the name of the second array
-     * @throws NullPointerException if array1 or array2 are null
-     * @throws IllegalArgumentException if the arrays don't agree on the number of elements
+     * @throws IllegalArgumentException if array1 or array2 are null or if the arrays don't agree on the number of elements
      */
     public static void sameLength(final Object[] array1, final Object[] array2, final String array1Name, final String array2Name) {
         notNull(array1, array1Name);
@@ -128,8 +123,7 @@ public final class Contract {
      * @param array the array
      * @param length the desired length of the array
      * @param arrayName the name of the array
-     * @throws NullPointerException if the array is null
-     * @throws IllegalArgumentException if the array's length is not as expected
+     * @throws IllegalArgumentException if the array is null or if the array's length is not as expected
      */
     public static void atLength(final Object[] array, final int length, final String arrayName) {
         notNull(array, arrayName);
@@ -146,8 +140,7 @@ public final class Contract {
      * @param min the minimum value of the input (if null, input is not bound by minimum value)
      * @param max the maximum value of the input (if null, input is not bound by maximum value)
      * @param inputName the name of the input to report in error
-     * @throws NullPointerException if input is null
-     * @throws IndexOutOfBoundsException if the input is less than min or greater than max
+     * @throws IllegalArgumentException if input is null or if the input is less than min or greater than max
      */
     public static void inBounds(final Integer input, final Integer min, final Integer max, final String inputName) {
         notNull(input, inputName);
@@ -165,8 +158,7 @@ public final class Contract {
      * Checks that the input value is non-negative
      * @param input the input to check
      * @param inputName the name of the input
-     * @throws NullPointerException if input is null
-     * @throws IllegalArgumentException if the input is less than zero
+     * @throws IllegalArgumentException if input is null or if the input is less than zero
      */
     public static void notNegative(final Integer input, final String inputName) {
         notNull(input, inputName);
@@ -180,8 +172,7 @@ public final class Contract {
      * Checks that the input value is non-zero
      * @param input the input to check
      * @param inputName the name of the input
-     * @throws NullPointerException if input is null
-     * @throws IllegalArgumentException if the input is zero
+     * @throws IllegalArgumentException if input is null or if the input is zero
      */
     public static void notZero(final Integer input, final String inputName) {
         notNull(input, inputName);
@@ -195,8 +186,7 @@ public final class Contract {
      * Checks that an input string is non blank
      * @param input the input
      * @param inputName the name of the input
-     * @throws NullPointerException if input is null
-     * @throws IllegalArgumentException if the input is blank
+     * @throws IllegalArgumentException if input is null or if the input is blank
      */
     public static void notBlank(final String input, final String inputName) {
         notNull(input, inputName);

@@ -31,10 +31,10 @@ public final class ScopeKey<T> {
 
     private ScopeKey(Class<T> clazz, String signature){
         if(signature == null){
-            throw new NullPointerException("ScopeKey signature cannot be null");
+            throw new IllegalArgumentException("ScopeKey signature cannot be null");
         }
         if(clazz == null){
-            throw new NullPointerException("ScopeKey class cannot be null");
+            throw new IllegalArgumentException("ScopeKey class cannot be null");
         }
         this.signature = signature;
         this.clazz = clazz;

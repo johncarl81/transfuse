@@ -305,7 +305,7 @@ public class CoreFactory {
                 new MirroredMethodGeneratorFactory(variableNamer, generationUtil),
                 generationUtil,
                 variableNamer,
-                classNamer, validator);
+                validator);
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {

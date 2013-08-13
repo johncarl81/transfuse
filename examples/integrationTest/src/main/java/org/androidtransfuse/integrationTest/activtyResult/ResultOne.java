@@ -54,12 +54,9 @@ public class ResultOne {
 
     @OnActivityResult
     public void result(int requestCode, int resultCode, android.content.Intent data) {
-        if (requestCode == REQUEST) {
-
-            if(resultCode == android.app.Activity.RESULT_OK){
-                String result=data.getStringExtra(RESULT_KEY);
-                Toast.makeText(context, result, SharedVariables.ONE_SECOND).show();
-            }
+        if (requestCode == REQUEST && resultCode == android.app.Activity.RESULT_OK){
+            String result=data.getStringExtra(RESULT_KEY);
+            Toast.makeText(context, result, SharedVariables.ONE_SECOND).show();
         }
     }
 }
