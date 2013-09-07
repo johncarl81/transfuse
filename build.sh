@@ -23,6 +23,7 @@ if [ "$POST_BUILD" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 	git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER"
 	git push origin
 
+        cd ..
 	rm -rf site
 
 fi
