@@ -19,7 +19,6 @@ import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.model.TypedExpression;
 
 import java.util.List;
 
@@ -28,11 +27,11 @@ import java.util.List;
  */
 public interface ModifierInjectionBuilder {
 
-    JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters);
+    JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<? extends JExpression> parameters);
 
     JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name);
 
-    JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable);
+    JStatement buildFieldSet(ASTType expressionType, JExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable);
 
-    JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression);
+    JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<? extends JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression);
 }

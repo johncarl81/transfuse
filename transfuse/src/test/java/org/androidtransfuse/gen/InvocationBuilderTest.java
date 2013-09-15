@@ -86,28 +86,30 @@ public class InvocationBuilderTest {
     public void testFieldSet() throws ClassNotFoundException, JClassAlreadyExistsException {
         ASTType variableType = mock(ASTType.class);
         JExpression variable = mock(JExpression.class);
-        TypedExpression expression = mock(TypedExpression.class);
+        ASTType expressionType = mock(ASTType.class);
+        JExpression expression = mock(JExpression.class);
         InjectionNode injectionNode = mock(InjectionNode.class);
         String name = "test";
+        TypedExpression typedExpression = new TypedExpression(expressionType, expression);
 
         FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PUBLIC, name, injectionNode);
-        invocationBuilder.buildFieldSet(expression, fieldInjectionPoint, variable);
-        verify(publicInjectionBuilder).buildFieldSet(expression, fieldInjectionPoint.getContainingType(), fieldInjectionPoint.getInjectionNode().getASTType(), fieldInjectionPoint.getName(), variable);
+        invocationBuilder.buildFieldSet(typedExpression, fieldInjectionPoint, variable);
+        verify(publicInjectionBuilder).buildFieldSet(expressionType, expression, fieldInjectionPoint.getContainingType(), fieldInjectionPoint.getInjectionNode().getASTType(), fieldInjectionPoint.getName(), variable);
         reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable, variableType);
 
         FieldInjectionPoint protectedFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PROTECTED, name, injectionNode);
-        invocationBuilder.buildFieldSet(expression, protectedFieldInjectionPoint, variable);
-        verify(protectedInjectionBuilder).buildFieldSet(expression, protectedFieldInjectionPoint.getContainingType(), protectedFieldInjectionPoint.getInjectionNode().getASTType(), protectedFieldInjectionPoint.getName(), variable);
+        invocationBuilder.buildFieldSet(typedExpression, protectedFieldInjectionPoint, variable);
+        verify(protectedInjectionBuilder).buildFieldSet(expressionType, expression, protectedFieldInjectionPoint.getContainingType(), protectedFieldInjectionPoint.getInjectionNode().getASTType(), protectedFieldInjectionPoint.getName(), variable);
         reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable, variableType);
 
         FieldInjectionPoint packagePrivateFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PACKAGE_PRIVATE, name, injectionNode);
-        invocationBuilder.buildFieldSet(expression, packagePrivateFieldInjectionPoint, variable);
-        verify(protectedInjectionBuilder).buildFieldSet(expression, packagePrivateFieldInjectionPoint.getContainingType(), packagePrivateFieldInjectionPoint.getInjectionNode().getASTType(), packagePrivateFieldInjectionPoint.getName(), variable);
+        invocationBuilder.buildFieldSet(typedExpression, packagePrivateFieldInjectionPoint, variable);
+        verify(protectedInjectionBuilder).buildFieldSet(expressionType, expression, packagePrivateFieldInjectionPoint.getContainingType(), packagePrivateFieldInjectionPoint.getInjectionNode().getASTType(), packagePrivateFieldInjectionPoint.getName(), variable);
         reset(publicInjectionBuilder, protectedInjectionBuilder, privateInjectionBuilder, variable, variableType);
 
         FieldInjectionPoint privateFieldInjectionPoint = new FieldInjectionPoint(variableType, ASTAccessModifier.PRIVATE, name, injectionNode);
-        invocationBuilder.buildFieldSet(expression, privateFieldInjectionPoint, variable);
-        verify(privateInjectionBuilder).buildFieldSet(expression, privateFieldInjectionPoint.getContainingType(), privateFieldInjectionPoint.getInjectionNode().getASTType(), privateFieldInjectionPoint.getName(), variable);
+        invocationBuilder.buildFieldSet(typedExpression, privateFieldInjectionPoint, variable);
+        verify(privateInjectionBuilder).buildFieldSet(expressionType, expression, privateFieldInjectionPoint.getContainingType(), privateFieldInjectionPoint.getInjectionNode().getASTType(), privateFieldInjectionPoint.getName(), variable);
     }
 
     @Test

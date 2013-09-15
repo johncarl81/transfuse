@@ -30,7 +30,6 @@ import java.util.List;
  * @author John Ericksen
  */
 public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
-    ;
 
     private final PackageHelperRepository packageHelperGenerator;
     private final ClassGenerationUtil generationUtil;
@@ -44,7 +43,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters) {
+    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<? extends JExpression> parameters) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getConstructorCall(type, parameterTypes);
         JInvocation invocation = accessorMethod.invoke(generationUtil);
@@ -56,7 +55,7 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
 
 
     @Override
-    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
+    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<? extends JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getMethodCall(returnType, targetExpressionType, methodName, injectionNodeType);
         JInvocation invocation = accessorMethod.invoke(generationUtil).arg(targetExpression);
@@ -74,11 +73,11 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
+    public JStatement buildFieldSet(ASTType expressionType, JExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldSetter(containingType, fieldType, fieldName);
         return accessorMethod.invoke(generationUtil)
                 .arg(variable)
-                .arg(invocationHelper.coerceType(fieldType, expression));
+                .arg(invocationHelper.coerceType(fieldType, new TypedExpression(expressionType, expression)));
     }
 }

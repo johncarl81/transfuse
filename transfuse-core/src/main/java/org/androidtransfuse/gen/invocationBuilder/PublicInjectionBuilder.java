@@ -40,7 +40,7 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters) {
+    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<? extends JExpression> parameters) {
         JInvocation constructorInvocation = JExpr._new(generationUtil.ref(type));
 
         for (JExpression parameter : parameters) {
@@ -51,7 +51,7 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<JExpression> parameters, List<ASTType> types, ASTType targetExpressionType, JExpression targetExpression) {
+    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<? extends JExpression> parameters, List<ASTType> types, ASTType targetExpressionType, JExpression targetExpression) {
         //public case:
         JInvocation methodInvocation = targetExpression.invoke(methodName);
 
@@ -68,10 +68,10 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
+    public JStatement buildFieldSet(ASTType expressionType, JExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
         JBlock assignmentBlock = new JBlock(false, false);
 
-        assignmentBlock.assign(variable.ref(fieldName), invocationHelper.coerceType(fieldType, expression));
+        assignmentBlock.assign(variable.ref(fieldName), invocationHelper.coerceType(fieldType, new TypedExpression(expressionType, expression)));
 
         return assignmentBlock;
     }

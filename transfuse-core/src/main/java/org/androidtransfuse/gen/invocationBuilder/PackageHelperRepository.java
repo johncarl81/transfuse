@@ -33,10 +33,10 @@ public class PackageHelperRepository {
 
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
 
-    public synchronized ProtectedAccessorMethod getConstructorCall(ASTType containingType, List<ASTType> parameterTypes) {
-        ConstructorCall constructorCall = new ConstructorCall(containingType, parameterTypes);
+    public synchronized ProtectedAccessorMethod getConstructorCall(ASTType type, List<ASTType> parameterTypes) {
+        ConstructorCall constructorCall = new ConstructorCall(type, parameterTypes);
 
-        PackageClass containedPackageClass = containingType.getPackageClass();
+        PackageClass containedPackageClass = type.getPackageClass();
         PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
         if (!helperClass.getConstructorMapping().containsKey(constructorCall)) {
@@ -82,13 +82,14 @@ public class PackageHelperRepository {
     }
 
 
-    public synchronized ProtectedAccessorMethod getFieldSetter(ASTType containingType, ASTType fieldType, String name) {
-        FieldReference fieldReference = new FieldReference(fieldType, containingType, name);
+    public synchronized ProtectedAccessorMethod getFieldSetter(ASTType containingType, ASTType fieldType, String fieldName) {
+        FieldReference fieldReference = new FieldReference(fieldType, containingType, fieldName);
 
-        PackageHelperDescriptor helperClass = getPackageHelper(containingType.getPackageClass());
+        PackageClass containedPackageClass = containingType.getPackageClass();
+        PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
 
         if (!helperClass.getFieldSetMapping().containsKey(fieldReference)) {
-            String accessorMethod = PRE_METHOD + containingType.getPackageClass().getClassName().replace('.', '$') + "$FS$" + name;
+            String accessorMethod = PRE_METHOD + containedPackageClass.getClassName().replace('.', '$') + "$FS$" + fieldName;
             helperClass.getFieldSetMapping().put(fieldReference, accessorMethod);
         }
 

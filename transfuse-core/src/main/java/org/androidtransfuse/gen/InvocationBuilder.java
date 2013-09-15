@@ -44,14 +44,13 @@ public class InvocationBuilder {
 
     private ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
         return invocationBuilderStrategy.getInjectionBuilder(modifier);
-
     }
 
-    public JInvocation buildMethodCall(ASTType returnType, MethodInjectionPoint methodInjectionPoint, Iterable<JExpression> parameters, JExpression variable) {
+    public JInvocation buildMethodCall(ASTType returnType, MethodInjectionPoint methodInjectionPoint, Iterable<? extends JExpression> parameters, JExpression variable) {
         return buildMethodCall(methodInjectionPoint.getAccessModifier(), returnType, methodInjectionPoint.getName(), parameters, pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);
     }
 
-    public JInvocation buildMethodCall(ASTAccessModifier accessModifier, ASTType returnType, String name, Iterable<JExpression> parameters, List<ASTType> parameterTypes, ASTType targetExpressionType, JExpression targetExpression) {
+    public JInvocation buildMethodCall(ASTAccessModifier accessModifier, ASTType returnType, String name, Iterable<? extends JExpression> parameters, List<ASTType> parameterTypes, ASTType targetExpressionType, JExpression targetExpression) {
         ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
 
         return injectionBuilder.buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
@@ -68,8 +67,19 @@ public class InvocationBuilder {
     }
 
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(fieldInjectionPoint.getAccessModifier());
-        return injectionBuilder.buildFieldSet(expression, fieldInjectionPoint.getContainingType(), fieldInjectionPoint.getInjectionNode().getASTType(), fieldInjectionPoint.getName(), variable);
+        return buildFieldSet(
+                fieldInjectionPoint.getAccessModifier(),
+                fieldInjectionPoint.getContainingType(),
+                variable,
+                fieldInjectionPoint.getInjectionNode().getASTType(),
+                fieldInjectionPoint.getName(),
+                expression.getType(),
+                expression.getExpression());
+    }
+
+    public JStatement buildFieldSet(ASTAccessModifier accessModifier, ASTType containingType, JExpression containingExpression, ASTType fieldType, String name, ASTType expressionType, JExpression expression) {
+        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
+        return injectionBuilder.buildFieldSet(expressionType, expression, containingType, fieldType, name, containingExpression);
     }
 
     public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
