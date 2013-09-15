@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  *
  * @author John Ericksen
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bind {
 

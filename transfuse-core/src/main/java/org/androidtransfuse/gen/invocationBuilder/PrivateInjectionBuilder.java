@@ -18,9 +18,6 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.InjectionUtil;
 
@@ -42,7 +39,7 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
+    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters) {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
         JInvocation constructorInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.CALL_CONSTRUCTOR_METHOD)
@@ -50,8 +47,8 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
 
         //add classes
         JArray classArray = JExpr.newArray(generationUtil.ref(Class.class));
-        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
-            classArray.add(generationUtil.ref(injectionNode.getSignature().getType()).dotclass());
+        for (ASTType parameterType : parameterTypes) {
+            classArray.add(generationUtil.ref(parameterType).dotclass());
         }
         constructorInvocation.arg(classArray);
 
@@ -95,13 +92,13 @@ public class PrivateInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        JClass variableType = generationUtil.ref(fieldInjectionPoint.getContainingType());
+    public JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
+        JClass variableType = generationUtil.ref(containingType);
 
         return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
                 .arg(variableType.dotclass())
                 .arg(variable)
-                .arg(fieldInjectionPoint.getName())
+                .arg(fieldName)
                 .arg(expression.getExpression());
     }
 

@@ -20,8 +20,6 @@ import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -46,9 +44,9 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
+    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters) {
 
-        ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getConstructorCall(constructorInjectionPoint);
+        ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getConstructorCall(type, parameterTypes);
         JInvocation invocation = accessorMethod.invoke(generationUtil);
         for (JExpression parameter : parameters) {
             invocation.arg(parameter);
@@ -76,11 +74,11 @@ public class ProtectedInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
+    public JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
 
-        ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldSetter(fieldInjectionPoint);
+        ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldSetter(containingType, fieldType, fieldName);
         return accessorMethod.invoke(generationUtil)
                 .arg(variable)
-                .arg(invocationHelper.coerceType(fieldInjectionPoint.getInjectionNode().getASTType(), expression));
+                .arg(invocationHelper.coerceType(fieldType, expression));
     }
 }

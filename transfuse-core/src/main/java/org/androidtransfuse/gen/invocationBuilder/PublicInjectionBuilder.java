@@ -18,8 +18,6 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -42,7 +40,7 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
+    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<JExpression> parameters) {
         JInvocation constructorInvocation = JExpr._new(generationUtil.ref(type));
 
         for (JExpression parameter : parameters) {
@@ -70,10 +68,10 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
+    public JStatement buildFieldSet(TypedExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
         JBlock assignmentBlock = new JBlock(false, false);
 
-        assignmentBlock.assign(variable.ref(fieldInjectionPoint.getName()), invocationHelper.coerceType(fieldInjectionPoint.getInjectionNode().getASTType(), expression));
+        assignmentBlock.assign(variable.ref(fieldName), invocationHelper.coerceType(fieldType, expression));
 
         return assignmentBlock;
     }
