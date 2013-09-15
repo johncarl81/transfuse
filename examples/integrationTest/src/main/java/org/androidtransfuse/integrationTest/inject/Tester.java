@@ -20,7 +20,7 @@ import org.parceler.Parcel;
 /**
  * @author John Ericksen
  */
-@Parcel
+@Parcel(Parcel.Serialization.METHOD)
 public class Tester {
 
     private ParcelProxyProxy proxy;

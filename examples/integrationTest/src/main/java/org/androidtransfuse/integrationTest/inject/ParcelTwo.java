@@ -20,7 +20,7 @@ import org.parceler.Parcel;
 /**
  * @author John Ericksen
  */
-@Parcel(ParcelTwoConverter.class)
+@Parcel(converter = ParcelTwoConverter.class)
 public class ParcelTwo {
 
     private String value;
