@@ -58,7 +58,7 @@ public interface ASTBase {
      * @param annotation type
      * @return annotation AST
      */
-    ASTAnnotation getASTAnnotation(Class annotation);
+    ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation);
 
     /**
      * Supplies the name of the current tree node

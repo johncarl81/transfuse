@@ -115,7 +115,7 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return getProxy().getASTAnnotation(annotation);
     }
 

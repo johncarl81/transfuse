@@ -21,6 +21,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.lang.model.element.TypeElement;
+import java.lang.annotation.Annotation;
 
 /**
  * Element specific AST Type
@@ -140,7 +141,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
 

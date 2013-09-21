@@ -31,17 +31,19 @@ import java.lang.annotation.Annotation;
  */
 public class ASTClassParameter implements ASTParameter {
 
+    private final String name;
     private final ASTType astType;
-    private final ImmutableMap<Class<?>, Annotation> annotationMap;
+    private final ImmutableMap<Class<? extends Annotation>, Annotation> annotationMap;
     private final ImmutableSet<ASTAnnotation> annotations;
 
-    public ASTClassParameter(Annotation[] annotations, ASTType astType, ImmutableSet<ASTAnnotation> astAnnotations) {
+    public ASTClassParameter(String name, Annotation[] annotations, ASTType astType, ImmutableSet<ASTAnnotation> astAnnotations) {
+        this.name = name;
         this.annotations = astAnnotations;
         this.astType = astType;
 
-        ImmutableMap.Builder<Class<?>, Annotation> classAnnotationBuilder = ImmutableMap.builder();
+        ImmutableMap.Builder<Class<? extends Annotation>, Annotation> classAnnotationBuilder = ImmutableMap.builder();
         for (Annotation annotation : annotations) {
-            classAnnotationBuilder.put(annotation.getClass(), annotation);
+            classAnnotationBuilder.put(annotation.annotationType(), annotation);
         }
 
         this.annotationMap = classAnnotationBuilder.build();
@@ -57,7 +59,7 @@ public class ASTClassParameter implements ASTParameter {
 
     @Override
     public String getName() {
-        return astType.getName();
+        return name;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ASTClassParameter implements ASTParameter {
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
 }

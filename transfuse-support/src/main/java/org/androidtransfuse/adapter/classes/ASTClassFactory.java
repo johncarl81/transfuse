@@ -151,10 +151,12 @@ public class ASTClassFactory {
         ImmutableList.Builder<ASTParameter> astParameterBuilder = ImmutableList.builder();
 
         for (int i = 0; i < parameterTypes.length; i++) {
+            ASTType parameterType = getType(parameterTypes[i], nullSafeAccess(genericParameterTypes, i));
             astParameterBuilder.add(
                     new ASTClassParameter(
+                            parameterType.getName(),
                             parameterAnnotations[i],
-                            getType(parameterTypes[i], nullSafeAccess(genericParameterTypes, i)),
+                            parameterType,
                             getAnnotations(parameterAnnotations[i])));
         }
 

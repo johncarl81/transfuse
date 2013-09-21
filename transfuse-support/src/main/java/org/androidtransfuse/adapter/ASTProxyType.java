@@ -134,7 +134,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return proxyASTType.getASTAnnotation(annotation);
     }
 

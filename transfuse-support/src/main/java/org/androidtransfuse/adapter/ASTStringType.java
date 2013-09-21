@@ -113,7 +113,7 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return null;
     }
 

@@ -71,7 +71,7 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
-    public ASTAnnotation getASTAnnotation(Class annotation) {
+    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return method.getASTAnnotation(annotation);
     }
 
