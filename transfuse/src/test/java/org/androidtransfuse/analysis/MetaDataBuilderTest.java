@@ -74,7 +74,7 @@ public class MetaDataBuilderTest {
         assertEquals(1, metaDataList.size());
         org.androidtransfuse.model.manifest.MetaData metaData = metaDataList.get(0);
         assertEquals(TEST_NAME, metaData.getName());
-        assertEquals(TEST_RESOURCE, metaData.getResourceSpecification());
+        assertEquals(TEST_RESOURCE, metaData.getResource());
         assertEquals(TEST_VALUE, metaData.getValue());
     }
 
@@ -85,11 +85,11 @@ public class MetaDataBuilderTest {
         assertEquals(2, metaDataList.size());
         org.androidtransfuse.model.manifest.MetaData metaData = metaDataList.get(0);
         assertEquals(TEST_NAME, metaData.getName());
-        assertEquals(TEST_RESOURCE, metaData.getResourceSpecification());
+        assertEquals(TEST_RESOURCE, metaData.getResource());
         assertEquals(TEST_VALUE, metaData.getValue());
         org.androidtransfuse.model.manifest.MetaData metaData2 = metaDataList.get(1);
         assertEquals(TEST_NAME, metaData2.getName());
-        assertEquals(TEST_RESOURCE, metaData2.getResourceSpecification());
+        assertEquals(TEST_RESOURCE, metaData2.getResource());
         assertEquals(TEST_VALUE, metaData2.getValue());
     }
 }

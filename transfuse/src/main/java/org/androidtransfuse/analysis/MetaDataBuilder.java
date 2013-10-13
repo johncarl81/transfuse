@@ -22,6 +22,8 @@ import org.androidtransfuse.annotations.MetaDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+
 /**
  * @author John Ericksen
  */
@@ -50,8 +52,8 @@ public class MetaDataBuilder {
         org.androidtransfuse.model.manifest.MetaData metaData = new org.androidtransfuse.model.manifest.MetaData();
 
         metaData.setName(metaDataInput.name());
-        metaData.setResourceSpecification(metaDataInput.resource());
-        metaData.setValue(metaDataInput.value());
+        metaData.setResource(checkBlank(metaDataInput.resource()));
+        metaData.setValue(checkBlank(metaDataInput.value()));
 
         return metaData;
     }

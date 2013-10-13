@@ -34,9 +34,9 @@ public class MetaData extends Mergeable implements Identified {
     @XStreamAlias("android:name")
     @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:resourceSpecification")
+    @XStreamAlias("android:resource")
     @XStreamAsAttribute
-    private String resourceSpecification;
+    private String resource;
     @XStreamAlias("android:value")
     @XStreamAsAttribute
     private String value;
@@ -51,12 +51,12 @@ public class MetaData extends Mergeable implements Identified {
     }
 
     @Merge("s")
-    public String getResourceSpecification() {
-        return resourceSpecification;
+    public String getResource() {
+        return resource;
     }
 
-    public void setResourceSpecification(String resourceSpecification) {
-        this.resourceSpecification = resourceSpecification;
+    public void setResource(String resource) {
+        this.resource = resource;
     }
 
     @Merge("v")
