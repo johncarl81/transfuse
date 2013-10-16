@@ -175,6 +175,7 @@ public class Manifest extends Mergeable {
         return permissions;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Permission.class)
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }

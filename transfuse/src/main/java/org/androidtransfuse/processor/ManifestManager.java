@@ -46,6 +46,7 @@ public class ManifestManager {
     private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
     private final List<Service> services = new ArrayList<Service>();
     private final List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
+    private final List<Permission> permissions = new ArrayList<Permission>();
     private UsesSDK usesSdk;
 
     @Inject
@@ -55,6 +56,15 @@ public class ManifestManager {
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public void addPermission(Permission permission){
+        try {
+            updateMergeTags(Permission.class, permission);
+            permissions.add(permission);
+        } catch (MergerException e) {
+            throw new TransfuseAnalysisException("Unable to Merge UsesPermission", e);
+        }
     }
 
     public void addUsesPermission(String permission) {
@@ -130,6 +140,8 @@ public class ManifestManager {
         manifest.getApplications().add(localApplication);
 
         manifest.getUsesPermissions().addAll(usesPermissions);
+
+        manifest.getPermissions().addAll(permissions);
 
         if(usesSdk != null){
             manifest.getUsesSDKs().add(usesSdk);

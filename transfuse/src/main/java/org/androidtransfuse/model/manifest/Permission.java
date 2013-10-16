@@ -17,6 +17,10 @@ package org.androidtransfuse.model.manifest;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.annotations.ProtectionLevel;
+import org.androidtransfuse.model.Identified;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
 
 /**
  * attributes:
@@ -30,7 +34,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class Permission {
+public class Permission extends Mergeable implements Identified {
 
     @XStreamAlias("android:description")
     @XStreamAsAttribute
@@ -51,6 +55,7 @@ public class Permission {
     @XStreamAsAttribute
     private ProtectionLevel protectionLevel;
 
+    @Merge("d")
     public String getDescription() {
         return description;
     }
@@ -59,6 +64,7 @@ public class Permission {
         this.description = description;
     }
 
+    @Merge("i")
     public String getIcon() {
         return icon;
     }
@@ -67,6 +73,7 @@ public class Permission {
         this.icon = icon;
     }
 
+    @Merge("l")
     public String getLabel() {
         return label;
     }
@@ -75,6 +82,8 @@ public class Permission {
         this.label = label;
     }
 
+
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -83,6 +92,7 @@ public class Permission {
         this.name = name;
     }
 
+    @Merge("g")
     public String getPermissionGroup() {
         return permissionGroup;
     }
@@ -91,11 +101,16 @@ public class Permission {
         this.permissionGroup = permissionGroup;
     }
 
+    @Merge("p")
     public ProtectionLevel getProtectionLevel() {
         return protectionLevel;
     }
 
     public void setProtectionLevel(ProtectionLevel protectionLevel) {
         this.protectionLevel = protectionLevel;
+    }
+
+    public String getIdentifier(){
+        return name;
     }
 }

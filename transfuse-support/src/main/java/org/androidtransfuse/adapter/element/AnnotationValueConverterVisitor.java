@@ -22,6 +22,7 @@ import org.androidtransfuse.transaction.TransactionRuntimeException;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.SimpleAnnotationValueVisitor6;
@@ -109,7 +110,10 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
 
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
-        return variableElement.accept(astTypeElementConverterFactory.buildTypeConverter(type), null);
+        if(variableElement.getKind() == ElementKind.ENUM_CONSTANT){
+            return (T) Enum.valueOf((Class<? extends Enum>)type, variableElement.getSimpleName().toString());
+        }
+        return null;
     }
 
     @Override

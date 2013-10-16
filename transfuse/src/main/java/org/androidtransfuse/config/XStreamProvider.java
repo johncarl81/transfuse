@@ -49,6 +49,7 @@ public class XStreamProvider implements Provider<XStream> {
         xStream.registerConverter(new LabeledConverter<ScreenSize>(ScreenSize.class, ScreenSize.values()));
         xStream.registerConverter(new LabeledConverter<UIOptions>(UIOptions.class, UIOptions.values()));
         xStream.registerConverter(new LabeledConverter<WindowSoftInputMode>(WindowSoftInputMode.class, WindowSoftInputMode.values()));
+        xStream.registerConverter(new LabeledConverter<ProtectionLevel>(ProtectionLevel.class, ProtectionLevel.values()));
         xStream.registerConverter(new MergeableTagConverter());
 
         return xStream;
