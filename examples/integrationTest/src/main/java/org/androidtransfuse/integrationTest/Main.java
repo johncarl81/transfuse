@@ -125,7 +125,7 @@ public class Main {
         parcelExample.setRealParcelable(new RealParcelable(TEST_VALUE));
         parcelExample.setBooleans(new boolean[]{true, false, true});
 
-        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, parcelExample, THE_ANSWER));
+        android.content.Intent intent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(new SerializableValue(TEST_VALUE), TEST_VALUE, THE_ANSWER));
         return new ActivityListItem(intent, "Extras");
     }
 }
