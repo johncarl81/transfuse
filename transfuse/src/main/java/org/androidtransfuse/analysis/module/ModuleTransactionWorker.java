@@ -52,6 +52,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    UsesSdkProcessor usesSdkProcessor,
                                    DefineScopeProcessor defineScopeProcessor,
                                    PermissionProcessor permissionProcessor,
+                                   UsesFeatureProcessor usesFeatureProcessor,
                                    ModuleRepository moduleRepository,
                                    Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
         this.moduleRepository = moduleRepository;
@@ -76,6 +77,9 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(Permission.class),permissionProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(Permissions.class),
                 configurationFactory.buildConfigurationComposite(permissionProcessor));
+        typeProcessorsBuilder.put(astClassFactory.getType(UsesFeature.class), usesFeatureProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(UsesFeatures.class),
+                configurationFactory.buildConfigurationComposite(usesFeatureProcessor));
         typeProcessorsBuilder.put(astClassFactory.getType(UsesSdk.class), usesSdkProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScope.class), defineScopeProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScopes.class),
