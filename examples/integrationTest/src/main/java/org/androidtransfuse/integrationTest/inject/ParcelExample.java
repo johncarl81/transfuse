@@ -23,7 +23,7 @@ import org.parceler.Parcel;
 /**
  * @author John Ericksen
  */
-@Parcel
+@Parcel(Parcel.Serialization.METHOD)
 public class ParcelExample {
 
     private String name;

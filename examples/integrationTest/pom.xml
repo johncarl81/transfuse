@@ -37,16 +37,16 @@
             <artifactId>transfuse-integration-test-dependency</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
             <scope>provided</scope>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler-api</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
