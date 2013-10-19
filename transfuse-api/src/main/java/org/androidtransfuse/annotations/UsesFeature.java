@@ -16,8 +16,12 @@
 package org.androidtransfuse.annotations;
 
 /**
- * @author John Ericksen
+ * @author Gustavo Matias
  */
-public @interface Permissions {
-    Permission[] value();
+public @interface UsesFeature {
+	String value();
+
+	boolean required() default true;
+
+	int glEsVersion() default -1;
 }

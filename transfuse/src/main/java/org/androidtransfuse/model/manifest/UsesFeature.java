@@ -15,6 +15,10 @@
  */
 package org.androidtransfuse.model.manifest;
 
+import org.androidtransfuse.model.Identified;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
@@ -26,7 +30,7 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  *
  * @author John Ericksen
  */
-public class UsesFeature {
+public class UsesFeature extends Mergeable implements Identified {
 
     @XStreamAlias("android:name")
     @XStreamAsAttribute
@@ -38,6 +42,7 @@ public class UsesFeature {
     @XStreamAsAttribute
     private Integer glEsVersion;
 
+    @Merge("n")
     public String getName() {
         return name;
     }
@@ -46,6 +51,7 @@ public class UsesFeature {
         this.name = name;
     }
 
+    @Merge("r")
     public Boolean getRequired() {
         return required;
     }
@@ -54,6 +60,7 @@ public class UsesFeature {
         this.required = required;
     }
 
+    @Merge("g")
     public Integer getGlEsVersion() {
         return glEsVersion;
     }
@@ -61,4 +68,9 @@ public class UsesFeature {
     public void setGlEsVersion(Integer glEsVersion) {
         this.glEsVersion = glEsVersion;
     }
+    
+    public String getIdentifier(){
+        return name;
+    }
+    
 }

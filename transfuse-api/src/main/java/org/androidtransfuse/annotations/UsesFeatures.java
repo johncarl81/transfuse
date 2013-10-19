@@ -16,8 +16,8 @@
 package org.androidtransfuse.annotations;
 
 /**
- * @author John Ericksen
+ * @author Gustavo Matias
  */
-public @interface Permissions {
-    Permission[] value();
+public @interface UsesFeatures {
+    UsesFeature[] value();
 }

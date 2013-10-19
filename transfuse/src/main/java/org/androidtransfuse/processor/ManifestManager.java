@@ -15,15 +15,6 @@
  */
 package org.androidtransfuse.processor;
 
-import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.config.TransfuseAndroidModule;
-import org.androidtransfuse.model.Mergeable;
-import org.androidtransfuse.model.manifest.*;
-import org.apache.commons.beanutils.PropertyUtils;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -33,6 +24,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.config.TransfuseAndroidModule;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.model.manifest.Activity;
+import org.androidtransfuse.model.manifest.Application;
+import org.androidtransfuse.model.manifest.IntentFilter;
+import org.androidtransfuse.model.manifest.Manifest;
+import org.androidtransfuse.model.manifest.MetaData;
+import org.androidtransfuse.model.manifest.Permission;
+import org.androidtransfuse.model.manifest.Receiver;
+import org.androidtransfuse.model.manifest.Service;
+import org.androidtransfuse.model.manifest.UsesFeature;
+import org.androidtransfuse.model.manifest.UsesPermission;
+import org.androidtransfuse.model.manifest.UsesSDK;
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * @author John Ericksen
@@ -46,6 +57,7 @@ public class ManifestManager {
     private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
     private final List<Service> services = new ArrayList<Service>();
     private final List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
+    private final List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
     private final List<Permission> permissions = new ArrayList<Permission>();
     private UsesSDK usesSdk;
 
@@ -64,6 +76,15 @@ public class ManifestManager {
             permissions.add(permission);
         } catch (MergerException e) {
             throw new TransfuseAnalysisException("Unable to Merge UsesPermission", e);
+        }
+    }
+    
+    public void addUsesFeature(UsesFeature usesFeature){
+        try {
+            updateMergeTags(UsesFeature.class, usesFeature);
+            usesFeatures.add(usesFeature);
+        } catch (MergerException e) {
+            throw new TransfuseAnalysisException("Unable to Merge UsesFeature", e);
         }
     }
 
@@ -140,6 +161,8 @@ public class ManifestManager {
         manifest.getApplications().add(localApplication);
 
         manifest.getUsesPermissions().addAll(usesPermissions);
+        
+        manifest.getUsesFeatures().addAll(usesFeatures);
 
         manifest.getPermissions().addAll(permissions);
 
