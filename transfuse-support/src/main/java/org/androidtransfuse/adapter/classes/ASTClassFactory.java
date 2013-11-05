@@ -58,6 +58,10 @@ public class ASTClassFactory {
     }
 
     private synchronized ASTType getType(Class<?> clazz, Type genericType) {
+        if(clazz.isArray()){
+            return new ASTArrayType(getType(clazz.getComponentType(), genericType));
+        }
+
         if (!typeCache.containsKey(clazz.getName())) {
             typeCache.put(clazz.getName(), buildType(clazz));
         }
