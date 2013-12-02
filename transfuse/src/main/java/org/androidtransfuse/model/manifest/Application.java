@@ -23,6 +23,7 @@ import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
+import org.androidtransfuse.model.manifest.MetaData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +137,8 @@ public class Application extends Mergeable implements Identified {
     private List<Provider> providers = new ArrayList<Provider>();
     @XStreamImplicit(itemFieldName = "uses-library")
     private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
+    @XStreamImplicit(itemFieldName = "meta-data")
+    private List<MetaData> metaDatas = new ArrayList<MetaData>();
 
     @Merge("r")
     public Boolean getAllowTaskReparenting() {
@@ -366,6 +369,14 @@ public class Application extends Mergeable implements Identified {
 
     public void setUsesLibraries(List<UsesLibrary> usesLibraries) {
         this.usesLibraries = usesLibraries;
+    }
+
+    public List<MetaData> getMetaDatas() {
+        return metaDatas;
+    }
+
+    public void setMetaDatas(List<MetaData> metaDatas) {
+        this.metaDatas = metaDatas;
     }
 
     @Override
