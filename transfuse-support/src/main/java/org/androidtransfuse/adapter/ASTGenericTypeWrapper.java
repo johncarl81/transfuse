@@ -42,6 +42,10 @@ public class ASTGenericTypeWrapper implements ASTType {
         return lazyTypeParameterBuilder.buildGenericParameters();
     }
 
+    public ASTType getWrappedType(){
+        return astType;
+    }
+
     public ImmutableSet<ASTMethod> getMethods() {
         return astType.getMethods();
     }

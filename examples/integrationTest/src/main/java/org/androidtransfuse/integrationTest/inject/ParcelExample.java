@@ -120,6 +120,5 @@ public class ParcelExample {
         }
         builder.append(']');
         return builder.toString();
-
     }
 }

@@ -82,8 +82,6 @@ public class Manifest extends Mergeable {
 
     @XStreamImplicit(itemFieldName = "uses-permission")
     private List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
-    @XStreamImplicit(itemFieldName = "uses-feature")
-    private List<UsesFeature> usesFeature = new ArrayList<UsesFeature>();
     @XStreamImplicit(itemFieldName = "uses-sdk")
     private List<UsesSDK> usesSDKs = new ArrayList<UsesSDK>();
     @XStreamImplicit(itemFieldName = "application")
@@ -233,21 +231,13 @@ public class Manifest extends Mergeable {
         this.supportsScreens = supportsScreens;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = UsesFeature.class)
     public List<UsesFeature> getUsesFeatures() {
         return usesFeatures;
     }
 
     public void setUsesFeatures(List<UsesFeature> usesFeatures) {
         this.usesFeatures = usesFeatures;
-    }
-    
-    public List<UsesFeature> getUsesFeature() {
-        return usesFeature;
-    }
-
-    @MergeCollection(collectionType = ArrayList.class, type = UsesFeature.class)
-    public void setUsesFeature(List<UsesFeature> usesFeature) {
-        this.usesFeature = usesFeature;
     }
 
     public String getNamespace() {

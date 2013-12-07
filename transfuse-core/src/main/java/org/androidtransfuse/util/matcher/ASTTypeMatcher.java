@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.util.matcher;
 
+import org.androidtransfuse.adapter.ASTGenericTypeWrapper;
 import org.androidtransfuse.adapter.ASTType;
 
 /**
@@ -36,22 +37,18 @@ public class ASTTypeMatcher implements Matcher<ASTType> {
 
     public boolean matches(ASTType astType) {
 
-        if(this.astType != null){
+        if(this.astType != null) {
             if(ignoreGenerics){
-                if(!astType.getName().equals(this.astType.getName())){
-                    return false;
+                if(this.astType instanceof ASTGenericTypeWrapper) {
+                    return ((ASTGenericTypeWrapper)this.astType).getWrappedType().equals(astType);
                 }
+                return this.astType.equals(astType);
             }
-            else{
-                if(subtypesAllowed){
-                    return this.astType.inheritsFrom(astType);
-                }
-                if(!astType.equals(this.astType)){
-                    return false;
-                }
+            else if(subtypesAllowed) {
+                return this.astType.inheritsFrom(astType);
             }
         }
 
-        return true;
+        return astType.equals(this.astType);
     }
 }
