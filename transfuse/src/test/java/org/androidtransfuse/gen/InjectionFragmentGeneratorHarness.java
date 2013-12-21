@@ -59,7 +59,7 @@ public class InjectionFragmentGeneratorHarness {
         JClass scopesRef = codeModel.ref(Scopes.class);
         JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
 
-        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, injectionNode, scopes);
+        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, injectionNode, scopes);
         virtualProxyGenerator.generateProxies();
 
         block._return(expressionMap.get(injectionNode).getExpression());

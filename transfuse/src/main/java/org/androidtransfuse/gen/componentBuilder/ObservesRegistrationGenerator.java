@@ -161,7 +161,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     }
 
     private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, JExpression scopesExpression, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
-        injectionFragmentGenerator.buildFragment(block, definedClass, tendingInjectionNode, scopesExpression, expressionMap);
+        injectionFragmentGenerator.buildFragment(block, block, definedClass, tendingInjectionNode, scopesExpression, expressionMap);
 
         return expressionMap.get(tendingInjectionNode);
     }

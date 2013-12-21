@@ -22,6 +22,7 @@ import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
+import javax.inject.Named;
 import java.util.Map;
 
 /**
@@ -30,5 +31,5 @@ import java.util.Map;
 @Factory
 public interface InjectionBuilderContextFactory {
 
-    InjectionBuilderContext buildContext(JBlock block, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap);
+    InjectionBuilderContext buildContext(@Named("block") JBlock block, @Named("constructorBlock") JBlock constructorBlock, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap);
 }

@@ -333,8 +333,8 @@ public class CoreFactory {
 
     private static class InjectionBuilderContextFactoryImpl implements InjectionBuilderContextFactory {
         @Override
-        public InjectionBuilderContext buildContext(JBlock block, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
-            return new InjectionBuilderContext(block, definedClass, scopeVar, expressionMap);
+        public InjectionBuilderContext buildContext(JBlock block, JBlock constructorBlock, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
+            return new InjectionBuilderContext(block, constructorBlock, definedClass, scopeVar, expressionMap);
         }
     }
 

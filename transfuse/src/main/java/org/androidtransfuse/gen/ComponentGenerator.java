@@ -74,6 +74,7 @@ public class ComponentGenerator  {
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
                             block,
+                            block,
                             definedClass,
                             descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor),
                             scopesVar);

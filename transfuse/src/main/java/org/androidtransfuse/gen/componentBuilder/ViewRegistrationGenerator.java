@@ -57,7 +57,7 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
         try{
 
             //todo: map scopes
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, viewInjectionNode, null);
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, viewInjectionNode, null);
 
             JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
 

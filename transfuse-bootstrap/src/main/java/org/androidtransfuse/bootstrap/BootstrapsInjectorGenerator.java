@@ -84,7 +84,7 @@ public class BootstrapsInjectorGenerator {
 
             setupInjectionAspect(injectionNode, input);
 
-            injectionGenerator.buildFragment(injectorBlock, innerInjectorClass, injectionNode, scopesVar);
+            injectionGenerator.buildFragment(injectorBlock, injectorBlock, innerInjectorClass, injectionNode, scopesVar);
 
             // add instance to map
             addBootstrapRegistration(nodeClass, innerInjectorClass);

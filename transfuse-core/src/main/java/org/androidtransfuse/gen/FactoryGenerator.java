@@ -113,7 +113,7 @@ public class FactoryGenerator {
             JMethod defaultConstructor = implClass.constructor(JMod.PUBLIC);
 
             JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
-            defaultConstructor.body().assign(scopesField, scopesBuildInvocation);
+            defaultConstructor.body().invoke("this").arg(scopesBuildInvocation);
 
             implClass._implements(interfaceClass);
 
@@ -129,7 +129,7 @@ public class FactoryGenerator {
 
                 //Injections
                 InjectionNode returnType = injectionNodeFactory.buildInjectionNode(methodDescriptor);
-                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, implClass, returnType, scopesField);
+                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, constructor.body(), implClass, returnType, scopesField);
 
                 block._return(expressionMap.get(returnType).getExpression());
 

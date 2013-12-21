@@ -46,13 +46,13 @@ public class InjectionFragmentGenerator {
         this.virtualProxyGenerator = virtualProxyGenerator;
     }
 
-    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar) throws ClassNotFoundException, JClassAlreadyExistsException {
-        return buildFragment(block, definedClass, injectionNode, scopeVar, new HashMap<InjectionNode, TypedExpression>());
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JBlock constructorBlock, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar) throws ClassNotFoundException, JClassAlreadyExistsException {
+        return buildFragment(block, constructorBlock, definedClass, injectionNode, scopeVar, new HashMap<InjectionNode, TypedExpression>());
     }
 
-    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, JBlock constructorBlock, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, definedClass, scopeVar, expressionMap);
+        InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, constructorBlock, definedClass, scopeVar, expressionMap);
 
         injectionExpressionBuilder.buildVariable(injectionBuilderContext, injectionNode);
 

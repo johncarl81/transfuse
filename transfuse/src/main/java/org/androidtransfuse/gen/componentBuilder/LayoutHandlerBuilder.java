@@ -61,7 +61,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
             JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, definedClass, layoutHandlerInjectionNode, scopesVar);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, layoutHandlerInjectionNode, scopesVar);
 
             //LayoutHandlerDelegate.invokeLayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();
