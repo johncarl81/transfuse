@@ -38,7 +38,6 @@ import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.gen.proxy.VirtualProxyGenerator;
 import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
-import org.androidtransfuse.gen.scopeBuilder.SingletonScopeBuilder;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
@@ -205,9 +204,8 @@ public class CoreFactory {
 
         InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
-        SingletonScopeBuilder singletonScopeBuilder = new SingletonScopeBuilder(codeModel, new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, variableNamer, classNamer), generationUtil, typedExpressionFactory, variableNamer);
-        scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
-        scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(Providers.of(singletonScopeBuilder)));
+        scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
+        scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
 
         return scopeRepository;
     }
@@ -281,7 +279,7 @@ public class CoreFactory {
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, generationUtil, buildAnalyser());
 
-        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(codeModel, buildProviderGenerator(), typedExpressionFactory, variableNamer, generationUtil);
+        CustomScopeAspectFactoryFactory scopeAspectFactoryFactory = new CustomScopeAspectFactoryFactory(buildVariableFactoryBuilderFactory());
 
         DefineScopeProcessor defineScopeProcessor = new DefineScopeProcessor(astClassFactory, scopeInjectionFactory, scopeAspectFactoryFactory);
 
@@ -298,9 +296,7 @@ public class CoreFactory {
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
                 new InjectionNodeImplFactory(buildInjectionPointFactory(),
-                        new VariableFactoryBuilderFactory2(typedExpressionFactory,
-                                generationUtil,
-                                buildAnalyser()),
+                        buildVariableFactoryBuilderFactory(),
                         new QualifierPredicate(astClassFactory)),
                 new MirroredMethodGeneratorFactory(variableNamer, generationUtil),
                 generationUtil,
@@ -321,10 +317,14 @@ public class CoreFactory {
         InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
         for (ASTType factoryType : factories) {
             repository.putType(factoryType,
-                    new FactoryNodeBuilder(factoryType, new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser()), buildAnalyser()));
+                    new FactoryNodeBuilder(factoryType, buildVariableFactoryBuilderFactory(), buildAnalyser()));
         }
 
         moduleRepository.addModuleRepository(repository);
+    }
+
+    private VariableFactoryBuilderFactory2 buildVariableFactoryBuilderFactory(){
+        return new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser(), buildProviderGenerator(), codeModel, variableNamer);
     }
 
     public ModuleRepository getModuleRepository() {

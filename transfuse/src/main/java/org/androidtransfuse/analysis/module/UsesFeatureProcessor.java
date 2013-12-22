@@ -15,13 +15,13 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import javax.inject.Inject;
-
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.manifest.UsesFeature;
 import org.androidtransfuse.processor.ManifestManager;
+
+import javax.inject.Inject;
 
 /**
  * @author Gustavo Matias

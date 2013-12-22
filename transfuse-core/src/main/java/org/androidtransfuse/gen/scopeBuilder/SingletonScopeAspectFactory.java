@@ -15,26 +15,30 @@
  */
 package org.androidtransfuse.gen.scopeBuilder;
 
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
+import org.androidtransfuse.gen.variableBuilder.VariableFactoryBuilderFactory2;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+import javax.inject.Singleton;
 
 /**
  * @author John Ericksen
  */
 public class SingletonScopeAspectFactory implements ScopeAspectFactory {
 
-    private final Provider<SingletonScopeBuilder> singletonScopeBuilderProvider;
+    private final VariableFactoryBuilderFactory2 variableFactoryBuilderFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
-    public SingletonScopeAspectFactory(Provider<SingletonScopeBuilder> singletonScopeBuilderProvider) {
-        this.singletonScopeBuilderProvider = singletonScopeBuilderProvider;
+    public SingletonScopeAspectFactory(VariableFactoryBuilderFactory2 variableFactoryBuilderFactory, ASTClassFactory astClassFactory) {
+        this.variableFactoryBuilderFactory = variableFactoryBuilderFactory;
+        this.astClassFactory = astClassFactory;
     }
 
     @Override
     public ScopeAspect buildAspect(AnalysisContext context) {
-        return new ScopeAspect(singletonScopeBuilderProvider.get());
+        return new ScopeAspect(variableFactoryBuilderFactory.buildScopeVariableBuilder(astClassFactory.getType(Singleton.class)));
     }
 }

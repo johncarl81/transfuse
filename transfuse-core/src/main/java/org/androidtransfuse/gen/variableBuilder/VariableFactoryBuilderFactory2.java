@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.ProviderGenerator;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -31,14 +34,24 @@ public class VariableFactoryBuilderFactory2 {
     private final TypedExpressionFactory typedExpressionFactory;
     private final ClassGenerationUtil generationUtil;
     private final Analyzer analyzer;
+    private final ProviderGenerator providerGenerator;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+
 
     @Inject
     public VariableFactoryBuilderFactory2(TypedExpressionFactory typedExpressionFactory,
                                           ClassGenerationUtil generationUtil,
-                                          Analyzer analyzer) {
+                                          Analyzer analyzer,
+                                          ProviderGenerator providerGenerator,
+                                          JCodeModel codeModel,
+                                          UniqueVariableNamer namer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.generationUtil = generationUtil;
         this.analyzer = analyzer;
+        this.providerGenerator = providerGenerator;
+        this.codeModel = codeModel;
+        this.namer = namer;
     }
 
     public FactoryVariableBuilder buildFactoryVariableBuilder(ASTType factoryType) {
@@ -51,5 +64,9 @@ public class VariableFactoryBuilderFactory2 {
 
     public ExpressionVariableBuilderWrapper buildExpressionWrapper(TypedExpression typedExpression) {
         return new ExpressionVariableBuilderWrapper(typedExpression);
+    }
+
+    public CustomScopeVariableBuilder buildScopeVariableBuilder(ASTType scopeKey){
+        return new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, generationUtil, namer);
     }
 }

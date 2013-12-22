@@ -15,15 +15,14 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.androidtransfuse.model.Mergeable;
-import org.androidtransfuse.processor.MergeCollection;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.MergeCollection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * attributes:

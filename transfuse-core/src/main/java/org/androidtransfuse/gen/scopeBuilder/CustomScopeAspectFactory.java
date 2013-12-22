@@ -15,15 +15,10 @@
  */
 package org.androidtransfuse.gen.scopeBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
-import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.ProviderGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
-import org.androidtransfuse.gen.variableBuilder.CustomScopeVariableBuilder;
-import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
+import org.androidtransfuse.gen.variableBuilder.VariableFactoryBuilderFactory2;
 
 /**
  * @author John Ericksen
@@ -31,28 +26,15 @@ import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 public class CustomScopeAspectFactory implements ScopeAspectFactory {
 
     private final ASTType scopeKey;
-    private final TypedExpressionFactory typedExpressionFactory;
-    private final ProviderGenerator providerGenerator;
-    private final UniqueVariableNamer namer;
-    private final JCodeModel codeModel;
-    private final ClassGenerationUtil generationUtil;
+    private final VariableFactoryBuilderFactory2 variableFactoryBuilderFactory;
 
-    public CustomScopeAspectFactory(ASTType scopeKey,
-                                    TypedExpressionFactory typedExpressionFactory,
-                                    ProviderGenerator providerGenerator,
-                                    UniqueVariableNamer namer,
-                                    JCodeModel codeModel,
-                                    ClassGenerationUtil generationUtil) {
+    public CustomScopeAspectFactory(VariableFactoryBuilderFactory2 variableFactoryBuilderFactory, ASTType scopeKey) {
+        this.variableFactoryBuilderFactory = variableFactoryBuilderFactory;
         this.scopeKey = scopeKey;
-        this.typedExpressionFactory = typedExpressionFactory;
-        this.providerGenerator = providerGenerator;
-        this.namer = namer;
-        this.codeModel = codeModel;
-        this.generationUtil = generationUtil;
     }
 
     @Override
     public ScopeAspect buildAspect(AnalysisContext context) {
-        return new ScopeAspect(new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, generationUtil, namer));
+        return new ScopeAspect(variableFactoryBuilderFactory.buildScopeVariableBuilder(scopeKey));
     }
 }

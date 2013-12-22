@@ -15,14 +15,7 @@
  */
 package org.gradletransfuse;
 
-import android.os.Bundle;
-import android.view.Menu;
-
-import org.androidtransfuse.annotations.Activity;
-import org.androidtransfuse.annotations.Intent;
-import org.androidtransfuse.annotations.IntentFilter;
-import org.androidtransfuse.annotations.IntentType;
-import org.androidtransfuse.annotations.Layout;
+import org.androidtransfuse.annotations.*;
 
 @Activity
 @Layout(R.layout.activity_main)
