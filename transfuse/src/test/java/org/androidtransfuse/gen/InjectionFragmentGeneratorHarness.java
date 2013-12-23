@@ -37,6 +37,8 @@ public class InjectionFragmentGeneratorHarness {
     @Inject
     private InjectionFragmentGenerator injectionFragmentGenerator;
     @Inject
+    private InstantiationStrategyFactory instantiationStrategyFactory;
+    @Inject
     private ClassGenerationUtil generationUtil;
     @Inject
     private UniqueVariableNamer namer;
@@ -59,7 +61,12 @@ public class InjectionFragmentGeneratorHarness {
         JClass scopesRef = codeModel.ref(Scopes.class);
         JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
 
-        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, injectionNode, scopes);
+        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
+                instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopes),
+                definedClass,
+                injectionNode,
+                scopes);
+
         virtualProxyGenerator.generateProxies();
 
         block._return(expressionMap.get(injectionNode).getExpression());

@@ -33,17 +33,14 @@ public class ScopesGenerator {
 
     public static final PackageClass TRANSFUSE_SCOPES_UTIL = new PackageClass("org.androidtransfuse", Namer.name("Transfuse").append("ScopesUtil").build());
     public static final String GET_INSTANCE = "getInstance";
-    public static final String BUILD_METHOD = "build";
 
     private final ClassGenerationUtil generationUtil;
     private final ModuleRepository repository;
-    private final UniqueVariableNamer namer;
 
     @Inject
-    public ScopesGenerator(ClassGenerationUtil generationUtil, ModuleRepository repository, UniqueVariableNamer namer) {
+    public ScopesGenerator(ClassGenerationUtil generationUtil, ModuleRepository repository) {
         this.generationUtil = generationUtil;
         this.repository = repository;
-        this.namer = namer;
     }
 
     public void generate(){
@@ -55,15 +52,9 @@ public class ScopesGenerator {
             //private utility constructor
             scopesUtil.constructor(JMod.PRIVATE);
 
-            // builder method
-            JMethod buildMethod = scopesUtil.method(JMod.PUBLIC | JMod.STATIC, Scopes.class, BUILD_METHOD);
-
-            JBlock buildMethodBody = buildMethod.body();
-
-            buildMethodBody._return(buildScopes(repository, generationUtil, namer, buildMethodBody));
-
             // static get instance method
-            JFieldVar instance = scopesUtil.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, Scopes.class, "INSTANCE", JExpr.invoke(buildMethod));
+            JFieldVar instance = scopesUtil.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, Scopes.class, "INSTANCE",
+                    buildScopes(repository, generationUtil));
 
             JMethod getInstanceMethod = scopesUtil.method(JMod.PUBLIC | JMod.STATIC, Scopes.class, GET_INSTANCE);
             getInstanceMethod.body()._return(instance);
@@ -74,17 +65,17 @@ public class ScopesGenerator {
         }
     }
 
-    public static JVar buildScopes(ModuleRepository repository, ClassGenerationUtil generationUtil, UniqueVariableNamer namer, JBlock injectorBlock) {
+    public static JInvocation buildScopes(ModuleRepository repository, ClassGenerationUtil generationUtil) {
         JClass scopesRef = generationUtil.ref(Scopes.class);
-        JVar scopesVar = injectorBlock.decl(scopesRef, namer.generateName(Scopes.class), JExpr._new(scopesRef));
+        JInvocation scopesInit = JExpr._new(scopesRef);
 
         for (Map.Entry<ASTType, ASTType> scopeTypeEntry : repository.buildModuleConfiguration().getScopeAnnotations().entrySet()) {
             JExpression annotation = generationUtil.ref(scopeTypeEntry.getKey()).dotclass();
             JClass scopeType = generationUtil.ref(scopeTypeEntry.getValue());
 
-            injectorBlock.invoke(scopesVar, Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
+            scopesInit = scopesInit.invoke(Scopes.ADD_SCOPE).arg(annotation).arg(JExpr._new(scopeType));
         }
 
-        return scopesVar;
+        return scopesInit;
     }
 }

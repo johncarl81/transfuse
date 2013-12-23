@@ -46,6 +46,7 @@ public class FactoryGenerator {
 
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionNodeImplFactory injectionNodeImplFactory;
     private final MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory;
     private final AnalysisContextFactory analysisContextFactory;
@@ -58,7 +59,7 @@ public class FactoryGenerator {
     @Inject
     public FactoryGenerator(JCodeModel codeModel,
                             InjectionFragmentGenerator injectionFragmentGenerator,
-                            AnalysisContextFactory analysisContextFactory,
+                            InstantiationStrategyFactory instantiationStrategyFactory, AnalysisContextFactory analysisContextFactory,
                             Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             ModuleRepository injectionNodeBuilderRepositoryFactory,
                             InjectionNodeImplFactory injectionNodeImplFactory,
@@ -68,6 +69,7 @@ public class FactoryGenerator {
                             Validator validator) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.injectionNodeImplFactory = injectionNodeImplFactory;
@@ -129,7 +131,8 @@ public class FactoryGenerator {
 
                 //Injections
                 InjectionNode returnType = injectionNodeFactory.buildInjectionNode(methodDescriptor);
-                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, constructor.body(), implClass, returnType, scopesField);
+                Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
+                        instantiationStrategyFactory.buildFieldStrategy(implClass, constructor.body(), scopesField), implClass, returnType, scopesField);
 
                 block._return(expressionMap.get(returnType).getExpression());
 

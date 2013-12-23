@@ -16,8 +16,8 @@
 package org.androidtransfuse.scope;
 
 import java.lang.annotation.Annotation;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -27,11 +27,21 @@ public class Scopes {
     public static final String ADD_SCOPE = "addScope";
     public static final String GET_SCOPE = "getScope";
 
-    private final ConcurrentMap<Class<? extends Annotation>, Scope> scopeMapping = new ConcurrentHashMap<Class<? extends Annotation>, Scope>();
+    private final Map<Class<? extends Annotation>, Scope> scopeMapping;
+
+    public Scopes(){
+        this(new HashMap<Class<? extends Annotation>, Scope>());
+    }
+
+    private Scopes(Map<Class<? extends Annotation>, Scope> scopeMapping){
+        //supporting immutable style
+        this.scopeMapping = scopeMapping;
+    }
 
     public Scopes addScope(Class<? extends Annotation> key, Scope scope){
-        scopeMapping.put(key, scope);
-        return this;
+        Map<Class<? extends Annotation>, Scope> mapping = new HashMap<Class<? extends Annotation>, Scope>(scopeMapping);
+        mapping.put(key, scope);
+        return new Scopes(mapping);
     }
 
     public Scope getScope(Class<? extends Annotation> key){

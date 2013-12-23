@@ -78,6 +78,7 @@ public class CoreFactory {
     private final ModuleRepositoryImpl moduleRepository = new ModuleRepositoryImpl();
     private final Validator validator;
     private final ScopePredicate scopePredicate = new ScopePredicate(astClassFactory);
+    private final InstantiationStrategyFactory instantiationStrategyFactory = new InstantiationStrategyFactoryImpl();
 
     private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
 
@@ -118,7 +119,7 @@ public class CoreFactory {
     }
 
     public ScopesGenerator buildScopesGenerator() {
-        return new ScopesGenerator(generationUtil, getModuleRepository(), variableNamer);
+        return new ScopesGenerator(generationUtil, getModuleRepository());
     }
 
     private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
@@ -181,14 +182,13 @@ public class CoreFactory {
             }
         };
 
-        GeneratedProviderBuilderFactory generatedProviderBuilderFactory = new GeneratedProviderBuilderFactory(providerGeneratorProvider,
-                Providers.of(variableNamer), Providers.of(typedExpressionFactory));
+        GeneratedProviderBuilderFactory generatedProviderBuilderFactory = new GeneratedProviderBuilderFactory(providerGeneratorProvider, Providers.of(typedExpressionFactory));
 
         return new GeneratedProviderInjectionNodeBuilder(generatedProviderBuilderFactory, buildInjectionPointFactory(), buildAnalyser());
     }
 
     private ProviderGenerator buildProviderGenerator(){
-        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), generationUtil, variableNamer, classNamer);
+        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer);
     }
 
     private AnalysisRepository buildAnalysisRepository(){
@@ -254,7 +254,7 @@ public class CoreFactory {
                     new ExceptionWrapper(generationUtil),
                     new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
                     validator);
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), variableBuilderFactory, getModuleRepository());
+            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), instantiationStrategyFactory, variableBuilderFactory, getModuleRepository());
         }
         return bootstrapsInjectorGenerator;
     }
@@ -292,6 +292,7 @@ public class CoreFactory {
 
         return new FactoryGenerator(codeModel,
                 buildInjectionGenerator(),
+                instantiationStrategyFactory,
                 new AnalysisContextFactory(buildAnalysisRepository()),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
@@ -333,8 +334,8 @@ public class CoreFactory {
 
     private static class InjectionBuilderContextFactoryImpl implements InjectionBuilderContextFactory {
         @Override
-        public InjectionBuilderContext buildContext(JBlock block, JBlock constructorBlock, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
-            return new InjectionBuilderContext(block, constructorBlock, definedClass, scopeVar, expressionMap);
+        public InjectionBuilderContext buildContext(JBlock block,  InstantiationStrategy instantiateOnceStrategy, JDefinedClass definedClass, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) {
+            return new InjectionBuilderContext(block, definedClass, scopeVar, expressionMap, instantiateOnceStrategy);
         }
     }
 
@@ -449,6 +450,19 @@ public class CoreFactory {
         @Override
         public void addModuleRepository(InjectionNodeBuilderRepository repository) {
             this.moduleInjectionNodeBuilderRepository.addRepository(repository);
+        }
+    }
+
+    private final class InstantiationStrategyFactoryImpl implements InstantiationStrategyFactory{
+
+        @Override
+        public FieldInstantiationStrategy buildFieldStrategy(JDefinedClass definedClass, JBlock constructorBlock, JExpression scopes) {
+            return new FieldInstantiationStrategy(definedClass, constructorBlock, scopes, variableNamer);
+        }
+
+        @Override
+        public MethodInstantiationStrategy buildMethodStrategy(JDefinedClass definedClass, JBlock block, JExpression scopes) {
+            return new MethodInstantiationStrategy(definedClass, block, scopes, variableNamer);
         }
     }
 }

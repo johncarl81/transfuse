@@ -21,6 +21,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -38,18 +39,21 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
     private final InjectionNode injectionNode;
     private final ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
 
     @Inject
     public ViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode,
                                      /*@Assisted*/ String method,
                                      /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode,
                                      /*@Assisted*/ ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder,
-                                     InjectionFragmentGenerator injectionFragmentGenerator) {
+                                     InjectionFragmentGenerator injectionFragmentGenerator,
+                                     InstantiationStrategyFactory instantiationStrategyFactory) {
         this.viewInjectionNode = viewInjectionNode;
         this.method = method;
         this.injectionNode = injectionNode;
         this.viewRegistrationInvocationBuilder = viewRegistrationInvocationBuilder;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
     }
 
     @Override
@@ -57,7 +61,8 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
         try{
 
             //todo: map scopes
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, viewInjectionNode, null);
+            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block,
+                    instantiationStrategyFactory.buildMethodStrategy(definedClass, block, null), definedClass, viewInjectionNode, null);
 
             JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
 

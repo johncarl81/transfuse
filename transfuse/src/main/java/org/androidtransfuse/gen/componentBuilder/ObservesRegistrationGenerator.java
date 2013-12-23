@@ -45,6 +45,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     private final UniqueVariableNamer variableNamer;
     private final ClassNamer classNamer;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InvocationBuilder invocationBuilder;
 
     @Inject
@@ -53,12 +54,14 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                                          UniqueVariableNamer variableNamer,
                                          ClassNamer classNamer,
                                          InjectionFragmentGenerator injectionFragmentGenerator,
+                                         InstantiationStrategyFactory instantiationStrategyFactory,
                                          InvocationBuilder invocationBuilder) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.invocationBuilder = invocationBuilder;
     }
 
@@ -161,7 +164,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
     }
 
     private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, JExpression scopesExpression, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
-        injectionFragmentGenerator.buildFragment(block, block, definedClass, tendingInjectionNode, scopesExpression, expressionMap);
+        injectionFragmentGenerator.buildFragment(block, instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesExpression), definedClass, tendingInjectionNode, scopesExpression, expressionMap);
 
         return expressionMap.get(tendingInjectionNode);
     }

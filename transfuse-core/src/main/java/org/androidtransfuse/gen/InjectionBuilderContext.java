@@ -22,7 +22,6 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,23 +32,22 @@ public class InjectionBuilderContext {
 
     private final Map<InjectionNode, TypedExpression> variableMap;
     private final JBlock block;
-    private final JBlock constructorBlock;
     private final JDefinedClass definedClass;
     private final JExpression scopeVar;
     private final Map<InjectionNode, TypedExpression> proxyLoad = new HashMap<InjectionNode, TypedExpression>();
-    private final Map<JDefinedClass, JExpression> assignedFields = new HashMap<JDefinedClass, JExpression>();
+    private final InstantiationStrategy instantiationStrategy;
 
     @Inject
-    public InjectionBuilderContext(/*@Assisted*/ @Named("block") JBlock block,
-                                   /*@Assisted*/ @Named("constructorBlock")  JBlock constructorBlock,
+    public InjectionBuilderContext(/*@Assisted*/ JBlock block,
                                    /*@Assisted*/ JDefinedClass definedClass,
                                    /*@Assisted*/ JExpression scopeVar,
-                                   /*@Assisted*/ Map<InjectionNode, TypedExpression> variableMap) {
+                                   /*@Assisted*/ Map<InjectionNode, TypedExpression> variableMap,
+                                   /*@Assisted*/ InstantiationStrategy instantiationStrategy) {
         this.block = block;
-        this.constructorBlock = constructorBlock;
         this.definedClass = definedClass;
         this.variableMap = variableMap;
         this.scopeVar = scopeVar;
+        this.instantiationStrategy = instantiationStrategy;
     }
 
 
@@ -73,14 +71,7 @@ public class InjectionBuilderContext {
         return scopeVar;
     }
 
-    public JBlock getConstructorBlock() {
-        return constructorBlock;
-    }
-
-    public synchronized JExpression assignField(JDefinedClass providerClass, ConstructorAssignment constructorAssignment){
-        if(!assignedFields.containsKey(providerClass)){
-            assignedFields.put(providerClass, constructorAssignment.assign(providerClass, this));
-        }
-        return assignedFields.get(providerClass);
+    public JExpression instantiateOnce(JDefinedClass providerClass) {
+        return instantiationStrategy.instantiate(providerClass);
     }
 }

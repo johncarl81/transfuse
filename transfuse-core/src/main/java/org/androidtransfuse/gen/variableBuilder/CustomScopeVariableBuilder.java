@@ -60,7 +60,7 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
 
         //build provider
         JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
-        JExpression provider = JExpr._new(providerClass).arg(injectionBuilderContext.getScopeVar());
+        JExpression provider = injectionBuilderContext.instantiateOnce(providerClass);
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);

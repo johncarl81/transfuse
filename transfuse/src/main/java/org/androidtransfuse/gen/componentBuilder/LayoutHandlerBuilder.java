@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.ScopesGenerator;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
@@ -34,6 +35,7 @@ import java.util.Map;
 public class LayoutHandlerBuilder implements LayoutBuilder {
 
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionNode layoutHandlerInjectionNode;
     private final Logger logger;
     private final JCodeModel codeModel;
@@ -41,11 +43,13 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
+                                InstantiationStrategyFactory instantiationStrategyFactory,
                                 /*@Assisted*/ InjectionNode layoutHandlerInjectionNode,
                                 Logger logger,
                                 JCodeModel codeModel,
                                 UniqueVariableNamer namer) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;
         this.logger = logger;
         this.codeModel = codeModel;
@@ -61,7 +65,11 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
             JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block, block, definedClass, layoutHandlerInjectionNode, scopesVar);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
+                    instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesVar),
+                    definedClass,
+                    layoutHandlerInjectionNode,
+                    scopesVar);
 
             //LayoutHandlerDelegate.invokeLayout()
             JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();

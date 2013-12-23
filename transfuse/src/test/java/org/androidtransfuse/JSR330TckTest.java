@@ -60,8 +60,7 @@ public class JSR330TckTest {
 
     public static junit.framework.Test suite(){
 
-        Scopes scopes = new Scopes();
-        scopes.addScope(Singleton.class, new ConcurrentDoubleLockingScope());
+        Scopes scopes = new Scopes().addScope(Singleton.class, new ConcurrentDoubleLockingScope());
 
         Car car = Factories.get(CarFactory.class, scopes).buildCar();
 

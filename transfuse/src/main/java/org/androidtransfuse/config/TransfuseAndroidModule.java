@@ -69,7 +69,8 @@ import java.util.Map;
         ASTFactory.class,
         InjectionNodeBuilderRepositoryFactory.class,
         VariableExpressionBuilderFactory.class,
-        InjectionBuilderContextFactory.class})
+        InjectionBuilderContextFactory.class,
+        InstantiationStrategyFactory.class})
 @Namespace("Transfuse")
 public class TransfuseAndroidModule {
 

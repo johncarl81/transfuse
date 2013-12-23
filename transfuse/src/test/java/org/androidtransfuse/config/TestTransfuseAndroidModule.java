@@ -31,6 +31,7 @@ import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
@@ -89,7 +90,8 @@ import javax.lang.model.util.Elements;
         InjectionBuilderContextFactory.class,
         MethodBasedResourceExpressionBuilderAdaptorFactory.class,
         MethodBasedResourceExpressionBuilderFactory.class,
-        AnalysisGenerationTransactionProcessorBuilderFactory.class
+        AnalysisGenerationTransactionProcessorBuilderFactory.class,
+        InstantiationStrategyFactory.class
 })
 public class TestTransfuseAndroidModule {
 

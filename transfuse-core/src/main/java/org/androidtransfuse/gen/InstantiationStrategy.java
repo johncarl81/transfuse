@@ -6,8 +6,8 @@ import com.sun.codemodel.JExpression;
 /**
  * @author John Ericksen
  */
-public interface ConstructorAssignment {
+public interface InstantiationStrategy {
 
-    JExpression assign(JDefinedClass providerClass, InjectionBuilderContext context);
+    JExpression instantiate(JDefinedClass providerClass);
 
 }

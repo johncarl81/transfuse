@@ -34,6 +34,7 @@ public class ComponentGenerator  {
 
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
@@ -41,11 +42,12 @@ public class ComponentGenerator  {
     @Inject
     public ComponentGenerator(JCodeModel codeModel,
                               InjectionFragmentGenerator injectionFragmentGenerator,
-                              ComponentBuilderFactory componentBuilderFactory,
+                              InstantiationStrategyFactory instantiationStrategyFactory, ComponentBuilderFactory componentBuilderFactory,
                               ClassGenerationUtil generationUtil,
                               UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.componentBuilderFactory = componentBuilderFactory;
         this.generationUtil = generationUtil;
         this.namer = namer;
@@ -74,7 +76,7 @@ public class ComponentGenerator  {
             Map<InjectionNode, TypedExpression> expressionMap =
                     injectionFragmentGenerator.buildFragment(
                             block,
-                            block,
+                            instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesVar),
                             definedClass,
                             descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor),
                             scopesVar);

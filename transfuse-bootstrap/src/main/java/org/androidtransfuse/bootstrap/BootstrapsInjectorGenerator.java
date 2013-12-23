@@ -21,6 +21,7 @@ import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class BootstrapsInjectorGenerator {
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
     private final InjectionFragmentGenerator injectionGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final ExistingVariableInjectionBuilderFactory variableBuilderFactory;
     private final ModuleRepository repository;
 
@@ -49,12 +51,14 @@ public class BootstrapsInjectorGenerator {
                                        ClassGenerationUtil generationUtil,
                                        UniqueVariableNamer variableNamer,
                                        InjectionFragmentGenerator injectionGenerator,
+                                       InstantiationStrategyFactory instantiationStrategyFactory,
                                        ExistingVariableInjectionBuilderFactory variableBuilderFactory,
                                        ModuleRepository repository) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
         this.injectionGenerator = injectionGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.variableBuilderFactory = variableBuilderFactory;
         this.repository = repository;
     }
@@ -78,13 +82,17 @@ public class BootstrapsInjectorGenerator {
             JBlock injectorBlock = method.body();
 
             //define root scope holder
-            JVar scopesVar = ScopesGenerator.buildScopes(repository, generationUtil, variableNamer, injectorBlock);
+            JVar scopesVar = injectorBlock.decl(codeModel.ref(Scopes.class), variableNamer.generateName(Scopes.class), ScopesGenerator.buildScopes(repository, generationUtil));
 
             injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 
             setupInjectionAspect(injectionNode, input);
 
-            injectionGenerator.buildFragment(injectorBlock, injectorBlock, innerInjectorClass, injectionNode, scopesVar);
+            injectionGenerator.buildFragment(injectorBlock,
+                    instantiationStrategyFactory.buildMethodStrategy(innerInjectorClass, injectorBlock, scopesVar),
+                    innerInjectorClass,
+                    injectionNode,
+                    scopesVar);
 
             // add instance to map
             addBootstrapRegistration(nodeClass, innerInjectorClass);

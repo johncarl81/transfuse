@@ -16,7 +16,6 @@
 package org.androidtransfuse.gen.variableDecorator;
 
 import org.androidtransfuse.gen.ProviderGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Inject;
@@ -28,20 +27,17 @@ import javax.inject.Provider;
 public class GeneratedProviderBuilderFactory {
 
     private final Provider<ProviderGenerator> providerGeneratorProvider;
-    private final Provider<UniqueVariableNamer> namerProvider;
     private final Provider<TypedExpressionFactory> typedExpressionFactoryProvider;
 
     @Inject
     public GeneratedProviderBuilderFactory(Provider<ProviderGenerator> providerGeneratorProvider,
-                                           Provider<UniqueVariableNamer> namerProvider,
                                            Provider<TypedExpressionFactory> typedExpressionFactoryProvider) {
         this.providerGeneratorProvider = providerGeneratorProvider;
-        this.namerProvider = namerProvider;
         this.typedExpressionFactoryProvider = typedExpressionFactoryProvider;
     }
 
     public GeneratedProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerTypeInjectionNode){
 
-        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerGeneratorProvider.get(), namerProvider.get(), typedExpressionFactoryProvider.get());
+        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerGeneratorProvider.get(), typedExpressionFactoryProvider.get());
     }
 }

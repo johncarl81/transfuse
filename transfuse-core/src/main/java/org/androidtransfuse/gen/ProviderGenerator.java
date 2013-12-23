@@ -44,6 +44,7 @@ public class ProviderGenerator {
     private final ProviderCache cache;
     private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
     private final ClassNamer classNamer;
@@ -70,10 +71,11 @@ public class ProviderGenerator {
     }
 
     @Inject
-    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
+    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, InstantiationStrategyFactory instantiationStrategyFactory, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
         this.cache = cache;
         this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
@@ -141,7 +143,8 @@ public class ProviderGenerator {
 
             JBlock getMethodBody = getMethod.body();
 
-            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody, constructor.body(), providerClass, injectionNode, scopesField);
+            Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody,
+                    instantiationStrategyFactory.buildMethodStrategy(providerClass, getMethodBody, scopesField), providerClass, injectionNode, scopesField);
 
             getMethodBody._return(expressionMap.get(injectionNode).getExpression());
 
