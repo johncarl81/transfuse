@@ -16,13 +16,24 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
+import org.androidtransfuse.util.Generated;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author John Ericksen
  */
-public interface InstantiationStrategy {
+public class TransfuseClassGenerationStrategy implements ClassGenerationStrategy{
 
-    JExpression instantiate(JDefinedClass providerClass);
+    // ISO 8601 standard date format
+    private static final DateFormat ISO_8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
+    @Override
+    public void annotateGenerated(JDefinedClass definedClass) {
+        definedClass.annotate(Generated.class)
+                .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor")
+                .param("date", ISO_8601.format(new Date()));
+    }
 }

@@ -18,12 +18,8 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
-import org.androidtransfuse.util.Generated;
 
 import javax.inject.Inject;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Utility class unifying the creation of a basic class from a PackageClass
@@ -35,13 +31,13 @@ import java.util.Date;
  */
 public class ClassGenerationUtil {
 
-    // ISO 8601 standard date format
-    private final DateFormat iso8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     private final JCodeModel codeModel;
+    private final ClassGenerationStrategy classGenerationStrategy;
 
     @Inject
-    public ClassGenerationUtil(JCodeModel codeModel) {
+    public ClassGenerationUtil(JCodeModel codeModel, ClassGenerationStrategy classGenerationStrategy) {
         this.codeModel = codeModel;
+        this.classGenerationStrategy = classGenerationStrategy;
     }
 
     public JDefinedClass defineClass(PackageClass className) throws JClassAlreadyExistsException {
@@ -50,7 +46,7 @@ public class ClassGenerationUtil {
 
         JDefinedClass definedClass = jPackage._class(className.getClassName());
 
-        annotateGeneratedClass(definedClass);
+        classGenerationStrategy.annotateGenerated(definedClass);
 
         return definedClass;
     }
@@ -73,16 +69,5 @@ public class ClassGenerationUtil {
 
     public JClass ref(Class<?> clazz) {
         return codeModel.ref(clazz);
-    }
-
-    /**
-     * Annotates the input class with the `@Generated` annotation
-     *
-     * @param definedClass input codemodel class
-     */
-    private void annotateGeneratedClass(JDefinedClass definedClass) {
-        definedClass.annotate(Generated.class)
-                .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor")
-                .param("date", iso8601.format(new Date()));
     }
 }

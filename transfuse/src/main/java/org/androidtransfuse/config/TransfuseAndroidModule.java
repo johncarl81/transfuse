@@ -57,7 +57,8 @@ import java.util.Map;
 })
 @Bindings({
         @Bind(type = ModuleRepository.class, to = InjectionNodeBuilderRepositoryFactory.class),
-        @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class)
+        @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class),
+        @Bind(type = ClassGenerationStrategy.class, to = TransfuseClassGenerationStrategy.class)
 })
 @BindProviders({
         @BindProvider(type = XStream.class, provider = XStreamProvider.class),

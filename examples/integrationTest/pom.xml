@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>transfuse-integration-test</artifactId>
-    <version>0.2.5-SNAPSHOT</version>
+    <version>0.2.6-SNAPSHOT</version>
     <packaging>apk</packaging>
 
     <name>Transfuse Integration Test</name>
@@ -40,13 +40,13 @@
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler</artifactId>
-            <version>0.2.2-SNAPSHOT</version>
+            <version>0.2.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler-api</artifactId>
-            <version>0.2.2-SNAPSHOT</version>
+            <version>0.2.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>

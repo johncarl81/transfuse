@@ -29,9 +29,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 import org.androidtransfuse.bootstrap.BootstrapModule;
-import org.androidtransfuse.gen.GeneratorFactory;
-import org.androidtransfuse.gen.InjectionBuilderContextFactory;
-import org.androidtransfuse.gen.InstantiationStrategyFactory;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
@@ -68,6 +66,7 @@ import javax.lang.model.util.Elements;
 @Bindings({
         @Bind(type = ModuleRepository.class, to = InjectionNodeBuilderRepositoryFactory.class),
         @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class),
+        @Bind(type = ClassGenerationStrategy.class, to = TransfuseClassGenerationStrategy.class),
         @Bind(type = RResource.class, to = EmptyRResource.class),
         @Bind(type = Elements.class, to = NoOpElements.class),
         @Bind(type = Filer.class, to = NoOpFiler.class),
