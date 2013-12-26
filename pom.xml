@@ -4,7 +4,7 @@
 
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse-project</artifactId>
-    <version>0.2.6</version>
+    <version>0.2.6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Transfuse Project</name>
