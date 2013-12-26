@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.app.Activity;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -24,6 +23,7 @@ import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.parceler.Parcel;
 
 import javax.inject.Inject;
@@ -60,7 +60,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
+        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
 
         injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, signature.getType()));
 

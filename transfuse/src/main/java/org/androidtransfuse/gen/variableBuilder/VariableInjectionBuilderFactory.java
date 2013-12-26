@@ -49,13 +49,13 @@ public interface VariableInjectionBuilderFactory {
 
     PreferenceVariableBuilder buildPreferenceVariableBuilder(ASTType preferenceType, String preferenceName, InjectionNode preferenceManagerInjectionNode);
 
-    StaticInvocationVariableBuilder buildStaticInvocationVariableBuilder(Class invocationTarget, String staticInvocation);
+    StaticInvocationVariableBuilder buildStaticInvocationVariableBuilder(ASTType invocationTarget, String staticInvocation);
 
     MethodCallVariableBuilder buildMethodCallVariableBuilder(String methodName, ImmutableList<JExpression> arguments);
 
-    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") Class dependency, /*@Assisted("returnType")*/ @Named("returnType") Class returnType, DependentVariableBuilder variableBuilder);
+    DependentInjectionNodeBuilder buildDependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") ASTType dependency, /*@Assisted("returnType")*/ @Named("returnType") ASTType returnType, DependentVariableBuilder variableBuilder);
 
-    DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, Class type);
+    DependentVariableBuilderWrapper buildDependentVariableBuilderWrapper(InjectionNode dependency, DependentVariableBuilder dependentVariableBuilder, ASTType type);
 
     IndependentInjectionNodeBuilder buildInjectionNodeBuilder(VariableBuilder variableBuilder);
 

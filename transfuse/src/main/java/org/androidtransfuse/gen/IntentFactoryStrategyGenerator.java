@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen;
 
-import android.os.Bundle;
-import android.os.Parcelable;
 import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
@@ -32,6 +30,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.parceler.Parcel;
 import org.parceler.Parcels;
 
@@ -98,7 +97,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
             constructorBody.add(JExpr.invoke("super")
                     .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
-                    .arg(JExpr._new(codeModel._ref(Bundle.class)))
+                    .arg(JExpr._new(codeModel.ref(AndroidLiterals.BUNDLE.getName())))
             );
 
             for (IntentFactoryExtraAspect extra : extras) {
@@ -148,7 +147,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
         } else if (type.implementsFrom(astClassFactory.getType(Serializable.class))) {
             return extras.invoke("putSerializable").arg(name).arg(extraParam);
         }
-        if (type.inheritsFrom(astClassFactory.getType(Parcelable.class))) {
+        if (type.inheritsFrom(AndroidLiterals.PARCELABLE)) {
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
         if (type.isAnnotated(Parcel.class)) {

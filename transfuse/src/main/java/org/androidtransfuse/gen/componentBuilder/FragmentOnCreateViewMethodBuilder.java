@@ -15,13 +15,9 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ClassGenerationUtil;
@@ -30,6 +26,7 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -65,7 +62,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(View.class), "onCreateView");
+        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(AndroidLiterals.VIEW.getName()), "onCreateView");
         onCreateMethod.annotate(Override.class);
         MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateViewMethod);
 
@@ -77,10 +74,9 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
         //layoutInflater_0 .inflate(layout.details, viewGroup_0, false);
         JBlock body = onCreateMethod.body();
 
-        JVar viewDeclaration = body.decl(codeModel.ref(View.class), namer.generateName(View.class));
+        JVar viewDeclaration = body.decl(codeModel.ref(AndroidLiterals.VIEW.getName()), namer.generateName(AndroidLiterals.VIEW));
 
-        ASTType viewType = astClassFactory.getType(View.class);
-        onCreateMethodDescriptorBuilder.putType(viewType, new TypedExpression(viewType, viewDeclaration));
+        onCreateMethodDescriptorBuilder.putType(AndroidLiterals.VIEW, new TypedExpression(AndroidLiterals.VIEW, viewDeclaration));
 
         MethodDescriptor onCreateMethodDescriptor = onCreateMethodDescriptorBuilder.build();
 
@@ -93,12 +89,10 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
             body.assign(viewDeclaration, onCreateView);
         } else {
-            ASTType viewGroupType = astClassFactory.getType(ViewGroup.class);
-            ASTType layoutInflaterType = astClassFactory.getType(LayoutInflater.class);
-            body.assign(viewDeclaration, onCreateMethodDescriptor.getExpression(layoutInflaterType).getExpression()
+            body.assign(viewDeclaration, onCreateMethodDescriptor.getExpression(AndroidLiterals.LAYOUT_INFLATER).getExpression()
                     .invoke("inflate")
                     .arg(rResourceReferenceBuilder.buildReference(layout))
-                    .arg(onCreateMethodDescriptor.getExpression(viewGroupType).getExpression())
+                    .arg(onCreateMethodDescriptor.getExpression(AndroidLiterals.VIEW_GROUP).getExpression())
                     .arg(JExpr.lit(false)));
         }
 
@@ -108,7 +102,6 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     public void closeMethod(MethodDescriptor descriptor) {
         JMethod method = descriptor.getMethod();
 
-        ASTType viewType = astClassFactory.getType(View.class);
-        method.body()._return(descriptor.getExpression(viewType).getExpression());
+        method.body()._return(descriptor.getExpression(AndroidLiterals.VIEW).getExpression());
     }
 }

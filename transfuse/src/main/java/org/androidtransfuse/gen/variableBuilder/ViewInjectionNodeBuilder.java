@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.app.Activity;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
@@ -25,6 +24,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.View;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -57,7 +57,7 @@ public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotati
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(Activity.class, context);
+        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
 
         try {
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, codeModel.parseType(signature.getType().getName())));

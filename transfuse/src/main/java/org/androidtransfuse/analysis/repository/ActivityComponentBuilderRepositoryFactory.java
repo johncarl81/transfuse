@@ -15,23 +15,18 @@
  */
 package org.androidtransfuse.analysis.repository;
 
-import android.app.Activity;
-import android.app.ActivityGroup;
-import android.app.ListActivity;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.view.View;
-import android.widget.ListView;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
@@ -44,6 +39,7 @@ public class ActivityComponentBuilderRepositoryFactory {
 
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTClassFactory astClassFactory;
+    private final ASTElementFactory astElementFactory;
     private final GeneratorFactory generatorFactory;
     private final ListenerRegistrationGenerator listenerRegistrationGenerator;
     private final NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
@@ -51,11 +47,13 @@ public class ActivityComponentBuilderRepositoryFactory {
     @Inject
     public ActivityComponentBuilderRepositoryFactory(ASTClassFactory astClassFactory,
                                                      ComponentBuilderFactory componentBuilderFactory,
+                                                     ASTElementFactory astElementFactory,
                                                      GeneratorFactory generatorFactory,
                                                      ListenerRegistrationGenerator listenerRegistrationGenerator,
                                                      NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator) {
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
+        this.astElementFactory = astElementFactory;
         this.generatorFactory = generatorFactory;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
         this.nonConfigurationInstanceGenerator = nonConfigurationInstanceGenerator;
@@ -66,10 +64,10 @@ public class ActivityComponentBuilderRepositoryFactory {
         ImmutableMap.Builder<String, ImmutableSet<ExpressionVariableDependentGenerator>> methodCallbackGenerators = ImmutableMap.builder();
 
         ImmutableSet<ExpressionVariableDependentGenerator> activityMethodGenerators = buildActivityMethodCallbackGenerators();
-        methodCallbackGenerators.put(Activity.class.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(ListActivity.class.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
-        methodCallbackGenerators.put(PreferenceActivity.class.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(ActivityGroup.class.getName(), activityMethodGenerators);
+        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY.getName(), activityMethodGenerators);
+        methodCallbackGenerators.put(AndroidLiterals.LIST_ACTIVITY.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
+        methodCallbackGenerators.put(AndroidLiterals.PREFERENCE_ACTIVITY.getName(), activityMethodGenerators);
+        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY_GROUP.getName(), activityMethodGenerators);
 
         return new ActivityComponentBuilderRepository(methodCallbackGenerators.build());
     }
@@ -79,7 +77,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         listActivityCallbackGenerators.addAll(activityMethodGenerators);
 
         //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
-        ASTMethod onListItemClickMethod = getASTMethod(ListActivity.class, "onListItemClick", ListView.class, View.class, int.class, long.class);
+        ASTMethod onListItemClickMethod = getASTMethod(AndroidLiterals.LIST_ACTIVITY, "onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG);
         listActivityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
@@ -104,16 +102,16 @@ public class ActivityComponentBuilderRepositoryFactory {
         // onBackPressed
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
         //onActivityResult
-        activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", int.class, int.class, android.content.Intent.class));
+        activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
 
         // onSaveInstanceState
-        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", Bundle.class);
+        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true)));
 
         // onRestoreInstanceState
-        ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", Bundle.class);
+        ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE);
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnRestoreInstanceState.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onRestoreInstanceState, true)));
@@ -130,7 +128,7 @@ public class ActivityComponentBuilderRepositoryFactory {
         return activityCallbackGenerators.build();
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, Class... args) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
 
         ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
@@ -139,15 +137,11 @@ public class ActivityComponentBuilderRepositoryFactory {
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args) {
-        return getASTMethod(Activity.class, methodName, args);
+    private ASTMethod getASTMethod(String methodName, ASTType... args) {
+        return getASTMethod(AndroidLiterals.ACTIVITY, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
-        try {
-            return astClassFactory.getMethod(type.getDeclaredMethod(methodName, args));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
-        }
+    private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
+        return astElementFactory.findMethod(type, methodName, args);
     }
 }

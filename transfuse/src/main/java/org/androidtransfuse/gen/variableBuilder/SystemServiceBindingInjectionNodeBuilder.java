@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.content.Context;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -23,6 +22,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.SystemService;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -51,7 +51,7 @@ public class SystemServiceBindingInjectionNodeBuilder extends InjectionNodeBuild
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(Context.class, context);
+        InjectionNode contextInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.CONTEXT, context);
 
         injectionNode.addAspect(VariableBuilder.class,
                 variableInjectionBuilderFactory.buildSystemServiceVariableBuilder(

@@ -26,6 +26,7 @@ import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class BroadcastReceiverInjectionNodeFactory implements InjectionNodeFacto
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(MethodDescriptor methodDescriptor) {
 
-        injectionNodeBuilderRepository.putType(android.content.BroadcastReceiver.class, injectionBindingBuilder.buildThis(android.content.BroadcastReceiver.class));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.BROADCAST_RECEIVER, injectionBindingBuilder.buildThis(AndroidLiterals.BROADCAST_RECEIVER));
 
         for (Map.Entry<ASTParameter, TypedExpression> parameterEntry : methodDescriptor.getParameters().entrySet()) {
             injectionNodeBuilderRepository.putType(parameterEntry.getKey().getASTType(), injectionBindingBuilder.buildExpression(parameterEntry.getValue()));

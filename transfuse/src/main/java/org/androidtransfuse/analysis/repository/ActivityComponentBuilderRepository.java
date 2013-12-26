@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis.repository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class ActivityComponentBuilderRepository {
             return activityGenerators.get(key);
         } else {
             //default
-            return activityGenerators.get(android.app.Activity.class.getName());
+            return activityGenerators.get(AndroidLiterals.ACTIVITY.getName());
         }
     }
 }

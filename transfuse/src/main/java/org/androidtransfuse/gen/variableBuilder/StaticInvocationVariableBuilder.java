@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Inject;
 
@@ -25,12 +26,12 @@ import javax.inject.Inject;
  */
 public class StaticInvocationVariableBuilder implements DependentVariableBuilder{
 
-    private final Class invocationTarget;
+    private final ASTType invocationTarget;
     private final String staticInvocation;
     private final JCodeModel codeModel;
 
     @Inject
-    public StaticInvocationVariableBuilder(/*@Assisted*/ Class invocationTarget,
+    public StaticInvocationVariableBuilder(/*@Assisted*/ ASTType invocationTarget,
                                            /*@Assisted*/ String staticInvocation,
                                            JCodeModel codeModel) {
         this.invocationTarget = invocationTarget;
@@ -40,6 +41,6 @@ public class StaticInvocationVariableBuilder implements DependentVariableBuilder
 
     @Override
     public JExpression buildVariable(JExpression dependencyExpression) {
-        return codeModel.ref(invocationTarget).staticInvoke(staticInvocation).arg(dependencyExpression);
+        return codeModel.ref(invocationTarget.getName()).staticInvoke(staticInvocation).arg(dependencyExpression);
     }
 }

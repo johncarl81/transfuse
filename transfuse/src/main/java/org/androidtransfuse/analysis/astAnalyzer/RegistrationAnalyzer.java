@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import android.view.View;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
@@ -25,14 +24,18 @@ import com.google.common.collect.Maps;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.RegisterListener;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.listeners.*;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 import java.util.*;
 
 /**
@@ -42,25 +45,31 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private final ImmutableMap<ASTType, RegistrationGeneratorFactory> generatorFactories;
     private final ASTClassFactory astClassFactory;
+    private final ASTElementFactory astElementFactory;
+    private final Elements elements;
     private final InjectionPointFactory injectionPointFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
 
     @Inject
     public RegistrationAnalyzer(ASTClassFactory astClassFactory,
+                                ASTElementFactory astElementFactory,
+                                Elements elements,
                                 InjectionPointFactory injectionPointFactory,
                                 ComponentBuilderFactory componentBuilderFactory) {
         this.astClassFactory = astClassFactory;
+        this.astElementFactory = astElementFactory;
+        this.elements = elements;
         this.injectionPointFactory = injectionPointFactory;
         this.componentBuilderFactory = componentBuilderFactory;
 
         Map<ASTType, String> listenerMethodMapping = new HashMap<ASTType, String>();
 
-        listenerMethodMapping.put(astType(View.OnClickListener.class), "setOnClickListener");
-        listenerMethodMapping.put(astType(View.OnLongClickListener.class), "setOnLongClickListener");
-        listenerMethodMapping.put(astType(View.OnCreateContextMenuListener.class), "setOnCreateContextMenuListener");
-        listenerMethodMapping.put(astType(View.OnKeyListener.class), "setOnKeyListener");
-        listenerMethodMapping.put(astType(View.OnTouchListener.class), "setOnTouchListener");
-        listenerMethodMapping.put(astType(View.OnFocusChangeListener.class), "setOnFocusChangeListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, "setOnCreateContextMenuListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
 
         Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 
@@ -74,6 +83,8 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         callThroughMapping.add(astType(ServiceOnStartCommand.class));
         callThroughMapping.add(astType(ServiceOnUnbind.class));
 
+        callThroughMapping.remove(null);
+
         ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorBuilder = ImmutableMap.builder();
 
         generatorBuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
@@ -84,7 +95,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     private ASTType astType(Class<?> clazz) {
-        return astClassFactory.getType(clazz);
+        //todo: merge both ast factories?
+        TypeElement typeElement = elements.getTypeElement(clazz.getCanonicalName());
+        if(typeElement == null){
+            return null;
+        }
+        return astElementFactory.getType(typeElement);
     }
 
     private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory> {
@@ -230,11 +246,10 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private InjectionNode buildViewInjectionNode(final ASTAnnotation registerAnnotation, AnalysisContext context) {
 
-        ASTType viewType = astClassFactory.getType(View.class);
         ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
         ASTAnnotation viewRegistrationAnnotation = new ASTAnnotationPropertyReplacement(registerAnnotation, atViewType);
 
-        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), viewType, context);
+        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), AndroidLiterals.VIEW, context);
     }
 
     private static final class ASTAnnotationPropertyReplacement implements ASTAnnotation {

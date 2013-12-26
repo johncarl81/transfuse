@@ -51,5 +51,5 @@ public @interface BroadcastReceiver {
 
     boolean exported() default true;
 
-    Class<? extends android.content.BroadcastReceiver>  type() default android.content.BroadcastReceiver.class;
+    Class<?> type() default Object.class;
 }

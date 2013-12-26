@@ -15,13 +15,12 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import android.content.res.ColorStateList;
-import android.graphics.Movie;
-import android.graphics.drawable.Drawable;
-import android.view.animation.Animation;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -44,34 +43,41 @@ public class ResourceExpressionBuilderFactory {
     private final JCodeModel codeModel;
     private final Map<JType, ResourceExpressionBuilderAdaptor> resourceExpressionBuilderMap = new HashMap<JType, ResourceExpressionBuilderAdaptor>();
     private final MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory;
+    private final ASTClassFactory astClassFactory;
 
     @Inject
-    public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, JCodeModel codeModel) {
+    public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, JCodeModel codeModel, ASTClassFactory astClassFactory) {
         this.codeModel = codeModel;
         this.adaptorFactory = adaptorFactory;
+        this.astClassFactory = astClassFactory;
 
         addMethodBasedResourceBuider(String.class, GET_STRING);
         addMethodBasedResourceBuider(String.class, GET_STRING);
         addMethodBasedResourceBuider(Boolean.class, GET_BOOLEAN);
         addMethodBasedResourceBuider(boolean.class, GET_BOOLEAN);
-        addMethodBasedResourceBuider(ColorStateList.class, GET_COLORSTATELIST);
+        addMethodBasedResourceBuider(AndroidLiterals.COLOR_STATE_LIST, GET_COLORSTATELIST);
         addMethodBasedResourceBuider(Integer.class, GET_INTEGER);
         addMethodBasedResourceBuider(int.class, GET_INTEGER);
-        addMethodBasedResourceBuider(Drawable.class, GET_DRAWABLE);
+        addMethodBasedResourceBuider(AndroidLiterals.GRAPHICS_DRAWABLE, GET_DRAWABLE);
         addMethodBasedResourceBuider(String[].class, GET_STRINGARRAY);
         addMethodBasedResourceBuider(Integer[].class, GET_INTARRAY);
         addMethodBasedResourceBuider(int[].class, GET_INTARRAY);
-        addMethodBasedResourceBuider(Movie.class, GET_MOVIE);
-        addAnimationResourceBuilder(Animation.class);
+        addMethodBasedResourceBuider(AndroidLiterals.GRAPHICS_MOVIE, GET_MOVIE);
+        addAnimationResourceBuilder(AndroidLiterals.ANIMATION);
+    }
+
+    private void addMethodBasedResourceBuider(ASTType type, String method) {
+        JType refClass = codeModel.ref(type.getName());
+        resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(type, method));
     }
 
     private void addMethodBasedResourceBuider(Class clazz, String method) {
         JType refClass = codeModel._ref(clazz);
-        resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(clazz, method));
+        resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(astClassFactory.getType(clazz), method));
     }
 
-    private void addAnimationResourceBuilder(Class clazz) {
-        JType refClass = codeModel._ref(clazz);
+    private void addAnimationResourceBuilder(ASTType type) {
+        JType refClass = codeModel.ref(type.getName());
         resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildAnimationResourceExpressionBuilderAdaptor());
     }
 

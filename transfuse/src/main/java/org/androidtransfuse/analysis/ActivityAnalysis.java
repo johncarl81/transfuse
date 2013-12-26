@@ -15,16 +15,13 @@
  */
 package org.androidtransfuse.analysis;
 
-import android.app.Application;
-import android.content.Context;
-import android.os.Bundle;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
@@ -36,6 +33,7 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
@@ -62,6 +60,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final AnalysisContextFactory analysisContextFactory;
     private final Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private final ASTClassFactory astClassFactory;
+    private final ASTElementFactory astElementFactory;
     private final ManifestManager manifestManager;
     private final IntentFilterFactory intentFilterBuilder;
     private final ComponentBuilderFactory componentBuilderFactory;
@@ -85,6 +84,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             AnalysisContextFactory analysisContextFactory,
                             Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
                             ASTClassFactory astClassFactory,
+                            ASTElementFactory astElementFactory,
                             ManifestManager manifestManager,
                             IntentFilterFactory intentFilterBuilder,
                             ComponentBuilderFactory componentBuilderFactory,
@@ -106,6 +106,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.analysisContextFactory = analysisContextFactory;
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.astClassFactory = astClassFactory;
+        this.astElementFactory = astElementFactory;
         this.manifestManager = manifestManager;
         this.intentFilterBuilder = intentFilterBuilder;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -127,7 +128,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass activityClassName;
         ComponentDescriptor activityDescriptor = null;
 
-        if (input.extendsFrom(astClassFactory.getType(android.app.Activity.class))) {
+        if (input.extendsFrom(AndroidLiterals.ACTIVITY)) {
             //vanilla Android activity
             PackageClass activityPackageClass = input.getPackageClass();
             activityClassName = buildPackageClass(input, activityPackageClass.getClassName());
@@ -140,7 +141,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
             TypeMirror type = getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
 
-            String activityType = type == null ? android.app.Activity.class.getName() : type.toString();
+            String activityType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.ACTIVITY.getName() : type.toString();
 
             Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
 
@@ -253,7 +254,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             windowFeatureBuilder = new NoOpWindowFeatureBuilder();
         }
 
-        ASTMethod onCreateASTMethod = getASTMethod("onCreate", Bundle.class);
+        ASTMethod onCreateASTMethod = getASTMethod("onCreate", AndroidLiterals.BUNDLE);
         activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, windowFeatureBuilder, layoutBuilder));
 
         activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
@@ -266,28 +267,24 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args) {
-        return getASTMethod(android.app.Activity.class, methodName, args);
+    private ASTMethod getASTMethod(String methodName, ASTType... args) {
+        return getASTMethod(AndroidLiterals.ACTIVITY, methodName, args);
     }
 
-    private ASTMethod getASTMethod(Class type, String methodName, Class... args) {
-        try {
-            return astClassFactory.getMethod(type.getDeclaredMethod(methodName, args));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
-        }
+    private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
+        return astElementFactory.findMethod(type, methodName, args);
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
 
-        injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
-        injectionNodeBuilderRepository.putType(Application.class, injectionBindingBuilder.dependency(Context.class).invoke(Application.class, "getApplication").build());
-        injectionNodeBuilderRepository.putType(android.app.Activity.class, injectionBindingBuilder.buildThis(android.app.Activity.class));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
+        injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
-        if (activityType != null && !activityType.toString().equals(android.app.Activity.class.getName())) {
+        if (activityType != null && !activityType.toString().equals(AndroidLiterals.ACTIVITY.getName())) {
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
             injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
         }

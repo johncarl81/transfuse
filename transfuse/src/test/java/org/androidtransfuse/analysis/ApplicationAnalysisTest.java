@@ -21,6 +21,7 @@ import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -49,6 +50,7 @@ public class ApplicationAnalysisTest {
     }
 
     @Test
+    @Ignore
     public void testAnalysis() {
         applicationAnalysis.analyze(applicationASTType);
     }

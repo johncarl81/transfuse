@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -29,16 +30,16 @@ import javax.inject.Named;
  */
 public class DependentInjectionNodeBuilder implements InjectionNodeBuilder{
 
-    private final Class dependency;
-    private final Class returnType;
+    private final ASTType dependency;
+    private final ASTType returnType;
     private final DependentVariableBuilder variableBuilder;
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final Analyzer analyzer;
 
     @Inject
-    public DependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") Class dependency,
-                                         /*@Assisted("returnType")*/ @Named("returnType") Class returnType,
+    public DependentInjectionNodeBuilder(/*@Assisted("dependency")*/ @Named("dependency") ASTType dependency,
+                                         /*@Assisted("returnType")*/ @Named("returnType") ASTType returnType,
                                          /*@Assisted*/ DependentVariableBuilder variableBuilder,
                                          InjectionPointFactory injectionPointFactory,
                                          VariableInjectionBuilderFactory variableInjectionBuilderFactory,

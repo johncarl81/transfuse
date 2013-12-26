@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.annotations.Factory;
 
 /**
@@ -23,7 +24,7 @@ import org.androidtransfuse.annotations.Factory;
 @Factory
 public interface MethodBasedResourceExpressionBuilderAdaptorFactory {
 
-    MethodBasedResourceExpressionBuilderAdaptor buildMethodBasedResourceExpressionBuilderAdaptor(Class clazz, String accessMethod);
+    MethodBasedResourceExpressionBuilderAdaptor buildMethodBasedResourceExpressionBuilderAdaptor(ASTType type, String accessMethod);
 
     AnimationResourceExpressionBuilderAdaptor buildAnimationResourceExpressionBuilderAdaptor();
 }

@@ -24,6 +24,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.View;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -56,7 +57,7 @@ public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingle
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode viewInjectionNode = injectionPointFactory.buildInjectionNode(android.view.View.class, context);
+        InjectionNode viewInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.VIEW, context);
 
         try {
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, codeModel.parseType(signature.getType().getName())));

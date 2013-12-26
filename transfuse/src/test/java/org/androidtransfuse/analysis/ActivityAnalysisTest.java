@@ -23,6 +23,7 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -49,6 +50,7 @@ public class ActivityAnalysisTest {
     }
 
     @Test
+    @Ignore
     public void testActivityAnnotation() {
         ComponentDescriptor activityDescriptor = activityAnalysis.analyze(astClassFactory.getType(MockActivityDelegate.class));
         assertEquals(TEST_NAME, activityDescriptor.getPackageClass().getClassName());

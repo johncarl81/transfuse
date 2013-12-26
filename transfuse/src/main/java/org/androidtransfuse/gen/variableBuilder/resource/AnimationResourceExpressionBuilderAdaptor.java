@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import android.app.Application;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -39,7 +39,7 @@ public class AnimationResourceExpressionBuilderAdaptor implements ResourceExpres
 
     public ResourceExpressionBuilder buildResourceExpressionBuilder(AnalysisContext context) {
 
-        InjectionNode applicationInjectionNode = injectionPointFactory.buildInjectionNode(Application.class, context);
+        InjectionNode applicationInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.APPLICATION, context);
 
         return methodBasedResourceExpressionBuilderFactory.buildAnimationResourceExpressionBuilder(applicationInjectionNode);
     }

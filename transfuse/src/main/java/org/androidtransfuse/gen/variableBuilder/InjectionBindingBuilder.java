@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
 import com.google.common.collect.ImmutableList;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
@@ -41,10 +39,14 @@ public class InjectionBindingBuilder {
     }
 
     public DependencyBindingBuilder dependency(Class clazz) {
-        return new DependencyBindingBuilder(clazz);
+        return dependency(astClassFactory.getType(clazz));
     }
 
-    public StaticInvocationBindingBuilder staticInvoke(Class<PreferenceManager> invocationTarget, Class returnType, String method) {
+    public DependencyBindingBuilder dependency(ASTType type) {
+        return new DependencyBindingBuilder(type);
+    }
+
+    public StaticInvocationBindingBuilder staticInvoke(ASTType invocationTarget, ASTType returnType, String method) {
         return new StaticInvocationBindingBuilder(invocationTarget, returnType, method);
     }
 
@@ -65,17 +67,17 @@ public class InjectionBindingBuilder {
 
     public final class StaticInvocationBindingBuilder {
 
-        private final Class invocationTarget;
-        private final Class returnType;
+        private final ASTType invocationTarget;
+        private final ASTType returnType;
         private final String method;
 
-        private StaticInvocationBindingBuilder(Class invocationTarget, Class returnType, String method) {
+        private StaticInvocationBindingBuilder(ASTType invocationTarget, ASTType returnType, String method) {
             this.invocationTarget = invocationTarget;
             this.returnType = returnType;
             this.method = method;
         }
 
-        public StaticInvocationBindingBuilderArgument dependencyArg(Class<Context> dependency) {
+        public StaticInvocationBindingBuilderArgument dependencyArg(ASTType dependency) {
             return new StaticInvocationBindingBuilderArgument(this, dependency);
         }
     }
@@ -83,9 +85,9 @@ public class InjectionBindingBuilder {
     public final class StaticInvocationBindingBuilderArgument {
 
         private final StaticInvocationBindingBuilder parent;
-        private final Class dependency;
+        private final ASTType dependency;
 
-        private StaticInvocationBindingBuilderArgument(StaticInvocationBindingBuilder parent, Class dependency) {
+        private StaticInvocationBindingBuilderArgument(StaticInvocationBindingBuilder parent, ASTType dependency) {
             this.parent = parent;
             this.dependency = dependency;
         }
@@ -100,29 +102,29 @@ public class InjectionBindingBuilder {
 
     public final class DependencyBindingBuilder {
 
-        private final Class clazz;
+        private final ASTType type;
 
-        private DependencyBindingBuilder(Class clazz) {
-            this.clazz = clazz;
+        private DependencyBindingBuilder(ASTType type) {
+            this.type = type;
         }
 
-        public DependantVariableBuilderWrapper invoke(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
+        public DependantVariableBuilderWrapper invoke(ASTType returnType, DependentVariableBuilder dependentVariableBuilder) {
             return new DependantVariableBuilderWrapper(returnType, dependentVariableBuilder);
         }
 
-        public DependencyArgumentBindingBuilder invoke(Class returnType, String methodName) {
-            return new DependencyArgumentBindingBuilder(clazz, returnType, methodName);
+        public DependencyArgumentBindingBuilder invoke(ASTType returnType, String methodName) {
+            return new DependencyArgumentBindingBuilder(type, returnType, methodName);
         }
 
         public final class DependencyArgumentBindingBuilder {
 
-            private final Class clazz;
-            private final Class returnType;
+            private final ASTType type;
+            private final ASTType returnType;
             private final String methodName;
             private final ImmutableList.Builder<JExpression> arguments = ImmutableList.builder();
 
-            private DependencyArgumentBindingBuilder(Class clazz, Class returnType, String methodName) {
-                this.clazz = clazz;
+            private DependencyArgumentBindingBuilder(ASTType type, ASTType returnType, String methodName) {
+                this.type = type;
                 this.returnType = returnType;
                 this.methodName = methodName;
             }
@@ -134,7 +136,7 @@ public class InjectionBindingBuilder {
 
             public InjectionNodeBuilder build() {
                 return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
-                        clazz,
+                        type,
                         returnType,
                         variableInjectionBuilderFactory.buildMethodCallVariableBuilder(methodName, arguments.build()));
             }
@@ -142,16 +144,16 @@ public class InjectionBindingBuilder {
 
         public final class DependantVariableBuilderWrapper {
             private final DependentVariableBuilder dependentVariableBuilder;
-            private final Class returnType;
+            private final ASTType returnType;
 
-            private DependantVariableBuilderWrapper(Class returnType, DependentVariableBuilder dependentVariableBuilder) {
+            private DependantVariableBuilderWrapper(ASTType returnType, DependentVariableBuilder dependentVariableBuilder) {
                 this.returnType = returnType;
                 this.dependentVariableBuilder = dependentVariableBuilder;
             }
 
             public InjectionNodeBuilder build() {
                 return variableInjectionBuilderFactory.buildDependentInjectionNodeBuilder(
-                        clazz,
+                        type,
                         returnType,
                         dependentVariableBuilder
                 );

@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.view.View;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
@@ -30,6 +29,7 @@ import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.model.r.ResourceIdentifier;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -63,7 +63,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                RResource rResource,
                                TypedExpressionFactory typedExpressionFactory,
                                ExpressionMatchingIterableFactory generatorFactory) {
-        super(View.class, typedExpressionFactory);
+        super(AndroidLiterals.VIEW, typedExpressionFactory);
         this.viewId = viewId;
         this.viewTag = viewTag;
         this.activityInjectionNode = activityInjectionNode;

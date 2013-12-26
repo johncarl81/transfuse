@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
@@ -24,6 +22,7 @@ import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -54,7 +53,7 @@ public class AnimationResourceExpressionBuilder implements ResourceExpressionBui
         TypedExpression applicationVar = injectionExpressionBuilder.buildVariable(context, applicationInjectionNode);
 
         //AnimationUtils.loadAnimation(application, id);
-        JExpression expression = codeModel.ref(AnimationUtils.class).staticInvoke(LOAD_ANIMATION).arg(applicationVar.getExpression()).arg(resourceIdExpr);
-        return typedExpressionFactory.build(Animation.class, expression);
+        JExpression expression = codeModel.ref(AndroidLiterals.ANIMATION_UTILS.getName()).staticInvoke(LOAD_ANIMATION).arg(applicationVar.getExpression()).arg(resourceIdExpr);
+        return typedExpressionFactory.build(AndroidLiterals.ANIMATION, expression);
     }
 }

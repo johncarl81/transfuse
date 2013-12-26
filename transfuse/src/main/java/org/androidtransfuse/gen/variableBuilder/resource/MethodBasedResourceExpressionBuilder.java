@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder.resource;
 
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -27,14 +28,14 @@ import javax.inject.Inject;
 
 public class MethodBasedResourceExpressionBuilder implements ResourceExpressionBuilder {
 
-    private final Class returnType;
+    private final ASTType returnType;
     private final String accessMethod;
     private final InjectionNode resourcesInjectionNode;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
-    public MethodBasedResourceExpressionBuilder(/*@Assisted*/ Class returnType,
+    public MethodBasedResourceExpressionBuilder(/*@Assisted*/ ASTType returnType,
                                                 /*@Assisted*/ String accessMethod,
                                                 /*@Assisted*/ InjectionNode resourcesInjectionNode,
                                                 InjectionExpressionBuilder injectionExpressionBuilder,

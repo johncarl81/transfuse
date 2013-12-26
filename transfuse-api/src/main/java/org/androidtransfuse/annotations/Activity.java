@@ -83,5 +83,5 @@ public @interface Activity {
     
     WindowSoftInputMode windowSoftInputMode() default WindowSoftInputMode.STATE_UNSPECIFIED;
 
-    Class<? extends android.app.Activity> type() default android.app.Activity.class;
+    Class<?> type() default Object.class;
 }

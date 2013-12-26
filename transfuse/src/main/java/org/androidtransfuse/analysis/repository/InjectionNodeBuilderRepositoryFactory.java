@@ -15,11 +15,6 @@
  */
 package org.androidtransfuse.analysis.repository;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
-import android.view.MenuInflater;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.JExpr;
@@ -27,6 +22,7 @@ import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -144,19 +140,19 @@ public class InjectionNodeBuilderRepositoryFactory implements ModuleRepository {
     public InjectionNodeBuilderRepository buildApplicationInjections() {
         InjectionNodeBuilderRepository builderRepository = injectionNodeBuilderRepositoryProvider.get();
         //resources
-        builderRepository.putType(Resources.class, injectionBindingBuilder.dependency(android.app.Application.class).invoke(Resources.class, "getResources").build());
+        builderRepository.putType(AndroidLiterals.RESOURCES, injectionBindingBuilder.dependency(AndroidLiterals.APPLICATION).invoke(AndroidLiterals.RESOURCES, "getResources").build());
 
         //menu inflater
-        builderRepository.putType(MenuInflater.class, injectionBindingBuilder.dependency(android.app.Activity.class).invoke(MenuInflater.class, "getMenuInflater").build());
+        builderRepository.putType(AndroidLiterals.MENU_INFLATER, injectionBindingBuilder.dependency(AndroidLiterals.ACTIVITY).invoke(AndroidLiterals.MENU_INFLATER, "getMenuInflater").build());
 
         //system services
         for (Map.Entry<String, ASTType> systemServiceEntry : SYSTEM_SERVICES.entrySet()) {
             builderRepository.putType(systemServiceEntry.getValue(),
-                    injectionBindingBuilder.dependency(Context.class).invoke(Object.class, "getSystemService").arg(JExpr.lit(systemServiceEntry.getKey())).build());
+                    injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(new ASTStringType("java.lang.Object"), "getSystemService").arg(JExpr.lit(systemServiceEntry.getKey())).build());
         }
 
-        builderRepository.putType(SharedPreferences.class,
-                injectionBindingBuilder.staticInvoke(PreferenceManager.class, SharedPreferences.class, "getDefaultSharedPreferences").dependencyArg(Context.class).build());
+        builderRepository.putType(AndroidLiterals.SHARED_PREFERENCES,
+                injectionBindingBuilder.staticInvoke(AndroidLiterals.PREFERENCE_MANAGER, AndroidLiterals.SHARED_PREFERENCES, "getDefaultSharedPreferences").dependencyArg(AndroidLiterals.CONTEXT).build());
 
 
         return builderRepository;

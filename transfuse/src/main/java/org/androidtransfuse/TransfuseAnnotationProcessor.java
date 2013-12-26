@@ -20,7 +20,6 @@ import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
-import org.androidtransfuse.config.ConfigurationScope;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.manifest.Manifest;

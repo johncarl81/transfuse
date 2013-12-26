@@ -242,4 +242,37 @@ public class ASTElementFactory {
 
         return annotationBuilder.build();
     }
+
+    public ASTMethod findMethod(ASTType type, String methodName, ASTType... args) {
+        TypeElement typeElement = elements.getTypeElement(type.getName());
+
+        ASTType updatedType = getType(typeElement);
+
+        for (ASTMethod astMethod : updatedType.getMethods()) {
+            if(astMethod.getName().equals(methodName) && parametersMatch(astMethod.getParameters(), args)){
+                return astMethod;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean parametersMatch(List<ASTParameter> parameters, ASTType[] args) {
+
+        if(args == null && !parameters.isEmpty()){
+            return false;
+        }
+
+        if(parameters.size() != args.length){
+            return false;
+        }
+
+        for(int i = 0; i < parameters.size(); i++){
+            if(!parameters.get(i).getASTType().equals(args[i])){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

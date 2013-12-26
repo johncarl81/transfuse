@@ -17,9 +17,7 @@ package org.androidtransfuse.config;
 
 import com.sun.codemodel.JCodeModel;
 import com.thoughtworks.xstream.XStream;
-import org.androidtransfuse.NoOpElements;
-import org.androidtransfuse.NoOpFiler;
-import org.androidtransfuse.NoOpMessager;
+import org.androidtransfuse.*;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;

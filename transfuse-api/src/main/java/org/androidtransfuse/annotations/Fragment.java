@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Fragment {
 
-    Class<? extends android.support.v4.app.Fragment> type() default android.support.v4.app.Fragment.class;
+    Class<?> type() default Object.class;
 
     String name() default "";
 }

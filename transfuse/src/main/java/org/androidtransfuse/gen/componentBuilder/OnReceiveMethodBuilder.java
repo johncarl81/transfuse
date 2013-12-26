@@ -15,18 +15,17 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import android.content.Context;
-import android.content.Intent;
 import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -38,34 +37,32 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final ASTClassFactory astClassFactory;
+    private final ASTElementFactory astElementFactory;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public OnReceiveMethodBuilder(JCodeModel codeModel, ClassGenerationUtil generationUtil, ASTClassFactory astClassFactory, UniqueVariableNamer namer) {
+    public OnReceiveMethodBuilder(JCodeModel codeModel, ClassGenerationUtil generationUtil, ASTClassFactory astClassFactory, ASTElementFactory astElementFactory, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.astClassFactory = astClassFactory;
+        this.astElementFactory = astElementFactory;
         this.namer = namer;
     }
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        try {
-            JMethod onReceiveMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onReceive");
-            onReceiveMethod.annotate(Override.class);
-            ASTMethod onReceiveASTMethod = astClassFactory.getMethod(android.content.BroadcastReceiver.class.getDeclaredMethod("onReceive", Context.class, Intent.class));
+        JMethod onReceiveMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID, "onReceive");
+        onReceiveMethod.annotate(Override.class);
+        ASTMethod onReceiveASTMethod = astElementFactory.findMethod(AndroidLiterals.BROADCAST_RECEIVER, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT);
 
-            MethodDescriptorBuilder methodDescriptor = new MethodDescriptorBuilder(onReceiveMethod, onReceiveASTMethod);
+        MethodDescriptorBuilder methodDescriptor = new MethodDescriptorBuilder(onReceiveMethod, onReceiveASTMethod);
 
-            for (ASTParameter astParameter : onReceiveASTMethod.getParameters()) {
-                JVar param = onReceiveMethod.param(generationUtil.ref(astParameter.getASTType()), namer.generateName(astParameter.getASTType()));
-                methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
-            }
-
-            return methodDescriptor.build();
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while looking up onReceive method", e);
+        for (ASTParameter astParameter : onReceiveASTMethod.getParameters()) {
+            JVar param = onReceiveMethod.param(generationUtil.ref(astParameter.getASTType()), namer.generateName(astParameter.getASTType()));
+            methodDescriptor.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
         }
+
+        return methodDescriptor.build();
     }
 
     @Override

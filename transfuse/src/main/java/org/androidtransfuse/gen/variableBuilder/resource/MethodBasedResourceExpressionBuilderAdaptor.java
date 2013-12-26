@@ -15,10 +15,11 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import android.content.res.Resources;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -27,13 +28,13 @@ import javax.inject.Inject;
  */
 public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpressionBuilderAdaptor {
 
-    private final Class returnType;
+    private final ASTType returnType;
     private final String accessMethod;
     private final MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory;
     private final InjectionPointFactory injectionPointFactory;
 
     @Inject
-    public MethodBasedResourceExpressionBuilderAdaptor(/*@Assisted*/ Class returnType,
+    public MethodBasedResourceExpressionBuilderAdaptor(/*@Assisted*/ ASTType returnType,
                                                        /*@Assisted*/ String accessMethod,
                                                        MethodBasedResourceExpressionBuilderFactory methodBasedResourceExpressionBuilderFactory,
                                                        InjectionPointFactory injectionPointFactory) {
@@ -45,7 +46,7 @@ public class MethodBasedResourceExpressionBuilderAdaptor implements ResourceExpr
 
     public ResourceExpressionBuilder buildResourceExpressionBuilder(AnalysisContext context) {
 
-        InjectionNode resourceInjectionNode = injectionPointFactory.buildInjectionNode(Resources.class, context);
+        InjectionNode resourceInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.RESOURCES, context);
 
         return methodBasedResourceExpressionBuilderFactory.buildMethodBasedResourceExpressionBuilder(returnType, accessMethod, resourceInjectionNode);
     }

@@ -3,50 +3,39 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.5'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.1'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 apply plugin: 'android'
+apply plugin: 'android-apt'
 
 repositories {
     mavenCentral()
 }
 
-configurations {
-    compile
-    transfuse.extendsFrom(compile)
-}
-
 dependencies {
-    compile 'com.google.android:support-v4:r7'
-    transfuse 'org.androidtransfuse:transfuse:0.2.2'
-    transfuse 'com.google.android:android:2.1_r1'
-    transfuse 'com.google.android:support-v4:r7'
-    transfuse 'org.parceler:parceler:0.1.1'
-    compile 'org.androidtransfuse:transfuse-api:0.2.2'
-    compile 'org.parceler:parceler-api:0.1.1'
+    apt 'org.androidtransfuse:transfuse:0.2.6'
+    compile 'org.androidtransfuse:transfuse-api:0.2.6'
+    apt 'org.parceler:parceler:0.2.3'
+    compile 'org.parceler:parceler-api:0.2.3'
 }
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "17.0.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.0.0"
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 16
+        targetSdkVersion 19
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
     }
 
     sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
     }
-}
-
-android.applicationVariants.all { variant ->
-
-    aptOutput = file("${project.buildDir}/source/apt_generated/${variant.dirName}")
-    aptOutput.mkdirs()
-    variant.javaCompile.options.compilerArgs += [
-            '-processorpath', configurations.transfuse.asPath,
-            '-s', aptOutput
-    ]
 }

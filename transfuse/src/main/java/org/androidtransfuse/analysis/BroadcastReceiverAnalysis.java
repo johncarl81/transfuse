@@ -26,6 +26,7 @@ import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
@@ -78,7 +79,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
         ComponentDescriptor receiverDescriptor = null;
 
-        if (astType.extendsFrom(astClassFactory.getType(android.content.BroadcastReceiver.class))) {
+        if (astType.extendsFrom(AndroidLiterals.BROADCAST_RECEIVER)) {
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
             receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
@@ -105,10 +106,10 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     }
 
     private String buildReceiverType(TypeMirror type) {
-        if (type != null) {
+        if (type != null && !type.toString().equals("java.lang.Object")) {
             return type.toString();
         } else {
-            return android.content.BroadcastReceiver.class.getName();
+            return AndroidLiterals.BROADCAST_RECEIVER.getName();
         }
     }
 

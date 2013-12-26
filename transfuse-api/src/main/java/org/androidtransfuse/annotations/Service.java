@@ -50,5 +50,5 @@ public @interface Service {
 
     String process() default "";
 
-    Class<? extends android.app.Service> type() default android.app.Service.class;
+    Class<?> type() default Object.class;
 }

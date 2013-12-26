@@ -15,15 +15,13 @@
  */
 package org.androidtransfuse.analysis;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
@@ -33,6 +31,7 @@ import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -51,6 +50,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTClassFactory astClassFactory;
+    private final ASTElementFactory astElementFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ManifestManager manifestManager;
     private final InjectionBindingBuilder injectionBindingBuilder;
@@ -63,6 +63,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
+                               ASTElementFactory astElementFactory,
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager,
                                InjectionBindingBuilder injectionBindingBuilder,
@@ -73,6 +74,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
+        this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.manifestManager = manifestManager;
         this.injectionBindingBuilder = injectionBindingBuilder;
@@ -88,7 +90,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass applicationClassName;
         ComponentDescriptor applicationDescriptor = null;
 
-        if (astType.extendsFrom(astClassFactory.getType(android.app.Application.class))) {
+        if (astType.extendsFrom(AndroidLiterals.APPLICATION)) {
             //vanilla Android Application
             PackageClass activityPackageClass = astType.getPackageClass();
             applicationClassName = buildPackageClass(astType, activityPackageClass.getClassName());
@@ -96,7 +98,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
             applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
 
-            applicationDescriptor = new ComponentDescriptor(android.app.Application.class.getName(), applicationClassName);
+            applicationDescriptor = new ComponentDescriptor(AndroidLiterals.APPLICATION.getName(), applicationClassName);
 
             //analyze delegate
             AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
@@ -135,7 +137,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         //onTerminate
         applicationDescriptor.addGenerators(buildEventMethod(OnTerminate.class, "onTerminate"));
         //onConfigurationChanged
-        ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", Configuration.class);
+        ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION);
         applicationDescriptor.addGenerators(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class),
                         componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
@@ -153,19 +155,15 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
-    private ASTMethod getASTMethod(String methodName, Class... args) {
-        try {
-            return astClassFactory.getMethod(android.app.Application.class.getDeclaredMethod(methodName, args));
-        } catch (NoSuchMethodException e) {
-            throw new TransfuseAnalysisException("NoSuchMethodException while trying to reference method " + methodName, e);
-        }
+    private ASTMethod getASTMethod(String methodName, ASTType... args) {
+        return astElementFactory.findMethod(AndroidLiterals.APPLICATION, methodName, args);
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap() {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
 
-        injectionNodeBuilderRepository.putType(Context.class, injectionBindingBuilder.buildThis(Context.class));
-        injectionNodeBuilderRepository.putType(android.app.Application.class, injectionBindingBuilder.buildThis((android.app.Application.class)));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.buildThis((AndroidLiterals.APPLICATION)));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildApplicationInjections());

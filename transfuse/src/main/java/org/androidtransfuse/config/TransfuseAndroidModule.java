@@ -18,6 +18,8 @@ package org.androidtransfuse.config;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.thoughtworks.xstream.XStream;
+import org.androidtransfuse.CodeGenerationScope;
+import org.androidtransfuse.ConfigurationScope;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;

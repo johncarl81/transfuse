@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen.variableBuilder.resource;
+package org.androidtransfuse;
 
-import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.annotations.Factory;
-import org.androidtransfuse.model.InjectionNode;
+import javax.inject.Scope;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author John Ericksen
  */
-@Factory
-public interface MethodBasedResourceExpressionBuilderFactory {
-
-    MethodBasedResourceExpressionBuilder buildMethodBasedResourceExpressionBuilder(ASTType returnType, String accessMethod, InjectionNode resourcesNode);
-
-    AnimationResourceExpressionBuilder buildAnimationResourceExpressionBuilder(InjectionNode applicationNode);
-}
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Scope
+public @interface ConfigurationScope {}

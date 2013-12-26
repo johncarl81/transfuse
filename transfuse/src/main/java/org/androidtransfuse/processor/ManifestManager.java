@@ -19,6 +19,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.model.manifest.*;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.inject.Inject;
@@ -138,7 +139,7 @@ public class ManifestManager {
 
         if (application == null) {
             localApplication = new Application();
-            localApplication.setName(android.app.Application.class.getName());
+            localApplication.setName(AndroidLiterals.APPLICATION.getName());
         }
 
         updateMergeTags(Application.class, localApplication);

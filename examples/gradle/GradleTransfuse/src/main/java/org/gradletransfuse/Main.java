@@ -15,6 +15,8 @@
  */
 package org.gradletransfuse;
 
+import org.androidtransfuse.annotations.*;
+
 @Activity
 @Layout(R.layout.activity_main)
 @IntentFilter({

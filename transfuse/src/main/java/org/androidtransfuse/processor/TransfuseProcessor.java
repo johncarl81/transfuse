@@ -20,6 +20,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.transaction.TransactionProcessorBuilder;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -44,7 +45,7 @@ public class TransfuseProcessor {
     }
 
     public void generateEmptyApplication() {
-        manifestBuilder.setupManifestApplication(android.app.Application.class.getName());
+        manifestBuilder.setupManifestApplication(AndroidLiterals.APPLICATION.getName());
     }
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {

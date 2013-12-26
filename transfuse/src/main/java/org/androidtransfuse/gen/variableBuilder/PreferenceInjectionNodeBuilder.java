@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import android.content.SharedPreferences;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -23,6 +22,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.Preference;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
@@ -51,7 +51,7 @@ public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAn
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(SharedPreferences.class, context);
+        InjectionNode preferenceManagerInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.SHARED_PREFERENCES, context);
 
         injectionNode.addAspect(VariableBuilder.class,
                 variableInjectionBuilderFactory.buildPreferenceVariableBuilder(signature.getType(), preferenceName, preferenceManagerInjectionNode));
