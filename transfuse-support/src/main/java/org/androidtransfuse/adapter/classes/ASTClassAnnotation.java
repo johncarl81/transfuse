@@ -51,7 +51,7 @@ public class ASTClassAnnotation implements ASTAnnotation {
     public ImmutableSet<String> getPropertyNames(){
         return FluentIterable.from(Arrays.asList(annotation.annotationType().getDeclaredMethods()))
                 .transform(new MethodNameExtractor())
-                .toImmutableSet();
+                .toSet();
     }
 
     private static final class MethodNameExtractor implements Function<Method, String> {

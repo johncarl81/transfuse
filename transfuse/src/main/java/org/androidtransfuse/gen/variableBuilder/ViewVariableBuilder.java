@@ -19,7 +19,6 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
-import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.FieldInjectionPoint;
@@ -51,8 +50,8 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final ExpressionMatchingIterableFactory generatorFactory;
 
     @Inject
-    public ViewVariableBuilder(/*@Assisted*/ @Nullable Integer viewId,
-                               /*@Assisted*/ @Nullable String viewTag,
+    public ViewVariableBuilder(/*@Assisted*/ /*@Nullable*/ Integer viewId,
+                               /*@Assisted*/ /*@Nullable*/ String viewTag,
                                /*@Assisted*/ InjectionNode activityInjectionNode,
                                /*@Assisted*/ JType viewType,
                                InjectionExpressionBuilder injectionExpressionBuilder,

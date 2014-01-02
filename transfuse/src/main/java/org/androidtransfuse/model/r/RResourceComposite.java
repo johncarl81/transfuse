@@ -32,7 +32,7 @@ public class RResourceComposite implements RResource {
         this.resources = FluentIterable
                 .from(Arrays.asList(resources))
                 .filter(Predicates.notNull())
-                .toImmutableList();
+                .toList();
     }
 
     @Override

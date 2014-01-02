@@ -100,7 +100,7 @@ public class ASTElementFactory {
 
         ImmutableSet<ASTType> interfaces = FluentIterable.from(typeElement.getInterfaces())
                 .transform(astTypeBuilderVisitor)
-                .toImmutableSet();
+                .toSet();
 
         ImmutableSet.Builder<ASTAnnotation> annotations = ImmutableSet.builder();
 
@@ -140,7 +140,7 @@ public class ASTElementFactory {
                 .from(enclosedElements)
                 .transform(astElementConverterFactory.buildASTElementConverter(astType))
                 .filter(Predicates.notNull())
-                .toImmutableList();
+                .toList();
     }
 
     /**
@@ -188,7 +188,7 @@ public class ASTElementFactory {
     private ImmutableSet<ASTType> buildASTElementTypes(List<? extends TypeMirror> mirrorTypes) {
         return FluentIterable.from(mirrorTypes)
                 .transform(astTypeBuilderVisitor)
-                .toImmutableSet();
+                .toSet();
     }
 
     /**

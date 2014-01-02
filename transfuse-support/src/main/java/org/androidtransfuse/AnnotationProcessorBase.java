@@ -41,7 +41,7 @@ public abstract class AnnotationProcessorBase extends AbstractProcessor {
         return FluentIterable
                 .from(Arrays.asList(supportedAnnotations))
                 .transform(new ClassToNameTransform())
-                .toImmutableSet();
+                .toSet();
     }
 
     private static class ClassToNameTransform implements Function<Class, String> {

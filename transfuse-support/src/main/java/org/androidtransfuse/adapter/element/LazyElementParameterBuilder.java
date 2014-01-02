@@ -49,6 +49,6 @@ public class LazyElementParameterBuilder implements LazyTypeParameterBuilder {
     public ImmutableSet<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(declaredType.getTypeArguments())
                 .transform(astTypeBuilderVisitor)
-                .toImmutableSet();
+                .toSet();
     }
 }

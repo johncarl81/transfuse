@@ -18,8 +18,6 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.config.Nullable;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.MethodDescriptor;
@@ -39,23 +37,20 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     private final ClassGenerationUtil generationUtil;
     private final ASTMethod onCreateViewMethod;
     private final UniqueVariableNamer namer;
-    private final ASTClassFactory astClassFactory;
     private final Integer layout;
     private final RResourceReferenceBuilder rResourceReferenceBuilder;
 
     @Inject
-    public FragmentOnCreateViewMethodBuilder(/*@Assisted*/ @Nullable Integer layout,
+    public FragmentOnCreateViewMethodBuilder(/*@Assisted*/ /*@Nullable*/ Integer layout,
                                              /*@Assisted*/ ASTMethod onCreateViewMethod,
                                              JCodeModel codeModel,
                                              ClassGenerationUtil generationUtil,
                                              UniqueVariableNamer namer,
-                                             ASTClassFactory astClassFactory,
                                              RResourceReferenceBuilder rResourceReferenceBuilder) {
         this.codeModel = codeModel;
         this.onCreateViewMethod = onCreateViewMethod;
         this.generationUtil = generationUtil;
         this.namer = namer;
-        this.astClassFactory = astClassFactory;
         this.layout = layout;
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
     }
