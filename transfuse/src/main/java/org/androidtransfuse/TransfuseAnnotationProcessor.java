@@ -49,6 +49,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.collect.Collections2.transform;
 
@@ -114,7 +115,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
-        File manifestFile = manifestLocator.findManifest();
+        File manifestFile = manifestLocator.findManifest(processingEnv);
         Manifest manifest = manifestParser.readManifest(manifestFile);
 
         RResourceComposite r = new RResourceComposite(
@@ -187,5 +188,14 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
+    }
+
+    @Override
+    public Set<String> getSupportedOptions() {
+        TreeSet<String> set = new TreeSet<String>();
+
+        set.add(ManifestLocator.OPTION_ANDROID_MANIFEST_FILE);
+
+        return set;
     }
 }

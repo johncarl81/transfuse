@@ -18,6 +18,7 @@ package org.androidtransfuse.util;
 import org.androidtransfuse.TransfuseAnalysisException;
 
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.File;
@@ -48,6 +49,7 @@ import java.net.URISyntaxException;
  * @author John Ericksen
  */
 public class ManifestLocator {
+	public static final String OPTION_ANDROID_MANIFEST_FILE = "androidManifestFile";
 
     private static final int MAX_PARENTS_FROM_SOURCE_FOLDER = 10;
 
@@ -58,6 +60,41 @@ public class ManifestLocator {
     public ManifestLocator(Filer filer, Logger logger) {
         this.filer = filer;
         this.logger = logger;
+    }
+
+    public File findManifest(ProcessingEnvironment processingEnv) {
+        String androidManifestFilePath = processingEnv.getOptions().get(OPTION_ANDROID_MANIFEST_FILE);
+
+        File androidManifestFile = null;
+
+        if (androidManifestFilePath != null) {
+            if (androidManifestFilePath.startsWith("file:")) {
+                if (!androidManifestFilePath.startsWith("file://")) {
+                    androidManifestFilePath = "file://" + androidManifestFilePath.substring("file:".length());
+                }
+            } else {
+                androidManifestFilePath = "file://" + androidManifestFilePath;
+            }
+
+            try {
+                URI cleanURI = new URI(androidManifestFilePath);
+
+                File file = new File(cleanURI);
+
+                if (file.exists()) {
+                    androidManifestFile = file;
+                    logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
+                }
+            } catch (URISyntaxException e) {
+                logger.error("URISyntaxException while trying to load manifest", e);
+                throw new TransfuseAnalysisException("URISyntaxException while trying to load manifest", e);
+            }
+        } else {
+            // Backwards compatibility
+            androidManifestFile = findManifest();
+        }
+
+        return androidManifestFile;
     }
 
     public File findManifest() {
