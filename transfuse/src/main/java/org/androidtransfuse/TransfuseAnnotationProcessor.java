@@ -49,6 +49,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.collect.Collections2.transform;
 
@@ -187,5 +188,10 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );
+    }
+
+    @Override
+    public Set<String> getSupportedOptions() {
+        return Collections.singleton(ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
     }
 }

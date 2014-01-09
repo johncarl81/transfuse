@@ -16,14 +16,18 @@
 package org.androidtransfuse.util;
 
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.tools.JavaFileObject;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 /**
  * Copied respectfully from the AndroidAnnotations project:
@@ -48,21 +52,39 @@ import java.net.URISyntaxException;
  * @author John Ericksen
  */
 public class ManifestLocator {
+	public static final String ANDROID_MANIFEST_FILE_OPTION = "androidManifestFile";
 
     private static final int MAX_PARENTS_FROM_SOURCE_FOLDER = 10;
 
+    private final Map<String,String> options;
     private final Filer filer;
     private final Logger logger;
 
     @Inject
-    public ManifestLocator(Filer filer, Logger logger) {
+    public ManifestLocator(Filer filer, Logger logger, @Named(TransfuseAndroidModule.PROCESSING_ENVIRONMENT_OPTIONS) Map<String,String> options) {
         this.filer = filer;
         this.logger = logger;
+        this.options = options;
     }
 
     public File findManifest() {
+        String androidManifestFilePath = options.get(ANDROID_MANIFEST_FILE_OPTION);
+
+        File androidManifestFile = null;
+
         try {
-            return findManifestFileThrowing();
+            if (androidManifestFilePath != null) {
+                androidManifestFile = new File(androidManifestFilePath);
+
+                if (!androidManifestFile.exists()) {
+                    throw new IllegalStateException("Could not find the AndroidManifest.xml file specified by option " + ANDROID_MANIFEST_FILE_OPTION + " [" + androidManifestFilePath + "]");
+                } else {
+                    logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
+                }
+            } else {
+                // Backwards compatibility
+                androidManifestFile = findManifestFileThrowing();
+            }
         } catch (URISyntaxException e) {
             logger.error("URISyntaxException while trying to load manifest", e);
             throw new TransfuseAnalysisException("URISyntaxException while trying to load manifest", e);
@@ -70,7 +92,10 @@ public class ManifestLocator {
             logger.error("IOException while trying to load manifest", e);
             throw new TransfuseAnalysisException("IOException while trying to load manifest", e);
         }
+
+        return androidManifestFile;
     }
+
 
     /**
      * We use a dirty trick to find the AndroidManifest.xml file, since it's not
