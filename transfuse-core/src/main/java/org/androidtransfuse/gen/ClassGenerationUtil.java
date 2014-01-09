@@ -60,7 +60,13 @@ public class ClassGenerationUtil {
         if(astType.isArray()){
             return ref(typeName.substring(0, typeName.length() - 2)).array();
         }
-        return ref(typeName);
+        JClass reference = ref(typeName);
+
+        for (ASTType genericParam : astType.getGenericParameters()) {
+            reference.narrow(ref(genericParam));
+        }
+
+        return reference;
     }
 
     public JClass ref(String typeName){

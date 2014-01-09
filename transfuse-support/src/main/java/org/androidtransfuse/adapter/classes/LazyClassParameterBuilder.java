@@ -19,6 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTWildcardType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
@@ -56,32 +57,29 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
 
     @Override
     public ASTType apply(Type input) {
-        Class clazz = getClass(input);
-
-        if (clazz != null) {
-            return astClassFactory.getType(clazz);
-        }
-
-        return null;
+        return getClass(input);
     }
 
-    private Class<?> getClass(Type type) {
+    private ASTType getClass(Type type) {
         if (type instanceof Class) {
-            return (Class) type;
+            return astClassFactory.getType((Class) type);
         } else if (type instanceof ParameterizedType) {
             return getClass(((ParameterizedType) type).getRawType());
         } else if (type instanceof GenericArrayType) {
-            Type componentType = ((GenericArrayType) type).getGenericComponentType();
-            Class<?> componentClass = getClass(componentType);
-            if (componentClass != null) {
-                return Array.newInstance(componentClass, 0).getClass();
-            } else {
-                return null;
-            }
+            return getClass(((GenericArrayType) type).getGenericComponentType());
         } else if(type instanceof TypeVariable){
             return getClass(((TypeVariable) type).getBounds()[0]);
         } else if(type instanceof WildcardType){
-            return getClass(((WildcardType) type).getUpperBounds()[0]);
+            WildcardType wildcardType = (WildcardType)type;
+            ASTType extendsBound = null;
+            ASTType superBound = null;
+            if(wildcardType.getUpperBounds().length > 0){
+                superBound = getClass(wildcardType.getUpperBounds()[0]);
+            }
+            if(wildcardType.getLowerBounds().length > 0){
+                extendsBound = getClass(wildcardType.getLowerBounds()[0]);
+            }
+            return new ASTWildcardType(superBound, extendsBound);
         } else {
             return null;
         }

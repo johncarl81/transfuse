@@ -72,7 +72,15 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitWildcard(WildcardType wildcardType, Void v) {
-        throw new TransfuseAdapterException("Encountered Wildcard Type, unable to represent in graph");
+        ASTType extendsBound = null;
+        ASTType superBound = null;
+        if(wildcardType.getSuperBound() != null){
+            superBound = wildcardType.getSuperBound().accept(this, null);
+        }
+        if(wildcardType.getExtendsBound() != null){
+            extendsBound = wildcardType.getExtendsBound().accept(this, null);
+        }
+        return new ASTWildcardType(superBound, extendsBound);
     }
 
     @Override
