@@ -85,6 +85,7 @@ public class TransfuseAndroidModule {
     public static final String SCOPES_UTIL_TRANSACTION_WORKER = "scopesUtilTransactionWorker";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
+    public static final String PROCESSING_ENVIRONMENT_OPTIONS = "processingEnvironmentOptions";
 
     @Provides
     @CodeGenerationScope
@@ -114,6 +115,13 @@ public class TransfuseAndroidModule {
     @Singleton
     public Filer getFiler(ProcessingEnvironment processingEnvironment){
         return new SynchronizedFiler(processingEnvironment.getFiler());
+    }
+
+    @Provides
+    @Singleton
+    @Named(PROCESSING_ENVIRONMENT_OPTIONS)
+    public Map<String,String> getOptions(ProcessingEnvironment processingEnvironment){
+        return processingEnvironment.getOptions();
     }
 
     @Provides

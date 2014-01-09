@@ -115,7 +115,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
-        File manifestFile = manifestLocator.findManifest(processingEnv);
+        File manifestFile = manifestLocator.findManifest();
         Manifest manifest = manifestParser.readManifest(manifestFile);
 
         RResourceComposite r = new RResourceComposite(
@@ -192,10 +192,6 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Override
     public Set<String> getSupportedOptions() {
-        TreeSet<String> set = new TreeSet<String>();
-
-        set.add(ManifestLocator.OPTION_ANDROID_MANIFEST_FILE);
-
-        return set;
+        return Collections.singleton(ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
     }
 }
