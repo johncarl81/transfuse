@@ -15,8 +15,7 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +27,9 @@ import java.util.List;
  */
 public class CompatibleScreens {
 
-    @XStreamImplicit(itemFieldName = "screen")
     private List<Screen> screens = new ArrayList<Screen>();
 
+    @XmlElement(name = "screen")
     public List<Screen> getScreens() {
         return screens;
     }

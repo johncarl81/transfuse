@@ -15,12 +15,14 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.annotations.ProtectionLevel;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * attributes:
@@ -36,26 +38,15 @@ import org.androidtransfuse.processor.Merge;
  */
 public class Permission extends Mergeable implements Identified {
 
-    @XStreamAlias("android:description")
-    @XStreamAsAttribute
     private String description;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:permissionGroup")
-    @XStreamAsAttribute
     private String permissionGroup;
-    @XStreamAlias("android:protectionLevel")
-    @XStreamAsAttribute
     private ProtectionLevel protectionLevel;
 
     @Merge("d")
+    @XmlAttribute(name = "description", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getDescription() {
         return description;
     }
@@ -65,6 +56,7 @@ public class Permission extends Mergeable implements Identified {
     }
 
     @Merge("i")
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -74,6 +66,7 @@ public class Permission extends Mergeable implements Identified {
     }
 
     @Merge("l")
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -84,6 +77,7 @@ public class Permission extends Mergeable implements Identified {
 
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -93,6 +87,7 @@ public class Permission extends Mergeable implements Identified {
     }
 
     @Merge("g")
+    @XmlAttribute(name = "permissionGroup", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermissionGroup() {
         return permissionGroup;
     }
@@ -102,6 +97,8 @@ public class Permission extends Mergeable implements Identified {
     }
 
     @Merge("p")
+    @XmlAttribute(name = "protectionLevel", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ProtectionLevelConverter.class)
     public ProtectionLevel getProtectionLevel() {
         return protectionLevel;
     }
@@ -110,6 +107,7 @@ public class Permission extends Mergeable implements Identified {
         this.protectionLevel = protectionLevel;
     }
 
+    @XmlTransient
     public String getIdentifier(){
         return name;
     }

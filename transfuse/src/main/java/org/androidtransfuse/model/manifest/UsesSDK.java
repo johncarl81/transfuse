@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * attributes:
@@ -30,17 +30,12 @@ import org.androidtransfuse.processor.Merge;
  */
 public class UsesSDK extends Mergeable {
 
-    @XStreamAlias("android:minSdkVersion")
-    @XStreamAsAttribute
     private Integer minSdkVersion;
-    @XStreamAlias("android:targetSdkVersion")
-    @XStreamAsAttribute
     private Integer targetSdkVersion;
-    @XStreamAlias("android:maxSdkVersion")
-    @XStreamAsAttribute
     private Integer maxSdkVersion;
 
     @Merge("m")
+    @XmlAttribute(name = "minSdkVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getMinSdkVersion() {
         return minSdkVersion;
     }
@@ -50,6 +45,7 @@ public class UsesSDK extends Mergeable {
     }
 
     @Merge("t")
+    @XmlAttribute(name = "targetSdkVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getTargetSdkVersion() {
         return targetSdkVersion;
     }
@@ -59,6 +55,7 @@ public class UsesSDK extends Mergeable {
     }
 
     @Merge("x")
+    @XmlAttribute(name = "maxSdkVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getMaxSdkVersion() {
         return maxSdkVersion;
     }

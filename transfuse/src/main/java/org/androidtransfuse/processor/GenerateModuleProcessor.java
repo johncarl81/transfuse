@@ -80,8 +80,6 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
 
             mergedManifest.updatePackages();
 
-            mergedManifest.updateNamespace();
-
             return mergedManifest;
         } catch (MergerException e) {
             logger.error("InstantiationException while merging manifest", e);

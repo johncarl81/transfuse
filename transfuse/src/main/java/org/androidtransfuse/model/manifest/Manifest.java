@@ -15,12 +15,14 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.MergeCollection;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,59 +51,48 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-@XStreamAlias("manifest")
+@XmlRootElement(name = "manifest", namespace = ManifestNamespaceMapper.DEFAULT_PREFIX)
+@XmlType(propOrder = {
+        "applicationPackage",
+        "sharedUserId",
+        "sharedUserLabel",
+        "versionCode",
+        "versionName",
+        "installLocation",
+        "usesPermissions",
+        "usesSDKs",
+        "applications",
+        "instrumentations",
+        "permissions",
+        "permissionGroups",
+        "permissionTrees",
+        "supportsScreens",
+        "usesFeatures",
+        "usesConfigurations",
+        "compatibleScreens"
+        }
+)
 public class Manifest extends Mergeable {
 
-    public static final String NAMESPACE = "http://androidtransfuse.org";
-
-    @XStreamAlias("xmlns:t")
-    @XStreamAsAttribute
-    private String transfuseNamespace;
-    @XStreamAlias("xmlns:android")
-    @XStreamAsAttribute
-    private final String namespace = "http://schemas.android.com/apk/res/android";
-    @XStreamAlias("package")
-    @XStreamAsAttribute
     private String applicationPackage;
-    @XStreamAlias("android:sharedUserId")
-    @XStreamAsAttribute
     private String sharedUserId;
-    @XStreamAlias("android:sharedUserLabel")
-    @XStreamAsAttribute
     private String sharedUserLabel;
-    @XStreamAlias("android:versionCode")
-    @XStreamAsAttribute
     private Integer versionCode;
-    @XStreamAlias("android:versionName")
-    @XStreamAsAttribute
     private String versionName;
-    @XStreamAlias("android:installLocation")
-    @XStreamAsAttribute
     private InstallLocation installLocation;
-
-    @XStreamImplicit(itemFieldName = "uses-permission")
     private List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
-    @XStreamImplicit(itemFieldName = "uses-sdk")
     private List<UsesSDK> usesSDKs = new ArrayList<UsesSDK>();
-    @XStreamImplicit(itemFieldName = "application")
     private List<Application> applications = new ArrayList<Application>();
-    @XStreamImplicit(itemFieldName = "instrumentation")
     private List<Instrumentation> instrumentations = new ArrayList<Instrumentation>();
-    @XStreamImplicit(itemFieldName = "permission")
     private List<Permission> permissions = new ArrayList<Permission>();
-    @XStreamImplicit(itemFieldName = "permission-group")
     private List<PermissionGroup> permissionGroups = new ArrayList<PermissionGroup>();
-    @XStreamImplicit(itemFieldName = "permission-tree")
     private List<PermissionTree> permissionTrees = new ArrayList<PermissionTree>();
-    @XStreamImplicit(itemFieldName = "supports-screens")
     private List<SupportsScreens> supportsScreens = new ArrayList<SupportsScreens>();
-    @XStreamImplicit(itemFieldName = "uses-feature")
     private List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
-    @XStreamImplicit(itemFieldName = "uses-configuration")
     private List<UsesConfiguration> usesConfigurations = new ArrayList<UsesConfiguration>();
-    @XStreamImplicit(itemFieldName = "compatible-screens")
     private List<CompatibleScreens> compatibleScreens = new ArrayList<CompatibleScreens>();
 
+    @XmlAttribute(name = "package", namespace = ManifestNamespaceMapper.DEFAULT_PREFIX)
     public String getApplicationPackage() {
         return applicationPackage;
     }
@@ -110,10 +101,7 @@ public class Manifest extends Mergeable {
         this.applicationPackage = applicationPackage;
     }
 
-    public void updateNamespace(){
-        transfuseNamespace = NAMESPACE;
-    }
-
+    @XmlAttribute(name = "sharedUserId", namespace = ManifestNamespaceMapper.ANDROID_PREFIX)
     public String getSharedUserId() {
         return sharedUserId;
     }
@@ -122,6 +110,7 @@ public class Manifest extends Mergeable {
         this.sharedUserId = sharedUserId;
     }
 
+    @XmlAttribute(name = "sharedUserLabel", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getSharedUserLabel() {
         return sharedUserLabel;
     }
@@ -130,6 +119,7 @@ public class Manifest extends Mergeable {
         this.sharedUserLabel = sharedUserLabel;
     }
 
+    @XmlAttribute(name = "versionCode", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getVersionCode() {
         return versionCode;
     }
@@ -138,6 +128,7 @@ public class Manifest extends Mergeable {
         this.versionCode = versionCode;
     }
 
+    @XmlAttribute(name = "versionName", namespace = ManifestNamespaceMapper.ANDROID_PREFIX)
     public String getVersionName() {
         return versionName;
     }
@@ -146,6 +137,8 @@ public class Manifest extends Mergeable {
         this.versionName = versionName;
     }
 
+    @XmlAttribute(name = "installLocation", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.InstallLocationConverter.class)
     public InstallLocation getInstallLocation() {
         return installLocation;
     }
@@ -155,6 +148,7 @@ public class Manifest extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Application.class)
+    @XmlElement(name = "application")
     public List<Application> getApplications() {
         return applications;
     }
@@ -163,6 +157,7 @@ public class Manifest extends Mergeable {
         this.applications = applications;
     }
 
+    @XmlElement(name = "instrumentation")
     public List<Instrumentation> getInstrumentations() {
         return instrumentations;
     }
@@ -171,6 +166,7 @@ public class Manifest extends Mergeable {
         this.instrumentations = instrumentations;
     }
 
+    @XmlElement(name = "permission")
     public List<Permission> getPermissions() {
         return permissions;
     }
@@ -180,6 +176,7 @@ public class Manifest extends Mergeable {
         this.permissions = permissions;
     }
 
+    @XmlElement(name = "permission-group")
     public List<PermissionGroup> getPermissionGroups() {
         return permissionGroups;
     }
@@ -188,6 +185,7 @@ public class Manifest extends Mergeable {
         this.permissionGroups = permissionGroups;
     }
 
+    @XmlElement(name = "permission-tree")
     public List<PermissionTree> getPermissionTrees() {
         return permissionTrees;
     }
@@ -196,6 +194,7 @@ public class Manifest extends Mergeable {
         this.permissionTrees = permissionTrees;
     }
 
+    @XmlElement(name = "uses-configuration")
     public List<UsesConfiguration> getUsesConfigurations() {
         return usesConfigurations;
     }
@@ -205,6 +204,7 @@ public class Manifest extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = UsesPermission.class)
+    @XmlElement(name = "uses-permission")
     public List<UsesPermission> getUsesPermissions() {
         return usesPermissions;
     }
@@ -214,6 +214,7 @@ public class Manifest extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = UsesSDK.class)
+    @XmlElement(name = "uses-sdk")
     public List<UsesSDK> getUsesSDKs() {
         return usesSDKs;
     }
@@ -222,6 +223,7 @@ public class Manifest extends Mergeable {
         this.usesSDKs = usesSDKs;
     }
 
+    @XmlElement(name = "supports-screens")
     public List<SupportsScreens> getSupportsScreens() {
         return supportsScreens;
     }
@@ -231,6 +233,7 @@ public class Manifest extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = UsesFeature.class)
+    @XmlElement(name = "uses-feature")
     public List<UsesFeature> getUsesFeatures() {
         return usesFeatures;
     }
@@ -239,14 +242,7 @@ public class Manifest extends Mergeable {
         this.usesFeatures = usesFeatures;
     }
 
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public String getTransfuseNamespace() {
-        return transfuseNamespace;
-    }
-
+    @XmlElement(name = "compatible-screens")
     public List<CompatibleScreens> getCompatibleScreens() {
         return compatibleScreens;
     }

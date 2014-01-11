@@ -15,13 +15,12 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,23 +41,15 @@ import java.util.List;
  */
 public class IntentFilter extends Mergeable {
 
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:priority")
-    @XStreamAsAttribute
     private Integer priority;
-    @XStreamImplicit(itemFieldName = "action")
     private List<Action> actions = new ArrayList<Action>();
-    @XStreamImplicit(itemFieldName = "category")
     private List<Category> categories = new ArrayList<Category>();
-    @XStreamImplicit(itemFieldName = "data")
     private List<Data> data = new ArrayList<Data>();
 
     @Merge("i")
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -68,6 +59,7 @@ public class IntentFilter extends Mergeable {
     }
 
     @Merge("l")
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -77,6 +69,7 @@ public class IntentFilter extends Mergeable {
     }
 
     @Merge("p")
+    @XmlAttribute(name = "priority", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getPriority() {
         return priority;
     }
@@ -86,6 +79,7 @@ public class IntentFilter extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Action.class)
+    @XmlElement(name = "action")
     public List<Action> getActions() {
         return actions;
     }
@@ -95,6 +89,7 @@ public class IntentFilter extends Mergeable {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Category.class)
+    @XmlElement(name = "category")
     public List<Category> getCategories() {
         return categories;
     }
@@ -103,6 +98,7 @@ public class IntentFilter extends Mergeable {
         this.categories = categories;
     }
 
+    @XmlElement(name = "data")
     public List<Data> getData() {
         return data;
     }

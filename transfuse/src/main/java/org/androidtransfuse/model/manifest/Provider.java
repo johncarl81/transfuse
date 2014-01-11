@@ -15,10 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,56 +46,25 @@ import java.util.List;
  */
 public class Provider {
 
-    @XStreamAlias("android:authorities")
-    @XStreamAsAttribute
     private String authorities;
-    @XStreamAlias("android:enabled")
-    @XStreamAsAttribute
     private Boolean enabled;
-    @XStreamAlias("android:exported")
-    @XStreamAsAttribute
     private Boolean exported;
-    @XStreamAlias("android:grantUriPermissions")
-    @XStreamAsAttribute
     private Boolean grantUriPermissions;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:initOrder")
-    @XStreamAsAttribute
     private Integer initOrder;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:multiprocess")
-    @XStreamAsAttribute
     private Boolean multiprocess;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:process")
-    @XStreamAsAttribute
     private String process;
-    @XStreamAlias("android:readPermission")
-    @XStreamAsAttribute
     private String readPermission;
-    @XStreamAlias("android:syncable")
-    @XStreamAsAttribute
     private Boolean syncable;
-    @XStreamAlias("android:writePermission")
-    @XStreamAsAttribute
     private String writePermission;
-
-    @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
-    @XStreamImplicit(itemFieldName = "grant-uri-permission")
     private List<GrantUriPermission> grantUriPermissionList = new ArrayList<GrantUriPermission>();
-    @XStreamImplicit(itemFieldName = "path-permission")
     private List<PathPermission> pathPermissions = new ArrayList<PathPermission>();
 
+    @XmlAttribute(name = "authorities", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getAuthorities() {
         return authorities;
     }
@@ -106,6 +73,7 @@ public class Provider {
         this.authorities = authorities;
     }
 
+    @XmlAttribute(name = "enabled", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getEnabled() {
         return enabled;
     }
@@ -114,6 +82,7 @@ public class Provider {
         this.enabled = enabled;
     }
 
+    @XmlAttribute(name = "exported", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getExported() {
         return exported;
     }
@@ -122,6 +91,7 @@ public class Provider {
         this.exported = exported;
     }
 
+    @XmlAttribute(name = "grantUriPermissions", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getGrantUriPermissions() {
         return grantUriPermissions;
     }
@@ -130,6 +100,7 @@ public class Provider {
         this.grantUriPermissions = grantUriPermissions;
     }
 
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -138,6 +109,7 @@ public class Provider {
         this.icon = icon;
     }
 
+    @XmlAttribute(name = "initOrder", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getInitOrder() {
         return initOrder;
     }
@@ -146,6 +118,7 @@ public class Provider {
         this.initOrder = initOrder;
     }
 
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -154,6 +127,7 @@ public class Provider {
         this.label = label;
     }
 
+    @XmlAttribute(name = "multiprocess", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getMultiprocess() {
         return multiprocess;
     }
@@ -162,6 +136,7 @@ public class Provider {
         this.multiprocess = multiprocess;
     }
 
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -170,6 +145,7 @@ public class Provider {
         this.name = name;
     }
 
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -178,6 +154,7 @@ public class Provider {
         this.permission = permission;
     }
 
+    @XmlAttribute(name = "process", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getProcess() {
         return process;
     }
@@ -186,6 +163,7 @@ public class Provider {
         this.process = process;
     }
 
+    @XmlAttribute(name = "readPermission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getReadPermission() {
         return readPermission;
     }
@@ -194,6 +172,7 @@ public class Provider {
         this.readPermission = readPermission;
     }
 
+    @XmlAttribute(name = "syncable", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getSyncable() {
         return syncable;
     }
@@ -202,6 +181,7 @@ public class Provider {
         this.syncable = syncable;
     }
 
+    @XmlAttribute(name = "writePermission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getWritePermission() {
         return writePermission;
     }
@@ -210,6 +190,7 @@ public class Provider {
         this.writePermission = writePermission;
     }
 
+    @XmlElement(name = "meta-data")
     public List<MetaData> getMetaData() {
         return metaData;
     }
@@ -218,6 +199,7 @@ public class Provider {
         this.metaData = metaData;
     }
 
+    @XmlElement(name = "grant-uri-permission")
     public List<GrantUriPermission> getGrantUriPermissionList() {
         return grantUriPermissionList;
     }
@@ -226,6 +208,7 @@ public class Provider {
         this.grantUriPermissionList = grantUriPermissionList;
     }
 
+    @XmlElement(name = "path-permission")
     public List<PathPermission> getPathPermissions() {
         return pathPermissions;
     }

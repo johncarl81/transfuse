@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -28,16 +28,11 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class GrantUriPermission {
 
-    @XStreamAlias("android:path")
-    @XStreamAsAttribute
     private String path;
-    @XStreamAlias("android:pathPattern")
-    @XStreamAsAttribute
     private String pathPattern;
-    @XStreamAlias("android:pathPrefix")
-    @XStreamAsAttribute
     private String pathPrefix;
 
+    @XmlAttribute(name = "path", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPath() {
         return path;
     }
@@ -46,6 +41,7 @@ public class GrantUriPermission {
         this.path = path;
     }
 
+    @XmlAttribute(name = "pathPattern", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPattern() {
         return pathPattern;
     }
@@ -54,6 +50,7 @@ public class GrantUriPermission {
         this.pathPattern = pathPattern;
     }
 
+    @XmlAttribute(name = "pathPrefix", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPrefix() {
         return pathPrefix;
     }

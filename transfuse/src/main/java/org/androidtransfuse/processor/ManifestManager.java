@@ -16,14 +16,11 @@
 package org.androidtransfuse.processor;
 
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.model.manifest.*;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.beanutils.PropertyUtils;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -42,7 +39,6 @@ import java.util.List;
 public class ManifestManager {
 
     private Application application;
-    private final String manifestPackage;
     private final List<Activity> activities = new ArrayList<Activity>();
     private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
     private final List<Service> services = new ArrayList<Service>();
@@ -50,11 +46,6 @@ public class ManifestManager {
     private final List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
     private final List<Permission> permissions = new ArrayList<Permission>();
     private UsesSDK usesSdk;
-
-    @Inject
-    public ManifestManager(@Named(TransfuseAndroidModule.ORIGINAL_MANIFEST) Manifest originalManifest) {
-        this.manifestPackage = originalManifest.getApplicationPackage();
-    }
 
     public void setApplication(Application application) {
         this.application = application;
@@ -133,7 +124,6 @@ public class ManifestManager {
 
     public Manifest getManifest() throws MergerException {
         Manifest manifest = new Manifest();
-        manifest.setApplicationPackage(manifestPackage);
 
         Application localApplication = application;
 

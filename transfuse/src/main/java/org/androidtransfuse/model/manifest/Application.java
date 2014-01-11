@@ -15,15 +15,16 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.annotations.UIOptions;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,84 +61,37 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-@XStreamAlias("application")
 public class Application extends Mergeable implements Identified {
 
-    @XStreamAlias("android:allowTaskReparenting")
-    @XStreamAsAttribute
     private Boolean allowTaskReparenting;
-    @XStreamAlias("android:backupAgent")
-    @XStreamAsAttribute
     private String backupAgent;
-    @XStreamAlias("android:debuggable")
-    @XStreamAsAttribute
     private Boolean debuggable;
-    @XStreamAlias("android:description")
-    @XStreamAsAttribute
     private String description;
-    @XStreamAlias("android:enabled")
-    @XStreamAsAttribute
     private Boolean enabled;
-    @XStreamAlias("android:hasCode")
-    @XStreamAsAttribute
     private Boolean hasCode;
-    @XStreamAlias("android:hardwareAccelerated")
-    @XStreamAsAttribute
     private Boolean hardwareAccelerated;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:killAfterRestore")
-    @XStreamAsAttribute
     private Boolean killAfterRestore;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:logo")
-    @XStreamAsAttribute
     private String logo;
-    @XStreamAlias("android:manageSpaceActivity")
-    @XStreamAsAttribute
     private String manageSpaceActivity;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:persistent")
-    @XStreamAsAttribute
     private Boolean persistent;
-    @XStreamAlias("android:process")
-    @XStreamAsAttribute
     private String process;
-    @XStreamAlias("android:restoreAnyVersion")
-    @XStreamAsAttribute
     private Boolean restoreAnyVersion;
-    @XStreamAlias("android:taskAffinity")
-    @XStreamAsAttribute
     private String taskAffinity;
-    @XStreamAlias("android:theme")
-    @XStreamAsAttribute
     private String theme;
-    @XStreamAlias("android:uiOptions")
-    @XStreamAsAttribute
     private UIOptions uiOptions;
-
-    @XStreamImplicit(itemFieldName = "activity")
     private List<Activity> activities = new ArrayList<Activity>();
-    @XStreamImplicit(itemFieldName = "activity-alias")
     private List<ActivityAlias> activityAliases = new ArrayList<ActivityAlias>();
-    @XStreamImplicit(itemFieldName = "service")
     private List<Service> services = new ArrayList<Service>();
-    @XStreamImplicit(itemFieldName = "receiver")
     private List<Receiver> receivers = new ArrayList<Receiver>();
-    @XStreamImplicit(itemFieldName = "provider")
     private List<Provider> providers = new ArrayList<Provider>();
-    @XStreamImplicit(itemFieldName = "uses-library")
     private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
 
     @Merge("r")
+    @XmlAttribute(name = "allowTaskReparenting", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
     }
@@ -147,6 +101,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("a")
+    @XmlAttribute(name = "backupAgent", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getBackupAgent() {
         return backupAgent;
     }
@@ -156,6 +111,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("b")
+    @XmlAttribute(name = "debuggable", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getDebuggable() {
         return debuggable;
     }
@@ -165,6 +121,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("d")
+    @XmlAttribute(name = "description", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getDescription() {
         return description;
     }
@@ -174,6 +131,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("e")
+    @XmlAttribute(name = "enabled", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getEnabled() {
         return enabled;
     }
@@ -183,6 +141,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("c")
+    @XmlAttribute(name = "hasCode", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getHasCode() {
         return hasCode;
     }
@@ -192,6 +151,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("h")
+    @XmlAttribute(name = "hardwareAccelerated", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getHardwareAccelerated() {
         return hardwareAccelerated;
     }
@@ -201,6 +161,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("i")
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -210,6 +171,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("k")
+    @XmlAttribute(name = "killAfterRestore", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getKillAfterRestore() {
         return killAfterRestore;
     }
@@ -219,6 +181,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("l")
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -228,6 +191,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("o")
+    @XmlAttribute(name = "logo", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLogo() {
         return logo;
     }
@@ -237,6 +201,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("s")
+    @XmlAttribute(name = "manageSpaceActivity", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getManageSpaceActivity() {
         return manageSpaceActivity;
     }
@@ -246,6 +211,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -255,6 +221,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("m")
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -264,6 +231,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("x")
+    @XmlAttribute(name = "persistent", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getPersistent() {
         return persistent;
     }
@@ -273,6 +241,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("p")
+    @XmlAttribute(name = "process", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getProcess() {
         return process;
     }
@@ -282,6 +251,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("v")
+    @XmlAttribute(name = "restoreAnyVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getRestoreAnyVersion() {
         return restoreAnyVersion;
     }
@@ -291,6 +261,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("f")
+    @XmlAttribute(name = "taskAffinity", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTaskAffinity() {
         return taskAffinity;
     }
@@ -300,6 +271,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("t")
+    @XmlAttribute(name = "theme", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTheme() {
         return theme;
     }
@@ -309,6 +281,8 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Merge("u")
+    @XmlAttribute(name = "uiOptions", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.UIOptionsConverter.class)
     public UIOptions getUiOptions() {
         return uiOptions;
     }
@@ -318,6 +292,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Activity.class)
+    @XmlElement(name = "activity")
     public List<Activity> getActivities() {
         return activities;
     }
@@ -326,6 +301,7 @@ public class Application extends Mergeable implements Identified {
         this.activities = activities;
     }
 
+    @XmlElement(name = "activity-alias")
     public List<ActivityAlias> getActivityAliases() {
         return activityAliases;
     }
@@ -335,6 +311,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Service.class)
+    @XmlElement(name = "service")
     public List<Service> getServices() {
         return services;
     }
@@ -344,6 +321,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = Receiver.class)
+    @XmlElement(name = "receiver")
     public List<Receiver> getReceivers() {
         return receivers;
     }
@@ -352,6 +330,7 @@ public class Application extends Mergeable implements Identified {
         this.receivers = receivers;
     }
 
+    @XmlElement(name = "provider")
     public List<Provider> getProviders() {
         return providers;
     }
@@ -360,6 +339,7 @@ public class Application extends Mergeable implements Identified {
         this.providers = providers;
     }
 
+    @XmlElement(name = "uses-library")
     public List<UsesLibrary> getUsesLibraries() {
         return usesLibraries;
     }
@@ -369,6 +349,7 @@ public class Application extends Mergeable implements Identified {
     }
 
     @Override
+    @XmlTransient
     public String getIdentifier() {
         return name;
     }

@@ -15,10 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,33 +38,17 @@ import java.util.List;
  */
 public class ActivityAlias {
 
-    @XStreamAlias("android:enabled")
-    @XStreamAsAttribute
     private Boolean enabled;
-    @XStreamAlias("android:exported")
-    @XStreamAsAttribute
     private Boolean exported;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:targetActivity")
-    @XStreamAsAttribute
     private String targetActivity;
-
-    @XStreamImplicit(itemFieldName = "intent-filter")
     private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
-    @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
+    @XmlAttribute(name = "enabled", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getEnabled() {
         return enabled;
     }
@@ -75,6 +57,7 @@ public class ActivityAlias {
         this.enabled = enabled;
     }
 
+    @XmlAttribute(name = "exported", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getExported() {
         return exported;
     }
@@ -83,6 +66,7 @@ public class ActivityAlias {
         this.exported = exported;
     }
 
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -91,6 +75,7 @@ public class ActivityAlias {
         this.icon = icon;
     }
 
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -99,6 +84,7 @@ public class ActivityAlias {
         this.label = label;
     }
 
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -107,6 +93,7 @@ public class ActivityAlias {
         this.name = name;
     }
 
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -115,6 +102,7 @@ public class ActivityAlias {
         this.permission = permission;
     }
 
+    @XmlAttribute(name = "targetActivity", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTargetActivity() {
         return targetActivity;
     }
@@ -123,6 +111,7 @@ public class ActivityAlias {
         this.targetActivity = targetActivity;
     }
 
+    @XmlElement(name = "intent-filter")
     public List<IntentFilter> getIntentFilters() {
         return intentFilters;
     }
@@ -131,6 +120,7 @@ public class ActivityAlias {
         this.intentFilters = intentFilters;
     }
 
+    @XmlElement(name = "meta-data")
     public List<MetaData> getMetaData() {
         return metaData;
     }

@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.model.manifest;
+package org.androidtransfuse.config;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import org.androidtransfuse.model.manifest.Manifest;
+import org.androidtransfuse.model.manifest.UsesPermission;
+import org.androidtransfuse.util.TransfuseRuntimeException;
 
+import javax.inject.Provider;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 /**
- * attributes:
- * android:name="string"
- *
  * @author John Ericksen
  */
-public class SupportsGlTexture {
+public class JAXBContextProvider implements Provider<JAXBContext> {
 
-    private String name;
-
-    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public JAXBContext get(){
+        try {
+            return JAXBContext.newInstance(Manifest.class, UsesPermission.class);
+        } catch (JAXBException e) {
+            throw new TransfuseRuntimeException("Unable to create JAXBContext", e);
+        }
     }
 }

@@ -13,27 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.model.manifest;
-
-import javax.xml.bind.annotation.XmlAttribute;
-
-
 /**
- * attributes:
- * android:name="string"
- *
  * @author John Ericksen
  */
-public class SupportsGlTexture {
 
-    private String name;
+@XmlSchema(
+        elementFormDefault = XmlNsForm.QUALIFIED,
+        xmlns = {
+                @XmlNs(prefix= ManifestNamespaceMapper.DEFAULT_PREFIX, namespaceURI=ManifestNamespaceMapper.DEFAULT_URI),
+                @XmlNs(prefix=ManifestNamespaceMapper.ANDROID_PREFIX, namespaceURI=ManifestNamespaceMapper.ANDROID_URI),
+                @XmlNs(prefix=ManifestNamespaceMapper.TRANSFUSE_PREFIX, namespaceURI=ManifestNamespaceMapper.TRANSFUSE_URI)
+        })
+package org.androidtransfuse.model.manifest;
 
-    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-}
+import javax.xml.bind.annotation.XmlNs;
+import javax.xml.bind.annotation.XmlNsForm;
+import javax.xml.bind.annotation.XmlSchema;

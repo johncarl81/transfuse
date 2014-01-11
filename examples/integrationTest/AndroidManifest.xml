@@ -1,50 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest t:tag="+" xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.integrationTest" android:versionCode="1" android:versionName="1.0">
-    <uses-permission t:tag="+,n" android:name="android.permission.INTERNET"/>
-    <uses-permission t:tag="+,n" android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission t:tag="+,n" android:name="android.permission.VIBRATE"/>
-    <uses-sdk t:tag="+,m,t" android:minSdkVersion="5" android:targetSdkVersion="11"/>
-    <application t:tag="+,i,l,n" android:icon="@drawable/icon" android:label="Transfuse Integration Test" android:name=".IntegrationAppApplication">
-        <activity t:tag="+,l,n" android:label="About" android:name=".AboutActivity"/>
-        <activity t:tag="+,l,n" android:label="@string/app_name" android:name=".MainActivity">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<manifest package="org.androidtransfuse.integrationTest" android:versionCode="1" t:tag="+"
+          xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" t:tag="+,n"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" t:tag="+,n"/>
+    <uses-permission android:name="android.permission.VIBRATE" t:tag="+,n"/>
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11" t:tag="+,m,t"/>
+    <application android:icon="@drawable/icon" android:label="Transfuse Integration Test" android:name=".IntegrationAppApplication" t:tag="+,i,l,n">
+        <activity android:label="About" android:name=".AboutActivity" t:tag="+,l,n"/>
+        <activity android:label="@string/app_name" android:name=".MainActivity" t:tag="+,l,n">
             <intent-filter t:tag="+">
-                <action t:tag="+,n" android:name="android.intent.action.MAIN"/>
-                <category t:tag="+,n" android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" t:tag="+,n"/>
+                <category android:name="android.intent.category.LAUNCHER" t:tag="+,n"/>
             </intent-filter>
         </activity>
-        <activity t:tag="+,l,n" android:label="Manifest Managed" android:name=".activity.ManifestManagedActivity"/>
+        <activity android:label="Manifest Managed" android:name=".activity.ManifestManagedActivity" t:tag="+,l,n"/>
         <activity android:label="Not Managed" android:name=".activity.NotManagedActivity"/>
-        <activity t:tag="+,l,n" android:label="Preferences" android:name=".activity.PreferencesActivity"/>
-        <activity t:tag="+,l,n" android:label="@string/app_name" android:name=".activtyResult.ResultOneActivity"/>
-        <activity t:tag="+,n" android:name=".activtyResult.ResultTwoActivity"/>
-        <activity t:tag="+,l,n" android:label="AOP" android:name=".aop.AOPActivity"/>
-        <activity t:tag="+,l,n" android:label="Broadcast Receiver" android:name=".broadcastReceiver.ToastTriggerActivity"/>
-        <activity t:tag="+,n" android:name=".externalGenerator.ExternalTestActivity"/>
-        <activity t:tag="+,n" android:name=".fragments.DetailActivity"/>
-        <activity t:tag="+,l,n" android:label="Fragments" android:name=".fragments.FragmentMainActivity"/>
-        <activity t:tag="+,l,n" android:label="CustomView" android:name=".inject.CustomViewActivity"/>
-        <activity t:tag="+,l,n" android:label="Extras" android:name=".inject.ExtraInjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="Injection" android:name=".inject.InjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="Preference Injection" android:name=".inject.PreferenceInjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="Resources" android:name=".inject.ResourceInjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="System Services" android:name=".inject.SystemInjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="View Injection" android:name=".inject.ViewInjectionActivity"/>
-        <activity t:tag="+,l,n" android:label="Variable Layout" android:name=".layout.VariableLayoutActivity"/>
-        <activity t:tag="+,l,n" android:label="Activity Lifecycle" android:name=".lifecycle.ActivityLifecycleActivity"/>
-        <activity t:tag="+,l,n" android:label="Activity Listeners" android:name=".listeners.ListenersActivity"/>
-        <activity t:tag="+,l,n" android:label="Menu" android:name=".menu.MenuActivity"/>
-        <activity t:tag="+,l,n" android:label="Observes" android:name=".observes.EventObserverActivity"/>
-        <activity t:tag="+,l,n" android:label="Listener Registration" android:name=".register.RegisterActivity"/>
-        <activity t:tag="+,n" android:name=".saveState.NonConfigInstanceActivity"/>
-        <activity t:tag="+,l,n" android:label="Save Instance State" android:name=".saveState.SaveInstanceStateActivity"/>
-        <activity t:tag="+,l,n" android:label="Custom Scope" android:name=".scope.CustomScopeActivity"/>
-        <activity t:tag="+,l,n" android:label="Scope One" android:name=".scope.ScopeOneActivity"/>
-        <activity t:tag="+,l,n" android:label="Scope Two" android:name=".scope.ScopeTwoActivity"/>
-        <service t:tag="+,n" android:name=".service.ExampleService"/>
-        <receiver t:tag="+,n" android:name=".broadcastReceiver.ToasterBroadcastReceiver">
+        <activity android:label="Preferences" android:name=".activity.PreferencesActivity" t:tag="+,l,n"/>
+        <activity android:label="@string/app_name" android:name=".activtyResult.ResultOneActivity" t:tag="+,l,n"/>
+        <activity android:name=".activtyResult.ResultTwoActivity" t:tag="+,n"/>
+        <activity android:label="AOP" android:name=".aop.AOPActivity" t:tag="+,l,n"/>
+        <activity android:label="Broadcast Receiver" android:name=".broadcastReceiver.ToastTriggerActivity" t:tag="+,l,n"/>
+        <activity android:name=".externalGenerator.ExternalTestActivity" t:tag="+,n"/>
+        <activity android:name=".fragments.DetailActivity" t:tag="+,n"/>
+        <activity android:label="Fragments" android:name=".fragments.FragmentMainActivity" t:tag="+,l,n"/>
+        <activity android:label="CustomView" android:name=".inject.CustomViewActivity" t:tag="+,l,n"/>
+        <activity android:label="Extras" android:name=".inject.ExtraInjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="Injection" android:name=".inject.InjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="Preference Injection" android:name=".inject.PreferenceInjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="Resources" android:name=".inject.ResourceInjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="System Services" android:name=".inject.SystemInjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="View Injection" android:name=".inject.ViewInjectionActivity" t:tag="+,l,n"/>
+        <activity android:label="Variable Layout" android:name=".layout.VariableLayoutActivity" t:tag="+,l,n"/>
+        <activity android:label="Activity Lifecycle" android:name=".lifecycle.ActivityLifecycleActivity" t:tag="+,l,n"/>
+        <activity android:label="Activity Listeners" android:name=".listeners.ListenersActivity" t:tag="+,l,n"/>
+        <activity android:label="Menu" android:name=".menu.MenuActivity" t:tag="+,l,n"/>
+        <activity android:label="Observes" android:name=".observes.EventObserverActivity" t:tag="+,l,n"/>
+        <activity android:label="Listener Registration" android:name=".register.RegisterActivity" t:tag="+,l,n"/>
+        <activity android:name=".saveState.NonConfigInstanceActivity" t:tag="+,n"/>
+        <activity android:label="Save Instance State" android:name=".saveState.SaveInstanceStateActivity" t:tag="+,l,n"/>
+        <activity android:label="Custom Scope" android:name=".scope.CustomScopeActivity" t:tag="+,l,n"/>
+        <activity android:label="Scope One" android:name=".scope.ScopeOneActivity" t:tag="+,l,n"/>
+        <activity android:label="Scope Two" android:name=".scope.ScopeTwoActivity" t:tag="+,l,n"/>
+        <receiver android:name=".broadcastReceiver.ToasterBroadcastReceiver" t:tag="+,n">
             <intent-filter t:tag="+">
-                <action t:tag="+,n" android:name="Toaster"/>
+                <action android:name="Toaster" t:tag="+,n"/>
             </intent-filter>
         </receiver>
+        <service android:name=".service.ExampleService" t:tag="+,n"/>
     </application>
 </manifest>

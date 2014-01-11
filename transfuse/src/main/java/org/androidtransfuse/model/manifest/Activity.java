@@ -15,9 +15,6 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.annotations.LaunchMode;
 import org.androidtransfuse.annotations.ScreenOrientation;
 import org.androidtransfuse.annotations.UIOptions;
@@ -28,6 +25,10 @@ import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,82 +78,34 @@ import java.util.List;
  */
 public class Activity extends Mergeable implements Comparable<Activity>, Identified {
 
-    @XStreamAlias("android:allowTaskReparenting")
-    @XStreamAsAttribute
     private Boolean allowTaskReparenting;
-    @XStreamAlias("android:alwaysRetainTaskState")
-    @XStreamAsAttribute
     private Boolean alwaysRetainTaskState;
-    @XStreamAlias("android:clearTaskOnLaunch")
-    @XStreamAsAttribute
     private Boolean clearTaskOnLaunch;
-    @XStreamAlias("android:configChanges")
-    @XStreamAsAttribute
     private String configChanges;
-    @XStreamAlias("android:enabled")
-    @XStreamAsAttribute
     private Boolean enabled;
-    @XStreamAlias("android:excludeFromRecents")
-    @XStreamAsAttribute
     private Boolean excludeFromRecents;
-    @XStreamAlias("android:exported")
-    @XStreamAsAttribute
     private Boolean exported;
-    @XStreamAlias("android:finishOnTaskLaunch")
-    @XStreamAsAttribute
     private Boolean finishOnTaskLaunch;
-    @XStreamAlias("android:hardwareAccelerated")
-    @XStreamAsAttribute
     private Boolean hardwareAccelerated;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:launchMode")
-    @XStreamAsAttribute
     private LaunchMode launchMode;
-    @XStreamAlias("android:multiprocess")
-    @XStreamAsAttribute
     private Boolean multiprocess;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:noHistory")
-    @XStreamAsAttribute
     private Boolean noHistory;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:process")
-    @XStreamAsAttribute
     private String process;
-    @XStreamAlias("android:screenOrientation")
-    @XStreamAsAttribute
     private ScreenOrientation screenOrientation;
-    @XStreamAlias("android:stateNotNeeded")
-    @XStreamAsAttribute
     private Boolean stateNotNeeded;
-    @XStreamAlias("android:taskAffinity")
-    @XStreamAsAttribute
     private String taskAffinity;
-    @XStreamAlias("android:theme")
-    @XStreamAsAttribute
     private String theme;
-    @XStreamAlias("android:uiOptions")
-    @XStreamAsAttribute
     private UIOptions uiOptions;
-    @XStreamAlias("android:windowSoftInputMode")
-    @XStreamAsAttribute
     private WindowSoftInputMode windowSoftInputMode;
-
-    @XStreamImplicit(itemFieldName = "intent-filter")
     private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
-    @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
     @Merge("t")
+    @XmlAttribute(name = "allowTaskReparenting", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getAllowTaskReparenting() {
         return allowTaskReparenting;
     }
@@ -162,6 +115,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("s")
+    @XmlAttribute(name = "alwaysRetainTaskState", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getAlwaysRetainTaskState() {
         return alwaysRetainTaskState;
     }
@@ -171,6 +125,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("c")
+    @XmlAttribute(name = "clearTaskOnLaunch", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getClearTaskOnLaunch() {
         return clearTaskOnLaunch;
     }
@@ -180,6 +135,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("a")
+    @XmlAttribute(name = "configChanges", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getConfigChanges() {
         return configChanges;
     }
@@ -189,6 +145,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("e")
+    @XmlAttribute(name = "enabled", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getEnabled() {
         return enabled;
     }
@@ -198,6 +155,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("r")
+    @XmlAttribute(name = "excludeFromRecents", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getExcludeFromRecents() {
         return excludeFromRecents;
     }
@@ -207,6 +165,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("x")
+    @XmlAttribute(name = "exported", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getExported() {
         return exported;
     }
@@ -216,6 +175,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("f")
+    @XmlAttribute(name = "finishOnTaskLaunch", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getFinishOnTaskLaunch() {
         return finishOnTaskLaunch;
     }
@@ -225,6 +185,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("j")
+    @XmlAttribute(name = "hardwareAccelerated", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getHardwareAccelerated() {
         return hardwareAccelerated;
     }
@@ -234,6 +195,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("i")
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -243,6 +205,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("l")
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -252,6 +215,8 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("u")
+    @XmlAttribute(name = "launchMode", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.LaunchModeConverter.class)
     public LaunchMode getLaunchMode() {
         return launchMode;
     }
@@ -261,6 +226,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("m")
+    @XmlAttribute(name = "multiprocess", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getMultiprocess() {
         return multiprocess;
     }
@@ -270,6 +236,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -279,6 +246,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("v")
+    @XmlAttribute(name = "noHistory", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getNoHistory() {
         return noHistory;
     }
@@ -288,6 +256,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("p")
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -297,6 +266,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("o")
+    @XmlAttribute(name = "process", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getProcess() {
         return process;
     }
@@ -306,6 +276,8 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("g")
+    @XmlAttribute(name = "screenOrientation", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ScreenOrientationConverter.class)
     public ScreenOrientation getScreenOrientation() {
         return screenOrientation;
     }
@@ -315,6 +287,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("d")
+    @XmlAttribute(name = "stateNotNeeded", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getStateNotNeeded() {
         return stateNotNeeded;
     }
@@ -324,6 +297,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("y")
+    @XmlAttribute(name = "taskAffinity", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTaskAffinity() {
         return taskAffinity;
     }
@@ -333,6 +307,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("h")
+    @XmlAttribute(name = "theme", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTheme() {
         return theme;
     }
@@ -342,6 +317,8 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("b")
+    @XmlAttribute(name = "uiOptions", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.UIOptionsConverter.class)
     public UIOptions getUiOptions() {
         return uiOptions;
     }
@@ -351,6 +328,8 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Merge("w")
+    @XmlAttribute(name = "windowSoftInputMode", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.WindowSoftInputModeConverter.class)
     public WindowSoftInputMode getWindowSoftInputMode() {
         return windowSoftInputMode;
     }
@@ -360,6 +339,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = IntentFilter.class)
+    @XmlElement(name = "intent-filter")
     public List<IntentFilter> getIntentFilters() {
         return intentFilters;
     }
@@ -369,6 +349,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = MetaData.class)
+    @XmlElement(name = "meta-data")
     public List<MetaData> getMetaData() {
         return metaData;
     }
@@ -397,6 +378,7 @@ public class Activity extends Mergeable implements Comparable<Activity>, Identif
     }
 
     @Override
+    @XmlTransient
     public String getIdentifier() {
         return name;
     }

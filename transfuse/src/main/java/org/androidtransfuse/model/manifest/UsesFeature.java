@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * attributes:
@@ -31,17 +32,12 @@ import org.androidtransfuse.processor.Merge;
  */
 public class UsesFeature extends Mergeable implements Identified {
 
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:required")
-    @XStreamAsAttribute
     private Boolean required;
-    @XStreamAlias("android:glEsVersion")
-    @XStreamAsAttribute
     private Integer glEsVersion;
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -51,6 +47,7 @@ public class UsesFeature extends Mergeable implements Identified {
     }
 
     @Merge("r")
+    @XmlAttribute(name = "required", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getRequired() {
         return required;
     }
@@ -60,6 +57,7 @@ public class UsesFeature extends Mergeable implements Identified {
     }
 
     @Merge("g")
+    @XmlAttribute(name = "glEsVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Integer getGlEsVersion() {
         return glEsVersion;
     }
@@ -67,7 +65,8 @@ public class UsesFeature extends Mergeable implements Identified {
     public void setGlEsVersion(Integer glEsVersion) {
         this.glEsVersion = glEsVersion;
     }
-    
+
+    @XmlTransient
     public String getIdentifier(){
         return name;
     }

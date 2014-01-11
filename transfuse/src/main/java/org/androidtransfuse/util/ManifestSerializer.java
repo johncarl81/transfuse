@@ -15,10 +15,12 @@
  */
 package org.androidtransfuse.util;
 
-import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.model.manifest.Manifest;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.*;
 
 /**
@@ -28,37 +30,43 @@ import java.io.*;
  */
 public class ManifestSerializer {
 
-    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-
-    private final XStream xStream;
+    private final JAXBContext context;
     private final Logger logger;
 
     @Inject
-    public ManifestSerializer(XStream xStream, Logger logger) {
-        this.xStream = xStream;
+    public ManifestSerializer(JAXBContext context, Logger logger) {
+        this.context = context;
         this.logger = logger;
     }
 
     public Manifest readManifest(File manifestFile) {
-        return (Manifest) xStream.fromXML(manifestFile);
+        try{
+            return (Manifest) context.createUnmarshaller().unmarshal(manifestFile);
+        } catch (JAXBException e) {
+            throw new TransfuseRuntimeException("JAXBException while unmarshalling manifest", e);
+        }
     }
 
     public Manifest readManifest(InputStream manifestInputStream) {
-        return (Manifest) xStream.fromXML(manifestInputStream);
+        try{
+            return (Manifest) context.createUnmarshaller().unmarshal(manifestInputStream);
+        } catch (JAXBException e) {
+            throw new TransfuseRuntimeException("JAXBException while unmarshalling manifest", e);
+        }
     }
 
     public void writeManifest(Manifest manifest, OutputStream manifestStream) {
         try {
             Writer writer = new OutputStreamWriter(manifestStream, "UTF-8");
-            writer.write(XML_HEADER);
 
-            xStream.toXML(manifest, writer);
-        } catch (FileNotFoundException e) {
-            logger.error("FileNotFoundException while writing manifest", e);
-            throw new TransfuseInjectionException(e);
+            Marshaller marshaller = context.createMarshaller();
+
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(manifest, writer);
         } catch (IOException e) {
-            logger.error("IOException while writing manifest", e);
-            throw new TransfuseInjectionException(e);
+            throw new TransfuseRuntimeException("IOException while writing manifest", e);
+        } catch (JAXBException e) {
+            throw new TransfuseRuntimeException("JAXBException while writing manifest", e);
         }
     }
 

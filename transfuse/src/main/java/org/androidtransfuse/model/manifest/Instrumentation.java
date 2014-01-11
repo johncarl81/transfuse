@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -31,25 +31,14 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class Instrumentation {
 
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
-    private String label;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
+   private String label;
     private String name;
-    @XStreamAlias("android:functionalTest")
-    @XStreamAsAttribute
     private Boolean functionalTest;
-    @XStreamAlias("android:handleProfiling")
-    @XStreamAsAttribute
     private Boolean handleProfiling;
-    @XStreamAlias("android:targetPackage")
-    @XStreamAsAttribute
     private String targetPackage;
 
+    @XmlAttribute(name = "functionalTest", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getFunctionalTest() {
         return functionalTest;
     }
@@ -58,6 +47,7 @@ public class Instrumentation {
         this.functionalTest = functionalTest;
     }
 
+    @XmlAttribute(name = "handleProfiling", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getHandleProfiling() {
         return handleProfiling;
     }
@@ -66,6 +56,7 @@ public class Instrumentation {
         this.handleProfiling = handleProfiling;
     }
 
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -74,6 +65,7 @@ public class Instrumentation {
         this.icon = icon;
     }
 
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -82,6 +74,7 @@ public class Instrumentation {
         this.label = label;
     }
 
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -90,6 +83,7 @@ public class Instrumentation {
         this.name = name;
     }
 
+    @XmlAttribute(name = "targetPackage", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getTargetPackage() {
         return targetPackage;
     }

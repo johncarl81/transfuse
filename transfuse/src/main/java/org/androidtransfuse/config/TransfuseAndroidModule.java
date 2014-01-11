@@ -17,7 +17,6 @@ package org.androidtransfuse.config;
 
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
-import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.CodeGenerationScope;
 import org.androidtransfuse.ConfigurationScope;
 import org.androidtransfuse.adapter.ASTFactory;
@@ -49,6 +48,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.lang.model.util.Elements;
+import javax.xml.bind.JAXBContext;
 import java.io.File;
 import java.util.Map;
 
@@ -63,7 +63,7 @@ import java.util.Map;
         @Bind(type = ClassGenerationStrategy.class, to = TransfuseClassGenerationStrategy.class)
 })
 @BindProviders({
-        @BindProvider(type = XStream.class, provider = XStreamProvider.class),
+        @BindProvider(type = JAXBContext.class, provider = JAXBContextProvider.class),
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class)

@@ -15,8 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
-import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
-
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,23 +23,16 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-public class MergeableTagConverter extends AbstractSingleValueConverter {
+public class MergeableTagConverter extends XmlAdapter<String, MergeableTags> {
 
     private static final String SPLIT = ",";
 
     @Override
-    public boolean canConvert(Class type) {
-        return MergeableTags.class.isAssignableFrom(type);
-    }
-
-    @Override
-    public String toString(Object obj) {
-        if (obj == null) {
+    public String marshal(MergeableTags mergeableTags) throws Exception {
+        if (mergeableTags == null) {
             return null;
         }
-        Set<String> stringCollection = ((MergeableTags) obj).getTags();
-
-        if (stringCollection.isEmpty()) {
+        if (mergeableTags.getTags().isEmpty()) {
             return null;
         }
 
@@ -48,7 +40,7 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
 
         boolean first = true;
 
-        for (String s : stringCollection) {
+        for (String s : mergeableTags.getTags()) {
             if (first) {
                 first = false;
             } else {
@@ -61,8 +53,7 @@ public class MergeableTagConverter extends AbstractSingleValueConverter {
     }
 
     @Override
-    public Object fromString(String input) {
-
+    public MergeableTags unmarshal(String input) throws Exception {
         Set<String> tagValues = new HashSet<String>();
 
         if(input != null && !input.isEmpty()){

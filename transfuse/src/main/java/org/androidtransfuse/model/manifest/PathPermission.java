@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -31,25 +31,14 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class PathPermission {
 
-    @XStreamAlias("android:path")
-    @XStreamAsAttribute
     private String path;
-    @XStreamAlias("android:pathPrefix")
-    @XStreamAsAttribute
     private String pathPrefix;
-    @XStreamAlias("android:pathPattern")
-    @XStreamAsAttribute
     private String pathPattern;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:readPermission")
-    @XStreamAsAttribute
     private String readPermission;
-    @XStreamAlias("android:writePermission")
-    @XStreamAsAttribute
     private String writePermission;
 
+    @XmlAttribute(name = "path", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPath() {
         return path;
     }
@@ -58,6 +47,7 @@ public class PathPermission {
         this.path = path;
     }
 
+    @XmlAttribute(name = "pathPrefix", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPrefix() {
         return pathPrefix;
     }
@@ -66,6 +56,7 @@ public class PathPermission {
         this.pathPrefix = pathPrefix;
     }
 
+    @XmlAttribute(name = "pathPattern", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPattern() {
         return pathPattern;
     }
@@ -74,6 +65,7 @@ public class PathPermission {
         this.pathPattern = pathPattern;
     }
 
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -82,6 +74,7 @@ public class PathPermission {
         this.permission = permission;
     }
 
+    @XmlAttribute(name = "readPermission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getReadPermission() {
         return readPermission;
     }
@@ -90,6 +83,7 @@ public class PathPermission {
         this.readPermission = readPermission;
     }
 
+    @XmlAttribute(name = "writePermission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getWritePermission() {
         return writePermission;
     }

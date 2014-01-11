@@ -15,8 +15,7 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * attributes:
@@ -32,28 +31,15 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class Data {
 
-    @XStreamAlias("android:host")
-    @XStreamAsAttribute
     private String host;
-    @XStreamAlias("android:mimeType")
-    @XStreamAsAttribute
     private String mimeType;
-    @XStreamAlias("android:path")
-    @XStreamAsAttribute
     private String path;
-    @XStreamAlias("android:pathPattern")
-    @XStreamAsAttribute
     private String pathPattern;
-    @XStreamAlias("android:pathPrefix")
-    @XStreamAsAttribute
     private String pathPrefix;
-    @XStreamAlias("android:port")
-    @XStreamAsAttribute
     private String port;
-    @XStreamAlias("android:scheme")
-    @XStreamAsAttribute
     private String scheme;
 
+    @XmlAttribute(name = "host", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getHost() {
         return host;
     }
@@ -62,6 +48,7 @@ public class Data {
         this.host = host;
     }
 
+    @XmlAttribute(name = "mimeType", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getMimeType() {
         return mimeType;
     }
@@ -70,6 +57,7 @@ public class Data {
         this.mimeType = mimeType;
     }
 
+    @XmlAttribute(name = "path", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPath() {
         return path;
     }
@@ -78,6 +66,7 @@ public class Data {
         this.path = path;
     }
 
+    @XmlAttribute(name = "pathPattern", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPattern() {
         return pathPattern;
     }
@@ -86,6 +75,7 @@ public class Data {
         this.pathPattern = pathPattern;
     }
 
+    @XmlAttribute(name = "pathPrefix", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPrefix() {
         return pathPrefix;
     }
@@ -94,6 +84,7 @@ public class Data {
         this.pathPrefix = pathPrefix;
     }
 
+    @XmlAttribute(name = "port", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPort() {
         return port;
     }
@@ -102,6 +93,7 @@ public class Data {
         this.port = port;
     }
 
+    @XmlAttribute(name = "scheme", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getScheme() {
         return scheme;
     }

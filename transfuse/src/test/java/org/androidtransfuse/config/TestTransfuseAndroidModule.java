@@ -16,7 +16,6 @@
 package org.androidtransfuse.config;
 
 import com.sun.codemodel.JCodeModel;
-import com.thoughtworks.xstream.XStream;
 import org.androidtransfuse.*;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.module.ModuleRepository;
@@ -51,6 +50,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.inject.Named;
 import javax.lang.model.util.Elements;
+import javax.xml.bind.JAXBContext;
 
 @BootstrapModule
 @BindInterceptors({
@@ -71,7 +71,7 @@ import javax.lang.model.util.Elements;
         @Bind(type = Messager.class, to = NoOpMessager.class)
 })
 @BindProviders({
-        @BindProvider(type = XStream.class, provider = XStreamProvider.class),
+        @BindProvider(type = JAXBContext.class, provider = JAXBContextProvider.class),
         @BindProvider(type = VariableExpressionBuilder.class, provider = ExpressionDecoratorFactory.class),
         @BindProvider(type = GeneratorRepository.class, provider = GeneratorRepositoryProvider.class),
         @BindProvider(type = AnalysisRepository.class, provider = AnalysisRepositoryFactory.class)

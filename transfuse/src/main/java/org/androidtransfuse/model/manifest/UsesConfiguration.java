@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 
 /**
  * attributes:
@@ -33,22 +34,13 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class UsesConfiguration {
 
-    @XStreamAlias("android:reqFiveWayNav")
-    @XStreamAsAttribute
     private Boolean reqFiveWayNav;
-    @XStreamAlias("android:reqHardKeyboard")
-    @XStreamAsAttribute
     private Boolean reqHardKeyboard;
-    @XStreamAlias("android:reqKeyboardType")
-    @XStreamAsAttribute
     private ReqKeyboardType reqKeyboardType;
-    @XStreamAlias("android:reqNavigation")
-    @XStreamAsAttribute
     private ReqNavigation reqNavigation;
-    @XStreamAlias("android:reqTouchScreen")
-    @XStreamAsAttribute
     private ReqTouchScreen reqTouchScreen;
 
+    @XmlAttribute(name = "reqFiveWayNav", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getReqFiveWayNav() {
         return reqFiveWayNav;
     }
@@ -57,6 +49,7 @@ public class UsesConfiguration {
         this.reqFiveWayNav = reqFiveWayNav;
     }
 
+    @XmlAttribute(name = "reqHardKeyboard", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getReqHardKeyboard() {
         return reqHardKeyboard;
     }
@@ -65,6 +58,8 @@ public class UsesConfiguration {
         this.reqHardKeyboard = reqHardKeyboard;
     }
 
+    @XmlAttribute(name = "reqKeyboardType", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ReqKeyboardTypeConverter.class)
     public ReqKeyboardType getReqKeyboardType() {
         return reqKeyboardType;
     }
@@ -73,6 +68,8 @@ public class UsesConfiguration {
         this.reqKeyboardType = reqKeyboardType;
     }
 
+    @XmlAttribute(name = "reqNavigation", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ReqNavigationConverter.class)
     public ReqNavigation getReqNavigation() {
         return reqNavigation;
     }
@@ -81,6 +78,8 @@ public class UsesConfiguration {
         this.reqNavigation = reqNavigation;
     }
 
+    @XmlAttribute(name = "reqTouchScreen", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ReqTouchScreenConverter.class)
     public ReqTouchScreen getReqTouchScreen() {
         return reqTouchScreen;
     }

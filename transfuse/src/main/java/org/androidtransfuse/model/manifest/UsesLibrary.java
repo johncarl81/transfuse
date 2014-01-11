@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -27,13 +27,10 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class UsesLibrary {
 
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:required")
-    @XStreamAsAttribute
     private Boolean required;
 
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -42,6 +39,7 @@ public class UsesLibrary {
         this.name = name;
     }
 
+    @XmlAttribute(name = "required", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getRequired() {
         return required;
     }

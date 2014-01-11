@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -28,16 +28,11 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class PermissionTree {
 
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
 
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -46,6 +41,7 @@ public class PermissionTree {
         this.icon = icon;
     }
 
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -54,6 +50,7 @@ public class PermissionTree {
         this.label = label;
     }
 
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }

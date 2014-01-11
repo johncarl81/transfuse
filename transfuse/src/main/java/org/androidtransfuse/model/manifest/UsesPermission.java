@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  * attributes:
@@ -28,8 +28,6 @@ import org.androidtransfuse.processor.Merge;
  */
 public class UsesPermission extends Mergeable implements Comparable<UsesPermission> {
 
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
 
     public UsesPermission() {
@@ -41,6 +39,7 @@ public class UsesPermission extends Mergeable implements Comparable<UsesPermissi
     }
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }

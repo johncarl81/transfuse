@@ -15,11 +15,12 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * attributes:
@@ -29,8 +30,6 @@ import org.androidtransfuse.processor.Merge;
  */
 public class Action extends Mergeable implements Identified {
 
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
 
     public String getName() {
@@ -38,11 +37,13 @@ public class Action extends Mergeable implements Identified {
     }
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public void setName(String name) {
         this.name = name;
     }
 
     @Override
+    @XmlTransient
     public String getIdentifier() {
         return name;
     }

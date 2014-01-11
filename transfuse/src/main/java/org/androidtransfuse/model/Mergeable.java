@@ -15,22 +15,34 @@
  */
 package org.androidtransfuse.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import org.androidtransfuse.model.manifest.ManifestNamespaceMapper;
+import org.androidtransfuse.processor.MergeableTagConverter;
 import org.androidtransfuse.processor.MergeableTags;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @author John Ericksen
  */
-
 public class Mergeable {
 
     private static final String GENERATED_TOKEN = "+";
 
-    @XStreamAlias("t:tag")
-    @XStreamAsAttribute
     private MergeableTags tags = new MergeableTags();
 
+    @XmlAttribute(name = "tag", namespace = ManifestNamespaceMapper.TRANSFUSE_URI)
+    @XmlJavaTypeAdapter(MergeableTagConverter.class)
+    public MergeableTags getTags() {
+        return tags;
+    }
+
+    public void setTags(MergeableTags tags) {
+        this.tags = tags;
+    }
+
+    @XmlTransient
     public int getMergeTagSize(){
         if(tags != null){
             return tags.getTags().size();
@@ -52,6 +64,7 @@ public class Mergeable {
         }
     }
 
+    @XmlTransient
     public boolean isGenerated(){
         return containsTag(GENERATED_TOKEN);
     }

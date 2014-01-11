@@ -39,36 +39,30 @@ public class MergeableTagConverterTest {
     }
 
     @Test
-    public void testCanConvert(){
-        assertTrue(converter.canConvert(MergeableTags.class));
-        assertFalse(converter.canConvert(Object.class));
-    }
+    public void testToString() throws Exception {
+        MergeableTags mergeable = new MergeableTags(TAGS);
 
-    @Test
-    public void testToString(){
-        MergeableTags mergable = new MergeableTags(TAGS);
-
-        String converted = converter.toString(mergable);
+        String converted = converter.marshal(mergeable);
 
         assertEquals(CONVERTED_TAGS, converted);
     }
 
     @Test
-    public void testEmptyInput(){
-        MergeableTags mergable = new MergeableTags();
+    public void testEmptyInput() throws Exception {
+        MergeableTags mergeable = new MergeableTags();
 
-        assertNull(converter.toString(mergable));
+        assertNull(converter.marshal(mergeable));
     }
     @Test
-    public void testNullInput(){
-        assertNull(converter.toString(null));
+    public void testNullInput() throws Exception {
+        assertNull(converter.marshal(null));
     }
 
     @Test
-    public void testFromEmptyString(){
-        Object output = converter.fromString("");
+    public void testFromEmptyString() throws Exception {
+        Object output = converter.unmarshal("");
 
-        assertTrue(output instanceof MergeableTags);
+        assertNotNull(output);
 
         MergeableTags tags = (MergeableTags)output;
 
@@ -76,10 +70,10 @@ public class MergeableTagConverterTest {
     }
 
     @Test
-    public void testFromNullString(){
-        Object output = converter.fromString(null);
+    public void testFromNullString() throws Exception {
+        Object output = converter.unmarshal(null);
 
-        assertTrue(output instanceof MergeableTags);
+        assertNotNull(output);
 
         MergeableTags tags = (MergeableTags)output;
 
@@ -87,10 +81,10 @@ public class MergeableTagConverterTest {
     }
 
     @Test
-    public void testFromString(){
-        Object output = converter.fromString(CONVERTED_TAGS);
+    public void testFromString() throws Exception {
+        Object output = converter.unmarshal(CONVERTED_TAGS);
 
-        assertTrue(output instanceof MergeableTags);
+        assertNotNull(output);
 
         MergeableTags tags = (MergeableTags)output;
 

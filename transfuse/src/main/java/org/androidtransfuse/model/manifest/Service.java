@@ -15,14 +15,14 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,34 +44,18 @@ import java.util.List;
  */
 public class Service extends Mergeable implements Identified {
 
-    @XStreamAlias("android:enabled")
-    @XStreamAsAttribute
     private Boolean enabled;
-    @XStreamAlias("android:exported")
-    @XStreamAsAttribute
     private Boolean exported;
-    @XStreamAlias("android:icon")
-    @XStreamAsAttribute
     private String icon;
-    @XStreamAlias("android:label")
-    @XStreamAsAttribute
     private String label;
-    @XStreamAlias("android:name")
-    @XStreamAsAttribute
     private String name;
-    @XStreamAlias("android:permission")
-    @XStreamAsAttribute
     private String permission;
-    @XStreamAlias("android:process")
-    @XStreamAsAttribute
     private String process;
-
-    @XStreamImplicit(itemFieldName = "intent-filter")
     private List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
-    @XStreamImplicit(itemFieldName = "meta-data")
     private List<MetaData> metaData = new ArrayList<MetaData>();
 
     @Merge("e")
+    @XmlAttribute(name = "enabled", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getEnabled() {
         return enabled;
     }
@@ -81,6 +65,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("x")
+    @XmlAttribute(name = "exported", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getExported() {
         return exported;
     }
@@ -90,6 +75,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("i")
+    @XmlAttribute(name = "icon", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getIcon() {
         return icon;
     }
@@ -99,6 +85,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("l")
+    @XmlAttribute(name = "label", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLabel() {
         return label;
     }
@@ -108,6 +95,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("n")
+    @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getName() {
         return name;
     }
@@ -117,6 +105,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("p")
+    @XmlAttribute(name = "permission", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPermission() {
         return permission;
     }
@@ -126,6 +115,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Merge("r")
+    @XmlAttribute(name = "process", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getProcess() {
         return process;
     }
@@ -135,6 +125,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = IntentFilter.class)
+    @XmlElement(name = "intent-filter")
     public List<IntentFilter> getIntentFilters() {
         return intentFilters;
     }
@@ -144,6 +135,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @MergeCollection(collectionType = ArrayList.class, type = MetaData.class)
+    @XmlElement(name = "meta-data")
     public List<MetaData> getMetaData() {
         return metaData;
     }
@@ -153,6 +145,7 @@ public class Service extends Mergeable implements Identified {
     }
 
     @Override
+    @XmlTransient
     public String getIdentifier() {
         return name;
     }

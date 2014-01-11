@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 
 /**
  * attributes:
@@ -27,13 +28,11 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class Screen {
 
-    @XStreamAlias("android:screenSize")
-    @XStreamAsAttribute
     private ScreenSize screenSize;
-    @XStreamAlias("android:screenDensity")
-    @XStreamAsAttribute
     private ScreenDensity screenDensity;
 
+    @XmlAttribute(name = "screenSize", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ScreenSizeConverter.class)
     public ScreenSize getScreenSize() {
         return screenSize;
     }
@@ -42,6 +41,8 @@ public class Screen {
         this.screenSize = screenSize;
     }
 
+    @XmlAttribute(name = "screenDensity", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(LabeledConverter.ScreenDensityConverter.class)
     public ScreenDensity getScreenDensity() {
         return screenDensity;
     }

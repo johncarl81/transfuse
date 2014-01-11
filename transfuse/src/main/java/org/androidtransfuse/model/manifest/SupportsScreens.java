@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import javax.xml.bind.annotation.XmlAttribute;
+
 
 /**
  * attributes:
@@ -34,34 +34,17 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  */
 public class SupportsScreens {
 
-    @XStreamAlias("android:resizeable")
-    @XStreamAsAttribute
     private Boolean resizeable;
-    @XStreamAlias("android:smallScreens")
-    @XStreamAsAttribute
     private Boolean smallScreen;
-    @XStreamAlias("android:normalScreens")
-    @XStreamAsAttribute
     private Boolean normalScreens;
-    @XStreamAlias("android:largeScreens")
-    @XStreamAsAttribute
     private Boolean largeScreens;
-    @XStreamAlias("android:xlargeScreens")
-    @XStreamAsAttribute
     private Boolean xlargeScreens;
-    @XStreamAlias("android:anyDensity")
-    @XStreamAsAttribute
     private Boolean anyDensity;
-    @XStreamAlias("android:requiresSmallestWidthDp")
-    @XStreamAsAttribute
     private String requiresSmallestWidthDp;
-    @XStreamAlias("android:compatibleWidthLimitDp")
-    @XStreamAsAttribute
     private String compatibleWidthLimitDp;
-    @XStreamAlias("android:largestWidthLimitDp")
-    @XStreamAsAttribute
     private String largestWidthLimitDp;
 
+    @XmlAttribute(name = "resizeable", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getResizeable() {
         return resizeable;
     }
@@ -70,6 +53,7 @@ public class SupportsScreens {
         this.resizeable = resizeable;
     }
 
+    @XmlAttribute(name = "smallScreens", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getSmallScreen() {
         return smallScreen;
     }
@@ -78,6 +62,7 @@ public class SupportsScreens {
         this.smallScreen = smallScreen;
     }
 
+    @XmlAttribute(name = "normalScreens", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getNormalScreens() {
         return normalScreens;
     }
@@ -86,6 +71,7 @@ public class SupportsScreens {
         this.normalScreens = normalScreens;
     }
 
+    @XmlAttribute(name = "largeScreens", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getLargeScreens() {
         return largeScreens;
     }
@@ -94,6 +80,7 @@ public class SupportsScreens {
         this.largeScreens = largeScreens;
     }
 
+    @XmlAttribute(name = "xlargeScreens", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getXlargeScreens() {
         return xlargeScreens;
     }
@@ -102,6 +89,7 @@ public class SupportsScreens {
         this.xlargeScreens = xlargeScreens;
     }
 
+    @XmlAttribute(name = "anyDensity", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public Boolean getAnyDensity() {
         return anyDensity;
     }
@@ -110,6 +98,7 @@ public class SupportsScreens {
         this.anyDensity = anyDensity;
     }
 
+    @XmlAttribute(name = "requiresSmallestWidthDp", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getRequiresSmallestWidthDp() {
         return requiresSmallestWidthDp;
     }
@@ -118,6 +107,7 @@ public class SupportsScreens {
         this.requiresSmallestWidthDp = requiresSmallestWidthDp;
     }
 
+    @XmlAttribute(name = "compatibleWidthLimitDp", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getCompatibleWidthLimitDp() {
         return compatibleWidthLimitDp;
     }
@@ -126,6 +116,7 @@ public class SupportsScreens {
         this.compatibleWidthLimitDp = compatibleWidthLimitDp;
     }
 
+    @XmlAttribute(name = "largestWidthLimitDp", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getLargestWidthLimitDp() {
         return largestWidthLimitDp;
     }
