@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import java.lang.annotation.Annotation;
@@ -70,8 +71,8 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
-        return ImmutableSet.of();
+    public ImmutableList<ASTType> getGenericParameters() {
+        return ImmutableList.of();
     }
 
     @Override

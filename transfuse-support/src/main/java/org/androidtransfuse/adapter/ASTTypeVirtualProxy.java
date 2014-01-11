@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAdapterException;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -80,7 +81,7 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericParameters() {
         return getProxy().getGenericParameters();
     }
 

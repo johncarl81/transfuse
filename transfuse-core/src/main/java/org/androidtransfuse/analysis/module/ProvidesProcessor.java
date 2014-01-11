@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis.module;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -134,8 +135,8 @@ public class ProvidesProcessor implements MethodProcessor {
 
             ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
                 @Override
-                public ImmutableSet<ASTType> buildGenericParameters() {
-                    return ImmutableSet.of(astMethod.getReturnType());
+                public ImmutableList<ASTType> buildGenericParameters() {
+                    return ImmutableList.of(astMethod.getReturnType());
                 }
             });
 

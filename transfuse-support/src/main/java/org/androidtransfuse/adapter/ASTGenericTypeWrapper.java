@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -38,7 +39,7 @@ public class ASTGenericTypeWrapper implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericParameters() {
         return lazyTypeParameterBuilder.buildGenericParameters();
     }
 

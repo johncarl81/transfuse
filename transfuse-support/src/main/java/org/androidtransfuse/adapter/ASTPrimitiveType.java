@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -115,8 +116,8 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
-        return ImmutableSet.of();
+    public ImmutableList<ASTType> getGenericParameters() {
+        return ImmutableList.of();
     }
 
     public static ASTPrimitiveType getAutoboxType(String name) {

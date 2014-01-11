@@ -15,12 +15,12 @@
  */
 package org.androidtransfuse.adapter;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author John Ericksen
  */
 public interface LazyTypeParameterBuilder {
 
-    ImmutableSet<ASTType> buildGenericParameters();
+    ImmutableList<ASTType> buildGenericParameters();
 }

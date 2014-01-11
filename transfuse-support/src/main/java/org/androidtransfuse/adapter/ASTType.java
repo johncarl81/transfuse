@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -78,7 +79,7 @@ public interface ASTType extends ASTBase {
      *
      * @return generic parameters
      */
-    ImmutableSet<ASTType> getGenericParameters();
+    ImmutableList<ASTType> getGenericParameters();
 
     /**
      * Determines if the current type inherits (extends or implements) from the given type.

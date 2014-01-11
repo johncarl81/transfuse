@@ -17,7 +17,7 @@ package org.androidtransfuse.adapter.classes;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
@@ -32,7 +32,7 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
 
     private final ParameterizedType parameterizedType;
     private final ASTClassFactory astClassFactory;
-    private ImmutableSet<ASTType> genericParameters = null;
+    private ImmutableList<ASTType> genericParameters = null;
 
     @Inject
     public LazyClassParameterBuilder(/*@Assisted*/ ParameterizedType parameterizedType,
@@ -41,17 +41,17 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
         this.astClassFactory = astClassFactory;
     }
 
-    public synchronized ImmutableSet<ASTType> buildGenericParameters() {
+    public synchronized ImmutableList<ASTType> buildGenericParameters() {
         if (genericParameters == null) {
             genericParameters = innerBuildGenericParameters();
         }
         return genericParameters;
     }
 
-    private ImmutableSet<ASTType> innerBuildGenericParameters() {
+    private ImmutableList<ASTType> innerBuildGenericParameters() {
         return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
                 .transform(this)
-                .toSet();
+                .toList();
     }
 
     @Override

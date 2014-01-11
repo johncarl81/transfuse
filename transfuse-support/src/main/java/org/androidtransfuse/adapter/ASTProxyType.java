@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -114,7 +115,7 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericParameters() {
         return proxyASTType.getGenericParameters();
     }
 

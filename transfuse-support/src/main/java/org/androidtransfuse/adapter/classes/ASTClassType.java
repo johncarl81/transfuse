@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter.classes;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -136,8 +137,8 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
-        return ImmutableSet.of();
+    public ImmutableList<ASTType> getGenericParameters() {
+        return ImmutableList.of();
     }
 
     @Override

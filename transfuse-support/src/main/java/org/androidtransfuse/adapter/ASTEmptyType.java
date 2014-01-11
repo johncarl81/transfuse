@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -68,8 +69,8 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
-    public ImmutableSet<ASTType> getGenericParameters() {
-        return ImmutableSet.of();
+    public ImmutableList<ASTType> getGenericParameters() {
+        return ImmutableList.of();
     }
 
     @Override
