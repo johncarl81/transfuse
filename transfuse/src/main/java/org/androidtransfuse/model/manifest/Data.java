@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class Data {
+public class Data extends ManifestBase {
 
     private String host;
     private String mimeType;

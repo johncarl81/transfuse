@@ -51,7 +51,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-@XmlRootElement(name = "manifest", namespace = ManifestNamespaceMapper.DEFAULT_PREFIX)
+@XmlRootElement(name = "manifest")
 @XmlType(propOrder = {
         "applicationPackage",
         "sharedUserId",
@@ -92,7 +92,7 @@ public class Manifest extends Mergeable {
     private List<UsesConfiguration> usesConfigurations = new ArrayList<UsesConfiguration>();
     private List<CompatibleScreens> compatibleScreens = new ArrayList<CompatibleScreens>();
 
-    @XmlAttribute(name = "package", namespace = ManifestNamespaceMapper.DEFAULT_PREFIX)
+    @XmlAttribute(name = "package")
     public String getApplicationPackage() {
         return applicationPackage;
     }
@@ -101,7 +101,7 @@ public class Manifest extends Mergeable {
         this.applicationPackage = applicationPackage;
     }
 
-    @XmlAttribute(name = "sharedUserId", namespace = ManifestNamespaceMapper.ANDROID_PREFIX)
+    @XmlAttribute(name = "sharedUserId", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getSharedUserId() {
         return sharedUserId;
     }
@@ -128,7 +128,7 @@ public class Manifest extends Mergeable {
         this.versionCode = versionCode;
     }
 
-    @XmlAttribute(name = "versionName", namespace = ManifestNamespaceMapper.ANDROID_PREFIX)
+    @XmlAttribute(name = "versionName", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getVersionName() {
         return versionName;
     }

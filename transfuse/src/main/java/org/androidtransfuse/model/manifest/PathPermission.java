@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class PathPermission {
+public class PathPermission extends ManifestBase {
 
     private String path;
     private String pathPrefix;

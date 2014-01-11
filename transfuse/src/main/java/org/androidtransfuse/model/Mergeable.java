@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.model;
 
+import org.androidtransfuse.model.manifest.ManifestBase;
 import org.androidtransfuse.model.manifest.ManifestNamespaceMapper;
 import org.androidtransfuse.processor.MergeableTagConverter;
 import org.androidtransfuse.processor.MergeableTags;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 /**
  * @author John Ericksen
  */
-public class Mergeable {
+public class Mergeable extends ManifestBase {
 
     private static final String GENERATED_TOKEN = "+";
 

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class SupportsScreens {
+public class SupportsScreens extends ManifestBase {
 
     private Boolean resizeable;
     private Boolean smallScreen;

@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class SupportsGlTexture {
+public class SupportsGlTexture extends ManifestBase {
 
     private String name;
 

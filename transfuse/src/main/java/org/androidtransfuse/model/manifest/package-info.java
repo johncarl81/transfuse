@@ -18,14 +18,11 @@
  */
 
 @XmlSchema(
-        elementFormDefault = XmlNsForm.QUALIFIED,
         xmlns = {
-                @XmlNs(prefix= ManifestNamespaceMapper.DEFAULT_PREFIX, namespaceURI=ManifestNamespaceMapper.DEFAULT_URI),
                 @XmlNs(prefix=ManifestNamespaceMapper.ANDROID_PREFIX, namespaceURI=ManifestNamespaceMapper.ANDROID_URI),
                 @XmlNs(prefix=ManifestNamespaceMapper.TRANSFUSE_PREFIX, namespaceURI=ManifestNamespaceMapper.TRANSFUSE_URI)
         })
 package org.androidtransfuse.model.manifest;
 
 import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;

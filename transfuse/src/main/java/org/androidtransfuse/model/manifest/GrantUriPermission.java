@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class GrantUriPermission {
+public class GrantUriPermission extends ManifestBase {
 
     private String path;
     private String pathPattern;

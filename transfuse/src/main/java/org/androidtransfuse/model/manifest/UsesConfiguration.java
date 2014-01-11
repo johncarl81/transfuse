@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author John Ericksen
  */
-public class UsesConfiguration {
+public class UsesConfiguration extends ManifestBase {
 
     private Boolean reqFiveWayNav;
     private Boolean reqHardKeyboard;

@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class ActivityAlias {
+public class ActivityAlias extends ManifestBase {
 
     private Boolean enabled;
     private Boolean exported;

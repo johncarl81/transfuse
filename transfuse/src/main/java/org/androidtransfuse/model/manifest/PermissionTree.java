@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class PermissionTree {
+public class PermissionTree extends ManifestBase {
 
     private String icon;
     private String label;

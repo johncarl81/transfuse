@@ -44,7 +44,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class Provider {
+public class Provider extends ManifestBase {
 
     private String authorities;
     private Boolean enabled;

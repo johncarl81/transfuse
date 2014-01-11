@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class PermissionGroup {
+public class PermissionGroup extends ManifestBase {
 
     private String description;
     private String icon;

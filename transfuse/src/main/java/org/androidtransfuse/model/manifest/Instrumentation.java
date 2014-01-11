@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class Instrumentation {
+public class Instrumentation extends ManifestBase {
 
     private String icon;
-   private String label;
+    private String label;
     private String name;
     private Boolean functionalTest;
     private Boolean handleProfiling;

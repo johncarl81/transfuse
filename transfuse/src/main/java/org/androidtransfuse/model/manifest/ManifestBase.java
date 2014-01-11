@@ -15,26 +15,31 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.Element;
+import javax.xml.bind.annotation.XmlAnyElement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * child elements:
- * <screen>
+ * Base class for all Manifest related domain objects.
  *
  * @author John Ericksen
  */
-public class CompatibleScreens extends ManifestBase {
+public class ManifestBase {
 
-    private List<Screen> screens = new ArrayList<Screen>();
+    private List<Element> elements = new ArrayList<Element>();
 
-    @XmlElement(name = "screen")
-    public List<Screen> getScreens() {
-        return screens;
+    /**
+     * List of Elements to hold all extra xml elements that are undefined in the AndroidManifest schema.
+     *
+     * @return list of extra elements
+     */
+    @XmlAnyElement
+    public List<Element> getElements() {
+        return elements;
     }
 
-    public void setScreens(List<Screen> screens) {
-        this.screens = screens;
+    public void setElements(List<Element> elements) {
+        this.elements = elements;
     }
 }

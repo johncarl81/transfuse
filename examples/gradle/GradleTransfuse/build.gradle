@@ -12,6 +12,9 @@ apply plugin: 'android-apt'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
@@ -34,8 +37,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
     }
+}
 
-    sourceSets.main {
-        manifest.srcFile 'AndroidManifest.xml'
+apt {
+    arguments {
+        androidManifestFile variant.processResources.manifestFile
     }
 }

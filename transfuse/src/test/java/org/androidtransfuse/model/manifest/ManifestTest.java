@@ -19,8 +19,10 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.util.ManifestSerializer;
 import org.apache.commons.io.IOUtils;
+import org.custommonkey.xmlunit.Diff;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
@@ -28,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -46,30 +49,31 @@ public class ManifestTest {
     }
 
     @Test
-    public void testManifestParsingAndWriting() {
+    public void testManifestParsingAndWriting() throws SAXException {
         try {
 
             InputStream manifestStream = this.getClass().getClassLoader().getResourceAsStream("AndroidManifest.xml");
-            String manifestString = IOUtils.toString(manifestStream);
-            Manifest manifest = manifestSerializer.readManifest(new ByteArrayInputStream(manifestString.getBytes()));
+            String inputManifestString = IOUtils.toString(manifestStream);
+            Manifest manifest = manifestSerializer.readManifest(new ByteArrayInputStream(inputManifestString.getBytes()));
 
             assertNotNull(manifest);
             assertEquals("android.permission.VIBRATE", manifest.getUsesPermissions().get(0).getName());
+
+            //additional elements are preserved
+            assertEquals(1, manifest.getApplications().get(0).getElements().size());
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
             manifestSerializer.writeManifest(manifest, outputStream);
 
-            String output = IOUtils.toString(new ByteArrayInputStream(outputStream.toByteArray()));
+            String outputManifestString = IOUtils.toString(new ByteArrayInputStream(outputStream.toByteArray()));
 
-            //assertEquals(formatWhitespace(manifestString), formatWhitespace(output));
+            Diff diff = new Diff(inputManifestString, outputManifestString);
+
+            assertXMLEqual("comparing test xml to control xml", diff, true);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String formatWhitespace(String input) {
-        return input.replaceAll("\\s+", " ");
     }
 }

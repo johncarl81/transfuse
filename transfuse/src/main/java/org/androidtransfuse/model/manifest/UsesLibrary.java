@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class UsesLibrary {
+public class UsesLibrary extends ManifestBase {
 
     private String name;
     private Boolean required;

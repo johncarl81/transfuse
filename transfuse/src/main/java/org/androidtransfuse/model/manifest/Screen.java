@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author John Ericksen
  */
-public class Screen {
+public class Screen extends ManifestBase {
 
     private ScreenSize screenSize;
     private ScreenDensity screenDensity;
