@@ -20,6 +20,7 @@ import org.androidtransfuse.model.Identified;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
+import org.androidtransfuse.model.manifest.MetaData;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -89,6 +90,8 @@ public class Application extends Mergeable implements Identified {
     private List<Receiver> receivers = new ArrayList<Receiver>();
     private List<Provider> providers = new ArrayList<Provider>();
     private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
+    @XStreamImplicit(itemFieldName = "meta-data")
+    private List<MetaData> metaDatas = new ArrayList<MetaData>();
 
     @Merge("r")
     @XmlAttribute(name = "allowTaskReparenting", namespace = ManifestNamespaceMapper.ANDROID_URI)
@@ -346,6 +349,14 @@ public class Application extends Mergeable implements Identified {
 
     public void setUsesLibraries(List<UsesLibrary> usesLibraries) {
         this.usesLibraries = usesLibraries;
+    }
+
+    public List<MetaData> getMetaDatas() {
+        return metaDatas;
+    }
+
+    public void setMetaDatas(List<MetaData> metaDatas) {
+        this.metaDatas = metaDatas;
     }
 
     @Override
