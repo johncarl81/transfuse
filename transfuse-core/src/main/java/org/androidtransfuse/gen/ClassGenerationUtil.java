@@ -20,6 +20,8 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class unifying the creation of a basic class from a PackageClass
@@ -60,10 +62,20 @@ public class ClassGenerationUtil {
         if(astType.isArray()){
             return ref(typeName.substring(0, typeName.length() - 2)).array();
         }
-        JClass reference = ref(typeName);
+        return ref(typeName);
+    }
 
-        for (ASTType genericParam : astType.getGenericParameters()) {
-            reference.narrow(ref(genericParam));
+    public JClass narrowRef(ASTType astType){
+        JClass reference = ref(astType);
+
+        if(astType.getGenericParameters().size() > 0){
+            List<JClass> genericParameterRefs = new ArrayList<JClass>();
+
+            for (ASTType genericParam : astType.getGenericParameters()) {
+                genericParameterRefs.add(narrowRef(genericParam));
+            }
+
+            reference = reference.narrow(genericParameterRefs);
         }
 
         return reference;

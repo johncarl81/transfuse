@@ -44,7 +44,7 @@ public class UniqueVariableNamer {
     }
 
     public String generateName(JType definedClass) {
-        return generateName(definedClass.fullName());
+        return generateName(definedClass.erasure().fullName());
     }
 
     public String generateName(InjectionNode injectionNode) {
