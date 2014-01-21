@@ -37,9 +37,8 @@ public class ASTArrayType implements ASTType {
         this.delegate = delegate;
     }
 
-    @Override
-    public boolean isArray() {
-        return true;
+    public ASTType getComponentType() {
+        return delegate;
     }
 
     @Override
@@ -133,7 +132,7 @@ public class ASTArrayType implements ASTType {
 
         ASTArrayType that = (ASTArrayType) o;
 
-        return new EqualsBuilder().append(isArray(), that.isArray()).append(delegate, that.delegate).isEquals();
+        return new EqualsBuilder().append(delegate, that.delegate).isEquals();
     }
 
     @Override

@@ -76,11 +76,6 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public boolean isArray() {
-        return getProxy().isArray();
-    }
-
-    @Override
     public ImmutableList<ASTType> getGenericParameters() {
         return getProxy().getGenericParameters();
     }

@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 
@@ -59,7 +60,7 @@ public class ClassGenerationUtil {
 
     public JClass ref(ASTType astType){
         String typeName = astType.getName();
-        if(astType.isArray()){
+        if(astType instanceof ASTArrayType){
             return ref(typeName.substring(0, typeName.length() - 2)).array();
         }
         return ref(typeName);

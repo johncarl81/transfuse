@@ -98,11 +98,6 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public boolean isArray() {
-        return false;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

@@ -76,7 +76,7 @@ public class MethodSignature {
     }
 
     private void makeTypeDescriptor(StringBuilder builder, ASTType type) {
-        if (type.isArray()) {
+        if (type instanceof ASTArrayType) {
             builder.append('[');
         }
         makeTypeDesc(builder, type);

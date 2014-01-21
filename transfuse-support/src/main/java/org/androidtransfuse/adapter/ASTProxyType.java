@@ -90,11 +90,6 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public boolean isArray() {
-        return proxyASTType.isArray();
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ASTProxyType)) {
             return false;

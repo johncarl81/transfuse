@@ -108,11 +108,6 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public boolean isArray() {
-        return clazz.isArray();
-    }
-
-    @Override
     public PackageClass getPackageClass() {
         return packageClass;
     }

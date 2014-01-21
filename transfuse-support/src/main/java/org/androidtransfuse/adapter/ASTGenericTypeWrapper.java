@@ -71,10 +71,6 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.getInterfaces();
     }
 
-    public boolean isArray() {
-        return astType.isArray();
-    }
-
     public boolean isAnnotated(Class<? extends Annotation> annotation) {
         return astType.isAnnotated(annotation);
     }

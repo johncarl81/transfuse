@@ -68,13 +68,6 @@ public interface ASTType extends ASTBase {
     ImmutableSet<ASTType> getInterfaces();
 
     /**
-     * Determines if this type is an array type
-     *
-     * @return array type
-     */
-    boolean isArray();
-
-    /**
      * Generates a list of the generic type parameters, if they are appropriate for the type and exist.
      *
      * @return generic parameters

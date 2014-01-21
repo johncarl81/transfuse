@@ -64,11 +64,6 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
-    public boolean isArray() {
-        return false;
-    }
-
-    @Override
     public ImmutableList<ASTType> getGenericParameters() {
         return ImmutableList.of();
     }
