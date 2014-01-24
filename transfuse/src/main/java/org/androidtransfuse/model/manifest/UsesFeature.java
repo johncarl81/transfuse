@@ -21,6 +21,7 @@ import org.androidtransfuse.processor.Merge;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * attributes:
@@ -58,6 +59,7 @@ public class UsesFeature extends Mergeable implements Identified {
 
     @Merge("g")
     @XmlAttribute(name = "glEsVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    @XmlJavaTypeAdapter(HexadecimalIntegerConverter.class)
     public Integer getGlEsVersion() {
         return glEsVersion;
     }

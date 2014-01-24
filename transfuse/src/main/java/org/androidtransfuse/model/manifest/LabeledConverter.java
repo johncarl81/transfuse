@@ -26,12 +26,6 @@ import java.util.Map;
  */
 public class LabeledConverter<T extends Labeled> extends XmlAdapter<String, T> {
 
-    public static final class ConfigChangesConverter extends LabeledConverter<ConfigChanges>{
-        public ConfigChangesConverter() {
-            super(ConfigChanges.class, ConfigChanges.values());
-        }
-    }
-
     public static final class InstallLocationConverter extends LabeledConverter<InstallLocation>{
         public InstallLocationConverter() {
             super(InstallLocation.class, InstallLocation.values());
