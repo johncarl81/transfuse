@@ -16,31 +16,33 @@
 package org.androidtransfuse.intentFactory;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**
  * @author John Ericksen
  */
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class ActivityIntentFactoryStrategyTest {
 
     private ActivityIntentFactoryStrategy activityIntentFactoryStrategy;
-    private Context mockContext;
+    private Activity mockContext;
     private Bundle mockBundle;
     private Intent mockIntent;
 
     @Before
     public void setup(){
-        mockContext = mock(Context.class);
-        mockBundle = mock(Bundle.class);
-        mockIntent = mock(Intent.class);
+        mockContext = new Activity();
+        mockBundle = new Bundle();
+        mockIntent = new Intent();
         activityIntentFactoryStrategy = new ActivityIntentFactoryStrategy(Activity.class, mockBundle);
     }
 
@@ -57,7 +59,5 @@ public class ActivityIntentFactoryStrategyTest {
     @Test
     public void testStart(){
         activityIntentFactoryStrategy.start(mockContext, mockIntent);
-
-        verify(mockContext).startActivity(mockIntent);
     }
 }

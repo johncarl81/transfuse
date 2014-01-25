@@ -41,10 +41,10 @@ public final class ExtraUtil {
      * @param nullable nullability of the extra
      * @return extra value
      */
-    public static Object getExtra(Bundle extras, String name, boolean nullable) {
-        Object value = null;
+    public static <T> T getExtra(Bundle extras, String name, boolean nullable) {
+        T value = null;
         if (extras != null && extras.containsKey(name)) {
-            value = extras.get(name);
+            value = (T)extras.get(name);
         }
         if (!nullable && value == null) {
             throw new TransfuseInjectionException("Unable to access Extra " + name);

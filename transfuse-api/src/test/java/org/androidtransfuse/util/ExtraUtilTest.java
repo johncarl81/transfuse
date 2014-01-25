@@ -17,16 +17,19 @@ package org.androidtransfuse.util;
 
 import android.os.Bundle;
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 /**
  * @author John Ericksen
  */
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class ExtraUtilTest {
 
     private static final String TEST_NAME = "test extra";
@@ -45,10 +48,9 @@ public class ExtraUtilTest {
     @Test
     public void getExtra() {
 
-        Bundle mockBundle = PowerMockito.mock(Bundle.class);
+        Bundle mockBundle = new Bundle();
 
-        when(mockBundle.containsKey(TEST_NAME)).thenReturn(true);
-        when(mockBundle.get(TEST_NAME)).thenReturn(TEST_EXTRA_TARGET);
+        mockBundle.putString(TEST_NAME, TEST_EXTRA_TARGET);
 
         Object extraOutput = ExtraUtil.getExtra(mockBundle, TEST_NAME, false);
 
@@ -58,21 +60,17 @@ public class ExtraUtilTest {
     @Test(expected = TransfuseInjectionException.class)
     public void getExtraThatIsExpectedToExist() {
 
-        Bundle mockBundle = PowerMockito.mock(Bundle.class);
+        Bundle mockBundle = new Bundle();
 
-        when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
-
-        assertNull(ExtraUtil.getExtra(mockBundle, TEST_NAME, false));
+        ExtraUtil.getExtra(mockBundle, TEST_NAME, false);
     }
 
     @Test
     public void getExtraThatIsOptional() {
 
-        Bundle mockBundle = PowerMockito.mock(Bundle.class);
+        Bundle mockBundle = new Bundle();
 
-        when(mockBundle.containsKey(TEST_NAME)).thenReturn(false);
-
-        ExtraUtil.getExtra(mockBundle, TEST_NAME, true);
+        assertNull(ExtraUtil.getExtra(mockBundle, TEST_NAME, true));
     }
 
     @Test
