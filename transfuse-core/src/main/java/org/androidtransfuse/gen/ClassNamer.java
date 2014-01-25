@@ -39,7 +39,8 @@ public class ClassNamer {
 
     static{
         PROHIBITED_PACKAGES.put("java.", "java_.");
-        PROHIBITED_PACKAGES. put("javax.", "javax_.");
+        PROHIBITED_PACKAGES.put("javax.", "javax_.");
+        PROHIBITED_PACKAGES.put("com.sun.", "com.sun_.");
     }
 
     private final ConcurrentMap<String, AtomicInteger> nameMap = new ConcurrentHashMap<String, AtomicInteger>();
