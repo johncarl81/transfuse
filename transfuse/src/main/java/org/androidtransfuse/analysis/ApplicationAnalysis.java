@@ -196,6 +196,13 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestApplication.setTaskAffinity(checkBlank(annotation.taskAffinity()));
         manifestApplication.setTheme(checkBlank(annotation.theme()));
         manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
+        manifestApplication.setAllowBackup(checkDefault(annotation.allowBackup(), true));
+        manifestApplication.setLargeHeap(checkDefault(annotation.largeHeap(), false));
+        manifestApplication.setSupportsRtl(checkDefault(annotation.supportsRtl(), false));
+        manifestApplication.setRestrictedAccountType(checkDefault(annotation.restrictedAccountType(), false));
+        manifestApplication.setVmSafeMode(checkDefault(annotation.vmSafeMode(), false));
+        manifestApplication.setTestOnly(checkDefault(annotation.testOnly(), false));
+        manifestApplication.setRequiredAccountType(checkBlank(annotation.requiredAccountType()));
         manifestManager.setApplication(manifestApplication);
     }
 }

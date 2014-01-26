@@ -42,6 +42,20 @@ public @interface Application {
 
     boolean allowTaskReparenting() default false;
 
+    boolean allowBackup() default true;
+
+    boolean largeHeap() default false;
+
+    boolean supportsRtl() default false;
+
+    boolean restrictedAccountType() default false;
+
+    boolean vmSafeMode() default false;
+
+    boolean testOnly() default false;
+
+    String requiredAccountType() default "";
+
     String backupAgent() default "";
 
     boolean debuggable() default false;

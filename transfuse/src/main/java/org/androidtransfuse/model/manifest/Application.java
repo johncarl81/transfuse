@@ -83,6 +83,13 @@ public class Application extends Mergeable implements Identified {
     private String taskAffinity;
     private String theme;
     private UIOptions uiOptions;
+    private Boolean allowBackup;
+    private Boolean largeHeap;
+    private Boolean supportsRtl;
+    private Boolean restrictedAccountType;
+    private Boolean vmSafeMode;
+    private Boolean testOnly;
+    private String requiredAccountType;
     private List<Activity> activities = new ArrayList<Activity>();
     private List<ActivityAlias> activityAliases = new ArrayList<ActivityAlias>();
     private List<Service> services = new ArrayList<Service>();
@@ -346,6 +353,76 @@ public class Application extends Mergeable implements Identified {
 
     public void setUsesLibraries(List<UsesLibrary> usesLibraries) {
         this.usesLibraries = usesLibraries;
+    }
+
+    @Merge("ab")
+    @XmlAttribute(name = "allowBackup", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getAllowBackup() {
+        return allowBackup;
+    }
+
+    public void setAllowBackup(Boolean allowBackup) {
+        this.allowBackup = allowBackup;
+    }
+
+    @Merge("lh")
+    @XmlAttribute(name = "largeHeap", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getLargeHeap() {
+        return largeHeap;
+    }
+
+    public void setLargeHeap(Boolean largeHeap) {
+        this.largeHeap = largeHeap;
+    }
+
+    @Merge("rt")
+    @XmlAttribute(name = "supportsRtl", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getSupportsRtl() {
+        return supportsRtl;
+    }
+
+    public void setSupportsRtl(Boolean supportsRtl) {
+        this.supportsRtl = supportsRtl;
+    }
+
+    @Merge("ra")
+    @XmlAttribute(name = "restrictedAccountType", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getRestrictedAccountType() {
+        return restrictedAccountType;
+    }
+
+    public void setRestrictedAccountType(Boolean restrictedAccountType) {
+        this.restrictedAccountType = restrictedAccountType;
+    }
+
+    @Merge("vm")
+    @XmlAttribute(name = "vmSafeMode", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getVmSafeMode() {
+        return vmSafeMode;
+    }
+
+    public void setVmSafeMode(Boolean vmSafeMode) {
+        this.vmSafeMode = vmSafeMode;
+    }
+
+    @Merge("to")
+    @XmlAttribute(name = "testOnly", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Boolean getTestOnly() {
+        return testOnly;
+    }
+
+    public void setTestOnly(Boolean testOnly) {
+        this.testOnly = testOnly;
+    }
+
+    @Merge("rc")
+    @XmlAttribute(name = "requiredAccountType", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public String getRequiredAccountType() {
+        return requiredAccountType;
+    }
+
+    public void setRequiredAccountType(String requiredAccountType) {
+        this.requiredAccountType = requiredAccountType;
     }
 
     @Override
