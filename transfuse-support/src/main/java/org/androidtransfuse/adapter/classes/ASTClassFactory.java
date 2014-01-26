@@ -21,7 +21,7 @@ import org.androidtransfuse.adapter.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +33,12 @@ import java.util.Map;
  */
 @Singleton
 public class ASTClassFactory {
+
+    @Target(ElementType.PARAMETER)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ASTParameterName{
+        String value();
+    }
 
     private final Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
     private final ASTFactory astFactory;
@@ -156,9 +162,15 @@ public class ASTClassFactory {
 
         for (int i = 0; i < parameterTypes.length; i++) {
             ASTType parameterType = getType(parameterTypes[i], nullSafeAccess(genericParameterTypes, i));
+            String name = null;
+            for (Annotation parameterAnnotation : parameterAnnotations[i]) {
+                if(parameterAnnotation.annotationType().equals(ASTParameterName.class)){
+                    name = ((ASTParameterName)parameterAnnotation).value();
+                }
+            }
             astParameterBuilder.add(
                     new ASTClassParameter(
-                            parameterType.getName(),
+                            name,
                             parameterAnnotations[i],
                             parameterType,
                             getAnnotations(parameterAnnotations[i])));

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.analysis.targets;
 
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.util.TransfuseInjectionException;
 
 import javax.inject.Inject;
@@ -27,12 +28,12 @@ public class MockAnalysisClass extends MockAnalysisSuperClass {
     private MockParameter testParameter;
 
     @Inject
-    public MockAnalysisClass(MockParameter testParameter) throws TransfuseInjectionException {
+    public MockAnalysisClass(@ASTClassFactory.ASTParameterName("testParameter") MockParameter testParameter) throws TransfuseInjectionException {
         this.testParameter = testParameter;
     }
 
     @Inject
-    public void injectMethod(MockParameter testParameter) throws TransfuseInjectionException {
+    public void injectMethod(@ASTClassFactory.ASTParameterName("testParameter") MockParameter testParameter) throws TransfuseInjectionException {
         this.testParameter = testParameter;
     }
 }

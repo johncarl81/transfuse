@@ -99,7 +99,7 @@ public class InjectionPointFactoryTest {
 
             InjectionNode injectionNode = injectionNodes.get(i);
             ASTParameter typeParameter = astParameters.get(i);
-            assertEquals(typeParameter.getName(), injectionNode.getClassName());
+            assertEquals(typeParameter.getASTType().getName(), injectionNode.getClassName());
         }
 
         assertEquals(1, methodInjectionPoint.getThrowsTypes().size());
