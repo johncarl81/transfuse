@@ -47,8 +47,8 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
         //activity metadata
         builder.given(Layout.class).requires(Arrays.asList(Activity.class, Fragment.class), "@Layout annotation must be accompanied by @Activity");
         builder.given(LayoutHandler.class).requires(Arrays.asList(Activity.class, Fragment.class), "@LayoutHandler annotation must be accompanied by @Activity");
-        builder.given(MetaData.class).requires(Activity.class, "@MetaData annotation must be accompanied by @Activity");
-        builder.given(MetaDataSet.class).requires(Activity.class, "@MetaDataSet annotation must be accompanied by @Activity");
+        builder.given(MetaData.class).requires(Arrays.asList(Activity.class, Application.class, Service.class, BroadcastReceiver.class), "@MetaData annotation must be accompanied by a component annotation");
+        builder.given(MetaDataSet.class).requires(Arrays.asList(Activity.class, Application.class, Service.class, BroadcastReceiver.class), "@MetaDataSet annotation must be accompanied by a component annotation");
         builder.given(Activity.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Activity name parameter must follow Java Bean syntax");
         builder.given(Service.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Service name parameter must follow Java Bean syntax");
         builder.given(Fragment.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Fragment name parameter must follow Java Bean syntax");

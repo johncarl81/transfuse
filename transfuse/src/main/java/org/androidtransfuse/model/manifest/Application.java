@@ -96,6 +96,7 @@ public class Application extends Mergeable implements Identified {
     private List<Receiver> receivers = new ArrayList<Receiver>();
     private List<Provider> providers = new ArrayList<Provider>();
     private List<UsesLibrary> usesLibraries = new ArrayList<UsesLibrary>();
+    private List<MetaData> metaData = new ArrayList<MetaData>();
 
     @Merge("r")
     @XmlAttribute(name = "allowTaskReparenting", namespace = ManifestNamespaceMapper.ANDROID_URI)
@@ -335,6 +336,16 @@ public class Application extends Mergeable implements Identified {
 
     public void setReceivers(List<Receiver> receivers) {
         this.receivers = receivers;
+    }
+
+    @MergeCollection(collectionType = ArrayList.class, type = MetaData.class)
+    @XmlElement(name = "meta-data")
+    public List<MetaData> getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(List<MetaData> metaData) {
+        this.metaData = metaData;
     }
 
     @XmlElement(name = "provider")

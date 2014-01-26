@@ -56,6 +56,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final MetaDataBuilder metadataBuilder;
     private final ManifestBuilder manifestBuilder;
 
     @Inject
@@ -69,6 +70,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                InjectionBindingBuilder injectionBindingBuilder,
                                ContextScopeComponentBuilder contextScopeComponentBuilder,
                                ObservesRegistrationGenerator observesExpressionDecorator,
+                               MetaDataBuilder metadataBuilder,
                                ManifestBuilder manifestBuilder) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -80,6 +82,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.observesExpressionDecorator = observesExpressionDecorator;
+        this.metadataBuilder = metadataBuilder;
         this.manifestBuilder = manifestBuilder;
     }
 
@@ -108,7 +111,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         //add manifest elements
-        setupManifest(applicationAnnotation, applicationClassName.getFullyQualifiedName(), applicationAnnotation.label());
+        setupManifest(applicationAnnotation, astType, applicationClassName.getFullyQualifiedName(), applicationAnnotation.label());
 
         return applicationDescriptor;
     }
@@ -173,7 +176,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private void setupManifest(Application annotation, String name, String label) {
+    private void setupManifest(Application annotation, ASTType type, String name, String label) {
 
         org.androidtransfuse.model.manifest.Application manifestApplication = manifestBuilder.setupManifestApplication(name);
 
@@ -203,6 +206,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestApplication.setVmSafeMode(checkDefault(annotation.vmSafeMode(), false));
         manifestApplication.setTestOnly(checkDefault(annotation.testOnly(), false));
         manifestApplication.setRequiredAccountType(checkBlank(annotation.requiredAccountType()));
+
+        manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
+
         manifestManager.setApplication(manifestApplication);
     }
 }
