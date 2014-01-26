@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.aop.InterceptorRecorder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertNotNull;
@@ -35,8 +36,7 @@ public class PreferencesTest {
     @Before
     public void setup() {
         InterceptorRecorder.reset();
-        PreferencesActivity preferencesActivity = new PreferencesActivity();
-        preferencesActivity.onCreate(null);
+        PreferencesActivity preferencesActivity = Robolectric.buildActivity(PreferencesActivity.class).create().get();
 
         preferences = DelegateUtil.getDelegate(preferencesActivity, Preferences.class);
     }

@@ -19,6 +19,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -35,10 +36,8 @@ public class ScopeTest {
 
     @Before
     public void setup() {
-        ScopeOneActivity scopeOneActivity = new ScopeOneActivity();
-        scopeOneActivity.onCreate(null);
-        ScopeTwoActivity scopeTwoActivity = new ScopeTwoActivity();
-        scopeTwoActivity.onCreate(null);
+        ScopeOneActivity scopeOneActivity = Robolectric.buildActivity(ScopeOneActivity.class).create().get();
+        ScopeTwoActivity scopeTwoActivity = Robolectric.buildActivity(ScopeTwoActivity.class).create().get();
 
         one = DelegateUtil.getDelegate(scopeOneActivity, ScopeOne.class);
         two = DelegateUtil.getDelegate(scopeTwoActivity, ScopeTwo.class);

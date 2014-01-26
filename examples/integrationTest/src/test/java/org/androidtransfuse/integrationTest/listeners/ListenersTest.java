@@ -19,6 +19,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertTrue;
@@ -34,8 +35,7 @@ public class ListenersTest {
 
     @Before
     public void setup(){
-        listenersActivity = new ListenersActivity();
-        listenersActivity.onCreate(null);
+        listenersActivity = Robolectric.buildActivity(ListenersActivity.class).create().get();
 
         listeners = DelegateUtil.getDelegate(listenersActivity, Listeners.class);
     }

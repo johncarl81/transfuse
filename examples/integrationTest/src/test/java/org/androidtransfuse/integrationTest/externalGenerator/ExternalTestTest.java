@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -35,8 +36,7 @@ public class ExternalTestTest {
 
     @Before
     public void setUp() {
-        ExternalTestActivity testActivity = new ExternalTestActivity();
-        testActivity.onCreate(new Bundle());
+        ExternalTestActivity testActivity = Robolectric.buildActivity(ExternalTestActivity.class).create(new Bundle()).get();
 
         test = DelegateUtil.getDelegate(testActivity, ExternalTest.class);
     }

@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.IntegrationModule;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import javax.inject.Provider;
@@ -36,8 +37,7 @@ public class InjectionTest {
 
     @Before
     public void setup() {
-        InjectionActivity injectionActivity = new InjectionActivity();
-        injectionActivity.onCreate(null);
+        InjectionActivity injectionActivity = Robolectric.buildActivity(InjectionActivity.class).create().get();
 
         injection = DelegateUtil.getDelegate(injectionActivity, Injection.class);
     }

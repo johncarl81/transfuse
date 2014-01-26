@@ -23,6 +23,7 @@ import org.androidtransfuse.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import javax.inject.Singleton;
@@ -43,8 +44,7 @@ public class EventObserverTest {
 
     @Before
     public void setup() {
-        eventObserverActivity = new EventObserverActivity();
-        eventObserverActivity.onCreate(null);
+        eventObserverActivity = Robolectric.buildActivity(EventObserverActivity.class).create().get();
 
         eventManager = Transfuse$$ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(ScopeKey.of(EventManager.class), Providers.of(new EventManager()));
 

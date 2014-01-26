@@ -19,6 +19,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -35,8 +36,7 @@ public class CustomViewTest {
 
     @Before
     public void setup() {
-        CustomViewActivity customViewActivity = new CustomViewActivity();
-        customViewActivity.onCreate(null);
+        CustomViewActivity customViewActivity = Robolectric.buildActivity(CustomViewActivity.class).create().get();
 
         customView = DelegateUtil.getDelegate(customViewActivity, CustomView.class);
     }

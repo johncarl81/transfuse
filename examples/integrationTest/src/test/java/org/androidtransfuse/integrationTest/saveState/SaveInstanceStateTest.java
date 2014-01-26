@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -38,8 +39,7 @@ public class SaveInstanceStateTest {
 
     @Before
     public void setup(){
-        saveInstanceStateActivity = new SaveInstanceStateActivity();
-        saveInstanceStateActivity.onCreate(null);
+        saveInstanceStateActivity = Robolectric.buildActivity(SaveInstanceStateActivity.class).create().get();
 
         bundle = new Bundle();
 

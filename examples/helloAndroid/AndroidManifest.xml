@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest t:tag="+" xmlns:t="http://androidtransfuse.org" xmlns:android="http://schemas.android.com/apk/res/android" package="org.androidtransfuse.examples.hello" android:versionCode="1" android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="11"/>
-    <application t:tag="+,n" android:name="android.app.Application">
-        <activity t:tag="+,l,n" android:label="@string/app_name" android:name=".HelloAndroidActivity">
-            <intent-filter t:tag="+">
-                <action t:tag="+,n" android:name="android.intent.action.MAIN"/>
-                <category t:tag="+,n" android:name="android.intent.category.LAUNCHER"/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<manifest ns2:versionName="1.0" ns2:versionCode="1" package="org.androidtransfuse.examples.hello" ns1:tag="+" xmlns:ns2="http://schemas.android.com/apk/res/android" xmlns:ns1="http://androidtransfuse.org">
+    <uses-sdk ns2:targetSdkVersion="11" ns2:minSdkVersion="3"/>
+    <application ns2:name="android.app.Application" ns1:tag="+,n">
+        <activity ns2:name=".HelloAndroidActivity" ns2:label="@string/app_name" ns1:tag="+,l,n">
+            <intent-filter ns1:tag="+">
+                <action ns2:name="android.intent.action.MAIN" ns1:tag="+,n"/>
+                <category ns2:name="android.intent.category.LAUNCHER" ns1:tag="+,n"/>
             </intent-filter>
         </activity>
     </application>

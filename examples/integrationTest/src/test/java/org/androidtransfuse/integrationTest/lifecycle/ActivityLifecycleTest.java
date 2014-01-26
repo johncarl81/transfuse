@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.*;
@@ -37,8 +38,7 @@ public class ActivityLifecycleTest {
     @Before
     public void setup() {
         bundle = new Bundle();
-        lifecycleActivity = new ActivityLifecycleActivity();
-        lifecycleActivity.onCreate(bundle);
+        lifecycleActivity = Robolectric.buildActivity(ActivityLifecycleActivity.class).create(bundle).get();
 
         activityLifecycle = DelegateUtil.getDelegate(lifecycleActivity, ActivityLifecycle.class);
     }

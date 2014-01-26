@@ -167,6 +167,7 @@ public class AOPProxyGenerator {
             proxyConstructorInjectionPoint.addInjectionNode(interceptorInjectionNode);
         }
 
+        //todo: move off of parseType
         JType returnType = codeModel.parseType(method.getReturnType().getName());
 
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());

@@ -19,6 +19,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -36,8 +37,7 @@ public class ResourceInjectionTest {
 
     @Before
     public void setup() {
-        ResourceInjectionActivity resourceInjectionActivity = new ResourceInjectionActivity();
-        resourceInjectionActivity.onCreate(null);
+        ResourceInjectionActivity resourceInjectionActivity = Robolectric.buildActivity(ResourceInjectionActivity.class).create().get();
 
         resourceInjection = DelegateUtil.getDelegate(resourceInjectionActivity, ResourceInjection.class);
     }

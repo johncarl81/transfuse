@@ -23,6 +23,7 @@ import org.androidtransfuse.util.TransfuseInjectionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -82,14 +83,11 @@ public class ExtraInjectionTest {
 
     private ExtraInjection setupExtraInjection(String extraOneValue, Long extraTwoValue, String extraThreeValue, SerializableValue serializableValue, ParcelExample inputParcelExample) {
 
-        ExtraInjectionActivity extraInjectionActivity = new ExtraInjectionActivity();
-
-        IntentFactory intentFactory = new IntentFactory(extraInjectionActivity);
+        IntentFactory intentFactory = new IntentFactory(Robolectric.buildActivity(CustomViewActivity.class).get());
         Intent callingIntent = intentFactory.buildIntent(new ExtraInjectionActivityStrategy(serializableValue, extraOneValue, inputParcelExample, extraTwoValue)
                 .setExtraThree(extraThreeValue));
 
-        extraInjectionActivity.setIntent(callingIntent);
-        extraInjectionActivity.onCreate(null);
+        ExtraInjectionActivity extraInjectionActivity = Robolectric.buildActivity(ExtraInjectionActivity.class).withIntent(callingIntent).create().get();
 
         return DelegateUtil.getDelegate(extraInjectionActivity, ExtraInjection.class);
     }

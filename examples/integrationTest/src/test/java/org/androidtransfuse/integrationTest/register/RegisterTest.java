@@ -20,6 +20,7 @@ import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertFalse;
@@ -41,8 +42,7 @@ public class RegisterTest {
 
     @Before
     public void setup() {
-        RegisterActivity registerActivity = new RegisterActivity();
-        registerActivity.onCreate(null);
+        RegisterActivity registerActivity = Robolectric.buildActivity(RegisterActivity.class).create().get();
 
         register = DelegateUtil.getDelegate(registerActivity, Register.class);
 
