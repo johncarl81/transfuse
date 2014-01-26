@@ -16,7 +16,6 @@
 package org.androidtransfuse.integrationTest.inject;
 
 import android.content.Intent;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.androidtransfuse.integrationTest.SerializableValue;
 import org.androidtransfuse.intentFactory.IntentFactory;
@@ -24,6 +23,7 @@ import org.androidtransfuse.util.TransfuseInjectionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

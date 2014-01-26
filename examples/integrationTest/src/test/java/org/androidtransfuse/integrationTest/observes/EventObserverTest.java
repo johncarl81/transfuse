@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.integrationTest.observes;
 
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.androidtransfuse.Transfuse$$ScopesUtil;
 import org.androidtransfuse.event.EventManager;
 import org.androidtransfuse.integrationTest.DelegateUtil;
@@ -24,6 +23,7 @@ import org.androidtransfuse.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import javax.inject.Singleton;
 

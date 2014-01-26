@@ -40,13 +40,13 @@
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler</artifactId>
-            <version>0.2.3-SNAPSHOT</version>
+            <version>0.2.6-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler-api</artifactId>
-            <version>0.2.3-SNAPSHOT</version>
+            <version>0.2.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -66,16 +66,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.pivotallabs</groupId>
+            <groupId>org.robolectric</groupId>
             <artifactId>robolectric</artifactId>
-            <version>1.2</version>
+            <version>2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <!-- Version 4.9 is required for robolectric  -->
-            <version>4.9</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
