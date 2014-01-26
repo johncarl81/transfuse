@@ -27,7 +27,3 @@ before_install:
   - mvn install
   - cd ../../..
 
-script:
-  - if [ "$TRAVIS_BRANCH" == "master" ] ; then target=deploy ; else target=install ; fi
-  - mvn $target
-
