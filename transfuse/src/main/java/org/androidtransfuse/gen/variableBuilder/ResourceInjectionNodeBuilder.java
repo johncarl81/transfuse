@@ -15,13 +15,12 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.annotations.Resource;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderFactory;
 import org.androidtransfuse.model.InjectionNode;
@@ -34,18 +33,18 @@ import javax.inject.Inject;
  */
 public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final ResourceExpressionBuilderFactory resourceExpressionBuilderFactory;
     private final Analyzer analyzer;
 
     @Inject
-    public ResourceInjectionNodeBuilder(JCodeModel codeModel,
+    public ResourceInjectionNodeBuilder(ClassGenerationUtil generationUtil,
                                         VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                         ResourceExpressionBuilderFactory resourceExpressionBuilderFactory,
                                         Analyzer analyzer) {
         super(Resource.class);
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.resourceExpressionBuilderFactory = resourceExpressionBuilderFactory;
         this.analyzer = analyzer;
@@ -57,17 +56,13 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        try {
-            JType resourceType = codeModel.parseType(signature.getType().getName());
+        JType resourceType = generationUtil.type(signature.getType());
 
-            ResourceExpressionBuilder resourceExpressionBuilder =
-                    resourceExpressionBuilderFactory.buildResourceExpressionBuilder(resourceType, context);
+        ResourceExpressionBuilder resourceExpressionBuilder =
+                resourceExpressionBuilderFactory.buildResourceExpressionBuilder(resourceType, context);
 
-            injectionNode.addAspect(VariableBuilder.class,
-                    variableInjectionBuilderFactory.buildResourceVariableBuilder(resourceId, resourceExpressionBuilder));
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
-        }
+        injectionNode.addAspect(VariableBuilder.class,
+                variableInjectionBuilderFactory.buildResourceVariableBuilder(resourceId, resourceExpressionBuilder));
 
         return injectionNode;
     }

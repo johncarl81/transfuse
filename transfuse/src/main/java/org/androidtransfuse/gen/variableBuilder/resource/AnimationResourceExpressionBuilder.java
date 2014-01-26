@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -33,16 +33,16 @@ public class AnimationResourceExpressionBuilder implements ResourceExpressionBui
 
     private static final String LOAD_ANIMATION = "loadAnimation";
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final InjectionNode applicationInjectionNode;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
 
     @Inject
     public AnimationResourceExpressionBuilder(/*@Assisted*/ InjectionNode applicationInjectionNode,
-                                              JCodeModel codeModel,
+                                              ClassGenerationUtil generationUtil,
                                               InjectionExpressionBuilder injectionExpressionBuilder, TypedExpressionFactory typedExpressionFactory) {
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.applicationInjectionNode = applicationInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.typedExpressionFactory = typedExpressionFactory;
@@ -53,7 +53,7 @@ public class AnimationResourceExpressionBuilder implements ResourceExpressionBui
         TypedExpression applicationVar = injectionExpressionBuilder.buildVariable(context, applicationInjectionNode);
 
         //AnimationUtils.loadAnimation(application, id);
-        JExpression expression = codeModel.ref(AndroidLiterals.ANIMATION_UTILS.getName()).staticInvoke(LOAD_ANIMATION).arg(applicationVar.getExpression()).arg(resourceIdExpr);
+        JExpression expression = generationUtil.ref(AndroidLiterals.ANIMATION_UTILS).staticInvoke(LOAD_ANIMATION).arg(applicationVar.getExpression()).arg(resourceIdExpr);
         return typedExpressionFactory.build(AndroidLiterals.ANIMATION, expression);
     }
 }

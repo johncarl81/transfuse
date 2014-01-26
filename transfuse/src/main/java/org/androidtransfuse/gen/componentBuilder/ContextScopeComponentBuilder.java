@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
@@ -33,12 +34,12 @@ import java.util.Map;
  */
 public class ContextScopeComponentBuilder implements ExpressionVariableDependentGenerator{
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public ContextScopeComponentBuilder(JCodeModel codeModel, UniqueVariableNamer namer) {
-        this.codeModel = codeModel;
+    public ContextScopeComponentBuilder(ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
+        this.generationUtil = generationUtil;
         this.namer = namer;
     }
 
@@ -49,7 +50,7 @@ public class ContextScopeComponentBuilder implements ExpressionVariableDependent
 
         //scope variable
         JFieldVar scopeField = definedClass.field(JMod.PRIVATE, Scope.class, namer.generateName(Scope.class),
-                JExpr._new(codeModel.ref(ConcurrentDoubleLockingScope.class)));
+                JExpr._new(generationUtil.ref(ConcurrentDoubleLockingScope.class)));
 
         //method
         JMethod getScope = definedClass.method(JMod.PUBLIC, Scope.class, ContextScopeHolder.GET_SCOPE);

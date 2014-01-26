@@ -43,7 +43,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final InjectionNode viewInjectionNode;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final RResourceReferenceBuilder rResourceReferenceBuilder;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final RResource rResource;
@@ -56,7 +56,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                        /*@Assisted*/ JType viewType,
                                        InjectionExpressionBuilder injectionExpressionBuilder,
                                        RResourceReferenceBuilder rResourceReferenceBuilder,
-                                       JCodeModel codeModel,
+                                       ClassGenerationUtil generationUtil,
                                        InvocationBuilder injectionInvocationBuilder,
                                        UniqueVariableNamer variableNamer,
                                        RResource rResource,
@@ -69,7 +69,7 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
         this.viewType = viewType;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.variableNamer = variableNamer;
         this.rResource = rResource;
@@ -99,16 +99,14 @@ public class FragmentViewVariableBuilder extends ConsistentTypeVariableBuilder {
             } else {
                 return viewExpression;
             }
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("JClassAlreadyExistsException while generating injection: " + injectionNode.getClassName(), e);
         }
     }
 
-    public JVar inject(ASTInjectionAspect injectionAspect, InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode, JExpression viewExpression) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public JVar inject(ASTInjectionAspect injectionAspect, InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode, JExpression viewExpression) throws JClassAlreadyExistsException {
         JVar variableRef;
-        JType nodeType = codeModel.parseType(injectionNode.getClassName());
+        JType nodeType = generationUtil.type(injectionNode.getASTType());
 
         if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
             variableRef = injectionBuilderContext.getBlock().decl(nodeType, variableNamer.generateName(injectionNode));

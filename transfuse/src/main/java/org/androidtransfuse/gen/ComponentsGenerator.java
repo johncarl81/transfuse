@@ -38,12 +38,10 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
     private static final String GET_METHOD = "get";
 
     private final ClassGenerationUtil generationUtil;
-    private final JCodeModel codeModel;
 
     @Inject
-    public ComponentsGenerator(ClassGenerationUtil generationUtil, JCodeModel codeModel) {
+    public ComponentsGenerator(ClassGenerationUtil generationUtil) {
         this.generationUtil = generationUtil;
-        this.codeModel = codeModel;
     }
 
     @Override
@@ -51,11 +49,11 @@ public class ComponentsGenerator extends AbstractCompletionTransactionWorker<Map
         try {
             JDefinedClass componentsRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            componentsRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Class.class));
+            componentsRepositoryClass._implements(generationUtil.ref(Repository.class).narrow(Class.class));
 
             //map definition
-            JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Class.class);
-            JClass hashMapType = codeModel.ref(HashMap.class).narrow(Class.class, Class.class);
+            JClass mapType = generationUtil.ref(Map.class).narrow(Class.class, Class.class);
+            JClass hashMapType = generationUtil.ref(HashMap.class).narrow(Class.class, Class.class);
             JVar registrationMap = componentsRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapType, MAP_NAME, JExpr._new(hashMapType));
 
             //map getter

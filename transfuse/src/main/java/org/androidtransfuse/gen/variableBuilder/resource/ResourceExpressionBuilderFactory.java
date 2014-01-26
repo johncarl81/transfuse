@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.gen.variableBuilder.resource;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -40,14 +40,14 @@ public class ResourceExpressionBuilderFactory {
     private static final String GET_INTARRAY = "getIntArray";
     private static final String GET_MOVIE = "getMovie";
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final Map<JType, ResourceExpressionBuilderAdaptor> resourceExpressionBuilderMap = new HashMap<JType, ResourceExpressionBuilderAdaptor>();
     private final MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory;
     private final ASTClassFactory astClassFactory;
 
     @Inject
-    public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, JCodeModel codeModel, ASTClassFactory astClassFactory) {
-        this.codeModel = codeModel;
+    public ResourceExpressionBuilderFactory(MethodBasedResourceExpressionBuilderAdaptorFactory adaptorFactory, ClassGenerationUtil generationUtil, ASTClassFactory astClassFactory) {
+        this.generationUtil = generationUtil;
         this.adaptorFactory = adaptorFactory;
         this.astClassFactory = astClassFactory;
 
@@ -67,17 +67,17 @@ public class ResourceExpressionBuilderFactory {
     }
 
     private void addMethodBasedResourceBuider(ASTType type, String method) {
-        JType refClass = codeModel.ref(type.getName());
+        JType refClass = generationUtil.type(type);
         resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(type, method));
     }
 
     private void addMethodBasedResourceBuider(Class clazz, String method) {
-        JType refClass = codeModel._ref(clazz);
+        JType refClass = generationUtil.type(clazz);
         resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildMethodBasedResourceExpressionBuilderAdaptor(astClassFactory.getType(clazz), method));
     }
 
     private void addAnimationResourceBuilder(ASTType type) {
-        JType refClass = codeModel.ref(type.getName());
+        JType refClass = generationUtil.type(type);
         resourceExpressionBuilderMap.put(refClass, adaptorFactory.buildAnimationResourceExpressionBuilderAdaptor());
     }
 

@@ -16,10 +16,7 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
-import org.androidtransfuse.gen.InjectionFragmentGenerator;
-import org.androidtransfuse.gen.InstantiationStrategyFactory;
-import org.androidtransfuse.gen.ScopesGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -38,22 +35,22 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionNode layoutHandlerInjectionNode;
     private final Logger logger;
-    private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
                                 InstantiationStrategyFactory instantiationStrategyFactory,
                                 /*@Assisted*/ InjectionNode layoutHandlerInjectionNode,
                                 Logger logger,
-                                JCodeModel codeModel,
-                                UniqueVariableNamer namer) {
+                                UniqueVariableNamer namer,
+                                ClassGenerationUtil generationUtil) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;
         this.logger = logger;
-        this.codeModel = codeModel;
         this.namer = namer;
+        this.generationUtil = generationUtil;
     }
 
     @Override
@@ -61,8 +58,8 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
         try {
             // Scopes instance
-            JClass scopesRef = codeModel.ref(Scopes.class);
-            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            JClass scopesRef = generationUtil.ref(Scopes.class);
+            JInvocation scopesBuildInvocation = generationUtil.ref(ScopesGenerator.TRANSFUSE_SCOPES_UTIL).staticInvoke(ScopesGenerator.GET_INSTANCE);
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
             Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
@@ -76,8 +73,6 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
 
             block.add(layoutHandlerDelegate.invoke(LayoutHandlerDelegate.INVOKE_LAYOUT_METHOD));
 
-        } catch (ClassNotFoundException e) {
-            logger.error("ClassNotFoundException while trying to generate LayoutHandler", e);
         } catch (JClassAlreadyExistsException e) {
             logger.error("JClassAlreadyExistsException while trying to generate LayoutHandler", e);
         }

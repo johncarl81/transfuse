@@ -48,7 +48,6 @@ public class InjectionNode {
     }
 
     public ASTType getUsageType() {
-        //todo:signature
         return signature.getType();
     }
 

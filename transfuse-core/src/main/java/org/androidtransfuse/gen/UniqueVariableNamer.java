@@ -48,7 +48,7 @@ public class UniqueVariableNamer {
     }
 
     public String generateName(InjectionNode injectionNode) {
-        return generateName(injectionNode.getClassName());
+        return generateName(injectionNode.getASTType());
     }
 
     public String generateName(String fullClassName) {

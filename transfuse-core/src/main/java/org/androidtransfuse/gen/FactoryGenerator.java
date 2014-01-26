@@ -44,7 +44,6 @@ import java.util.Map;
  */
 public class FactoryGenerator {
 
-    private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionNodeImplFactory injectionNodeImplFactory;
@@ -57,8 +56,7 @@ public class FactoryGenerator {
     private final Validator validator;
 
     @Inject
-    public FactoryGenerator(JCodeModel codeModel,
-                            InjectionFragmentGenerator injectionFragmentGenerator,
+    public FactoryGenerator(InjectionFragmentGenerator injectionFragmentGenerator,
                             InstantiationStrategyFactory instantiationStrategyFactory, AnalysisContextFactory analysisContextFactory,
                             Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             ModuleRepository injectionNodeBuilderRepositoryFactory,
@@ -67,7 +65,6 @@ public class FactoryGenerator {
                             ClassGenerationUtil generationUtil,
                             UniqueVariableNamer variableNamer,
                             Validator validator) {
-        this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -114,7 +111,7 @@ public class FactoryGenerator {
 
             JMethod defaultConstructor = implClass.constructor(JMod.PUBLIC);
 
-            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            JInvocation scopesBuildInvocation = generationUtil.ref(ScopesGenerator.TRANSFUSE_SCOPES_UTIL).staticInvoke(ScopesGenerator.GET_INSTANCE);
             defaultConstructor.body().invoke("this").arg(scopesBuildInvocation);
 
             implClass._implements(interfaceClass);
@@ -142,8 +139,6 @@ public class FactoryGenerator {
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists for generated type " + descriptor.getName(), e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Target class not found", e);
         }
     }
 }

@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 
 import javax.inject.Inject;
 
@@ -28,19 +28,19 @@ public class StaticInvocationVariableBuilder implements DependentVariableBuilder
 
     private final ASTType invocationTarget;
     private final String staticInvocation;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public StaticInvocationVariableBuilder(/*@Assisted*/ ASTType invocationTarget,
                                            /*@Assisted*/ String staticInvocation,
-                                           JCodeModel codeModel) {
+                                           ClassGenerationUtil generationUtil) {
         this.invocationTarget = invocationTarget;
         this.staticInvocation = staticInvocation;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     @Override
     public JExpression buildVariable(JExpression dependencyExpression) {
-        return codeModel.ref(invocationTarget.getName()).staticInvoke(staticInvocation).arg(dependencyExpression);
+        return generationUtil.ref(invocationTarget).staticInvoke(staticInvocation).arg(dependencyExpression);
     }
 }

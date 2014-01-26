@@ -68,8 +68,6 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
 
             viewRegistrationInvocationBuilder.buildInvocation(block, value, viewExpression, method, injectionNode);
 
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Class not found", e);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists", e);
         }

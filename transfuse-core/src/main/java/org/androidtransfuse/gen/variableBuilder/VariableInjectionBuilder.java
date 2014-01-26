@@ -100,7 +100,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                         injectionAspect.getConstructorInjectionPoint().getThrowsTypes(),
                         new ExceptionWrapper.BlockWriter<JVar>() {
                             @Override
-                            public JVar write(JBlock block) throws ClassNotFoundException {
+                            public JVar write(JBlock block) {
 
                                 //constructor injection
                                 JExpression constructionExpression = injectionInvocationBuilder.buildConstructorCall(
@@ -136,7 +136,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                 methodInjectionPoint.getThrowsTypes(),
                                 new ExceptionWrapper.BlockWriter<Void>() {
                                     @Override
-                                    public Void write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException {
+                                    public Void write(JBlock block) throws JClassAlreadyExistsException {
                                         block.add(
                                                 injectionInvocationBuilder.buildMethodCall(
                                                         ASTVoidType.VOID,
@@ -152,8 +152,6 @@ public class VariableInjectionBuilder implements VariableBuilder {
                 }
             }
 
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse class: " + injectionNode.getClassName(), e);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("JClassAlreadyExistsException while generating injection: " + injectionNode.getClassName(), e);
         }

@@ -37,19 +37,16 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
     private final ASTType scopeKey;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ProviderGenerator providerGenerator;
-    private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
 
     public CustomScopeVariableBuilder(ASTType scopeKey,
                                       TypedExpressionFactory typedExpressionFactory,
                                       ProviderGenerator providerGenerator,
-                                      JCodeModel codeModel,
                                       ClassGenerationUtil generationUtil,
                                       UniqueVariableNamer namer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.providerGenerator = providerGenerator;
-        this.codeModel = codeModel;
         this.generationUtil = generationUtil;
         this.namer = namer;
         this.scopeKey = scopeKey;
@@ -80,6 +77,6 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
 
         JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
-        return codeModel.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
+        return generationUtil.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }
 }

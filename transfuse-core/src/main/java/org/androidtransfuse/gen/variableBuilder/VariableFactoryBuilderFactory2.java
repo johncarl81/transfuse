@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.gen.ClassGenerationUtil;
@@ -35,7 +34,6 @@ public class VariableFactoryBuilderFactory2 {
     private final ClassGenerationUtil generationUtil;
     private final Analyzer analyzer;
     private final ProviderGenerator providerGenerator;
-    private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
 
 
@@ -44,13 +42,11 @@ public class VariableFactoryBuilderFactory2 {
                                           ClassGenerationUtil generationUtil,
                                           Analyzer analyzer,
                                           ProviderGenerator providerGenerator,
-                                          JCodeModel codeModel,
                                           UniqueVariableNamer namer) {
         this.typedExpressionFactory = typedExpressionFactory;
         this.generationUtil = generationUtil;
         this.analyzer = analyzer;
         this.providerGenerator = providerGenerator;
-        this.codeModel = codeModel;
         this.namer = namer;
     }
 
@@ -67,6 +63,6 @@ public class VariableFactoryBuilderFactory2 {
     }
 
     public CustomScopeVariableBuilder buildScopeVariableBuilder(ASTType scopeKey){
-        return new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, codeModel, generationUtil, namer);
+        return new CustomScopeVariableBuilder(scopeKey, typedExpressionFactory, providerGenerator, generationUtil, namer);
     }
 }

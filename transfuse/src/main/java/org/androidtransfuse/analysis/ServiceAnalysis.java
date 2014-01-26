@@ -27,6 +27,7 @@ import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
@@ -74,7 +75,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final GeneratorFactory generatorFactory;
     private final ListenerRegistrationGenerator listenerRegistrationGenerator;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public ServiceAnalysis(Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider,
@@ -93,7 +94,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            GeneratorFactory generatorFactory,
                            ListenerRegistrationGenerator listenerRegistrationGenerator,
                            ObservesRegistrationGenerator observesExpressionDecorator,
-                           JCodeModel codeModel) {
+                           ClassGenerationUtil generationUtil) {
         this.injectionNodeRepositoryProvider = injectionNodeRepositoryProvider;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.manifestServiceProvider = manifestServiceProvider;
@@ -110,7 +111,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.generatorFactory = generatorFactory;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
         this.observesExpressionDecorator = observesExpressionDecorator;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -259,9 +260,9 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final class OnBindGenerator implements ExpressionVariableDependentGenerator {
         @Override
         public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
-            JMethod onBind = definedClass.method(JMod.PUBLIC, codeModel.ref(AndroidLiterals.IBINDER.getName()), "onBind");
+            JMethod onBind = definedClass.method(JMod.PUBLIC, generationUtil.ref(AndroidLiterals.IBINDER), "onBind");
             onBind.annotate(Override.class);
-            onBind.param(codeModel.ref(AndroidLiterals.INTENT.getName()), "intent");
+            onBind.param(generationUtil.ref(AndroidLiterals.INTENT), "intent");
 
             onBind.body()._return(JExpr._null());
         }

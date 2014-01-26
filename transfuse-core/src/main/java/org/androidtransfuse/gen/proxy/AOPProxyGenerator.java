@@ -44,15 +44,13 @@ public class AOPProxyGenerator {
     private static final String AOPPROXY_EXT = "AOPProxy";
     private static final String METHOD_INTERCEPTOR_INVOKE = "invoke";
 
-    private final JCodeModel codeModel;
     private final UniqueVariableNamer variableNamer;
     private final ClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final Validator validator;
 
     @Inject
-    public AOPProxyGenerator(JCodeModel codeModel, UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
-        this.codeModel = codeModel;
+    public AOPProxyGenerator(UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.generationUtil = generationUtil;
@@ -112,8 +110,6 @@ public class AOPProxyGenerator {
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("JClassAlreadyExistsException while building AOP Proxy", e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("ClassNotFoundException while building AOP Proxy", e);
         }
 
         return buildProxyInjectionNode(injectionNode, definedClass.fullName(), injectionAspect, proxyConstructorInjectionPoint);
@@ -138,7 +134,7 @@ public class AOPProxyGenerator {
         return proxyInjectionNode;
     }
 
-    private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) throws ClassNotFoundException {
+    private void buildMethodInterceptor(JDefinedClass definedClass, ConstructorInjectionPoint proxyConstructorInjectionPoint, JMethod constructor, JBlock constructorBody, Map<ASTMethod, Map<InjectionNode, JFieldVar>> interceptorFields, Map.Entry<ASTMethod, Set<InjectionNode>> methodInterceptorEntry) {
         ASTMethod method = methodInterceptorEntry.getKey();
 
         if (method.getAccessModifier().equals(ASTAccessModifier.PRIVATE)) {
@@ -167,8 +163,7 @@ public class AOPProxyGenerator {
             proxyConstructorInjectionPoint.addInjectionNode(interceptorInjectionNode);
         }
 
-        //todo: move off of parseType
-        JType returnType = codeModel.parseType(method.getReturnType().getName());
+        JType returnType = generationUtil.type(method.getReturnType());
 
         JMethod methodDeclaration = definedClass.method(method.getAccessModifier().getCodeModelJMod(), returnType, method.getName());
         methodDeclaration.annotate(Override.class);
@@ -185,7 +180,7 @@ public class AOPProxyGenerator {
         //aop interceptor
         Map<InjectionNode, JFieldVar> interceptorNameMap = interceptorFields.get(methodInterceptorEntry.getKey());
 
-        JArray paramArray = JExpr.newArray(codeModel.ref(Object.class));
+        JArray paramArray = JExpr.newArray(generationUtil.ref(Object.class));
 
         for (ASTParameter astParameter : method.getParameters()) {
             paramArray.add(parameterMap.get(astParameter));
@@ -260,7 +255,7 @@ public class AOPProxyGenerator {
                 methodExecutionInvocation.arg(parameterMap.get(astParameter));
             }
 
-            JInvocation newInterceptorInvocation = JExpr._new(codeModel.ref(MethodInterceptorChain.class))
+            JInvocation newInterceptorInvocation = JExpr._new(generationUtil.ref(MethodInterceptorChain.class))
                     .arg(methodExecutionInvocation)
                     .arg(JExpr._this());
 

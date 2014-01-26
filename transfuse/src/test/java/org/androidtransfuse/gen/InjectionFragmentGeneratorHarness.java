@@ -33,8 +33,6 @@ import java.util.Map;
 public class InjectionFragmentGeneratorHarness {
 
     @Inject
-    private JCodeModel codeModel;
-    @Inject
     private InjectionFragmentGenerator injectionFragmentGenerator;
     @Inject
     private InstantiationStrategyFactory instantiationStrategyFactory;
@@ -45,12 +43,12 @@ public class InjectionFragmentGeneratorHarness {
     @Inject
     private VirtualProxyGenerator virtualProxyGenerator;
 
-    public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException, ClassNotFoundException {
+    public void buildProvider(InjectionNode injectionNode, PackageClass providerPackageClass) throws JClassAlreadyExistsException {
         JDefinedClass definedClass = generationUtil.defineClass(providerPackageClass);
 
-        JType providedType = codeModel.parseType(injectionNode.getSignature().getType().getName());
+        JType providedType = generationUtil.type(injectionNode.getSignature().getType());
 
-        definedClass._implements(codeModel.ref(Provider.class).narrow(providedType));
+        definedClass._implements(generationUtil.ref(Provider.class).narrow(providedType));
 
         JMethod getMethod = definedClass.method(JMod.PUBLIC, providedType, "get");
         getMethod.annotate(Override.class);
@@ -58,7 +56,7 @@ public class InjectionFragmentGeneratorHarness {
         JBlock block = getMethod.body();
         //Singleton scopes holder
 
-        JClass scopesRef = codeModel.ref(Scopes.class);
+        JClass scopesRef = generationUtil.ref(Scopes.class);
         JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
 
         Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,

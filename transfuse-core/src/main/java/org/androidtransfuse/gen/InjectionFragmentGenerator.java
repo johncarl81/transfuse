@@ -46,11 +46,11 @@ public class InjectionFragmentGenerator {
         this.virtualProxyGenerator = virtualProxyGenerator;
     }
 
-    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, InstantiationStrategy instantiateOnceStrategy, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, InstantiationStrategy instantiateOnceStrategy, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar) throws JClassAlreadyExistsException {
         return buildFragment(block, instantiateOnceStrategy, definedClass, injectionNode, scopeVar, new HashMap<InjectionNode, TypedExpression>());
     }
 
-    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, InstantiationStrategy instantiateOnceStrategy, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public Map<InjectionNode, TypedExpression> buildFragment(JBlock block, InstantiationStrategy instantiateOnceStrategy, JDefinedClass definedClass, InjectionNode injectionNode, JExpression scopeVar, Map<InjectionNode, TypedExpression> expressionMap) throws JClassAlreadyExistsException {
 
         InjectionBuilderContext injectionBuilderContext = injectionBuilderContextFactory.buildContext(block, instantiateOnceStrategy, definedClass, scopeVar, expressionMap);
 

@@ -86,10 +86,10 @@ public class CoreFactory {
         this.elements = elements;
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
-        this.generationUtil = new ClassGenerationUtil(codeModel, new TransfuseClassGenerationStrategy());
+        this.validator = new Validator(messager);
+        this.generationUtil = new ClassGenerationUtil(codeModel, new TransfuseClassGenerationStrategy(), validator);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(classNamer);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
-        this.validator = new Validator(messager);
     }
 
     public ASTElementConverterFactory buildConverterFactory() {
@@ -131,7 +131,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(codeModel, variableNamer, classNamer, generationUtil, validator);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(variableNamer, classNamer, generationUtil, validator);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(generationUtil);
@@ -188,7 +188,7 @@ public class CoreFactory {
     }
 
     private ProviderGenerator buildProviderGenerator(){
-        return new ProviderGenerator(providerCache, codeModel, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer);
+        return new ProviderGenerator(providerCache, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer);
     }
 
     private AnalysisRepository buildAnalysisRepository(){
@@ -290,7 +290,7 @@ public class CoreFactory {
 
     public FactoryGenerator buildFactoryGenerator() {
 
-        return new FactoryGenerator(codeModel,
+        return new FactoryGenerator(
                 buildInjectionGenerator(),
                 instantiationStrategyFactory,
                 new AnalysisContextFactory(buildAnalysisRepository()),
@@ -306,7 +306,7 @@ public class CoreFactory {
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {
-        return new FactoriesGenerator(codeModel, generationUtil, classNamer, variableNamer);
+        return new FactoriesGenerator(generationUtil, classNamer, variableNamer);
     }
 
     public VirtualProxyGenerator buildVirtualProxyGenerator(){
@@ -325,7 +325,7 @@ public class CoreFactory {
     }
 
     private VariableFactoryBuilderFactory2 buildVariableFactoryBuilderFactory(){
-        return new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser(), buildProviderGenerator(), codeModel, variableNamer);
+        return new VariableFactoryBuilderFactory2(typedExpressionFactory, generationUtil, buildAnalyser(), buildProviderGenerator(), variableNamer);
     }
 
     public ModuleRepository getModuleRepository() {

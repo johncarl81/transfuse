@@ -16,9 +16,11 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -36,11 +38,13 @@ public class ClassGenerationUtil {
 
     private final JCodeModel codeModel;
     private final ClassGenerationStrategy classGenerationStrategy;
+    private final Validator validator;
 
     @Inject
-    public ClassGenerationUtil(JCodeModel codeModel, ClassGenerationStrategy classGenerationStrategy) {
+    public ClassGenerationUtil(JCodeModel codeModel, ClassGenerationStrategy classGenerationStrategy, Validator validator) {
         this.codeModel = codeModel;
         this.classGenerationStrategy = classGenerationStrategy;
+        this.validator = validator;
     }
 
     public JDefinedClass defineClass(PackageClass className) throws JClassAlreadyExistsException {
@@ -52,6 +56,20 @@ public class ClassGenerationUtil {
         classGenerationStrategy.annotateGenerated(definedClass);
 
         return definedClass;
+    }
+
+    public JType type(Class clazz){
+        return codeModel._ref(clazz);
+    }
+
+    public JType type(ASTType astType){
+
+        try {
+            return codeModel.parseType(astType.getName());
+        } catch (ClassNotFoundException e) {
+            validator.error("Unable to parse type " + astType.getName()).element(astType).build();
+            throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
+        }
     }
 
     public JClass ref(PackageClass packageClass){

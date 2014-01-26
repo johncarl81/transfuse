@@ -32,7 +32,6 @@ import java.util.Map;
  */
 public class ComponentGenerator  {
 
-    private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
@@ -40,12 +39,10 @@ public class ComponentGenerator  {
     private final UniqueVariableNamer namer;
 
     @Inject
-    public ComponentGenerator(JCodeModel codeModel,
-                              InjectionFragmentGenerator injectionFragmentGenerator,
+    public ComponentGenerator(InjectionFragmentGenerator injectionFragmentGenerator,
                               InstantiationStrategyFactory instantiationStrategyFactory, ComponentBuilderFactory componentBuilderFactory,
                               ClassGenerationUtil generationUtil,
                               UniqueVariableNamer namer) {
-        this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -68,8 +65,8 @@ public class ComponentGenerator  {
             JBlock block = initMethodDescriptor.getMethod().body();
 
             // Scopes instance
-            JClass scopesRef = codeModel.ref(Scopes.class);
-            JInvocation scopesBuildInvocation = codeModel.directClass(ScopesGenerator.TRANSFUSE_SCOPES_UTIL.getCanonicalName()).staticInvoke(ScopesGenerator.GET_INSTANCE);
+            JClass scopesRef = generationUtil.ref(Scopes.class);
+            JInvocation scopesBuildInvocation = generationUtil.ref(ScopesGenerator.TRANSFUSE_SCOPES_UTIL).staticInvoke(ScopesGenerator.GET_INSTANCE);
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
             //Injections
@@ -103,8 +100,6 @@ public class ComponentGenerator  {
             return definedClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("ClassNotFoundException while building Injection Fragment", e);
         }
     }
 }

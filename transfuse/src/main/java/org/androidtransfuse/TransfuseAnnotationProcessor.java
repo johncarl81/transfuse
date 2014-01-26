@@ -49,7 +49,6 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static com.google.common.collect.Collections2.transform;
 

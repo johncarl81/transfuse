@@ -116,7 +116,7 @@ public class VirtualProxyGenerator {
 
         descriptor.getProxyInterfaces().addAll(injectionNode.getAspect(VirtualProxyAspect.class).getProxyInterfaces());
 
-        return codeModel.directClass(descriptor.getProxyName().getCanonicalName());
+        return generationUtil.ref(descriptor.getProxyName());
     }
 
     public void generateProxies(){

@@ -18,7 +18,6 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
@@ -36,15 +35,13 @@ public class OnReceiveMethodBuilder implements MethodBuilder {
 
     private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
-    private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public OnReceiveMethodBuilder(JCodeModel codeModel, ClassGenerationUtil generationUtil, ASTClassFactory astClassFactory, ASTElementFactory astElementFactory, UniqueVariableNamer namer) {
+    public OnReceiveMethodBuilder(JCodeModel codeModel, ClassGenerationUtil generationUtil, ASTElementFactory astElementFactory, UniqueVariableNamer namer) {
         this.codeModel = codeModel;
         this.generationUtil = generationUtil;
-        this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.namer = namer;
     }

@@ -38,14 +38,12 @@ public class FactoriesGenerator {
     private static final String GET_METHOD = "get";
     private static final String MAP_NAME = "factories";
 
-    private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final ClassNamer classNamer;
     private final UniqueVariableNamer variableNamer;
 
     @Inject
-    public FactoriesGenerator(JCodeModel codeModel, ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
-        this.codeModel = codeModel;
+    public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
         this.generationUtil = generationUtil;
         this.classNamer = classNamer;
         this.variableNamer = variableNamer;
@@ -55,11 +53,11 @@ public class FactoriesGenerator {
         try {
             JDefinedClass factoryRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
 
-            factoryRepositoryClass._implements(codeModel.ref(Repository.class).narrow(Factories.FactoryBuilder.class));
+            factoryRepositoryClass._implements(generationUtil.ref(Repository.class).narrow(Factories.FactoryBuilder.class));
 
             //map definition
-            JClass mapIntances = codeModel.ref(Map.class).narrow(Class.class, Factories.FactoryBuilder.class);
-            JClass hashMapIntances = codeModel.ref(HashMap.class).narrow(Class.class, Factories.FactoryBuilder.class);
+            JClass mapIntances = generationUtil.ref(Map.class).narrow(Class.class, Factories.FactoryBuilder.class);
+            JClass hashMapIntances = generationUtil.ref(HashMap.class).narrow(Class.class, Factories.FactoryBuilder.class);
             JVar registrationMap = factoryRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapIntances, MAP_NAME, JExpr._new(hashMapIntances));
 
             //get factory map
@@ -93,7 +91,7 @@ public class FactoriesGenerator {
 
             //getter with scopes
             JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-            JVar scopes = getMethodWithScopes.param(codeModel.ref(Scopes.class), variableNamer.generateName(Scopes.class));
+            JVar scopes = getMethodWithScopes.param(generationUtil.ref(Scopes.class), variableNamer.generateName(Scopes.class));
 
             getMethodWithScopes.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(scopes));
 

@@ -33,7 +33,6 @@ import javax.inject.Inject;
  */
 public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
-    private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final ASTMethod onCreateViewMethod;
     private final UniqueVariableNamer namer;
@@ -43,11 +42,9 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
     @Inject
     public FragmentOnCreateViewMethodBuilder(/*@Assisted*/ /*@Nullable*/ Integer layout,
                                              /*@Assisted*/ ASTMethod onCreateViewMethod,
-                                             JCodeModel codeModel,
                                              ClassGenerationUtil generationUtil,
                                              UniqueVariableNamer namer,
                                              RResourceReferenceBuilder rResourceReferenceBuilder) {
-        this.codeModel = codeModel;
         this.onCreateViewMethod = onCreateViewMethod;
         this.generationUtil = generationUtil;
         this.namer = namer;
@@ -57,7 +54,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
 
     @Override
     public MethodDescriptor buildMethod(JDefinedClass definedClass) {
-        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.ref(AndroidLiterals.VIEW.getName()), "onCreateView");
+        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, generationUtil.ref(AndroidLiterals.VIEW), "onCreateView");
         onCreateMethod.annotate(Override.class);
         MethodDescriptorBuilder onCreateMethodDescriptorBuilder = new MethodDescriptorBuilder(onCreateMethod, onCreateViewMethod);
 
@@ -69,7 +66,7 @@ public class FragmentOnCreateViewMethodBuilder implements MethodBuilder {
         //layoutInflater_0 .inflate(layout.details, viewGroup_0, false);
         JBlock body = onCreateMethod.body();
 
-        JVar viewDeclaration = body.decl(codeModel.ref(AndroidLiterals.VIEW.getName()), namer.generateName(AndroidLiterals.VIEW));
+        JVar viewDeclaration = body.decl(generationUtil.ref(AndroidLiterals.VIEW), namer.generateName(AndroidLiterals.VIEW));
 
         onCreateMethodDescriptorBuilder.putType(AndroidLiterals.VIEW, new TypedExpression(AndroidLiterals.VIEW, viewDeclaration));
 

@@ -15,10 +15,10 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -43,7 +43,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     private final InjectionNode activityInjectionNode;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final boolean nullable;
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
     public ExtraValuableBuilder(/*@Assisted*/ String extraId,
@@ -51,14 +51,14 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
                                 /*@Assisted("nullable")*/ @Named("nullable") boolean nullable,
                                 /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
-                                JCodeModel codeModel,
+                                ClassGenerationUtil generationUtil,
                                 TypedExpressionFactory typedExpressionFactory) {
         super(Object.class, typedExpressionFactory);
         this.extraId = extraId;
         this.activityInjectionNode = activityInjectionNode;
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.nullable = nullable;
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.wrapped = wrapped;
     }
 
@@ -66,14 +66,14 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         TypedExpression contextVar = injectionExpressionBuilder.buildVariable(injectionBuilderContext, activityInjectionNode);
 
-        JInvocation getExtraInvocation = codeModel.ref(ExtraUtil.class)
+        JInvocation getExtraInvocation = generationUtil.ref(ExtraUtil.class)
                 .staticInvoke(ExtraUtil.GET_EXTRA)
                 .arg(contextVar.getExpression().invoke(GET_INTENT).invoke(GET_EXTRAS))
                 .arg(JExpr.lit(extraId))
                 .arg(JExpr.lit(nullable));
 
         if (wrapped) {
-            getExtraInvocation = ((JExpression) JExpr.cast(codeModel.ref(ParcelWrapper.class),
+            getExtraInvocation = ((JExpression) JExpr.cast(generationUtil.ref(ParcelWrapper.class),
                     getExtraInvocation)).invoke(ParcelWrapper.GET_PARCEL);
         }
 

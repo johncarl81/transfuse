@@ -87,10 +87,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Tried to generate a class that already exists", e);
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Tried to generate a class that already exists", e);
         }
-
     }
 
     private Map<JClass, JVar> getObservers(JDefinedClass definedClass, JBlock block, Map<InjectionNode, TypedExpression> expressionMap) throws JClassAlreadyExistsException {
@@ -117,7 +114,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                     constructor.body().invoke(SUPER_REF).arg(constTargetParam);
 
                     observerClass._extends(
-                            codeModel.ref(WeakObserver.class)
+                            generationUtil.ref(WeakObserver.class)
                                     .narrow(eventRef)
                                     .narrow(targetRef));
 
@@ -163,7 +160,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
         return null;
     }
 
-    private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, JExpression scopesExpression, Map<InjectionNode, TypedExpression> expressionMap) throws ClassNotFoundException, JClassAlreadyExistsException {
+    private TypedExpression buildEventTending(JBlock block, JDefinedClass definedClass, InjectionNode tendingInjectionNode, JExpression scopesExpression, Map<InjectionNode, TypedExpression> expressionMap) throws JClassAlreadyExistsException {
         injectionFragmentGenerator.buildFragment(block, instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesExpression), definedClass, tendingInjectionNode, scopesExpression, expressionMap);
 
         return expressionMap.get(tendingInjectionNode);

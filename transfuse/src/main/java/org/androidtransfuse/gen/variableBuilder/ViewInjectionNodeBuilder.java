@@ -15,13 +15,12 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.View;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.AndroidLiterals;
@@ -33,18 +32,18 @@ import javax.inject.Inject;
  */
 public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotationAdapter {
 
-    private final JCodeModel codeModel;
+    private final ClassGenerationUtil generationUtil;
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final Analyzer analyzer;
 
     @Inject
-    public ViewInjectionNodeBuilder(JCodeModel codeModel,
+    public ViewInjectionNodeBuilder(ClassGenerationUtil generationUtil,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                     Analyzer analyzer) {
         super(View.class);
-        this.codeModel = codeModel;
+        this.generationUtil = generationUtil;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
@@ -59,11 +58,7 @@ public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotati
 
         InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
 
-        try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, codeModel.parseType(signature.getType().getName())));
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
-        }
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, generationUtil.type(signature.getType())));
 
         return injectionNode;
     }

@@ -50,17 +50,14 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private static final String STRATEGY_EXT = "Strategy";
 
     private final Class<? extends AbstractIntentFactoryStrategy> factoryStrategyClass;
-    private final JCodeModel codeModel;
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
 
     @Inject
     public IntentFactoryStrategyGenerator(/*@Assisted*/ Class factoryStrategyClass,
-                                          JCodeModel codeModel,
                                           ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
         this.factoryStrategyClass = factoryStrategyClass;
-        this.codeModel = codeModel;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
 
@@ -97,7 +94,7 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
 
             constructorBody.add(JExpr.invoke("super")
                     .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
-                    .arg(JExpr._new(codeModel.ref(AndroidLiterals.BUNDLE.getName())))
+                    .arg(JExpr._new(generationUtil.ref(AndroidLiterals.BUNDLE)))
             );
 
             for (IntentFactoryExtraAspect extra : extras) {

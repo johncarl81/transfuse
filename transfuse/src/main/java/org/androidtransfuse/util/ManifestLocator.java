@@ -19,7 +19,6 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.config.TransfuseAndroidModule;
 
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.tools.JavaFileObject;

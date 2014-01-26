@@ -42,7 +42,6 @@ public class ProviderGenerator {
     private static final String GET_METHOD = "get";
 
     private final ProviderCache cache;
-    private final JCodeModel codeModel;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final ClassGenerationUtil generationUtil;
@@ -71,9 +70,8 @@ public class ProviderGenerator {
     }
 
     @Inject
-    public ProviderGenerator(ProviderCache cache, JCodeModel codeModel, InjectionFragmentGenerator injectionFragmentGenerator, InstantiationStrategyFactory instantiationStrategyFactory, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
+    public ProviderGenerator(ProviderCache cache, InjectionFragmentGenerator injectionFragmentGenerator, InstantiationStrategyFactory instantiationStrategyFactory, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
         this.cache = cache;
-        this.codeModel = codeModel;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.generationUtil = generationUtil;
@@ -115,7 +113,7 @@ public class ProviderGenerator {
 
             JDefinedClass providerClass = generationUtil.defineClass(providerClassName);
 
-            providerClass._implements(codeModel.ref(Provider.class).narrow(injectionNodeClassRef));
+            providerClass._implements(generationUtil.ref(Provider.class).narrow(injectionNodeClassRef));
 
             return providerClass;
 
@@ -149,8 +147,6 @@ public class ProviderGenerator {
             getMethodBody._return(expressionMap.get(injectionNode).getExpression());
 
             return providerClass;
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Error while creating provider", e);
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Error while creating provider", e);
         }

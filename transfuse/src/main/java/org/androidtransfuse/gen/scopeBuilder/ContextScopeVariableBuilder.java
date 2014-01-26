@@ -38,7 +38,6 @@ import javax.inject.Inject;
 public class ContextScopeVariableBuilder implements VariableBuilder {
 
     private final ProviderGenerator providerGenerator;
-    private final JCodeModel codeModel;
     private final ClassGenerationUtil generationUtil;
     private final TypedExpressionFactory typedExpressionFactory;
     private final InjectionNode contextScopeHolder;
@@ -47,13 +46,11 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
     @Inject
     public ContextScopeVariableBuilder(/*@Assisted*/ InjectionNode contextScopeHolder,
-                                       JCodeModel codeModel,
                                        ProviderGenerator providerGenerator,
                                        ClassGenerationUtil generationUtil,
                                        TypedExpressionFactory typedExpressionFactory,
                                        InjectionExpressionBuilder injectionExpressionBuilder,
                                        TypeInvocationHelper invocationHelper) {
-        this.codeModel = codeModel;
         this.providerGenerator = providerGenerator;
         this.generationUtil = generationUtil;
         this.typedExpressionFactory = typedExpressionFactory;
@@ -85,6 +82,6 @@ public class ContextScopeVariableBuilder implements VariableBuilder {
 
         JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
-        return codeModel.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
+        return generationUtil.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
     }
 }

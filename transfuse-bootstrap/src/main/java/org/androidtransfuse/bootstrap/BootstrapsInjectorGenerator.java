@@ -75,14 +75,14 @@ public class BootstrapsInjectorGenerator {
 
             JDefinedClass innerInjectorClass = generationUtil.defineClass(bootstrapClassName);
 
-            innerInjectorClass._extends(codeModel.ref(Bootstraps.BootstrapsInjectorAdapter.class).narrow(nodeClass));
+            innerInjectorClass._extends(generationUtil.ref(Bootstraps.BootstrapsInjectorAdapter.class).narrow(nodeClass));
 
             JMethod method = innerInjectorClass.method(JMod.PUBLIC, codeModel.VOID, Bootstraps.BOOTSTRAPS_INJECTOR_METHOD);
             JVar input = method.param(nodeClass, "input");
             JBlock injectorBlock = method.body();
 
             //define root scope holder
-            JVar scopesVar = injectorBlock.decl(codeModel.ref(Scopes.class), variableNamer.generateName(Scopes.class), ScopesGenerator.buildScopes(repository, generationUtil));
+            JVar scopesVar = injectorBlock.decl(generationUtil.ref(Scopes.class), variableNamer.generateName(Scopes.class), ScopesGenerator.buildScopes(repository, generationUtil));
 
             injectorBlock.add(JExpr.invoke("scopeSingletons").arg(scopesVar));
 
@@ -99,8 +99,6 @@ public class BootstrapsInjectorGenerator {
 
         } catch (JClassAlreadyExistsException e) {
             throw new BootstrapException("Unable to crate Bootstrap Factory, class already exists.", e);
-        } catch (ClassNotFoundException e) {
-            throw new BootstrapException("Unable to find class", e);
         }
     }
 
@@ -111,11 +109,11 @@ public class BootstrapsInjectorGenerator {
     private synchronized void addBootstrapRegistration(JClass nodeClass, JDefinedClass innerInjectorClass) throws JClassAlreadyExistsException {
         if(injectorClass == null){
             injectorClass = generationUtil.defineClass(BOOTSTRAPS_INJECTOR);
-            injectorClass._implements(codeModel.ref(Repository.class).narrow(Bootstraps.BootstrapInjector.class));
+            injectorClass._implements(generationUtil.ref(Repository.class).narrow(Bootstraps.BootstrapInjector.class));
 
             // map to hold injector instances
-            JClass mapType = codeModel.ref(Map.class).narrow(Class.class, Bootstraps.BootstrapInjector.class);
-            JClass hashmapType = codeModel.ref(HashMap.class).narrow(Class.class, Bootstraps.BootstrapInjector.class);
+            JClass mapType = generationUtil.ref(Map.class).narrow(Class.class, Bootstraps.BootstrapInjector.class);
+            JClass hashmapType = generationUtil.ref(HashMap.class).narrow(Class.class, Bootstraps.BootstrapInjector.class);
             registerField = injectorClass.field(JMod.PRIVATE, mapType, "registration", JExpr._new(hashmapType));
 
             // initalize constructor

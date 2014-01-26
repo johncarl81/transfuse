@@ -34,7 +34,7 @@ public class ExceptionWrapper {
         this.generationUtil = generationUtil;
     }
 
-    public <T> T wrapException(JBlock block, List<ASTType> throwsTypes, BlockWriter<T> blockWriter) throws ClassNotFoundException, JClassAlreadyExistsException {
+    public <T> T wrapException(JBlock block, List<ASTType> throwsTypes, BlockWriter<T> blockWriter) throws JClassAlreadyExistsException {
         JTryBlock tryBlock = null;
         JBlock writeBlock = block;
         if (throwsTypes.size() > 0) {
@@ -58,6 +58,6 @@ public class ExceptionWrapper {
     }
 
     public interface BlockWriter<T> {
-        T write(JBlock block) throws ClassNotFoundException, JClassAlreadyExistsException;
+        T write(JBlock block) throws JClassAlreadyExistsException;
     }
 }
