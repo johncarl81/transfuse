@@ -62,7 +62,10 @@ public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingle
         try {
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, codeModel.parseType(signature.getType().getName())));
         } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
+            throw new TransfuseAnalysisException(
+                "Unable to parse type " + signature.getType().getName()
+                + " viewId (hex): " + (viewId != null ? "0x"+Integer.toHexString(viewId) : null)
+                + " viewTag: " + viewTag, e);
         }
 
         return injectionNode;

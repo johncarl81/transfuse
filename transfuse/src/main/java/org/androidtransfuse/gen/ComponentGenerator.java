@@ -23,6 +23,7 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -38,9 +39,10 @@ public class ComponentGenerator  {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
+    private final Logger logger;
 
     @Inject
-    public ComponentGenerator(JCodeModel codeModel,
+    public ComponentGenerator(JCodeModel codeModel, Logger logger,
                               InjectionFragmentGenerator injectionFragmentGenerator,
                               InstantiationStrategyFactory instantiationStrategyFactory, ComponentBuilderFactory componentBuilderFactory,
                               ClassGenerationUtil generationUtil,
@@ -51,6 +53,7 @@ public class ComponentGenerator  {
         this.componentBuilderFactory = componentBuilderFactory;
         this.generationUtil = generationUtil;
         this.namer = namer;
+        this.logger = logger;
     }
 
     public JDefinedClass generate(ComponentDescriptor descriptor) {
@@ -73,13 +76,19 @@ public class ComponentGenerator  {
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
             //Injections
-            Map<InjectionNode, TypedExpression> expressionMap =
-                    injectionFragmentGenerator.buildFragment(
-                            block,
-                            instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesVar),
-                            definedClass,
-                            descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor),
-                            scopesVar);
+            Map<InjectionNode, TypedExpression> expressionMap;
+            try {
+              expressionMap = injectionFragmentGenerator.buildFragment(
+                      block,
+                      instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesVar),
+                      definedClass,
+                      descriptor.getInjectionNodeFactory().buildInjectionNode(initMethodDescriptor),
+                      scopesVar);
+            } catch (RuntimeException e) {
+              logger.info("unable to generate component (" + definedClass.name() + ") this pass");
+              throw e;
+            }
+            logger.info("generated component: " + definedClass.name());
 
             //Registrations
             for (ExpressionVariableDependentGenerator registrationGenerator : descriptor.getRegistrations()) {
