@@ -404,7 +404,7 @@ Fragments map lifecycle events associated with the following annotations:
 @OnConfigurationChanged
 --
 
-NOTE: * Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.
+NOTE: * Due to the fact that the View element of the Fragments are not created until the onCreateView lifecycle phase, Transfuse will not inject into the Fragment until that phase and does not map the onCreate lifecycle phase.  For consistency, Transfuse triggers the @OnCreate event in the onCreateView Fragment method.
 
 All of the injections available on the Activity are available on the Fragment component.  In addition, the parent Activity may also be injected into the Fragment.
 
