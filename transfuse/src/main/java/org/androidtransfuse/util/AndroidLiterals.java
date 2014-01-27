@@ -51,6 +51,8 @@ public final class AndroidLiterals {
     public static final ASTType RESOURCES = new ASTStringType("android.content.res.Resources");
     public static final ASTType PREFERENCE_MANAGER = new ASTStringType("android.preference.PreferenceManager");
     public static final ASTType SHARED_PREFERENCES = new ASTStringType("android.content.SharedPreferences");
+    public static final ASTType MENU = new ASTStringType("android.view.Menu");
+    public static final ASTType MENU_ITEM = new ASTStringType("android.view.MenuItem");
     public static final ASTType MENU_INFLATER = new ASTStringType("android.view.MenuInflater");
     public static final ASTType PARCELABLE = new ASTStringType("android.os.Parcelable");
     public static final ASTType COLOR_STATE_LIST = new ASTStringType("android.content.res.ColorStateList");

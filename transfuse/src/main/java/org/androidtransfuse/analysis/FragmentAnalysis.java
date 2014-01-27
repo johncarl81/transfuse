@@ -137,6 +137,10 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         //onActivityCreated
         fragmentDescriptor.addGenerators(buildEventMethod(OnActivityCreated.class, "onActivityCreated", AndroidLiterals.BUNDLE));
+        //onCreateOptionsMenu
+        fragmentDescriptor.addGenerators(buildEventMethod(OnCreateOptionsMenu.class, "onCreateOptionsMenu", AndroidLiterals.MENU, AndroidLiterals.MENU_INFLATER));
+        //onOptionsItemSelected
+        fragmentDescriptor.addGenerators(buildEventMethod(OnCreateOptionsMenu.class, "onOptionsItemSelected", AndroidLiterals.MENU_ITEM));
         //onStart
         fragmentDescriptor.addGenerators(buildEventMethod(OnStart.class, "onStart"));
         //onResume
