@@ -57,12 +57,7 @@ public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingle
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         InjectionNode viewInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.VIEW, context);
-
-        try {
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, codeModel.parseType(signature.getType().getName())));
-        } catch (ClassNotFoundException e) {
-            throw new TransfuseAnalysisException("Unable to parse type " + signature.getType().getName(), e);
-        }
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, generationUtil.type(signature.getType())));
 
         return injectionNode;
     }

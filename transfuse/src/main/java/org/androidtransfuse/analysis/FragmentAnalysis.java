@@ -180,7 +180,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-      return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
