@@ -140,7 +140,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         //onCreateOptionsMenu
         fragmentDescriptor.addGenerators(buildEventMethod(OnCreateOptionsMenu.class, "onCreateOptionsMenu", AndroidLiterals.MENU, AndroidLiterals.MENU_INFLATER));
         //onOptionsItemSelected
-        fragmentDescriptor.addGenerators(buildEventMethod(OnCreateOptionsMenu.class, "onOptionsItemSelected", AndroidLiterals.MENU_ITEM));
+        fragmentDescriptor.addGenerators(buildEventMethod(OnOptionsItemSelected.class, "onOptionsItemSelected", AndroidLiterals.MENU_ITEM));
         //onStart
         fragmentDescriptor.addGenerators(buildEventMethod(OnStart.class, "onStart"));
         //onResume
@@ -180,7 +180,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+      return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
