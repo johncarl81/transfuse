@@ -39,7 +39,8 @@ public class ComponentGenerator  {
     private final UniqueVariableNamer namer;
 
     @Inject
-    public ComponentGenerator(InjectionFragmentGenerator injectionFragmentGenerator,
+    public ComponentGenerator(JCodeModel codeModel,
+                              InjectionFragmentGenerator injectionFragmentGenerator,
                               InstantiationStrategyFactory instantiationStrategyFactory, ComponentBuilderFactory componentBuilderFactory,
                               ClassGenerationUtil generationUtil,
                               UniqueVariableNamer namer) {
