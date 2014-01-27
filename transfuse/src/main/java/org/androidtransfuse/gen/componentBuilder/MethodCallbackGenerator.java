@@ -31,11 +31,7 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -89,11 +85,11 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                             injectionNodeJExpressionEntry.getValue().getExpression()
                     );
 
-                  if(ASTVoidType.VOID.equals(methodCallback.getReturnType())){
-                    body.add(methodCall);
-                  } else {
-                    body._return(methodCall);
-                  }
+                    if(ASTVoidType.VOID.equals(methodCallback.getReturnType())){
+                      body.add(methodCall);
+                    } else {
+                      body._return(methodCall);
+                    }
                 }
             }
         }
