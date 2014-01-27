@@ -30,6 +30,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis;
 import org.androidtransfuse.analysis.module.*;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.config.SynchronizedElements;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeImplFactory;
 import org.androidtransfuse.gen.componentBuilder.MirroredMethodGeneratorFactory;
@@ -83,7 +84,7 @@ public class CoreFactory {
     private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
 
     public CoreFactory(Elements elements, Messager messager, Filer filer, String namespace) {
-        this.elements = elements;
+        this.elements = new SynchronizedElements(elements);
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
         this.validator = new Validator(messager);
