@@ -53,23 +53,25 @@ import java.util.List;
  */
 @XmlRootElement(name = "manifest")
 @XmlType(propOrder = {
+        // root manifest element attributes
         "applicationPackage",
         "sharedUserId",
         "sharedUserLabel",
         "versionCode",
         "versionName",
         "installLocation",
+        // top level elements
         "usesPermissions",
-        "usesSDKs",
-        "applications",
-        "instrumentations",
         "permissions",
-        "permissionGroups",
         "permissionTrees",
-        "supportsScreens",
-        "usesFeatures",
+        "permissionGroups",
+        "instrumentations",
+        "usesSDKs",
         "usesConfigurations",
-        "compatibleScreens"
+        "usesFeatures",
+        "supportsScreens",
+        "compatibleScreens",
+        "applications"
         }
 )
 public class Manifest extends Mergeable {
