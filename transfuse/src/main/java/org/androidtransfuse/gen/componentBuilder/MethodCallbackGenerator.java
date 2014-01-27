@@ -18,10 +18,11 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JStatement;
+import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -74,7 +75,7 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                         parameters.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
                     }
 
-                    JStatement methodCall = invocationBuilder.buildMethodCall(
+                    JInvocation methodCall = invocationBuilder.buildMethodCall(
                             methodCallback.getAccessModifier(),
                             methodDescriptor.getASTMethod().getReturnType(),
                             methodCallback.getName(),
@@ -84,7 +85,11 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                             injectionNodeJExpressionEntry.getValue().getExpression()
                     );
 
-                    body.add(methodCall);
+                    if(ASTVoidType.VOID.equals(methodCallback.getReturnType())){
+                      body.add(methodCall);
+                    } else {
+                      body._return(methodCall);
+                    }
                 }
             }
         }
