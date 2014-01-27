@@ -57,6 +57,7 @@ public class FragmentViewInjectionNodeBuilder extends InjectionNodeBuilderSingle
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         InjectionNode viewInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.VIEW, context);
+
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFragmentViewVariableBuilder(viewId, viewTag, viewInjectionNode, generationUtil.type(signature.getType())));
 
         return injectionNode;
