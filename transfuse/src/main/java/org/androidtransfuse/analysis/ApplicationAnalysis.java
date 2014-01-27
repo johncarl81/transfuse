@@ -199,7 +199,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestApplication.setTaskAffinity(checkBlank(annotation.taskAffinity()));
         manifestApplication.setTheme(checkBlank(annotation.theme()));
         manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
-        manifestApplication.setAllowBackup(checkDefault(annotation.allowBackup(), true));
+        manifestApplication.setAllowBackup(annotation.allowBackup());
         manifestApplication.setLargeHeap(checkDefault(annotation.largeHeap(), false));
         manifestApplication.setSupportsRtl(checkDefault(annotation.supportsRtl(), false));
         manifestApplication.setRestrictedAccountType(checkDefault(annotation.restrictedAccountType(), false));
