@@ -88,7 +88,7 @@ public class CoreFactory {
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
         this.validator = new Validator(messager);
-        this.generationUtil = new ClassGenerationUtil(codeModel, new TransfuseClassGenerationStrategy(), validator);
+        this.generationUtil = new ClassGenerationUtil(codeModel, new BootstrapClassGenerationStrategy(), validator);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(classNamer);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
     }

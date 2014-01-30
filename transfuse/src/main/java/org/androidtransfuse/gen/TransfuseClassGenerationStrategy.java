@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.util.Generated;
 
 import java.text.DateFormat;
@@ -33,7 +34,7 @@ public class TransfuseClassGenerationStrategy implements ClassGenerationStrategy
     @Override
     public void annotateGenerated(JDefinedClass definedClass) {
         definedClass.annotate(Generated.class)
-                .param("value", "org.androidtransfuse.TransfuseAnnotationProcessor")
+                .param("value", TransfuseAnnotationProcessor.class.getName())
                 .param("date", ISO_8601.format(new Date()));
     }
 }
