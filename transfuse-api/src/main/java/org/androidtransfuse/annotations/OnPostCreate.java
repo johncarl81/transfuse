@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * Activity `onPostCreate(Bundle)` Lifecycle Event callback method annotation.  Registers the annotated method
  * to be called during the `onPostCreate(Bundle)` Lifecycle Phase.
  *
- * @author John Ericksen
+ * @author Dan Bachelder
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
