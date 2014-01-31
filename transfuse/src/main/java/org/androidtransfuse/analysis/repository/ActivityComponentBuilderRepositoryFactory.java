@@ -101,6 +101,8 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
         // onBackPressed
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
+        // onPostCreate
+        activityCallbackGenerators.add(buildEventMethod(OnPostCreate.class, "onPostCreate", AndroidLiterals.BUNDLE));
         //onActivityResult
         activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
 
