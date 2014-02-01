@@ -28,7 +28,7 @@ import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
 import org.androidtransfuse.processor.GenerateModuleProcessor;
-import org.androidtransfuse.processor.ReloadableASTElementFactory;
+import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;

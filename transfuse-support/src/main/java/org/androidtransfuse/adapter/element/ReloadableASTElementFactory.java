@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.processor;
+package org.androidtransfuse.adapter.element;
 
 import com.google.common.base.Function;
 import org.androidtransfuse.adapter.ASTType;
