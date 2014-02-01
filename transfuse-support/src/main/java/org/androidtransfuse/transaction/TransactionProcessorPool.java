@@ -50,7 +50,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor<V, R
      */
     public void execute() {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         for (Transaction<V, R> transaction : transactions) {
             if (!transaction.isComplete()) {

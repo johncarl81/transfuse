@@ -96,7 +96,7 @@ public class TransfuseAndroidModule {
     @Provides
     @Singleton
     public Elements getElements(ProcessingEnvironment processingEnvironment){
-        return new SynchronizedElements(processingEnvironment.getElementUtils());
+        return processingEnvironment.getElementUtils();
     }
 
     @Provides
