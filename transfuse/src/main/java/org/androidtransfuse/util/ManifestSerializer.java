@@ -64,8 +64,10 @@ public class ManifestSerializer {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(manifest, writer);
         } catch (IOException e) {
+            logger.error("IOException while writing manifest", e);
             throw new TransfuseRuntimeException("IOException while writing manifest", e);
         } catch (JAXBException e) {
+            logger.error("JAXBException while writing manifest", e);
             throw new TransfuseRuntimeException("JAXBException while writing manifest", e);
         }
     }
@@ -75,7 +77,7 @@ public class ManifestSerializer {
             writeManifest(manifest, new FileOutputStream(manifestFile));
         } catch (IOException e) {
             logger.error("IOException while writing manifest", e);
-            throw new TransfuseInjectionException(e);
+            throw new TransfuseInjectionException("IOException while writing manifest", e);
         }
     }
 }

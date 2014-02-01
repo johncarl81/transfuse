@@ -32,12 +32,15 @@ import java.util.Collections;
  */
 public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker<Void, Void> {
 
+    public static final String MANIFEST_PROCESSING_OPTION = "transfuseManifestProcessing";
+
     private final ManifestManager manifestManager;
     private final Merger merger;
     private final Manifest originalManifest;
     private final Logger logger;
     private final File manifestFile;
     private ManifestSerializer manifestParser;
+    private final String manifestProcessingOption;
 
     @Inject
     public GenerateModuleProcessor(ManifestManager manifestManager,
@@ -47,13 +50,16 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
                                    Logger logger,
                                    @Named(TransfuseAndroidModule.MANIFEST_FILE)
                                    File manifestFile,
-                                   ManifestSerializer manifestParser) {
+                                   ManifestSerializer manifestParser,
+                                   @Named(MANIFEST_PROCESSING_OPTION)
+                                   String manifestProcessingOption) {
         this.manifestManager = manifestManager;
         this.merger = merger;
         this.originalManifest = originalManifest;
         this.logger = logger;
         this.manifestFile = manifestFile;
         this.manifestParser = manifestParser;
+        this.manifestProcessingOption = manifestProcessingOption;
     }
 
     @Override
@@ -62,8 +68,19 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
         //assembling generated code
         Manifest updatedManifest = buildManifest();
 
-        //write manifest back out, updating from processed classes
-        manifestParser.writeManifest(updatedManifest, manifestFile);
+        if(!"off".equals(manifestProcessingOption)){
+            if("log".equals(manifestProcessingOption)){
+                logger.info("Manifest generation piped to log");
+                manifestParser.writeManifest(updatedManifest, System.out);
+            }
+            else{
+                //write manifest back out, updating from processed classes
+                manifestParser.writeManifest(updatedManifest, manifestFile);
+            }
+        }
+        else{
+            logger.info("Manifest generation disabled");
+        }
 
         return null;
     }

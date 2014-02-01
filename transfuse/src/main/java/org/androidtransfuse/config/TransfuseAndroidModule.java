@@ -39,6 +39,7 @@ import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.*;
 import org.androidtransfuse.transaction.*;
 import org.androidtransfuse.util.Logger;
+import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.MessagerLogger;
 
 import javax.annotation.processing.Filer;
@@ -85,7 +86,6 @@ public class TransfuseAndroidModule {
     public static final String SCOPES_UTIL_TRANSACTION_WORKER = "scopesUtilTransactionWorker";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
-    public static final String PROCESSING_ENVIRONMENT_OPTIONS = "processingEnvironmentOptions";
 
     @Provides
     @CodeGenerationScope
@@ -118,10 +118,15 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
-    @Singleton
-    @Named(PROCESSING_ENVIRONMENT_OPTIONS)
-    public Map<String,String> getOptions(ProcessingEnvironment processingEnvironment){
-        return processingEnvironment.getOptions();
+    @Named(ManifestLocator.ANDROID_MANIFEST_FILE_OPTION)
+    public String getManifestFileLocation(ProcessingEnvironment processingEnvironment){
+        return processingEnvironment.getOptions().get(ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
+    }
+
+    @Provides
+    @Named(GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION)
+    public String getManifestProcessing(ProcessingEnvironment processingEnvironment){
+        return processingEnvironment.getOptions().get(GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION);
     }
 
     @Provides

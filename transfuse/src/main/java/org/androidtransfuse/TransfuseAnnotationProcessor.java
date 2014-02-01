@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse;
 
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.annotations.*;
@@ -26,6 +27,7 @@ import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
+import org.androidtransfuse.processor.GenerateModuleProcessor;
 import org.androidtransfuse.processor.ReloadableASTElementFactory;
 import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.scope.ScopeKey;
@@ -191,6 +193,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return Collections.singleton(ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
+        return ImmutableSet.of(
+                GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION,
+                ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
     }
 }

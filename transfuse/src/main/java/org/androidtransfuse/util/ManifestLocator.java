@@ -16,7 +16,6 @@
 package org.androidtransfuse.util;
 
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.config.TransfuseAndroidModule;
 
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
@@ -26,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  * Copied respectfully from the AndroidAnnotations project:
@@ -55,21 +53,19 @@ public class ManifestLocator {
 
     private static final int MAX_PARENTS_FROM_SOURCE_FOLDER = 10;
 
-    private final Map<String,String> options;
+    private final String androidManifestFilePath;
     private final Filer filer;
     private final Logger logger;
 
     @Inject
-    public ManifestLocator(Filer filer, Logger logger, @Named(TransfuseAndroidModule.PROCESSING_ENVIRONMENT_OPTIONS) Map<String,String> options) {
+    public ManifestLocator(Filer filer, Logger logger, @Named(ANDROID_MANIFEST_FILE_OPTION) String androidManifestFilePath) {
         this.filer = filer;
         this.logger = logger;
-        this.options = options;
+        this.androidManifestFilePath = androidManifestFilePath;
     }
 
     public File findManifest() {
-        String androidManifestFilePath = options.get(ANDROID_MANIFEST_FILE_OPTION);
-
-        File androidManifestFile = null;
+        File androidManifestFile;
 
         try {
             if (androidManifestFilePath != null) {
