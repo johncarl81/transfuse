@@ -28,7 +28,10 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.bootstrap.Namespace;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.ClassGenerationStrategy;
+import org.androidtransfuse.gen.InjectionBuilderContextFactory;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
+import org.androidtransfuse.gen.TransfuseClassGenerationStrategy;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
@@ -37,7 +40,10 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFacto
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.*;
-import org.androidtransfuse.transaction.*;
+import org.androidtransfuse.transaction.ScopedTransactionBuilder;
+import org.androidtransfuse.transaction.TransactionProcessor;
+import org.androidtransfuse.transaction.TransactionProcessorChannel;
+import org.androidtransfuse.transaction.TransactionProcessorPool;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.MessagerLogger;
@@ -78,12 +84,6 @@ import java.util.Map;
 @Namespace("Transfuse")
 public class TransfuseAndroidModule {
 
-    public static final String FACTORY_TRANSACTION_WORKER = "factoryTransactionWorker";
-    public static final String FACTORIES_TRANSACTION_WORKER = "factoriessTransactionWorker";
-    public static final String PACKAGE_HELPER_TRANSACTION_WORKER = "packageHelperTransactionWorker";
-    public static final String COMPONENTS_TRANSACTION_WORKER = "componentsTransactionWorker";
-    public static final String VIRTUAL_PROXY_TRANSACTION_WORKER = "virtualProxyTransactionWorker";
-    public static final String SCOPES_UTIL_TRANSACTION_WORKER = "scopesUtilTransactionWorker";
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
 
@@ -156,70 +156,20 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
-    @Named(VIRTUAL_PROXY_TRANSACTION_WORKER)
-    public TransactionWorker<Void, Void> getVirtualProxyTransactionWorker(JCodeModel codeModel,
-                                                                                          FilerSourceCodeWriter codeWriter,
-                                                                                          FilerResourceWriter resourceWriter,
-                                                                                          VirtualProxyTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(FACTORY_TRANSACTION_WORKER)
-    public TransactionWorker<Provider<ASTType>, JDefinedClass> getFactoryTransactionWorker(JCodeModel codeModel,
-                                                                                                        FilerSourceCodeWriter codeWriter,
-                                                                                                        FilerResourceWriter resourceWriter,
-                                                                                                        FactoryTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Provider<ASTType>, JDefinedClass>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(FACTORIES_TRANSACTION_WORKER)
-    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getFactoriesTransactionWorker(JCodeModel codeModel,
-                                                                                                                       FilerSourceCodeWriter codeWriter,
-                                                                                                                       FilerResourceWriter resourceWriter,
-                                                                                                                       FactoriesTransactionWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(PACKAGE_HELPER_TRANSACTION_WORKER)
-    public TransactionWorker<Void, Void> getPHTransactionWorker(JCodeModel codeModel,
-                                                                FilerSourceCodeWriter codeWriter,
-                                                                FilerResourceWriter resourceWriter,
-                                                                PackageHelperGeneratorAdapter worker) {
-        return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(COMPONENTS_TRANSACTION_WORKER)
-    public TransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void> getComponentsWorker(JCodeModel codeModel,
-                                                                                                           FilerSourceCodeWriter codeWriter,
-                                                                                                           FilerResourceWriter resourceWriter,
-                                                                                                           ComponentsGenerator worker) {
-        return new CodeGenerationScopedTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    @Named(SCOPES_UTIL_TRANSACTION_WORKER)
-    public TransactionWorker<Void, Void> getScopesUtilWorker(JCodeModel codeModel,
-                                                                                              FilerSourceCodeWriter codeWriter,
-                                                                                              FilerResourceWriter resourceWriter,
-                                                                                              ScopesGeneratorWorker worker) {
-        return new CodeGenerationScopedTransactionWorker<Void, Void>(codeModel, codeWriter, resourceWriter, worker);
-    }
-
-    @Provides
-    public FactoryProcessor getFactoryProcessor(FactoryTransactionFactory factoryTransactionFactory,
-                                                FactoriesTransactionFactory factoriesTransactionFactory) {
+    public FactoryProcessor getFactoryProcessor(Provider<FactoryTransactionWorker> factoryTransactionWorkerProvider,
+                                                Provider<FactoriesTransactionWorker> factoriesTransactionWorkerProvider,
+                                                ScopedTransactionBuilder scopedTransactionBuilder) {
         TransactionProcessorPool<Provider<ASTType>, JDefinedClass> factoryProcessor =
                 new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
         TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> factoriesProcessor =
                 new TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void>();
 
         TransactionProcessor processor =
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(factoryProcessor, factoriesProcessor, factoriesTransactionFactory);
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(
+                        factoryProcessor,
+                        factoriesProcessor,
+                        scopedTransactionBuilder.buildFactory(factoriesTransactionWorkerProvider));
 
-        return new FactoryProcessor(processor, factoryProcessor, factoryTransactionFactory);
+        return new FactoryProcessor(processor, factoryProcessor, scopedTransactionBuilder.buildFactory(factoryTransactionWorkerProvider));
     }
 }

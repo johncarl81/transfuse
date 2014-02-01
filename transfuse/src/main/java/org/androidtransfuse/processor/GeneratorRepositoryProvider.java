@@ -21,7 +21,10 @@ import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.config.ScopesGeneratorWorker;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
+import org.androidtransfuse.gen.ComponentsGenerator;
+import org.androidtransfuse.gen.PackageHelperGeneratorAdapter;
 import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.transaction.*;
 
@@ -57,13 +60,14 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final Provider<ApplicationAnalysis> applicationAnalysisProvider;
     private final AnalysisGenerationTransactionProcessorBuilderFactory processorFactory;
     private final GenerateModuleProcessor generateModuleProcessor;
-    private final PackageHelperTransactionFactory packageHelperTransactionFactory;
+    private final Provider<PackageHelperGeneratorAdapter> packageHelperTransactionWorkerProvider;
     private final ModuleProcessorBuilder moduleProcessorBuilder;
     private final ImplementedByProcessorBuilder implementedByProcessorBuilder;
     private final TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor;
-    private final ComponentsTransactionFactory componentsTransactionFactory;
-    private final VirtualProxyTransactionFactory virtualProxyTransactionFactory;
-    private final ScopesUtilityTransactionFactory scopesUtilityTransactionFactory;
+    private final Provider<ComponentsGenerator> componentsGeneratorProvider;
+    private final Provider<VirtualProxyTransactionWorker> virtualProxyTransactionWorkerProvider;
+    private final Provider<ScopesGeneratorWorker> scopesGeneratorWorkerProvider;
+    private final ScopedTransactionBuilder scopedTransactionBuilder;
 
     @Inject
     public GeneratorRepositoryProvider(FactoryProcessor factoryProcessor,
@@ -75,13 +79,14 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        Provider<ApplicationAnalysis> applicationAnalysisProvider,
                                        AnalysisGenerationTransactionProcessorBuilderFactory processorFactory,
                                        GenerateModuleProcessor generateModuleProcessor,
-                                       PackageHelperTransactionFactory packageHelperTransactionFactory,
+                                       Provider<PackageHelperGeneratorAdapter> packageHelperTransactionWorkerProvider,
                                        ModuleProcessorBuilder moduleProcessorBuilder,
                                        ImplementedByProcessorBuilder implementedByProcessorBuilder,
                                        TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor,
-                                       ComponentsTransactionFactory componentsTransactionFactory,
-                                       VirtualProxyTransactionFactory virtualProxyTransactionFactory,
-                                       ScopesUtilityTransactionFactory scopesUtilityTransactionFactory) {
+                                       Provider<ComponentsGenerator> componentsGeneratorProvider,
+                                       Provider<VirtualProxyTransactionWorker> virtualProxyTransactionWorkerProvider,
+                                       Provider<ScopesGeneratorWorker> scopesGeneratorWorkerProvider,
+                                       ScopedTransactionBuilder scopedTransactionBuilder) {
         this.factoryProcessor = factoryProcessor;
         this.analysisGenerationFactory = analysisGenerationFactory;
         this.activityAnalysisProvider = activityAnalysisProvider;
@@ -91,13 +96,14 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         this.applicationAnalysisProvider = applicationAnalysisProvider;
         this.processorFactory = processorFactory;
         this.generateModuleProcessor = generateModuleProcessor;
-        this.packageHelperTransactionFactory = packageHelperTransactionFactory;
+        this.packageHelperTransactionWorkerProvider = packageHelperTransactionWorkerProvider;
         this.moduleProcessorBuilder = moduleProcessorBuilder;
         this.implementedByProcessorBuilder = implementedByProcessorBuilder;
         this.componentsRepositoryProcessor = componentsRepositoryProcessor;
-        this.componentsTransactionFactory = componentsTransactionFactory;
-        this.virtualProxyTransactionFactory = virtualProxyTransactionFactory;
-        this.scopesUtilityTransactionFactory = scopesUtilityTransactionFactory;
+        this.componentsGeneratorProvider = componentsGeneratorProvider;
+        this.virtualProxyTransactionWorkerProvider = virtualProxyTransactionWorkerProvider;
+        this.scopesGeneratorWorkerProvider = scopesGeneratorWorkerProvider;
+        this.scopedTransactionBuilder = scopedTransactionBuilder;
     }
 
     @Override
@@ -138,7 +144,11 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         TransactionProcessor<Void, Void> manifestProcessor = new TransactionProcessorPredefined(ImmutableSet.of(new Transaction<Void, Void>(generateModuleProcessor)));
         TransactionProcessor<Void, Void> componentProcessorCompletion = new TransactionProcessorChain(
 
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(componentsProcessor, componentsRepositoryProcessor, componentsTransactionFactory), manifestProcessor);
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(
+                        componentsProcessor,
+                        componentsRepositoryProcessor,
+                        scopedTransactionBuilder.buildFactory(componentsGeneratorProvider)),
+                manifestProcessor);
 
         ImmutableSet.Builder<TransactionProcessor<?, ?>> configurationDependentBuilders = ImmutableSet.builder();
 
@@ -149,9 +159,10 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
 
         // Package Helper processing (to be run last)
         TransactionProcessor<Void, Void> packageHelperProcessor = new TransactionProcessorPredefined(
-                ImmutableSet.of(packageHelperTransactionFactory.buildTransaction(),
-                        virtualProxyTransactionFactory.buildTransaction(),
-                        scopesUtilityTransactionFactory.buildTransaction()));
+                ImmutableSet.of(
+                        scopedTransactionBuilder.build(packageHelperTransactionWorkerProvider),
+                        scopedTransactionBuilder.build(virtualProxyTransactionWorkerProvider),
+                        scopedTransactionBuilder.build(scopesGeneratorWorkerProvider)));
 
         TransactionProcessor<?, ?> configurationDependentProcessors =
                 new TransactionProcessorComposite(configurationDependentBuilders.build());
