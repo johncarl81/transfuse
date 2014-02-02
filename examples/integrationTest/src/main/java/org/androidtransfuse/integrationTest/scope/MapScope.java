@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.integrationTest.scope;
 
+import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.OutOfScopeException;
-import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.ScopeKey;
 
 import javax.inject.Provider;
@@ -24,21 +24,47 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class MapScope implements Scope {
+public class MapScope implements EnterableScope {
 
     private ConcurrentMap<ScopeKey<?>, Object> values;
 
+    public void enter() {
+        values = new ConcurrentHashMap<ScopeKey<?>, Object>();
+    }
+
+    public void exit() {
+        values = null;
+    }
+
+    public boolean isStarted(){
+        return values != null;
+    }
+
+    public <T> void seed(ScopeKey<T> key, T value) {
+        Map<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
+        scopedObjects.put(key, value);
+    }
+
     @Override
     public <T> T getScopedObject(final ScopeKey<T> key, final Provider<T> provider) {
+        ConcurrentMap<ScopeKey<?>, Object> scopedObjects = getScopedObjectMap(key);
+
         @SuppressWarnings("unchecked")
-        Object current = values.get(key);
+        Object current = scopedObjects.get(key);
         if (current == null) {
             Object value = provider.get();
-            current = values.putIfAbsent(key, value);
+            current = scopedObjects.putIfAbsent(key, value);
             if(current == null){
                 current = value;
             }
         }
         return (T) current;
+    }
+
+    private <T> ConcurrentMap<ScopeKey<?>, Object> getScopedObjectMap(ScopeKey<T> key) {
+        if (!isStarted()) {
+            throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
+        }
+        return values;
     }
 }
