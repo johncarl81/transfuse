@@ -26,7 +26,10 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 import org.androidtransfuse.bootstrap.BootstrapModule;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.ClassGenerationStrategy;
+import org.androidtransfuse.gen.GeneratorFactory;
+import org.androidtransfuse.gen.InjectionBuilderContextFactory;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
@@ -41,10 +44,7 @@ import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuilderFactory;
 import org.androidtransfuse.processor.GeneratorRepository;
 import org.androidtransfuse.processor.GeneratorRepositoryProvider;
-import org.androidtransfuse.util.EmptyRResource;
-import org.androidtransfuse.util.JavaUtilLogger;
-import org.androidtransfuse.util.Logger;
-import org.androidtransfuse.util.TestingScope;
+import org.androidtransfuse.util.*;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -64,7 +64,6 @@ import javax.xml.bind.JAXBContext;
 @Bindings({
         @Bind(type = ModuleRepository.class, to = InjectionNodeBuilderRepositoryFactory.class),
         @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class),
-        @Bind(type = ClassGenerationStrategy.class, to = TransfuseClassGenerationStrategy.class),
         @Bind(type = RResource.class, to = EmptyRResource.class),
         @Bind(type = Elements.class, to = NoOpElements.class),
         @Bind(type = Filer.class, to = NoOpFiler.class),
@@ -93,6 +92,11 @@ import javax.xml.bind.JAXBContext;
 public class TestTransfuseAndroidModule {
 
     private final JCodeModel codeModel = new JCodeModel();
+
+    @Provides
+    public ClassGenerationStrategy getClassGenerationStrategy(){
+        return new ClassGenerationStrategy(Generated.class, TransfuseAnnotationProcessor.class.getName());
+    }
 
     @Provides
     @ConfigurationScope

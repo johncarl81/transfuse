@@ -43,10 +43,7 @@ import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
-import org.androidtransfuse.util.Providers;
-import org.androidtransfuse.util.QualifierPredicate;
-import org.androidtransfuse.util.ScopePredicate;
-import org.androidtransfuse.util.VirtualProxyException;
+import org.androidtransfuse.util.*;
 import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
@@ -87,7 +84,10 @@ public class CoreFactory {
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
         this.validator = new Validator(messager);
-        this.generationUtil = new ClassGenerationUtil(codeModel, new BootstrapClassGenerationStrategy(), validator);
+        this.generationUtil = new ClassGenerationUtil(
+                codeModel,
+                new ClassGenerationStrategy(Generated.class, BootstrapProcessor.class.getName()),
+                validator);
         this.virtualProxyCache = new VirtualProxyGenerator.VirtualProxyGeneratorCache(classNamer);
         this.moduleRepository.addModuleRepository(buildScopeRepository());
     }

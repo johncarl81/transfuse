@@ -19,6 +19,7 @@ import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.CodeGenerationScope;
 import org.androidtransfuse.ConfigurationScope;
+import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.module.ModuleRepository;
@@ -31,7 +32,6 @@ import org.androidtransfuse.bootstrap.Namespace;
 import org.androidtransfuse.gen.ClassGenerationStrategy;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
-import org.androidtransfuse.gen.TransfuseClassGenerationStrategy;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
 import org.androidtransfuse.gen.variableDecorator.ExpressionDecoratorFactory;
@@ -44,6 +44,7 @@ import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorChannel;
 import org.androidtransfuse.transaction.TransactionProcessorPool;
+import org.androidtransfuse.util.Generated;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.MessagerLogger;
@@ -66,8 +67,7 @@ import java.util.Map;
 })
 @Bindings({
         @Bind(type = ModuleRepository.class, to = InjectionNodeBuilderRepositoryFactory.class),
-        @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class),
-        @Bind(type = ClassGenerationStrategy.class, to = TransfuseClassGenerationStrategy.class)
+        @Bind(type = InvocationBuilderStrategy.class, to = DefaultInvocationBuilderStrategy.class)
 })
 @BindProviders({
         @BindProvider(type = JAXBContext.class, provider = JAXBContextProvider.class),
@@ -86,6 +86,11 @@ public class TransfuseAndroidModule {
 
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
+
+    @Provides
+    public ClassGenerationStrategy getClassGenerationStrategy(){
+        return new ClassGenerationStrategy(Generated.class, TransfuseAnnotationProcessor.class.getName());
+    }
 
     @Provides
     @CodeGenerationScope
