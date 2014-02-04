@@ -141,7 +141,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         Set<? extends Element> applicationTypes = roundEnvironment.getElementsAnnotatedWith(Application.class);
 
         if (applicationTypes.size() > 1) {
-            throw new TransfuseAnalysisException("Unable to process with more than one application defined");
+            throw new TransfuseAnalysisException("Unable to process with more than one application defined: " + applicationTypes);
         }
 
         //process components
