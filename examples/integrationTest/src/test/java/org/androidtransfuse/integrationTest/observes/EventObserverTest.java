@@ -44,7 +44,7 @@ public class EventObserverTest {
 
     @Before
     public void setup() {
-        eventObserverActivity = Robolectric.buildActivity(EventObserverActivity.class).create().get();
+        eventObserverActivity = Robolectric.buildActivity(EventObserverActivity.class).create().resume().get();
 
         eventManager = Transfuse$$ScopesUtil.getInstance().getScope(Singleton.class).getScopedObject(ScopeKey.of(EventManager.class), Providers.of(new EventManager()));
 
@@ -88,7 +88,7 @@ public class EventObserverTest {
         assertFalse(eventObserver.isEventTwoTriggered());
         eventManager.trigger(new EventTwo());
         assertFalse(eventObserver.isEventTwoTriggered());
-        eventObserverActivity.onRestart();
+        eventObserverActivity.onResume();
         assertFalse(eventObserver.isEventTwoTriggered());
         eventManager.trigger(new EventTwo());
         assertTrue(eventObserver.isEventTwoTriggered());

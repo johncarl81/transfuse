@@ -15,9 +15,8 @@
  */
 package org.androidtransfuse.event;
 
-import org.androidtransfuse.annotations.OnCreate;
 import org.androidtransfuse.annotations.OnPause;
-import org.androidtransfuse.annotations.OnRestart;
+import org.androidtransfuse.annotations.OnResume;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -55,8 +54,7 @@ public final class EventTending {
     /**
      * Register the observers defined in the addObserver() method with the given EventManager.
      */
-    @OnRestart
-    @OnCreate
+    @OnResume
     public void register(){
         for (Map.Entry<Class, EventObserver> observerEntry : eventObservers.entrySet()) {
             eventManager.register(observerEntry.getKey(), observerEntry.getValue());

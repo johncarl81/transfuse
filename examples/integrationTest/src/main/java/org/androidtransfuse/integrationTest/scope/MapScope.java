@@ -15,8 +15,8 @@
  */
 package org.androidtransfuse.integrationTest.scope;
 
-import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.config.OutOfScopeException;
+import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.ScopeKey;
 
 import javax.inject.Provider;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class MapScope implements EnterableScope {
+public class MapScope implements Scope{
 
     private ConcurrentMap<ScopeKey<?>, Object> values;
 
