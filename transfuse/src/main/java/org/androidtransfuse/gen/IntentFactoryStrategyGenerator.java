@@ -53,13 +53,17 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     private final ASTClassFactory astClassFactory;
     private final ClassGenerationUtil generationUtil;
     private final ImmutableMap<ASTPrimitiveType, String> methodMapping;
+    private final UniqueVariableNamer namer;
 
     @Inject
     public IntentFactoryStrategyGenerator(/*@Assisted*/ Class factoryStrategyClass,
-                                          ASTClassFactory astClassFactory, ClassGenerationUtil generationUtil) {
+                                          ASTClassFactory astClassFactory,
+                                          ClassGenerationUtil generationUtil,
+                                          UniqueVariableNamer namer) {
         this.factoryStrategyClass = factoryStrategyClass;
         this.astClassFactory = astClassFactory;
         this.generationUtil = generationUtil;
+        this.namer = namer;
 
         ImmutableMap.Builder<ASTPrimitiveType, String> methodMappingBuilder = ImmutableMap.builder();
         methodMappingBuilder.put(ASTPrimitiveType.BOOLEAN, "putBoolean");
@@ -96,6 +100,20 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
                     .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
                     .arg(JExpr._new(generationUtil.ref(AndroidLiterals.BUNDLE)))
             );
+
+            //addFlags method
+            JMethod addFlags = strategyClass.method(JMod.PUBLIC, strategyClass, "addFlags");
+            JVar flagParam = addFlags.param(int.class, namer.generateName(int.class));
+            JBlock addFlagsBody = addFlags.body();
+            addFlagsBody.invoke("internalAddFlags").arg(flagParam);
+            addFlagsBody._return(JExpr._this());
+
+            //addCategories method
+            JMethod addCategory = strategyClass.method(JMod.PUBLIC, strategyClass, "addCategory");
+            JVar categoryParam = addCategory.param(String.class, namer.generateName(String.class));
+            JBlock addCategoryBody = addCategory.body();
+            addCategoryBody.invoke("internalAddCategory").arg(categoryParam);
+            addCategoryBody._return(JExpr._this());
 
             for (IntentFactoryExtraAspect extra : extras) {
                 if (extra.isRequired()) {

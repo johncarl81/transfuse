@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.List;
+
 /**
  * Strategy class defining a Contract for the given Android Context, specifying the relevant parameters to build an Android Intent.
  *
@@ -52,4 +54,18 @@ public interface IntentFactoryStrategy {
      * @return Bundled Extras
      */
     Bundle getExtras();
+
+    /**
+     * Returns the associated Flags defined by the Strategy class.
+     *
+     * @return flags
+     */
+    int getFlags();
+
+    /**
+     * Returns a list of Categories defined by the Strategy class.
+     *
+     * @return categories
+     */
+    List<String> getCategories();
 }

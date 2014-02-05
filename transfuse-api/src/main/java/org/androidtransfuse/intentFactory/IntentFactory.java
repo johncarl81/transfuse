@@ -92,6 +92,10 @@ public class IntentFactory {
      */
     public Intent buildIntent(IntentFactoryStrategy parameters) {
         android.content.Intent intent = intentMockFactory.buildIntent(context, parameters.getTargetContext());
+        intent.setFlags(parameters.getFlags());
+        for (String category : parameters.getCategories()){
+            intent.addCategory(category);
+        }
 
         intent.putExtras(parameters.getExtras());
 

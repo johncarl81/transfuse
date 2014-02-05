@@ -18,6 +18,9 @@ package org.androidtransfuse.intentFactory;
 import android.content.Context;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Abstract Base class defining the required parameters to build an Intent.
  *
@@ -27,6 +30,8 @@ public abstract class AbstractIntentFactoryStrategy implements IntentFactoryStra
 
     private final Class<? extends Context> targetContext;
     private final Bundle bundle;
+    private int flags = 0;
+    private List<String> categories = new ArrayList<String>();
 
     protected AbstractIntentFactoryStrategy(Class<? extends Context> targetContext, Bundle bundle) {
         this.targetContext = targetContext;
@@ -41,5 +46,21 @@ public abstract class AbstractIntentFactoryStrategy implements IntentFactoryStra
     @Override
     public Bundle getExtras() {
         return bundle;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void internalAddCategory(String category) {
+        this.categories.add(category);
+    }
+
+    public int getFlags() {
+        return flags;
+    }
+
+    public void internalAddFlags(int flags) {
+        this.flags |= flags;
     }
 }
