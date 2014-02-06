@@ -18,9 +18,7 @@ package org.androidtransfuse.processor;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.transaction.TransactionProcessorBuilder;
-import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -35,17 +33,10 @@ import java.util.Collection;
 public class TransfuseProcessor {
 
     private final GeneratorRepository generatorRepository;
-    private final ManifestBuilder manifestBuilder;
 
     @Inject
-    public TransfuseProcessor(GeneratorRepository generatorRepository,
-                              ManifestBuilder manifestBuilder) {
+    public TransfuseProcessor(GeneratorRepository generatorRepository) {
         this.generatorRepository = generatorRepository;
-        this.manifestBuilder = manifestBuilder;
-    }
-
-    public void generateEmptyApplication() {
-        manifestBuilder.setupManifestApplication(AndroidLiterals.APPLICATION.getName());
     }
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {

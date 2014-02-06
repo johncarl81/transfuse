@@ -25,7 +25,6 @@ import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.ManifestBuilder;
 import org.androidtransfuse.gen.componentBuilder.*;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -46,6 +45,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
  */
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
+    private final Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final ComponentBuilderFactory componentBuilderFactory;
@@ -57,10 +57,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final ContextScopeComponentBuilder contextScopeComponentBuilder;
     private final ObservesRegistrationGenerator observesExpressionDecorator;
     private final MetaDataBuilder metadataBuilder;
-    private final ManifestBuilder manifestBuilder;
 
     @Inject
-    public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
+    public ApplicationAnalysis(Provider<org.androidtransfuse.model.manifest.Application> applicationProvider, InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
@@ -70,8 +69,8 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                InjectionBindingBuilder injectionBindingBuilder,
                                ContextScopeComponentBuilder contextScopeComponentBuilder,
                                ObservesRegistrationGenerator observesExpressionDecorator,
-                               MetaDataBuilder metadataBuilder,
-                               ManifestBuilder manifestBuilder) {
+                               MetaDataBuilder metadataBuilder) {
+        this.applicationProvider = applicationProvider;
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -83,7 +82,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.contextScopeComponentBuilder = contextScopeComponentBuilder;
         this.observesExpressionDecorator = observesExpressionDecorator;
         this.metadataBuilder = metadataBuilder;
-        this.manifestBuilder = manifestBuilder;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -178,7 +176,9 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private void setupManifest(Application annotation, ASTType type, String name, String label) {
 
-        org.androidtransfuse.model.manifest.Application manifestApplication = manifestBuilder.setupManifestApplication(name);
+        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
+
+        manifestApplication.setName(name);
 
         manifestApplication.setLabel(checkBlank(label));
         manifestApplication.setAllowTaskReparenting(checkDefault(annotation.allowTaskReparenting(), false));
@@ -209,6 +209,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
 
-        manifestManager.setApplication(manifestApplication);
+        manifestManager.addApplication(manifestApplication);
     }
 }

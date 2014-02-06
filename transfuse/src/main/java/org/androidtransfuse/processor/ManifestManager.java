@@ -41,7 +41,7 @@ import java.util.List;
 @Singleton
 public class ManifestManager {
 
-    private Application application;
+    private final List<Application> applications = new ArrayList<Application>();
     private final String manifestPackage;
     private final List<Activity> activities = new ArrayList<Activity>();
     private final List<Receiver> broadcastReceivers = new ArrayList<Receiver>();
@@ -56,8 +56,8 @@ public class ManifestManager {
         this.manifestPackage = originalManifest.getApplicationPackage();
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void addApplication(Application application) {
+        this.applications.add(application);
     }
 
     public void addPermission(Permission permission){
@@ -135,12 +135,17 @@ public class ManifestManager {
         Manifest manifest = new Manifest();
         manifest.setApplicationPackage(manifestPackage);
 
-        Application localApplication = application;
+        Application localApplication;
 
-        if (application == null) {
+        if (applications.isEmpty()){
             localApplication = new Application();
             localApplication.setName(AndroidLiterals.APPLICATION.getName());
         }
+        else{
+            localApplication = applications.get(0);
+        }
+
+        //todo: do multiple applications result in an error?
 
         updateMergeTags(Application.class, localApplication);
 

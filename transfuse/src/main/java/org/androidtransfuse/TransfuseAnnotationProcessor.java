@@ -18,6 +18,7 @@ package org.androidtransfuse;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
+import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
@@ -28,7 +29,6 @@ import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
 import org.androidtransfuse.processor.GenerateModuleProcessor;
-import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;
@@ -138,19 +138,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             baseModuleConfiguration = true;
         }
 
-        Set<? extends Element> applicationTypes = roundEnvironment.getElementsAnnotatedWith(Application.class);
-
-        if (applicationTypes.size() > 1) {
-            throw new TransfuseAnalysisException("Unable to process with more than one application defined");
-        }
-
-        //process components
-        if (applicationTypes.isEmpty()) {
-            transfuseProcessor.generateEmptyApplication();
-        } else {
-            transfuseProcessor.submit(Application.class, reloadableASTElementFactory.buildProviders((applicationTypes)));
-        }
-
+        transfuseProcessor.submit(Application.class, buildASTCollection(roundEnvironment, Application.class));
         transfuseProcessor.submit(TransfuseModule.class, buildASTCollection(roundEnvironment, TransfuseModule.class));
         transfuseProcessor.submit(ImplementedBy.class, buildASTCollection(roundEnvironment, ImplementedBy.class));
         transfuseProcessor.submit(Factory.class, buildASTCollection(roundEnvironment, Factory.class));
