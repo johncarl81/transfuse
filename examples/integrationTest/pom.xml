@@ -88,7 +88,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <sdk>
-                        <platform>7</platform>
+                        <platform>10</platform>
                     </sdk>
                 </configuration>
             </plugin>

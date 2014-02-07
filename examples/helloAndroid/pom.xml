@@ -6,22 +6,29 @@
 
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse-hello-android</artifactId>
-    <version>1.0.0</version>
+    <version>0.2.8-SNAPSHOT</version>
     <packaging>apk</packaging>
 
     <name>Transfuse Hello Android Example</name>
+
+    <parent>
+        <groupId>org.androidtransfuse</groupId>
+        <artifactId>transfuse-examples</artifactId>
+        <version>0.2.8-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse</artifactId>
-            <version>0.2.8-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
             <artifactId>transfuse-api</artifactId>
-            <version>0.2.8-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -40,7 +47,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <sdk>
-                        <platform>7</platform>
+                        <platform>10</platform>
                     </sdk>
                 </configuration>
             </plugin>
