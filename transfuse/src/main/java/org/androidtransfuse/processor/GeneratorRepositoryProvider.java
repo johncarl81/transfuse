@@ -63,7 +63,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
     private final Provider<PackageHelperGeneratorAdapter> packageHelperTransactionWorkerProvider;
     private final ModuleProcessorBuilder moduleProcessorBuilder;
     private final ImplementedByProcessorBuilder implementedByProcessorBuilder;
-    private final TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor;
+    private final TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, JDefinedClass> componentsRepositoryProcessor;
     private final Provider<ComponentsGenerator> componentsGeneratorProvider;
     private final Provider<VirtualProxyTransactionWorker> virtualProxyTransactionWorkerProvider;
     private final Provider<ScopesGeneratorWorker> scopesGeneratorWorkerProvider;
@@ -82,7 +82,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                                        Provider<PackageHelperGeneratorAdapter> packageHelperTransactionWorkerProvider,
                                        ModuleProcessorBuilder moduleProcessorBuilder,
                                        ImplementedByProcessorBuilder implementedByProcessorBuilder,
-                                       TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, Void> componentsRepositoryProcessor,
+                                       TransactionProcessorPool<Map<Provider<ASTType>, JDefinedClass>, JDefinedClass> componentsRepositoryProcessor,
                                        Provider<ComponentsGenerator> componentsGeneratorProvider,
                                        Provider<VirtualProxyTransactionWorker> virtualProxyTransactionWorkerProvider,
                                        Provider<ScopesGeneratorWorker> scopesGeneratorWorkerProvider,
@@ -144,7 +144,7 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
         TransactionProcessor<Void, Void> manifestProcessor = new TransactionProcessorPredefined(ImmutableSet.of(new Transaction<Void, Void>(generateModuleProcessor)));
         TransactionProcessor<Void, Void> componentProcessorCompletion = new TransactionProcessorChain(
 
-                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, Void>(
+                new TransactionProcessorChannel<Provider<ASTType>, JDefinedClass, JDefinedClass>(
                         componentsProcessor,
                         componentsRepositoryProcessor,
                         scopedTransactionBuilder.buildFactory(componentsGeneratorProvider)),

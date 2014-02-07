@@ -17,7 +17,6 @@ package org.androidtransfuse.adapter.element;
 
 import com.google.common.base.Function;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.element.ASTElementFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

@@ -77,7 +77,7 @@ public class CoreFactory {
     private final ScopePredicate scopePredicate = new ScopePredicate(astClassFactory);
     private final InstantiationStrategyFactory instantiationStrategyFactory = new InstantiationStrategyFactoryImpl();
 
-    private BootstrapsInjectorGenerator bootstrapsInjectorGenerator = null;
+    private BootstrapGenerator bootstrapGenerator = null;
 
     public CoreFactory(Elements elements, Messager messager, Filer filer, String namespace) {
         this.elements = elements;
@@ -120,6 +120,10 @@ public class CoreFactory {
 
     public ScopesGenerator buildScopesGenerator() {
         return new ScopesGenerator(generationUtil, getModuleRepository());
+    }
+
+    public BootstrapsGenerator buildBootstrapsGenerator() {
+        return new BootstrapsGenerator(generationUtil, variableNamer);
     }
 
     private final class GeneratedProviderInjectionNodeBuilderProvider implements Provider<GeneratedProviderInjectionNodeBuilder>{
@@ -243,8 +247,8 @@ public class CoreFactory {
         return new InjectionFragmentGenerator(injectionBuilderContextFactory, injectionExpressionBuilder, virtualProxyGenerator);
     }
 
-    public synchronized BootstrapsInjectorGenerator buildBootstrapsInjectorGenerator() {
-        if(bootstrapsInjectorGenerator == null){
+    public synchronized BootstrapGenerator buildBootstrapGenerator() {
+        if(bootstrapGenerator == null){
             InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
             injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
             ExistingVariableInjectionBuilderFactory variableBuilderFactory = new ExistingVariableInjectionBuilderFactory(
@@ -254,9 +258,9 @@ public class CoreFactory {
                     new ExceptionWrapper(generationUtil),
                     new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
                     validator);
-            this.bootstrapsInjectorGenerator = new BootstrapsInjectorGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), instantiationStrategyFactory, variableBuilderFactory, getModuleRepository());
+            this.bootstrapGenerator = new BootstrapGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), instantiationStrategyFactory, variableBuilderFactory, getModuleRepository());
         }
-        return bootstrapsInjectorGenerator;
+        return bootstrapGenerator;
     }
 
     public ModuleProcessor buildModuleProcessor() {

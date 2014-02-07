@@ -63,7 +63,7 @@ public class FactoriesTransactionWorker extends AbstractCompletionTransactionWor
 
 
         //setup Factories class
-        factoriesGenerator.generateFactories(aggregate);
+        factoriesGenerator.generate(aggregate);
 
         return null;
     }

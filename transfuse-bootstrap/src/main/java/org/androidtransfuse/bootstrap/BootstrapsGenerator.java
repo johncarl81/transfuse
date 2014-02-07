@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen;
+package org.androidtransfuse.bootstrap;
 
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
-import org.androidtransfuse.Components;
+import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.gen.AbstractRepositoryGenerator;
+import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
@@ -28,19 +27,18 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ComponentsGenerator extends AbstractRepositoryGenerator {
+public class BootstrapsGenerator extends AbstractRepositoryGenerator {
 
-    private static final PackageClass REPOSITORY_NAME = new PackageClass(Components.COMPONENTS_PACKAGE, Components.COMPONENTS_REPOSITORY_NAME);
+    public static final PackageClass BOOTSTRAPS_INJECTOR = new PackageClass(
+            Bootstraps.BOOTSTRAPS_INJECTOR_PACKAGE, Bootstraps.BOOTSTRAPS_INJECTOR_NAME);
 
     @Inject
-    public ComponentsGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
-        super(Repository.class, generationUtil, namer, REPOSITORY_NAME, Class.class);
+    public BootstrapsGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer) {
+        super(Repository.class, generationUtil, namer, BOOTSTRAPS_INJECTOR, Bootstraps.BootstrapInjector.class);
     }
 
     @Override
     protected JExpression generateInstance(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JClass concreteType) throws JClassAlreadyExistsException {
-        return concreteType.dotclass();
+        return JExpr._new(concreteType);
     }
-
-
 }

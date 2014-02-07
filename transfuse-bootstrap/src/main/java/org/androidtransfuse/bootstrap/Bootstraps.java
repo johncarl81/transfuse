@@ -74,6 +74,9 @@ public final class Bootstraps {
     }
 
     public abstract static class BootstrapsInjectorAdapter<T> implements BootstrapInjector<T>{
+
+        public static final String SCOPE_SINGLETONS_METHOD = "scopeSingletons";
+
         private final Map<Class<? extends Annotation> , Map<ScopeKey, Object>> scoped = new HashMap<Class<? extends Annotation> , Map<ScopeKey, Object>>();
 
         public <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, ScopeKey<S> bindType, S instance){

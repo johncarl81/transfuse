@@ -101,18 +101,24 @@ public class BootstrapProcessor extends AnnotationProcessorBase {
                 }
 
                 Collection<? extends ASTType> astTypes = wrapASTCollection(coreFactory, roundEnvironment.getElementsAnnotatedWith(Bootstrap.class));
-                BootstrapsInjectorGenerator bootstrapsInjectorGenerator = coreFactory.buildBootstrapsInjectorGenerator();
+                BootstrapGenerator bootstrapsInjectorGenerator = coreFactory.buildBootstrapGenerator();
 
                 AnalysisContext context = coreFactory.buildAnalysisContext();
+                Map<Provider<ASTType>, JDefinedClass> bootstrapMap = new HashMap<Provider<ASTType>, JDefinedClass>();
                 for (ASTType astType : astTypes) {
 
                     InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(astType, context);
 
-                    bootstrapsInjectorGenerator.generate(injectionNode);
+                    JDefinedClass bootstrapClass = bootstrapsInjectorGenerator.generate(injectionNode);
+
+                    bootstrapMap.put(Providers.of(astType), bootstrapClass);
                 }
 
+                BootstrapsGenerator bootstrapsGenerator = coreFactory.buildBootstrapsGenerator();
+                bootstrapsGenerator.generate(bootstrapMap);
+
                 FactoriesGenerator factoriesGenerator = coreFactory.buildFactoriesGenerator();
-                factoriesGenerator.generateFactories(factoryAggregate);
+                factoriesGenerator.generate(factoryAggregate);
                 coreFactory.buildVirtualProxyGenerator().generateProxies();
 
                 JCodeModel codeModel = coreFactory.getCodeModel();

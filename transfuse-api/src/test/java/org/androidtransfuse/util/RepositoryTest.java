@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.util.matcher;
+package org.androidtransfuse.util;
 
-import org.androidtransfuse.adapter.ASTType;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
-* @author John Ericksen
-*/
-public class InheritsMatcher implements Matcher<ASTType> {
+ * @author John Ericksen
+ */
+public class RepositoryTest {
 
-    private final ASTType superType;
-
-    public InheritsMatcher(ASTType superType) {
-        this.superType = superType;
-    }
-
-    @Override
-    public boolean matches(ASTType astType) {
-        return astType.inheritsFrom(superType);
+    @Test
+    public void testGetMethod() throws NoSuchMethodException {
+        assertNotNull(Repository.class.getMethod(Repository.GET_METHOD));
     }
 }

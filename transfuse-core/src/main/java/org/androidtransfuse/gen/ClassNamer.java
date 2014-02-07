@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen;
 
+import com.sun.codemodel.JClass;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -164,7 +165,7 @@ public class ClassNamer {
         return numberedClassName(astType.getPackageClass());
     }
 
-    public ClassNameBuilder numberedClassName(JDefinedClass definedClass) {
+    public ClassNameBuilder numberedClassName(JClass definedClass) {
         return numberedClassName(new PackageClass(definedClass._package().name(), definedClass.name()));
     }
 

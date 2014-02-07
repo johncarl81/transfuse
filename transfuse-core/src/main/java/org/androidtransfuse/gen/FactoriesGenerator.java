@@ -17,26 +17,19 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.Factories;
-import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * @author John Ericksen
  */
-public class FactoriesGenerator {
+public class FactoriesGenerator extends AbstractRepositoryGenerator {
 
     private static final PackageClass REPOSITORY_NAME = new PackageClass(Factories.FACTORIES_PACKAGE, Factories.FACTORIES_REPOSITORY_NAME);
     private static final String GET_METHOD = "get";
-    private static final String MAP_NAME = "factories";
 
     private final ClassGenerationUtil generationUtil;
     private final ClassNamer classNamer;
@@ -44,61 +37,30 @@ public class FactoriesGenerator {
 
     @Inject
     public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
+        super(Repository.class, generationUtil, variableNamer, REPOSITORY_NAME, Factories.FactoryBuilder.class);
         this.generationUtil = generationUtil;
         this.classNamer = classNamer;
         this.variableNamer = variableNamer;
     }
 
-    public JDefinedClass generateFactories(Map<Provider<ASTType>, JDefinedClass> processedAggregate) {
-        try {
-            JDefinedClass factoryRepositoryClass = generationUtil.defineClass(REPOSITORY_NAME);
+    @Override
+    protected JExpression generateInstance(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JClass concreteType) throws JClassAlreadyExistsException {
 
-            factoryRepositoryClass._implements(generationUtil.ref(Repository.class).narrow(Factories.FactoryBuilder.class));
+        //factory builder
+        JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(interfaceClass).build().getClassName());
+        factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
 
-            //map definition
-            JClass mapIntances = generationUtil.ref(Map.class).narrow(Class.class, Factories.FactoryBuilder.class);
-            JClass hashMapIntances = generationUtil.ref(HashMap.class).narrow(Class.class, Factories.FactoryBuilder.class);
-            JVar registrationMap = factoryRepositoryClass.field(JMod.PRIVATE | JMod.FINAL, mapIntances, MAP_NAME, JExpr._new(hashMapIntances));
+        //getter without given scopes
+        JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, Repository.GET_METHOD);
 
-            //get factory map
-            JMethod getAll = factoryRepositoryClass.method(JMod.PUBLIC, mapIntances, "get");
-            getAll.body()._return(registrationMap);
+        getMethod.body()._return(JExpr._new(concreteType));
 
-            generateRegistration(factoryRepositoryClass, processedAggregate, registrationMap);
+        //getter with scopes
+        JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
+        JVar scopes = getMethodWithScopes.param(generationUtil.ref(Scopes.class), variableNamer.generateName(Scopes.class));
 
-            return factoryRepositoryClass;
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Already generated Factories class", e);
-        }
-    }
+        getMethodWithScopes.body()._return(JExpr._new(concreteType).arg(scopes));
 
-    private void generateRegistration(JDefinedClass factoryRepositoryClass, Map<Provider<ASTType>, JDefinedClass> processedAggregate, JVar registrationMap) throws JClassAlreadyExistsException {
-        // constructor registration block
-        JBlock factoryRegistrationBlock = factoryRepositoryClass.constructor(JMod.PUBLIC).body();
-
-        for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
-            ASTType astType = astTypeJDefinedClassEntry.getKey().get();
-            JClass interfaceClass = generationUtil.ref(astType);
-
-            //factory builder
-            JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(astType).build().getClassName());
-            factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
-
-            //getter without given scopes
-            JMethod getMethod = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-
-            getMethod.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()));
-
-            //getter with scopes
-            JMethod getMethodWithScopes = factoryClass.method(JMod.PUBLIC, interfaceClass, GET_METHOD);
-            JVar scopes = getMethodWithScopes.param(generationUtil.ref(Scopes.class), variableNamer.generateName(Scopes.class));
-
-            getMethodWithScopes.body()._return(JExpr._new(astTypeJDefinedClassEntry.getValue()).arg(scopes));
-
-            //register factory implementations
-            factoryRegistrationBlock.add(registrationMap.invoke("put")
-                    .arg(interfaceClass.dotclass())
-                    .arg(JExpr._new(factoryClass)));
-        }
+        return JExpr._new(factoryClass);
     }
 }

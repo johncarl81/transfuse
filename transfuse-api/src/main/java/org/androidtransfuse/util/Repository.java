@@ -22,5 +22,7 @@ import java.util.Map;
  */
 public interface Repository<T> {
 
+    String GET_METHOD = "get";
+
     Map<Class, T> get();
 }

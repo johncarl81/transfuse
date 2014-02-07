@@ -71,7 +71,7 @@ public class FactoriesGeneratorTest {
         ASTType factoryType = astClassFactory.getType(Factory.class);
         JDefinedClass factoryGeneratedClass = factoryGenerator.generate(factoryType);
 
-        JDefinedClass factoriesDefinedClass = factoriesGenerator.generateFactories(
+        JDefinedClass factoriesDefinedClass = factoriesGenerator.generate(
                 Collections.<Provider<ASTType>, JDefinedClass>singletonMap(
                         new SingletonProvider<ASTType>(factoryType), factoryGeneratedClass));
 
