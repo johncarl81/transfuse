@@ -55,6 +55,11 @@ public abstract class AbstractRepositoryGenerator extends AbstractCompletionTran
 
     public JDefinedClass generate(Map<Provider<ASTType>, JDefinedClass> aggregate) {
         try {
+            if(aggregate.isEmpty()){
+                // don't generate a repository if it will hold nothing.
+                return null;
+            }
+
             JDefinedClass factoryRepositoryClass = generationUtil.defineClass(repositoryName);
 
             factoryRepositoryClass._implements(generationUtil.ref(repositoryType).narrow(contentType));
