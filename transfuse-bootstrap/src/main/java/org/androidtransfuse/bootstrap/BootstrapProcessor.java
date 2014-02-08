@@ -33,9 +33,7 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Providers;
 
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Provider;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
@@ -50,7 +48,6 @@ import static com.google.common.collect.Collections2.transform;
  * @author John Ericksen
  */
 @SupportedAnnotations({Bootstrap.class, BootstrapModule.class, Namespace.class})
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BootstrapProcessor extends AnnotationProcessorBase {
 
     private boolean ran = false;

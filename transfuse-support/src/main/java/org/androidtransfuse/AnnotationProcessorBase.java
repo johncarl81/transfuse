@@ -19,6 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.lang.model.SourceVersion;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Set;
@@ -49,5 +50,10 @@ public abstract class AnnotationProcessorBase extends AbstractProcessor {
         public String apply(Class input) {
             return input.getName();
         }
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
     }
 }

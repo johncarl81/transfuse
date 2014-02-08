@@ -37,11 +37,9 @@ import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedSourceVersion;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.ElementFilter;
@@ -76,7 +74,6 @@ import static com.google.common.collect.Collections2.transform;
         TransfuseModule.class,
         Factory.class,
         ImplementedBy.class})
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
 @Bootstrap
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
