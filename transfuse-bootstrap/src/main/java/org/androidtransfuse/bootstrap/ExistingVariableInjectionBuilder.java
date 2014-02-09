@@ -19,7 +19,6 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
@@ -40,7 +39,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
-    private final ExpressionMatchingIterableFactory generatorFactory;
+    private final ExpressionMatchingListFactory generatorFactory;
     private final Validator validator;
 
     @Inject
@@ -49,7 +48,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
                                             InjectionExpressionBuilder injectionExpressionBuilder,
                                             TypedExpressionFactory typedExpressionFactory,
                                             ExceptionWrapper exceptionWrapper,
-                                            ExpressionMatchingIterableFactory generatorFactory,
+                                            ExpressionMatchingListFactory generatorFactory,
                                             Validator validator) {
         this.expression = expression;
         this.injectionInvocationBuilder = injectionInvocationBuilder;
@@ -101,12 +100,11 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
                                     public Void write(JBlock block) throws JClassAlreadyExistsException {
                                         block.add(
                                                 injectionInvocationBuilder.buildMethodCall(
-                                                        ASTVoidType.VOID,
-                                                        methodInjectionPoint,
-                                                        generatorFactory.buildExpressionMatchingIterable(
+                                                        methodInjectionPoint.getMethod(),
+                                                        generatorFactory.build(
                                                                 injectionBuilderContext.getVariableMap(),
                                                                 methodInjectionPoint.getInjectionNodes()),
-                                                        expression));
+                                                        new TypedExpression(methodInjectionPoint.getContainingType(), expression)));
                                         return null;
                                     }
                                 });

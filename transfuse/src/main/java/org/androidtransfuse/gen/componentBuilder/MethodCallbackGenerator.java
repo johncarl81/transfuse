@@ -66,22 +66,16 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                 for (ASTMethod methodCallback : methods) {
 
                     List<ASTParameter> matchedParameters = matchMethodArguments(methodDescriptor.getASTMethod().getParameters(), methodCallback);
-                    List<ASTType> parameterTypes = new ArrayList<ASTType>();
                     List<JExpression> parameters = new ArrayList<JExpression>();
 
                     for (ASTParameter matchedParameter : matchedParameters) {
-                        parameterTypes.add(matchedParameter.getASTType());
                         parameters.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
                     }
 
                     JStatement methodCall = invocationBuilder.buildMethodCall(
-                            methodCallback.getAccessModifier(),
-                            methodDescriptor.getASTMethod().getReturnType(),
-                            methodCallback.getName(),
+                            methodCallback,
                             parameters,
-                            parameterTypes,
-                            injectionNodeJExpressionEntry.getValue().getType(),
-                            injectionNodeJExpressionEntry.getValue().getExpression()
+                            injectionNodeJExpressionEntry.getValue()
                     );
 
                     body.add(methodCall);

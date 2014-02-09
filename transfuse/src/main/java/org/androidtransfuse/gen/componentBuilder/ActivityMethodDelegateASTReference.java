@@ -40,12 +40,8 @@ public class ActivityMethodDelegateASTReference implements ActivityDelegateASTRe
     @Override
     public JExpression buildReference(TypedExpression rootExpression) {
         return invocationBuilder.buildMethodCall(
-                method.getAccessModifier(),
-                method.getReturnType(),
-                method.getName(),
+                method,
                 Collections.EMPTY_LIST,
-                Collections.EMPTY_LIST,
-                rootExpression.getType(),
-                rootExpression.getExpression());
+                rootExpression);
     }
 }

@@ -15,17 +15,19 @@
  */
 package org.androidtransfuse.gen;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
-import org.androidtransfuse.adapter.ASTAccessModifier;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
-import org.androidtransfuse.gen.invocationBuilder.ModifierInjectionBuilder;
-import org.androidtransfuse.model.*;
+import org.androidtransfuse.gen.invocationBuilder.ModifiedInvocationBuilder;
+import org.androidtransfuse.model.FieldInjectionPoint;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,62 +44,43 @@ public class InvocationBuilder {
         this.invocationBuilderStrategy = invocationBuilderStrategy;
     }
 
-    private ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
-        return invocationBuilderStrategy.getInjectionBuilder(modifier);
-    }
+    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(method.getAccessModifier());
 
-    public JInvocation buildMethodCall(ASTType returnType, MethodInjectionPoint methodInjectionPoint, Iterable<? extends JExpression> parameters, JExpression variable) {
-        return buildMethodCall(methodInjectionPoint.getAccessModifier(), returnType, methodInjectionPoint.getName(), parameters, pullASTTypes(methodInjectionPoint.getInjectionNodes()), methodInjectionPoint.getContainingType(), variable);
-    }
-
-    public JInvocation buildMethodCall(ASTAccessModifier accessModifier, ASTType returnType, String name, Iterable<? extends JExpression> parameters, List<ASTType> parameterTypes, ASTType targetExpressionType, JExpression targetExpression) {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
-
-        return injectionBuilder.buildMethodCall(returnType, name, parameters, parameterTypes, targetExpressionType, targetExpression);
-    }
-
-    private List<ASTType> pullASTTypes(List<InjectionNode> injectionNodes) {
-        List<ASTType> astTypes = new ArrayList<ASTType>();
-
-        for (InjectionNode injectionNode : injectionNodes) {
-            astTypes.add(injectionNode.getASTType());
-        }
-
-        return astTypes;
+        return injectionBuilder.buildMethodCall(method, parameters, expression);
     }
 
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        return buildFieldSet(
-                fieldInjectionPoint.getAccessModifier(),
-                fieldInjectionPoint.getContainingType(),
-                variable,
-                fieldInjectionPoint.getInjectionNode().getASTType(),
-                fieldInjectionPoint.getName(),
-                expression.getType(),
-                expression.getExpression());
+        return buildFieldSet(fieldInjectionPoint.getField(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
     }
 
-    public JStatement buildFieldSet(ASTAccessModifier accessModifier, ASTType containingType, JExpression containingExpression, ASTType fieldType, String name, ASTType expressionType, JExpression expression) {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
-        return injectionBuilder.buildFieldSet(expressionType, expression, containingType, fieldType, name, containingExpression);
+    public JStatement buildFieldSet(ASTField field, TypedExpression containingExpression, TypedExpression expression) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(field.getAccessModifier());
+        return injectionBuilder.buildFieldSet(field, expression, containingExpression);
     }
 
-    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name, ASTAccessModifier accessModifier) {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
-        return injectionBuilder.buildFieldGet(returnType, variableType, variable, name);
+    public JExpression buildFieldGet(ASTField field, TypedExpression targetExpression) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(field.getAccessModifier());
+        return injectionBuilder.buildFieldGet(field, targetExpression);
     }
 
-    public JExpression buildConstructorCall(ConstructorInjectionPoint constructorInjectionPoint, Iterable<JExpression> parameters, ASTType type) {
-        List<ASTType> parameterTypes = new ArrayList<ASTType>();
-        for (InjectionNode injectionNode : constructorInjectionPoint.getInjectionNodes()) {
-            parameterTypes.add(injectionNode.getASTType());
-        }
+    public JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<JExpression> parameters) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(constructor.getAccessModifier());
 
-        return buildConstructorCall(constructorInjectionPoint.getAccessModifier(), parameterTypes, parameters, type);
+        return injectionBuilder.buildConstructorCall(constructor, type, parameters);
     }
 
-    public JExpression buildConstructorCall(ASTAccessModifier accessModifier, List<ASTType> parameterTypes, Iterable<JExpression> parameters, ASTType type) {
-        ModifierInjectionBuilder injectionBuilder = getInjectionBuilder(accessModifier);
-        return injectionBuilder.buildConstructorCall(type, parameterTypes, parameters);
+    private List<ASTType> pullASTTypes(List<InjectionNode> injectionNodes) {
+        return FluentIterable
+                .from(injectionNodes)
+                .transform(new Function<InjectionNode, ASTType>() {
+                    public ASTType apply(InjectionNode injectionNode) {
+                        return injectionNode.getASTType();
+                    }
+                }).toList();
+    }
+
+    private ModifiedInvocationBuilder getInjectionBuilder(ASTAccessModifier modifier) {
+        return invocationBuilderStrategy.getInjectionBuilder(modifier);
     }
 }

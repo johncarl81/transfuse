@@ -19,7 +19,6 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
 import org.androidtransfuse.event.EventTending;
@@ -31,7 +30,10 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -125,18 +127,14 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
                     JVar targetParam = triggerMethod.param(targetRef, variableNamer.generateName(typedExpression.getType()));
                     JBlock triggerBody = triggerMethod.body();
 
-                    Set<JExpression> parameters = new HashSet<JExpression>();
+                    List<JExpression> parameters = new ArrayList<JExpression>();
                     parameters.add(eventParam);
 
                     for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
                         triggerBody.add(invocationBuilder.buildMethodCall(
-                                observerMethod.getAccessModifier(),
-                                ASTVoidType.VOID,
-                                observerMethod.getName(),
+                                observerMethod,
                                 parameters,
-                                Collections.singletonList(event),
-                                typedExpression.getType(),
-                                targetParam));
+                                new TypedExpression(typedExpression.getType(), targetParam)));
                     }
 
                     JVar observer = block.decl(observerClass, variableNamer.generateName(EventObserver.class), JExpr._new(observerClass).arg(typedExpression.getExpression()));

@@ -23,25 +23,31 @@ import javax.tools.Diagnostic;
  */
 public class MessagerLogger implements Logger {
 
+    private final String prepend;
     private final Messager messager;
 
     public MessagerLogger(Messager messager) {
+        this("", messager);
+    }
+
+    public MessagerLogger(String prepend, Messager messager) {
         this.messager = messager;
+        this.prepend = prepend;
     }
 
     @Override
     public void info(String value) {
-        messager.printMessage(Diagnostic.Kind.NOTE, value);
+        messager.printMessage(Diagnostic.Kind.NOTE, prepend + value);
     }
 
     @Override
     public void warning(String value) {
-        messager.printMessage(Diagnostic.Kind.WARNING, value);
+        messager.printMessage(Diagnostic.Kind.WARNING, prepend + value);
     }
 
     @Override
     public void error(String value) {
-        messager.printMessage(Diagnostic.Kind.ERROR, value);
+        messager.printMessage(Diagnostic.Kind.ERROR, prepend + value);
     }
 
     @Override

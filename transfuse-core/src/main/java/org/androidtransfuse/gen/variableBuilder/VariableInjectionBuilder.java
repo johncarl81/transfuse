@@ -18,7 +18,6 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.AOPProxyAspect;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
@@ -45,7 +44,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
-    private final ExpressionMatchingIterableFactory generatorFactory;
+    private final ExpressionMatchingListFactory generatorFactory;
     private final Validator validator;
 
     @Inject
@@ -56,7 +55,7 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     InjectionExpressionBuilder injectionExpressionBuilder,
                                     TypedExpressionFactory typedExpressionFactory,
                                     ExceptionWrapper exceptionWrapper,
-                                    ExpressionMatchingIterableFactory generatorFactory,
+                                    ExpressionMatchingListFactory generatorFactory,
                                     Validator validator) {
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
@@ -104,11 +103,11 @@ public class VariableInjectionBuilder implements VariableBuilder {
 
                                 //constructor injection
                                 JExpression constructionExpression = injectionInvocationBuilder.buildConstructorCall(
-                                        injectionAspect.getConstructorInjectionPoint(),
-                                        generatorFactory.buildExpressionMatchingIterable(
+                                        injectionAspect.getConstructorInjectionPoint().getConstructor(),
+                                        nodeType, generatorFactory.build(
                                                 injectionBuilderContext.getVariableMap(),
-                                                injectionAspect.getConstructorInjectionPoint().getInjectionNodes()),
-                                        nodeType);
+                                                injectionAspect.getConstructorInjectionPoint().getInjectionNodes())
+                                );
 
                                 if (injectionAspect.getAssignmentType().equals(ASTInjectionAspect.InjectionAssignmentType.LOCAL)) {
                                     return injectionBuilderContext.getBlock().decl(generationUtil.ref(nodeType), variableNamer.generateName(proxyableInjectionNode), constructionExpression);
@@ -139,12 +138,11 @@ public class VariableInjectionBuilder implements VariableBuilder {
                                     public Void write(JBlock block) throws JClassAlreadyExistsException {
                                         block.add(
                                                 injectionInvocationBuilder.buildMethodCall(
-                                                        ASTVoidType.VOID,
-                                                        methodInjectionPoint,
-                                                        generatorFactory.buildExpressionMatchingIterable(
+                                                        methodInjectionPoint.getMethod(),
+                                                        generatorFactory.build(
                                                                 injectionBuilderContext.getVariableMap(),
                                                                 methodInjectionPoint.getInjectionNodes()),
-                                                        variableRef));
+                                                        new TypedExpression(methodInjectionPoint.getContainingType(), variableRef)));
                                         return null;
                                     }
                                 });

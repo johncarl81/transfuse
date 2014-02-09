@@ -17,13 +17,11 @@ package org.androidtransfuse.validation;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
-import org.androidtransfuse.adapter.element.ASTElementAnnotation;
-import org.androidtransfuse.adapter.element.ASTElementField;
-import org.androidtransfuse.adapter.element.ASTElementMethod;
-import org.androidtransfuse.adapter.element.ASTElementType;
+import org.androidtransfuse.adapter.element.*;
 
 import javax.annotation.processing.Messager;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -36,15 +34,23 @@ import java.util.Map;
  */
 public class Validator {
 
+    public static final String LOG_PREPEND = "logPrepend";
+
+    private final String prepend;
     private final Messager messager;
 
     @Inject
-    public Validator(Messager messager) {
+    public Validator(@Named(LOG_PREPEND) String prepend, Messager messager){
+        this.prepend = prepend;
         this.messager = messager;
     }
 
     public ValidationBuilder error(String message){
-        return new ValidationBuilder(Diagnostic.Kind.ERROR, message);
+        return new ValidationBuilder(Diagnostic.Kind.ERROR, prepend + message);
+    }
+
+    public ValidationBuilder warn(String message){
+        return new ValidationBuilder(Diagnostic.Kind.WARNING, prepend + message);
     }
 
     public final class ValidationBuilder{
@@ -61,6 +67,9 @@ public class Validator {
         }
 
         public ValidationBuilder element(ASTBase astBase){
+            if(astBase instanceof ASTElementBase){
+                this.element = ((ASTElementBase)astBase).getElement();
+            }
             if(astBase instanceof ASTElementType){
                 this.element = ((ASTElementType)astBase).getElement();
             }

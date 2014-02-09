@@ -67,9 +67,9 @@ public class InjectionPointFactory {
      * @param context        required AnalysisContext
      * @return ConstructorInjectionPoint
      */
-    public ConstructorInjectionPoint buildInjectionPoint(ASTType concreteType, ASTConstructor astConstructor, AnalysisContext context) {
+    public ConstructorInjectionPoint buildInjectionPoint(ASTType containingType, ASTConstructor astConstructor, AnalysisContext context) {
 
-        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(concreteType, astConstructor.getAccessModifier());
+        ConstructorInjectionPoint constructorInjectionPoint = new ConstructorInjectionPoint(containingType, astConstructor);
         constructorInjectionPoint.addThrows(astConstructor.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
@@ -90,14 +90,14 @@ public class InjectionPointFactory {
     /**
      * Build a Method Injection Point from the given ASTMethod
      *
-     * @param concreteType
+     * @param containingType
      * @param astMethod    required ASTMethod
      * @param context      analysis context
      * @return MethodInjectionPoint
      */
-    public MethodInjectionPoint buildInjectionPoint(ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
+    public MethodInjectionPoint buildInjectionPoint(ASTType containingType, ASTMethod astMethod, AnalysisContext context) {
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(concreteType, astMethod.getAccessModifier(), astMethod.getName());
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(containingType, astMethod);
         methodInjectionPoint.addThrows(astMethod.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
@@ -118,13 +118,13 @@ public class InjectionPointFactory {
     /**
      * Build a Field InjectionPoint from the given ASTField
      *
-     * @param concreteType
+     * @param containingType
      * @param astField     required ASTField
      * @param context      analysis context
      * @return FieldInjectionPoint
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType concreteType, ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(concreteType, astField.getAccessModifier(), astField.getName(), buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+    public FieldInjectionPoint buildInjectionPoint(ASTType containingType, ASTField astField, AnalysisContext context) {
+        return new FieldInjectionPoint(containingType, astField, buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
     }
 
     /**

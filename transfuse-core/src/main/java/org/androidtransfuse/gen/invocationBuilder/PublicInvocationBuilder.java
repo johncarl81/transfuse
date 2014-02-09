@@ -16,6 +16,9 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTConstructor;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.TypedExpression;
@@ -24,23 +27,23 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- * Injection Builder for building publicly scoped elements.
+ * Invocation Builder for building publicly scoped elements.
  *
  * @author John Ericksen
  */
-public class PublicInjectionBuilder implements ModifierInjectionBuilder {
+public class PublicInvocationBuilder implements ModifiedInvocationBuilder {
 
     private final TypeInvocationHelper invocationHelper;
     private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public PublicInjectionBuilder(TypeInvocationHelper invocationHelper, ClassGenerationUtil generationUtil) {
+    public PublicInvocationBuilder(TypeInvocationHelper invocationHelper, ClassGenerationUtil generationUtil) {
         this.invocationHelper = invocationHelper;
         this.generationUtil = generationUtil;
     }
 
     @Override
-    public JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<? extends JExpression> parameters) {
+    public JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<? extends JExpression> parameters) {
         JInvocation constructorInvocation = JExpr._new(generationUtil.ref(type));
 
         for (JExpression parameter : parameters) {
@@ -51,9 +54,8 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<? extends JExpression> parameters, List<ASTType> types, ASTType targetExpressionType, JExpression targetExpression) {
-        //public case:
-        JInvocation methodInvocation = targetExpression.invoke(methodName);
+    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+        JInvocation methodInvocation = expression.getExpression().invoke(method.getName());
 
         for (JExpression parameter : parameters) {
             methodInvocation.arg(parameter);
@@ -63,15 +65,15 @@ public class PublicInjectionBuilder implements ModifierInjectionBuilder {
     }
 
     @Override
-    public JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name) {
-        return variable.ref(name);
+    public JExpression buildFieldGet(ASTField field, TypedExpression variable) {
+        return variable.getExpression().ref(field.getName());
     }
 
     @Override
-    public JStatement buildFieldSet(ASTType expressionType, JExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable) {
+    public JStatement buildFieldSet(ASTField field, TypedExpression expression, TypedExpression containingExpression) {
         JBlock assignmentBlock = new JBlock(false, false);
 
-        assignmentBlock.assign(variable.ref(fieldName), invocationHelper.coerceType(fieldType, new TypedExpression(expressionType, expression)));
+        assignmentBlock.assign(containingExpression.getExpression().ref(field.getName()), invocationHelper.coerceType(field.getASTType(), expression));
 
         return assignmentBlock;
     }

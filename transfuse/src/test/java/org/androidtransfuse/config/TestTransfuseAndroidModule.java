@@ -45,6 +45,7 @@ import org.androidtransfuse.processor.AnalysisGenerationTransactionProcessorBuil
 import org.androidtransfuse.processor.GeneratorRepository;
 import org.androidtransfuse.processor.GeneratorRepositoryProvider;
 import org.androidtransfuse.util.*;
+import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -92,6 +93,12 @@ import javax.xml.bind.JAXBContext;
 public class TestTransfuseAndroidModule {
 
     private final JCodeModel codeModel = new JCodeModel();
+
+    @Provides
+    @Named(Validator.LOG_PREPEND)
+    public String getLogPreprend(){
+        return "Transfuse: ";
+    }
 
     @Provides
     public ClassGenerationStrategy getClassGenerationStrategy(){

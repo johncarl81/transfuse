@@ -16,38 +16,39 @@
 package org.androidtransfuse.gen.invocationBuilder;
 
 import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 /**
  * @author John Ericksen
  */
 public class DefaultInvocationBuilderStrategy implements InvocationBuilderStrategy{
 
-    private final Provider<PublicInjectionBuilder> publicProvider;
-    private final Provider<ProtectedInjectionBuilder> protectedProvider;
-    private final Provider<PrivateInjectionBuilder> privateProvider;
+    private final PublicInvocationBuilder publicInvocationBuilder;
+    private final ProtectedInvocationBuilder protectedInvocationBuilder;
+    private final WarningInvocationBuilderDecorator privateInvocationBuilder;
 
     @Inject
-    public DefaultInvocationBuilderStrategy(Provider<PublicInjectionBuilder> publicProvider,
-                                            Provider<ProtectedInjectionBuilder> protectedProvider,
-                                            Provider<PrivateInjectionBuilder> privateProvider) {
-        this.publicProvider = publicProvider;
-        this.protectedProvider = protectedProvider;
-        this.privateProvider = privateProvider;
+    public DefaultInvocationBuilderStrategy(PublicInvocationBuilder publicInvocationBuilder,
+                                            ProtectedInvocationBuilder protectedInvocationBuilder,
+                                            PrivateInvocationBuilder privateInvocationBuilder,
+                                            Validator validator) {
+        this.publicInvocationBuilder = publicInvocationBuilder;
+        this.protectedInvocationBuilder = protectedInvocationBuilder;
+        this.privateInvocationBuilder = new WarningInvocationBuilderDecorator(privateInvocationBuilder, validator);
     }
 
     @Override
-    public ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
+    public ModifiedInvocationBuilder getInjectionBuilder(ASTAccessModifier modifier) {
         switch (modifier) {
             case PUBLIC:
-                return publicProvider.get();
+                return publicInvocationBuilder;
             case PACKAGE_PRIVATE:
             case PROTECTED:
-                return protectedProvider.get();
+                return protectedInvocationBuilder;
             default:
-                return privateProvider.get();
+                return privateInvocationBuilder;
         }
     }
 }

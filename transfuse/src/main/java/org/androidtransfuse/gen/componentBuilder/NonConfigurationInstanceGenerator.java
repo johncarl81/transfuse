@@ -79,7 +79,8 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                     for (FieldInjectionPoint nonConfigurationField : aspect.getFields()) {
                         TypedExpression fieldExpression = typeExpressionFactory.build(nonConfigurationField.getInjectionNode().getASTType(), JExpr.ref(bodyVar, fieldMap.get(nonConfigurationField)));
                         conditional.add(
-                                invocationBuilder.buildFieldSet(fieldExpression,
+                                invocationBuilder.buildFieldSet(
+                                        fieldExpression,
                                         nonConfigurationField,
                                         expressionMap.get(nonConfigurationComponent).getExpression()));
                     }
@@ -101,11 +102,9 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                     NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
                     for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                         construction.arg(invocationBuilder.buildFieldGet(
-                                fieldInjectionPoint.getInjectionNode().getASTType(),
-                                expressionMap.get(injectionNode).getType(),
-                                expressionMap.get(injectionNode).getExpression(),
-                                fieldInjectionPoint.getName(),
-                                fieldInjectionPoint.getAccessModifier()));
+                                fieldInjectionPoint.getField(),
+                                expressionMap.get(injectionNode)
+                        ));
                     }
                 }
 

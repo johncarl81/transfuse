@@ -39,10 +39,9 @@ public class ActivityFieldDelegateASTReference implements ActivityDelegateASTRef
     @Override
     public JExpression buildReference(TypedExpression rootExpression) {
 
-        return invocationBuilder.buildFieldGet(astField.getASTType(),
-                rootExpression.getType(),
-                rootExpression.getExpression(),
-                astField.getName(),
-                astField.getAccessModifier());
+        return invocationBuilder.buildFieldGet(
+                astField,
+                rootExpression
+        );
     }
 }

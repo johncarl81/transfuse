@@ -18,12 +18,12 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -61,21 +61,15 @@ public class ProvidesVariableBuilder extends ConsistentTypeVariableBuilder {
         JExpression moduleVar = injectionExpressionBuilder.buildVariable(context, module).getExpression();
 
         List<JExpression> paramExpressions = new ArrayList<JExpression>();
-        List<ASTType> paramTypes = new ArrayList<ASTType>();
 
         for (ASTParameter parameter : method.getParameters()) {
             JExpression paramExpression = injectionExpressionBuilder.buildVariable(context, dependencyAnalysis.get(parameter)).getExpression();
             paramExpressions.add(paramExpression);
-            paramTypes.add(parameter.getASTType());
         }
 
         return invocationBuilder.buildMethodCall(
-                method.getAccessModifier(),
-                method.getReturnType(),
-                method.getName(),
+                method,
                 paramExpressions,
-                paramTypes,
-                module.getASTType(),
-                moduleVar);
+                new TypedExpression(module.getASTType(), moduleVar));
     }
 }

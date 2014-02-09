@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
 
 /**
@@ -24,30 +24,24 @@ import org.androidtransfuse.adapter.ASTType;
 public class FieldInjectionPoint {
 
     private final ASTType containingType;
+    private final ASTField field;
     private final InjectionNode injectionNode;
-    private final String name;
-    private final ASTAccessModifier modifier;
 
-    public FieldInjectionPoint(ASTType containingType, ASTAccessModifier modifier, String name, InjectionNode injectionNode) {
-        this.modifier = modifier;
+    public FieldInjectionPoint(ASTType containingType, ASTField field, InjectionNode injectionNode) {
+        this.field = field;
         this.injectionNode = injectionNode;
-        this.name = name;
         this.containingType = containingType;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public InjectionNode getInjectionNode() {
         return injectionNode;
     }
 
-    public ASTAccessModifier getAccessModifier() {
-        return modifier;
-    }
-
     public ASTType getContainingType() {
         return containingType;
+    }
+
+    public ASTField getField() {
+        return field;
     }
 }

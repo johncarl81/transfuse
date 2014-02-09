@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 
 /**
@@ -23,14 +23,14 @@ import org.androidtransfuse.adapter.ASTType;
  */
 public class MethodInjectionPoint extends MethodInjectionPointBase {
 
-    private final String name;
+    private final ASTMethod method;
 
-    public MethodInjectionPoint(ASTType containingType, ASTAccessModifier accessModifier, String name) {
-        super(containingType, accessModifier);
-        this.name = name;
+    public MethodInjectionPoint(ASTType containingType, ASTMethod method) {
+        super(containingType);
+        this.method = method;
     }
 
-    public String getName() {
-        return name;
+    public ASTMethod getMethod() {
+        return method;
     }
 }

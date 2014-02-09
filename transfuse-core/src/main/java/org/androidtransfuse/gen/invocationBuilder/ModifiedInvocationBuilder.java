@@ -18,20 +18,24 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
+import org.androidtransfuse.adapter.ASTConstructor;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.TypedExpression;
 
 import java.util.List;
 
 /**
  * @author John Ericksen
  */
-public interface ModifierInjectionBuilder {
+public interface ModifiedInvocationBuilder {
 
-    JExpression buildConstructorCall(ASTType type, List<ASTType> parameterTypes, Iterable<? extends JExpression> parameters);
+    JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<? extends JExpression> parameters);
 
-    JExpression buildFieldGet(ASTType returnType, ASTType variableType, JExpression variable, String name);
+    JExpression buildFieldGet(ASTField field, TypedExpression variable);
 
-    JStatement buildFieldSet(ASTType expressionType, JExpression expression, ASTType containingType, ASTType fieldType, String fieldName, JExpression variable);
+    JStatement buildFieldSet(ASTField field, TypedExpression inputExpression, TypedExpression containingExpression);
 
-    JInvocation buildMethodCall(ASTType returnType, String methodName, Iterable<? extends JExpression> parameters, List<ASTType> injectionNodeType, ASTType targetExpressionType, JExpression targetExpression);
+    JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression);
 }

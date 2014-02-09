@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTConstructor;
 import org.androidtransfuse.adapter.ASTType;
 
 /**
@@ -23,7 +23,14 @@ import org.androidtransfuse.adapter.ASTType;
  */
 public class ConstructorInjectionPoint extends MethodInjectionPointBase {
 
-    public ConstructorInjectionPoint(ASTType containingType, ASTAccessModifier modifier) {
-        super(containingType, modifier);
+    private final ASTConstructor constructor;
+
+    public ConstructorInjectionPoint(ASTType containingType, ASTConstructor constructor) {
+        super(containingType);
+        this.constructor = constructor;
+    }
+
+    public ASTConstructor getConstructor() {
+        return constructor;
     }
 }

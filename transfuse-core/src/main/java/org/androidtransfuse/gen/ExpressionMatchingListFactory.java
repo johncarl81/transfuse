@@ -15,28 +15,35 @@
  */
 package org.androidtransfuse.gen;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.invocationBuilder.TypeInvocationHelper;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class ExpressionMatchingIterableFactory {
+public class ExpressionMatchingListFactory {
 
-    private final Provider<TypeInvocationHelper> helperProvider;
+    private final TypeInvocationHelper helperProvider;
 
     @Inject
-    public ExpressionMatchingIterableFactory(Provider<TypeInvocationHelper> helperProvider) {
+    public ExpressionMatchingListFactory(TypeInvocationHelper helperProvider) {
         this.helperProvider = helperProvider;
     }
 
-    public ExpressionMatchingIterable buildExpressionMatchingIterable(Map<InjectionNode, TypedExpression> variableMap, List<InjectionNode> keys) {
-        return new ExpressionMatchingIterable(helperProvider.get(), variableMap, keys);
+    public ImmutableList<JExpression> build(final Map<InjectionNode, TypedExpression> variableMap, List<InjectionNode> keys) {
+        return FluentIterable.from(keys).transform(new Function<InjectionNode, JExpression>() {
+            public JExpression apply(InjectionNode injectionNode) {
+                return helperProvider.getExpression(injectionNode.getASTType(), variableMap, injectionNode);
+            }
+        }).toList();
     }
 }

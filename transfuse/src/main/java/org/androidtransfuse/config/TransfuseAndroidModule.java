@@ -48,6 +48,7 @@ import org.androidtransfuse.util.Generated;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.MessagerLogger;
+import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
@@ -113,7 +114,13 @@ public class TransfuseAndroidModule {
     @Provides
     @Singleton
     public Logger getLogger(ProcessingEnvironment processingEnvironment){
-        return new MessagerLogger(processingEnvironment.getMessager());
+        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager());
+    }
+
+    @Provides
+    @Named(Validator.LOG_PREPEND)
+    public String getLogPreprend(){
+        return "Transfuse: ";
     }
 
     @Provides

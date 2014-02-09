@@ -63,7 +63,7 @@ public class AOPProxyGenerator {
 
         ASTInjectionAspect injectionAspect = injectionNode.getAspect(ASTInjectionAspect.class);
         ConstructorInjectionPoint constructorInjectionPoint = injectionAspect.getConstructorInjectionPoint();
-        ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), ASTAccessModifier.PUBLIC);
+        ConstructorInjectionPoint proxyConstructorInjectionPoint = new ConstructorInjectionPoint(injectionNode.getASTType(), constructorInjectionPoint.getConstructor());
 
         try {
             PackageClass aopClassName = classNamer.numberedClassName(injectionNode.getASTType().getPackageClass())

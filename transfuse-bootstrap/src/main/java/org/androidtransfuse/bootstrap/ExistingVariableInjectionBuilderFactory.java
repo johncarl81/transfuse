@@ -17,7 +17,7 @@ package org.androidtransfuse.bootstrap;
 
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.ExceptionWrapper;
-import org.androidtransfuse.gen.ExpressionMatchingIterableFactory;
+import org.androidtransfuse.gen.ExpressionMatchingListFactory;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -32,14 +32,14 @@ public class ExistingVariableInjectionBuilderFactory {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final TypedExpressionFactory typedExpressionFactory;
     private final ExceptionWrapper exceptionWrapper;
-    private final ExpressionMatchingIterableFactory generatorFactory;
+    private final ExpressionMatchingListFactory generatorFactory;
     private final Validator validator;
 
     public ExistingVariableInjectionBuilderFactory(InvocationBuilder injectionInvocationBuilder,
                                                    InjectionExpressionBuilder injectionExpressionBuilder,
                                                    TypedExpressionFactory typedExpressionFactory,
                                                    ExceptionWrapper exceptionWrapper,
-                                                   ExpressionMatchingIterableFactory generatorFactory,
+                                                   ExpressionMatchingListFactory generatorFactory,
                                                    Validator validator) {
         this.injectionInvocationBuilder = injectionInvocationBuilder;
         this.injectionExpressionBuilder = injectionExpressionBuilder;

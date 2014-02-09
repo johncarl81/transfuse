@@ -20,7 +20,6 @@ import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -45,13 +44,8 @@ public class ViewMethodRegistrationInvocationBuilderImpl implements ViewRegistra
 
         block.invoke(viewExpression, method)
                 .arg(invocationBuilder.buildMethodCall(
-                        getterMethod.getReturnType(),
-                        new MethodInjectionPoint(
-                                expression.getType(),
-                                getterMethod.getAccessModifier(),
-                                getterMethod.getName()
-                        ),
+                        getterMethod,
                         Collections.EMPTY_LIST,
-                        expression.getExpression()));
+                        expression));
     }
 }

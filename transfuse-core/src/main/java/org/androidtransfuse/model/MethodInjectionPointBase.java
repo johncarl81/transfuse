@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.model;
 
-import org.androidtransfuse.adapter.ASTAccessModifier;
 import org.androidtransfuse.adapter.ASTType;
 
 import java.util.ArrayList;
@@ -30,11 +29,9 @@ public abstract class MethodInjectionPointBase {
     private final ASTType containingType;
     private final List<InjectionNode> injectionNodes = new ArrayList<InjectionNode>();
     private final List<ASTType> throwsTypes = new ArrayList<ASTType>();
-    private final ASTAccessModifier accessModifier;
 
-    protected MethodInjectionPointBase(ASTType containingType, ASTAccessModifier astAccessModifier) {
+    protected MethodInjectionPointBase(ASTType containingType) {
         this.containingType = containingType;
-        this.accessModifier = astAccessModifier;
     }
 
     public void addInjectionNode(InjectionNode injectionNode) {
@@ -55,9 +52,5 @@ public abstract class MethodInjectionPointBase {
 
     public ASTType getContainingType() {
         return containingType;
-    }
-
-    public ASTAccessModifier getAccessModifier() {
-        return accessModifier;
     }
 }

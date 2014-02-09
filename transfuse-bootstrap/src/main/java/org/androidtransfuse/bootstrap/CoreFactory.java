@@ -83,7 +83,7 @@ public class CoreFactory {
         this.elements = elements;
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
-        this.validator = new Validator(messager);
+        this.validator = new Validator("Bootstrap: ", messager);
         this.generationUtil = new ClassGenerationUtil(
                 codeModel,
                 new ClassGenerationStrategy(Generated.class, BootstrapProcessor.class.getName()),
@@ -139,7 +139,7 @@ public class CoreFactory {
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(generationUtil);
-        ExpressionMatchingIterableFactory generatorFactory = new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil)));
+        ExpressionMatchingListFactory generatorFactory = new ExpressionMatchingListFactory(new TypeInvocationHelper(astClassFactory, generationUtil));
 
         return new VariableInjectionBuilder(
                 generationUtil,
@@ -214,14 +214,14 @@ public class CoreFactory {
         return scopeRepository;
     }
 
-    private InvocationBuilder buildInvocationBuilder(){
-        return new InvocationBuilder(new InvocationBuilderStrategy() {
+    private org.androidtransfuse.gen.InvocationBuilder buildInvocationBuilder(){
+        return new org.androidtransfuse.gen.InvocationBuilder(new InvocationBuilderStrategy() {
             @Override
-            public ModifierInjectionBuilder getInjectionBuilder(ASTAccessModifier modifier) {
+            public ModifiedInvocationBuilder getInjectionBuilder(ASTAccessModifier modifier) {
                 if(modifier.equals(ASTAccessModifier.PUBLIC)){
-                    return new PublicInjectionBuilder(new TypeInvocationHelper(astClassFactory, generationUtil), generationUtil);
+                    return new PublicInvocationBuilder(new TypeInvocationHelper(astClassFactory, generationUtil), generationUtil);
                 }
-                return new PrivateInjectionBuilder(generationUtil);
+                return new PrivateInvocationBuilder(generationUtil);
             }
         });
     }
@@ -256,7 +256,7 @@ public class CoreFactory {
                     injectionExpressionBuilder,
                     typedExpressionFactory,
                     new ExceptionWrapper(generationUtil),
-                    new ExpressionMatchingIterableFactory(Providers.of(new TypeInvocationHelper(astClassFactory, generationUtil))),
+                    new ExpressionMatchingListFactory(new TypeInvocationHelper(astClassFactory, generationUtil)),
                     validator);
             this.bootstrapGenerator = new BootstrapGenerator(codeModel, generationUtil, variableNamer, buildInjectionGenerator(), instantiationStrategyFactory, variableBuilderFactory, getModuleRepository());
         }

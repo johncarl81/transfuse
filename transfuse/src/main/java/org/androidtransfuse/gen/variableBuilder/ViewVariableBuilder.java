@@ -17,7 +17,6 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -47,7 +46,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
     private final UniqueVariableNamer variableNamer;
     private final InvocationBuilder injectionInvocationBuilder;
     private final RResource rResource;
-    private final ExpressionMatchingIterableFactory generatorFactory;
+    private final ExpressionMatchingListFactory generatorFactory;
 
     @Inject
     public ViewVariableBuilder(/*@Assisted*/ /*@Nullable*/ Integer viewId,
@@ -61,7 +60,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
                                UniqueVariableNamer variableNamer,
                                RResource rResource,
                                TypedExpressionFactory typedExpressionFactory,
-                               ExpressionMatchingIterableFactory generatorFactory) {
+                               ExpressionMatchingListFactory generatorFactory) {
         super(AndroidLiterals.VIEW, typedExpressionFactory);
         this.viewId = viewId;
         this.viewTag = viewTag;
@@ -134,12 +133,11 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
             for (MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
                 block.add(
                         injectionInvocationBuilder.buildMethodCall(
-                                ASTVoidType.VOID,
-                                methodInjectionPoint,
-                                generatorFactory.buildExpressionMatchingIterable(
+                                methodInjectionPoint.getMethod(),
+                                generatorFactory.build(
                                         injectionBuilderContext.getVariableMap(),
                                         methodInjectionPoint.getInjectionNodes()),
-                                variableRef));
+                                new TypedExpression(methodInjectionPoint.getContainingType(), variableRef)));
             }
         }
 

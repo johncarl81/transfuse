@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
+import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Namer;
@@ -33,7 +34,17 @@ public class PackageHelperRepository {
 
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
 
-    public synchronized ProtectedAccessorMethod getConstructorCall(ASTType type, List<ASTType> parameterTypes) {
+    public synchronized ProtectedAccessorMethod getConstructorCall(ASTType type, List<ASTParameter> parameters) {
+        List<ASTType> parameterTypes = new ArrayList<ASTType>();
+
+        for (ASTParameter parameter : parameters) {
+            parameterTypes.add(parameter.getASTType());
+        }
+
+        return getConstructorCallByType(type, parameterTypes);
+    }
+
+    public synchronized ProtectedAccessorMethod getConstructorCallByType(ASTType type, List<ASTType> parameterTypes) {
         ConstructorCall constructorCall = new ConstructorCall(type, parameterTypes);
 
         PackageClass containedPackageClass = type.getPackageClass();
