@@ -239,6 +239,15 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             injectionNodeBuilderRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
         }
 
+        if(type != null){
+            ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
+
+            while(!serviceASTType.equals(AndroidLiterals.SERVICE) && serviceASTType.inheritsFrom(AndroidLiterals.SERVICE)){
+                injectionNodeBuilderRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
+                serviceASTType = serviceASTType.getSuperClass();
+            }
+        }
+
         injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
         injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 

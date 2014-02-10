@@ -198,9 +198,14 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.ACTIVITY).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.ACTIVITY, "getActivity").build());
 
-        if (type != null && !type.toString().equals(AndroidLiterals.FRAGMENT.getName())) {
+
+        if(type != null){
             ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);
-            injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
+
+            while(!fragmentASTType.equals(AndroidLiterals.FRAGMENT) && fragmentASTType.inheritsFrom(AndroidLiterals.FRAGMENT)){
+                injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
+                fragmentASTType = fragmentASTType.getSuperClass();
+            }
         }
 
         injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);

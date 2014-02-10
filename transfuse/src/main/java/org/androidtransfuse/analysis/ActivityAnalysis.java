@@ -284,9 +284,13 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
-        if (activityType != null && !activityType.toString().equals(AndroidLiterals.ACTIVITY.getName())) {
+        if(activityType != null){
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
-            injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
+
+            while(!activityASTType.equals(AndroidLiterals.ACTIVITY) && activityASTType.inheritsFrom(AndroidLiterals.ACTIVITY)){
+                injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
+                activityASTType = activityASTType.getSuperClass();
+            }
         }
 
         injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
