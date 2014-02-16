@@ -18,7 +18,6 @@ package org.androidtransfuse.gen.invocationBuilder;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
-import org.androidtransfuse.util.Namer;
 
 import javax.inject.Singleton;
 import java.util.*;
@@ -30,7 +29,7 @@ import java.util.*;
 public class PackageHelperRepository {
 
     private static final String PRE_METHOD = "access";
-    private static final String PACKAGE_HELPER_NAME = Namer.name("Transfuse").append("PackageHelper").build();
+    private static final String PACKAGE_HELPER_NAME = "PackageHelper";
 
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
 
@@ -47,11 +46,10 @@ public class PackageHelperRepository {
     public synchronized ProtectedAccessorMethod getConstructorCallByType(ASTType type, List<ASTType> parameterTypes) {
         ConstructorCall constructorCall = new ConstructorCall(type, parameterTypes);
 
-        PackageClass containedPackageClass = type.getPackageClass();
-        PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
+        PackageHelperDescriptor helperClass = getPackageHelper(type);
 
         if (!helperClass.getConstructorMapping().containsKey(constructorCall)) {
-            String helperMethod = PRE_METHOD + containedPackageClass.getClassName() + "$INIT";
+            String helperMethod = PRE_METHOD + type.getPackageClass().getClassName() + "$INIT";
             helperClass.getConstructorMapping().put(constructorCall, helperMethod);
         }
 
@@ -67,11 +65,10 @@ public class PackageHelperRepository {
 
         MethodCall methodSignature = new MethodCall(targetExpressionsType, returnType, methodName, paramTypes);
 
-        PackageClass containedPackageClass = targetExpressionsType.getPackageClass();
-        PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
+        PackageHelperDescriptor helperClass = getPackageHelper(targetExpressionsType);
 
         if (!helperClass.getMethodCallMapping().containsKey(methodSignature)) {
-            String accessorMethod = PRE_METHOD + containedPackageClass.getClassName() + "$M$" + methodName;
+            String accessorMethod = PRE_METHOD + targetExpressionsType.getPackageClass().getClassName() + "$M$" + methodName;
             helperClass.getMethodCallMapping().put(methodSignature, accessorMethod);
         }
 
@@ -81,11 +78,10 @@ public class PackageHelperRepository {
     public synchronized ProtectedAccessorMethod getFieldGetter(ASTType returnType, ASTType variableType, String name) {
         FieldReference fieldReference = new FieldReference(returnType, variableType, name);
 
-        PackageClass containedPackageClass = variableType.getPackageClass();
-        PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
+        PackageHelperDescriptor helperClass = getPackageHelper(variableType);
 
         if (!helperClass.getFieldGetMapping().containsKey(fieldReference)) {
-            String accessorMethod = PRE_METHOD + containedPackageClass.getClassName() + "$FG$" + name;
+            String accessorMethod = PRE_METHOD + variableType.getPackageClass().getClassName() + "$FG$" + name;
             helperClass.getFieldGetMapping().put(fieldReference, accessorMethod);
         }
 
@@ -96,11 +92,10 @@ public class PackageHelperRepository {
     public synchronized ProtectedAccessorMethod getFieldSetter(ASTType containingType, ASTType fieldType, String fieldName) {
         FieldReference fieldReference = new FieldReference(fieldType, containingType, fieldName);
 
-        PackageClass containedPackageClass = containingType.getPackageClass();
-        PackageHelperDescriptor helperClass = getPackageHelper(containedPackageClass);
+        PackageHelperDescriptor helperClass = getPackageHelper(containingType);
 
         if (!helperClass.getFieldSetMapping().containsKey(fieldReference)) {
-            String accessorMethod = PRE_METHOD + containedPackageClass.getClassName().replace('.', '$') + "$FS$" + fieldName;
+            String accessorMethod = PRE_METHOD + containingType.getPackageClass().getClassName().replace('.', '$') + "$FS$" + fieldName;
             helperClass.getFieldSetMapping().put(fieldReference, accessorMethod);
         }
 
@@ -111,8 +106,8 @@ public class PackageHelperRepository {
         return packageHelpers.values();
     }
 
-    private PackageHelperDescriptor getPackageHelper(PackageClass pkg) {
-        PackageClass helperPackageClass = pkg.replaceName(PACKAGE_HELPER_NAME);
+    private PackageHelperDescriptor getPackageHelper(ASTType type) {
+        PackageClass helperPackageClass = type.getPackageClass().append(PACKAGE_HELPER_NAME);
         if (!packageHelpers.containsKey(helperPackageClass)) {
             packageHelpers.put(helperPackageClass, new PackageHelperDescriptor(helperPackageClass));
         }

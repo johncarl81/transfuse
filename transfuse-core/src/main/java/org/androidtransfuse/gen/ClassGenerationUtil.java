@@ -73,7 +73,7 @@ public class ClassGenerationUtil {
     }
 
     public JClass ref(PackageClass packageClass){
-        return ref(packageClass.getCanonicalName());
+        return ref(packageClass.getFullyQualifiedName());
     }
 
     public JClass ref(ASTType astType){

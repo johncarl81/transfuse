@@ -98,7 +98,7 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
 
         //InjectionUtil.getInstance().setField(Class targetClass, Object target, String field, Object value)
         return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.SET_FIELD_METHOD)
-                .arg(variableType.dotclass())
+                .arg(generationUtil.ref(containerExpression.getType()).dotclass())
                 .arg(containerExpression.getExpression())
                 .arg(field.getName())
                 .arg(expression.getExpression());
