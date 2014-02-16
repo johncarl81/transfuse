@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis.module;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.androidtransfuse.Plugin;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -54,6 +55,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
                                    PermissionProcessor permissionProcessor,
                                    UsesFeatureProcessor usesFeatureProcessor,
                                    ModuleRepository moduleRepository,
+                                   PluginProcessor pluginProcessor,
                                    Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider) {
         this.moduleRepository = moduleRepository;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -86,7 +88,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScope.class), defineScopeProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(DefineScopes.class),
                 configurationFactory.buildConfigurationComposite(defineScopeProcessor));
-
+        typeProcessorsBuilder.put(astClassFactory.getType(Plugin.class), pluginProcessor);
 
         typeProcessors = typeProcessorsBuilder.build();
     }

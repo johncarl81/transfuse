@@ -44,6 +44,7 @@
         <module>transfuse-core</module>
         <module>transfuse-bootstrap</module>
         <module>transfuse-bootstrap-test</module>
+        <module>transfuse-plugin</module>
         <module>transfuse-api</module>
         <module>transfuse</module>
     </modules>
