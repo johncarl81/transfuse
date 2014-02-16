@@ -130,7 +130,14 @@ public class ASTElementFactory {
         PackageElement packageElement = elements.getPackageOf(typeElement);
 
         String pkg = packageElement.getQualifiedName().toString();
-        String name = typeElement.getQualifiedName().toString().substring(pkg.length() + 1);
+        String qualifiedName = typeElement.getQualifiedName().toString();
+        String name;
+        if(pkg.length() < qualifiedName.length()){
+            name = qualifiedName.substring(pkg.length() + 1);
+        }
+        else{
+            name = qualifiedName;
+        }
 
         return new PackageClass(pkg, name);
     }
