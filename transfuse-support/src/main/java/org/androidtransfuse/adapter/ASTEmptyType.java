@@ -54,6 +54,11 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public boolean isInterface() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }

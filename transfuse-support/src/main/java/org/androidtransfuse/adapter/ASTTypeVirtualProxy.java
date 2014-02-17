@@ -66,6 +66,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public boolean isInterface() {
+        return getProxy().isInterface();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return getProxy().getSuperClass();
     }

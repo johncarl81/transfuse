@@ -88,6 +88,11 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
+    public boolean isInterface() {
+        return typeElement.getKind().isInterface();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return superClass;
     }

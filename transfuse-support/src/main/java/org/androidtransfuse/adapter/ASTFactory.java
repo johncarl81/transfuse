@@ -16,6 +16,7 @@
 package org.androidtransfuse.adapter;
 
 import org.androidtransfuse.adapter.classes.LazyClassParameterBuilder;
+import org.androidtransfuse.adapter.classes.LazyParametrizedTypeParameterBuilder;
 import org.androidtransfuse.adapter.element.ASTElementAnnotation;
 import org.androidtransfuse.adapter.element.LazyElementParameterBuilder;
 import org.androidtransfuse.annotations.Factory;
@@ -34,9 +35,13 @@ public interface ASTFactory {
 
     ASTElementAnnotation buildASTElementAnnotation(AnnotationMirror annotationMirror, ASTType type);
 
-    LazyClassParameterBuilder builderParameterBuilder(ParameterizedType genericType);
+    LazyParametrizedTypeParameterBuilder buildParameterBuilder(ParameterizedType genericType);
+
+    LazyClassParameterBuilder buildParameterBuilder(Class type);
 
     LazyElementParameterBuilder buildParameterBuilder(DeclaredType declaredType);
+
+    LazyASTTypeParameterBuilder buildParameterBuilder(ASTType type);
 
     ASTGenericTypeWrapper buildGenericTypeWrapper(ASTType astType, LazyTypeParameterBuilder lazyTypeParameterBuilder);
 }

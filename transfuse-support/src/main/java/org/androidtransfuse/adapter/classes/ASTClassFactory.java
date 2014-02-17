@@ -76,7 +76,7 @@ public class ASTClassFactory {
 
         if (genericType instanceof ParameterizedType) {
             //wrap with a parametrized type
-            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.builderParameterBuilder((ParameterizedType) genericType));
+            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder((ParameterizedType) genericType));
         }
 
         return astType;

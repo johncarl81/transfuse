@@ -63,6 +63,10 @@ public class ASTStringType implements ASTType {
         return true;
     }
 
+    public boolean isInterface() {
+        return false;
+    }
+
     @Override
     public ASTType getSuperClass() {
         return null;

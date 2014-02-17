@@ -95,6 +95,10 @@ public enum ASTPrimitiveType implements ASTType {
         return false;
     }
 
+    public boolean isInterface() {
+        return false;
+    }
+
     @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return ImmutableSet.of();

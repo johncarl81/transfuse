@@ -23,8 +23,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class ASTWildcardType extends ASTEmptyType {
 
+    public static final ASTWildcardType WILDCARD = new ASTWildcardType();
+
     private final ASTType superBound;
     private final ASTType extendsBound;
+
+    private ASTWildcardType() {
+        this(null, null);
+    }
 
     public ASTWildcardType(ASTType superBound, ASTType extendsBound) {
         super("?");

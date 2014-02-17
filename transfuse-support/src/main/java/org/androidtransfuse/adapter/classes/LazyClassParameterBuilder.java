@@ -15,30 +15,24 @@
  */
 package org.androidtransfuse.adapter.classes;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.ASTWildcardType;
-import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
 
 import javax.inject.Inject;
-import java.lang.reflect.*;
-import java.util.Arrays;
 
 /**
  * @author John Ericksen
  */
-public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Function<Type, ASTType> {
+public class LazyClassParameterBuilder implements org.androidtransfuse.adapter.LazyTypeParameterBuilder {
 
-    private final ParameterizedType parameterizedType;
+    private final Class clazz;
     private final ASTClassFactory astClassFactory;
     private ImmutableList<ASTType> genericParameters = null;
 
     @Inject
-    public LazyClassParameterBuilder(/*@Assisted*/ ParameterizedType parameterizedType,
+    public LazyClassParameterBuilder(/*@Assisted*/ Class clazz,
                                      ASTClassFactory astClassFactory) {
-        this.parameterizedType = parameterizedType;
+        this.clazz = clazz;
         this.astClassFactory = astClassFactory;
     }
 
@@ -50,38 +44,6 @@ public class LazyClassParameterBuilder implements LazyTypeParameterBuilder, Func
     }
 
     private ImmutableList<ASTType> innerBuildGenericParameters() {
-        return FluentIterable.from(Arrays.asList(parameterizedType.getActualTypeArguments()))
-                .transform(this)
-                .toList();
-    }
-
-    @Override
-    public ASTType apply(Type input) {
-        return getClass(input);
-    }
-
-    private ASTType getClass(Type type) {
-        if (type instanceof Class) {
-            return astClassFactory.getType((Class) type);
-        } else if (type instanceof ParameterizedType) {
-            return getClass(((ParameterizedType) type).getRawType());
-        } else if (type instanceof GenericArrayType) {
-            return getClass(((GenericArrayType) type).getGenericComponentType());
-        } else if(type instanceof TypeVariable){
-            return getClass(((TypeVariable) type).getBounds()[0]);
-        } else if(type instanceof WildcardType){
-            WildcardType wildcardType = (WildcardType)type;
-            ASTType extendsBound = null;
-            ASTType superBound = null;
-            if(wildcardType.getUpperBounds().length > 0){
-                superBound = getClass(wildcardType.getUpperBounds()[0]);
-            }
-            if(wildcardType.getLowerBounds().length > 0){
-                extendsBound = getClass(wildcardType.getLowerBounds()[0]);
-            }
-            return new ASTWildcardType(superBound, extendsBound);
-        } else {
-            return null;
-        }
+        return ImmutableList.of(astClassFactory.getType(clazz));
     }
 }

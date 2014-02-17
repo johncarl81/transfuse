@@ -44,6 +44,10 @@ public class ASTProxyType implements ASTType {
         return true;
     }
 
+    public boolean isInterface() {
+        return false;
+    }
+
     @Override
     public String getName() {
         return name;

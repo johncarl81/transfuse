@@ -93,6 +93,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isInterface() {
+        return clazz.isInterface();
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotationList;
     }

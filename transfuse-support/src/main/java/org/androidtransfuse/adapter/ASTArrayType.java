@@ -82,6 +82,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isInterface() {
+        return delegate.isInterface();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return delegate.getSuperClass();
     }

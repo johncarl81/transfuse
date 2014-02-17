@@ -54,6 +54,13 @@ public interface ASTType extends ASTBase {
     boolean isConcreteClass();
 
     /**
+     * Determines if the given AST type represents an interface
+     *
+     * @return concrete class status
+     */
+    boolean isInterface();
+
+    /**
      * Supplies the super class (by extension) of this type
      *
      * @return supertype

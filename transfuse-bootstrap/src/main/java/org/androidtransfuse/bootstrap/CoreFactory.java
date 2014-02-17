@@ -20,6 +20,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.classes.LazyClassParameterBuilder;
+import org.androidtransfuse.adapter.classes.LazyParametrizedTypeParameterBuilder;
 import org.androidtransfuse.adapter.element.*;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
@@ -362,8 +363,18 @@ public class CoreFactory {
         }
 
         @Override
-        public LazyClassParameterBuilder builderParameterBuilder(ParameterizedType genericType) {
-            return new LazyClassParameterBuilder(genericType, astClassFactory);
+        public LazyParametrizedTypeParameterBuilder buildParameterBuilder(ParameterizedType genericType) {
+            return new LazyParametrizedTypeParameterBuilder(genericType, astClassFactory);
+        }
+
+        @Override
+        public LazyClassParameterBuilder buildParameterBuilder(Class type) {
+            return new LazyClassParameterBuilder(type, astClassFactory);
+        }
+
+        @Override
+        public LazyASTTypeParameterBuilder buildParameterBuilder(ASTType type) {
+            return new LazyASTTypeParameterBuilder(type);
         }
 
         @Override
