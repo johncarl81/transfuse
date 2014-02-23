@@ -40,7 +40,7 @@ public class ASTStringType implements ASTType {
 
     @Override
     public PackageClass getPackageClass() {
-        return new PackageClass(null, name);
+        return new PackageClass(name);
     }
 
     @Override

@@ -16,8 +16,10 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -39,9 +41,10 @@ public class ViewFieldRegistrationInvocationBuilderImpl implements ViewRegistrat
     }
 
     @Override
-    public void buildInvocation(JBlock block, TypedExpression expression, JExpression viewExpression, String method, InjectionNode injectionNode) {
+    public void buildInvocation(JDefinedClass definedClass, JBlock block, TypedExpression expression, JExpression viewExpression, String method, InjectionNode injectionNode) {
         block.invoke(viewExpression, method)
                 .arg(invocationBuilder.buildFieldGet(
+                        new ASTStringType(definedClass.name()),
                         astField,
                         expression.getType(),
                         expression

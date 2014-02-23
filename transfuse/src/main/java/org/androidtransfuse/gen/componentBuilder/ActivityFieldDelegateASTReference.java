@@ -15,8 +15,10 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
+import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -37,9 +39,10 @@ public class ActivityFieldDelegateASTReference implements ActivityDelegateASTRef
     }
 
     @Override
-    public JExpression buildReference(TypedExpression rootExpression) {
+    public JExpression buildReference(JDefinedClass definedClass, TypedExpression rootExpression) {
 
         return invocationBuilder.buildFieldGet(
+                new ASTStringType(definedClass.name()),
                 astField,
                 rootExpression.getType(),
                 rootExpression

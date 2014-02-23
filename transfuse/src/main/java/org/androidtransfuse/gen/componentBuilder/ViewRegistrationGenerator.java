@@ -66,7 +66,7 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
 
             JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
 
-            viewRegistrationInvocationBuilder.buildInvocation(block, value, viewExpression, method, injectionNode);
+            viewRegistrationInvocationBuilder.buildInvocation(definedClass, block, value, viewExpression, method, injectionNode);
 
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class already exists", e);

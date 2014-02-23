@@ -41,25 +41,25 @@ public class InvocationBuilder {
         this.invocationBuilderStrategy = invocationBuilderStrategy;
     }
 
-    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
-        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(method.getAccessModifier());
+    public JInvocation buildMethodCall(ASTType userType, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(userType, expression.getType(), method.getAccessModifier());
 
         return injectionBuilder.buildMethodCall(method, parameters, expression);
     }
 
-    public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        return buildFieldSet(fieldInjectionPoint.getField(), fieldInjectionPoint.getContainingType(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
+    public JStatement buildFieldSet(ASTType userType, TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
+        return buildFieldSet(userType, fieldInjectionPoint.getField(), fieldInjectionPoint.getContainingType(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
     }
 
-    public JStatement buildFieldSet(ASTField field, ASTType containingRootType, TypedExpression containingExpression, TypedExpression expression) {
+    public JStatement buildFieldSet(ASTType userType, ASTField field, ASTType containingRootType, TypedExpression containingExpression, TypedExpression expression) {
         ModifiedInvocationBuilder injectionBuilder;
         boolean cast = false;
         if(field.isFinal()){
-            injectionBuilder = getInjectionBuilder(ASTAccessModifier.PRIVATE);
+            injectionBuilder = getInjectionBuilder(userType, expression.getType(), ASTAccessModifier.PRIVATE);
         }
         else{
             cast = isHiddenField(containingRootType, containingExpression.getType(), field.getName());
-            injectionBuilder = getInjectionBuilder(field.getAccessModifier());
+            injectionBuilder = getInjectionBuilder(userType, expression.getType(), field.getAccessModifier());
         }
         return injectionBuilder.buildFieldSet(cast, field, expression, containingExpression);
     }
@@ -75,21 +75,30 @@ public class InvocationBuilder {
         return false;
     }
 
-    public JExpression buildFieldGet(ASTField field, ASTType rootType, TypedExpression targetExpression) {
-        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(field.getAccessModifier());
+    public JExpression buildFieldGet(ASTType userType, ASTField field, ASTType rootType, TypedExpression targetExpression) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(userType, targetExpression.getType(), field.getAccessModifier());
 
         boolean cast = isHiddenField(rootType, targetExpression.getType(), field.getName());
 
         return injectionBuilder.buildFieldGet(cast, field, targetExpression);
     }
 
-    public JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<JExpression> parameters) {
-        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(constructor.getAccessModifier());
+    public JExpression buildConstructorCall(ASTType userType, ASTConstructor constructor, ASTType type, List<JExpression> parameters) {
+        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(userType, type, constructor.getAccessModifier());
 
         return injectionBuilder.buildConstructorCall(constructor, type, parameters);
     }
 
-    private ModifiedInvocationBuilder getInjectionBuilder(ASTAccessModifier modifier) {
+    private ModifiedInvocationBuilder getInjectionBuilder(ASTType user, ASTType target, ASTAccessModifier inputModifier) {
+
+        ASTAccessModifier modifier = inputModifier;
+        if(modifier.equals(ASTAccessModifier.PROTECTED) && (target.inheritsFrom(user) || user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage()))){
+            modifier = ASTAccessModifier.PUBLIC;
+        }
+        else if(modifier.equals(ASTAccessModifier.PACKAGE_PRIVATE) && user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage())){
+            modifier = ASTAccessModifier.PUBLIC;
+        }
+
         return invocationBuilderStrategy.getInjectionBuilder(modifier);
     }
 }

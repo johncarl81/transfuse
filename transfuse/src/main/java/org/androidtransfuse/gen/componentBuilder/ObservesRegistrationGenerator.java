@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ObservesAspect;
 import org.androidtransfuse.event.EventObserver;
@@ -132,6 +133,7 @@ public class ObservesRegistrationGenerator implements ExpressionVariableDependen
 
                     for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
                         triggerBody.add(invocationBuilder.buildMethodCall(
+                                new ASTStringType(observerClass.name()),
                                 observerMethod,
                                 parameters,
                                 new TypedExpression(typedExpression.getType(), targetParam)));

@@ -24,6 +24,7 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.validation.Validator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,6 +44,8 @@ public class InvocationBuilderAssociationTest {
     private PrivateInvocationBuilder privateInjectionBuilder;
     private InvocationBuilder invocationBuilder;
     private Map<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationMap;
+    private PackageClass packageClassOne;
+    private PackageClass packageClassTwo;
 
     @Before
     public void setup() {
@@ -65,10 +68,16 @@ public class InvocationBuilderAssociationTest {
         modifierAssociationMap.put(ASTAccessModifier.PROTECTED, protectedInvocationBuilder);
         modifierAssociationMap.put(ASTAccessModifier.PACKAGE_PRIVATE, protectedInvocationBuilder);
         modifierAssociationMap.put(ASTAccessModifier.PRIVATE, privateInjectionBuilder);
+
+        packageClassOne = new PackageClass("org.test", "Tester");
+        packageClassTwo = new PackageClass("org.androidtransfuse", "Tester");
+
+        Assert.assertFalse(packageClassOne.getPackage().equals(packageClassTwo.getPackage()));
     }
 
     @Test
     public void testFieldGet() {
+        ASTType userType = mock(ASTType.class);
         ASTType returnType = mock(ASTType.class);
         ASTField field = mock(ASTField.class);
         ASTType variableType = mock(ASTType.class);
@@ -79,14 +88,17 @@ public class InvocationBuilderAssociationTest {
         for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
             when(field.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
             when(field.getName()).thenReturn(name);
-            invocationBuilder.buildFieldGet(field, returnType, target);
+            when(userType.getPackageClass()).thenReturn(packageClassOne);
+            when(returnType.getPackageClass()).thenReturn(packageClassTwo);
+            invocationBuilder.buildFieldGet(userType, field, returnType, target);
             verify(modifierAssociationEntry.getValue()).buildFieldGet(false, field, target);
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, returnType, variable, variableType);
+            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, userType, returnType, variable, variableType);
         }
     }
 
     @Test
     public void testFieldSet() throws ClassNotFoundException, JClassAlreadyExistsException {
+        ASTType userType = mock(ASTType.class);
         ASTType variableType = mock(ASTType.class);
         ASTField field = mock(ASTField.class);
         JExpression variable = mock(JExpression.class);
@@ -100,14 +112,17 @@ public class InvocationBuilderAssociationTest {
             when(field.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
             when(field.getName()).thenReturn(name);
             FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, field, injectionNode);
-            invocationBuilder.buildFieldSet(typedExpression, fieldInjectionPoint, variable);
+            when(userType.getPackageClass()).thenReturn(packageClassOne);
+            when(expressionType.getPackageClass()).thenReturn(packageClassTwo);
+            invocationBuilder.buildFieldSet(userType, typedExpression, fieldInjectionPoint, variable);
             verify(modifierAssociationEntry.getValue()).buildFieldSet(eq(false), eq(field), eq(typedExpression), any(TypedExpression.class));
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, variable, variableType);
+            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, userType, variable, variableType);
         }
     }
 
     @Test
     public void testConstructorCall() throws ClassNotFoundException, JClassAlreadyExistsException {
+        ASTType userType = mock(ASTType.class);
         ASTType type = mock(ASTType.class);
         JExpression variable = mock(JExpression.class);
         List<JExpression> parameters = mock(List.class);
@@ -115,7 +130,9 @@ public class InvocationBuilderAssociationTest {
 
         for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
             when(constructor.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
-            invocationBuilder.buildConstructorCall(constructor, type, parameters);
+            when(userType.getPackageClass()).thenReturn(packageClassOne);
+            when(type.getPackageClass()).thenReturn(packageClassTwo);
+            invocationBuilder.buildConstructorCall(userType, constructor, type, parameters);
             verify(modifierAssociationEntry.getValue()).buildConstructorCall(eq(constructor), eq(type), eq(parameters));
             reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, parameters, variable);
         }
@@ -124,6 +141,7 @@ public class InvocationBuilderAssociationTest {
     @Test
     public void testMethodInvocation() {
 
+        ASTType userType = mock(ASTType.class);
         ASTType returnType = mock(ASTType.class);
         String name = "test";
         List<JExpression> parameters = mock(List.class);
@@ -137,9 +155,11 @@ public class InvocationBuilderAssociationTest {
             when(method.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
             when(method.getReturnType()).thenReturn(returnType);
             when(method.getName()).thenReturn(name);
-            invocationBuilder.buildMethodCall(method, parameters, expression);
+            when(userType.getPackageClass()).thenReturn(packageClassOne);
+            when(targetExpressionType.getPackageClass()).thenReturn(packageClassTwo);
+            invocationBuilder.buildMethodCall(userType, method, parameters, expression);
             verify(modifierAssociationEntry.getValue()).buildMethodCall(eq(method), eq(parameters), eq(expression));
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
+            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, userType, returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
         }
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
+import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -23,5 +24,5 @@ import org.androidtransfuse.model.TypedExpression;
  */
 public interface ActivityDelegateASTReference {
 
-    JExpression buildReference(TypedExpression rootExpression);
+    JExpression buildReference(JDefinedClass definedClass, TypedExpression rootExpression);
 }

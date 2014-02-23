@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
@@ -124,6 +125,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
             for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
                 block.add(
                         injectionInvocationBuilder.buildFieldSet(
+                                new ASTStringType(injectionBuilderContext.getDefinedClass().name()),
                                 injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                                 fieldInjectionPoint,
                                 variableRef));
@@ -133,6 +135,7 @@ public class ViewVariableBuilder extends ConsistentTypeVariableBuilder {
             for (MethodInjectionPoint methodInjectionPoint : injectionGroup.getMethodInjectionPoints()) {
                 block.add(
                         injectionInvocationBuilder.buildMethodCall(
+                                new ASTStringType(injectionBuilderContext.getDefinedClass().name()),
                                 methodInjectionPoint.getMethod(),
                                 generatorFactory.build(
                                         injectionBuilderContext.getVariableMap(),

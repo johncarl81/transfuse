@@ -63,7 +63,7 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
                 parameterMap.put(astParameter, param);
             }
 
-            JExpression targetExpression = activityDelegateASTReference.buildReference(value);
+            JExpression targetExpression = activityDelegateASTReference.buildReference(definedClass, value);
 
             JInvocation delegateInvocation = targetExpression.invoke(method.getName());
 

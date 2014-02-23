@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.gen;
 
+import org.androidtransfuse.SubDiffPackage;
+
 /**
  * @author John Ericksen
  */

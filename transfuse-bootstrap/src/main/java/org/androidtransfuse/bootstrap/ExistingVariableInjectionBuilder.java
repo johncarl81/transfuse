@@ -19,6 +19,7 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
@@ -86,6 +87,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
                     for (FieldInjectionPoint fieldInjectionPoint : injectionGroup.getFieldInjectionPoints()) {
                         block.add(
                                 injectionInvocationBuilder.buildFieldSet(
+                                        new ASTStringType(injectionBuilderContext.getDefinedClass().name()),
                                         injectionBuilderContext.getVariableMap().get(fieldInjectionPoint.getInjectionNode()),
                                         fieldInjectionPoint,
                                         expression));
@@ -100,6 +102,7 @@ public class ExistingVariableInjectionBuilder implements VariableBuilder {
                                     public Void write(JBlock block) throws JClassAlreadyExistsException {
                                         block.add(
                                                 injectionInvocationBuilder.buildMethodCall(
+                                                        new ASTStringType(injectionBuilderContext.getDefinedClass().name()),
                                                         methodInjectionPoint.getMethod(),
                                                         generatorFactory.build(
                                                                 injectionBuilderContext.getVariableMap(),
