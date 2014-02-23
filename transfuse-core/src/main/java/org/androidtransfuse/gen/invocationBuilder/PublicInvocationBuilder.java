@@ -66,14 +66,14 @@ public class PublicInvocationBuilder implements ModifiedInvocationBuilder {
 
     @Override
     public JExpression buildFieldGet(ASTField field, TypedExpression variable) {
-        return variable.getExpression().ref(field.getName());
+        return ((JExpression)JExpr.cast(generationUtil.ref(variable.getType()), variable.getExpression())).ref(field.getName());
     }
 
     @Override
     public JStatement buildFieldSet(ASTField field, TypedExpression expression, TypedExpression containingExpression) {
         JBlock assignmentBlock = new JBlock(false, false);
 
-        assignmentBlock.assign(containingExpression.getExpression().ref(field.getName()), invocationHelper.coerceType(field.getASTType(), expression));
+        assignmentBlock.assign(((JExpression)JExpr.cast(generationUtil.ref(containingExpression.getType()), containingExpression.getExpression())).ref(field.getName()), invocationHelper.coerceType(field.getASTType(), expression));
 
         return assignmentBlock;
     }

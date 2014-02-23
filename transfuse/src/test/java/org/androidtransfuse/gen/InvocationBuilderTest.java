@@ -15,131 +15,193 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JExpression;
-import org.androidtransfuse.NoOpMessager;
-import org.androidtransfuse.adapter.*;
-import org.androidtransfuse.gen.invocationBuilder.*;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
+import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.bootstrap.Bootstraps;
+import org.androidtransfuse.gen.classloader.MemoryClassLoader;
+import org.androidtransfuse.gen.invocationBuilder.PackageHelperGenerator;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.validation.Validator;
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.*;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author John Ericksen
  */
+@Bootstrap
 public class InvocationBuilderTest {
 
-    private PublicInvocationBuilder publicInjectionBuilder;
-    private ProtectedInvocationBuilder protectedInvocationBuilder;
-    private PrivateInvocationBuilder privateInjectionBuilder;
+    private static final Map<String, List<String>> PROPERTIES = new HashMap<String, List<String>>(){{
+        put("Target", Arrays.asList("One", "Two", "Three", "Four"));
+        put("Subclass", Arrays.asList("Four"));
+        put("SubDiffPackage", Arrays.asList(/*"Three",*/ "Four"));
+    }};
+
+    private static final Map<String, String> METHOD_EXPECTATIONS = new HashMap<String, String>(){{
+        put("getOne", "org.androidtransfuse.gen.Target:One");
+        put("getTwo", "org.androidtransfuse.gen.Target:Two");
+        put("getThree", "org.androidtransfuse.gen.Target:Three");
+        put("getPrivateFour", "org.androidtransfuse.gen.Target:Four");
+        put("getSuperFour", "org.androidtransfuse.gen.Subclass:Four");
+        //put("getDiffPkgThree", "org.androidtransfuse.gen.SubDiffPackage:Three");
+        put("getDiffPkgFour()", "org.androidtransfuse.gen.SubDiffPackage:Four");
+    }};
+
+    private static final List<String> METHOD_NULL_EXPECTATIONS = new ArrayList<String>(){{
+        add("getSuperOne");
+        add("getSuperTwo");
+        add("getSuperThree");
+        add("getDiffPkgOne");
+        add("getDiffPkgTwo");
+        add("getDiffPkgFour");
+    }};
+
+    @Inject
+    private CodeGenerationUtil codeGenerationUtil;
+    @Inject
     private InvocationBuilder invocationBuilder;
-    private Map<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationMap;
+    @Inject
+    private ASTClassFactory astClassFactory;
+    @Inject
+    private ClassGenerationUtil generationUtil;
+    @Inject
+    private PackageHelperGenerator packageHelperGenerator;
+
+    private Class targetClass;
 
     @Before
-    public void setup() {
+    public void setup() throws ClassNotFoundException, IOException {
+        Bootstraps.inject(this);
 
-        publicInjectionBuilder = mock(PublicInvocationBuilder.class);
-        protectedInvocationBuilder = mock(ProtectedInvocationBuilder.class);
-        privateInjectionBuilder = mock(PrivateInvocationBuilder.class);
-        Validator validator = new Validator("Test", new NoOpMessager());
+        MemoryClassLoader classLoader = codeGenerationUtil.getClassLoader();
 
-        invocationBuilder = new InvocationBuilder(new DefaultInvocationBuilderStrategy(
-                publicInjectionBuilder,
-                protectedInvocationBuilder,
-                privateInjectionBuilder,
-                validator
-        ));
+        PackageClass subDiffPackageClass = new PackageClass("org.androidtransfuse.gen", "SubDiffPackage");
+        PackageClass subPackageClass = new PackageClass("org.androidtransfuse.gen", "Subclass");
+        PackageClass targetPackageClass = new PackageClass("org.androidtransfuse.gen", "Target");
 
-        modifierAssociationMap = new EnumMap<ASTAccessModifier, ModifiedInvocationBuilder>(ASTAccessModifier.class);
+        Map<String, String> source = new LinkedHashMap<String, String>();
 
-        modifierAssociationMap.put(ASTAccessModifier.PUBLIC, publicInjectionBuilder);
-        modifierAssociationMap.put(ASTAccessModifier.PROTECTED, protectedInvocationBuilder);
-        modifierAssociationMap.put(ASTAccessModifier.PACKAGE_PRIVATE, protectedInvocationBuilder);
-        modifierAssociationMap.put(ASTAccessModifier.PRIVATE, privateInjectionBuilder);
+        source.put(subDiffPackageClass.getCanonicalName(), loadJavaResource(subDiffPackageClass));
+        source.put(subPackageClass.getCanonicalName(), loadJavaResource(subPackageClass));
+        source.put(targetPackageClass.getCanonicalName(), loadJavaResource(targetPackageClass));
+
+        classLoader.add(source);
+
+        targetClass = classLoader.loadClass(targetPackageClass.getCanonicalName());
+        Class subDiffClass = classLoader.loadClass(targetPackageClass.getCanonicalName());
+
+        assertNotNull(subDiffClass);
+    }
+
+    private String loadJavaResource(PackageClass packageClass) throws IOException {
+
+        String path = "/" + packageClass.getCanonicalName().replace(".", "/") + ".java";
+
+        return IOUtils.toString(InvocationBuilderTest.class.getResourceAsStream(path));
     }
 
     @Test
-    public void testFieldGet() {
-        ASTType returnType = mock(ASTType.class);
-        ASTField field = mock(ASTField.class);
-        ASTType variableType = mock(ASTType.class);
-        JExpression variable = mock(JExpression.class);
-        String name = "test";
-        TypedExpression target = new TypedExpression(returnType, variable);
+    public void testBuilderFieldModifiers() throws Exception {
 
-        for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
-            when(field.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
-            when(field.getName()).thenReturn(name);
-            invocationBuilder.buildFieldGet(field, target);
-            verify(modifierAssociationEntry.getValue()).buildFieldGet(field, target);
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, returnType, variable, variableType);
+        ASTType targetType = astClassFactory.getType(targetClass);
+        PackageClass testerName = targetType.getPackageClass().append("Tester");
+
+        // define class to test field invocations
+        JDefinedClass testerClass = generationUtil.defineClass(testerName);
+        testerClass._implements(Runnable.class);
+
+        JMethod runMethod = testerClass.method(JMod.PUBLIC, void.class, "run");
+        JBlock body = runMethod.body();
+
+        JVar targetVar = body.decl(generationUtil.ref(targetType), "target", invocationBuilder.buildConstructorCall(targetType.getConstructors().iterator().next(), targetType, Collections.EMPTY_LIST));
+
+        // build field setters
+        for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
+            TypedExpression container = new TypedExpression(superIter, targetVar);
+            for (ASTField field : superIter.getFields()) {
+                body.add(invocationBuilder.buildFieldSet(field, container, new TypedExpression(astClassFactory.getType(String.class), JExpr.lit(superIter.getName() + ":" + field.getName()))));
+            }
         }
+
+        // build asserts against generated field getters
+        for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
+            TypedExpression container = new TypedExpression(superIter, targetVar);
+            for (ASTField field : superIter.getFields()) {
+                body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(superIter.getName() + ":" + field.getName())).arg(invocationBuilder.buildFieldGet(field, container));
+            }
+        }
+
+        packageHelperGenerator.generate();
+
+        ClassLoader classLoader = codeGenerationUtil.build(true);
+        Class<Runnable> tester = (Class<Runnable>) classLoader.loadClass(testerName.getCanonicalName());
+
+        tester.newInstance().run();
     }
 
     @Test
-    public void testFieldSet() throws ClassNotFoundException, JClassAlreadyExistsException {
-        ASTType variableType = mock(ASTType.class);
-        ASTField field = mock(ASTField.class);
-        JExpression variable = mock(JExpression.class);
-        ASTType expressionType = mock(ASTType.class);
-        JExpression expression = mock(JExpression.class);
-        InjectionNode injectionNode = mock(InjectionNode.class);
-        TypedExpression typedExpression = new TypedExpression(expressionType, expression);
-        String name = "test";
+    public void testBuilderMethodModifiers() throws Exception {
 
-        for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
-            when(field.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
-            when(field.getName()).thenReturn(name);
-            FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, field, injectionNode);
-            invocationBuilder.buildFieldSet(typedExpression, fieldInjectionPoint, variable);
-            verify(modifierAssociationEntry.getValue()).buildFieldSet(eq(field), eq(typedExpression), any(TypedExpression.class));
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, variable, variableType);
+        ASTType targetType = astClassFactory.getType(targetClass);
+        PackageClass testerName = targetType.getPackageClass().append("Tester");
+
+        // define class to test field invocations
+        JDefinedClass testerClass = generationUtil.defineClass(testerName);
+        testerClass._implements(Runnable.class);
+
+        JMethod runMethod = testerClass.method(JMod.PUBLIC, void.class, "run");
+        JBlock body = runMethod.body();
+
+        JVar targetVar = body.decl(generationUtil.ref(targetType), "target", invocationBuilder.buildConstructorCall(targetType.getConstructors().iterator().next(), targetType, Collections.EMPTY_LIST));
+
+        // build field setters
+        for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
+            TypedExpression container = new TypedExpression(superIter, targetVar);
+            if(PROPERTIES.containsKey(superIter.getPackageClass().getClassName())){
+                List<String> setMethods = PROPERTIES.get(superIter.getPackageClass().getClassName());
+                for (ASTMethod method : superIter.getMethods()) {
+                    String property = method.getName().replace("set", "");
+                    if(method.getName().startsWith("set") && setMethods.contains(property)){
+                        body.add(invocationBuilder.buildMethodCall(method, Collections.singletonList(JExpr.lit(superIter.getName() + ":" + property)), container));
+                    }
+                }
+            }
         }
+
+        // build asserts against generated field getters
+        TypedExpression container = new TypedExpression(targetType, targetVar);
+        for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
+            for (ASTMethod method : superIter.getMethods()) {
+                if(METHOD_EXPECTATIONS.containsKey(method.getName())){
+                    body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(METHOD_EXPECTATIONS.get(method.getName()))).arg(invocationBuilder.buildMethodCall(method, Collections.EMPTY_LIST, container));
+                }
+            }
+        }
+
+        for (ASTMethod method : targetType.getMethods()) {
+            if(METHOD_NULL_EXPECTATIONS.contains(method.getName())){
+                body.staticInvoke(generationUtil.ref(Assert.class), "assertNull").arg(invocationBuilder.buildMethodCall(method, Collections.EMPTY_LIST, container));
+            }
+        }
+
+        packageHelperGenerator.generate();
+
+        ClassLoader classLoader = codeGenerationUtil.build();
+        Class<Runnable> tester = (Class<Runnable>) classLoader.loadClass(testerName.getCanonicalName());
+
+        tester.newInstance().run();
     }
 
-    @Test
-    public void testConstructorCall() throws ClassNotFoundException, JClassAlreadyExistsException {
-        ASTType type = mock(ASTType.class);
-        JExpression variable = mock(JExpression.class);
-        List<JExpression> parameters = mock(List.class);
-        ASTConstructor constructor =  mock(ASTConstructor.class);
-
-        for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
-            when(constructor.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
-            invocationBuilder.buildConstructorCall(constructor, type, parameters);
-            verify(modifierAssociationEntry.getValue()).buildConstructorCall(eq(constructor), eq(type), eq(parameters));
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, parameters, variable);
-        }
-    }
-
-    @Test
-    public void testMethodInvocation() {
-
-        ASTType returnType = mock(ASTType.class);
-        String name = "test";
-        List<JExpression> parameters = mock(List.class);
-        List<ASTType> parameterTypes = mock(List.class);
-        ASTType targetExpressionType = mock(ASTType.class);
-        JExpression targetExpression = mock(JExpression.class);
-        ASTMethod method = mock(ASTMethod.class);
-        TypedExpression expression = new TypedExpression(targetExpressionType, targetExpression);
-
-        for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
-            when(method.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
-            when(method.getReturnType()).thenReturn(returnType);
-            when(method.getName()).thenReturn(name);
-            invocationBuilder.buildMethodCall(method, parameters, expression);
-            verify(modifierAssociationEntry.getValue()).buildMethodCall(eq(method), eq(parameters), eq(expression));
-            reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
-        }
-    }
 }

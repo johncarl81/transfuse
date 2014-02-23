@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.gen;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
@@ -24,7 +22,6 @@ import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.ModifiedInvocationBuilder;
 import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -68,16 +65,6 @@ public class InvocationBuilder {
         ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(constructor.getAccessModifier());
 
         return injectionBuilder.buildConstructorCall(constructor, type, parameters);
-    }
-
-    private List<ASTType> pullASTTypes(List<InjectionNode> injectionNodes) {
-        return FluentIterable
-                .from(injectionNodes)
-                .transform(new Function<InjectionNode, ASTType>() {
-                    public ASTType apply(InjectionNode injectionNode) {
-                        return injectionNode.getASTType();
-                    }
-                }).toList();
     }
 
     private ModifiedInvocationBuilder getInjectionBuilder(ASTAccessModifier modifier) {

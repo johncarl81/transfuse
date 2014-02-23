@@ -113,7 +113,7 @@ public class PackageClass {
     }
 
     public String getPackage() {
-        return pkg;
+        return pkg == null? "" : pkg;
     }
 
     /**

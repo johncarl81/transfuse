@@ -38,6 +38,10 @@ public class CodeGenerationUtil {
         this.classLoader = classLoader;
     }
 
+    public MemoryClassLoader getClassLoader() {
+        return classLoader;
+    }
+
     public ClassLoader build() throws IOException {
         return build(false);
     }

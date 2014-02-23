@@ -106,7 +106,7 @@ public class PackageHelperGenerator {
 
         JClass targetRef = generationUtil.ref(targetExpressionsType);
         JVar targetParam = accessorMethod.param(targetRef, namer.generateName(targetRef));
-        JInvocation invocation = targetParam.invoke(methodName);
+        JInvocation invocation = ((JExpression) JExpr.cast(targetRef, targetParam)).invoke(methodName);
 
         for (ASTType argType : argTypes) {
             JClass ref = generationUtil.ref(argType);
@@ -130,7 +130,7 @@ public class PackageHelperGenerator {
         JVar variableParam = accessorMethod.param(variableTypeRef, namer.generateName(variableTypeRef));
         JBlock body = accessorMethod.body();
 
-        body._return(variableParam.ref(name));
+        body._return(((JExpression) JExpr.cast(variableTypeRef, variableParam)).ref(name));
     }
 
     private void buildFieldSet(FieldReference fieldReference, String accessorMethodName, JDefinedClass helperClass) {
@@ -145,7 +145,7 @@ public class PackageHelperGenerator {
 
         JBlock body = accessorMethod.body();
 
-        body.assign(containerParam.ref(fieldReference.getName()), inputParam);
+        body.assign(((JExpression) JExpr.cast(containerType, containerParam)).ref(fieldReference.getName()), inputParam);
     }
 
     private JDefinedClass buildPackageHelper(PackageClass helperClassName) {
