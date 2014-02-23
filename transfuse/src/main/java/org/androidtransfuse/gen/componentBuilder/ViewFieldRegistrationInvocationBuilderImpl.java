@@ -43,6 +43,7 @@ public class ViewFieldRegistrationInvocationBuilderImpl implements ViewRegistrat
         block.invoke(viewExpression, method)
                 .arg(invocationBuilder.buildFieldGet(
                         astField,
+                        expression.getType(),
                         expression
                 ));
     }

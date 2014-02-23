@@ -48,17 +48,17 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
     }
 
     @Override
-    public JExpression buildFieldGet(ASTField field, TypedExpression targetExpression) {
+    public JExpression buildFieldGet(boolean cast, ASTField field, TypedExpression targetExpression) {
         validator.warn("Reflection is required to access private fields, consider using non-private.").element(field).build();
 
-        return delegate.buildFieldGet(field, targetExpression);
+        return delegate.buildFieldGet(cast, field, targetExpression);
     }
 
     @Override
-    public JStatement buildFieldSet(ASTField field, TypedExpression expression, TypedExpression containingExpression) {
+    public JStatement buildFieldSet(boolean cast, ASTField field, TypedExpression expression, TypedExpression containingExpression) {
         validator.warn("Reflection is required to modify private fields, consider using non-private.").element(field).build();
 
-        return delegate.buildFieldSet(field, expression, containingExpression);
+        return delegate.buildFieldSet(cast, field, expression, containingExpression);
     }
 
     @Override

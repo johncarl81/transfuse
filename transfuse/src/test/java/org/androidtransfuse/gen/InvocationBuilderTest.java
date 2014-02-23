@@ -131,7 +131,7 @@ public class InvocationBuilderTest {
         for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
             TypedExpression container = new TypedExpression(superIter, targetVar);
             for (ASTField field : superIter.getFields()) {
-                body.add(invocationBuilder.buildFieldSet(field, container, new TypedExpression(astClassFactory.getType(String.class), JExpr.lit(superIter.getName() + ":" + field.getName()))));
+                body.add(invocationBuilder.buildFieldSet(field, targetType, container, new TypedExpression(astClassFactory.getType(String.class), JExpr.lit(superIter.getName() + ":" + field.getName()))));
             }
         }
 
@@ -139,7 +139,7 @@ public class InvocationBuilderTest {
         for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
             TypedExpression container = new TypedExpression(superIter, targetVar);
             for (ASTField field : superIter.getFields()) {
-                body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(superIter.getName() + ":" + field.getName())).arg(invocationBuilder.buildFieldGet(field, container));
+                body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(superIter.getName() + ":" + field.getName())).arg(invocationBuilder.buildFieldGet(field, targetType, container));
             }
         }
 

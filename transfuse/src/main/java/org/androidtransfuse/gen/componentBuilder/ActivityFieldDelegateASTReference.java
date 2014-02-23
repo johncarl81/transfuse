@@ -41,6 +41,7 @@ public class ActivityFieldDelegateASTReference implements ActivityDelegateASTRef
 
         return invocationBuilder.buildFieldGet(
                 astField,
+                rootExpression.getType(),
                 rootExpression
         );
     }

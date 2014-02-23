@@ -48,17 +48,39 @@ public class InvocationBuilder {
     }
 
     public JStatement buildFieldSet(TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        return buildFieldSet(fieldInjectionPoint.getField(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
+        return buildFieldSet(fieldInjectionPoint.getField(), fieldInjectionPoint.getContainingType(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
     }
 
-    public JStatement buildFieldSet(ASTField field, TypedExpression containingExpression, TypedExpression expression) {
-        ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(field.getAccessModifier());
-        return injectionBuilder.buildFieldSet(field, expression, containingExpression);
+    public JStatement buildFieldSet(ASTField field, ASTType containingRootType, TypedExpression containingExpression, TypedExpression expression) {
+        ModifiedInvocationBuilder injectionBuilder;
+        boolean cast = false;
+        if(field.isFinal()){
+            injectionBuilder = getInjectionBuilder(ASTAccessModifier.PRIVATE);
+        }
+        else{
+            cast = isHiddenField(containingRootType, containingExpression.getType(), field.getName());
+            injectionBuilder = getInjectionBuilder(field.getAccessModifier());
+        }
+        return injectionBuilder.buildFieldSet(cast, field, expression, containingExpression);
     }
 
-    public JExpression buildFieldGet(ASTField field, TypedExpression targetExpression) {
+    public boolean isHiddenField(ASTType rootType, ASTType holdingType, String name){
+        for(ASTType iterType = rootType; !iterType.equals(holdingType); iterType = iterType.getSuperClass()){
+            for(ASTField field : iterType.getFields()){
+                if(field.getName().equals(name)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public JExpression buildFieldGet(ASTField field, ASTType rootType, TypedExpression targetExpression) {
         ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(field.getAccessModifier());
-        return injectionBuilder.buildFieldGet(field, targetExpression);
+
+        boolean cast = isHiddenField(rootType, targetExpression.getType(), field.getName());
+
+        return injectionBuilder.buildFieldGet(cast, field, targetExpression);
     }
 
     public JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<JExpression> parameters) {

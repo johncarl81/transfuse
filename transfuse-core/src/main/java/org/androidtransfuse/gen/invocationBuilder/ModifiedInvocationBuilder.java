@@ -33,9 +33,9 @@ public interface ModifiedInvocationBuilder {
 
     JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<? extends JExpression> parameters);
 
-    JExpression buildFieldGet(ASTField field, TypedExpression variable);
+    JExpression buildFieldGet(boolean cast, ASTField field, TypedExpression variable);
 
-    JStatement buildFieldSet(ASTField field, TypedExpression inputExpression, TypedExpression containingExpression);
+    JStatement buildFieldSet(boolean cast, ASTField field, TypedExpression inputExpression, TypedExpression containingExpression);
 
     JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression);
 }

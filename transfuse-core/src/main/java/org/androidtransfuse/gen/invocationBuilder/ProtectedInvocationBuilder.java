@@ -74,14 +74,14 @@ public class ProtectedInvocationBuilder implements ModifiedInvocationBuilder {
     }
 
     @Override
-    public JExpression buildFieldGet(ASTField field, TypedExpression variable) {
+    public JExpression buildFieldGet(boolean cast, ASTField field, TypedExpression variable) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldGetter(field.getASTType(), variable.getType(), field.getName());
         return accessorMethod.invoke(generationUtil).arg(variable.getExpression());
     }
 
     @Override
-    public JStatement buildFieldSet(ASTField field, TypedExpression expression, TypedExpression containingExpression) {
+    public JStatement buildFieldSet(boolean cast, ASTField field, TypedExpression expression, TypedExpression containingExpression) {
 
         ProtectedAccessorMethod accessorMethod = packageHelperGenerator.getFieldSetter(containingExpression.getType(), field.getASTType(), field.getName());
         return accessorMethod.invoke(generationUtil)
