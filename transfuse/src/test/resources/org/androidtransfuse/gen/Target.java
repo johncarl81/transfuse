@@ -23,7 +23,7 @@ public class Target extends Subclass {
     public String one;
     protected String two;
     String three;
-    public String four;
+    private String four;
 
     public String getOne() {
         return one;

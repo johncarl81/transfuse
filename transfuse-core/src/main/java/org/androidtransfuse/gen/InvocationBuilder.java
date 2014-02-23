@@ -55,11 +55,11 @@ public class InvocationBuilder {
         ModifiedInvocationBuilder injectionBuilder;
         boolean cast = false;
         if(field.isFinal()){
-            injectionBuilder = getInjectionBuilder(userType, expression.getType(), ASTAccessModifier.PRIVATE);
+            injectionBuilder = invocationBuilderStrategy.getInjectionBuilder(ASTAccessModifier.PRIVATE);
         }
         else{
             cast = isHiddenField(containingRootType, containingExpression.getType(), field.getName());
-            injectionBuilder = getInjectionBuilder(userType, expression.getType(), field.getAccessModifier());
+            injectionBuilder = getInjectionBuilder(userType, containingExpression.getType(), field.getAccessModifier());
         }
         return injectionBuilder.buildFieldSet(cast, field, expression, containingExpression);
     }
@@ -89,14 +89,16 @@ public class InvocationBuilder {
         return injectionBuilder.buildConstructorCall(constructor, type, parameters);
     }
 
-    private ModifiedInvocationBuilder getInjectionBuilder(ASTType user, ASTType target, ASTAccessModifier inputModifier) {
+    private ModifiedInvocationBuilder getInjectionBuilder(ASTType user, ASTType target, ASTAccessModifier modifier) {
 
-        ASTAccessModifier modifier = inputModifier;
         if(modifier.equals(ASTAccessModifier.PROTECTED) && (target.inheritsFrom(user) || user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage()))){
-            modifier = ASTAccessModifier.PUBLIC;
+            return invocationBuilderStrategy.getInjectionBuilder(ASTAccessModifier.PUBLIC);
         }
-        else if(modifier.equals(ASTAccessModifier.PACKAGE_PRIVATE) && user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage())){
-            modifier = ASTAccessModifier.PUBLIC;
+        if(modifier.equals(ASTAccessModifier.PACKAGE_PRIVATE) && user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage())){
+            return invocationBuilderStrategy.getInjectionBuilder(ASTAccessModifier.PUBLIC);
+        }
+        if(user.getPackageClass().equals(target.getPackageClass())){
+            return invocationBuilderStrategy.getInjectionBuilder(ASTAccessModifier.PUBLIC);
         }
 
         return invocationBuilderStrategy.getInjectionBuilder(modifier);

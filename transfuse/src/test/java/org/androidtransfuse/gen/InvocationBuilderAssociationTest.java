@@ -113,7 +113,7 @@ public class InvocationBuilderAssociationTest {
             when(field.getName()).thenReturn(name);
             FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, field, injectionNode);
             when(userType.getPackageClass()).thenReturn(packageClassOne);
-            when(expressionType.getPackageClass()).thenReturn(packageClassTwo);
+            when(variableType.getPackageClass()).thenReturn(packageClassTwo);
             invocationBuilder.buildFieldSet(userType, typedExpression, fieldInjectionPoint, variable);
             verify(modifierAssociationEntry.getValue()).buildFieldSet(eq(false), eq(field), eq(typedExpression), any(TypedExpression.class));
             reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, userType, variable, variableType);
