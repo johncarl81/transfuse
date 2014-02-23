@@ -91,7 +91,7 @@ public class InjectionPointFactoryTest {
         ASTType containingType = astClassFactory.getType(MockAnalysisClass.class);
         ASTMethod astMethod = astClassFactory.getMethod(method);
 
-        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astMethod, emptyContext);
+        MethodInjectionPoint methodInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, containingType, astMethod, emptyContext);
 
 
         List<InjectionNode> injectionNodes = methodInjectionPoint.getInjectionNodes();
@@ -113,7 +113,7 @@ public class InjectionPointFactoryTest {
 
         ASTType containingType = astClassFactory.getType(MockAnalysisClass.class);
 
-        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, astClassFactory.getField(field), emptyContext);
+        FieldInjectionPoint fieldInjectionPoint = injectionPointFactory.buildInjectionPoint(containingType, containingType, astClassFactory.getField(field), emptyContext);
 
         InjectionNode injectionNode = fieldInjectionPoint.getInjectionNode();
 

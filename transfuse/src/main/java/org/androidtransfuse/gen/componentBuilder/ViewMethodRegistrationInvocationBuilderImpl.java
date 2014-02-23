@@ -18,8 +18,8 @@ package org.androidtransfuse.gen.componentBuilder;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
@@ -46,7 +46,8 @@ public class ViewMethodRegistrationInvocationBuilderImpl implements ViewRegistra
 
         block.invoke(viewExpression, method)
                 .arg(invocationBuilder.buildMethodCall(
-                        new ASTStringType(definedClass.name()),
+                        new ASTJDefinedClassType(definedClass),
+                        new ASTJDefinedClassType(definedClass),
                         getterMethod,
                         Collections.EMPTY_LIST,
                         expression));

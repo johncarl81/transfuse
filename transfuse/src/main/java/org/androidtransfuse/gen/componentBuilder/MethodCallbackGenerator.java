@@ -19,9 +19,9 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JStatement;
+import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -74,7 +74,8 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                     }
 
                     JStatement methodCall = invocationBuilder.buildMethodCall(
-                            new ASTStringType(definedClass.name()),
+                            new ASTJDefinedClassType(definedClass),
+                            new ASTJDefinedClassType(definedClass),
                             methodCallback,
                             parameters,
                             injectionNodeJExpressionEntry.getValue()

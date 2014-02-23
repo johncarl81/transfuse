@@ -168,7 +168,7 @@ public class InvocationBuilderTest {
                 for (ASTMethod method : superIter.getMethods()) {
                     String property = method.getName().replace("set", "");
                     if(method.getName().startsWith("set") && setMethods.contains(property)){
-                        body.add(invocationBuilder.buildMethodCall(userType, method, Collections.singletonList(JExpr.lit(superIter.getName() + ":" + property)), container));
+                        body.add(invocationBuilder.buildMethodCall(userType, targetType, method, Collections.singletonList(JExpr.lit(superIter.getName() + ":" + property)), container));
                     }
                 }
             }
@@ -179,14 +179,14 @@ public class InvocationBuilderTest {
         for(ASTType superIter = targetType; !superIter.equals(astClassFactory.getType(Object.class)); superIter = superIter.getSuperClass()){
             for (ASTMethod method : superIter.getMethods()) {
                 if(METHOD_EXPECTATIONS.containsKey(method.getName())){
-                    body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(METHOD_EXPECTATIONS.get(method.getName()))).arg(invocationBuilder.buildMethodCall(userType, method, Collections.EMPTY_LIST, container));
+                    body.staticInvoke(generationUtil.ref(Assert.class), "assertEquals").arg(JExpr.lit(METHOD_EXPECTATIONS.get(method.getName()))).arg(invocationBuilder.buildMethodCall(userType, targetType, method, Collections.EMPTY_LIST, container));
                 }
             }
         }
 
         for (ASTMethod method : targetType.getMethods()) {
             if(METHOD_NULL_EXPECTATIONS.contains(method.getName())){
-                body.staticInvoke(generationUtil.ref(Assert.class), "assertNull").arg(invocationBuilder.buildMethodCall(userType, method, Collections.EMPTY_LIST, container));
+                body.staticInvoke(generationUtil.ref(Assert.class), "assertNull").arg(invocationBuilder.buildMethodCall(userType, targetType, method, Collections.EMPTY_LIST, container));
             }
         }
 

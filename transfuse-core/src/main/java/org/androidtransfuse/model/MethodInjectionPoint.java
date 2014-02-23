@@ -23,14 +23,20 @@ import org.androidtransfuse.adapter.ASTType;
  */
 public class MethodInjectionPoint extends MethodInjectionPointBase {
 
+    private final ASTType rootContainingType;
     private final ASTMethod method;
 
-    public MethodInjectionPoint(ASTType containingType, ASTMethod method) {
+    public MethodInjectionPoint(ASTType rootContainingType, ASTType containingType, ASTMethod method) {
         super(containingType);
+        this.rootContainingType = rootContainingType;
         this.method = method;
     }
 
     public ASTMethod getMethod() {
         return method;
+    }
+
+    public ASTType getRootContainingType() {
+        return rootContainingType;
     }
 }

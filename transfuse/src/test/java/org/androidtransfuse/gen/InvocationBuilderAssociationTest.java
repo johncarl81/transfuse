@@ -111,7 +111,7 @@ public class InvocationBuilderAssociationTest {
         for (Map.Entry<ASTAccessModifier, ModifiedInvocationBuilder> modifierAssociationEntry : modifierAssociationMap.entrySet()) {
             when(field.getAccessModifier()).thenReturn(modifierAssociationEntry.getKey());
             when(field.getName()).thenReturn(name);
-            FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, field, injectionNode);
+            FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(variableType, variableType, field, injectionNode);
             when(userType.getPackageClass()).thenReturn(packageClassOne);
             when(variableType.getPackageClass()).thenReturn(packageClassTwo);
             invocationBuilder.buildFieldSet(userType, typedExpression, fieldInjectionPoint, variable);
@@ -157,8 +157,8 @@ public class InvocationBuilderAssociationTest {
             when(method.getName()).thenReturn(name);
             when(userType.getPackageClass()).thenReturn(packageClassOne);
             when(targetExpressionType.getPackageClass()).thenReturn(packageClassTwo);
-            invocationBuilder.buildMethodCall(userType, method, parameters, expression);
-            verify(modifierAssociationEntry.getValue()).buildMethodCall(eq(method), eq(parameters), eq(expression));
+            invocationBuilder.buildMethodCall(userType, targetExpressionType, method, parameters, expression);
+            verify(modifierAssociationEntry.getValue()).buildMethodCall(eq(false), eq(method), eq(parameters), eq(expression));
             reset(publicInjectionBuilder, protectedInvocationBuilder, privateInjectionBuilder, userType, returnType, parameters, parameterTypes, targetExpressionType, targetExpression);
         }
     }

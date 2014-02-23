@@ -94,7 +94,7 @@ public class InjectionFragmentGeneratorTest {
         ASTType containingType = astClassFactory.getType(MethodInjectable.class);
         ASTMethod method = getMethod("setInjectionTarget", containingType);
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(containingType, method);
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(containingType, containingType, method);
         methodInjectionPoint.addInjectionNode(buildInjectionNode(InjectionTarget.class));
 
         getInjectionAspect(injectionNode).addGroup().add(methodInjectionPoint);
@@ -111,7 +111,7 @@ public class InjectionFragmentGeneratorTest {
         ASTType containingType = astClassFactory.getType(FieldInjectable.class);
         ASTField field = getField("injectionTarget", containingType);
 
-        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, field, buildInjectionNode(InjectionTarget.class));
+        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, containingType, field, buildInjectionNode(InjectionTarget.class));
         getInjectionAspect(injectionNode).addGroup().add(fieldInjectionPoint);
 
         FieldInjectable fieldInjectable = buildInstance(FieldInjectable.class, injectionNode);
@@ -159,7 +159,7 @@ public class InjectionFragmentGeneratorTest {
         ASTType containingType = astClassFactory.getType(VariableBuilderInjectable.class);
         ASTField field = getField("target", containingType);
 
-        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, field, buildInjectionNode(VariableTarget.class));
+        FieldInjectionPoint fieldInjectionPoint = new FieldInjectionPoint(containingType, containingType, field, buildInjectionNode(VariableTarget.class));
         getInjectionAspect(injectionNode).addGroup().add(fieldInjectionPoint);
 
         injectionNodeBuilderRepository.putType(VariableTarget.class, new InjectionNodeBuilder() {

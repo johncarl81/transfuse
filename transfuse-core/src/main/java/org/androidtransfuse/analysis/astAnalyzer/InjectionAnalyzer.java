@@ -69,14 +69,14 @@ public class InjectionAnalyzer implements ASTAnalysis {
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
         if (astMethod.isAnnotated(Inject.class)) {
-            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(concreteType, astMethod, context));
+            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(injectionNode.getASTType(), concreteType, astMethod, context));
         }
     }
 
     @Override
     public void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context) {
         if (astField.isAnnotated(Inject.class)) {
-            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(concreteType, astField, context));
+            getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(injectionNode.getASTType(), concreteType, astField, context));
         }
     }
 

@@ -57,7 +57,7 @@ public class ProtectedInvocationBuilder implements ModifiedInvocationBuilder {
 
 
     @Override
-    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+    public JInvocation buildMethodCall(boolean cast, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
 
         List<ASTType> paramerTypes = FluentIterable.from(method.getParameters()).transform(new Function<ASTParameter, ASTType>() {
             public ASTType apply(ASTParameter parameter) {

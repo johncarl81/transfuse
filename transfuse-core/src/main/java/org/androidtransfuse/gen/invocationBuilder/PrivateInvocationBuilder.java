@@ -59,7 +59,7 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
     }
 
     @Override
-    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+    public JInvocation buildMethodCall(boolean cast, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
 
         JClass targetType = generationUtil.ref(expression.getType());
         //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)

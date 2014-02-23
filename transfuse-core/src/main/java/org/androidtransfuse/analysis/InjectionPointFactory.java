@@ -95,9 +95,9 @@ public class InjectionPointFactory {
      * @param context      analysis context
      * @return MethodInjectionPoint
      */
-    public MethodInjectionPoint buildInjectionPoint(ASTType containingType, ASTMethod astMethod, AnalysisContext context) {
+    public MethodInjectionPoint buildInjectionPoint(ASTType rootContainingType, ASTType containingType, ASTMethod astMethod, AnalysisContext context) {
 
-        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(containingType, astMethod);
+        MethodInjectionPoint methodInjectionPoint = new MethodInjectionPoint(rootContainingType, containingType, astMethod);
         methodInjectionPoint.addThrows(astMethod.getThrowsTypes());
 
         List<ASTAnnotation> methodAnnotations = new ArrayList<ASTAnnotation>();
@@ -123,8 +123,8 @@ public class InjectionPointFactory {
      * @param context      analysis context
      * @return FieldInjectionPoint
      */
-    public FieldInjectionPoint buildInjectionPoint(ASTType containingType, ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(containingType, astField, buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+    public FieldInjectionPoint buildInjectionPoint(ASTType rootContainingType, ASTType containingType, ASTField astField, AnalysisContext context) {
+        return new FieldInjectionPoint(rootContainingType, containingType, astField, buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
     }
 
     /**

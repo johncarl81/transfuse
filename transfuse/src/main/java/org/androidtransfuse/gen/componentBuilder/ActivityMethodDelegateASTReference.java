@@ -17,8 +17,8 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.gen.InvocationBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -42,7 +42,8 @@ public class ActivityMethodDelegateASTReference implements ActivityDelegateASTRe
     @Override
     public JExpression buildReference(JDefinedClass definedClass, TypedExpression rootExpression) {
         return invocationBuilder.buildMethodCall(
-                new ASTStringType(definedClass.name()),
+                new ASTJDefinedClassType(definedClass),
+                rootExpression.getType(),
                 method,
                 Collections.EMPTY_LIST,
                 rootExpression);

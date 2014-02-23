@@ -45,7 +45,7 @@ public class NonConfigurationAnalysis extends ASTAnalysisAdaptor {
 
         if(astField.isAnnotated(NonConfigurationInstance.class)){
             NonConfigurationAspect aspect = buildAspect(injectionNode);
-            aspect.add(injectionPointFactory.buildInjectionPoint(concreteType, astField, context));
+            aspect.add(injectionPointFactory.buildInjectionPoint(injectionNode.getASTType(), concreteType, astField, context));
 
             if (!injectionNode.containsAspect(ASTInjectionAspect.class)) {
                 injectionNode.addAspect(ASTInjectionAspect.class, new ASTInjectionAspect());

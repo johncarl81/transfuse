@@ -41,14 +41,21 @@ public class InvocationBuilder {
         this.invocationBuilderStrategy = invocationBuilderStrategy;
     }
 
-    public JInvocation buildMethodCall(ASTType userType, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+    public JInvocation buildMethodCall(ASTType userType, ASTType containingRootType, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+
+        boolean cast = isHiddenMethod(containingRootType, expression.getType(), method);
         ModifiedInvocationBuilder injectionBuilder = getInjectionBuilder(userType, expression.getType(), method.getAccessModifier());
 
-        return injectionBuilder.buildMethodCall(method, parameters, expression);
+        return injectionBuilder.buildMethodCall(cast, method, parameters, expression);
+    }
+
+    public boolean isHiddenMethod(ASTType rootType, ASTType holdingType, ASTMethod inputMethod){
+        return inputMethod.getAccessModifier().equals(ASTAccessModifier.PACKAGE_PRIVATE) &&
+                !rootType.getPackageClass().getPackage().equals(holdingType.getPackageClass().getPackage());
     }
 
     public JStatement buildFieldSet(ASTType userType, TypedExpression expression, FieldInjectionPoint fieldInjectionPoint, JExpression variable) {
-        return buildFieldSet(userType, fieldInjectionPoint.getField(), fieldInjectionPoint.getContainingType(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
+        return buildFieldSet(userType, fieldInjectionPoint.getField(), fieldInjectionPoint.getRootContainingType(), new TypedExpression(fieldInjectionPoint.getContainingType(), variable), expression);
     }
 
     public JStatement buildFieldSet(ASTType userType, ASTField field, ASTType containingRootType, TypedExpression containingExpression, TypedExpression expression) {

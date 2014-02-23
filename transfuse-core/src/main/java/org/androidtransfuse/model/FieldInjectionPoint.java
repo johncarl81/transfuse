@@ -23,11 +23,13 @@ import org.androidtransfuse.adapter.ASTType;
  */
 public class FieldInjectionPoint {
 
+    private final ASTType rootContainingType;
     private final ASTType containingType;
     private final ASTField field;
     private final InjectionNode injectionNode;
 
-    public FieldInjectionPoint(ASTType containingType, ASTField field, InjectionNode injectionNode) {
+    public FieldInjectionPoint(ASTType rootContainingType, ASTType containingType, ASTField field, InjectionNode injectionNode) {
+        this.rootContainingType = rootContainingType;
         this.field = field;
         this.injectionNode = injectionNode;
         this.containingType = containingType;
@@ -35,6 +37,10 @@ public class FieldInjectionPoint {
 
     public InjectionNode getInjectionNode() {
         return injectionNode;
+    }
+
+    public ASTType getRootContainingType() {
+        return rootContainingType;
     }
 
     public ASTType getContainingType() {

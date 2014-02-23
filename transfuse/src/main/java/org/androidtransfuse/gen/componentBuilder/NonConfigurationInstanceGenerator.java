@@ -17,7 +17,7 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTStringType;
+import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
 import org.androidtransfuse.gen.ClassGenerationUtil;
@@ -81,7 +81,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                         TypedExpression fieldExpression = typeExpressionFactory.build(nonConfigurationField.getInjectionNode().getASTType(), JExpr.ref(bodyVar, fieldMap.get(nonConfigurationField)));
                         conditional.add(
                                 invocationBuilder.buildFieldSet(
-                                        new ASTStringType(definedClass.name()),
+                                        new ASTJDefinedClassType(definedClass),
                                         fieldExpression,
                                         nonConfigurationField,
                                         expressionMap.get(nonConfigurationComponent).getExpression()));
@@ -104,7 +104,7 @@ public class NonConfigurationInstanceGenerator implements ExpressionVariableDepe
                     NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
                     for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
                         construction.arg(invocationBuilder.buildFieldGet(
-                                new ASTStringType(definedClass.name()),
+                                new ASTJDefinedClassType(definedClass),
                                 fieldInjectionPoint.getField(),
                                 injectionNode.getASTType(),
                                 expressionMap.get(injectionNode)

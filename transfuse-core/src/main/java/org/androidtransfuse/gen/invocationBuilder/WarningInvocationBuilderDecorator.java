@@ -62,9 +62,9 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
     }
 
     @Override
-    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+    public JInvocation buildMethodCall(boolean cast, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
         validator.warn("Reflection is required to call private methods, consider using non-private.").element(method).build();
 
-        return delegate.buildMethodCall(method, parameters, expression);
+        return delegate.buildMethodCall(cast, method, parameters, expression);
     }
 }

@@ -16,9 +16,9 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
 import org.androidtransfuse.gen.InvocationBuilder;
@@ -69,7 +69,8 @@ public class ProvidesVariableBuilder extends ConsistentTypeVariableBuilder {
         }
 
         return invocationBuilder.buildMethodCall(
-                new ASTStringType(context.getDefinedClass().name()),
+                new ASTJDefinedClassType(context.getDefinedClass()),
+                injectionNode.getASTType(),
                 method,
                 paramExpressions,
                 new TypedExpression(module.getASTType(), moduleVar));

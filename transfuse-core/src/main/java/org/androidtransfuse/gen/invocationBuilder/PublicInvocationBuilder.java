@@ -54,8 +54,8 @@ public class PublicInvocationBuilder implements ModifiedInvocationBuilder {
     }
 
     @Override
-    public JInvocation buildMethodCall(ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
-        JInvocation methodInvocation = expression.getExpression().invoke(method.getName());
+    public JInvocation buildMethodCall(boolean cast, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
+        JInvocation methodInvocation = conditionalCast(cast, generationUtil.ref(expression.getType()), expression.getExpression()).invoke(method.getName());
 
         for (JExpression parameter : parameters) {
             methodInvocation.arg(parameter);
