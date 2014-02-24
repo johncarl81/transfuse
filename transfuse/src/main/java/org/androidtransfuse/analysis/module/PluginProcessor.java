@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis.module;
 
+import org.androidtransfuse.ConfigurationRepository;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
@@ -27,35 +29,31 @@ import javax.inject.Inject;
  */
 public class PluginProcessor implements TypeProcessor {
 
-    private final ModuleRepository moduleRepository;
+    private final ConfigurationRepository repository;
 
     @Inject
-    public PluginProcessor(ModuleRepository moduleRepository) {
-        this.moduleRepository = moduleRepository;
+    public PluginProcessor(ConfigurationRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation) {
 
-        ASTType pluginType = typeAnnotation.getProperty("value", ASTType.class);
-
-        try {
-
-            TransfusePlugin plugin = (TransfusePlugin) Class.forName(pluginType.getName()).newInstance();
-            plugin.run();
-
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        final ASTType pluginType = typeAnnotation.getProperty("value", ASTType.class);
 
         return new ModuleConfiguration() {
             @Override
             public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
-                //empty
+                try {
+                    TransfusePlugin plugin = (TransfusePlugin) Class.forName(pluginType.getName()).newInstance();
+                    plugin.run(repository);
+                } catch (InstantiationException e) {
+                    throw new TransfuseAnalysisException("Unable to instantiate", e);
+                } catch (IllegalAccessException e) {
+                    throw new TransfuseAnalysisException("IllegalAccessException", e);
+                } catch (ClassNotFoundException e) {
+                    throw new TransfuseAnalysisException("ClassNotFoundException", e);
+                }
             }
         };
     }

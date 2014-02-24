@@ -18,7 +18,7 @@ package org.androidtransfuse;
 /**
  * @author John Ericksen
  */
-public interface TransfusePlugin {
+public @interface Plugins {
 
-    void run(ConfigurationRepository repository);
+    Plugin[] value();
 }

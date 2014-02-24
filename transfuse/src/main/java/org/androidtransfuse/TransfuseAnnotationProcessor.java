@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
@@ -28,6 +29,7 @@ import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RBuilder;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceComposite;
+import org.androidtransfuse.plugins.PluginModule;
 import org.androidtransfuse.processor.GenerateModuleProcessor;
 import org.androidtransfuse.processor.TransfuseProcessor;
 import org.androidtransfuse.scope.ScopeKey;
@@ -47,7 +49,6 @@ import javax.lang.model.util.Elements;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import static com.google.common.collect.Collections2.transform;
@@ -130,7 +131,9 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         if (!baseModuleConfiguration) {
             transfuseProcessor.submit(TransfuseModule.class, reloadableASTElementFactory.buildProviders(
-                    Collections.singleton(elements.getTypeElement(APIModule.class.getName())
+                    ImmutableList.of(
+                            elements.getTypeElement(APIModule.class.getName()),
+                            elements.getTypeElement(PluginModule.class.getName())
                     )));
             baseModuleConfiguration = true;
         }

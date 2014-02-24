@@ -15,10 +15,14 @@
  */
 package org.androidtransfuse;
 
+import java.lang.annotation.Annotation;
+
 /**
  * @author John Ericksen
  */
-public interface TransfusePlugin {
+public interface ConfigurationRepository {
 
-    void run(ConfigurationRepository repository);
+    ComponentBuilder component(Class<? extends Annotation> annotation);
+
+    void addEvent(Class<? extends Annotation> componentType, String type, EventMapping eventMapping);
 }

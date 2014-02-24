@@ -18,10 +18,12 @@ package org.androidtransfuse.config;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.CodeGenerationScope;
+import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.ConfigurationScope;
 import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.analysis.ConfigurationRepositoryImpl;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
@@ -87,6 +89,12 @@ public class TransfuseAndroidModule {
 
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
+
+    @Provides
+    @Singleton
+    public ConfigurationRepository getRepository(ConfigurationRepositoryImpl repository){
+        return repository;
+    }
 
     @Provides
     public ClassGenerationStrategy getClassGenerationStrategy(){

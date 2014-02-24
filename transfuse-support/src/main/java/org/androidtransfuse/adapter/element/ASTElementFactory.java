@@ -255,9 +255,11 @@ public class ASTElementFactory {
 
         ASTType updatedType = getType(typeElement);
 
-        for (ASTMethod astMethod : updatedType.getMethods()) {
-            if(astMethod.getName().equals(methodName) && parametersMatch(astMethod.getParameters(), args)){
-                return astMethod;
+        for(ASTType typeLoop = updatedType; typeLoop != null ; typeLoop = typeLoop.getSuperClass()){
+            for (ASTMethod astMethod : typeLoop.getMethods()) {
+                if(astMethod.getName().equals(methodName) && parametersMatch(astMethod.getParameters(), args)){
+                    return astMethod;
+                }
             }
         }
 
@@ -266,8 +268,8 @@ public class ASTElementFactory {
 
     private boolean parametersMatch(List<ASTParameter> parameters, ASTType[] args) {
 
-        if(args == null && !parameters.isEmpty()){
-            return false;
+        if(args == null){
+            return parameters.isEmpty();
         }
 
         if(parameters.size() != args.length){
@@ -275,7 +277,7 @@ public class ASTElementFactory {
         }
 
         for(int i = 0; i < parameters.size(); i++){
-            if(!parameters.get(i).getASTType().equals(args[i])){
+            if(!parameters.get(i).getASTType().getName().equals(args[i].getName())){
                 return false;
             }
         }

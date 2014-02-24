@@ -18,6 +18,7 @@ package org.androidtransfuse.config;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.*;
 import org.androidtransfuse.adapter.ASTFactory;
+import org.androidtransfuse.analysis.ConfigurationRepositoryImpl;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
@@ -56,6 +57,7 @@ import org.androidtransfuse.validation.Validator;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.lang.model.util.Elements;
 import javax.xml.bind.JAXBContext;
 
@@ -105,6 +107,12 @@ import javax.xml.bind.JAXBContext;
 public class TestTransfuseAndroidModule {
 
     private final JCodeModel codeModel = new JCodeModel();
+
+    @Provides
+    @Singleton
+    public ConfigurationRepository getRepository(ConfigurationRepositoryImpl repository){
+        return repository;
+    }
 
     @Provides
     @Named(Validator.LOG_PREPEND)

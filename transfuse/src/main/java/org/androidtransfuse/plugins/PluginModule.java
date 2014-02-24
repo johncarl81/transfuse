@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse;
+package org.androidtransfuse.plugins;
+
+import org.androidtransfuse.Plugin;
+import org.androidtransfuse.Plugins;
+import org.androidtransfuse.annotations.TransfuseModule;
 
 /**
  * @author John Ericksen
  */
-public interface TransfusePlugin {
-
-    void run(ConfigurationRepository repository);
+@TransfuseModule
+@Plugins({
+        @Plugin(ApplicationPlugin.class),
+        @Plugin(ServicePlugin.class),
+        @Plugin(ActivityPlugin.class),
+        @Plugin(FragmentPlugin.class)
+})
+public class PluginModule {
 }

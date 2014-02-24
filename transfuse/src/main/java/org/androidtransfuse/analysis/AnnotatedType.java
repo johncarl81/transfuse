@@ -13,12 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse;
+package org.androidtransfuse.analysis;
+
+import org.androidtransfuse.adapter.ASTType;
 
 /**
  * @author John Ericksen
  */
-public interface TransfusePlugin {
+public class AnnotatedType {
 
-    void run(ConfigurationRepository repository);
+    private ASTType type;
+    private ASTType annotation;
+
+    public AnnotatedType(ASTType type, ASTType annotation) {
+        this.type = type;
+        this.annotation = annotation;
+    }
+
+    public ASTType getType() {
+        return type;
+    }
+
+    public ASTType getAnnotation() {
+        return annotation;
+    }
 }
