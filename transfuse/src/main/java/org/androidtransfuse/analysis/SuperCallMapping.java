@@ -13,19 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse;
+package org.androidtransfuse.analysis;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.androidtransfuse.adapter.ASTType;
+
+import java.util.List;
 
 /**
  * @author John Ericksen
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Plugin {
+public class SuperCallMapping {
+    private final String methodName;
+    private final List<ASTType> parameters;
 
-    Class<? extends TransfusePlugin> value();
+    public SuperCallMapping(String methodName, List<ASTType> parameters) {
+        this.parameters = parameters;
+        this.methodName = methodName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public List<ASTType> getParameters() {
+        return parameters;
+    }
 }

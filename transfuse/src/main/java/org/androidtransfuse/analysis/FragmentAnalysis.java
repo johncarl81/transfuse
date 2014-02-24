@@ -15,8 +15,9 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.sun.codemodel.JCodeModel;
-import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
@@ -28,7 +29,6 @@ import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.FragmentLayoutGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
-import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
@@ -38,7 +38,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import java.lang.annotation.Annotation;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
@@ -65,8 +64,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory;
     private final FragmentLayoutGenerator fragmentLayoutGenerator;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
-    private final JCodeModel codeModel;
-    private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
+    private final ComponentAnalysis componentAnalysis;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -87,8 +85,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
                             FragmentLayoutGenerator fragmentLayoutGenerator,
                             ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                            JCodeModel codeModel,
-                            SuperGenerator.SuperGeneratorFactory superGeneratorFactory) {
+                            ComponentAnalysis componentAnalysis) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -107,8 +104,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionGeneratorFactory = injectionGeneratorFactory;
         this.fragmentLayoutGenerator = fragmentLayoutGenerator;
         this.scopesGenerationFactory = scopesGenerationFactory;
-        this.codeModel = codeModel;
-        this.superGeneratorFactory = superGeneratorFactory;
+        this.componentAnalysis = componentAnalysis;
     }
 
     @Override
@@ -127,17 +123,18 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
-            fragmentDescriptor = new ComponentDescriptor(astType, fragmentType, fragmentClassName);
+            fragmentDescriptor = new ComponentDescriptor(astType, fragmentType, fragmentClassName, context);
+
+            componentAnalysis.setupGenerators(fragmentDescriptor, fragmentType, Fragment.class);
 
             //application generation profile
-            setupFragmentProfile(fragmentDescriptor, astType, fragmentType, context);
+            setupFragmentProfile(fragmentDescriptor, astType, fragmentType);
         }
 
         return fragmentDescriptor;
     }
 
-    private void setupFragmentProfile(ComponentDescriptor fragmentDescriptor, ASTType astType, ASTType fragmentType, AnalysisContext context) {
-
+    private void setupFragmentProfile(ComponentDescriptor fragmentDescriptor, ASTType astType, ASTType fragmentType) {
         ASTMethod onCreateViewMethod = getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE);
 
         fragmentDescriptor.getGenerators().add(injectionGeneratorFactory.build(onCreateViewMethod, astType));
@@ -145,50 +142,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         fragmentDescriptor.getGenerators().add(fragmentLayoutGenerator);
 
-        fragmentDescriptor.setAnalysisContext(context);
-        fragmentDescriptor.getGenerateFirst().add(new MethodSignature(getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE)));
 
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnCreate.class, "onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE));
-        //onActivityCreated
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnActivityCreated.class, "onActivityCreated", AndroidLiterals.BUNDLE));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onActivityCreated", AndroidLiterals.BUNDLE)));
-        //onStart
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnStart.class, "onStart"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onStart")));
-        //onResume
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnResume.class, "onResume"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onResume")));
-        //onPause
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnPause.class, "onPause"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onPause")));
-        //onStop
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnStop.class, "onStop"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onStop")));
-        //onDestroyView
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnDestroyView.class, "onDestroyView"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDestroyView")));
-        //onDestroy
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnDestroy.class, "onDestroy"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDestroy")));
-        //onDetach
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnDetach.class, "onDetach"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDetach")));
-        //onLowMemory
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onLowMemory")));
-        //onActivityResult
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
-
-        //onConfigurationChanged
-        fragmentDescriptor.getGenerators().add(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION));
-        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION)));
-
-        if (fragmentType.extendsFrom(AndroidLiterals.LIST_FRAGMENT)) {
-            ASTMethod onListItemClickMethod = getASTMethod(AndroidLiterals.LIST_ACTIVITY, "onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG);
-            fragmentDescriptor.getGenerators().add(
-                    componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class), onListItemClickMethod, getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE))
-            );
-        }
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
@@ -202,13 +156,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                 getASTMethod("onPause")
         ));
 
-    }
-
-    private org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
-        ASTMethod method = getASTMethod(methodName, args);
-        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
-
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {

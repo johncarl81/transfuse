@@ -30,6 +30,7 @@ import org.androidtransfuse.util.AndroidLiterals;
 public class ServicePlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {
+        repository.component(Service.class).method("onCreate").event(OnCreate.class).registration();
         repository.component(Service.class).method("onDestroy").event(OnDestroy.class);
         repository.component(Service.class).method("onLowMemory").event(OnLowMemory.class);
         repository.component(Service.class).method("onRebind", AndroidLiterals.INTENT).event(OnRebind.class);

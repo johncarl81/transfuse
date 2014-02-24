@@ -106,6 +106,16 @@ public class ComponentBuilder {
             repository.addEvent(componentAnnotation, componentType, new EventMapping(methodName, parameters, eventAnnotation));
             return this;
         }
+
+        public MethodBuilder superCall(){
+            repository.addSuperCall(componentAnnotation, componentType, methodName, parameters);
+            return this;
+        }
+
+        public MethodBuilder registration() {
+            repository.addRegistration(componentAnnotation, componentType, methodName, parameters);
+            return this;
+        }
     }
 
     public class MappingBuilder {

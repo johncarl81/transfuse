@@ -35,13 +35,18 @@ public class ComponentDescriptor {
     private final PackageClass packageClass;
     private final List<Generation> generators = new ArrayList<Generation>();
     private final List<MethodSignature> generateFirst = new ArrayList<MethodSignature>();
-    private AnalysisContext analysisContext;
+    private final AnalysisContext analysisContext;
     private InjectionNode rootInjectionNode;
 
     public ComponentDescriptor(ASTType target, ASTType componentType, PackageClass packageClass) {
+        this(target, componentType, packageClass, null);
+    }
+
+    public ComponentDescriptor(ASTType target, ASTType componentType, PackageClass packageClass, AnalysisContext analysisContext) {
         this.target = target;
         this.packageClass = packageClass;
         this.componentType = componentType;
+        this.analysisContext = analysisContext;
     }
 
     public Collection<Generation> getGenerators() {
@@ -54,10 +59,6 @@ public class ComponentDescriptor {
 
     public ASTType getTarget() {
         return target;
-    }
-
-    public void setAnalysisContext(AnalysisContext analysisContext) {
-        this.analysisContext = analysisContext;
     }
 
     public AnalysisContext getAnalysisContext() {

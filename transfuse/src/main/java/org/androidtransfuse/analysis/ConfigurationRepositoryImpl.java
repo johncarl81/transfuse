@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import org.androidtransfuse.ComponentBuilder;
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.EventMapping;
@@ -35,27 +37,50 @@ import java.util.*;
 public class ConfigurationRepositoryImpl implements ConfigurationRepository{
 
     private final ASTClassFactory astClassFactory;
-    private final Map<Matcher<AnnotatedType>, List<EventMapping>> events = new HashMap<Matcher<AnnotatedType>, List<EventMapping>>();
-    private final Map<Matcher<AnnotatedType>, List<InjectionMapping>> mappings = new HashMap<Matcher<AnnotatedType>, List<InjectionMapping>>();
-    private final Map<Matcher<AnnotatedType>, Set<Class<?>>> callThroughEvents = new HashMap<Matcher<AnnotatedType>, Set<Class<?>>>();
-    private final Map<Matcher<AnnotatedType>, Map<ASTType, String>> listeners = new HashMap<Matcher<AnnotatedType>, Map<ASTType, String>>();
+
+    private final Map<Matcher<AnnotatedType>, Configuration> configurations = new HashMap<Matcher<AnnotatedType>, Configuration>();
+
+    private static class Configuration{
+        private final List<EventMapping> events = new ArrayList<EventMapping>();
+        private final List<InjectionMapping> mappings = new ArrayList<InjectionMapping>();
+        private final List<SuperCallMapping> superCalls = new ArrayList<SuperCallMapping>();
+        private final Set<Class<?>> callThroughEvents = new HashSet<Class<?>>();
+        private final Map<ASTType, String> listeners = new HashMap<ASTType, String>();
+        private Registration registraion = null;
+    }
 
     @Inject
     public ConfigurationRepositoryImpl(ASTClassFactory astClassFactory) {
         this.astClassFactory = astClassFactory;
     }
 
-    public List<EventMapping> getEvents(ASTType type, Class<? extends Annotation> annotation){
-        List<EventMapping> matched = new ArrayList<EventMapping>();
+    private List<Configuration> findConfigurations(ASTType type, Class<? extends Annotation> annotation){
         AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
-
-        for (Map.Entry<Matcher<AnnotatedType>, List<EventMapping>> eventEntry : events.entrySet()) {
-            if(eventEntry.getKey().matches(signature)){
-                matched.addAll(eventEntry.getValue());
+        List<Configuration> matched = new ArrayList<Configuration>();
+        for (Map.Entry<Matcher<AnnotatedType>,Configuration> configurationEntry : configurations.entrySet()) {
+            if(configurationEntry.getKey().matches(signature)){
+                matched.add(configurationEntry.getValue());
             }
         }
-
         return matched;
+    }
+
+    private Configuration getConfiguration(ASTType type, Class<? extends Annotation> annotation){
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(annotation));
+        if(!configurations.containsKey(annotatedTypeMatcher)){
+            configurations.put(annotatedTypeMatcher, new Configuration());
+        }
+        return configurations.get(annotatedTypeMatcher);
+    }
+
+    @Override
+    public void addRegistration(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters) {
+        getConfiguration(componentType, componentAnnotation).registraion = new Registration(methodName, parameters);
+    }
+
+    @Override
+    public void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters) {
+        getConfiguration(componentType, componentAnnotation).superCalls.add(new SuperCallMapping(methodName, parameters));
     }
 
     @Override
@@ -65,81 +90,75 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
 
     @Override
     public void addEvent(Class<? extends Annotation> componentType, ASTType type, EventMapping eventMapping) {
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
-
-        if(!events.containsKey(annotatedTypeMatcher)){
-            events.put(annotatedTypeMatcher, new ArrayList<EventMapping>());
-        }
-        events.get(annotatedTypeMatcher).add(eventMapping);
+        getConfiguration(type, componentType).events.add(eventMapping);
     }
 
-    public void addMapping(Class<? extends Annotation> componentType, ASTType type, InjectionMapping eventMapping) {
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
-
-        if(!mappings.containsKey(annotatedTypeMatcher)){
-            mappings.put(annotatedTypeMatcher, new ArrayList<InjectionMapping>());
-        }
-        mappings.get(annotatedTypeMatcher).add(eventMapping);
+    public void addMapping(Class<? extends Annotation> componentType, ASTType type, InjectionMapping injectionMapping) {
+        getConfiguration(type, componentType).mappings.add(injectionMapping);
     }
 
     @Override
     public void addCallThroughEvent(Class<? extends Annotation> componentType, ASTType type, Class<?> callThroughEventClass) {
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
-
-        if(!callThroughEvents.containsKey(annotatedTypeMatcher)){
-            callThroughEvents.put(annotatedTypeMatcher, new HashSet<Class<?>>());
-        }
-        callThroughEvents.get(annotatedTypeMatcher).add(callThroughEventClass);
+        getConfiguration(type, componentType).callThroughEvents.add(callThroughEventClass);
     }
 
     @Override
     public void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod) {
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
+        getConfiguration(type, componentType).listeners.put(listenerType, listenerMethod);
+    }
 
-        if(!listeners.containsKey(annotatedTypeMatcher)){
-            listeners.put(annotatedTypeMatcher, new HashMap<ASTType, String>());
-        }
-        listeners.get(annotatedTypeMatcher).put(listenerType, listenerMethod);
+    public List<EventMapping> getEvents(ASTType type, Class<? extends Annotation> annotation){
+        return FluentIterable.from(findConfigurations(type, annotation))
+                .transformAndConcat(new Function<Configuration, Iterable<EventMapping>>() {
+                    public Iterable<EventMapping> apply(Configuration configuration) {
+                        return configuration.events;
+                    }
+                }).toList();
     }
 
     public List<InjectionMapping> getMappings(ASTType type, Class<? extends Annotation> annotation) {
-        List<InjectionMapping> matched = new ArrayList<InjectionMapping>();
-        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
-
-        for (Map.Entry<Matcher<AnnotatedType>, List<InjectionMapping>> eventEntry : mappings.entrySet()) {
-            if(eventEntry.getKey().matches(signature)){
-                matched.addAll(eventEntry.getValue());
-            }
-        }
-
-        return matched;
+        return FluentIterable.from(findConfigurations(type, annotation))
+                .transformAndConcat(new Function<Configuration, Iterable<InjectionMapping>>() {
+                    public Iterable<InjectionMapping> apply(Configuration configuration) {
+                        return configuration.mappings;
+                    }
+                }).toList();
     }
 
     public Map<ASTType, String> getListeners(ASTType type, Class<? extends Annotation> annotation) {
         Map<ASTType, String> matchedListeners = new HashMap<ASTType, String>();
 
-        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
-
-        for (Map.Entry<Matcher<AnnotatedType>, Map<ASTType, String>> eventEntry : listeners.entrySet()) {
-            if(eventEntry.getKey().matches(signature)){
-                matchedListeners.putAll(eventEntry.getValue());
-            }
+        for (Configuration configuration : findConfigurations(type, annotation)) {
+            matchedListeners.putAll(configuration.listeners);
         }
 
         return matchedListeners;
     }
 
     public Set<Class<?>> getCallThroughClasses(ASTType type, Class<? extends Annotation> annotation) {
-        Set<Class<?>> matched = new HashSet<Class<?>>();
+        return FluentIterable.from(findConfigurations(type, annotation))
+                .transformAndConcat(new Function<Configuration, Iterable<Class<?>>>() {
+                    public Iterable<Class<?>> apply(Configuration configuration) {
+                        return configuration.callThroughEvents;
+                    }
+                }).toSet();
+    }
 
-        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
+    public List<SuperCallMapping> getSuperCalls(ASTType type, Class<? extends Annotation> annotation){
+        return FluentIterable.from(findConfigurations(type, annotation))
+                .transformAndConcat(new Function<Configuration, Iterable<SuperCallMapping>>() {
+                    public Iterable<SuperCallMapping> apply(Configuration configuration) {
+                        return configuration.superCalls;
+                    }
+                }).toList();
+    }
 
-        for (Map.Entry<Matcher<AnnotatedType>, Set<Class<?>>> eventEntry : callThroughEvents.entrySet()) {
-            if(eventEntry.getKey().matches(signature)){
-                matched.addAll(eventEntry.getValue());
+    public Registration getRegistration(ASTType type, Class<? extends Annotation> annotation){
+        for(Configuration configuration : findConfigurations(type, annotation)){
+            if(configuration.registraion != null){
+                return configuration.registraion;
             }
         }
-
-        return matched;
+        return null;
     }
 }

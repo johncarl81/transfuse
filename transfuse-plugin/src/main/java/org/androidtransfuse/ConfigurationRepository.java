@@ -18,6 +18,7 @@ package org.androidtransfuse;
 import org.androidtransfuse.adapter.ASTType;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -33,4 +34,8 @@ public interface ConfigurationRepository {
     void addCallThroughEvent(Class<? extends Annotation> componentType, ASTType type, Class<?> callThroughEventClass);
 
     void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod);
+
+    void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters);
+
+    void addRegistration(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters);
 }

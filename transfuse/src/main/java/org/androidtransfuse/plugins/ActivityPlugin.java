@@ -37,17 +37,23 @@ public class ActivityPlugin implements TransfusePlugin{
 
     @Override
     public void run(ConfigurationRepository repository) {
-        repository.component(Activity.class).method("onDestroy").event(OnDestroy.class);
-        repository.component(Activity.class).method("onPause").event(OnPause.class);
-        repository.component(Activity.class).method("onRestart").event(OnRestart.class);
-        repository.component(Activity.class).method("onResume").event(OnResume.class);
-        repository.component(Activity.class).method("onStart").event(OnStart.class);
-        repository.component(Activity.class).method("onStop").event(OnStop.class);
-        repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class);
-        repository.component(Activity.class).method("onPostCreate", AndroidLiterals.BUNDLE).event(OnPostCreate.class);
+
+        repository.component(Activity.class).method("onCreate", AndroidLiterals.BUNDLE)
+                .event(OnCreate.class)
+                .superCall()
+                .registration();
+        repository.component(Activity.class).method("onDestroy").event(OnDestroy.class).superCall();
+        repository.component(Activity.class).method("onPause").event(OnPause.class).superCall();
+        repository.component(Activity.class).method("onRestart").event(OnRestart.class).superCall();
+        repository.component(Activity.class).method("onResume").event(OnResume.class).superCall();
+        repository.component(Activity.class).method("onStart").event(OnStart.class).superCall();
+        repository.component(Activity.class).method("onStop").event(OnStop.class).superCall();
+        repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class).superCall();
+        repository.component(Activity.class).method("onPostCreate", AndroidLiterals.BUNDLE).event(OnPostCreate.class).superCall();
         repository.component(Activity.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
-        repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class);
-        repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class);
+        repository.component(Activity.class).method("onNewIntent", AndroidLiterals.INTENT).event(OnNewIntent.class);
+        repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class).superCall();
+        repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class).superCall();
         repository.component(Activity.class).extending(AndroidLiterals.LIST_ACTIVITY)
                 .method("onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG).event(OnListItemClick.class);
 

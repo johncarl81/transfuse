@@ -23,11 +23,9 @@ import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.BroadcastReceiver;
-import org.androidtransfuse.annotations.OnReceive;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.BroadcastReceiverManifestEntryGenerator;
-import org.androidtransfuse.experiment.generators.MethodCallbackGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
@@ -37,7 +35,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import java.lang.annotation.Annotation;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
@@ -56,6 +53,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private final ASTElementFactory astElementFactory;
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
+    private final ComponentAnalysis componentAnalysis;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
@@ -66,7 +64,9 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ComponentBuilderFactory componentBuilderFactory,
                                      BroadcastReceiverManifestEntryGenerator manifestEntryGenerator,
                                      ASTElementFactory astElementFactory,
-                                     OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory, ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory) {
+                                     OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
+                                     ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
+                                     ComponentAnalysis componentAnalysis) {
         this.astClassFactory = astClassFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
@@ -77,6 +77,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         this.astElementFactory = astElementFactory;
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
         this.scopesGenerationFactory = scopesGenerationFactory;
+        this.componentAnalysis = componentAnalysis;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -94,9 +95,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiverAnnotation.name());
 
             TypeMirror type = getTypeMirror(broadcastReceiverAnnotation, "type");
-            ASTType receiverType = buildReceiverType(type);
-
-            receiverDescriptor = new ComponentDescriptor(astType, receiverType, receiverClassName);
+            ASTType receiverType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.BROADCAST_RECEIVER : type.accept(astTypeBuilderVisitor, null);
 
             InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
             if(type != null) {
@@ -110,26 +109,18 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(injectionNodeBuilderRepository);
 
+            receiverDescriptor = new ComponentDescriptor(astType, receiverType, receiverClassName, analysisContext);
+
             receiverDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT)));
 
             receiverDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT), astType));
 
-            receiverDescriptor.getGenerators().add(buildEventMethod(OnReceive.class, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
-
-            receiverDescriptor.setAnalysisContext(analysisContext);
+            componentAnalysis.setupGenerators(receiverDescriptor, receiverType, BroadcastReceiver.class);
         }
 
         receiverDescriptor.getGenerators().add(manifestEntryGenerator);
 
         return receiverDescriptor;
-    }
-
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
-
-        ASTMethod method = getASTMethod(methodName, args);
-        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
-
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
@@ -138,14 +129,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
     private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
         return astElementFactory.findMethod(type, methodName, args);
-    }
-
-    private ASTType buildReceiverType(TypeMirror type) {
-        if (type != null && !type.toString().equals("java.lang.Object")) {
-            return type.accept(astTypeBuilderVisitor, null);
-        } else {
-            return AndroidLiterals.BROADCAST_RECEIVER;
-        }
     }
 
     private PackageClass buildPackageClass(ASTType astType, String className) {

@@ -17,20 +17,25 @@ package org.androidtransfuse.plugins;
 
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.annotations.BroadcastReceiver;
+import org.androidtransfuse.annotations.OnReceive;
 import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.util.AndroidLiterals;
+
+import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
 @Bootstrap
-public class ApplicationPlugin implements TransfusePlugin{
+public class BroadcastReceiverPlugin implements TransfusePlugin{
+
+    @Inject
+    InjectionBindingBuilder injectionBindingBuilder;
+
     @Override
     public void run(ConfigurationRepository repository) {
-        repository.component(Application.class).method("onCreate").event(OnCreate.class).superCall().registration();
-        repository.component(Application.class).method("onLowMemory").event(OnLowMemory.class);
-        repository.component(Application.class).method("onTerminate").event(OnTerminate.class);
-        repository.component(Application.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class);
+        repository.component(BroadcastReceiver.class).method("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT).event(OnReceive.class).registration();
     }
 }

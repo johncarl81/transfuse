@@ -17,8 +17,9 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.*;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
@@ -29,7 +30,6 @@ import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.*;
 import org.androidtransfuse.gen.GeneratorFactory;
-import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
@@ -40,7 +40,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
@@ -55,9 +54,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final AnalysisContextFactory analysisContextFactory;
-    private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
-    private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
@@ -69,21 +66,19 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final Provider<ActivityManifestEntryGenerator> manifestGeneratorProvider;
     private final LayoutGenerator layoutGenerator;
     private final LayoutHandlerGenerator layoutHandlerGenerator;
-    private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
     private final WindowFeatureGenerator windowFeatureGenerator;
     private final GeneratorFactory generatorFactory;
     private final ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listerRegistrationGeneratorFactory;
     private final NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory nonConfigurationInstanceGeneratorFactory;
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
+    private final ComponentAnalysis componentAnalysis;
 
     @Inject
     public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             AnalysisContextFactory analysisContextFactory,
-                            ASTClassFactory astClassFactory,
                             ASTElementFactory astElementFactory,
-                            ComponentBuilderFactory componentBuilderFactory,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
                             ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
@@ -95,19 +90,17 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             Provider<ActivityManifestEntryGenerator> manifestGeneratorProvider,
                             LayoutGenerator layoutGenerator,
                             LayoutHandlerGenerator layoutHandlerGenerator,
-                            SuperGenerator.SuperGeneratorFactory superGeneratorFactory,
                             WindowFeatureGenerator windowFeatureGenerator,
                             GeneratorFactory generatorFactory,
                             ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listerRegistrationGeneratorFactory,
                             NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory nonConfigurationInstanceGeneratorFactory,
                             OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
-                            ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory) {
+                            ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
+                            ComponentAnalysis componentAnalysis) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.analysisContextFactory = analysisContextFactory;
-        this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
-        this.componentBuilderFactory = componentBuilderFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
@@ -119,13 +112,13 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.manifestGeneratorProvider = manifestGeneratorProvider;
         this.layoutGenerator = layoutGenerator;
         this.layoutHandlerGenerator = layoutHandlerGenerator;
-        this.superGeneratorFactory = superGeneratorFactory;
         this.windowFeatureGenerator = windowFeatureGenerator;
         this.generatorFactory = generatorFactory;
         this.listerRegistrationGeneratorFactory = listerRegistrationGeneratorFactory;
         this.nonConfigurationInstanceGeneratorFactory = nonConfigurationInstanceGeneratorFactory;
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
         this.scopesGenerationFactory = scopesGenerationFactory;
+        this.componentAnalysis = componentAnalysis;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -149,18 +142,16 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
-            activityDescriptor = new ComponentDescriptor(input, activityType, activityClassName);
+            activityDescriptor = new ComponentDescriptor(input, activityType, activityClassName, context);
 
-            activityDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
             activityDescriptor.getGenerators().add(layoutGenerator);
             activityDescriptor.getGenerators().add(layoutHandlerGenerator);
             activityDescriptor.getGenerators().add(windowFeatureGenerator);
             activityDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
 
-            activityDescriptor.getGenerateFirst().add(new MethodSignature(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
             activityDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), input));
 
-            activityDescriptor.setAnalysisContext(context);
+            componentAnalysis.setupGenerators(activityDescriptor, activityType, Activity.class);
 
             for (Generation generator : getGenerators(activityType.getName())) {
                 activityDescriptor.getGenerators().add(generator);
@@ -228,7 +219,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         ImmutableSet<Generation> activityMethodGenerators = buildActivityMethodCallbackGenerators();
         methodCallbackGenerators.put(AndroidLiterals.ACTIVITY.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(AndroidLiterals.LIST_ACTIVITY.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
+        methodCallbackGenerators.put(AndroidLiterals.LIST_ACTIVITY.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(AndroidLiterals.PREFERENCE_ACTIVITY.getName(), activityMethodGenerators);
         methodCallbackGenerators.put(AndroidLiterals.ACTIVITY_GROUP.getName(), activityMethodGenerators);
 
@@ -241,61 +232,8 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     }
 
-    private ImmutableSet<Generation> buildListActivityMethodCallbackGenerators(Set<Generation> activityMethodGenerators) {
-        ImmutableSet.Builder<Generation> listActivityCallbackGenerators = ImmutableSet.builder();
-        listActivityCallbackGenerators.addAll(activityMethodGenerators);
-
-        //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
-        ASTMethod onListItemClickMethod = getASTMethod(AndroidLiterals.LIST_ACTIVITY, "onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG);
-        listActivityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class), onListItemClickMethod, getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
-
-        return listActivityCallbackGenerators.build();
-    }
-
     private ImmutableSet<Generation> buildActivityMethodCallbackGenerators() {
         ImmutableSet.Builder<Generation> activityCallbackGenerators = ImmutableSet.builder();
-        activityCallbackGenerators.add(buildEventMethod(OnCreate.class, "onCreate", AndroidLiterals.BUNDLE));
-        // onDestroy
-        activityCallbackGenerators.add(buildEventMethod(OnDestroy.class, "onDestroy"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onDestroy")));
-        // onPause
-        activityCallbackGenerators.add(buildEventMethod(OnPause.class, "onPause"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onPause")));
-        // onRestart
-        activityCallbackGenerators.add(buildEventMethod(OnRestart.class, "onRestart"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onRestart")));
-        // onResume
-        activityCallbackGenerators.add(buildEventMethod(OnResume.class, "onResume"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onResume")));
-        // onStart
-        activityCallbackGenerators.add(buildEventMethod(OnStart.class, "onStart"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onStart")));
-        // onStop
-        activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onStop")));
-        // onBackPressed
-        activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onBackPressed")));
-        // onPostCreate
-        activityCallbackGenerators.add(buildEventMethod(OnPostCreate.class, "onPostCreate", AndroidLiterals.BUNDLE));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onPostCreate", AndroidLiterals.BUNDLE)));
-        // onActivityResult
-        activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
-        // onNewIntent
-        activityCallbackGenerators.add(buildEventMethod(OnNewIntent.class, "onNewIntent", AndroidLiterals.INTENT));
-
-        // onSaveInstanceState
-        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
-        activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod, getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE)));
-
-        // onRestoreInstanceState
-        ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE);
-        activityCallbackGenerators.add(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnRestoreInstanceState.class), onRestoreInstanceState, getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
-        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE)));
 
         //extra intent factory
         activityCallbackGenerators.add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
@@ -307,14 +245,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         activityCallbackGenerators.add(nonConfigurationInstanceGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
 
         return activityCallbackGenerators.build();
-    }
-
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
-
-        ASTMethod method = getASTMethod(methodName, args);
-        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
-
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onCreate", AndroidLiterals.BUNDLE));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
