@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse;
 
+import org.androidtransfuse.adapter.ASTType;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -27,4 +29,8 @@ public interface ConfigurationRepository {
     void addEvent(Class<? extends Annotation> componentType, String type, EventMapping eventMapping);
 
     void addMapping(Class<? extends Annotation> componentType, String type, InjectionMapping eventMapping);
+
+    void addCallThroughEvent(Class<? extends Annotation> componentType, String type, Class<?> callThroughEventClass);
+
+    void addListener(Class<? extends Annotation> componentType, String type, ASTType listenerType, String listenerMethod);
 }

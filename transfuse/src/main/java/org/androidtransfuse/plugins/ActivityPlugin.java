@@ -20,6 +20,7 @@ import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.listeners.*;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -51,5 +52,21 @@ public class ActivityPlugin implements TransfusePlugin{
 
         repository.component(Activity.class).mapping(AndroidLiterals.CONTEXT).to(injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
     
+
+        repository.component(Activity.class).callThroughEvent(ActivityMenuComponent.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnKeyDownListener.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnKeyLongPressListener.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnKeyMultipleListener.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnKeyUpListener.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnTouchEventListener.class);
+        repository.component(Activity.class).callThroughEvent(ActivityOnTrackballEventListener.class);
+
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, "setOnCreateContextMenuListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
+
     }
 }

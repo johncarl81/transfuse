@@ -19,6 +19,7 @@ import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.listeners.FragmentMenuComponent;
 
 /**
  * @author John Ericksen
@@ -42,5 +43,7 @@ public class FragmentPlugin implements TransfusePlugin{
         repository.component(Fragment.class)
                 .extending("android.support.v4.app.ListFragment")
                 .method("onListItemClick", "android.widget.ListView", "android.view.View", "int", "long").event(OnListItemClick.class);
+
+        repository.component(Fragment.class).callThroughEvent(FragmentMenuComponent.class);
     }
 }

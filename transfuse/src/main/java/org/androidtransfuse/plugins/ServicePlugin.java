@@ -19,6 +19,8 @@ import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.listeners.ServiceOnStartCommand;
+import org.androidtransfuse.listeners.ServiceOnUnbind;
 
 /**
  * @author John Ericksen
@@ -33,5 +35,8 @@ public class ServicePlugin implements TransfusePlugin{
         repository.component(Service.class).method("onConfigurationChanged", "android.content.res.Configuration").event(OnConfigurationChanged.class);
         repository.component(Service.class).extending("android.app.IntentService")
                 .method("onHandleIntent", "android.content.Intent").event(OnHandleIntent.class);
+
+        repository.component(Service.class).callThroughEvent(ServiceOnStartCommand.class);
+        repository.component(Service.class).callThroughEvent(ServiceOnUnbind.class);
     }
 }

@@ -50,6 +50,15 @@ public class ComponentBuilder {
         return new MappingBuilder(type);
     }
 
+
+    public void callThroughEvent(Class<?> callThroughEventClass) {
+        repository.addCallThroughEvent(componentAnnotation, componentType, callThroughEventClass);
+    }
+
+    public void listener(ASTType listenerType, String listenerMethod) {
+        repository.addListener(componentAnnotation, componentType, listenerType, listenerMethod);
+    }
+
     public class MethodBuilder {
 
         private final String methodName;
@@ -77,5 +86,4 @@ public class ComponentBuilder {
             repository.addMapping(componentAnnotation, componentType, new InjectionMapping(type, builder));
         }
     }
-
 }

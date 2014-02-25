@@ -27,10 +27,7 @@ import org.androidtransfuse.util.matcher.Matcher;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author John Ericksen
@@ -41,6 +38,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     private final ASTClassFactory astClassFactory;
     private final Map<Matcher<AnnotatedType>, List<EventMapping>> events = new HashMap<Matcher<AnnotatedType>, List<EventMapping>>();
     private final Map<Matcher<AnnotatedType>, List<InjectionMapping>> mappings = new HashMap<Matcher<AnnotatedType>, List<InjectionMapping>>();
+    private final Map<Matcher<AnnotatedType>, Set<Class<?>>> callThroughEvents = new HashMap<Matcher<AnnotatedType>, Set<Class<?>>>();
+    private final Map<Matcher<AnnotatedType>, Map<ASTType, String>> listeners = new HashMap<Matcher<AnnotatedType>, Map<ASTType, String>>();
 
     @Inject
     public ConfigurationRepositoryImpl(ASTClassFactory astClassFactory) {
@@ -92,11 +91,67 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
         mappings.get(annotatedTypeMatcher).add(eventMapping);
     }
 
+    @Override
+    public void addCallThroughEvent(Class<? extends Annotation> componentType, String type, Class<?> callThroughEventClass) {
+        ASTType matchType = null;
+        if(type != null){
+            matchType = new ASTStringType(type);
+        }
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+
+        if(!callThroughEvents.containsKey(annotatedTypeMatcher)){
+            callThroughEvents.put(annotatedTypeMatcher, new HashSet<Class<?>>());
+        }
+        callThroughEvents.get(annotatedTypeMatcher).add(callThroughEventClass);
+    }
+
+    @Override
+    public void addListener(Class<? extends Annotation> componentType, String type, ASTType listenerType, String listenerMethod) {
+        ASTType matchType = null;
+        if(type != null){
+            matchType = new ASTStringType(type);
+        }
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+
+        if(!listeners.containsKey(annotatedTypeMatcher)){
+            listeners.put(annotatedTypeMatcher, new HashMap<ASTType, String>());
+        }
+        listeners.get(annotatedTypeMatcher).put(listenerType, listenerMethod);
+    }
+
     public List<InjectionMapping> getMappings(ASTType type, Class<? extends Annotation> annotation) {
         List<InjectionMapping> matched = new ArrayList<InjectionMapping>();
         AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
 
         for (Map.Entry<Matcher<AnnotatedType>, List<InjectionMapping>> eventEntry : mappings.entrySet()) {
+            if(eventEntry.getKey().matches(signature)){
+                matched.addAll(eventEntry.getValue());
+            }
+        }
+
+        return matched;
+    }
+
+    public Map<ASTType, String> getListeners(ASTType type, Class<? extends Annotation> annotation) {
+        Map<ASTType, String> matchedListeners = new HashMap<ASTType, String>();
+
+        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
+
+        for (Map.Entry<Matcher<AnnotatedType>, Map<ASTType, String>> eventEntry : listeners.entrySet()) {
+            if(eventEntry.getKey().matches(signature)){
+                matchedListeners.putAll(eventEntry.getValue());
+            }
+        }
+
+        return matchedListeners;
+    }
+
+    public Set<Class<?>> getCallThroughClasses(ASTType type, Class<? extends Annotation> annotation) {
+        Set<Class<?>> matched = new HashSet<Class<?>>();
+
+        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
+
+        for (Map.Entry<Matcher<AnnotatedType>, Set<Class<?>>> eventEntry : callThroughEvents.entrySet()) {
             if(eventEntry.getKey().matches(signature)){
                 matched.addAll(eventEntry.getValue());
             }
