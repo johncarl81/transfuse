@@ -18,11 +18,21 @@ package org.androidtransfuse.plugins;
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.util.AndroidLiterals;
+
+import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
+@Bootstrap
 public class ActivityPlugin implements TransfusePlugin{
+
+    @Inject
+    InjectionBindingBuilder injectionBindingBuilder;
+
     @Override
     public void run(ConfigurationRepository repository) {
         repository.component(Activity.class).method("onDestroy").event(OnDestroy.class);
@@ -38,5 +48,8 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onRestoreInstanceState", "android.os.Bundle").event(OnRestoreInstanceState.class);
         repository.component(Activity.class).extending("android.app.ListActivity")
                 .method("onListItemClick", "android.widget.ListView", "android.view.View", "int", "long").event(OnListItemClick.class);
+
+        repository.component(Activity.class).mapping(AndroidLiterals.CONTEXT).to(injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
+    
     }
 }

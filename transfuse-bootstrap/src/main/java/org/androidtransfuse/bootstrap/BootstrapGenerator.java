@@ -75,14 +75,21 @@ public class BootstrapGenerator {
 
             injectorBlock.add(JExpr.invoke(Bootstraps.BootstrapsInjectorAdapter.SCOPE_SINGLETONS_METHOD).arg(scopesVar));
 
-            //Setup injection aspect
-            injectionNode.addAspect(VariableBuilder.class, variableBuilderFactory.buildVariableBuilder(input));
+            injectorBlock.invoke(Bootstraps.BOOTSTRAPS_INJECTOR_METHOD).arg(scopesVar).arg(input);
 
-            injectionGenerator.buildFragment(injectorBlock,
-                    instantiationStrategyFactory.buildMethodStrategy(injectorBlock, scopesVar),
+            JMethod providedScopesMethod = innerInjectorClass.method(JMod.PUBLIC, codeModel.VOID, Bootstraps.BOOTSTRAPS_INJECTOR_METHOD);
+            JVar providedScopesVar = providedScopesMethod.param(Scopes.class, variableNamer.generateName(Scopes.class));
+            JVar provided = providedScopesMethod.param(nodeClass, variableNamer.generateName(nodeClass));
+            JBlock providedInjectorBlock = providedScopesMethod.body();
+
+            //Setup injection aspect
+            injectionNode.addAspect(VariableBuilder.class, variableBuilderFactory.buildVariableBuilder(provided));
+
+            injectionGenerator.buildFragment(providedInjectorBlock,
+                    instantiationStrategyFactory.buildMethodStrategy(providedInjectorBlock, providedScopesVar),
                     innerInjectorClass,
                     injectionNode,
-                    scopesVar);
+                    providedScopesVar);
 
             // add instance to map
             return innerInjectorClass;

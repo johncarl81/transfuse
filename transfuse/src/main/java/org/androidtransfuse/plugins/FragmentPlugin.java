@@ -18,10 +18,12 @@ package org.androidtransfuse.plugins;
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.bootstrap.Bootstrap;
 
 /**
  * @author John Ericksen
  */
+@Bootstrap
 public class FragmentPlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {

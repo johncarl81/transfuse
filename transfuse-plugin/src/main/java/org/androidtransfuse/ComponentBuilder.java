@@ -15,6 +15,9 @@
  */
 package org.androidtransfuse;
 
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -43,6 +46,10 @@ public class ComponentBuilder {
         return this;
     }
 
+    public MappingBuilder mapping(ASTType type) {
+        return new MappingBuilder(type);
+    }
+
     public class MethodBuilder {
 
         private final String methodName;
@@ -56,6 +63,18 @@ public class ComponentBuilder {
         public MethodBuilder event(Class<? extends Annotation> eventAnnotation) {
             repository.addEvent(componentAnnotation, componentType, new EventMapping(methodName, parameters, eventAnnotation));
             return this;
+        }
+    }
+
+    public class MappingBuilder {
+        private ASTType type;
+
+        public MappingBuilder(ASTType type) {
+            this.type = type;
+        }
+
+        public void to(InjectionNodeBuilder builder){
+            repository.addMapping(componentAnnotation, componentType, new InjectionMapping(type, builder));
         }
     }
 

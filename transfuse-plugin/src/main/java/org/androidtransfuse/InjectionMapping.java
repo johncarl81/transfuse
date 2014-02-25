@@ -15,16 +15,26 @@
  */
 package org.androidtransfuse;
 
-import java.lang.annotation.Annotation;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 
 /**
  * @author John Ericksen
  */
-public interface ConfigurationRepository {
+public class InjectionMapping {
+    private ASTType type;
+    private InjectionNodeBuilder injectionNodeBuilder;
 
-    ComponentBuilder component(Class<? extends Annotation> annotation);
+    public InjectionMapping(ASTType type, InjectionNodeBuilder injectionNodeBuilder) {
+        this.type = type;
+        this.injectionNodeBuilder = injectionNodeBuilder;
+    }
 
-    void addEvent(Class<? extends Annotation> componentType, String type, EventMapping eventMapping);
+    public org.androidtransfuse.adapter.ASTType getType() {
+        return type;
+    }
 
-    void addMapping(Class<? extends Annotation> componentType, String type, InjectionMapping eventMapping);
+    public InjectionNodeBuilder getInjectionNodeBuilder() {
+        return injectionNodeBuilder;
+    }
 }

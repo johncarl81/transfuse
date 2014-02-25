@@ -16,6 +16,7 @@
 package org.androidtransfuse.bootstrap;
 
 import org.androidtransfuse.scope.ScopeKey;
+import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import java.lang.annotation.Annotation;
@@ -46,5 +47,10 @@ public class BootstrapInjectorReflectionProxy<T> implements Bootstraps.Bootstrap
     @Override
     public void inject(T input) {
         injector.inject(input);
+    }
+
+    @Override
+    public void inject(Scopes scopes, T input) {
+        injector.inject(scopes, input);
     }
 }

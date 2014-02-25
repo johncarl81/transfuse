@@ -21,10 +21,12 @@ import org.androidtransfuse.annotations.Application;
 import org.androidtransfuse.annotations.OnConfigurationChanged;
 import org.androidtransfuse.annotations.OnLowMemory;
 import org.androidtransfuse.annotations.OnTerminate;
+import org.androidtransfuse.bootstrap.Bootstrap;
 
 /**
  * @author John Ericksen
  */
+@Bootstrap
 public class ApplicationPlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {

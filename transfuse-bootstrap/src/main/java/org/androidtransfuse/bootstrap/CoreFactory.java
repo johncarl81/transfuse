@@ -44,6 +44,7 @@ import org.androidtransfuse.gen.variableDecorator.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
+import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.*;
 import org.androidtransfuse.validation.Validator;
 
@@ -211,6 +212,7 @@ public class CoreFactory {
 
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
+        scopeRepository.putType(Scopes.class, new ScopesInjectionNodeBuilder(buildAnalyser(), typedExpressionFactory));
 
         return scopeRepository;
     }

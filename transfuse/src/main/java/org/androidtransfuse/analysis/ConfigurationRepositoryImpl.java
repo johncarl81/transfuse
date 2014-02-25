@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis;
 import org.androidtransfuse.ComponentBuilder;
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.EventMapping;
+import org.androidtransfuse.InjectionMapping;
 import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -39,6 +40,7 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
 
     private final ASTClassFactory astClassFactory;
     private final Map<Matcher<AnnotatedType>, List<EventMapping>> events = new HashMap<Matcher<AnnotatedType>, List<EventMapping>>();
+    private final Map<Matcher<AnnotatedType>, List<InjectionMapping>> mappings = new HashMap<Matcher<AnnotatedType>, List<InjectionMapping>>();
 
     @Inject
     public ConfigurationRepositoryImpl(ASTClassFactory astClassFactory) {
@@ -75,5 +77,31 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
             events.put(annotatedTypeMatcher, new ArrayList<EventMapping>());
         }
         events.get(annotatedTypeMatcher).add(eventMapping);
+    }
+
+    public void addMapping(Class<? extends Annotation> componentType, String type, InjectionMapping eventMapping) {
+        ASTType matchType = null;
+        if(type != null){
+            matchType = new ASTStringType(type);
+        }
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+
+        if(!mappings.containsKey(annotatedTypeMatcher)){
+            mappings.put(annotatedTypeMatcher, new ArrayList<InjectionMapping>());
+        }
+        mappings.get(annotatedTypeMatcher).add(eventMapping);
+    }
+
+    public List<InjectionMapping> getMappings(ASTType type, Class<? extends Annotation> annotation) {
+        List<InjectionMapping> matched = new ArrayList<InjectionMapping>();
+        AnnotatedType signature = new AnnotatedType(type, astClassFactory.getType(annotation));
+
+        for (Map.Entry<Matcher<AnnotatedType>, List<InjectionMapping>> eventEntry : mappings.entrySet()) {
+            if(eventEntry.getKey().matches(signature)){
+                matched.addAll(eventEntry.getValue());
+            }
+        }
+
+        return matched;
     }
 }

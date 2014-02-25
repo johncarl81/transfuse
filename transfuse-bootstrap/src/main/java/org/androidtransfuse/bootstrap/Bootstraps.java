@@ -70,6 +70,8 @@ public final class Bootstraps {
 
         void inject(T input);
 
+        void inject(Scopes scopes, T input);
+
         <S> BootstrapInjector<T> add(Class<? extends Annotation> scope, ScopeKey<S> bindType, S instance);
     }
 
