@@ -21,14 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation representation of the Android Manifest uses-permission XML tag.  Defining this annotation on a
- * `@TransfuseModule` will trigger Transfuse to generate the corresponding entry in the Android Manifest
+ * A collection of +@UsesPermission+ annotations
  *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UsesPermission {
-    String name();
-    int maxSdkVersion() default -1;
+public @interface UsesPermissions {
+    UsesPermission[] value();
 }

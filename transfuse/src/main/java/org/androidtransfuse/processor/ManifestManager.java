@@ -78,9 +78,8 @@ public class ManifestManager {
         }
     }
 
-    public void addUsesPermission(String permission) {
+    public void addUsesPermission(UsesPermission usesPermission) {
         try {
-            UsesPermission usesPermission = new UsesPermission(permission);
             updateMergeTags(UsesPermission.class, usesPermission);
             usesPermissions.add(usesPermission);
         } catch (MergerException e) {

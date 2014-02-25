@@ -74,6 +74,8 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         typeProcessorsBuilder.put(astClassFactory.getType(Bindings.class),
                 configurationFactory.buildConfigurationComposite(bindProcessor));
         typeProcessorsBuilder.put(astClassFactory.getType(UsesPermission.class), usesPermissionProcessor);
+        typeProcessorsBuilder.put(astClassFactory.getType(UsesPermissions.class),
+                configurationFactory.buildConfigurationComposite(usesPermissionProcessor));
         typeProcessorsBuilder.put(astClassFactory.getType(Permission.class),permissionProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(Permissions.class),
                 configurationFactory.buildConfigurationComposite(permissionProcessor));

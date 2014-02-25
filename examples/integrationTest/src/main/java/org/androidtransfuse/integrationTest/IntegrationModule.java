@@ -47,10 +47,11 @@ import java.util.Random;
         @Bind(type = LoopThree.class, to = LoopThreeImpl.class),
         @Bind(type = Proxied.class, to = ProxiedProxy.class)
 })
-@UsesPermission({
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.VIBRATE
+@UsesPermissions({
+        @UsesPermission(name = Manifest.permission.INTERNET),
+        @UsesPermission(name = Manifest.permission.ACCESS_COARSE_LOCATION),
+        @UsesPermission(name = Manifest.permission.ACCESS_FINE_LOCATION, maxSdkVersion = 20),
+        @UsesPermission(name = Manifest.permission.VIBRATE)
 })
 @DefineScope(annotation = CustomScope.class, scope = MapScope.class)
 @UsesSdk(min = 5, target = 11)

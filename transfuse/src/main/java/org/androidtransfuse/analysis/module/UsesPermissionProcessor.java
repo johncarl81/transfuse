@@ -18,10 +18,10 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.model.manifest.UsesPermission;
 import org.androidtransfuse.processor.ManifestManager;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 
 /**
  * @author John Ericksen
@@ -37,25 +37,28 @@ public class UsesPermissionProcessor implements TypeProcessor {
 
     @Override
     public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
-        String[] usesPermissions = bindAnnotation.getProperty("value", String[].class);
+        UsesPermission permission = new UsesPermission();
+        permission.setName(bindAnnotation.getProperty("name", String.class));
+        Integer maxSdkVersion = bindAnnotation.getProperty("maxSdkVersion", Integer.class);
+        if(maxSdkVersion != null && maxSdkVersion > 0){
+            permission.setMaxSdkVersion(maxSdkVersion);
+        }
 
-        return new UsesPermissionModuleConfiguration(usesPermissions);
+        return new UsesPermissionModuleConfiguration(permission);
     }
 
     private final class UsesPermissionModuleConfiguration implements ModuleConfiguration{
 
-        private final String[] usesPermissions;
+        private final UsesPermission usesPermission;
 
-        private UsesPermissionModuleConfiguration(String[] usesPermissions) {
-            this.usesPermissions = Arrays.copyOf(usesPermissions, usesPermissions.length);
+        private UsesPermissionModuleConfiguration(UsesPermission usesPermission) {
+            this.usesPermission = usesPermission;
         }
 
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
-            for (String permission : usesPermissions) {
-                manifestManager.addUsesPermission(permission);
-            }
+            manifestManager.addUsesPermission(usesPermission);
         }
     }
 }

@@ -65,6 +65,7 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
         builder.given(DefineScope.class).requires(TransfuseModule.class, "@DefineScope annotation must be accompanied by @TransfuseModule");
         builder.given(DefineScopes.class).requires(TransfuseModule.class, "@DefineScopes annotation must be accompanied by @TransfuseModule");
         builder.given(UsesPermission.class).requires(TransfuseModule.class, "@UsesPermission annotation must be accompanied by @TransfuseModule");
+        builder.given(UsesPermissions.class).requires(TransfuseModule.class, "@UsesPermissions annotation must be accompanied by @TransfuseModule");
         builder.given(UsesSdk.class).requires(TransfuseModule.class, "@UsesSdk annotation must be accompanied by @TransfuseModule");
 
         builder.given(Provides.class).requires(TransfuseModule.class, "@Provides annotation must be accompanied by @TransfuseModule");

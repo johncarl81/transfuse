@@ -23,20 +23,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  * attributes:
  * android:name="string"
+ * android:maxSdkVersion="integer"
  *
  * @author John Ericksen
  */
 public class UsesPermission extends Mergeable implements Comparable<UsesPermission> {
 
     private String name;
-
-    public UsesPermission() {
-        //empty bean constructor
-    }
-
-    public UsesPermission(String name) {
-        this.name = name;
-    }
+    private Integer maxSdkVersion;
 
     @Merge("n")
     @XmlAttribute(name = "name", namespace = ManifestNamespaceMapper.ANDROID_URI)
@@ -46,6 +40,16 @@ public class UsesPermission extends Mergeable implements Comparable<UsesPermissi
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Merge("v")
+    @XmlAttribute(name = "maxSdkVersion", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public Integer getMaxSdkVersion() {
+        return maxSdkVersion;
+    }
+
+    public void setMaxSdkVersion(Integer maxSdkVersion) {
+        this.maxSdkVersion = maxSdkVersion;
     }
 
     @Override
