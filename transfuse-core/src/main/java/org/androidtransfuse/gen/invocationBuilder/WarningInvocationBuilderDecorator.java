@@ -18,10 +18,7 @@ package org.androidtransfuse.gen.invocationBuilder;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
-import org.androidtransfuse.adapter.ASTConstructor;
-import org.androidtransfuse.adapter.ASTField;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.validation.Validator;
 
@@ -56,7 +53,17 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
 
     @Override
     public JStatement buildFieldSet(boolean cast, ASTField field, TypedExpression expression, TypedExpression containingExpression) {
-        validator.warn("Reflection is required to modify private fields, consider using non-private.").element(field).build();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Reflection is required to modify ");
+        if(field.getAccessModifier().equals(ASTAccessModifier.PRIVATE)){
+            builder.append("private ");
+        }
+        if(field.isFinal()){
+            builder.append("final ");
+        }
+        builder.append("fields, consider using non-private.");
+
+        validator.warn(builder.toString()).element(field).build();
 
         return delegate.buildFieldSet(cast, field, expression, containingExpression);
     }
