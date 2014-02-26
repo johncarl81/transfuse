@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.VariableElement;
 
 /**
@@ -57,5 +58,10 @@ public class ASTElementField extends ASTElementBase implements ASTField {
     @Override
     public Object getConstantValue() {
         return variableElement.getConstantValue();
+    }
+
+    @Override
+    public boolean isTransient() {
+        return variableElement.getModifiers().contains(Modifier.TRANSIENT);
     }
 }

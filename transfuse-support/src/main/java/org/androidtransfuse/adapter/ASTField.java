@@ -44,6 +44,13 @@ public interface ASTField extends ASTBase {
     boolean isFinal();
 
     /**
+     * Determines if the current field is transient;
+     *
+     * @return field is transient
+     */
+    boolean isTransient();
+
+    /**
      * Supplies the constant value for this field (if one exists)
      * <p/>
      * IE: static String value = "constant"

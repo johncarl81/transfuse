@@ -80,6 +80,11 @@ public class ASTClassField implements ASTField {
     }
 
     @Override
+    public boolean isTransient() {
+        return Modifier.isTransient(field.getModifiers());
+    }
+
+    @Override
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
