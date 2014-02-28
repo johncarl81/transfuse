@@ -70,7 +70,7 @@ public class UsesFeature extends Mergeable implements Identified {
 
     @XmlTransient
     public String getIdentifier(){
-        return name;
+        return name + glEsVersion;
     }
     
 }

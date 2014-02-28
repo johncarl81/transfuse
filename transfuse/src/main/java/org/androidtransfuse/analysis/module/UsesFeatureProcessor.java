@@ -23,6 +23,9 @@ import org.androidtransfuse.processor.ManifestManager;
 
 import javax.inject.Inject;
 
+import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
+import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+
 /**
  * @author Gustavo Matias
  */
@@ -38,9 +41,9 @@ public class UsesFeatureProcessor implements TypeProcessor {
     @Override
     public ModuleConfiguration process(ASTType moduleType, ASTAnnotation permissionAnnotation) {
     	UsesFeature usesFeature = new UsesFeature();
-        usesFeature.setName(permissionAnnotation.getProperty("name", String.class));
-        usesFeature.setRequired(permissionAnnotation.getProperty("required", Boolean.class));
-        usesFeature.setGlEsVersion(permissionAnnotation.getProperty("glEsVersion", Integer.class));
+        usesFeature.setName(checkBlank(permissionAnnotation.getProperty("value", String.class)));
+        usesFeature.setRequired(checkDefault(permissionAnnotation.getProperty("required", Boolean.class), true));
+        usesFeature.setGlEsVersion(checkDefault(permissionAnnotation.getProperty("glEsVersion", Integer.class), -1));
 
         return new UsesFeatureModuleConfiguration(usesFeature);
     }

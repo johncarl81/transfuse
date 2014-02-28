@@ -19,7 +19,7 @@ package org.androidtransfuse.annotations;
  * @author Gustavo Matias
  */
 public @interface UsesFeature {
-	String value();
+	String value() default "";
 
 	boolean required() default true;
 

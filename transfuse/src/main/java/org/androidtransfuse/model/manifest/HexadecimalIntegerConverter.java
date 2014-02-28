@@ -24,11 +24,17 @@ public class HexadecimalIntegerConverter extends XmlAdapter<String, Integer> {
 
     @Override
     public Integer unmarshal(String input) throws Exception {
+        if(input == null){
+            return null;
+        }
         return Integer.decode(input);
     }
 
     @Override
     public String marshal(Integer integer) throws Exception {
+        if(integer == null){
+            return null;
+        }
         return String.format("0x%08X", integer);
     }
 }
