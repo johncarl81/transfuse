@@ -29,7 +29,7 @@ public final class AnnotationUtil {
     }
 
     public static <T> T checkDefault(T input, T defaultValue) {
-        if (input.equals(defaultValue)) {
+        if (input != null && input.equals(defaultValue)) {
             return null;
         }
         return input;
