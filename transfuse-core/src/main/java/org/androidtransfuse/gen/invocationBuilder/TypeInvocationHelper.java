@@ -57,7 +57,7 @@ public class TypeInvocationHelper {
     }
 
     public JExpression coerceType(ASTType targetType, TypedExpression typedExpression) {
-        if (targetType.equals(typedExpression.getType())) {
+        if (typedExpression.getType().inheritsFrom(targetType)) {
             return typedExpression.getExpression();
         }
         if (targetType.inheritsFrom(typedExpression.getType())) {
