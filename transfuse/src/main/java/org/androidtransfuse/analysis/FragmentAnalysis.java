@@ -151,7 +151,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         fragmentDescriptor.addGenerators(buildEventMethod(OnDestroy.class, "onDestroy"));
         //onDetach
         fragmentDescriptor.addGenerators(buildEventMethod(OnDetach.class, "onDetach"));
-        //onLowMemory
+        //onLowMemorye
         fragmentDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onActivityResult
         fragmentDescriptor.addGenerators(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
