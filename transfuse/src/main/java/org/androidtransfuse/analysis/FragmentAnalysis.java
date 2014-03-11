@@ -166,6 +166,12 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             componentBuilderFactory.buildMirroredMethodGenerator(onListItemClickMethod, false)));
         }
 
+        // onSaveInstanceState
+        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
+        fragmentDescriptor.addGenerators(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class),
+                        componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true)));
+
         fragmentDescriptor.addGenerators(listenerRegistrationGenerator);
 
         fragmentDescriptor.addRegistration(observesExpressionDecorator);
