@@ -83,6 +83,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         callThroughMapping.add(astType(FragmentMenuComponent.class));
         callThroughMapping.add(astType(ServiceOnStartCommand.class));
         callThroughMapping.add(astType(ServiceOnUnbind.class));
+        callThroughMapping.add(astType(ServiceOnHandleIntent.class));
 
         callThroughMapping.remove(null);
 
