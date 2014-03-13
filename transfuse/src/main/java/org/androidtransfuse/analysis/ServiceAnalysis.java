@@ -17,10 +17,7 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
@@ -195,6 +192,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onRebind(android.content.Intent intent)
         serviceDescriptor.addGenerators(buildEventMethod(OnRebind.class, "onRebind", AndroidLiterals.INTENT));
+        //onHandleIntent(android.content.Intent intent)
+        serviceDescriptor.addGenerators(buildEventMethod(OnHandleIntent.class, "onHandleIntent", AndroidLiterals.INTENT));
         //onTaskRemoved(Intent rootIntent)
         //serviceDescriptor.addGenerators(buildEventMethod(OnTaskRemoved.class, "onTaskRemoved", Intent.class));
 
