@@ -32,6 +32,7 @@ public final class AndroidLiterals {
     public static final ASTType BROADCAST_RECEIVER = new ASTStringType("android.content.BroadcastReceiver");
     public static final ASTType INTENT = new ASTStringType("android.content.Intent");
     public static final ASTType SERVICE = new ASTStringType("android.app.Service");
+    public static final ASTType INTENT_SERVICE = new ASTStringType("android.app.IntentService");
     public static final ASTType IBINDER = new ASTStringType("android.os.IBinder");
     public static final ASTType FRAGMENT = new ASTStringType("android.support.v4.app.Fragment");
     public static final ASTType FRAGMENT_MANAGER = new ASTStringType("android.support.v4.app.FragmentManager");

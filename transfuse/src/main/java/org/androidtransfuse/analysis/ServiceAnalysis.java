@@ -17,7 +17,10 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
-import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
@@ -193,7 +196,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         //onRebind(android.content.Intent intent)
         serviceDescriptor.addGenerators(buildEventMethod(OnRebind.class, "onRebind", AndroidLiterals.INTENT));
         //onHandleIntent(android.content.Intent intent)
-        serviceDescriptor.addGenerators(buildEventMethod(OnHandleIntent.class, "onHandleIntent", AndroidLiterals.INTENT));
+        serviceDescriptor.addGenerators(buildEventMethod(OnHandleIntent.class, AndroidLiterals.INTENT_SERVICE, "onHandleIntent", AndroidLiterals.INTENT));
         //onTaskRemoved(Intent rootIntent)
         //serviceDescriptor.addGenerators(buildEventMethod(OnTaskRemoved.class, "onTaskRemoved", Intent.class));
 
@@ -206,6 +209,14 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.addRegistration(observesExpressionDecorator);
 
         serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
+    }
+
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, ASTType targetComponent, String methodName, ASTType... args) {
+        ASTMethod method = getASTMethod(targetComponent, methodName, args);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
+
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
+                componentBuilderFactory.buildMirroredMethodGenerator(method, true));
     }
 
     private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
