@@ -103,8 +103,10 @@ public class ActivityComponentBuilderRepositoryFactory {
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
         // onPostCreate
         activityCallbackGenerators.add(buildEventMethod(OnPostCreate.class, "onPostCreate", AndroidLiterals.BUNDLE));
-        //onActivityResult
+        // onActivityResult
         activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
+        // onNewIntent
+        activityCallbackGenerators.add(buildEventMethod(OnNewIntent.class, "onNewIntent", AndroidLiterals.INTENT));
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
