@@ -89,4 +89,6 @@ public @interface Application {
     String theme() default "";
 
     UIOptions uiOptions() default UIOptions.NONE;
+
+    Class<?> type() default Object.class;
 }
