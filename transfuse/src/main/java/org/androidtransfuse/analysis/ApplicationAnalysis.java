@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
+import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
@@ -31,14 +32,17 @@ import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
+import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.lang.model.type.TypeMirror;
 import java.lang.annotation.Annotation;
 
 import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
 import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * @author John Ericksen
@@ -51,6 +55,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
+    private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
     private final ManifestManager manifestManager;
     private final InjectionBindingBuilder injectionBindingBuilder;
@@ -64,6 +69,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
                                ASTElementFactory astElementFactory,
+                               ASTTypeBuilderVisitor astTypeBuilderVisitor,
                                AnalysisContextFactory analysisContextFactory,
                                ManifestManager manifestManager,
                                InjectionBindingBuilder injectionBindingBuilder,
@@ -76,6 +82,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.componentBuilderFactory = componentBuilderFactory;
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
+        this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
         this.manifestManager = manifestManager;
         this.injectionBindingBuilder = injectionBindingBuilder;
@@ -99,10 +106,14 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
             applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
 
-            applicationDescriptor = new ComponentDescriptor(AndroidLiterals.APPLICATION.getName(), applicationClassName);
+            TypeMirror type = getTypeMirror(new ApplicationTypeMirrorRunnable(applicationAnnotation));
+
+            String applicationType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.APPLICATION.getName() : type.toString();
+
+            applicationDescriptor = new ComponentDescriptor(applicationType, applicationClassName);
 
             //analyze delegate
-            AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap());
+            AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
             //application generation profile
             setupApplicationProfile(applicationDescriptor, astType, analysisContext);
@@ -160,12 +171,22 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         return astElementFactory.findMethod(AndroidLiterals.APPLICATION, methodName, args);
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap() {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror applicationType) {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.buildThis((AndroidLiterals.APPLICATION)));
         injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
+
+        if(applicationType != null){
+            ASTType applicationASTType = applicationType.accept(astTypeBuilderVisitor, null);
+
+            while(!applicationASTType.equals(AndroidLiterals.APPLICATION) && applicationASTType.inheritsFrom(AndroidLiterals.APPLICATION)){
+                injectionNodeBuilderRepository.putType(applicationASTType, injectionBindingBuilder.buildThis(applicationASTType));
+                applicationASTType = applicationASTType.getSuperClass();
+            }
+        }
+
 
         injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildApplicationInjections());
         injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildModuleConfiguration());
@@ -210,5 +231,16 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
 
         manifestManager.addApplication(manifestApplication);
+    }
+
+    private static class ApplicationTypeMirrorRunnable extends TypeMirrorRunnable<Application> {
+        public ApplicationTypeMirrorRunnable(Application ApplicationAnnotation) {
+            super(ApplicationAnnotation);
+        }
+
+        @Override
+        public void run(Application annotation) {
+            annotation.type();
+        }
     }
 }
