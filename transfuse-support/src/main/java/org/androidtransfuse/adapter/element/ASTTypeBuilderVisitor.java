@@ -102,7 +102,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void v) {
-        throw new TransfuseAdapterException("Encountered unknown TypeMirror, unable to recover");
+        throw new TransfuseAdapterException("Encountered unknown TypeMirror (" + typeMirror + ") kind: " + typeMirror.getKind() + ", unable to recover");
     }
 
     @Override
