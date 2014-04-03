@@ -16,6 +16,8 @@
 package org.androidtransfuse.adapter.element;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.androidtransfuse.TransfuseAdapterException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.transaction.TransactionRuntimeException;
@@ -83,6 +85,15 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
         return new ASTWildcardType(superBound, extendsBound);
     }
 
+    public ASTType visitIntersection(IntersectionType t, Void aVoid) {
+        return new ASTIntersectionType(Lists.newArrayList(Iterables.transform(t.getBounds(), new Function<TypeMirror, ASTType>() {
+            @Override
+            public ASTType apply(TypeMirror typeMirror) {
+                return typeMirror.accept(ASTTypeBuilderVisitor.this, null);
+            }
+        })));
+    }
+
     @Override
     public ASTType visitExecutable(ExecutableType executableType, Void v) {
         if (executableType instanceof TypeElement) {
@@ -102,7 +113,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitUnknown(TypeMirror typeMirror, Void v) {
-        throw new TransfuseAdapterException("Encountered unknown TypeMirror, unable to recover");
+        throw new TransfuseAdapterException("Encountered unknown TypeMirror (" + typeMirror + ") kind: " + typeMirror.getKind() + ", unable to recover");
     }
 
     @Override
