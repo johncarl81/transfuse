@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.bootstrap;
 
+import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.AbstractRepositoryGenerator;
@@ -23,11 +24,12 @@ import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class BootstrapsGenerator extends AbstractRepositoryGenerator {
+public class BootstrapsGenerator extends AbstractRepositoryGenerator<JDefinedClass> {
 
     public static final PackageClass BOOTSTRAPS_INJECTOR = new PackageClass(
             Bootstraps.BOOTSTRAPS_INJECTOR_PACKAGE, Bootstraps.BOOTSTRAPS_INJECTOR_NAME);
@@ -38,7 +40,7 @@ public class BootstrapsGenerator extends AbstractRepositoryGenerator {
     }
 
     @Override
-    protected JExpression generateInstance(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JClass concreteType) throws JClassAlreadyExistsException {
-        return JExpr._new(concreteType);
+    protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
+        return ImmutableMap.of(interfaceClass.dotclass(), JExpr._new(concreteType));
     }
 }

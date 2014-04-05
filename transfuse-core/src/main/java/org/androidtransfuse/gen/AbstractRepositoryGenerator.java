@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
-public abstract class AbstractRepositoryGenerator extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, JDefinedClass>, JDefinedClass> {
+public abstract class AbstractRepositoryGenerator<T> extends AbstractCompletionTransactionWorker<Map<Provider<ASTType>, T>, JDefinedClass> {
 
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
@@ -49,11 +49,11 @@ public abstract class AbstractRepositoryGenerator extends AbstractCompletionTran
     }
 
     @Override
-    public JDefinedClass innerRun(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+    public JDefinedClass innerRun(Map<Provider<ASTType>, T> aggregate) {
         return generate(aggregate);
     }
 
-    public JDefinedClass generate(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+    public JDefinedClass generate(Map<Provider<ASTType>, T> aggregate) {
         try {
             if(aggregate.isEmpty()){
                 // don't generate a repository if it will hold nothing.
@@ -81,25 +81,31 @@ public abstract class AbstractRepositoryGenerator extends AbstractCompletionTran
         }
     }
 
-    private void generateRegistration(JDefinedClass factoryRepositoryClass, Map<Provider<ASTType>, JDefinedClass> processedAggregate, JVar registrationMap) throws JClassAlreadyExistsException{
+    private void generateRegistration(JDefinedClass factoryRepositoryClass, Map<Provider<ASTType>, T> processedAggregate, JVar registrationMap) throws JClassAlreadyExistsException{
         // constructor registration block
         JBlock factoryRegistrationBlock = factoryRepositoryClass.constructor(JMod.PUBLIC).body();
 
-        for (Map.Entry<Provider<ASTType>, JDefinedClass> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
+        for (Map.Entry<Provider<ASTType>, T> astTypeJDefinedClassEntry : processedAggregate.entrySet()) {
 
             ASTType astType = astTypeJDefinedClassEntry.getKey().get();
             JClass interfaceClass = generationUtil.ref(astType);
 
-            JDefinedClass mappedValue = astTypeJDefinedClassEntry.getValue();
+            T mappedValue = astTypeJDefinedClassEntry.getValue();
             if(mappedValue != null){
 
-                //register factory implementations
-                factoryRegistrationBlock.add(registrationMap.invoke("put")
-                        .arg(interfaceClass.dotclass())
-                        .arg(generateInstance(factoryRepositoryClass, interfaceClass, mappedValue)));
+                Map<? extends JExpression, ? extends JExpression> mapping = generateMapping(factoryRepositoryClass, interfaceClass, mappedValue);
+
+                for (Map.Entry<? extends JExpression, ? extends JExpression> mappingEntry : mapping.entrySet()) {
+                    //register implementations
+                    factoryRegistrationBlock.add(registrationMap.invoke("put")
+                            .arg(mappingEntry.getKey())
+                            .arg(mappingEntry.getValue()));
+                }
+
+
             }
         }
     }
 
-    protected abstract JExpression generateInstance(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JClass concreteType) throws JClassAlreadyExistsException;
+    protected abstract Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, T concreteType) throws JClassAlreadyExistsException;
 }

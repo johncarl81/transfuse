@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen;
 
+import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Factories;
 import org.androidtransfuse.adapter.PackageClass;
@@ -22,11 +23,12 @@ import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class FactoriesGenerator extends AbstractRepositoryGenerator {
+public class FactoriesGenerator extends AbstractRepositoryGenerator<JDefinedClass> {
 
     private static final PackageClass REPOSITORY_NAME = new PackageClass(Factories.FACTORIES_PACKAGE, Factories.FACTORIES_REPOSITORY_NAME);
     private static final String GET_METHOD = "get";
@@ -44,7 +46,7 @@ public class FactoriesGenerator extends AbstractRepositoryGenerator {
     }
 
     @Override
-    protected JExpression generateInstance(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JClass concreteType) throws JClassAlreadyExistsException {
+    protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
 
         //factory builder
         JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(interfaceClass).build().getClassName());
@@ -61,6 +63,6 @@ public class FactoriesGenerator extends AbstractRepositoryGenerator {
 
         getMethodWithScopes.body()._return(JExpr._new(concreteType).arg(scopes));
 
-        return JExpr._new(factoryClass);
+        return ImmutableMap.of(interfaceClass.dotclass(), JExpr._new(factoryClass));
     }
 }

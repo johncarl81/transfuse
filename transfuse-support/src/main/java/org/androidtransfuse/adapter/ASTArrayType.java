@@ -108,17 +108,17 @@ public class ASTArrayType implements ASTType {
 
     @Override
     public boolean inheritsFrom(ASTType type) {
-        return delegate.inheritsFrom(type);
+        return type instanceof ASTArrayType && delegate.inheritsFrom(((ASTArrayType) type).getComponentType());
     }
 
     @Override
     public boolean extendsFrom(ASTType type) {
-        return delegate.extendsFrom(type);
+        return type instanceof ASTArrayType && delegate.extendsFrom(((ASTArrayType) type).getComponentType());
     }
 
     @Override
     public boolean implementsFrom(ASTType type) {
-        return delegate.implementsFrom(type);
+        return type instanceof ASTArrayType && delegate.implementsFrom(((ASTArrayType) type).getComponentType());
     }
 
     @Override
