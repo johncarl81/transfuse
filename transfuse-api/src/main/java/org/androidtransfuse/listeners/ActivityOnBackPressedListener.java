@@ -20,7 +20,18 @@ package org.androidtransfuse.listeners;
  *
  * Each defined method represents a method in the corresponding `Activity` class.
  *
- * Only one Call-Through component per type may be defined per injection graph.
+ * *Only one Call-Through component per type may be defined per injection graph.*
+ *
+ * This can be used instead of `@OnBackPressed` if you need more control over where `super.onBackPressed()` is called.
+ *
+ * To actually call `super.onBackPressed()` you will need a method like this in your `Activity` super class:
+ *
+ *  `class BaseActivity { public void superBack() { super.onBackPressed(); } }`
+ *
+ * and don't forget to use that super in your annotated component:
+ *
+ *  `@Activity(type=BaseActivity.class)`
+ *
  *
  * @author Dan Bachelder
  */
