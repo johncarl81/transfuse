@@ -17,7 +17,8 @@ package org.androidtransfuse.validation;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
-import org.androidtransfuse.adapter.element.*;
+import org.androidtransfuse.adapter.element.ASTElementAnnotation;
+import org.androidtransfuse.adapter.element.ASTElementBase;
 
 import javax.annotation.processing.Messager;
 import javax.inject.Inject;
@@ -69,15 +70,6 @@ public class Validator {
         public ValidationBuilder element(ASTBase astBase){
             if(astBase instanceof ASTElementBase){
                 this.element = ((ASTElementBase)astBase).getElement();
-            }
-            if(astBase instanceof ASTElementType){
-                this.element = ((ASTElementType)astBase).getElement();
-            }
-            if(astBase instanceof ASTElementField){
-                this.element = ((ASTElementField)astBase).getElement();
-            }
-            if(astBase instanceof ASTElementMethod){
-                this.element = ((ASTElementMethod)astBase).getElement();
             }
             return this;
         }
