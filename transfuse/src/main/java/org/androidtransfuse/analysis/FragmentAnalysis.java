@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis;
 
 import com.google.common.collect.ImmutableSet;
+import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
@@ -29,6 +30,7 @@ import org.androidtransfuse.gen.componentBuilder.MethodCallbackGenerator;
 import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -61,6 +63,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
     private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
     private final FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder;
+    private final JCodeModel codeModel;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -77,7 +80,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
                             ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
                             PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
-                            FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder) {
+                            FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder,
+                            JCodeModel codeModel) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -93,6 +97,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.fragmentViewInjectionNodeBuilder = fragmentViewInjectionNodeBuilder;
         this.listenerRegistrationGenerator = listenerRegistrationGenerator;
         this.observesExpressionDecorator = observesExpressionDecorator;
+        this.codeModel = codeModel;
     }
 
     @Override
@@ -168,9 +173,27 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
-        fragmentDescriptor.addGenerators(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class),
-                        componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true)));
+        MethodCallbackGenerator methodCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class),
+                componentBuilderFactory.buildMirroredMethodGenerator(onSaveInstanceStateMethod, true));
+        //hack to add bundle to base fragment to save state when onCreateView isn't called between onCreate and onConfigurationChanged
+        methodCallbackGenerator.setGenerator(new MethodCallbackGenerator.Generator() {
+            @Override
+            public JBlock generate(JDefinedClass definedClass, JExpression delegate, JBlock body, MethodDescriptor descriptor) {
+                JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID,  "onCreate");
+                JVar bundle = onCreateMethod.param(codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
+                JVar previousBundle = definedClass.field(JMod.PRIVATE, codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
+
+                onCreateMethod.body().add(codeModel.ref("super").staticInvoke("onCreate").arg(bundle));
+                onCreateMethod.body().assign(previousBundle, bundle);
+
+                JConditional nullCondition = body._if(delegate.eq(JExpr._null()));
+                nullCondition._then()._if(previousBundle.ne(JExpr._null()))._then()
+                        .add(descriptor.getParameters().values().iterator().next().getExpression().invoke("putAll").arg(previousBundle));
+
+                return nullCondition._else();
+            }
+        });
+        fragmentDescriptor.addGenerators(methodCallbackGenerator);
 
         fragmentDescriptor.addGenerators(listenerRegistrationGenerator);
 

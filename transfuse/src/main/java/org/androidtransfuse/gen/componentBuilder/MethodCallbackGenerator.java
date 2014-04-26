@@ -41,6 +41,8 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
     private final ASTType eventAnnotation;
     private final MethodGenerator methodGenerator;
     private final InvocationBuilder invocationBuilder;
+    //todo: this is a hack, need to build a better way to write methods
+    private Generator generator = null;
 
     @Inject
     public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ MethodGenerator methodGenerator, InvocationBuilder invocationBuilder) {
@@ -52,6 +54,8 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
     public void generate(JDefinedClass definedClass, MethodDescriptor creationMethodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
 
         MethodDescriptor methodDescriptor = null;
+        boolean calledOnce = false;
+        JBlock body = null;
         for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
             ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
 
@@ -61,8 +65,14 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
                 //define method on demand for possible lazy init
                 if (methodDescriptor == null) {
                     methodDescriptor = methodGenerator.buildMethod(definedClass);
+                    body = methodDescriptor.getMethod().body();
                 }
-                JBlock body = methodDescriptor.getMethod().body();
+
+
+                if(generator != null && !calledOnce && body != null){
+                    body = generator.generate(definedClass, injectionNodeJExpressionEntry.getValue().getExpression(), body, methodDescriptor);
+                    calledOnce = true;
+                }
 
                 for (ASTMethod methodCallback : methods) {
 
@@ -108,5 +118,13 @@ public class MethodCallbackGenerator implements ExpressionVariableDependentGener
         }
 
         return arguments;
+    }
+
+    public interface Generator{
+        JBlock generate(JDefinedClass definedClass, JExpression delegate, JBlock body, MethodDescriptor descriptor);
+    }
+
+    public void setGenerator(Generator generator) {
+        this.generator = generator;
     }
 }
