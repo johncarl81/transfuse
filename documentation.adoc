@@ -525,7 +525,7 @@ Required injections are given using the IntentStrategy constructor as optional p
 
 ==== Dependency Injection (DI)
 
-Transfuse implements [JSR-330][1], the same standard many of the leading DI frameworks implement.  The following annotations are available:
+Transfuse implements http://www.jcp.org/en/jsr/detail?id=330[JSR-330], the same standard many of the leading DI frameworks implement.  The following annotations are available:
 
 ===== @Inject
 
