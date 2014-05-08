@@ -50,12 +50,12 @@ public class InjectionNodeBuilderRepository {
         putSignatureMatcher(Matchers.annotated().byType(astClassFactory.getType(viewClass)).build(), viewVariableBuilder);
     }
 
-    public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
-        putType(new InjectionSignature(type), variableBuilder);
-    }
-
     public void putType(Class<?> clazz, InjectionNodeBuilder variableBuilder) {
         putType(astClassFactory.getType(clazz), variableBuilder);
+    }
+
+    public void putType(ASTType type, InjectionNodeBuilder variableBuilder) {
+        putType(new InjectionSignature(type), variableBuilder);
     }
 
     public void putType(InjectionSignature injectionSignature, InjectionNodeBuilder variableBuilder) {

@@ -15,6 +15,10 @@
  */
 package org.androidtransfuse.model.manifest;
 
+import org.androidtransfuse.model.Identified;
+import org.androidtransfuse.model.Mergeable;
+import org.androidtransfuse.processor.Merge;
+
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
@@ -29,7 +33,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author John Ericksen
  */
-public class Data extends ManifestBase {
+public class Data extends Mergeable implements Identified {
 
     private String host;
     private String mimeType;
@@ -39,6 +43,7 @@ public class Data extends ManifestBase {
     private String port;
     private String scheme;
 
+    @Merge("h")
     @XmlAttribute(name = "host", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getHost() {
         return host;
@@ -48,6 +53,7 @@ public class Data extends ManifestBase {
         this.host = host;
     }
 
+    @Merge("m")
     @XmlAttribute(name = "mimeType", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getMimeType() {
         return mimeType;
@@ -57,6 +63,7 @@ public class Data extends ManifestBase {
         this.mimeType = mimeType;
     }
 
+    @Merge("a")
     @XmlAttribute(name = "path", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPath() {
         return path;
@@ -66,6 +73,7 @@ public class Data extends ManifestBase {
         this.path = path;
     }
 
+    @Merge("t")
     @XmlAttribute(name = "pathPattern", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPattern() {
         return pathPattern;
@@ -75,6 +83,7 @@ public class Data extends ManifestBase {
         this.pathPattern = pathPattern;
     }
 
+    @Merge("x")
     @XmlAttribute(name = "pathPrefix", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPathPrefix() {
         return pathPrefix;
@@ -84,6 +93,7 @@ public class Data extends ManifestBase {
         this.pathPrefix = pathPrefix;
     }
 
+    @Merge("p")
     @XmlAttribute(name = "port", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getPort() {
         return port;
@@ -93,6 +103,7 @@ public class Data extends ManifestBase {
         this.port = port;
     }
 
+    @Merge("s")
     @XmlAttribute(name = "scheme", namespace = ManifestNamespaceMapper.ANDROID_URI)
     public String getScheme() {
         return scheme;
@@ -100,5 +111,10 @@ public class Data extends ManifestBase {
 
     public void setScheme(String scheme) {
         this.scheme = scheme;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return host + mimeType + path + pathPattern + pathPrefix + port + scheme;
     }
 }

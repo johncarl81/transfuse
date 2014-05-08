@@ -21,36 +21,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The annotation representation of the Android Manifest IntentFilter tag.  This annotation may be used along with the
- * `@Activity`, `@Service`, or `@BroadcastReceiver` to define the Intents that may activate this
- * Component.
+ * The annotation representation of the Android Manifest Data XML tag.  This annotation may be used along with the
+ * `@Activity`, `@Service`, or `@BroadcastReceiver` to define the intent associated data available through
+ * the `IntentFilter` annotation.
  *
- * The following example demonstrates an Activity as the default home screen of an application available on the Launcher:
- *
- * [source,java]
- * .*Example:*
- * --
- * @Activity
- * @IntentFilter({
- *     @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
- *     @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
- * })
- * public class Main {}
- * --
+ * @see org.androidtransfuse.annotations.IntentFilter
  *
  * @author John Ericksen
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IntentFilter {
+public @interface Data {
 
-    String icon() default "";
-
-    String label() default "";
-
-    int priority() default -1;
-
-    Intent[] value();
-
-    Data[] data() default {};
+    String scheme() default "";
+    String host() default "";
+    int port() default -1;
+    String path() default "";
+    String pathPattern() default "";
+    String pathPrefix() default "";
+    String mimeType() default "";
 }

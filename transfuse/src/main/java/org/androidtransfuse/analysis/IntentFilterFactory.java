@@ -16,6 +16,7 @@
 package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.annotations.Data;
 import org.androidtransfuse.annotations.Intent;
 import org.androidtransfuse.annotations.IntentFilter;
 import org.androidtransfuse.annotations.IntentFilters;
@@ -40,12 +41,14 @@ public class IntentFilterFactory {
     private final Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider;
     private final Provider<Action> actionProvider;
     private final Provider<Category> categoryProvider;
+    private final Provider<org.androidtransfuse.model.manifest.Data> dataProvider;
 
     @Inject
-    public IntentFilterFactory(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider) {
+    public IntentFilterFactory(Provider<org.androidtransfuse.model.manifest.IntentFilter> intentFilterProvider, Provider<Action> actionProvider, Provider<Category> categoryProvider, Provider<org.androidtransfuse.model.manifest.Data> dataProvider) {
         this.intentFilterProvider = intentFilterProvider;
         this.actionProvider = actionProvider;
         this.categoryProvider = categoryProvider;
+        this.dataProvider = dataProvider;
     }
 
     public List<org.androidtransfuse.model.manifest.IntentFilter> buildIntentFilters(ASTType astType) {
@@ -53,6 +56,7 @@ public class IntentFilterFactory {
         IntentFilters intentFilters = astType.getAnnotation(IntentFilters.class);
         IntentFilter intentFilter = astType.getAnnotation(IntentFilter.class);
         Intent intent = astType.getAnnotation(Intent.class);
+        Data data = astType.getAnnotation(Data.class);
 
         List<org.androidtransfuse.model.manifest.IntentFilter> convertedIntentFilters = new ArrayList<org.androidtransfuse.model.manifest.IntentFilter>();
 
@@ -75,6 +79,13 @@ public class IntentFilterFactory {
 
             addIntent(intent, resultIntentFilter);
         }
+        if(data != null){
+            if(resultIntentFilter == null){
+                resultIntentFilter = intentFilterProvider.get();
+                convertedIntentFilters.add(resultIntentFilter);
+            }
+            addData(data, resultIntentFilter);
+        }
 
         return convertedIntentFilters;
     }
@@ -88,6 +99,10 @@ public class IntentFilterFactory {
 
         for (Intent intentAnnotation : intentFilter.value()) {
             addIntent(intentAnnotation, resultIntentFilter);
+        }
+
+        for (Data dataAnnotation : intentFilter.data()){
+            addData(dataAnnotation, resultIntentFilter);
         }
 
         return resultIntentFilter;
@@ -109,5 +124,20 @@ public class IntentFilterFactory {
                 //noop
                 break;
         }
+    }
+
+    private void addData(Data dataAnnotation, org.androidtransfuse.model.manifest.IntentFilter intentFilter) {
+        org.androidtransfuse.model.manifest.Data data = dataProvider.get();
+
+        data.setHost(checkBlank(dataAnnotation.host()));
+        data.setPath(checkBlank(dataAnnotation.path()));
+        Integer port = checkDefault(dataAnnotation.port(), -1);
+        data.setPort(port == null? null : port.toString());
+        data.setMimeType(checkBlank(dataAnnotation.mimeType()));
+        data.setPathPattern(checkBlank(dataAnnotation.pathPattern()));
+        data.setPathPrefix(checkBlank(dataAnnotation.pathPrefix()));
+        data.setScheme(checkBlank(dataAnnotation.scheme()));
+
+        intentFilter.getData().add(data);
     }
 }

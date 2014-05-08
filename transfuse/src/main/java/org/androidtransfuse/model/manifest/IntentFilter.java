@@ -98,6 +98,7 @@ public class IntentFilter extends Mergeable {
         this.categories = categories;
     }
 
+    @MergeCollection(collectionType = ArrayList.class, type = Data.class)
     @XmlElement(name = "data")
     public List<Data> getData() {
         return data;
