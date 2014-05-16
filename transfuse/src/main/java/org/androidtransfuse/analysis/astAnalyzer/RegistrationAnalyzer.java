@@ -80,6 +80,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         callThroughMapping.add(astType(ActivityOnTouchEventListener.class));
         callThroughMapping.add(astType(ActivityOnTrackballEventListener.class));
         callThroughMapping.add(astType(ActivityMenuComponent.class));
+        callThroughMapping.add(astType(ActivityOnBackPressedListener.class));
         callThroughMapping.add(astType(FragmentMenuComponent.class));
         callThroughMapping.add(astType(ServiceOnStartCommand.class));
         callThroughMapping.add(astType(ServiceOnUnbind.class));
