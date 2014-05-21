@@ -70,6 +70,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         listenerMethodMapping.put(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
         listenerMethodMapping.put(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
         listenerMethodMapping.put(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
+        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_CLICK_LISTENER, "setOnItemClickListener");
+        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_LONG_CLICK_LISTENER, "setOnItemLongClickListener");
+        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_SELECTED_LISTENER, "setOnItemSelectedListener");
+        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, "setOnScrollListener");
+        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, "setMultiChoiceModeListener");
+        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, "setViewRecyclerListener");
 
         Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 
