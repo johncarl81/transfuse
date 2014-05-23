@@ -47,6 +47,12 @@ public final class AndroidLiterals {
     public static final ASTType VIEW_ON_KEY_LISTENER = new ASTStringType("android.view.View.OnKeyListener");
     public static final ASTType VIEW_ON_TOUCH_LISTENER = new ASTStringType("android.view.View.OnTouchListener");
     public static final ASTType VIEW_ON_FOCUS_CHANGE_LISTENER = new ASTStringType("android.view.View.OnFocusChangeListener");
+    public static final ASTType ADAPTER_VIEW_ON_ITEM_CLICK_LISTENER = new ASTStringType("android.widget.AdapterView.OnItemClickListener");
+    public static final ASTType ADAPTER_VIEW_ON_ITEM_LONG_CLICK_LISTENER = new ASTStringType("android.widget.AdapterView.OnItemLongClickListener");
+    public static final ASTType ADAPTER_VIEW_ON_ITEM_SELECTED_LISTENER = new ASTStringType("android.widget.AdapterView.OnItemSelectedListener");
+    public static final ASTType ABS_LIST_VIEW_ON_SCROLL_LISTENER = new ASTStringType("android.widget.AbsListView.OnScrollListener");
+    public static final ASTType ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER = new ASTStringType("android.widget.AbsListView.MultiChoiceModeListener");
+    public static final ASTType ABS_LIST_VIEW_RECYCLER_LISTENER = new ASTStringType("android.widget.AbsListView.RecyclerListener");
     public static final ASTType PREFERENCE_ACTIVITY = new ASTStringType("android.preference.PreferenceActivity");
     public static final ASTType ACTIVITY_GROUP = new ASTStringType("android.app.ActivityGroup");
     public static final ASTType RESOURCES = new ASTStringType("android.content.res.Resources");
