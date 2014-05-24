@@ -32,7 +32,6 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -116,7 +115,7 @@ public class LayoutHandlerGenerator implements Generation {
 
     private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
         if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = getTypeMirror(new LayoutHandlerTypeMirrorRunnable(layoutHandlerAnnotation));
+            TypeMirror layoutHandlerType = getTypeMirror(layoutHandlerAnnotation, "value");
 
             if (layoutHandlerType != null) {
                 ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
@@ -124,16 +123,5 @@ public class LayoutHandlerGenerator implements Generation {
             }
         }
         return null;
-    }
-
-    private static class LayoutHandlerTypeMirrorRunnable extends TypeMirrorRunnable<LayoutHandler> {
-        public LayoutHandlerTypeMirrorRunnable(LayoutHandler layoutHandlerAnnotation) {
-            super(layoutHandlerAnnotation);
-        }
-
-        @Override
-        public void run(LayoutHandler annotation) {
-            annotation.value();
-        }
     }
 }

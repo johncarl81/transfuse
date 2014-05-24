@@ -17,6 +17,7 @@ package org.androidtransfuse.util;
 
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author John Ericksen
@@ -27,12 +28,21 @@ public final class TypeMirrorUtil {
         //noop utility class constructor
     }
 
-    public static TypeMirror getTypeMirror(Runnable runnable) {
+    public static TypeMirror getTypeMirror(Object annotation, String parameter){
         //http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
         try {
-            runnable.run();
+            annotation.getClass().getMethod(parameter).invoke(annotation);
         } catch (MirroredTypeException mte) {
-            return mte.getTypeMirror();
+
+        } catch (InvocationTargetException invocationException) {
+            if(invocationException.getCause() instanceof MirroredTypeException){
+                return ((MirroredTypeException)invocationException.getCause()).getTypeMirror();
+            }
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", invocationException);
+        } catch (IllegalAccessException e) {
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", e);
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", e);
         }
         return null;
     }

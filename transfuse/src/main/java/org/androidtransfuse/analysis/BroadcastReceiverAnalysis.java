@@ -32,7 +32,6 @@ import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -82,7 +81,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
     public ComponentDescriptor analyze(ASTType astType) {
 
-        BroadcastReceiver broadcastReceiver = astType.getAnnotation(BroadcastReceiver.class);
+        BroadcastReceiver broadcastReceiverAnnotation = astType.getAnnotation(BroadcastReceiver.class);
 
         ComponentDescriptor receiverDescriptor;
 
@@ -92,9 +91,9 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             PackageClass receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
             receiverDescriptor = new ComponentDescriptor(astType, null, receiverClassName);
         } else {
-            PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
+            PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiverAnnotation.name());
 
-            TypeMirror type = getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
+            TypeMirror type = getTypeMirror(broadcastReceiverAnnotation, "type");
             ASTType receiverType = buildReceiverType(type);
 
             receiverDescriptor = new ComponentDescriptor(astType, receiverType, receiverClassName);
@@ -117,7 +116,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             receiverDescriptor.getGenerators().add(buildEventMethod(OnReceive.class, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
 
-            //receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, analysisContext));
             receiverDescriptor.setAnalysisContext(analysisContext);
         }
 
@@ -157,18 +155,6 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             return inputPackageClass.append("BroadcastReceiver");
         } else {
             return inputPackageClass.replaceName(className);
-        }
-    }
-
-    private static final class ReceiverTypeRunnable extends TypeMirrorRunnable<BroadcastReceiver> {
-        private ReceiverTypeRunnable(BroadcastReceiver receiverAnnotation) {
-            super(receiverAnnotation);
-        }
-
-        @Override
-        public void run(BroadcastReceiver annotation) {
-            //accessing this throws an exception, caught in TypeMirrorUtil
-            annotation.type();
         }
     }
 }

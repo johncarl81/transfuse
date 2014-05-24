@@ -38,7 +38,6 @@ import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -117,7 +116,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             //generated Android Service
             serviceClassName = buildPackageClass(input, serviceAnnotation.name());
 
-            TypeMirror type = getTypeMirror(new ServiceTypeMirrorRunnable(serviceAnnotation));
+            TypeMirror type = getTypeMirror(serviceAnnotation, "type");
 
             ASTType serviceType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.SERVICE : type.accept(astTypeBuilderVisitor, null);
 
@@ -229,17 +228,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         return injectionNodeBuilderRepository;
 
-    }
-
-    private static class ServiceTypeMirrorRunnable extends TypeMirrorRunnable<Service> {
-        public ServiceTypeMirrorRunnable(Service serviceAnnotation) {
-            super(serviceAnnotation);
-        }
-
-        @Override
-        public void run(Service annotation) {
-            annotation.type();
-        }
     }
 
     private final class OnBindGenerator implements Generation {

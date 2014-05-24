@@ -23,7 +23,6 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
@@ -66,7 +65,7 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
 
         InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         if (annotation != null) {
-            TypeMirror implementedClass = getTypeMirror(new ImplementedByClassTypeMirrorRunnable(annotation));
+            TypeMirror implementedClass = getTypeMirror(annotation, "value");
 
             ASTType implAstType = implementedClass.accept(astTypeBuilderVisitor, null);
 
@@ -85,17 +84,5 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
         injectionNodeBuilders.addModuleRepository(repository);
 
         return null;
-    }
-
-    private static class ImplementedByClassTypeMirrorRunnable extends TypeMirrorRunnable<ImplementedBy> {
-
-        protected ImplementedByClassTypeMirrorRunnable(ImplementedBy annotation) {
-            super(annotation);
-        }
-
-        @Override
-        public void run(ImplementedBy annotation) {
-            annotation.value();
-        }
     }
 }

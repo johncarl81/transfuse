@@ -33,7 +33,6 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -122,7 +121,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             //generated Android fragment
             fragmentClassName = buildPackageClass(astType, fragmentAnnotation.name());
 
-            TypeMirror type = getTypeMirror(new FragmentTypeMirrorRunnable(fragmentAnnotation));
+            TypeMirror type = getTypeMirror(fragmentAnnotation, "type");
 
             ASTType fragmentType = type == null  || type.toString().equals("java.lang.Object") ? AndroidLiterals.FRAGMENT : type.accept(astTypeBuilderVisitor, null);
 
@@ -261,18 +260,5 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         } else {
             return inputPackageClass.replaceName(fragmentName);
         }
-    }
-
-    private static final class FragmentTypeMirrorRunnable extends TypeMirrorRunnable<Fragment> {
-        public FragmentTypeMirrorRunnable(Fragment fragmentAnnotation) {
-            super(fragmentAnnotation);
-        }
-
-        @Override
-        public void run(Fragment annotation) {
-            annotation.type();
-        }
-
-
     }
 }

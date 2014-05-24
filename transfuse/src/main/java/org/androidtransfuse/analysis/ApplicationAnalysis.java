@@ -34,7 +34,6 @@ import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -107,7 +106,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
             applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
 
-            TypeMirror type = getTypeMirror(new ApplicationTypeMirrorRunnable(applicationAnnotation));
+            TypeMirror type = getTypeMirror(applicationAnnotation, "type");
 
             ASTType applicationType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.APPLICATION : type.accept(astTypeBuilderVisitor, null);
 
@@ -200,16 +199,5 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         return injectionNodeBuilderRepository;
 
-    }
-
-    private static class ApplicationTypeMirrorRunnable extends TypeMirrorRunnable<Application> {
-        public ApplicationTypeMirrorRunnable(Application ApplicationAnnotation) {
-            super(ApplicationAnnotation);
-        }
-
-        @Override
-        public void run(Application annotation) {
-            annotation.type();
-        }
     }
 }

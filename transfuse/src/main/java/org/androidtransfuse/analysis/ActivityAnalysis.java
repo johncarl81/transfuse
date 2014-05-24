@@ -35,7 +35,6 @@ import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerat
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -144,7 +143,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             //generated Android activity
             activityClassName = buildPackageClass(input, activityAnnotation.name());
 
-            TypeMirror type = getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
+            TypeMirror type = getTypeMirror(activityAnnotation, "type");
 
             ASTType activityType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.ACTIVITY : type.accept(astTypeBuilderVisitor, null);
 
@@ -221,17 +220,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         return injectionNodeBuilderRepository;
 
-    }
-
-    private static class ActivityTypeMirrorRunnable extends TypeMirrorRunnable<Activity> {
-        public ActivityTypeMirrorRunnable(Activity activityAnnotation) {
-            super(activityAnnotation);
-        }
-
-        @Override
-        public void run(Activity annotation) {
-            annotation.type();
-        }
     }
 
     public Set<Generation> getGenerators(String key) {
