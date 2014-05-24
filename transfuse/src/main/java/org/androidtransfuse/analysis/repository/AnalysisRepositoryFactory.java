@@ -29,7 +29,6 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
     private final InjectionAnalyzer injectionAnalyzer;
     private final ListenerAnalysis methodCallbackAnalysis;
     private final ScopeAnalysis scopeAnalysis;
-    private final RegistrationAnalyzer registrationAnalysis;
     private final DeclareFieldAnalysis declareFieldAnalysis;
     private final ObservesAnalysis observesAnalysis;
     private final NonConfigurationAnalysis nonConfigurationAnalysis;
@@ -40,7 +39,6 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
                                      InjectionAnalyzer injectionAnalyzer,
                                      ListenerAnalysis methodCallbackAnalysis,
                                      ScopeAnalysis scopeAnalysis,
-                                     RegistrationAnalyzer registrationAnalysis,
                                      DeclareFieldAnalysis declareFieldAnalysis,
                                      ObservesAnalysis observesAnalysis,
                                      NonConfigurationAnalysis nonConfigurationAnalysis,
@@ -49,7 +47,6 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
         this.injectionAnalyzer = injectionAnalyzer;
         this.methodCallbackAnalysis = methodCallbackAnalysis;
         this.scopeAnalysis = scopeAnalysis;
-        this.registrationAnalysis = registrationAnalysis;
         this.declareFieldAnalysis = declareFieldAnalysis;
         this.observesAnalysis = observesAnalysis;
         this.nonConfigurationAnalysis = nonConfigurationAnalysis;
@@ -63,7 +60,6 @@ public class AnalysisRepositoryFactory implements Provider<AnalysisRepository> {
         analysisRepository.addAnalysis(injectionAnalyzer);
         analysisRepository.addAnalysis(methodCallbackAnalysis);
         analysisRepository.addAnalysis(scopeAnalysis);
-        analysisRepository.addAnalysis(registrationAnalysis);
         analysisRepository.addAnalysis(declareFieldAnalysis);
         analysisRepository.addAnalysis(observesAnalysis);
         analysisRepository.addAnalysis(nonConfigurationAnalysis);

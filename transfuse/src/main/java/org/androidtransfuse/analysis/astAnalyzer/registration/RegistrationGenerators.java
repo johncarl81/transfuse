@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.analysis;
+package org.androidtransfuse.analysis.astAnalyzer.registration;
 
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.annotations.Factory;
 
 /**
  * @author John Ericksen
  */
-public class AnalysisContextFactory {
+@Factory
+public interface RegistrationGenerators {
 
-    public AnalysisContext buildAnalysisContext(InjectionNodeBuilderRepository injectionNodeBuilderRepository){
-        return new AnalysisContext(injectionNodeBuilderRepository);
-    }
+    ActivityDelegateRegistrationGeneratorFactory buildCallThroughMethodGenerator(ASTType listenerInterface);
+
+    ViewRegistrationGeneratorFactory buildViewRegistrationGenerator(String listenerMethod);
 }

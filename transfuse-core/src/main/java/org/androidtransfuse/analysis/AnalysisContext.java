@@ -17,7 +17,6 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.ImmutableMap;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -30,17 +29,15 @@ import java.util.Collection;
 public class AnalysisContext {
 
     private final ImmutableMap<ASTType, InjectionNode> dependents;
-    private final AnalysisRepository analysisRepository;
     private final InjectionNodeBuilderRepository injectionNodeBuilders;
 
     @Inject
-    public AnalysisContext(/*@Assisted*/ InjectionNodeBuilderRepository injectionNodeBuilders, AnalysisRepository analysisRepository) {
+    public AnalysisContext(/*@Assisted*/ InjectionNodeBuilderRepository injectionNodeBuilders) {
         this.dependents = ImmutableMap.of();
-        this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
-    private AnalysisContext(InjectionNode node, AnalysisContext previousContext, AnalysisRepository analysisRepository, InjectionNodeBuilderRepository injectionNodeBuilders) {
+    private AnalysisContext(InjectionNode node, AnalysisContext previousContext, InjectionNodeBuilderRepository injectionNodeBuilders) {
         ImmutableMap.Builder<ASTType, InjectionNode> dependentsBuilder = ImmutableMap.builder();
 
         dependentsBuilder.putAll(previousContext.dependents);
@@ -51,12 +48,11 @@ public class AnalysisContext {
 
         this.dependents = dependentsBuilder.build();
 
-        this.analysisRepository = analysisRepository;
         this.injectionNodeBuilders = injectionNodeBuilders;
     }
 
     public AnalysisContext addDependent(InjectionNode node) {
-        return new AnalysisContext(node, this, analysisRepository, injectionNodeBuilders);
+        return new AnalysisContext(node, this, injectionNodeBuilders);
     }
 
     public boolean isDependent(ASTType astType) {
@@ -65,10 +61,6 @@ public class AnalysisContext {
 
     public InjectionNode getInjectionNode(ASTType astType) {
         return dependents.get(astType);
-    }
-
-    public AnalysisRepository getAnalysisRepository() {
-        return analysisRepository;
     }
 
     public InjectionNodeBuilderRepository getInjectionNodeBuilders() {

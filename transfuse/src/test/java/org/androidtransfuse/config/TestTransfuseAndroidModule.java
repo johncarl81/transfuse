@@ -19,6 +19,7 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.*;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.ConfigurationRepositoryImpl;
+import org.androidtransfuse.analysis.astAnalyzer.registration.RegistrationGenerators;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
@@ -92,6 +93,7 @@ import javax.xml.bind.JAXBContext;
         VariableInjectionBuilderFactory.class,
         ComponentBuilderFactory.class,
         GeneratorFactory.class,
+        RegistrationGenerators.class,
         InjectionBuilderContextFactory.class,
         MethodBasedResourceExpressionBuilderAdaptorFactory.class,
         MethodBasedResourceExpressionBuilderFactory.class,

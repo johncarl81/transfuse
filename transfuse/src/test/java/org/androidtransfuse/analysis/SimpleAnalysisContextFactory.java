@@ -32,8 +32,7 @@ public class SimpleAnalysisContextFactory {
 
     public AnalysisContext buildContext() {
         return new AnalysisContext(
-                variableBuilderRepository,
-                analysisRepositoryFactory.get()
+                variableBuilderRepository
         );
     }
 }

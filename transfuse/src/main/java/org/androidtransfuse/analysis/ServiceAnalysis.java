@@ -38,7 +38,6 @@ import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
@@ -50,7 +49,6 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
-    private final Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
@@ -65,8 +63,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final ComponentAnalysis componentAnalysis;
 
     @Inject
-    public ServiceAnalysis(Provider<InjectionNodeBuilderRepository> injectionNodeRepositoryProvider,
-                           InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+    public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                            AnalysisContextFactory analysisContextFactory,
                            ASTElementFactory astElementFactory,
                            InjectionBindingBuilder injectionBindingBuilder,
@@ -78,7 +75,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
                            ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
                            ComponentAnalysis componentAnalysis) {
-        this.injectionNodeRepositoryProvider = injectionNodeRepositoryProvider;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
@@ -113,7 +109,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
             ASTType serviceType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.SERVICE : type.accept(astTypeBuilderVisitor, null);
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(serviceType));
 
             serviceDescriptor = new ComponentDescriptor(input, serviceType, serviceClassName, context);
 
@@ -165,26 +161,17 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         return astElementFactory.findMethod(type, methodName, args);
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType serviceType) {
 
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeRepositoryProvider.get();
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(serviceType, Service.class);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
 
-        if (type != null && !type.toString().equals(AndroidLiterals.SERVICE.getName())) {
-            ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
-            injectionNodeBuilderRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
-        }
-
-        if(type != null){
-            ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
-
-            while(!serviceASTType.equals(AndroidLiterals.SERVICE) && serviceASTType.inheritsFrom(AndroidLiterals.SERVICE)){
-                injectionNodeBuilderRepository.putType(serviceASTType, injectionBindingBuilder.buildThis(serviceASTType));
-                serviceASTType = serviceASTType.getSuperClass();
-            }
+        while(!serviceType.equals(AndroidLiterals.SERVICE) && serviceType.inheritsFrom(AndroidLiterals.SERVICE)){
+            injectionNodeBuilderRepository.putType(serviceType, injectionBindingBuilder.buildThis(serviceType));
+            serviceType = serviceType.getSuperClass();
         }
 
         injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());

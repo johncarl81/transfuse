@@ -36,7 +36,6 @@ import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
@@ -49,7 +48,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
     private final AnalysisContextFactory analysisContextFactory;
-    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
@@ -70,7 +68,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     public FragmentAnalysis(ASTClassFactory astClassFactory,
                             ASTElementFactory astElementFactory,
                             AnalysisContextFactory analysisContextFactory,
-                            Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             InjectionBindingBuilder injectionBindingBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -89,7 +86,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
-        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
@@ -121,7 +117,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
             ASTType fragmentType = type == null  || type.toString().equals("java.lang.Object") ? AndroidLiterals.FRAGMENT : type.accept(astTypeBuilderVisitor, null);
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(fragmentType));
 
             fragmentDescriptor = new ComponentDescriptor(astType, fragmentType, fragmentClassName, context);
 
@@ -166,9 +162,9 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         return astElementFactory.findMethod(type, methodName, args);
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror type) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType fragmentType) {
 
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(fragmentType, Fragment.class);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.FRAGMENT, injectionBindingBuilder.buildThis(AndroidLiterals.FRAGMENT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.ACTIVITY, "getActivity").build());
@@ -177,13 +173,9 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.ACTIVITY).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
 
 
-        if(type != null){
-            ASTType fragmentASTType = type.accept(astTypeBuilderVisitor, null);
-
-            while(!fragmentASTType.equals(AndroidLiterals.FRAGMENT) && fragmentASTType.inheritsFrom(AndroidLiterals.FRAGMENT)){
-                injectionNodeBuilderRepository.putType(fragmentASTType, injectionBindingBuilder.buildThis(fragmentASTType));
-                fragmentASTType = fragmentASTType.getSuperClass();
-            }
+        while(!fragmentType.equals(AndroidLiterals.FRAGMENT) && fragmentType.inheritsFrom(AndroidLiterals.FRAGMENT)){
+            injectionNodeBuilderRepository.putType(fragmentType, injectionBindingBuilder.buildThis(fragmentType));
+            fragmentType = fragmentType.getSuperClass();
         }
 
         injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);

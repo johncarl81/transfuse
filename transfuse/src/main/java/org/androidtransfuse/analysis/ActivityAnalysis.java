@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -40,7 +39,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
-import java.util.Set;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
@@ -52,7 +50,6 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
-    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -76,7 +73,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
     @Inject
     public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
-                            Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                             AnalysisContextFactory analysisContextFactory,
                             ASTElementFactory astElementFactory,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
@@ -98,7 +94,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
                             ComponentAnalysis componentAnalysis) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
-        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
@@ -140,7 +135,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
             ASTType activityType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.ACTIVITY : type.accept(astTypeBuilderVisitor, null);
 
-            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
+            AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(activityType));
 
             activityDescriptor = new ComponentDescriptor(input, activityType, activityClassName, context);
 
@@ -153,9 +148,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
             componentAnalysis.setupGenerators(activityDescriptor, activityType, Activity.class);
 
-            for (Generation generator : getGenerators(activityType.getName())) {
-                activityDescriptor.getGenerators().add(generator);
-            }
+            activityDescriptor.getGenerators().addAll(buildActivityMethodCallbackGenerators());
 
             activityDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                     getASTMethod("onCreate", AndroidLiterals.BUNDLE),
@@ -180,21 +173,17 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         }
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType activityType) {
 
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(activityType, Activity.class);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
 
-        if(activityType != null){
-            ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);
-
-            while(!activityASTType.equals(AndroidLiterals.ACTIVITY) && activityASTType.inheritsFrom(AndroidLiterals.ACTIVITY)){
-                injectionNodeBuilderRepository.putType(activityASTType, injectionBindingBuilder.buildThis(activityASTType));
-                activityASTType = activityASTType.getSuperClass();
-            }
+        while(!activityType.equals(AndroidLiterals.ACTIVITY) && activityType.inheritsFrom(AndroidLiterals.ACTIVITY)){
+            injectionNodeBuilderRepository.putType(activityType, injectionBindingBuilder.buildThis(activityType));
+            activityType = activityType.getSuperClass();
         }
 
         injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
@@ -210,25 +199,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                 injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
-
-    }
-
-    public Set<Generation> getGenerators(String key) {
-
-        ImmutableMap.Builder<String, ImmutableSet<Generation>> methodCallbackGenerators = ImmutableMap.builder();
-
-        ImmutableSet<Generation> activityMethodGenerators = buildActivityMethodCallbackGenerators();
-        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(AndroidLiterals.LIST_ACTIVITY.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(AndroidLiterals.PREFERENCE_ACTIVITY.getName(), activityMethodGenerators);
-        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY_GROUP.getName(), activityMethodGenerators);
-
-        ImmutableMap<String, ImmutableSet<Generation>> map = methodCallbackGenerators.build();
-
-        if(map.containsKey(key)){
-            return map.get(key);
-        }
-        return map.get(AndroidLiterals.ACTIVITY.getName());
 
     }
 

@@ -163,7 +163,7 @@ public class CoreFactory {
     }
 
     public AnalysisContext buildAnalysisContext() {
-        return new AnalysisContext(buildInjectionNodeRepository(), buildAnalysisRepository());
+        return new AnalysisContext(buildInjectionNodeRepository());
     }
 
     private Provider<InjectionNodeBuilderRepository> buildInjectionNodeRepositoryProvider(){
@@ -208,7 +208,7 @@ public class CoreFactory {
 
     private InjectionNodeBuilderRepository buildScopeRepository(){
 
-        InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(astClassFactory);
+        InjectionNodeBuilderRepository scopeRepository = new InjectionNodeBuilderRepository(buildAnalysisRepository(), astClassFactory);
 
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
         scopeRepository.putScopeAspectFactory(astClassFactory.getType(BootstrapModule.class), astClassFactory.getType(ConcurrentDoubleLockingScope.class), new SingletonScopeAspectFactory(buildVariableFactoryBuilderFactory(), astClassFactory));
@@ -300,7 +300,7 @@ public class CoreFactory {
         return new FactoryGenerator(
                 buildInjectionGenerator(),
                 instantiationStrategyFactory,
-                new AnalysisContextFactory(buildAnalysisRepository()),
+                new AnalysisContextFactory(),
                 buildInjectionNodeRepositoryProvider(),
                 moduleRepository,
                 new InjectionNodeImplFactory(buildInjectionPointFactory(),
@@ -322,7 +322,7 @@ public class CoreFactory {
 
     public void registerFactories(Collection<? extends ASTType> factories) {
         //register factory configuration
-        InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
+        InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(buildAnalysisRepository(), astClassFactory);
         for (ASTType factoryType : factories) {
             repository.putType(factoryType,
                     new FactoryNodeBuilder(factoryType, buildVariableFactoryBuilderFactory(), buildAnalyser()));
@@ -438,10 +438,10 @@ public class CoreFactory {
     private final class ModuleRepositoryImpl implements  ModuleRepository{
 
         private final Set<ASTType> installedComponents = new HashSet<ASTType>();
-        private final InjectionNodeBuilderRepository moduleInjectionNodeBuilderRepository = new InjectionNodeBuilderRepository(astClassFactory);
+        private final InjectionNodeBuilderRepository moduleInjectionNodeBuilderRepository = new InjectionNodeBuilderRepository(buildAnalysisRepository(), astClassFactory);
 
         public InjectionNodeBuilderRepository buildModuleConfiguration() {
-            InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(astClassFactory);
+            InjectionNodeBuilderRepository repository = new InjectionNodeBuilderRepository(buildAnalysisRepository(), astClassFactory);
             repository.addRepository(moduleInjectionNodeBuilderRepository);
             return repository;
         }

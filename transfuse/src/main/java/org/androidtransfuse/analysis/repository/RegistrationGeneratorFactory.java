@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradletransfuse;
+package org.androidtransfuse.analysis.repository;
 
-import org.parceler.Parcel;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
+import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.gen.componentBuilder.RegistrationGenerator;
+import org.androidtransfuse.model.InjectionNode;
 
-/**
- * @author John Ericksen
- */
-@Parcel
-public class ParcelerExample {
+public interface RegistrationGeneratorFactory {
 
-    public int value;
+    RegistrationGenerator buildRegistrationGenerator(InjectionNode injectionNode, ASTBase astBase, ASTAnnotation registerAnnotation, AnalysisContext context);
 }

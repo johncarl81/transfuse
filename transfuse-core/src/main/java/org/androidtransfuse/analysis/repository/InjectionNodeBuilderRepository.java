@@ -39,11 +39,13 @@ public class InjectionNodeBuilderRepository {
     private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
     private final Map<InjectionSignature, ASTType> scoping = new HashMap<InjectionSignature, ASTType>();
     private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
+    private final AnalysisRepository analysisRepository;
     private final ASTClassFactory astClassFactory;
 
     @Inject
-    public InjectionNodeBuilderRepository(ASTClassFactory astClassFactory) {
+    public InjectionNodeBuilderRepository(AnalysisRepository analysisRepository, ASTClassFactory astClassFactory) {
         this.astClassFactory = astClassFactory;
+        this.analysisRepository = analysisRepository;
     }
 
     public void putAnnotation(Class<?> viewClass, InjectionNodeBuilder viewVariableBuilder) {
@@ -117,6 +119,10 @@ public class InjectionNodeBuilderRepository {
 
     public boolean isInterceptor(ASTAnnotation annotation) {
         return interceptorAnnotationMap.containsKey(annotation.getASTType());
+    }
+
+    public AnalysisRepository getAnalysisRepository() {
+        return analysisRepository;
     }
 
     private Map<ASTType, ASTType> getInterceptorAnnotationMap() {

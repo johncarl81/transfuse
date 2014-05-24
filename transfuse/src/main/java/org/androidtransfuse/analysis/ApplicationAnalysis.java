@@ -33,7 +33,6 @@ import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
@@ -44,7 +43,6 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
-    private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final ASTElementFactory astElementFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
@@ -57,7 +55,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     @Inject
     public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
-                               Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                                ASTElementFactory astElementFactory,
                                ASTTypeBuilderVisitor astTypeBuilderVisitor,
                                AnalysisContextFactory analysisContextFactory,
@@ -68,7 +65,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
                                ComponentAnalysis componentAnalysis) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
-        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.astElementFactory = astElementFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
@@ -101,7 +97,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
             ASTType applicationType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.APPLICATION : type.accept(astTypeBuilderVisitor, null);
 
             //analyze delegate
-            AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
+            AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(applicationType));
 
             applicationDescriptor = new ComponentDescriptor(astType, applicationType, applicationClassName, analysisContext);
 
@@ -145,19 +141,16 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         return astElementFactory.findMethod(AndroidLiterals.APPLICATION, methodName, args);
     }
 
-    private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror applicationType) {
-        InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
+    private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType applicationType) {
+        InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(applicationType, Application.class);
+
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.buildThis((AndroidLiterals.APPLICATION)));
 
-        if(applicationType != null){
-            ASTType applicationASTType = applicationType.accept(astTypeBuilderVisitor, null);
-
-            while(!applicationASTType.equals(AndroidLiterals.APPLICATION) && applicationASTType.inheritsFrom(AndroidLiterals.APPLICATION)){
-                injectionNodeBuilderRepository.putType(applicationASTType, injectionBindingBuilder.buildThis(applicationASTType));
-                applicationASTType = applicationASTType.getSuperClass();
-            }
+        while(!applicationType.equals(AndroidLiterals.APPLICATION) && applicationType.inheritsFrom(AndroidLiterals.APPLICATION)){
+            injectionNodeBuilderRepository.putType(applicationType, injectionBindingBuilder.buildThis(applicationType));
+            applicationType = applicationType.getSuperClass();
         }
 
 
