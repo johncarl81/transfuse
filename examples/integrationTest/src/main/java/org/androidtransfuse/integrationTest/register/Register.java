@@ -16,7 +16,9 @@
 package org.androidtransfuse.integrationTest.register;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
@@ -66,6 +68,18 @@ public class Register {
 
             Toast toast = Toast.makeText(context, "Method Registration", ONE_SECOND);
             toast.show();
+        }
+    };
+
+    @RegisterListener(R.id.editText)
+    private TextView.OnEditorActionListener onEditListener = new TextView.OnEditorActionListener(){
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            Toast toast = Toast.makeText(context, "Text View OnEdit Registration", ONE_SECOND);
+            toast.show();
+
+            return true;
         }
     };
 

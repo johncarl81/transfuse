@@ -46,4 +46,8 @@
             android:layout_height="wrap_content"
             android:text="Inline On Click Toast"
             android:id="@+id/button5"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"/>
 </LinearLayout>
