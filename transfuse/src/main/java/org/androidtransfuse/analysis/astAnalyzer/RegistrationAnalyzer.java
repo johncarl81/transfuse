@@ -67,6 +67,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         listenerMethodMapping.put(AndroidLiterals.VIEW, new HashMap<ASTType, String>());
         listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW, new HashMap<ASTType, String>());
         listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEw, new HashMap<ASTType, String>());
+        listenerMethodMapping.put(AndroidLiterals.TEXT_VIEW, new HashMap<ASTType, String>());
         listenerMethodMapping.put(AndroidLiterals.VIEW, new HashMap<ASTType, String>());
         listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
         listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
@@ -80,6 +81,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, "setOnScrollListener");
         listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, "setMultiChoiceModeListener");
         listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, "setViewRecyclerListener");
+        listenerMethodMapping.get(AndroidLiterals.TEXT_VIEW).put(AndroidLiterals.TEXT_VIEW_ON_EDITOR_ACTION_LISTENER, "setOnEditorActionListener");
 
         Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 

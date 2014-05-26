@@ -43,6 +43,7 @@ public final class AndroidLiterals {
     public static final ASTType ABS_LIST_VIEw = new ASTStringType("android.widget.AbsListView");
     public static final ASTType VIEW_GROUP = new ASTStringType("android.view.ViewGroup");
     public static final ASTType LIST_VIEW = new ASTStringType("android.widget.ListView");
+    public static final ASTType TEXT_VIEW = new ASTStringType("android.widget.TextView");
     public static final ASTType VIEW_ON_CLICK_LISTENER = new ASTStringType("android.view.View.OnClickListener");
     public static final ASTType VIEW_ON_LONG_CLICK_LISTENER = new ASTStringType("android.view.View.OnLongClickListener");
     public static final ASTType VIEW_ON_CREATE_CONTEXT_MENU_LISTENER = new ASTStringType("android.view.View.OnCreateContextMenuListener");
@@ -55,6 +56,7 @@ public final class AndroidLiterals {
     public static final ASTType ABS_LIST_VIEW_ON_SCROLL_LISTENER = new ASTStringType("android.widget.AbsListView.OnScrollListener");
     public static final ASTType ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER = new ASTStringType("android.widget.AbsListView.MultiChoiceModeListener");
     public static final ASTType ABS_LIST_VIEW_RECYCLER_LISTENER = new ASTStringType("android.widget.AbsListView.RecyclerListener");
+    public static final ASTType TEXT_VIEW_ON_EDITOR_ACTION_LISTENER = new ASTStringType("android.widget.TextView.OnEditorActionListener");
     public static final ASTType PREFERENCE_ACTIVITY = new ASTStringType("android.preference.PreferenceActivity");
     public static final ASTType ACTIVITY_GROUP = new ASTStringType("android.app.ActivityGroup");
     public static final ASTType RESOURCES = new ASTStringType("android.content.res.Resources");
