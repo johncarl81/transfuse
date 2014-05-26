@@ -39,6 +39,8 @@ public final class AndroidLiterals {
     public static final ASTType LIST_FRAGMENT = new ASTStringType("android.support.v4.app.ListFragment");
     public static final ASTType LAYOUT_INFLATER = new ASTStringType("android.view.LayoutInflater");
     public static final ASTType VIEW = new ASTStringType("android.view.View");
+    public static final ASTType ADAPTER_VIEW = new ASTStringType("android.widget.AdapterView");
+    public static final ASTType ABS_LIST_VIEw = new ASTStringType("android.widget.AbsListView");
     public static final ASTType VIEW_GROUP = new ASTStringType("android.view.ViewGroup");
     public static final ASTType LIST_VIEW = new ASTStringType("android.widget.ListView");
     public static final ASTType VIEW_ON_CLICK_LISTENER = new ASTStringType("android.view.View.OnClickListener");

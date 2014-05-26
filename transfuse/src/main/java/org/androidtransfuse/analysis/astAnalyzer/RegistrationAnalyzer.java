@@ -62,20 +62,24 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         this.injectionPointFactory = injectionPointFactory;
         this.componentBuilderFactory = componentBuilderFactory;
 
-        Map<ASTType, String> listenerMethodMapping = new HashMap<ASTType, String>();
+        Map<ASTType, Map<ASTType, String>> listenerMethodMapping = new HashMap<ASTType, Map<ASTType, String>>();
 
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, "setOnCreateContextMenuListener");
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
-        listenerMethodMapping.put(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
-        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_CLICK_LISTENER, "setOnItemClickListener");
-        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_LONG_CLICK_LISTENER, "setOnItemLongClickListener");
-        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_SELECTED_LISTENER, "setOnItemSelectedListener");
-        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, "setOnScrollListener");
-        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, "setMultiChoiceModeListener");
-        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, "setViewRecyclerListener");
+        listenerMethodMapping.put(AndroidLiterals.VIEW, new HashMap<ASTType, String>());
+        listenerMethodMapping.put(AndroidLiterals.ADAPTER_VIEW, new HashMap<ASTType, String>());
+        listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEw, new HashMap<ASTType, String>());
+        listenerMethodMapping.put(AndroidLiterals.VIEW, new HashMap<ASTType, String>());
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, "setOnCreateContextMenuListener");
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
+        listenerMethodMapping.get(AndroidLiterals.VIEW).put(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
+        listenerMethodMapping.get(AndroidLiterals.ADAPTER_VIEW).put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_CLICK_LISTENER, "setOnItemClickListener");
+        listenerMethodMapping.get(AndroidLiterals.ADAPTER_VIEW).put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_LONG_CLICK_LISTENER, "setOnItemLongClickListener");
+        listenerMethodMapping.get(AndroidLiterals.ADAPTER_VIEW).put(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_SELECTED_LISTENER, "setOnItemSelectedListener");
+        listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, "setOnScrollListener");
+        listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, "setMultiChoiceModeListener");
+        listenerMethodMapping.get(AndroidLiterals.ABS_LIST_VIEw).put(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, "setViewRecyclerListener");
 
         Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 
@@ -94,7 +98,10 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> generatorBuilder = ImmutableMap.builder();
 
-        generatorBuilder.putAll(Maps.transformValues(listenerMethodMapping, new ListenerMethodMappingTransformer()));
+        for (Map.Entry<ASTType, Map<ASTType, String>> entry : listenerMethodMapping.entrySet()) {
+            generatorBuilder.putAll(Maps.transformValues(entry.getValue(), new ListenerMethodMappingTransformer(entry.getKey())));
+        }
+
         generatorBuilder.putAll(Maps.transformValues(Maps.uniqueIndex(callThroughMapping, Functions.<ASTType>identity()),
                 new CallThroughMethodMappingFunction()));
 
@@ -111,9 +118,16 @@ public class RegistrationAnalyzer implements ASTAnalysis {
     }
 
     private final class ListenerMethodMappingTransformer implements Function<String, RegistrationGeneratorFactory> {
+
+        private final ASTType listenableType;
+
+        private ListenerMethodMappingTransformer(ASTType listenableType) {
+            this.listenableType = listenableType;
+        }
+
         @Override
         public RegistrationGeneratorFactory apply(String value) {
-            return new ViewRegistrationGeneratorFactory(value);
+            return new ViewRegistrationGeneratorFactory(listenableType, value);
         }
     }
 
@@ -131,16 +145,18 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
     private final class ViewRegistrationGeneratorFactory implements RegistrationGeneratorFactory {
 
-        private String listenerMethod;
+        private final ASTType listenableType;
+        private final String listenerMethod;
 
-        private ViewRegistrationGeneratorFactory(String listenerMethod) {
+        private ViewRegistrationGeneratorFactory(ASTType listenableType, String listenerMethod) {
+            this.listenableType = listenableType;
             this.listenerMethod = listenerMethod;
         }
 
         @Override
         public RegistrationGenerator buildRegistrationGenerator(InjectionNode injectionNode, ASTBase astBase, ASTAnnotation registerAnnotation, AnalysisContext context) {
 
-            InjectionNode viewInjectionNode = buildViewInjectionNode(registerAnnotation, context);
+            InjectionNode viewInjectionNode = buildViewInjectionNode(listenableType, registerAnnotation, context);
 
             ViewRegistrationInvocationBuilder invocationBuilder;
             if (astBase instanceof ASTType) {
@@ -251,12 +267,12 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         return generators.build();
     }
 
-    private InjectionNode buildViewInjectionNode(final ASTAnnotation registerAnnotation, AnalysisContext context) {
+    private InjectionNode buildViewInjectionNode(ASTType listenableType, ASTAnnotation registerAnnotation, AnalysisContext context) {
 
         ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
         ASTAnnotation viewRegistrationAnnotation = new ASTAnnotationPropertyReplacement(registerAnnotation, atViewType);
 
-        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), AndroidLiterals.VIEW, context);
+        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), listenableType, context);
     }
 
     private static final class ASTAnnotationPropertyReplacement implements ASTAnnotation {
