@@ -76,6 +76,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
         listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, "setOnScrollListener");
         listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, "setMultiChoiceModeListener");
         listenerMethodMapping.put(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, "setViewRecyclerListener");
+        listenerMethodMapping.put(AndroidLiterals.TEXT_VIEW_ON_EDITOR_ACTION_LISTENER, "setOnEditorActionListener");
 
         Set<ASTType> callThroughMapping = new HashSet<ASTType>();
 

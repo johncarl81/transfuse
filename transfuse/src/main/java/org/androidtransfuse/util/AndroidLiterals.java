@@ -53,6 +53,7 @@ public final class AndroidLiterals {
     public static final ASTType ABS_LIST_VIEW_ON_SCROLL_LISTENER = new ASTStringType("android.widget.AbsListView.OnScrollListener");
     public static final ASTType ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER = new ASTStringType("android.widget.AbsListView.MultiChoiceModeListener");
     public static final ASTType ABS_LIST_VIEW_RECYCLER_LISTENER = new ASTStringType("android.widget.AbsListView.RecyclerListener");
+    public static final ASTType TEXT_VIEW_ON_EDITOR_ACTION_LISTENER = new ASTStringType("TextView.OnEditorActionListener");
     public static final ASTType PREFERENCE_ACTIVITY = new ASTStringType("android.preference.PreferenceActivity");
     public static final ASTType ACTIVITY_GROUP = new ASTStringType("android.app.ActivityGroup");
     public static final ASTType RESOURCES = new ASTStringType("android.content.res.Resources");
