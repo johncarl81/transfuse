@@ -25,6 +25,13 @@ You may download Transfuse as a Maven dependency:
 </dependency>
 ----
 
+or Gradle:
+[source,groovy]
+----
+apt "org.androidtransfuse:transfuse:${transfuseVersion}"
+compile "org.androidtransfuse:transfuse-api:${transfuseVersion}"
+----
+
 Or from http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22[Maven Central].
 
 .License
