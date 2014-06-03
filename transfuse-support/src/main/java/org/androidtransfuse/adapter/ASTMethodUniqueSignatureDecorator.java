@@ -103,4 +103,8 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     public int hashCode() {
         return methodSignature.hashCode();
     }
+
+    public String toString(){
+        return method.toString();
+    }
 }

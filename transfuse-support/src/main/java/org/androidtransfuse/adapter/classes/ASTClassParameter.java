@@ -76,4 +76,11 @@ public class ASTClassParameter implements ASTParameter {
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }
+
+    public String toString(){
+        if(name != null){
+            return astType.getPackageClass().getClassName() + " " + name;
+        }
+        return astType.getPackageClass().getClassName();
+    }
 }

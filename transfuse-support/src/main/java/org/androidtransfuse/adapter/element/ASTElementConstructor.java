@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter.element;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
@@ -56,5 +57,9 @@ public class ASTElementConstructor extends ASTElementBase implements ASTConstruc
     @Override
     public ImmutableSet<ASTType> getThrowsTypes() {
         return throwsTypes;
+    }
+
+    public String toString(){
+        return getElement().getEnclosingElement().getSimpleName() + "(" + Joiner.on(", ").join(parameters) + ")";
     }
 }

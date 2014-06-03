@@ -114,4 +114,8 @@ public class ASTClassField implements ASTField {
             return classField.get(null);
         }
     }
+
+    public String toString(){
+        return astType.getPackageClass().getClassName() + field.getName();
+    }
 }

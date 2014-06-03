@@ -64,4 +64,8 @@ public class ASTElementField extends ASTElementBase implements ASTField {
     public boolean isTransient() {
         return variableElement.getModifiers().contains(Modifier.TRANSIENT);
     }
+
+    public String toString(){
+        return astTypeLoader.getASTType().getPackageClass().getClassName() + " " + variableElement.getSimpleName();
+    }
 }

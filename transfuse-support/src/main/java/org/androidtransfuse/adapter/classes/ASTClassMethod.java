@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter.classes;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
@@ -98,5 +99,9 @@ public class ASTClassMethod implements ASTMethod {
     @Override
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
+    }
+
+    public String toString(){
+        return method.getName() + "(" + Joiner.on(", ").join(parameters) + ")";
     }
 }

@@ -42,4 +42,8 @@ public class ASTElementParameter extends ASTElementBase implements ASTParameter 
     public synchronized ASTType getASTType() {
         return astTypeLoader.getASTType();
     }
+
+    public String toString(){
+        return astTypeLoader.getASTType().getPackageClass().getClassName() + " " + getElement().getSimpleName();
+    }
 }

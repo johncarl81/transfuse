@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.adapter.classes;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
@@ -88,5 +89,9 @@ public class ASTClassConstructor implements ASTConstructor {
     @Override
     public boolean isFinal() {
         return Modifier.isFinal(constructor.getModifiers());
+    }
+
+    public String toString(){
+        return constructor.getName() + "(" + Joiner.on(", ").join(parameters) + ")";
     }
 }

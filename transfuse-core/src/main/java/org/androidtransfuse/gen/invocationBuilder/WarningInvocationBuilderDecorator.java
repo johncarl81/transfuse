@@ -39,14 +39,18 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
 
     @Override
     public JExpression buildConstructorCall(ASTConstructor constructor, ASTType type, List<? extends JExpression> parameters) {
-        validator.warn("Reflection is required to access private constructors, consider using non-private.").element(constructor).build();
+        validator.warn(
+                "Reflection is required to access private constructor: " + constructor + ", consider using non-private."
+        ).element(constructor).build();
 
         return delegate.buildConstructorCall(constructor, type, parameters);
     }
 
     @Override
     public JExpression buildFieldGet(boolean cast, ASTField field, TypedExpression targetExpression) {
-        validator.warn("Reflection is required to access private fields, consider using non-private.").element(field).build();
+        validator.warn(
+                "Reflection is required to access private field: " + field + ", consider using non-private."
+        ).element(field).build();
 
         return delegate.buildFieldGet(cast, field, targetExpression);
     }
@@ -61,7 +65,8 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
         if(field.isFinal()){
             builder.append("final ");
         }
-        builder.append("fields, consider using non-private.");
+        builder.append(
+                "field: " + field + ", consider using non-private.");
 
         validator.warn(builder.toString()).element(field).build();
 
@@ -70,7 +75,9 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
 
     @Override
     public JInvocation buildMethodCall(boolean cast, ASTMethod method, List<? extends JExpression> parameters, TypedExpression expression) {
-        validator.warn("Reflection is required to call private methods, consider using non-private.").element(method).build();
+        validator.warn(
+                "Reflection is required to call private method: " + method + ", consider using non-private."
+        ).element(method).build();
 
         return delegate.buildMethodCall(cast, method, parameters, expression);
     }
