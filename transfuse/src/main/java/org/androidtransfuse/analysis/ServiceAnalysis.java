@@ -171,7 +171,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         manifestService.setName(name);
         manifestService.setEnabled(checkDefault(serviceAnnotation.enabled(), true));
-        manifestService.setExported(checkDefault(serviceAnnotation.exported(), true));
+        manifestService.setExported(serviceAnnotation.exported().getValue());
         manifestService.setIcon(checkBlank(serviceAnnotation.icon()));
         manifestService.setLabel(checkBlank(serviceAnnotation.label()));
         manifestService.setPermission(checkBlank(serviceAnnotation.permission()));

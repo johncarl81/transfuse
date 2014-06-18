@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.annotations.Exported;
 import org.androidtransfuse.annotations.Service;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
@@ -62,7 +63,7 @@ public class ServiceAnalysisTest {
 
     @Test
     public void testManifestEntry(){
-        @Service(enabled = false, exported = false, icon = "icon", label = "label", permission = "permission", process = "process")
+        @Service(enabled = false, exported = Exported.FALSE, icon = "icon", label = "label", permission = "permission", process = "process")
         class ServiceAnalysisTarget{}
 
         org.androidtransfuse.model.manifest.Service service = serviceAnalysis.buildService("name", ServiceAnalysisTarget.class.getAnnotation(Service.class));

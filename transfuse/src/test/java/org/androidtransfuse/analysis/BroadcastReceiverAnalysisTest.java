@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.BroadcastReceiver;
+import org.androidtransfuse.annotations.Exported;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.model.ComponentDescriptor;
@@ -62,7 +63,7 @@ public class BroadcastReceiverAnalysisTest {
     @Test
     public void testManifestEntry(){
 
-        @BroadcastReceiver(label = "label", permission = "permission", process = "process", icon = "icon", enabled = false, exported = false)
+        @BroadcastReceiver(label = "label", permission = "permission", process = "process", icon = "icon", enabled = false, exported = Exported.FALSE)
         class BroadcastReceiverTarget {
         }
 

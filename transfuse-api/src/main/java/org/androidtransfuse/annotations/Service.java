@@ -42,7 +42,7 @@ public @interface Service {
 
     boolean enabled() default true;
 
-    boolean exported() default true;
+    Exported exported() default Exported.UNSPECIFIED;
 
     String icon() default "";
 

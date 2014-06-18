@@ -49,7 +49,7 @@ public @interface BroadcastReceiver {
 
     boolean enabled() default true;
 
-    boolean exported() default true;
+    Exported exported() default Exported.UNSPECIFIED;
 
     Class<?> type() default Object.class;
 }

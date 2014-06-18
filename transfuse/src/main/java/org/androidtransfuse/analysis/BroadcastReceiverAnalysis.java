@@ -161,7 +161,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         manifestReceiver.setPermission(checkBlank(annotation.permission()));
         manifestReceiver.setIcon(checkBlank(annotation.icon()));
         manifestReceiver.setEnabled(checkDefault(annotation.enabled(), true));
-        manifestReceiver.setExported(checkDefault(annotation.exported(), true));
+        manifestReceiver.setExported(annotation.exported().getValue());
 
         return manifestReceiver;
     }
