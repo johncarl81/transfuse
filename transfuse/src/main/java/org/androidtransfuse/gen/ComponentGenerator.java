@@ -15,17 +15,11 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.*;
-import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.gen.componentBuilder.*;
+import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodDescriptor;
-import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.scope.Scopes;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -51,7 +45,7 @@ public class ComponentGenerator  {
     }
 
     public JDefinedClass generate(ComponentDescriptor descriptor) {
-        if (descriptor == null) {
+        /*if (descriptor == null) {
             return null;
         }
 
@@ -100,6 +94,7 @@ public class ComponentGenerator  {
             return definedClass;
         } catch (JClassAlreadyExistsException e) {
             throw new TransfuseAnalysisException("Class Already Exists ", e);
-        }
+        }*/
+        return null;
     }
 }

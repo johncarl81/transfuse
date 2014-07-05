@@ -15,22 +15,22 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.annotations.OnReceive;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.ScopesGeneration;
+import org.androidtransfuse.experiment.generators.BroadcastReceiverManifestEntryGenerator;
+import org.androidtransfuse.experiment.generators.MethodCallbackGenerator;
+import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
-import org.androidtransfuse.gen.componentBuilder.ContextScopeComponentBuilder;
-import org.androidtransfuse.gen.componentBuilder.ObservesRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.manifest.Receiver;
-import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
@@ -38,9 +38,8 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
+import java.lang.annotation.Annotation;
 
-import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
-import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
@@ -51,68 +50,55 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private final ASTClassFactory astClassFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
-    private final Provider<Receiver> receiverProvider;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final InjectionBindingBuilder injectionBindingBuilder;
-    private final ManifestManager manifestManager;
     private final ComponentBuilderFactory componentBuilderFactory;
-    private final IntentFilterFactory intentFilterBuilder;
-    private final MetaDataBuilder metaDataBuilder;
-    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
-    private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final BroadcastReceiverManifestEntryGenerator manifestEntryGenerator;
+    private final ASTElementFactory astElementFactory;
+    private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
+    private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
 
     @Inject
     public BroadcastReceiverAnalysis(ASTClassFactory astClassFactory,
                                      ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                                     AnalysisContextFactory analysisContextFactory, Provider<Receiver> receiverProvider,
+                                     AnalysisContextFactory analysisContextFactory,
                                      Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                                     InjectionBindingBuilder injectionBindingBuilder, ManifestManager manifestManager,
+                                     InjectionBindingBuilder injectionBindingBuilder,
                                      ComponentBuilderFactory componentBuilderFactory,
-                                     IntentFilterFactory intentFilterBuilder,
-                                     MetaDataBuilder metaDataBuilder,
-                                     ContextScopeComponentBuilder contextScopeComponentBuilder,
-                                     ObservesRegistrationGenerator observesExpressionDecorator) {
+                                     BroadcastReceiverManifestEntryGenerator manifestEntryGenerator,
+                                     ASTElementFactory astElementFactory,
+                                     OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory, ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory) {
         this.astClassFactory = astClassFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
-        this.receiverProvider = receiverProvider;
-        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.injectionBindingBuilder = injectionBindingBuilder;
-        this.manifestManager = manifestManager;
+        this.manifestEntryGenerator = manifestEntryGenerator;
+        this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.intentFilterBuilder = intentFilterBuilder;
-        this.metaDataBuilder = metaDataBuilder;
-        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
-        this.observesExpressionDecorator = observesExpressionDecorator;
+        this.astElementFactory = astElementFactory;
+        this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
+        this.scopesGenerationFactory = scopesGenerationFactory;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
 
         BroadcastReceiver broadcastReceiver = astType.getAnnotation(BroadcastReceiver.class);
 
-        PackageClass receiverClassName;
-
-        ComponentDescriptor receiverDescriptor = null;
+        ComponentDescriptor receiverDescriptor;
 
         if (astType.extendsFrom(AndroidLiterals.BROADCAST_RECEIVER)) {
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
-            receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
+            PackageClass receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
+            receiverDescriptor = new ComponentDescriptor(null, null, receiverClassName);
         } else {
-            receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
+            PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
 
             TypeMirror type = getTypeMirror(new ReceiverTypeRunnable(broadcastReceiver));
-            String receiverType = buildReceiverType(type);
+            ASTType receiverType = buildReceiverType(type);
 
-            receiverDescriptor = new ComponentDescriptor(receiverType, receiverClassName);
+            receiverDescriptor = new ComponentDescriptor(astType, receiverType, receiverClassName);
 
-            receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildBroadcastReceiverInjectionNodeFactory(astType));
-
-            receiverDescriptor.setInitMethodBuilder(astClassFactory.getType(OnReceive.class), componentBuilderFactory.buildOnReceiveMethodBuilder());
-
-            receiverDescriptor.addGenerators(contextScopeComponentBuilder);
-
-            // make sure we have the mappings for the entire receiver inheritance chain so it can be injected
             InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
             if(type != null) {
                 ASTType applicationASTType = type.accept(astTypeBuilderVisitor, null);
@@ -125,45 +111,42 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(injectionNodeBuilderRepository);
 
-            receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, analysisContext));
-            receiverDescriptor.addRegistration(observesExpressionDecorator);
+            receiverDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT)));
+            receiverDescriptor.setInjectionGenerator(onCreateInjectionGeneratorFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT), astType));
+
+            receiverDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnReceive.class, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
+
+            //receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, analysisContext));
+            receiverDescriptor.setAnalysisContext(analysisContext);
         }
 
-        setupManifest(receiverClassName.getFullyQualifiedName(), broadcastReceiver, astType);
+        receiverDescriptor.getPreInjectionGenerators().add(manifestEntryGenerator);
 
         return receiverDescriptor;
     }
 
-    private String buildReceiverType(TypeMirror type) {
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
+
+        ASTMethod method = getASTMethod(methodName, args);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
+
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+    }
+
+    private ASTMethod getASTMethod(String methodName, ASTType... args) {
+        return getASTMethod(AndroidLiterals.BROADCAST_RECEIVER, methodName, args);
+    }
+
+    private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
+        return astElementFactory.findMethod(type, methodName, args);
+    }
+
+    private ASTType buildReceiverType(TypeMirror type) {
         if (type != null && !type.toString().equals("java.lang.Object")) {
-            return type.toString();
+            return type.accept(astTypeBuilderVisitor, null);
         } else {
-            return AndroidLiterals.BROADCAST_RECEIVER.getName();
+            return AndroidLiterals.BROADCAST_RECEIVER;
         }
-    }
-
-    private void setupManifest(String name, BroadcastReceiver annotation, ASTType astType) {
-
-        Receiver manifestReceiver = buildReceiver(name, annotation);
-
-        manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(astType));
-        manifestReceiver.setMetaData(metaDataBuilder.buildMetaData(astType));
-
-        manifestManager.addBroadcastReceiver(manifestReceiver);
-    }
-    
-    protected Receiver buildReceiver(String name, BroadcastReceiver annotation){
-        Receiver manifestReceiver = receiverProvider.get();
-
-        manifestReceiver.setName(name);
-        manifestReceiver.setLabel(checkBlank(annotation.label()));
-        manifestReceiver.setProcess(checkBlank(annotation.process()));
-        manifestReceiver.setPermission(checkBlank(annotation.permission()));
-        manifestReceiver.setIcon(checkBlank(annotation.icon()));
-        manifestReceiver.setEnabled(checkDefault(annotation.enabled(), true));
-        manifestReceiver.setExported(annotation.exported().getValue());
-
-        return manifestReceiver;
     }
 
     private PackageClass buildPackageClass(ASTType astType, String className) {

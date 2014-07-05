@@ -13,31 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.event;
-
-import java.lang.ref.WeakReference;
+package org.androidtransfuse.experiment;
 
 /**
- * Weak reference proxy to an Event Observer. Will trigger an event on the given reference only if the referenced object
- * exists.
- *
  * @author John Ericksen
  */
-public abstract class WeakObserver<E, T> implements EventObserver<E>{
+public interface PreInjectionGeneration {
 
-    private final WeakReference<T> reference;
+    void schedule(ComponentBuilder builder, ComponentDescriptor descriptor);
 
-    public WeakObserver(T target){
-        reference = new WeakReference<T>(target);
-    }
-
-    @Override
-    public void trigger(E event) {
-        T handle = reference.get();
-        if(handle != null){
-            trigger(event, handle);
-        }
-    }
-
-    public abstract void trigger(E event, T handle);
 }

@@ -16,17 +16,19 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTVoidType;
-import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.experiment.ComponentBuilder;
+import org.androidtransfuse.experiment.ComponentMethodGenerator;
+import org.androidtransfuse.experiment.GenerationPhase;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -34,49 +36,39 @@ import java.util.Map;
 public class ActivityDelegateRegistrationGenerator implements RegistrationGenerator {
 
     private final ImmutableList<ASTMethod> methods;
-    private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
     private final ActivityDelegateASTReference activityDelegateASTReference;
 
     @Inject
     public ActivityDelegateRegistrationGenerator(/*@Assisted*/ ActivityDelegateASTReference activityDelegateASTReference,
-                                                 /*@Assisted*/ ImmutableList<ASTMethod> methods,
-                                                 ClassGenerationUtil generationUtil,
-                                                 UniqueVariableNamer namer) {
+                                                 /*@Assisted*/ ImmutableList<ASTMethod> methods) {
         this.methods = methods;
-        this.generationUtil = generationUtil;
-        this.namer = namer;
         this.activityDelegateASTReference = activityDelegateASTReference;
     }
 
     @Override
-    public void build(JDefinedClass definedClass, JBlock block, TypedExpression value) {
+    public void build(final ComponentBuilder componentBuilder, final TypedExpression value) {
 
         for (ASTMethod method : methods) {
-            //mirror method
-            JMethod implementedMethod = definedClass.method(JMod.PUBLIC, generationUtil.ref(method.getReturnType()), method.getName());
-            implementedMethod.annotate(Override.class);
 
-            Map<ASTParameter, JVar> parameterMap = new HashMap<ASTParameter, JVar>();
-            for (ASTParameter astParameter : method.getParameters()) {
-                JVar param = implementedMethod.param(generationUtil.ref(astParameter.getASTType()), namer.generateName(astParameter.getASTType()));
-                parameterMap.put(astParameter, param);
-            }
+            componentBuilder.add(method, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                @Override
+                public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                    JExpression targetExpression = activityDelegateASTReference.buildReference(componentBuilder.getDefinedClass(), value);
 
-            JExpression targetExpression = activityDelegateASTReference.buildReference(definedClass, value);
+                    JInvocation delegateInvocation = targetExpression.invoke(methodDescriptor.getASTMethod().getName());
 
-            JInvocation delegateInvocation = targetExpression.invoke(method.getName());
+                    for (ASTParameter astParameter : methodDescriptor.getASTMethod().getParameters()) {
+                        delegateInvocation.arg(methodDescriptor.getParameter(astParameter).getExpression());
+                    }
 
-            for (ASTParameter astParameter : method.getParameters()) {
-                delegateInvocation.arg(parameterMap.get(astParameter));
-            }
-
-            if(ASTVoidType.VOID.equals(method.getReturnType())){
-                implementedMethod.body().add(delegateInvocation);
-            }
-            else{
-                implementedMethod.body()._return(delegateInvocation);
-            }
+                    if(ASTVoidType.VOID.equals(methodDescriptor.getASTMethod().getReturnType())){
+                        block.add(delegateInvocation);
+                    }
+                    else{
+                        block._return(delegateInvocation);
+                    }
+                }
+            });
         }
     }
 }

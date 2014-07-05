@@ -15,23 +15,28 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
-import org.androidtransfuse.analysis.repository.ActivityComponentBuilderRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.PostInjectionGeneration;
+import org.androidtransfuse.experiment.ScopesGeneration;
+import org.androidtransfuse.experiment.generators.*;
+import org.androidtransfuse.gen.GeneratorFactory;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
+import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
-import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.processor.ManifestManager;
+import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -40,9 +45,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
-import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
-import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
@@ -52,125 +57,130 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
-    private final InjectionPointFactory injectionPointFactory;
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
-    private final Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider;
-    private final ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository;
     private final AnalysisContextFactory analysisContextFactory;
-    private final Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
-    private final ManifestManager manifestManager;
-    private final IntentFilterFactory intentFilterBuilder;
     private final ComponentBuilderFactory componentBuilderFactory;
-    private final MetaDataBuilder metadataBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
-    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
-    private final ObservesRegistrationGenerator observesExpressionDecorator;
+    private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
     private final ViewInjectionNodeBuilder viewVariableBuilder;
     private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
     private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
     private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
     private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
+    private final Provider<ActivityManifestEntryGenerator> manifestGeneratorProvider;
+    private final LayoutGenerator layoutGenerator;
+    private final LayoutHandlerGenerator layoutHandlerGenerator;
+    private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
+    private final WindowFeatureGenerator windowFeatureGenerator;
+    private final GeneratorFactory generatorFactory;
+    private final ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator;
+    private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
+    private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
 
     @Inject
-    public ActivityAnalysis(InjectionPointFactory injectionPointFactory,
-                            InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+    public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                            Provider<org.androidtransfuse.model.manifest.Activity> manifestActivityProvider,
-                            ActivityComponentBuilderRepositoryFactory activityComponentBuilderRepository,
                             AnalysisContextFactory analysisContextFactory,
-                            Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
                             ASTClassFactory astClassFactory,
                             ASTElementFactory astElementFactory,
-                            ManifestManager manifestManager,
-                            IntentFilterFactory intentFilterBuilder,
                             ComponentBuilderFactory componentBuilderFactory,
-                            MetaDataBuilder metadataBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
-                            ContextScopeComponentBuilder contextScopeComponentBuilder,
-                            ObservesRegistrationGenerator observesExpressionDecorator,
+                            ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
                             ViewInjectionNodeBuilder viewVariableBuilder,
                             ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
                             SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
                             ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
-                            PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder) {
-        this.injectionPointFactory = injectionPointFactory;
+                            PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
+                            Provider<ActivityManifestEntryGenerator> manifestGeneratorProvider,
+                            LayoutGenerator layoutGenerator,
+                            LayoutHandlerGenerator layoutHandlerGenerator,
+                            SuperGenerator.SuperGeneratorFactory superGeneratorFactory,
+                            WindowFeatureGenerator windowFeatureGenerator,
+                            GeneratorFactory generatorFactory,
+                            ListenerRegistrationGenerator listenerRegistrationGenerator,
+                            NonConfigurationInstanceGenerator nonConfigurationInstanceGenerator,
+                            OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory, ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
-        this.manifestActivityProvider = manifestActivityProvider;
-        this.activityComponentBuilderRepository = activityComponentBuilderRepository;
         this.analysisContextFactory = analysisContextFactory;
-        this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
-        this.manifestManager = manifestManager;
-        this.intentFilterBuilder = intentFilterBuilder;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.metadataBuilder = metadataBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
-        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
-        this.observesExpressionDecorator = observesExpressionDecorator;
+        this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
         this.viewVariableBuilder = viewVariableBuilder;
         this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
         this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
         this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
         this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
+        this.manifestGeneratorProvider = manifestGeneratorProvider;
+        this.layoutGenerator = layoutGenerator;
+        this.layoutHandlerGenerator = layoutHandlerGenerator;
+        this.superGeneratorFactory = superGeneratorFactory;
+        this.windowFeatureGenerator = windowFeatureGenerator;
+        this.generatorFactory = generatorFactory;
+        this.listenerRegistrationGenerator = listenerRegistrationGenerator;
+        this.nonConfigurationInstanceGenerator = nonConfigurationInstanceGenerator;
+        this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
+        this.scopesGenerationFactory = scopesGenerationFactory;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
 
         Activity activityAnnotation = input.getAnnotation(Activity.class);
         PackageClass activityClassName;
-        ComponentDescriptor activityDescriptor = null;
+        ComponentDescriptor activityDescriptor;
 
         if (input.extendsFrom(AndroidLiterals.ACTIVITY)) {
             //vanilla Android activity
             PackageClass activityPackageClass = input.getPackageClass();
             activityClassName = buildPackageClass(input, activityPackageClass.getClassName());
+            activityDescriptor = new ComponentDescriptor(null, null, activityClassName);
         } else {
             //generated Android activity
             activityClassName = buildPackageClass(input, activityAnnotation.name());
 
-            Layout layoutAnnotation = input.getAnnotation(Layout.class);
-            LayoutHandler layoutHandlerAnnotation = input.getAnnotation(LayoutHandler.class);
-
             TypeMirror type = getTypeMirror(new ActivityTypeMirrorRunnable(activityAnnotation));
 
-            String activityType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.ACTIVITY.getName() : type.toString();
-
-            Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
+            ASTType activityType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.ACTIVITY : type.accept(astTypeBuilderVisitor, null);
 
             AnalysisContext context = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
 
-            InjectionNode layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, context);
+            activityDescriptor = new ComponentDescriptor(input, activityType, activityClassName);
 
-            activityDescriptor = new ComponentDescriptor(activityType, activityClassName);
+            activityDescriptor.getPreInjectionGenerators().add(superGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
+            activityDescriptor.getPreInjectionGenerators().add(layoutGenerator);
+            activityDescriptor.getPreInjectionGenerators().add(layoutHandlerGenerator);
+            activityDescriptor.getPreInjectionGenerators().add(windowFeatureGenerator);
+            activityDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
 
-            //application generation profile
-            setupActivityProfile(activityType, activityDescriptor, input, context, layout, layoutHandlerInjectionNode);
+            activityDescriptor.setInjectionGenerator(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), input));
+
+            activityDescriptor.setAnalysisContext(context);
+
+            for (PostInjectionGeneration generator : getGenerators(activityType.getName())) {
+                activityDescriptor.getPostInjectionGenerators().add(generator);
+            }
+
+            //todo: proper context scoping activityDescriptor.addGenerators(contextScopeComponentBuilder);
+
+            activityDescriptor.getPostInjectionGenerators().add(observesExpressionGeneratorFactory.build(
+                    getASTMethod("onCreate", AndroidLiterals.BUNDLE),
+                    getASTMethod("onResume"),
+                    getASTMethod("onPause")));
         }
 
         //add manifest elements
-        setupManifest(activityClassName.getFullyQualifiedName(), activityAnnotation, input);
+        activityDescriptor.getPreInjectionGenerators().add(manifestGeneratorProvider.get());
 
         return activityDescriptor;
-    }
-
-    private InjectionNode buildLayoutHandlerInjectionNode(final LayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
-        if (layoutHandlerAnnotation != null) {
-            TypeMirror layoutHandlerType = getTypeMirror(new LayoutHandlerTypeMirrorRunnable(layoutHandlerAnnotation));
-
-            if (layoutHandlerType != null) {
-                ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
-                return injectionPointFactory.buildInjectionNode(layoutHandlerASTType, context);
-            }
-        }
-        return null;
     }
 
     private PackageClass buildPackageClass(ASTType input, String activityName) {
@@ -182,97 +192,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         } else {
             return inputPackageClass.replaceName(activityName);
         }
-    }
-
-    private void setupManifest(String name, Activity activityAnnotation, ASTType type) {
-        org.androidtransfuse.model.manifest.Activity manifestActivity = buildManifestEntry(name, activityAnnotation);
-
-        manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-        manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
-
-        manifestManager.addActivity(manifestActivity);
-    }
-
-    protected org.androidtransfuse.model.manifest.Activity buildManifestEntry(String name, Activity activityAnnotation) {
-        org.androidtransfuse.model.manifest.Activity manifestActivity = manifestActivityProvider.get();
-
-        manifestActivity.setName(name);
-        manifestActivity.setLabel(checkBlank(activityAnnotation.label()));
-        manifestActivity.setAllowTaskReparenting(checkDefault(activityAnnotation.allowTaskReparenting(), false));
-        manifestActivity.setAlwaysRetainTaskState(checkDefault(activityAnnotation.alwaysRetainTaskState(), false));
-        manifestActivity.setClearTaskOnLaunch(checkDefault(activityAnnotation.clearTaskOnLaunch(), false));
-        manifestActivity.setConfigChanges(concatenate(activityAnnotation.configChanges()));
-        manifestActivity.setEnabled(checkDefault(activityAnnotation.enabled(), true));
-        manifestActivity.setExcludeFromRecents(checkDefault(activityAnnotation.excludeFromRecents(), false));
-        manifestActivity.setExported(activityAnnotation.exported().getValue());
-        manifestActivity.setFinishOnTaskLaunch(checkDefault(activityAnnotation.finishOnTaskLaunch(), false));
-        manifestActivity.setHardwareAccelerated(checkDefault(activityAnnotation.hardwareAccelerated(), false));
-        manifestActivity.setIcon(checkBlank(activityAnnotation.icon()));
-        manifestActivity.setLaunchMode(checkDefault(activityAnnotation.launchMode(), LaunchMode.STANDARD));
-        manifestActivity.setMultiprocess(checkDefault(activityAnnotation.multiprocess(), false));
-        manifestActivity.setNoHistory(checkDefault(activityAnnotation.noHistory(), false));
-        manifestActivity.setPermission(checkBlank(activityAnnotation.permission()));
-        manifestActivity.setProcess(checkBlank(activityAnnotation.process()));
-        manifestActivity.setScreenOrientation(checkDefault(activityAnnotation.screenOrientation(), ScreenOrientation.UNSPECIFIED));
-        manifestActivity.setStateNotNeeded(checkDefault(activityAnnotation.stateNotNeeded(), false));
-        manifestActivity.setTaskAffinity(checkBlank(activityAnnotation.taskAffinity()));
-        manifestActivity.setTheme(checkBlank(activityAnnotation.theme()));
-        manifestActivity.setUiOptions(checkDefault(activityAnnotation.uiOptions(), UIOptions.NONE));
-        manifestActivity.setWindowSoftInputMode(checkDefault(activityAnnotation.windowSoftInputMode(), WindowSoftInputMode.STATE_UNSPECIFIED));
-
-        return manifestActivity;
-    }
-
-    private String concatenate(ConfigChanges[] configChanges) {
-        if (configChanges.length == 0) {
-            return null;
-        }
-
-        return StringUtils.join(configChanges, "|");
-    }
-
-    private void setupActivityProfile(String activityType, ComponentDescriptor activityDescriptor, ASTType astType, AnalysisContext context, Integer layout, InjectionNode layoutHandlerInjectionNode) {
-
-        LayoutBuilder layoutBuilder;
-        if (layout == null) {
-            if (layoutHandlerInjectionNode == null) {
-                layoutBuilder = new NoOpLayoutBuilder();
-            } else {
-                layoutBuilder = componentBuilderFactory.buildLayoutHandlerBuilder(layoutHandlerInjectionNode);
-            }
-        } else {
-            layoutBuilder = componentBuilderFactory.buildRLayoutBuilder(layout);
-        }
-
-        WindowFeatureBuilder windowFeatureBuilder;
-        if(astType.isAnnotated(WindowFeature.class)){
-            ASTAnnotation windowFeatureAnnotation = astType.getASTAnnotation(WindowFeature.class);
-            Integer[] values = windowFeatureAnnotation.getProperty("value", Integer[].class);
-            windowFeatureBuilder = new WindowFeatureBuilderImpl(values);
-        }
-        else{
-            windowFeatureBuilder = new NoOpWindowFeatureBuilder();
-        }
-
-        ASTMethod onCreateASTMethod = getASTMethod("onCreate", AndroidLiterals.BUNDLE);
-        activityDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, windowFeatureBuilder, layoutBuilder));
-
-        activityDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
-
-        activityDescriptor.addGenerators(activityComponentBuilderRepository.build().getGenerators(activityType));
-
-        activityDescriptor.addGenerators(contextScopeComponentBuilder);
-
-        activityDescriptor.addRegistration(observesExpressionDecorator);
-
-    }
-
-    private ASTMethod getASTMethod(String methodName, ASTType... args) {
-        return getASTMethod(AndroidLiterals.ACTIVITY, methodName, args);
-    }
-
-    private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
-        return astElementFactory.findMethod(type, methodName, args);
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(TypeMirror activityType) {
@@ -320,14 +239,96 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         }
     }
 
-    private static class LayoutHandlerTypeMirrorRunnable extends TypeMirrorRunnable<LayoutHandler> {
-        public LayoutHandlerTypeMirrorRunnable(LayoutHandler layoutHandlerAnnotation) {
-            super(layoutHandlerAnnotation);
-        }
+    public Set<PostInjectionGeneration> getGenerators(String key) {
 
-        @Override
-        public void run(LayoutHandler annotation) {
-            annotation.value();
+        ImmutableMap.Builder<String, ImmutableSet<PostInjectionGeneration>> methodCallbackGenerators = ImmutableMap.builder();
+
+        ImmutableSet<PostInjectionGeneration> activityMethodGenerators = buildActivityMethodCallbackGenerators();
+        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY.getName(), activityMethodGenerators);
+        methodCallbackGenerators.put(AndroidLiterals.LIST_ACTIVITY.getName(), buildListActivityMethodCallbackGenerators(activityMethodGenerators));
+        methodCallbackGenerators.put(AndroidLiterals.PREFERENCE_ACTIVITY.getName(), activityMethodGenerators);
+        methodCallbackGenerators.put(AndroidLiterals.ACTIVITY_GROUP.getName(), activityMethodGenerators);
+
+        ImmutableMap<String, ImmutableSet<PostInjectionGeneration>> map = methodCallbackGenerators.build();
+
+        if(map.containsKey(key)){
+            return map.get(key);
         }
+        return map.get(AndroidLiterals.ACTIVITY.getName());
+
+    }
+
+    private ImmutableSet<PostInjectionGeneration> buildListActivityMethodCallbackGenerators(Set<PostInjectionGeneration> activityMethodGenerators) {
+        ImmutableSet.Builder<PostInjectionGeneration> listActivityCallbackGenerators = ImmutableSet.builder();
+        listActivityCallbackGenerators.addAll(activityMethodGenerators);
+
+        //onListItemClick(android.widget.ListView l, android.view.View v, int position, long id)
+        ASTMethod onListItemClickMethod = getASTMethod(AndroidLiterals.LIST_ACTIVITY, "onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG);
+        listActivityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnListItemClick.class), onListItemClickMethod));
+
+        return listActivityCallbackGenerators.build();
+    }
+
+    private ImmutableSet<PostInjectionGeneration> buildActivityMethodCallbackGenerators() {
+        ImmutableSet.Builder<PostInjectionGeneration> activityCallbackGenerators = ImmutableSet.builder();
+        activityCallbackGenerators.add(buildEventMethod(OnCreate.class, "onCreate", AndroidLiterals.BUNDLE));
+        // onDestroy
+        activityCallbackGenerators.add(buildEventMethod(OnDestroy.class, "onDestroy"));
+        // onPause
+        activityCallbackGenerators.add(buildEventMethod(OnPause.class, "onPause"));
+        // onRestart
+        activityCallbackGenerators.add(buildEventMethod(OnRestart.class, "onRestart"));
+        // onResume
+        activityCallbackGenerators.add(buildEventMethod(OnResume.class, "onResume"));
+        // onStart
+        activityCallbackGenerators.add(buildEventMethod(OnStart.class, "onStart"));
+        // onStop
+        activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
+        // onBackPressed
+        activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
+        // onPostCreate
+        activityCallbackGenerators.add(buildEventMethod(OnPostCreate.class, "onPostCreate", AndroidLiterals.BUNDLE));
+        // onActivityResult
+        activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
+        // onNewIntent
+        activityCallbackGenerators.add(buildEventMethod(OnNewIntent.class, "onNewIntent", AndroidLiterals.INTENT));
+
+        // onSaveInstanceState
+        ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
+        activityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod));
+
+        // onRestoreInstanceState
+        ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE);
+        activityCallbackGenerators.add(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnRestoreInstanceState.class), onRestoreInstanceState));
+
+        //extra intent factory
+        activityCallbackGenerators.add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
+
+        //listener registration
+        activityCallbackGenerators.add(listenerRegistrationGenerator);
+
+        //non configuration instance update
+        activityCallbackGenerators.add(nonConfigurationInstanceGenerator);
+
+        return activityCallbackGenerators.build();
+    }
+
+    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
+
+        ASTMethod method = getASTMethod(methodName, args);
+        ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
+
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+    }
+
+    private ASTMethod getASTMethod(String methodName, ASTType... args) {
+        return getASTMethod(AndroidLiterals.ACTIVITY, methodName, args);
+    }
+
+    private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
+        return astElementFactory.findMethod(type, methodName, args);
     }
 }

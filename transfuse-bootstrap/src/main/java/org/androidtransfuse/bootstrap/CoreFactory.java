@@ -476,8 +476,8 @@ public class CoreFactory {
         }
 
         @Override
-        public MethodInstantiationStrategy buildMethodStrategy(JDefinedClass definedClass, JBlock block, JExpression scopes) {
-            return new MethodInstantiationStrategy(definedClass, block, scopes, variableNamer);
+        public MethodInstantiationStrategy buildMethodStrategy(JBlock block, JExpression scopes) {
+            return new MethodInstantiationStrategy(block, scopes, variableNamer);
         }
     }
 }

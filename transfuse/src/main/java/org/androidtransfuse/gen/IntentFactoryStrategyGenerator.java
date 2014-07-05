@@ -23,12 +23,13 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
-import org.androidtransfuse.gen.componentBuilder.ExpressionVariableDependentGenerator;
+import org.androidtransfuse.experiment.ComponentBuilder;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.ComponentPartGenerator;
+import org.androidtransfuse.experiment.PostInjectionGeneration;
 import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
-import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.parceler.Parcel;
@@ -42,7 +43,7 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
-public class IntentFactoryStrategyGenerator implements ExpressionVariableDependentGenerator {
+public class IntentFactoryStrategyGenerator implements PostInjectionGeneration {
 
     private static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
     public static final String WRAP_METHOD = "wrap";
@@ -79,67 +80,72 @@ public class IntentFactoryStrategyGenerator implements ExpressionVariableDepende
     }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
+    public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
+        builder.add(new ComponentPartGenerator() {
+            @Override
+            public void generate(org.androidtransfuse.experiment.ComponentDescriptor descriptor) {
+                try {
+                    JDefinedClass strategyClass = generationUtil.defineClass(descriptor.getPackageClass().append(STRATEGY_EXT));
 
-        try {
-            JDefinedClass strategyClass = generationUtil.defineClass(descriptor.getPackageClass().append(STRATEGY_EXT));
+                    strategyClass._extends(factoryStrategyClass);
 
-            strategyClass._extends(factoryStrategyClass);
+                    JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
 
-            JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
+                    List<IntentFactoryExtraAspect> extras = getExtras(expressionMap);
 
-            List<IntentFactoryExtraAspect> extras = getExtras(expressionMap);
+                    //constructor, with required extras
+                    JMethod constructor = strategyClass.constructor(JMod.PUBLIC);
+                    JBlock constructorBody = constructor.body();
+                    JDocComment javadocComments = constructor.javadoc();
+                    javadocComments.append("Strategy Class for generating Intent for " + descriptor.getPackageClass().getClassName());
 
-            //constructor, with required extras
-            JMethod constructor = strategyClass.constructor(JMod.PUBLIC);
-            JBlock constructorBody = constructor.body();
-            JDocComment javadocComments = constructor.javadoc();
-            javadocComments.append("Strategy Class for generating Intent for " + descriptor.getPackageClass().getClassName());
+                    constructorBody.add(JExpr.invoke("super")
+                            .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
+                            .arg(JExpr._new(generationUtil.ref(AndroidLiterals.BUNDLE)))
+                    );
 
-            constructorBody.add(JExpr.invoke("super")
-                    .arg(generationUtil.ref(descriptor.getPackageClass()).dotclass())
-                    .arg(JExpr._new(generationUtil.ref(AndroidLiterals.BUNDLE)))
-            );
+                    //addFlags method
+                    JMethod addFlags = strategyClass.method(JMod.PUBLIC, strategyClass, "addFlags");
+                    JVar flagParam = addFlags.param(int.class, namer.generateName(int.class));
+                    JBlock addFlagsBody = addFlags.body();
+                    addFlagsBody.invoke("internalAddFlags").arg(flagParam);
+                    addFlagsBody._return(JExpr._this());
 
-            //addFlags method
-            JMethod addFlags = strategyClass.method(JMod.PUBLIC, strategyClass, "addFlags");
-            JVar flagParam = addFlags.param(int.class, namer.generateName(int.class));
-            JBlock addFlagsBody = addFlags.body();
-            addFlagsBody.invoke("internalAddFlags").arg(flagParam);
-            addFlagsBody._return(JExpr._this());
+                    //addCategories method
+                    JMethod addCategory = strategyClass.method(JMod.PUBLIC, strategyClass, "addCategory");
+                    JVar categoryParam = addCategory.param(String.class, namer.generateName(String.class));
+                    JBlock addCategoryBody = addCategory.body();
+                    addCategoryBody.invoke("internalAddCategory").arg(categoryParam);
+                    addCategoryBody._return(JExpr._this());
 
-            //addCategories method
-            JMethod addCategory = strategyClass.method(JMod.PUBLIC, strategyClass, "addCategory");
-            JVar categoryParam = addCategory.param(String.class, namer.generateName(String.class));
-            JBlock addCategoryBody = addCategory.body();
-            addCategoryBody.invoke("internalAddCategory").arg(categoryParam);
-            addCategoryBody._return(JExpr._this());
+                    for (IntentFactoryExtraAspect extra : extras) {
+                        if (extra.isRequired()) {
+                            JVar extraParam = constructor.param(generationUtil.ref(extra.getType()), extra.getName());
 
-            for (IntentFactoryExtraAspect extra : extras) {
-                if (extra.isRequired()) {
-                    JVar extraParam = constructor.param(generationUtil.ref(extra.getType()), extra.getName());
+                            constructorBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
 
-                    constructorBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                            javadocComments.addParam(extraParam);
+                        } else {
+                            //setter for non-required extra
+                            JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
+                            JVar extraParam = setterMethod.param(generationUtil.ref(extra.getType()), extra.getName());
 
-                    javadocComments.addParam(extraParam);
-                } else {
-                    //setter for non-required extra
-                    JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
-                    JVar extraParam = setterMethod.param(generationUtil.ref(extra.getType()), extra.getName());
+                            JBlock setterBody = setterMethod.body();
+                            setterBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                            setterMethod.javadoc().append("Optional Extra parameter");
+                            setterMethod.javadoc().addParam(extraParam);
 
-                    JBlock setterBody = setterMethod.body();
-                    setterBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
-                    setterMethod.javadoc().append("Optional Extra parameter");
-                    setterMethod.javadoc().addParam(extraParam);
+                            setterBody._return(JExpr._this());
 
-                    setterBody._return(JExpr._this());
+                        }
+                    }
 
+                } catch (JClassAlreadyExistsException e) {
+                    throw new TransfuseAnalysisException("Class already defined while trying to define IntentFactoryStrategy", e);
                 }
-            }
 
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Class already defined while trying to define IntentFactoryStrategy", e);
-        }
+            }
+        });
     }
 
     private String upperFirst(String name) {

@@ -15,8 +15,7 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
 /**
@@ -24,5 +23,5 @@ import org.androidtransfuse.model.TypedExpression;
  */
 public interface RegistrationGenerator {
 
-    void build(JDefinedClass definedClass, JBlock block, TypedExpression value);
+    void build(ComponentBuilder componentBuilder, TypedExpression value);
 }

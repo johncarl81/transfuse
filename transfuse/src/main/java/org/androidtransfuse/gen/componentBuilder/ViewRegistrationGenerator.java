@@ -17,13 +17,19 @@ package org.androidtransfuse.gen.componentBuilder;
 
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
+import org.androidtransfuse.experiment.ComponentBuilder;
+import org.androidtransfuse.experiment.ComponentMethodGenerator;
+import org.androidtransfuse.experiment.GenerationPhase;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,6 +46,7 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
     private final ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
+    private final ASTElementFactory astElementFactory;
 
     @Inject
     public ViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode,
@@ -47,29 +54,39 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
                                      /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode,
                                      /*@Assisted*/ ViewRegistrationInvocationBuilder viewRegistrationInvocationBuilder,
                                      InjectionFragmentGenerator injectionFragmentGenerator,
-                                     InstantiationStrategyFactory instantiationStrategyFactory) {
+                                     InstantiationStrategyFactory instantiationStrategyFactory,
+                                     ASTElementFactory astElementFactory) {
         this.viewInjectionNode = viewInjectionNode;
         this.method = method;
         this.injectionNode = injectionNode;
         this.viewRegistrationInvocationBuilder = viewRegistrationInvocationBuilder;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
+        this.astElementFactory = astElementFactory;
     }
 
     @Override
-    public void build(JDefinedClass definedClass, JBlock block, TypedExpression value) {
-        try{
+    public void build(final ComponentBuilder componentBuilder, final TypedExpression value) {
 
-            //todo: map scopes
-            Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block,
-                    instantiationStrategyFactory.buildMethodStrategy(definedClass, block, null), definedClass, viewInjectionNode, null);
 
-            JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
+        ASTMethod onCreateMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE);
+        componentBuilder.add(onCreateMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                try{
+                    //todo: map scopes
+                    Map<InjectionNode, TypedExpression> viewExpressionMap = injectionFragmentGenerator.buildFragment(block,
+                            instantiationStrategyFactory.buildMethodStrategy(block, null), componentBuilder.getDefinedClass(), viewInjectionNode, null);
 
-            viewRegistrationInvocationBuilder.buildInvocation(definedClass, block, value, viewExpression, method, injectionNode);
+                    JExpression viewExpression = viewExpressionMap.get(viewInjectionNode).getExpression();
 
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Class already exists", e);
-        }
+                    viewRegistrationInvocationBuilder.buildInvocation(componentBuilder.getDefinedClass(), block, value, viewExpression, method, injectionNode);
+
+                } catch (JClassAlreadyExistsException e) {
+                    throw new TransfuseAnalysisException("Class already exists", e);
+                }
+            }
+        });
+
     }
 }

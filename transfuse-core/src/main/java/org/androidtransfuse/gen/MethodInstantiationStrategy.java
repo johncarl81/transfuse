@@ -29,18 +29,13 @@ public class MethodInstantiationStrategy implements InstantiationStrategy {
     private final Map<JDefinedClass, JExpression> variables = new HashMap<JDefinedClass, JExpression>();
     private final JExpression scopesVar;
     private final UniqueVariableNamer namer;
-    private final JDefinedClass definedClass;
     private final JBlock block;
 
     @Inject
     public MethodInstantiationStrategy(
-            /*@Assisted*/ JDefinedClass definedClass,
             /*@Assisted*/ JBlock block,
             /*@Assisted*/ JExpression scopes,
-            UniqueVariableNamer namer
-
-    ) {
-        this.definedClass = definedClass;
+            UniqueVariableNamer namer) {
         this.block = block;
         this.scopesVar = scopes;
         this.namer = namer;

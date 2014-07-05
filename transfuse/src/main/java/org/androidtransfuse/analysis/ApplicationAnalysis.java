@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -26,10 +24,14 @@ import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.gen.componentBuilder.*;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.ScopesGeneration;
+import org.androidtransfuse.experiment.generators.ApplicationManifestEntryGenerator;
+import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
+import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
+import org.androidtransfuse.experiment.generators.SuperGenerator;
+import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.model.ComponentDescriptor;
-import org.androidtransfuse.processor.ManifestManager;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -40,8 +42,6 @@ import javax.inject.Provider;
 import javax.lang.model.type.TypeMirror;
 import java.lang.annotation.Annotation;
 
-import static org.androidtransfuse.util.AnnotationUtil.checkBlank;
-import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
@@ -49,7 +49,6 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
-    private final Provider<org.androidtransfuse.model.manifest.Application> applicationProvider;
     private final InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final ComponentBuilderFactory componentBuilderFactory;
@@ -57,26 +56,26 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final ASTElementFactory astElementFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
-    private final ManifestManager manifestManager;
     private final InjectionBindingBuilder injectionBindingBuilder;
-    private final ContextScopeComponentBuilder contextScopeComponentBuilder;
-    private final ObservesRegistrationGenerator observesExpressionDecorator;
-    private final MetaDataBuilder metadataBuilder;
+    private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
+    private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
+    private final OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory;
+    private final ApplicationManifestEntryGenerator applicationManifestEntryGenerator;
+    private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
 
     @Inject
-    public ApplicationAnalysis(Provider<org.androidtransfuse.model.manifest.Application> applicationProvider, InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
+    public ApplicationAnalysis(InjectionNodeBuilderRepositoryFactory variableBuilderRepositoryFactory,
                                Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                                ComponentBuilderFactory componentBuilderFactory,
                                ASTClassFactory astClassFactory,
                                ASTElementFactory astElementFactory,
                                ASTTypeBuilderVisitor astTypeBuilderVisitor,
                                AnalysisContextFactory analysisContextFactory,
-                               ManifestManager manifestManager,
                                InjectionBindingBuilder injectionBindingBuilder,
-                               ContextScopeComponentBuilder contextScopeComponentBuilder,
-                               ObservesRegistrationGenerator observesExpressionDecorator,
-                               MetaDataBuilder metadataBuilder) {
-        this.applicationProvider = applicationProvider;
+                               ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
+                               SuperGenerator.SuperGeneratorFactory superGeneratorFactory,
+                               OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
+                               ApplicationManifestEntryGenerator applicationManifestEntryGenerator, ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory) {
         this.variableBuilderRepositoryFactory = variableBuilderRepositoryFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -84,11 +83,12 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.astElementFactory = astElementFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
-        this.manifestManager = manifestManager;
         this.injectionBindingBuilder = injectionBindingBuilder;
-        this.contextScopeComponentBuilder = contextScopeComponentBuilder;
-        this.observesExpressionDecorator = observesExpressionDecorator;
-        this.metadataBuilder = metadataBuilder;
+        this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
+        this.superGeneratorFactory = superGeneratorFactory;
+        this.injectionGeneratorFactory = injectionGeneratorFactory;
+        this.applicationManifestEntryGenerator = applicationManifestEntryGenerator;
+        this.scopesGenerationFactory = scopesGenerationFactory;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -102,15 +102,16 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
             //vanilla Android Application
             PackageClass activityPackageClass = astType.getPackageClass();
             applicationClassName = buildPackageClass(astType, activityPackageClass.getClassName());
+            applicationDescriptor = new ComponentDescriptor(null, null, applicationClassName);
         } else {
 
             applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
 
             TypeMirror type = getTypeMirror(new ApplicationTypeMirrorRunnable(applicationAnnotation));
 
-            String applicationType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.APPLICATION.getName() : type.toString();
+            ASTType applicationType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.APPLICATION : type.accept(astTypeBuilderVisitor, null);
 
-            applicationDescriptor = new ComponentDescriptor(applicationType, applicationClassName);
+            applicationDescriptor = new ComponentDescriptor(astType, applicationType, applicationClassName);
 
             //analyze delegate
             AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(buildVariableBuilderMap(type));
@@ -120,7 +121,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         //add manifest elements
-        setupManifest(applicationAnnotation, astType, applicationClassName.getFullyQualifiedName(), applicationAnnotation.label());
+        applicationDescriptor.getPreInjectionGenerators().add(applicationManifestEntryGenerator);
 
         return applicationDescriptor;
     }
@@ -138,33 +139,41 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
     private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType, AnalysisContext context) {
 
-        ASTMethod onCreateASTMethod = getASTMethod("onCreate");
         //onCreate
-        applicationDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpWindowFeatureBuilder(), new NoOpLayoutBuilder()));
+        //applicationDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpWindowFeatureBuilder(), new NoOpLayoutBuilder()));
+        applicationDescriptor.getPreInjectionGenerators().add(superGeneratorFactory.build(getASTMethod("onCreate")));
+        applicationDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
 
-        applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
+        applicationDescriptor.setInjectionGenerator(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
 
+        //applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
+        applicationDescriptor.setAnalysisContext(context);
+
+        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnCreate.class, "onCreate"));
         //onLowMemory
-        applicationDescriptor.addGenerators(buildEventMethod(OnLowMemory.class, "onLowMemory"));
+        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onTerminate
-        applicationDescriptor.addGenerators(buildEventMethod(OnTerminate.class, "onTerminate"));
+        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnTerminate.class, "onTerminate"));
         //onConfigurationChanged
         ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION);
-        applicationDescriptor.addGenerators(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class),
-                        componentBuilderFactory.buildMirroredMethodGenerator(onConfigurationChangedASTMethod, true)));
+        applicationDescriptor.getPostInjectionGenerators().add(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class), onConfigurationChangedASTMethod)
+        );
 
-        applicationDescriptor.addGenerators(contextScopeComponentBuilder);
+        //todo: applicationDescriptor.getPostInjectionGenerators().add(contextScopeComponentBuilder);
 
-        applicationDescriptor.addRegistration(observesExpressionDecorator);
+        applicationDescriptor.getPostInjectionGenerators().add(observesExpressionGeneratorFactory.build(
+                getASTMethod("onCreate"),
+                getASTMethod("onCreate"),
+                getASTMethod("onTerminate")
+        ));
     }
 
-    private MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName) {
+    private org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName) {
         ASTMethod method = getASTMethod(methodName);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation,
-                componentBuilderFactory.buildMirroredMethodGenerator(method, true));
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
@@ -193,44 +202,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         return injectionNodeBuilderRepository;
 
-    }
-
-    private void setupManifest(Application annotation, ASTType type, String name, String label) {
-
-        org.androidtransfuse.model.manifest.Application manifestApplication = applicationProvider.get();
-
-        manifestApplication.setName(name);
-
-        manifestApplication.setLabel(checkBlank(label));
-        manifestApplication.setAllowTaskReparenting(checkDefault(annotation.allowTaskReparenting(), false));
-        manifestApplication.setBackupAgent(checkBlank(annotation.backupAgent()));
-        manifestApplication.setDebuggable(checkDefault(annotation.debuggable(), false));
-        manifestApplication.setDescription(checkBlank(annotation.description()));
-        manifestApplication.setEnabled(checkDefault(annotation.enabled(), true));
-        manifestApplication.setHasCode(checkDefault(annotation.hasCode(), true));
-        manifestApplication.setHardwareAccelerated(checkDefault(annotation.hardwareAccelerated(), false));
-        manifestApplication.setIcon(checkBlank(annotation.icon()));
-        manifestApplication.setKillAfterRestore(checkDefault(annotation.killAfterRestore(), true));
-        manifestApplication.setLogo(checkBlank(annotation.logo()));
-        manifestApplication.setManageSpaceActivity(checkBlank(annotation.manageSpaceActivity()));
-        manifestApplication.setPermission(checkBlank(annotation.permission()));
-        manifestApplication.setPersistent(checkDefault(annotation.persistent(), false));
-        manifestApplication.setProcess(checkBlank(annotation.process()));
-        manifestApplication.setRestoreAnyVersion(checkDefault(annotation.restoreAnyVersion(), false));
-        manifestApplication.setTaskAffinity(checkBlank(annotation.taskAffinity()));
-        manifestApplication.setTheme(checkBlank(annotation.theme()));
-        manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
-        manifestApplication.setAllowBackup(annotation.allowBackup());
-        manifestApplication.setLargeHeap(checkDefault(annotation.largeHeap(), false));
-        manifestApplication.setSupportsRtl(checkDefault(annotation.supportsRtl(), false));
-        manifestApplication.setRestrictedAccountType(checkDefault(annotation.restrictedAccountType(), false));
-        manifestApplication.setVmSafeMode(checkDefault(annotation.vmSafeMode(), false));
-        manifestApplication.setTestOnly(checkDefault(annotation.testOnly(), false));
-        manifestApplication.setRequiredAccountType(checkBlank(annotation.requiredAccountType()));
-
-        manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
-
-        manifestManager.addApplication(manifestApplication);
     }
 
     private static class ApplicationTypeMirrorRunnable extends TypeMirrorRunnable<Application> {

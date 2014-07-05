@@ -26,6 +26,10 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.aop.AsynchronousMethodInterceptor;
 import org.androidtransfuse.aop.UIThreadMethodInterceptor;
 import org.androidtransfuse.bootstrap.BootstrapModule;
+import org.androidtransfuse.experiment.ScopesGeneration;
+import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
+import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
+import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.ClassGenerationStrategy;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
@@ -88,7 +92,11 @@ import javax.xml.bind.JAXBContext;
         MethodBasedResourceExpressionBuilderAdaptorFactory.class,
         MethodBasedResourceExpressionBuilderFactory.class,
         AnalysisGenerationTransactionProcessorBuilderFactory.class,
-        InstantiationStrategyFactory.class
+        InstantiationStrategyFactory.class,
+        ObservesExpressionGenerator.ObservesExpressionGeneratorFactory.class,
+        OnCreateInjectionGenerator.InjectionGeneratorFactory.class,
+        SuperGenerator.SuperGeneratorFactory.class,
+        ScopesGeneration.ScopesGenerationFactory.class
 })
 public class TestTransfuseAndroidModule {
 

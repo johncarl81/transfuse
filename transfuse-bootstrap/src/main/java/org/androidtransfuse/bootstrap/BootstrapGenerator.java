@@ -79,7 +79,7 @@ public class BootstrapGenerator {
             injectionNode.addAspect(VariableBuilder.class, variableBuilderFactory.buildVariableBuilder(input));
 
             injectionGenerator.buildFragment(injectorBlock,
-                    instantiationStrategyFactory.buildMethodStrategy(innerInjectorClass, injectorBlock, scopesVar),
+                    instantiationStrategyFactory.buildMethodStrategy(injectorBlock, scopesVar),
                     innerInjectorClass,
                     injectionNode,
                     scopesVar);

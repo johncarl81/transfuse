@@ -13,30 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen.componentBuilder;
+package org.androidtransfuse.experiment;
 
 import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-
-import java.util.Arrays;
+import org.androidtransfuse.model.MethodDescriptor;
 
 /**
  * @author John Ericksen
  */
-public class WindowFeatureBuilderImpl implements WindowFeatureBuilder {
+public interface ComponentMethodGenerator {
 
-    private final Integer[] values;
-
-    public WindowFeatureBuilderImpl(Integer[] values) {
-        this.values = Arrays.copyOf(values, values.length);
-    }
-
-    @Override
-    public void builderWindowFeatureCall(JDefinedClass definedClass, JBlock block) {
-
-        for (int value : values) {
-            block.invoke("requestWindowFeature").arg(JExpr.lit(value));
-        }
-    }
+    void generate(MethodDescriptor methodDescriptor, JBlock block);
 }

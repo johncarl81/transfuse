@@ -18,7 +18,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.Analysis;
-import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.transaction.TransactionWorker;
 
 import javax.inject.Inject;
@@ -30,18 +30,18 @@ import javax.inject.Provider;
 public class AnalysisGenerationFactory {
 
     @Inject
-    private Provider<ComponentGenerator> componentGeneratorProvider;
+    private Provider<org.androidtransfuse.experiment.ComponentGenerator> componentGeneratorProvider;
 
-    public Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> buildAnalysisGenerationProvider(Provider<? extends Analysis<ComponentDescriptor>> analysis) {
+    public Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> buildAnalysisGenerationProvider(Provider<? extends Analysis<org.androidtransfuse.experiment.ComponentDescriptor>> analysis) {
         return new AnalysisGenerationProvider(analysis, componentGeneratorProvider);
     }
 
     private static final class AnalysisGenerationProvider implements Provider<TransactionWorker<Provider<ASTType>, JDefinedClass>> {
 
         private Provider<? extends Analysis<ComponentDescriptor>> analysis;
-        private Provider<ComponentGenerator> generator;
+        private Provider<org.androidtransfuse.experiment.ComponentGenerator> generator;
 
-        private AnalysisGenerationProvider(Provider<? extends Analysis<ComponentDescriptor>> analysis, Provider<ComponentGenerator> generator) {
+        private AnalysisGenerationProvider(Provider<? extends Analysis<ComponentDescriptor>> analysis, Provider<org.androidtransfuse.experiment.ComponentGenerator> generator) {
             this.analysis = analysis;
             this.generator = generator;
         }

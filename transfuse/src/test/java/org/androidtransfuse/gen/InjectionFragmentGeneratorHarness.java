@@ -60,7 +60,7 @@ public class InjectionFragmentGeneratorHarness {
         JVar scopes = block.decl(scopesRef, namer.generateName(Scopes.class));
 
         Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
-                instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopes),
+                instantiationStrategyFactory.buildMethodStrategy(block, scopes),
                 definedClass,
                 injectionNode,
                 scopes);

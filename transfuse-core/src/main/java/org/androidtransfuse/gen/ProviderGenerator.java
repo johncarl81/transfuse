@@ -142,7 +142,7 @@ public class ProviderGenerator {
             JBlock getMethodBody = getMethod.body();
 
             Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(getMethodBody,
-                    instantiationStrategyFactory.buildMethodStrategy(providerClass, getMethodBody, scopesField), providerClass, injectionNode, scopesField);
+                    instantiationStrategyFactory.buildMethodStrategy(getMethodBody, scopesField), providerClass, injectionNode, scopesField);
 
             getMethodBody._return(expressionMap.get(injectionNode).getExpression());
 

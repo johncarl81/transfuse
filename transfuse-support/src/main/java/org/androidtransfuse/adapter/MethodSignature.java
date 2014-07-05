@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +35,10 @@ public class MethodSignature {
 
     public MethodSignature(ASTType returnType, String methodName, List<ASTType> paramTypes){
         this.methodSignature = makeDescriptor(returnType, methodName, paramTypes);
+    }
+
+    public MethodSignature(ASTType returnType, String methodName, ASTType... paramTypes){
+        this(returnType, methodName, Arrays.asList(paramTypes));
     }
 
     /**

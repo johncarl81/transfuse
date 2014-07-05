@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen;
+package org.androidtransfuse.experiment;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
-import org.androidtransfuse.annotations.Factory;
+import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.TypedExpression;
+
+import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-@Factory
-public interface InstantiationStrategyFactory {
-
-    FieldInstantiationStrategy buildFieldStrategy(JDefinedClass definedClass, JBlock constructorBlock, JExpression scopes);
-
-    MethodInstantiationStrategy buildMethodStrategy(JBlock block, JExpression scopes);
+public interface PostInjectionGeneration {
+    void schedule(ComponentBuilder builder, ComponentDescriptor descriptor, Map<InjectionNode, TypedExpression> expressionMap);
 }

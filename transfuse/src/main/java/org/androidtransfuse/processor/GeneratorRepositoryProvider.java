@@ -22,10 +22,10 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.*;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.config.ScopesGeneratorWorker;
+import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.gen.AnalysisGenerationFactory;
 import org.androidtransfuse.gen.ComponentsGenerator;
 import org.androidtransfuse.gen.PackageHelperGeneratorAdapter;
-import org.androidtransfuse.model.ComponentDescriptor;
 import org.androidtransfuse.transaction.*;
 
 import javax.inject.Inject;
@@ -152,7 +152,6 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
 
         ImmutableSet.Builder<TransactionProcessor<?, ?>> configurationDependentBuilders = ImmutableSet.builder();
 
-        configurationDependentBuilders.add(factoryProcessor.getTransactionProcessor());
         configurationDependentBuilders.add(componentProcessorCompletion);
 
         processorMapBuilder.put(Factory.class, factoryProcessor);
@@ -168,7 +167,8 @@ public class GeneratorRepositoryProvider implements Provider<GeneratorRepository
                 new TransactionProcessorComposite(configurationDependentBuilders.build());
 
         TransactionProcessor<Void, Void> processor = new TransactionProcessorChain(configurationProcessors,
-                new TransactionProcessorChain(configurationDependentProcessors, packageHelperProcessor));
+                new TransactionProcessorChain(factoryProcessor.getTransactionProcessor(),
+                new TransactionProcessorChain(configurationDependentProcessors, packageHelperProcessor)));
 
         return new GeneratorRepository(processorMapBuilder.build(), processor);
     }

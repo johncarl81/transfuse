@@ -63,7 +63,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
             JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
             Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
-                    instantiationStrategyFactory.buildMethodStrategy(definedClass, block, scopesVar),
+                    instantiationStrategyFactory.buildMethodStrategy(block, scopesVar),
                     definedClass,
                     layoutHandlerInjectionNode,
                     scopesVar);

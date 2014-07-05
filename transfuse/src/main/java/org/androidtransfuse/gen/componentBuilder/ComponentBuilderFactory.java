@@ -16,12 +16,9 @@
 package org.androidtransfuse.gen.componentBuilder;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -33,23 +30,7 @@ import javax.inject.Named;
 @Factory
 public interface ComponentBuilderFactory {
 
-    MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, MethodGenerator methodGenerator);
-
-    RLayoutBuilder buildRLayoutBuilder(Integer layout);
-
-    MirroredMethodGenerator buildMirroredMethodGenerator(ASTMethod method, boolean superCall);
-
-    LayoutHandlerBuilder buildLayoutHandlerBuilder(InjectionNode layoutHandlerInjectionNode);
-
-    OnCreateMethodBuilder buildOnCreateMethodBuilder(ASTMethod method, WindowFeatureBuilder windowFeatureBuilder, LayoutBuilder layoutBuilder);
-
-    FragmentOnCreateViewMethodBuilder buildFragmentMethodBuilder(Integer layout, ASTMethod method);
-
-    OnReceiveMethodBuilder buildOnReceiveMethodBuilder();
-
-    BroadcastReceiverInjectionNodeFactory buildBroadcastReceiverInjectionNodeFactory(ASTType astType);
-
-    InjectionNodeFactoryImpl buildInjectionNodeFactory(ImmutableSet<ASTAnnotation> annotations, ASTType astType, AnalysisContext context);
+    org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, ASTMethod eventMethod);
 
     ViewRegistrationGenerator buildViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
 

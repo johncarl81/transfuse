@@ -15,26 +15,31 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpression;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
-import org.androidtransfuse.model.ComponentDescriptor;
+import org.androidtransfuse.experiment.ComponentBuilder;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.PostInjectionGeneration;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
+import javax.inject.Inject;
 import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class ListenerRegistrationGenerator implements ExpressionVariableDependentGenerator {
+public class ListenerRegistrationGenerator implements PostInjectionGeneration {
+
+    private ASTElementFactory astElementFactory;
+
+    @Inject
+    public ListenerRegistrationGenerator(ASTElementFactory astElementFactory) {
+        this.astElementFactory = astElementFactory;
+    }
 
     @Override
-    public void generate(JDefinedClass definedClass, MethodDescriptor methodDescriptor, Map<InjectionNode, TypedExpression> expressionMap, ComponentDescriptor descriptor, JExpression scopesExpression) {
-
-        JBlock block = methodDescriptor.getMethod().body();
+    public void schedule(final ComponentBuilder componentBuilder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
 
         //add listener registration
         for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
@@ -42,7 +47,7 @@ public class ListenerRegistrationGenerator implements ExpressionVariableDependen
                 RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
                 for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
-                    builder.build(definedClass, block, injectionNodeJExpressionEntry.getValue());
+                    builder.build(componentBuilder, injectionNodeJExpressionEntry.getValue());
                 }
             }
         }

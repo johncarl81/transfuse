@@ -28,6 +28,7 @@ import java.util.Map;
  *
  * @author John Ericksen
  */
+@Deprecated
 public final class EventTending {
 
     public static final String ADD_OBSERVER_METHOD = "addObserver";
