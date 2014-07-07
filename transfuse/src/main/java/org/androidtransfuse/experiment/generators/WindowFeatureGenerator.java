@@ -46,7 +46,7 @@ public class WindowFeatureGenerator implements Generation {
             ASTAnnotation windowFeatureAnnotation = target.getASTAnnotation(WindowFeature.class);
             final Integer[] values = windowFeatureAnnotation.getProperty("value", Integer[].class);
 
-            builder.add(astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE), GenerationPhase.LAYOUT, new ComponentMethodGenerator() {
+            builder.add(astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE), GenerationPhase.INIT, new ComponentMethodGenerator() {
                 @Override
                 public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                     for (int value : values) {

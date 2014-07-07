@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis;
 
-import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
@@ -24,14 +23,15 @@ import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.*;
-import org.androidtransfuse.experiment.*;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.FragmentLayoutGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
+import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
-import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
@@ -68,6 +68,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final FragmentLayoutGenerator fragmentLayoutGenerator;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final JCodeModel codeModel;
+    private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -86,7 +87,10 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
                             FragmentViewInjectionNodeBuilder fragmentViewInjectionNodeBuilder,
                             OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
-                            FragmentLayoutGenerator fragmentLayoutGenerator, ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory, JCodeModel codeModel) {
+                            FragmentLayoutGenerator fragmentLayoutGenerator,
+                            ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
+                            JCodeModel codeModel,
+                            SuperGenerator.SuperGeneratorFactory superGeneratorFactory) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -106,6 +110,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.fragmentLayoutGenerator = fragmentLayoutGenerator;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.codeModel = codeModel;
+        this.superGeneratorFactory = superGeneratorFactory;
     }
 
     @Override
@@ -149,27 +154,37 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnCreate.class, "onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE));
         //onActivityCreated
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnActivityCreated.class, "onActivityCreated", AndroidLiterals.BUNDLE));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onActivityCreated", AndroidLiterals.BUNDLE)));
         //onStart
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnStart.class, "onStart"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onStart")));
         //onResume
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnResume.class, "onResume"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onResume")));
         //onPause
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnPause.class, "onPause"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onPause")));
         //onStop
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnStop.class, "onStop"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onStop")));
         //onDestroyView
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnDestroyView.class, "onDestroyView"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDestroyView")));
         //onDestroy
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnDestroy.class, "onDestroy"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDestroy")));
         //onDetach
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnDetach.class, "onDetach"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onDetach")));
         //onLowMemory
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onLowMemory")));
         //onActivityResult
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
 
         //onConfigurationChanged
         fragmentDescriptor.getGenerators().add(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION));
+        fragmentDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION)));
 
         if (fragmentType.extendsFrom(AndroidLiterals.LIST_FRAGMENT)) {
             ASTMethod onListItemClickMethod = getASTMethod(AndroidLiterals.LIST_ACTIVITY, "onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG);
@@ -181,13 +196,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
         org.androidtransfuse.experiment.generators.MethodCallbackGenerator methodCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod, getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE));
-        fragmentDescriptor.getGenerators().add(new Generation() {
+        /*fragmentDescriptor.getGenerators().add(new Generation() {
             @Override
             public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
                 builder.add(getASTMethod("onCreate", AndroidLiterals.BUNDLE), GenerationPhase.INIT, new ComponentMethodGenerator() {
                     @Override
                     public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                        /*JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID,  "onCreate");
+                        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID,  "onCreate");
                         JVar bundle = onCreateMethod.param(codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
                         JVar previousBundle = definedClass.field(JMod.PRIVATE, codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
 
@@ -199,11 +214,10 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                                 .add(descriptor.getParameters().values().iterator().next().getExpression().invoke("putAll").arg(previousBundle));
 
                         return nullCondition._else();
-                        */
                     }
                 });
             }
-        });
+        });*/
 
         fragmentDescriptor.getGenerators().add(methodCallbackGenerator);
 

@@ -21,7 +21,10 @@ import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.annotations.Factory;
-import org.androidtransfuse.experiment.*;
+import org.androidtransfuse.experiment.ComponentBuilder;
+import org.androidtransfuse.experiment.ComponentDescriptor;
+import org.androidtransfuse.experiment.ComponentMethodGenerator;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.model.MethodDescriptor;
 
 import javax.inject.Inject;
@@ -47,7 +50,8 @@ public class SuperGenerator implements Generation, ComponentMethodGenerator {
 
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
-        builder.add(method, GenerationPhase.SUPER, this);
+        //builder.add(method, GenerationPhase.SUPER, this);
+        builder.addLazy(method, this);
     }
 
     @Override

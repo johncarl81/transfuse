@@ -274,20 +274,28 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         activityCallbackGenerators.add(buildEventMethod(OnCreate.class, "onCreate", AndroidLiterals.BUNDLE));
         // onDestroy
         activityCallbackGenerators.add(buildEventMethod(OnDestroy.class, "onDestroy"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onDestroy")));
         // onPause
         activityCallbackGenerators.add(buildEventMethod(OnPause.class, "onPause"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onPause")));
         // onRestart
         activityCallbackGenerators.add(buildEventMethod(OnRestart.class, "onRestart"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onRestart")));
         // onResume
         activityCallbackGenerators.add(buildEventMethod(OnResume.class, "onResume"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onResume")));
         // onStart
         activityCallbackGenerators.add(buildEventMethod(OnStart.class, "onStart"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onStart")));
         // onStop
         activityCallbackGenerators.add(buildEventMethod(OnStop.class, "onStop"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onStop")));
         // onBackPressed
         activityCallbackGenerators.add(buildEventMethod(OnBackPressed.class, "onBackPressed"));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onBackPressed")));
         // onPostCreate
         activityCallbackGenerators.add(buildEventMethod(OnPostCreate.class, "onPostCreate", AndroidLiterals.BUNDLE));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onPostCreate", AndroidLiterals.BUNDLE)));
         // onActivityResult
         activityCallbackGenerators.add(buildEventMethod(OnActivityResult.class, "onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT));
         // onNewIntent

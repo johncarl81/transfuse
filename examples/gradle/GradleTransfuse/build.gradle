@@ -20,8 +20,8 @@ repositories {
 dependencies {
     apt 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
     compile 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
-    apt 'org.parceler:parceler:0.2.10-SNAPSHOT'
-    compile 'org.parceler:parceler-api:0.2.10-SNAPSHOT'
+    apt 'org.parceler:parceler:0.2.11-SNAPSHOT'
+    compile 'org.parceler:parceler-api:0.2.11-SNAPSHOT'
 }
 
 android {
