@@ -18,7 +18,6 @@ package org.androidtransfuse.analysis.astAnalyzer;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.model.InjectionNode;
 
 import java.util.*;
 
@@ -28,11 +27,6 @@ import java.util.*;
 public class ObservesAspect {
 
     private final Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
-    private final InjectionNode observerTendingInjectionNode;
-
-    public ObservesAspect(InjectionNode observerTendingInjectionNode) {
-        this.observerTendingInjectionNode = observerTendingInjectionNode;
-    }
 
     public void addObserver(ASTType event, ASTMethod method){
         if(!observesMap.containsKey(event)){
@@ -52,9 +46,5 @@ public class ObservesAspect {
         }
 
         return Collections.emptySet();
-    }
-
-    public InjectionNode getObserverTendingInjectionNode() {
-        return observerTendingInjectionNode;
     }
 }
