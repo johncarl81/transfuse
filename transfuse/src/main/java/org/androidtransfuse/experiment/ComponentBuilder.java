@@ -23,6 +23,7 @@ import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.MethodDescriptorBuilder;
 import org.androidtransfuse.model.TypedExpression;
@@ -35,14 +36,71 @@ import java.util.*;
  */
 public class ComponentBuilder {
 
+    private class MethodMetaData{
+        private final Map<GenerationPhase, List<ComponentMethodGenerator>> generators = new HashMap<GenerationPhase, List<ComponentMethodGenerator>>();
+        private final List<ComponentMethodGenerator> lazyGenerators = new ArrayList<ComponentMethodGenerator>();
+        private final ASTMethod methodDefinition;
+        private MethodDescriptor descriptor;
+
+        private MethodMetaData(ASTMethod methodDefinition) {
+            this.methodDefinition = methodDefinition;
+        }
+
+        public void addLazy(ComponentMethodGenerator partGenerator) {
+            lazyGenerators.add(partGenerator);
+        }
+
+        public void put(GenerationPhase phase, ComponentMethodGenerator partGenerator) {
+            if(!generators.containsKey(phase)){
+                generators.put(phase, new ArrayList<ComponentMethodGenerator>());
+            }
+            generators.get(phase).add(partGenerator);
+        }
+
+        public void build() {
+            for (GenerationPhase phase : GenerationPhase.values()) {
+                if(generators.containsKey(phase)){
+                    for (ComponentMethodGenerator componentMethodGenerator : generators.get(phase)) {
+                        componentMethodGenerator.generate(getMethod(), descriptor.getMethod().body());
+                    }
+                }
+            }
+        }
+
+        public void setDescriptor(MethodDescriptor descriptor){
+            this.descriptor = descriptor;
+        }
+
+        private MethodDescriptor getMethod() {
+            if (descriptor == null) {
+                JMethod method = getDefinedClass().method(JMod.PUBLIC, generationUtil.ref(methodDefinition.getReturnType()), methodDefinition.getName());
+                method.annotate(Override.class);
+
+                MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, methodDefinition);
+
+                //parameters
+                for (ASTParameter astParameter : methodDefinition.getParameters()) {
+                    JVar param = method.param(generationUtil.ref(astParameter.getASTType()), variableNamer.generateName(astParameter.getASTType()));
+                    methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
+                }
+
+                descriptor = methodDescriptorBuilder.build();
+
+                for (ComponentMethodGenerator generator : lazyGenerators) {
+                    generator.generate(descriptor, method.body());
+                }
+            }
+            return descriptor;
+        }
+    }
+
+    private final Map<InjectionNode, TypedExpression> expressionMap = new HashMap<InjectionNode, TypedExpression>();
     private final ClassGenerationUtil generationUtil;
     private final ComponentDescriptor descriptor;
     private final UniqueVariableNamer variableNamer;
 
     private final Set<ComponentPartGenerator> generators = new HashSet<ComponentPartGenerator>();
-    private final Map<GenerationPhase, Map<MethodSignature, List<ComponentMethodGenerator>>> phaseGenerators = new HashMap<GenerationPhase, Map<MethodSignature, List<ComponentMethodGenerator>>>();
-    private final Map<MethodSignature, ASTMethod> methodSignatureDefinitions = new HashMap<MethodSignature, ASTMethod>();
-    private final Map<MethodSignature, MethodDescriptor> definedMethods = new HashMap<MethodSignature, MethodDescriptor>();
+    private final Map<MethodSignature, MethodMetaData> methodData = new HashMap<MethodSignature, MethodMetaData>();
     private JDefinedClass definedClass = null;
     private JVar scopes;
 
@@ -55,26 +113,20 @@ public class ComponentBuilder {
         this.variableNamer = variableNamer;
     }
 
-    public void buildPhase(GenerationPhase phase) {
-
-        // In order of GenerationPhase enum cardinal value
-        if(phaseGenerators.containsKey(phase)) {
-            for (MethodSignature methodSignature : phaseGenerators.get(phase).keySet()) {
-                if (phaseGenerators.get(phase).containsKey(methodSignature)) {
-                    for (ComponentMethodGenerator componentMethodGenerator : phaseGenerators.get(phase).get(methodSignature)) {
-                        MethodDescriptor methodDescriptor = getMethod(methodSignature);
-                        componentMethodGenerator.generate(methodDescriptor, methodDescriptor.getMethod().body());
-                    }
-                }
+    public void build(){
+        for (MethodSignature methodSignature : descriptor.getGenerateFirst()) {
+            if(methodData.containsKey(methodSignature)) {
+                methodData.get(methodSignature).build();
             }
         }
-    }
 
-    public void build(){
-        Set<ComponentPartGenerator> buildGenerators = new HashSet<ComponentPartGenerator>(generators);
-        generators.clear();
+        for (Map.Entry<MethodSignature, MethodMetaData> entry : methodData.entrySet()) {
+            if(!descriptor.getGenerateFirst().contains(entry.getKey())){
+                entry.getValue().build();
+            }
+        }
 
-        for (ComponentPartGenerator generator : buildGenerators) {
+        for (ComponentPartGenerator generator : generators) {
             generator.generate(descriptor);
         }
     }
@@ -83,22 +135,24 @@ public class ComponentBuilder {
         generators.add(partGenerator);
     }
 
-    public void add(ASTMethod method, GenerationPhase phase, ComponentMethodGenerator partGenerator) {
+    public void addLazy(ASTMethod method, ComponentMethodGenerator partGenerator){
         MethodSignature methodSignature = new MethodSignature(method);
-        if (!phaseGenerators.containsKey(phase)) {
-            phaseGenerators.put(phase, new HashMap<MethodSignature, List<ComponentMethodGenerator>>());
+        if(!methodData.containsKey(methodSignature)){
+            methodData.put(methodSignature, new MethodMetaData(method));
         }
-        if (!phaseGenerators.get(phase).containsKey(methodSignature)) {
-            phaseGenerators.get(phase).put(methodSignature, new ArrayList<ComponentMethodGenerator>());
+        methodData.get(methodSignature).addLazy(partGenerator);
+    }
+
+    public void add(ASTMethod method, GenerationPhase phase, ComponentMethodGenerator partGenerator){
+        MethodSignature methodSignature = new MethodSignature(method);
+        if(!methodData.containsKey(methodSignature)){
+            methodData.put(methodSignature, new MethodMetaData(method));
         }
-        if(!methodSignatureDefinitions.containsKey(methodSignature)){
-            methodSignatureDefinitions.put(methodSignature, method);
-        }
-        phaseGenerators.get(phase).get(methodSignature).add(partGenerator);
+        methodData.get(methodSignature).put(phase, partGenerator);
     }
 
     public JDefinedClass getDefinedClass() {
-        if (definedClass == null) {
+        if (definedClass == null && descriptor.getType() != null) {
             try {
                 definedClass = generationUtil.defineClass(descriptor.getPackageClass());
                 definedClass._extends(generationUtil.ref(descriptor.getType()));
@@ -107,25 +161,6 @@ public class ComponentBuilder {
             }
         }
         return definedClass;
-    }
-
-    private MethodDescriptor getMethod(MethodSignature methodSignature) {
-        if (!definedMethods.containsKey(methodSignature)) {
-            ASTMethod methodDefinition = methodSignatureDefinitions.get(methodSignature);
-            JMethod method = getDefinedClass().method(JMod.PUBLIC, generationUtil.ref(methodDefinition.getReturnType()), methodDefinition.getName());
-            method.annotate(Override.class);
-
-            MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, methodDefinition);
-
-            //parameters
-            for (ASTParameter astParameter : methodDefinition.getParameters()) {
-                JVar param = method.param(generationUtil.ref(astParameter.getASTType()), variableNamer.generateName(astParameter.getASTType()));
-                methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
-            }
-
-            definedMethods.put(methodSignature, methodDescriptorBuilder.build());
-        }
-        return definedMethods.get(methodSignature);
     }
 
     public AnalysisContext getAnalysisContext() {
@@ -138,5 +173,9 @@ public class ComponentBuilder {
 
     public JVar getScopes() {
         return scopes;
+    }
+
+    public Map<InjectionNode, TypedExpression> getExpressionMap() {
+        return expressionMap;
     }
 }

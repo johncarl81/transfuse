@@ -38,7 +38,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class FragmentLayoutGenerator implements PreInjectionGeneration {
+public class FragmentLayoutGenerator implements Generation {
 
     private final RResourceReferenceBuilder rResourceReferenceBuilder;
     private final ASTElementFactory astElementFactory;

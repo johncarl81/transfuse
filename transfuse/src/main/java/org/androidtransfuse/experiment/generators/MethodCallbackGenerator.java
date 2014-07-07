@@ -30,58 +30,67 @@ import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
-public class MethodCallbackGenerator implements PostInjectionGeneration {
+public class MethodCallbackGenerator implements Generation {
 
     private final ASTType eventAnnotation;
     private final InvocationBuilder invocationBuilder;
     private final ASTMethod eventMethod;
+    private final ASTMethod creationMethod;
 
     @Inject
-    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ ASTMethod eventMethod, InvocationBuilder invocationBuilder) {
+    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ @Named("eventMethod") ASTMethod eventMethod, /*@Assisted */ @Named("creationMethod") ASTMethod creationMethod, InvocationBuilder invocationBuilder) {
         this.eventAnnotation = eventAnnotation;
         this.invocationBuilder = invocationBuilder;
         this.eventMethod = eventMethod;
+        this.creationMethod = creationMethod;
     }
 
     @Override
-    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor, Map<InjectionNode, TypedExpression> expressionMap) {
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
 
-        for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-            ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
-            final TypedExpression eventReceiverExpression = injectionNodeJExpressionEntry.getValue();
+        builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : builder.getExpressionMap().entrySet()) {
+                    ListenerAspect methodCallbackAspect = injectionNodeJExpressionEntry.getKey().getAspect(ListenerAspect.class);
+                    final TypedExpression eventReceiverExpression = injectionNodeJExpressionEntry.getValue();
 
-            if (methodCallbackAspect != null && methodCallbackAspect.contains(eventAnnotation)) {
-                Set<ASTMethod> methods = methodCallbackAspect.getListeners(eventAnnotation);
+                    if (methodCallbackAspect != null && methodCallbackAspect.contains(eventAnnotation)) {
+                        Set<ASTMethod> methods = methodCallbackAspect.getListeners(eventAnnotation);
 
-                for (final ASTMethod methodCallback : methods) {
+                        for (final ASTMethod methodCallback : methods) {
 
-                    builder.add(eventMethod, GenerationPhase.EVENT, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                            builder.add(eventMethod, GenerationPhase.EVENT, new ComponentMethodGenerator() {
+                                @Override
+                                public void generate(MethodDescriptor methodDescriptor, JBlock block) {
 
-                            List<ASTParameter> matchedParameters = matchMethodArguments(methodDescriptor.getASTMethod().getParameters(), methodCallback);
-                            List<JExpression> matchedExpressions = new ArrayList<JExpression>();
+                                    List<ASTParameter> matchedParameters = matchMethodArguments(methodDescriptor.getASTMethod().getParameters(), methodCallback);
+                                    List<JExpression> matchedExpressions = new ArrayList<JExpression>();
 
-                            for (ASTParameter matchedParameter : matchedParameters) {
-                                matchedExpressions.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
-                            }
+                                    for (ASTParameter matchedParameter : matchedParameters) {
+                                        matchedExpressions.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
+                                    }
 
-                            JStatement methodCall = invocationBuilder.buildMethodCall(
-                                    new ASTJDefinedClassType(builder.getDefinedClass()),
-                                    new ASTJDefinedClassType(builder.getDefinedClass()),
-                                    methodCallback,
-                                    matchedExpressions,
-                                    eventReceiverExpression
-                            );
+                                    JStatement methodCall = invocationBuilder.buildMethodCall(
+                                            new ASTJDefinedClassType(builder.getDefinedClass()),
+                                            new ASTJDefinedClassType(builder.getDefinedClass()),
+                                            methodCallback,
+                                            matchedExpressions,
+                                            eventReceiverExpression
+                                    );
 
-                            block.add(methodCall);
+                                    block.add(methodCall);
+                                }
+                            });
                         }
-                    });
+                    }
                 }
+
             }
-        }
+        });
     }
 
     private List<ASTParameter> matchMethodArguments(List<ASTParameter> parametersToMatch, ASTMethod methodToCall) {

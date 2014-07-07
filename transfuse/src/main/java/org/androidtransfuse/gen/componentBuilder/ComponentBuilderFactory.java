@@ -30,7 +30,7 @@ import javax.inject.Named;
 @Factory
 public interface ComponentBuilderFactory {
 
-    org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, ASTMethod eventMethod);
+    org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
 
     ViewRegistrationGenerator buildViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
 

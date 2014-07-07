@@ -19,6 +19,7 @@ import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JExpr;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
@@ -64,7 +65,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final GeneratorFactory generatorFactory;
-    private final ListenerRegistrationGenerator listenerRegistrationGenerator;
+    private final ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listenerRegistrationGeneratorFactory;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionDecoratorFactory;
     private final ServiceManifestEntryGenerator serviceManifestEntryGenerator;
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
@@ -80,7 +81,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            InjectionBindingBuilder injectionBindingBuilder,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            GeneratorFactory generatorFactory,
-                           ListenerRegistrationGenerator listenerRegistrationGenerator,
+                           ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listenerRegistrationGeneratorFactory,
                            ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionDecoratorFactory,
                            ServiceManifestEntryGenerator serviceManifestEntryGenerator,
                            OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
@@ -94,7 +95,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.generatorFactory = generatorFactory;
-        this.listenerRegistrationGenerator = listenerRegistrationGenerator;
+        this.listenerRegistrationGeneratorFactory = listenerRegistrationGeneratorFactory;
         this.observesExpressionDecoratorFactory = observesExpressionDecoratorFactory;
         this.serviceManifestEntryGenerator = serviceManifestEntryGenerator;
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
@@ -109,8 +110,10 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         if (input.extendsFrom(AndroidLiterals.SERVICE)) {
             //vanilla Android Service
-            PackageClass activityPackageClass = input.getPackageClass();
-            serviceClassName = buildPackageClass(input, activityPackageClass.getClassName());
+            PackageClass packageClass = input.getPackageClass();
+            serviceClassName = buildPackageClass(input, packageClass.getClassName());
+
+            serviceDescriptor = new ComponentDescriptor(input, null, packageClass);
         } else {
             //generated Android Service
             serviceClassName = buildPackageClass(input, serviceAnnotation.name());
@@ -127,7 +130,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             setupServiceProfile(serviceDescriptor, input, context);
         }
 
-        serviceDescriptor.getPreInjectionGenerators().add(serviceManifestEntryGenerator);
+        serviceDescriptor.getGenerators().add(serviceManifestEntryGenerator);
 
         return serviceDescriptor;
     }
@@ -143,56 +146,55 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         }
     }
 
-
-
     private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType, AnalysisContext context) {
 
-        serviceDescriptor.setInjectionGenerator(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
-        serviceDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
+        serviceDescriptor.getGenerateFirst().add(new MethodSignature(getASTMethod("onCreate")));
+        serviceDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
+        serviceDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
 
         serviceDescriptor.setAnalysisContext(context);
 
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnCreate.class, "onCreate"));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnCreate.class, "onCreate"));
 
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnConfigurationChanged.class, "onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION));
         //onDestroy
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnDestroy.class, "onDestroy"));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnDestroy.class, "onDestroy"));
         //onLowMemory
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onRebind(android.content.Intent intent)
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnRebind.class, "onRebind", AndroidLiterals.INTENT));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnRebind.class, "onRebind", AndroidLiterals.INTENT));
         //onHandleIntent(android.content.Intent intent)
-        serviceDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnHandleIntent.class, AndroidLiterals.INTENT_SERVICE, "onHandleIntent", AndroidLiterals.INTENT));
+        serviceDescriptor.getGenerators().add(buildEventMethod(OnHandleIntent.class, AndroidLiterals.INTENT_SERVICE, "onHandleIntent", AndroidLiterals.INTENT));
         //onTaskRemoved(Intent rootIntent)
         //serviceDescriptor.addGenerators(buildEventMethod(OnTaskRemoved.class, "onTaskRemoved", Intent.class));
 
-        serviceDescriptor.getPreInjectionGenerators().add(new OnBindGenerator());
+        serviceDescriptor.getGenerators().add(new OnBindGenerator());
 
-        serviceDescriptor.getPostInjectionGenerators().add(listenerRegistrationGenerator);
+        serviceDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreate")));
 
         //todo: serviceDescriptor.getPostInjectionGenerators().add(contextScopeComponentBuilder);
 
-        serviceDescriptor.getPostInjectionGenerators().add(observesExpressionDecoratorFactory.build(
+        serviceDescriptor.getGenerators().add(observesExpressionDecoratorFactory.build(
                 getASTMethod("onCreate"),
                 getASTMethod("onCreate"),
                 getASTMethod("onDestroy")
         ));
 
-        serviceDescriptor.getPostInjectionGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
+        serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }
 
     private org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, ASTType targetComponent, String methodName, ASTType... args) {
         ASTMethod method = getASTMethod(targetComponent, methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onCreate"));
     }
 
     private org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildEventMethod(Class<? extends Annotation> eventAnnotationClass, String methodName, ASTType... args) {
         ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onCreate"));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
@@ -244,7 +246,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         }
     }
 
-    private final class OnBindGenerator implements PreInjectionGeneration {
+    private final class OnBindGenerator implements Generation {
         @Override
         public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
             builder.add(getASTMethod("onBind", AndroidLiterals.INTENT), GenerationPhase.INIT, new ComponentMethodGenerator() {

@@ -21,7 +21,7 @@ import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ComponentPartGenerator;
-import org.androidtransfuse.experiment.PreInjectionGeneration;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.model.manifest.Receiver;
 import org.androidtransfuse.processor.ManifestManager;
 
@@ -34,7 +34,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 /**
  * @author John Ericksen
  */
-public class BroadcastReceiverManifestEntryGenerator implements PreInjectionGeneration {
+public class BroadcastReceiverManifestEntryGenerator implements Generation {
 
     private final IntentFilterFactory intentFilterBuilder;
     private final MetaDataBuilder metadataBuilder;
@@ -54,19 +54,21 @@ public class BroadcastReceiverManifestEntryGenerator implements PreInjectionGene
 
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
-        builder.add(new ComponentPartGenerator() {
-            @Override
-            public void generate(ComponentDescriptor descriptor) {
-                BroadcastReceiver annotation = descriptor.getTarget().getAnnotation(BroadcastReceiver.class);
+        if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(BroadcastReceiver.class)) {
+            builder.add(new ComponentPartGenerator() {
+                @Override
+                public void generate(ComponentDescriptor descriptor) {
+                    BroadcastReceiver annotation = descriptor.getTarget().getAnnotation(BroadcastReceiver.class);
 
-                Receiver manifestReceiver = buildReceiver(descriptor.getPackageClass().getFullyQualifiedName(), annotation);
+                    Receiver manifestReceiver = buildReceiver(descriptor.getPackageClass().getFullyQualifiedName(), annotation);
 
-                manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(descriptor.getTarget()));
-                manifestReceiver.setMetaData(metadataBuilder.buildMetaData(descriptor.getTarget()));
+                    manifestReceiver.setIntentFilters(intentFilterBuilder.buildIntentFilters(descriptor.getTarget()));
+                    manifestReceiver.setMetaData(metadataBuilder.buildMetaData(descriptor.getTarget()));
 
-                manifestManager.addBroadcastReceiver(manifestReceiver);
-            }
-        });
+                    manifestManager.addBroadcastReceiver(manifestReceiver);
+                }
+            });
+        }
     }
 
     protected Receiver buildReceiver(String name, BroadcastReceiver annotation) {

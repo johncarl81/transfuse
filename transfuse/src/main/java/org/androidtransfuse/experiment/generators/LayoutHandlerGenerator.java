@@ -44,7 +44,7 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 /**
  * @author John Ericksen
  */
-public class LayoutHandlerGenerator implements PreInjectionGeneration {
+public class LayoutHandlerGenerator implements Generation {
 
     private final Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
     private final InjectionPointFactory injectionPointFactory;

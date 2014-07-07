@@ -26,7 +26,7 @@ import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ComponentPartGenerator;
-import org.androidtransfuse.experiment.PostInjectionGeneration;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.intentFactory.AbstractIntentFactoryStrategy;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.model.InjectionNode;
@@ -43,7 +43,7 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
-public class IntentFactoryStrategyGenerator implements PostInjectionGeneration {
+public class IntentFactoryStrategyGenerator implements Generation {
 
     private static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
     public static final String WRAP_METHOD = "wrap";
@@ -80,7 +80,7 @@ public class IntentFactoryStrategyGenerator implements PostInjectionGeneration {
     }
 
     @Override
-    public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         builder.add(new ComponentPartGenerator() {
             @Override
             public void generate(org.androidtransfuse.experiment.ComponentDescriptor descriptor) {
@@ -91,7 +91,7 @@ public class IntentFactoryStrategyGenerator implements PostInjectionGeneration {
 
                     JInvocation getExtrasMethod = JExpr.invoke(ActivityIntentFactoryStrategy.GET_EXTRAS_METHOD);
 
-                    List<IntentFactoryExtraAspect> extras = getExtras(expressionMap);
+                    List<IntentFactoryExtraAspect> extras = getExtras(builder.getExpressionMap());
 
                     //constructor, with required extras
                     JMethod constructor = strategyClass.constructor(JMod.PUBLIC);

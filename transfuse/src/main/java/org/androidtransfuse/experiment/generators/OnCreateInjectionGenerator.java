@@ -23,30 +23,24 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.experiment.*;
-import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
-import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
-import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author John Ericksen
  */
-public class OnCreateInjectionGenerator implements InjectionGeneration {
+public class OnCreateInjectionGenerator implements Generation {
 
     private final ASTMethod method;
     private final ASTType target;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
-    private final ClassGenerationUtil generationUtil;
-    private final UniqueVariableNamer namer;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final InjectionPointFactory injectionPointFactory;
 
@@ -60,22 +54,18 @@ public class OnCreateInjectionGenerator implements InjectionGeneration {
                                       /*@Assisted*/ASTType target,
                                       InjectionFragmentGenerator injectionFragmentGenerator,
                                       InstantiationStrategyFactory instantiationStrategyFactory,
-                                      ClassGenerationUtil generationUtil,
-                                      UniqueVariableNamer namer,
                                       InjectionBindingBuilder injectionBindingBuilder,
                                       InjectionPointFactory injectionPointFactory) {
         this.method = method;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.target = target;
-        this.generationUtil = generationUtil;
-        this.namer = namer;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.injectionPointFactory = injectionPointFactory;
     }
 
     @Override
-    public void build(final ComponentBuilder builder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         builder.add(method, GenerationPhase.INJECTION, new ComponentMethodGenerator() {
             @Override
@@ -93,7 +83,7 @@ public class OnCreateInjectionGenerator implements InjectionGeneration {
                             builder.getDefinedClass(),
                             injectionNode,
                             builder.getScopes(),
-                            expressionMap);
+                            builder.getExpressionMap());
                 } catch (JClassAlreadyExistsException e) {
                     throw new TransfuseRuntimeException("Class already exists", e);
                 }

@@ -21,7 +21,8 @@ import org.androidtransfuse.analysis.MetaDataBuilder;
 import org.androidtransfuse.annotations.Service;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
-import org.androidtransfuse.experiment.PreInjectionGeneration;
+import org.androidtransfuse.experiment.ComponentPartGenerator;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.processor.ManifestManager;
 
 import javax.inject.Inject;
@@ -33,7 +34,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 /**
  * @author John Ericksen
  */
-public class ServiceManifestEntryGenerator implements PreInjectionGeneration {
+public class ServiceManifestEntryGenerator implements Generation {
 
     private final IntentFilterFactory intentFilterBuilder;
     private final MetaDataBuilder metadataBuilder;
@@ -53,15 +54,21 @@ public class ServiceManifestEntryGenerator implements PreInjectionGeneration {
 
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
-        Service serviceAnnotation = descriptor.getTarget().getAnnotation(Service.class);
-        ASTType type = descriptor.getTarget();
+        if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Service.class)) {
+            builder.add(new ComponentPartGenerator() {
+                public void generate(ComponentDescriptor descriptor) {
+                    Service serviceAnnotation = descriptor.getTarget().getAnnotation(Service.class);
+                    ASTType type = descriptor.getTarget();
 
-        org.androidtransfuse.model.manifest.Service manifestService = buildService(descriptor.getPackageClass().getFullyQualifiedName(), serviceAnnotation);
+                    org.androidtransfuse.model.manifest.Service manifestService = buildService(descriptor.getPackageClass().getFullyQualifiedName(), serviceAnnotation);
 
-        manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-        manifestService.setMetaData(metadataBuilder.buildMetaData(type));
+                    manifestService.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+                    manifestService.setMetaData(metadataBuilder.buildMetaData(type));
 
-        manifestManager.addService(manifestService);
+                    manifestManager.addService(manifestService);
+                }
+            });
+        }
     }
 
     protected org.androidtransfuse.model.manifest.Service buildService(String name, Service serviceAnnotation) {

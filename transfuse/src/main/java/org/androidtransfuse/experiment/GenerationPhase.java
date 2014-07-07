@@ -15,51 +15,18 @@
  */
 package org.androidtransfuse.experiment;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-
 /**
  * @author John Ericksen
  */
 public enum GenerationPhase {
 
-    SUPER(InjectionPhase.PRE),
-    INIT(InjectionPhase.PRE),
-    LAYOUT(InjectionPhase.PRE),
-    SCOPES(InjectionPhase.PRE),
-    INJECTION(InjectionPhase.INJECTION),
-    REGISTRATION(InjectionPhase.POST),
-    EVENT(InjectionPhase.POST),
-    RETURN(InjectionPhase.POST);
-
-    public enum InjectionPhase{
-        PRE,
-        INJECTION,
-        POST
-    }
-
-    private static final EnumMap<InjectionPhase, List<GenerationPhase>> INJECTION_PHASES = new EnumMap<InjectionPhase, List<GenerationPhase>>(InjectionPhase.class);
-    private final InjectionPhase injectionPhase;
-
-    static{
-        for (InjectionPhase injectionPhase : InjectionPhase.values()) {
-            INJECTION_PHASES.put(injectionPhase, new ArrayList<GenerationPhase>());
-        }
-        for (GenerationPhase generationPhase : values()) {
-            INJECTION_PHASES.get(generationPhase.injectionPhase).add(generationPhase);
-        }
-    }
-
-    GenerationPhase(InjectionPhase injectionPhase) {
-        this.injectionPhase = injectionPhase;
-    }
-
-    public static List<GenerationPhase>  preInjectionPhases() {
-        return INJECTION_PHASES.get(InjectionPhase.PRE);
-    }
-
-    public static List<GenerationPhase> postInjectionPhases() {
-        return INJECTION_PHASES.get(InjectionPhase.POST);
-    }
+    SUPER,
+    INIT,
+    LAYOUT,
+    SCOPES,
+    INJECTION,
+    POSTINJECTION,
+    REGISTRATION,
+    EVENT,
+    RETURN;
 }

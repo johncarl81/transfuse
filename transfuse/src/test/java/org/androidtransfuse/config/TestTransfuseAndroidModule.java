@@ -35,6 +35,8 @@ import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
+import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
 import org.androidtransfuse.gen.invocationBuilder.InvocationBuilderStrategy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
@@ -96,7 +98,9 @@ import javax.xml.bind.JAXBContext;
         ObservesExpressionGenerator.ObservesExpressionGeneratorFactory.class,
         OnCreateInjectionGenerator.InjectionGeneratorFactory.class,
         SuperGenerator.SuperGeneratorFactory.class,
-        ScopesGeneration.ScopesGenerationFactory.class
+        ScopesGeneration.ScopesGenerationFactory.class,
+        ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory.class,
+        NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory.class
 })
 public class TestTransfuseAndroidModule {
 

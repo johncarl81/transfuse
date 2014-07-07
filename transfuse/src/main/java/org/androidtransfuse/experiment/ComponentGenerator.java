@@ -16,12 +16,8 @@
 package org.androidtransfuse.experiment;
 
 import com.sun.codemodel.JDefinedClass;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -37,34 +33,15 @@ public class ComponentGenerator {
 
     public JDefinedClass build(ComponentDescriptor descriptor) {
 
-        if (descriptor == null || descriptor.getTarget() == null) {
+        if (descriptor == null) {
             return null;
         }
 
         ComponentBuilder builder = componentBuilderFactory.build(descriptor);
 
         //pre injection phase
-        for (PreInjectionGeneration generator : descriptor.getPreInjectionGenerators()) {
+        for (Generation generator : descriptor.getGenerators()) {
             generator.schedule(builder, descriptor);
-        }
-        for(GenerationPhase preInjectionPhase : GenerationPhase.preInjectionPhases()) {
-            builder.buildPhase(preInjectionPhase);
-        }
-
-        //injection phase
-        Map<InjectionNode, TypedExpression> expressionMap = new HashMap<InjectionNode, TypedExpression>();
-
-        if (descriptor.getInjectionGenerator() != null) {
-            descriptor.getInjectionGenerator().build(builder, descriptor, expressionMap);
-        }
-        builder.buildPhase(GenerationPhase.INJECTION);
-
-        //post injection phase
-        for (PostInjectionGeneration generator : descriptor.getPostInjectionGenerators()) {
-            generator.schedule(builder, descriptor, expressionMap);
-        }
-        for(GenerationPhase preInjectionPhase : GenerationPhase.postInjectionPhases()) {
-            builder.buildPhase(preInjectionPhase);
         }
         builder.build();
 

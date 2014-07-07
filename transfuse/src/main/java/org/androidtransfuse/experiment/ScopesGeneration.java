@@ -32,7 +32,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class ScopesGeneration implements PreInjectionGeneration{
+public class ScopesGeneration implements Generation {
 
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;

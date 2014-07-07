@@ -22,7 +22,7 @@ import org.androidtransfuse.annotations.UIOptions;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ComponentPartGenerator;
-import org.androidtransfuse.experiment.PreInjectionGeneration;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.processor.ManifestManager;
 
 import javax.inject.Inject;
@@ -34,7 +34,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 /**
  * @author John Ericksen
  */
-public class ApplicationManifestEntryGenerator implements PreInjectionGeneration {
+public class ApplicationManifestEntryGenerator implements Generation {
 
     private final MetaDataBuilder metadataBuilder;
     private final ManifestManager manifestManager;
@@ -52,18 +52,20 @@ public class ApplicationManifestEntryGenerator implements PreInjectionGeneration
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
 
-        builder.add(new ComponentPartGenerator() {
-            public void generate(ComponentDescriptor descriptor) {
-                Application applicationAnnotation = descriptor.getTarget().getAnnotation(Application.class);
-                ASTType type = descriptor.getTarget();
+        if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Application.class)) {
+            builder.add(new ComponentPartGenerator() {
+                public void generate(ComponentDescriptor descriptor) {
+                    Application applicationAnnotation = descriptor.getTarget().getAnnotation(Application.class);
+                    ASTType type = descriptor.getTarget();
 
-                org.androidtransfuse.model.manifest.Application manifestApplication = buildManifestEntry(descriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation);
+                    org.androidtransfuse.model.manifest.Application manifestApplication = buildManifestEntry(descriptor.getPackageClass().getFullyQualifiedName(), applicationAnnotation);
 
-                manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
+                    manifestApplication.setMetaData(metadataBuilder.buildMetaData(type));
 
-                manifestManager.addApplication(manifestApplication);
-            }
-        });
+                    manifestManager.addApplication(manifestApplication);
+                }
+            });
+        }
     }
 
     private org.androidtransfuse.model.manifest.Application buildManifestEntry(String name, Application annotation) {

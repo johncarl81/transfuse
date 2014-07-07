@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
+import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ClassNamer;
@@ -43,7 +44,7 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class NonConfigurationInstanceGenerator implements PostInjectionGeneration {
+public class NonConfigurationInstanceGenerator implements Generation {
 
     private final UniqueVariableNamer variableNamer;
     private final ClassNamer classNamer;
@@ -51,34 +52,43 @@ public class NonConfigurationInstanceGenerator implements PostInjectionGeneratio
     private final InvocationBuilder invocationBuilder;
     private final TypedExpressionFactory typeExpressionFactory;
     private final ASTElementFactory astElementFactory;
+    private final ASTMethod creationMethod;
+
+    @Factory public interface NonconfigurationInstanceGeneratorFactory{
+        NonConfigurationInstanceGenerator build(ASTMethod creationMethod);
+    }
 
     @Inject
-    public NonConfigurationInstanceGenerator(UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory, ASTElementFactory astElementFactory) {
+    public NonConfigurationInstanceGenerator(/*@Assisted*/ ASTMethod creationMethod, UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory, ASTElementFactory astElementFactory) {
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.generationUtil = generationUtil;
         this.invocationBuilder = invocationBuilder;
         this.typeExpressionFactory = typeExpressionFactory;
         this.astElementFactory = astElementFactory;
+        this.creationMethod = creationMethod;
     }
 
     @Override
-    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
 
-            final List<InjectionNode> nonConfigurationComponents = buildNonConfigurationComponents(expressionMap);
+        builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                final List<InjectionNode> nonConfigurationComponents = buildNonConfigurationComponents(builder.getExpressionMap());
 
-            if (!nonConfigurationComponents.isEmpty()) {
-                try {
-                    //generate holder type
-                    final JDefinedClass nonConfigurationInstance = builder.getDefinedClass()._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(new PackageClass(null, "NonConfigurationInstance")).build().getClassName());
+                if (!nonConfigurationComponents.isEmpty()) {
+                    try {
+                        //generate holder type
+                        final JDefinedClass nonConfigurationInstance = builder.getDefinedClass()._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(new PackageClass(null, "NonConfigurationInstance")).build().getClassName());
 
-                    JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
-                    final Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);
+                        JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
+                        final Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);
 
-                    ASTMethod onCreateMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE);
-                    builder.add(onCreateMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                        ASTMethod onCreateMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE);
+                        builder.add(onCreateMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                            @Override
+                            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
 
                                 //add on create init
                                 //super.getLastNonConfigurationInstance()
@@ -96,45 +106,45 @@ public class NonConfigurationInstanceGenerator implements PostInjectionGeneratio
                                                         new ASTJDefinedClassType(builder.getDefinedClass()),
                                                         fieldExpression,
                                                         nonConfigurationField,
-                                                        expressionMap.get(nonConfigurationComponent).getExpression())
+                                                        builder.getExpressionMap().get(nonConfigurationComponent).getExpression())
                                         );
                                     }
                                 }
-                        }
-                    });
-
-                    ASTMethod onRetainNonConfigurationInstanceMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onRetainNonConfigurationInstance");
-                    builder.add(onRetainNonConfigurationInstanceMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                            JInvocation construction = JExpr._new(nonConfigurationInstance);
-                            JVar instanceDecl = block.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance)
-                                    , construction);
-
-                            for (InjectionNode injectionNode : nonConfigurationComponents) {
-
-                                NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
-                                for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
-                                    construction.arg(invocationBuilder.buildFieldGet(
-                                            new ASTJDefinedClassType(builder.getDefinedClass()),
-                                            fieldInjectionPoint.getField(),
-                                            injectionNode.getASTType(),
-                                            expressionMap.get(injectionNode)
-                                    ));
-                                }
                             }
+                        });
 
-                            block._return(instanceDecl);
-                        }
-                    });
+                        ASTMethod onRetainNonConfigurationInstanceMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onRetainNonConfigurationInstance");
+                        builder.add(onRetainNonConfigurationInstanceMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                            @Override
+                            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                                JInvocation construction = JExpr._new(nonConfigurationInstance);
+                                JVar instanceDecl = block.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance)
+                                        , construction);
+
+                                for (InjectionNode injectionNode : nonConfigurationComponents) {
+
+                                    NonConfigurationAspect aspect = injectionNode.getAspect(NonConfigurationAspect.class);
+                                    for (FieldInjectionPoint fieldInjectionPoint : aspect.getFields()) {
+                                        construction.arg(invocationBuilder.buildFieldGet(
+                                                new ASTJDefinedClassType(builder.getDefinedClass()),
+                                                fieldInjectionPoint.getField(),
+                                                injectionNode.getASTType(),
+                                                builder.getExpressionMap().get(injectionNode)
+                                        ));
+                                    }
+                                }
+
+                                block._return(instanceDecl);
+                            }
+                        });
 
 
-                } catch (JClassAlreadyExistsException e) {
-                    throw new TransfuseAnalysisException("Class already defined", e);
+                    } catch (JClassAlreadyExistsException e) {
+                        throw new TransfuseAnalysisException("Class already defined", e);
+                    }
                 }
-
             }
-
+        });
     }
 
     private Map<FieldInjectionPoint, JFieldVar> configureConstructor(JMethod constructor, JDefinedClass nonConfigurationInstance, List<InjectionNode> nonConfigurationComponents) {

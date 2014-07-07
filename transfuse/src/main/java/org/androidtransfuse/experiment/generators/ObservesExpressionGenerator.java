@@ -42,9 +42,9 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ObservesExpressionGenerator implements PostInjectionGeneration {
+public class ObservesExpressionGenerator implements Generation {
 
-    private final ASTMethod defineMethod;
+    private final ASTMethod creationMethod;
     private final ASTMethod registerMethod;
     private final ASTMethod unregisterMethod;
     private final JCodeModel codeModel;
@@ -59,13 +59,13 @@ public class ObservesExpressionGenerator implements PostInjectionGeneration {
 
     @Factory
     public interface ObservesExpressionGeneratorFactory {
-        ObservesExpressionGenerator build(@Named("defineMethod") ASTMethod defineMethod,
+        ObservesExpressionGenerator build(@Named("creationMethod") ASTMethod creationMethod,
                                           @Named("registerMethod") ASTMethod registerMethod,
                                           @Named("unregisterMethod") ASTMethod unregisterMethod);
     }
 
     @Inject
-    public ObservesExpressionGenerator(@Named("defineMethod") ASTMethod defineMethod,
+    public ObservesExpressionGenerator(@Named("creationMethod") ASTMethod creationMethod,
                                        @Named("registerMethod") ASTMethod registerMethod,
                                        @Named("unregisterMethod") ASTMethod unregisterMethod,
                                        JCodeModel codeModel,
@@ -77,7 +77,7 @@ public class ObservesExpressionGenerator implements PostInjectionGeneration {
                                        InjectionPointFactory injectionPointFactory,
                                        InjectionFragmentGenerator injectionFragmentGenerator,
                                        InstantiationStrategyFactory instantiationStrategyFactory) {
-        this.defineMethod = defineMethod;
+        this.creationMethod = creationMethod;
         this.registerMethod = registerMethod;
         this.unregisterMethod = unregisterMethod;
         this.codeModel = codeModel;
@@ -92,38 +92,43 @@ public class ObservesExpressionGenerator implements PostInjectionGeneration {
     }
 
     @Override
-    public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor, Map<InjectionNode, TypedExpression> expressionMap) {
-        try {
-            //mapping from event type -> observer
-            Map<JClass, JVar> observerTuples = getObservers(builder, expressionMap);
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
+        builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                try {
+                    //mapping from event type -> observer
+                    Map<JClass, JVar> observerTuples = getObservers(builder, builder.getExpressionMap());
 
-            if (!observerTuples.isEmpty()) {
-                final JVar eventManager = getEventManager(builder, expressionMap, builder.getScopes());
+                    if (!observerTuples.isEmpty()) {
+                        final JVar eventManager = getEventManager(builder, builder.getExpressionMap(), builder.getScopes());
 
-                for (final Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
+                        for (final Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
 
-                    builder.add(registerMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                            block.invoke(eventManager, "register")
-                                    .arg(tupleEntry.getKey().dotclass())
-                                    .arg(tupleEntry.getValue());
+                            builder.add(registerMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                                @Override
+                                public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                                    block.invoke(eventManager, "register")
+                                            .arg(tupleEntry.getKey().dotclass())
+                                            .arg(tupleEntry.getValue());
+                                }
+                            });
+
+                            builder.add(unregisterMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                                @Override
+                                public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                                    block.invoke(eventManager, "unregister")
+                                            .arg(tupleEntry.getValue());
+                                }
+                            });
                         }
-                    });
+                    }
 
-                    builder.add(unregisterMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                            block.invoke(eventManager, "unregister")
-                                    .arg(tupleEntry.getValue());
-                        }
-                    });
+                } catch (JClassAlreadyExistsException e) {
+                    throw new TransfuseAnalysisException("Tried to generate a class that already exists", e);
                 }
             }
-
-        } catch (JClassAlreadyExistsException e) {
-            throw new TransfuseAnalysisException("Tried to generate a class that already exists", e);
-        }
+        });
     }
 
     private JVar getEventManager(final ComponentBuilder builder, final Map<InjectionNode, TypedExpression> expressionMap, final JExpression scopes) {
@@ -132,7 +137,7 @@ public class ObservesExpressionGenerator implements PostInjectionGeneration {
         final InjectionNode eventManagerInjectionNode = injectionPointFactory.buildInjectionNode(eventManagerType, builder.getAnalysisContext());
         final JVar eventManagerVar = builder.getDefinedClass().field(JMod.PRIVATE, generationUtil.type(eventManagerType), variableNamer.generateName(eventManagerType));
 
-        builder.add(defineMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+        builder.add(creationMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
 
@@ -205,7 +210,7 @@ public class ObservesExpressionGenerator implements PostInjectionGeneration {
 
                     observerTuples.put(eventRef, observerField);
 
-                    builder.add(defineMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                    builder.add(creationMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
                         @Override
                         public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                             block.assign(observerField, JExpr._new(observerClass).arg(observerExpression));

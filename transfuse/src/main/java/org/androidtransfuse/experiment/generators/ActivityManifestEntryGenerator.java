@@ -22,7 +22,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ComponentPartGenerator;
-import org.androidtransfuse.experiment.PreInjectionGeneration;
+import org.androidtransfuse.experiment.Generation;
 import org.androidtransfuse.processor.ManifestManager;
 import org.apache.commons.lang.StringUtils;
 
@@ -35,7 +35,7 @@ import static org.androidtransfuse.util.AnnotationUtil.checkDefault;
 /**
  * @author John Ericksen
  */
-public class ActivityManifestEntryGenerator implements PreInjectionGeneration {
+public class ActivityManifestEntryGenerator implements Generation {
 
     private final IntentFilterFactory intentFilterBuilder;
     private final MetaDataBuilder metadataBuilder;
@@ -56,19 +56,21 @@ public class ActivityManifestEntryGenerator implements PreInjectionGeneration {
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
 
-        builder.add(new ComponentPartGenerator() {
-            public void generate(ComponentDescriptor descriptor) {
-                Activity activityAnnotation = descriptor.getTarget().getAnnotation(Activity.class);
-                ASTType type = descriptor.getTarget();
+        if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Activity.class)) {
+            builder.add(new ComponentPartGenerator() {
+                public void generate(ComponentDescriptor descriptor) {
+                    Activity activityAnnotation = descriptor.getTarget().getAnnotation(Activity.class);
+                    ASTType type = descriptor.getTarget();
 
-                org.androidtransfuse.model.manifest.Activity manifestActivity = buildManifestEntry(descriptor.getPackageClass().getFullyQualifiedName(), activityAnnotation);
+                    org.androidtransfuse.model.manifest.Activity manifestActivity = buildManifestEntry(descriptor.getPackageClass().getFullyQualifiedName(), activityAnnotation);
 
-                manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
-                manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
+                    manifestActivity.setIntentFilters(intentFilterBuilder.buildIntentFilters(type));
+                    manifestActivity.setMetaData(metadataBuilder.buildMetaData(type));
 
-                manifestManager.addActivity(manifestActivity);
-            }
-        });
+                    manifestManager.addActivity(manifestActivity);
+                }
+            });
+        }
     }
 
     protected org.androidtransfuse.model.manifest.Activity buildManifestEntry(String name, Activity activityAnnotation) {

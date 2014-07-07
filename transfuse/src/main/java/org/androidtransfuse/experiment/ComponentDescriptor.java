@@ -16,6 +16,7 @@
 package org.androidtransfuse.experiment;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.AnalysisContext;
 
@@ -31,9 +32,8 @@ public class ComponentDescriptor {
     private final ASTType target;
     private final ASTType componentType;
     private final PackageClass packageClass;
-    private InjectionGeneration injectionGenerator;
-    private final List<PreInjectionGeneration> preInjectionGenerators = new ArrayList<PreInjectionGeneration>();
-    private final List<PostInjectionGeneration> postInjectionGenerators = new ArrayList<PostInjectionGeneration>();
+    private final List<Generation> generators = new ArrayList<Generation>();
+    private final List<MethodSignature> generateFirst = new ArrayList<MethodSignature>();
     private AnalysisContext analysisContext;
 
     public ComponentDescriptor(ASTType target, ASTType componentType, PackageClass packageClass) {
@@ -42,20 +42,8 @@ public class ComponentDescriptor {
         this.componentType = componentType;
     }
 
-    public void setInjectionGenerator(InjectionGeneration injectionGenerator) {
-        this.injectionGenerator = injectionGenerator;
-    }
-
-    public InjectionGeneration getInjectionGenerator() {
-        return injectionGenerator;
-    }
-
-    public Collection<PreInjectionGeneration> getPreInjectionGenerators() {
-        return preInjectionGenerators;
-    }
-
-    public Collection<PostInjectionGeneration> getPostInjectionGenerators() {
-        return postInjectionGenerators;
+    public Collection<Generation> getGenerators() {
+        return generators;
     }
 
     public PackageClass getPackageClass() {
@@ -76,5 +64,9 @@ public class ComponentDescriptor {
 
     public ASTType getType() {
         return componentType;
+    }
+
+    public List<MethodSignature> getGenerateFirst() {
+        return generateFirst;
     }
 }

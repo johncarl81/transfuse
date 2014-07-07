@@ -15,12 +15,13 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
-import org.androidtransfuse.adapter.element.ASTElementFactory;
+import com.sun.codemodel.JBlock;
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAspect;
-import org.androidtransfuse.experiment.ComponentBuilder;
-import org.androidtransfuse.experiment.ComponentDescriptor;
-import org.androidtransfuse.experiment.PostInjectionGeneration;
+import org.androidtransfuse.annotations.Factory;
+import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -29,27 +30,37 @@ import java.util.Map;
 /**
  * @author John Ericksen
  */
-public class ListenerRegistrationGenerator implements PostInjectionGeneration {
+public class ListenerRegistrationGenerator implements Generation {
 
-    private ASTElementFactory astElementFactory;
+    private ASTMethod creationMethod;
 
     @Inject
-    public ListenerRegistrationGenerator(ASTElementFactory astElementFactory) {
-        this.astElementFactory = astElementFactory;
+    public ListenerRegistrationGenerator(/*@Assisted*/ASTMethod creationMethod) {
+        this.creationMethod = creationMethod;
+    }
+
+    @Factory
+    public interface ListerRegistrationGeneratorFactory {
+        ListenerRegistrationGenerator build(ASTMethod creationMethod);
     }
 
     @Override
-    public void schedule(final ComponentBuilder componentBuilder, ComponentDescriptor descriptor, final Map<InjectionNode, TypedExpression> expressionMap) {
+    public void schedule(final ComponentBuilder componentBuilder, ComponentDescriptor descriptor) {
 
-        //add listener registration
-        for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : expressionMap.entrySet()) {
-            if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
-                RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
+        componentBuilder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                //add listener registration
+                for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : componentBuilder.getExpressionMap().entrySet()) {
+                    if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
+                        RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
-                for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
-                    builder.build(componentBuilder, injectionNodeJExpressionEntry.getValue());
+                        for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
+                            builder.build(componentBuilder, injectionNodeJExpressionEntry.getValue());
+                        }
+                    }
                 }
             }
-        }
+        });
     }
 }

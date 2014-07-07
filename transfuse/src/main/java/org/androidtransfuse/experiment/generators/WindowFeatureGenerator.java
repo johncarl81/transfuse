@@ -30,7 +30,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class WindowFeatureGenerator implements PreInjectionGeneration {
+public class WindowFeatureGenerator implements Generation {
 
     private final ASTElementFactory astElementFactory;
 

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-public class SuperGenerator implements PreInjectionGeneration {
+public class SuperGenerator implements Generation, ComponentMethodGenerator {
 
     public
     @Factory
@@ -47,17 +47,17 @@ public class SuperGenerator implements PreInjectionGeneration {
 
     @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
-        builder.add(method, GenerationPhase.SUPER, new ComponentMethodGenerator() {
-            @Override
-            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                JInvocation invocation = block.invoke(JExpr._super(), method.getName());
+        builder.add(method, GenerationPhase.SUPER, this);
+    }
 
-                List<ASTParameter> parameters = methodDescriptor.getASTMethod().getParameters();
+    @Override
+    public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+        JInvocation invocation = block.invoke(JExpr._super(), method.getName());
 
-                for (ASTParameter parameter : parameters) {
-                    invocation.arg(methodDescriptor.getParameter(parameter).getExpression());
-                }
-            }
-        });
+        List<ASTParameter> parameters = methodDescriptor.getASTMethod().getParameters();
+
+        for (ASTParameter parameter : parameters) {
+            invocation.arg(methodDescriptor.getParameter(parameter).getExpression());
+        }
     }
 }

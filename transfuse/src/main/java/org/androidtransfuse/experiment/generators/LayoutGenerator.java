@@ -32,7 +32,7 @@ import javax.inject.Inject;
 /**
  * @author John Ericksen
  */
-public class LayoutGenerator implements PreInjectionGeneration {
+public class LayoutGenerator implements Generation {
 
     private final RResourceReferenceBuilder rResourceReferenceBuilder;
     private final RResource rResource;

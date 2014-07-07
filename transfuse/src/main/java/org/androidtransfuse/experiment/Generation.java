@@ -18,7 +18,7 @@ package org.androidtransfuse.experiment;
 /**
  * @author John Ericksen
  */
-public interface PreInjectionGeneration {
+public interface Generation {
 
     void schedule(ComponentBuilder builder, ComponentDescriptor descriptor);
 

@@ -17,6 +17,7 @@ package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
@@ -102,7 +103,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
             //vanilla Android Application
             PackageClass activityPackageClass = astType.getPackageClass();
             applicationClassName = buildPackageClass(astType, activityPackageClass.getClassName());
-            applicationDescriptor = new ComponentDescriptor(null, null, applicationClassName);
+            applicationDescriptor = new ComponentDescriptor(astType, null, applicationClassName);
         } else {
 
             applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
@@ -121,7 +122,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         //add manifest elements
-        applicationDescriptor.getPreInjectionGenerators().add(applicationManifestEntryGenerator);
+        applicationDescriptor.getGenerators().add(applicationManifestEntryGenerator);
 
         return applicationDescriptor;
     }
@@ -141,28 +142,29 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         //onCreate
         //applicationDescriptor.setInitMethodBuilder(astClassFactory.getType(OnCreate.class), componentBuilderFactory.buildOnCreateMethodBuilder(onCreateASTMethod, new NoOpWindowFeatureBuilder(), new NoOpLayoutBuilder()));
-        applicationDescriptor.getPreInjectionGenerators().add(superGeneratorFactory.build(getASTMethod("onCreate")));
-        applicationDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
+        applicationDescriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod("onCreate")));
+        applicationDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
 
-        applicationDescriptor.setInjectionGenerator(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
+        applicationDescriptor.getGenerateFirst().add(new MethodSignature(getASTMethod("onCreate")));
+        applicationDescriptor.getGenerators().add(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
 
         //applicationDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
         applicationDescriptor.setAnalysisContext(context);
 
-        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnCreate.class, "onCreate"));
+        applicationDescriptor.getGenerators().add(buildEventMethod(OnCreate.class, "onCreate"));
         //onLowMemory
-        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
+        applicationDescriptor.getGenerators().add(buildEventMethod(OnLowMemory.class, "onLowMemory"));
         //onTerminate
-        applicationDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnTerminate.class, "onTerminate"));
+        applicationDescriptor.getGenerators().add(buildEventMethod(OnTerminate.class, "onTerminate"));
         //onConfigurationChanged
         ASTMethod onConfigurationChangedASTMethod = getASTMethod("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION);
-        applicationDescriptor.getPostInjectionGenerators().add(
-                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class), onConfigurationChangedASTMethod)
+        applicationDescriptor.getGenerators().add(
+                componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class), onConfigurationChangedASTMethod, getASTMethod("onCreate"))
         );
 
         //todo: applicationDescriptor.getPostInjectionGenerators().add(contextScopeComponentBuilder);
 
-        applicationDescriptor.getPostInjectionGenerators().add(observesExpressionGeneratorFactory.build(
+        applicationDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                 getASTMethod("onCreate"),
                 getASTMethod("onCreate"),
                 getASTMethod("onTerminate")
@@ -173,7 +175,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         ASTMethod method = getASTMethod(methodName);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onCreate"));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {

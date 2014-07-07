@@ -90,7 +90,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
             PackageClass receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
-            receiverDescriptor = new ComponentDescriptor(null, null, receiverClassName);
+            receiverDescriptor = new ComponentDescriptor(astType, null, receiverClassName);
         } else {
             PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiver.name());
 
@@ -111,16 +111,17 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
             AnalysisContext analysisContext = analysisContextFactory.buildAnalysisContext(injectionNodeBuilderRepository);
 
-            receiverDescriptor.getPreInjectionGenerators().add(scopesGenerationFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT)));
-            receiverDescriptor.setInjectionGenerator(onCreateInjectionGeneratorFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT), astType));
+            receiverDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT)));
 
-            receiverDescriptor.getPostInjectionGenerators().add(buildEventMethod(OnReceive.class, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
+            receiverDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT), astType));
+
+            receiverDescriptor.getGenerators().add(buildEventMethod(OnReceive.class, "onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
 
             //receiverDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, analysisContext));
             receiverDescriptor.setAnalysisContext(analysisContext);
         }
 
-        receiverDescriptor.getPreInjectionGenerators().add(manifestEntryGenerator);
+        receiverDescriptor.getGenerators().add(manifestEntryGenerator);
 
         return receiverDescriptor;
     }
@@ -130,7 +131,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         ASTMethod method = getASTMethod(methodName, args);
         ASTType eventAnnotation = astClassFactory.getType(eventAnnotationClass);
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method);
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, getASTMethod("onReceive", AndroidLiterals.CONTEXT, AndroidLiterals.INTENT));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {
