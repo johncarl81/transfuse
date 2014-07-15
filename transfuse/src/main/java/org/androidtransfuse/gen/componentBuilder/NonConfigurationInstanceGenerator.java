@@ -85,8 +85,7 @@ public class NonConfigurationInstanceGenerator implements Generation {
                         JMethod constructor = nonConfigurationInstance.constructor(JMod.PRIVATE);
                         final Map<FieldInjectionPoint, JFieldVar> fieldMap = configureConstructor(constructor, nonConfigurationInstance, nonConfigurationComponents);
 
-                        ASTMethod onCreateMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onCreate", AndroidLiterals.BUNDLE);
-                        builder.add(onCreateMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                        builder.add(creationMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
                             @Override
                             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
 

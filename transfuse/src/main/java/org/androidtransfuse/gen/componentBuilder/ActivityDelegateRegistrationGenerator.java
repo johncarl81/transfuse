@@ -46,8 +46,7 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
     }
 
     @Override
-    public void build(final ComponentBuilder componentBuilder, final TypedExpression value) {
-
+    public void build(final ComponentBuilder componentBuilder, ASTMethod creationMethod, final TypedExpression value) {
         for (ASTMethod method : methods) {
 
             componentBuilder.add(method, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {

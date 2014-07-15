@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class ListenerRegistrationGenerator implements Generation {
 
-    private ASTMethod creationMethod;
+    private final ASTMethod creationMethod;
 
     @Inject
     public ListenerRegistrationGenerator(/*@Assisted*/ASTMethod creationMethod) {
@@ -50,16 +50,16 @@ public class ListenerRegistrationGenerator implements Generation {
         componentBuilder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                //add listener registration
-                for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : componentBuilder.getExpressionMap().entrySet()) {
-                    if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
-                        RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
+            //add listener registration
+            for (Map.Entry<InjectionNode, TypedExpression> injectionNodeJExpressionEntry : componentBuilder.getExpressionMap().entrySet()) {
+                if (injectionNodeJExpressionEntry.getKey().containsAspect(RegistrationAspect.class)) {
+                    RegistrationAspect registrationAspect = injectionNodeJExpressionEntry.getKey().getAspect(RegistrationAspect.class);
 
-                        for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
-                            builder.build(componentBuilder, injectionNodeJExpressionEntry.getValue());
-                        }
+                    for (RegistrationGenerator builder : registrationAspect.getRegistrationBuilders()) {
+                        builder.build(componentBuilder, creationMethod, injectionNodeJExpressionEntry.getValue());
                     }
                 }
+            }
             }
         });
     }

@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.componentBuilder;
 
+import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -23,5 +24,5 @@ import org.androidtransfuse.model.TypedExpression;
  */
 public interface RegistrationGenerator {
 
-    void build(ComponentBuilder componentBuilder, TypedExpression value);
+    void build(ComponentBuilder componentBuilder, ASTMethod creationMethod, TypedExpression value);
 }
