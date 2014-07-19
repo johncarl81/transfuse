@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTUtils;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -24,7 +25,6 @@ import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.parceler.Parcel;
 
 import javax.inject.Inject;
 
@@ -56,7 +56,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
             optional = false;
         }
 
-        boolean wrapped = signature.getType().isAnnotated(Parcel.class);
+        boolean wrapped = ASTUtils.getInstance().isAnnotated(signature.getType(), "org.parceler.Parcel");
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 

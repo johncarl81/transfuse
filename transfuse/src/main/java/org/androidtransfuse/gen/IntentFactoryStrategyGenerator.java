@@ -20,6 +20,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTUtils;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
@@ -32,8 +33,6 @@ import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -45,7 +44,8 @@ import java.util.*;
  */
 public class IntentFactoryStrategyGenerator implements Generation {
 
-    private static final PackageClass PARCELS_NAME = new PackageClass(Parcels.PARCELS_PACKAGE, Parcels.PARCELS_NAME);
+    private static final PackageClass ATPARCEL_NAME = new PackageClass("org.parceler", "Parcel");
+    private static final PackageClass PARCELS_NAME = new PackageClass("org.parceler", "Parcels");
     public static final String WRAP_METHOD = "wrap";
 
     private static final String STRATEGY_EXT = "Strategy";
@@ -171,7 +171,7 @@ public class IntentFactoryStrategyGenerator implements Generation {
         if (type.inheritsFrom(AndroidLiterals.PARCELABLE)) {
             return extras.invoke("putParcelable").arg(name).arg(extraParam);
         }
-        if (type.isAnnotated(Parcel.class)) {
+        if ( ASTUtils.getInstance().isAnnotated(type, ATPARCEL_NAME.getCanonicalName())) {
             JInvocation wrappedParcel = generationUtil.ref(PARCELS_NAME)
                     .staticInvoke(WRAP_METHOD).arg(extraParam);
 

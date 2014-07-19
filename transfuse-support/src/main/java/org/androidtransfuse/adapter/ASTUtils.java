@@ -60,12 +60,24 @@ public final class ASTUtils {
         return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
     }
 
-    public ASTAnnotation getAnnotation(Class resourceClass, ImmutableSet<ASTAnnotation> annotations) {
+    public ASTAnnotation getAnnotation(Class annotationClass, ImmutableSet<ASTAnnotation> annotations) {
+        return getAnnotation(annotationClass.getCanonicalName(), annotations);
+    }
+
+    public ASTAnnotation getAnnotation(String annotationClassName, ImmutableSet<ASTAnnotation> annotations){
         for (ASTAnnotation astAnnotation : annotations) {
-            if (astAnnotation.getASTType().getName().equals(resourceClass.getCanonicalName())) {
+            if (astAnnotation.getASTType().getName().equals(annotationClassName)) {
                 return astAnnotation;
             }
         }
         return null;
+    }
+
+    public boolean isAnnotated(ASTType type, Class annotationClass){
+        return isAnnotated(type, annotationClass.getCanonicalName());
+    }
+
+    public boolean isAnnotated(ASTType type, String annotationClassName){
+        return getAnnotation(annotationClassName, type.getAnnotations()) != null;
     }
 }

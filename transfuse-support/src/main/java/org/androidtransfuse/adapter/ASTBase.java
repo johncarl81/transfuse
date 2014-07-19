@@ -51,7 +51,6 @@ public interface ASTBase {
      */
     <A extends Annotation> A getAnnotation(Class<A> annotation);
 
-
     /**
      * Getter for the AST Annotation associated with the given annotation type
      *

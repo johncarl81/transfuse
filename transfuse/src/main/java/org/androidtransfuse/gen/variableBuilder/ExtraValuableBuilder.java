@@ -25,7 +25,6 @@ import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.ExtraUtil;
-import org.parceler.ParcelWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -73,8 +72,8 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
                 .arg(JExpr.lit(nullable));
 
         if (wrapped) {
-            getExtraInvocation = ((JExpression) JExpr.cast(generationUtil.ref(ParcelWrapper.class),
-                    getExtraInvocation)).invoke(ParcelWrapper.GET_PARCEL);
+            getExtraInvocation = ((JExpression) JExpr.cast(generationUtil.ref("org.parceler.ParcelWrapper"),
+                    getExtraInvocation)).invoke("getParcel");
         }
 
         return getExtraInvocation;
