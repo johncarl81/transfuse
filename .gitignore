@@ -2,6 +2,7 @@
 .gradle
 *~
 *.iml
+dependency-reduced-pom.xml
 build
 build.sh
 target
