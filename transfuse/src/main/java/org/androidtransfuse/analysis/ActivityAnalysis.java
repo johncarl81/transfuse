@@ -305,11 +305,13 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod, getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE)));
 
         // onRestoreInstanceState
         ASTMethod onRestoreInstanceState = getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE);
         activityCallbackGenerators.add(
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnRestoreInstanceState.class), onRestoreInstanceState, getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
+        activityCallbackGenerators.add(superGeneratorFactory.build(getASTMethod("onRestoreInstanceState", AndroidLiterals.BUNDLE)));
 
         //extra intent factory
         activityCallbackGenerators.add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
