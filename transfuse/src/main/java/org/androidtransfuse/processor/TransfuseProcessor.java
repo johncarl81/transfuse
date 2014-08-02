@@ -41,13 +41,17 @@ public class TransfuseProcessor {
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {
         for (Provider<ASTType> astProvider : astProviders) {
-            TransactionProcessorBuilder<Provider<ASTType>, ?> builder = generatorRepository.getComponentBuilder(componentAnnotation);
-            if (builder == null) {
-                throw new TransfuseAnalysisException("Builder for type " + componentAnnotation.getName() + " not found");
-            }
-
-            builder.submit(astProvider);
+           submit(componentAnnotation, astProvider);
         }
+    }
+
+    public void submit(Class<? extends Annotation> componentAnnotation, Provider<ASTType> astProvider) {
+        TransactionProcessorBuilder<Provider<ASTType>, ?> builder = generatorRepository.getComponentBuilder(componentAnnotation);
+        if (builder == null) {
+            throw new TransfuseAnalysisException("Builder for type " + componentAnnotation.getName() + " not found");
+        }
+
+        builder.submit(astProvider);
     }
 
     public void execute() {

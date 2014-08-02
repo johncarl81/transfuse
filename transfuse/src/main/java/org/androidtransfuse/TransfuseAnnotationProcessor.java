@@ -15,9 +15,9 @@
  */
 package org.androidtransfuse;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
 import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.annotations.*;
@@ -87,6 +87,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private ReloadableASTElementFactory reloadableASTElementFactory;
     @Inject
+    private ReloadableASTClassFactory reloadableASTClassFactory;
+    @Inject
     private ManifestLocator manifestLocator;
     @Inject
     private Logger logger;
@@ -130,11 +132,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
         if (!baseModuleConfiguration) {
-            transfuseProcessor.submit(TransfuseModule.class, reloadableASTElementFactory.buildProviders(
-                    ImmutableList.of(
-                            elements.getTypeElement(APIModule.class.getName()),
-                            elements.getTypeElement(PluginModule.class.getName())
-                    )));
+            transfuseProcessor.submit(TransfuseModule.class, reloadableASTClassFactory.apply(PluginModule.class));
+            transfuseProcessor.submit(TransfuseModule.class, reloadableASTElementFactory.apply(elements.getTypeElement(APIModule.class.getName())));
             baseModuleConfiguration = true;
         }
 

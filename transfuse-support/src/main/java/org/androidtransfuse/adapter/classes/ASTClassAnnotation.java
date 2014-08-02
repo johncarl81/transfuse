@@ -69,6 +69,8 @@ public class ASTClassAnnotation implements ASTAnnotation {
             Class convertedType = type;
             boolean convertToASTType = false;
             boolean convertToASTTypeArray = false;
+            boolean convertToASTAnnotation = false;
+            boolean convertToASTAnnotationArray = false;
 
             if (type.equals(ASTType.class)) {
                 //convert classes into ASTType
@@ -80,6 +82,18 @@ public class ASTClassAnnotation implements ASTAnnotation {
                 //convert classes into ASTType
                 convertedType = Class[].class;
                 convertToASTTypeArray = true;
+            }
+
+            if (type.equals(ASTAnnotation.class)) {
+                //convert classes into ASTType
+                convertedType = Annotation.class;
+                convertToASTAnnotation = true;
+            }
+
+            if (type.equals(ASTAnnotation[].class)) {
+                //convert classes into ASTType
+                convertedType = Annotation[].class;
+                convertToASTAnnotationArray = true;
             }
 
             if (!convertedType.isAssignableFrom(annotationParameter.getReturnType())) {
@@ -95,6 +109,16 @@ public class ASTClassAnnotation implements ASTAnnotation {
                 ASTType[] astTypes = new ASTType[((Class[])invocationResult).length];
                 for(int i = 0; i < ((Class[]) invocationResult).length; i++){
                     astTypes[i] = astClassFactory.getType(((Class[]) invocationResult)[i]);
+                }
+                return (T) astTypes;
+            }
+            if (convertToASTAnnotation) {
+                return (T) astClassFactory.getAnnotation((Annotation) invocationResult);
+            }
+            if (convertToASTAnnotationArray) {
+                ASTAnnotation[] astTypes = new ASTAnnotation[((Annotation[])invocationResult).length];
+                for(int i = 0; i < ((Annotation[]) invocationResult).length; i++){
+                    astTypes[i] = astClassFactory.getAnnotation(((Annotation[]) invocationResult)[i]);
                 }
                 return (T) astTypes;
             }
