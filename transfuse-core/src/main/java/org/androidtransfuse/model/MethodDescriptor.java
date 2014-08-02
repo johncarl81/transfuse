@@ -32,7 +32,6 @@ public class MethodDescriptor {
 
     private final JMethod method;
     private final ImmutableMap<ASTParameter, TypedExpression> parameterMap;
-    private final ImmutableMap<ASTType, TypedExpression> typeMap;
     private final ImmutableMap<ASTType, TypedExpression> querymap;
     private final ASTMethod astMethod;
 
@@ -40,7 +39,6 @@ public class MethodDescriptor {
         this.method = method;
         this.astMethod = astMethod;
         this.parameterMap = parameterMap;
-        this.typeMap = typeMap;
 
         ImmutableMap.Builder<ASTType, TypedExpression> queryBuilder = ImmutableMap.builder();
 
@@ -73,10 +71,6 @@ public class MethodDescriptor {
 
     public Map<ASTParameter, TypedExpression> getParameters() {
         return parameterMap;
-    }
-
-    public Map<ASTType, TypedExpression> getTypeMap() {
-        return typeMap;
     }
 
     //todo: move this to a properly build module repository

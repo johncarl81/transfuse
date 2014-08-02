@@ -147,7 +147,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         fragmentDescriptor.getGenerators().add(fragmentLayoutGenerator);
 
-        //fragmentDescriptor.setInjectionNodeFactory(componentBuilderFactory.buildInjectionNodeFactory(ImmutableSet.<ASTAnnotation>of(), astType, context));
         fragmentDescriptor.setAnalysisContext(context);
         fragmentDescriptor.getGenerateFirst().add(new MethodSignature(getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE)));
 
@@ -195,31 +194,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);
-        org.androidtransfuse.experiment.generators.MethodCallbackGenerator methodCallbackGenerator = componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod, getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE));
-        /*fragmentDescriptor.getGenerators().add(new Generation() {
-            @Override
-            public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
-                builder.add(getASTMethod("onCreate", AndroidLiterals.BUNDLE), GenerationPhase.INIT, new ComponentMethodGenerator() {
-                    @Override
-                    public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                        JMethod onCreateMethod = definedClass.method(JMod.PUBLIC, codeModel.VOID,  "onCreate");
-                        JVar bundle = onCreateMethod.param(codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
-                        JVar previousBundle = definedClass.field(JMod.PRIVATE, codeModel.ref(AndroidLiterals.BUNDLE.getName()), "bundle");
-
-                        onCreateMethod.body().add(codeModel.ref("super").staticInvoke("onCreate").arg(bundle));
-                        onCreateMethod.body().assign(previousBundle, bundle);
-
-                        JConditional nullCondition = body._if(delegate.eq(JExpr._null()));
-                        nullCondition._then()._if(previousBundle.ne(JExpr._null()))._then()
-                                .add(descriptor.getParameters().values().iterator().next().getExpression().invoke("putAll").arg(previousBundle));
-
-                        return nullCondition._else();
-                    }
-                });
-            }
-        });*/
-
-        fragmentDescriptor.getGenerators().add(methodCallbackGenerator);
+        fragmentDescriptor.getGenerators().add(componentBuilderFactory.buildFragmentOnSaveInstanceStateMethodCallbackGenerator(astClassFactory.getType(OnSaveInstanceState.class), onSaveInstanceStateMethod, getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE)));
 
         fragmentDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE)));
 

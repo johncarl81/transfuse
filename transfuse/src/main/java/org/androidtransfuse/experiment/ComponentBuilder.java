@@ -86,6 +86,7 @@ public class ComponentBuilder {
 
                 descriptor = methodDescriptorBuilder.build();
 
+                //todo: move to be properly lazy
                 for (ComponentMethodGenerator generator : lazyGenerators) {
                     generator.generate(descriptor, method.body());
                 }

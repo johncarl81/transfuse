@@ -20,6 +20,8 @@ import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.annotations.Factory;
+import org.androidtransfuse.experiment.generators.FragmentOnSaveInstanceStateMethodCallbackGenerator;
+import org.androidtransfuse.experiment.generators.MethodCallbackGenerator;
 import org.androidtransfuse.model.InjectionNode;
 
 import javax.inject.Named;
@@ -30,7 +32,9 @@ import javax.inject.Named;
 @Factory
 public interface ComponentBuilderFactory {
 
-    org.androidtransfuse.experiment.generators.MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
+    MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
+
+    FragmentOnSaveInstanceStateMethodCallbackGenerator buildFragmentOnSaveInstanceStateMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
 
     ViewRegistrationGenerator buildViewRegistrationGenerator(/*@Assisted("viewInjectionNode")*/ @Named("viewInjectionNode") InjectionNode viewInjectionNode, String listenerMethod, /*@Assisted("targetInjectionNode")*/ @Named("targetInjectionNode") InjectionNode injectionNode, ViewRegistrationInvocationBuilder invocationBuilder);
 

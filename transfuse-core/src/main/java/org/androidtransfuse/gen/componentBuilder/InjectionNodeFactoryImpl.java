@@ -71,10 +71,6 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
 
     private void buildVariableBuilderMap(MethodDescriptor methodDescriptor, InjectionNodeBuilderRepository injectionNodeBuilders) {
 
-        for (Map.Entry<ASTType, TypedExpression> typeEntry : methodDescriptor.getTypeMap().entrySet()) {
-            injectionNodeBuilders.putType(typeEntry.getKey(), buildExpression(typeEntry.getValue()));
-        }
-
         for (Map.Entry<ASTParameter, TypedExpression> parameterTypedExpressionEntry : methodDescriptor.getParameters().entrySet()) {
             ASTParameter parameter = parameterTypedExpressionEntry.getKey();
             ASTType parameterType = parameterTypedExpressionEntry.getKey().getASTType();

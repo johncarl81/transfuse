@@ -26,7 +26,6 @@ import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
@@ -65,7 +64,7 @@ public class OnCreateInjectionGenerator implements Generation {
     }
 
     @Override
-    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
+    public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         builder.add(method, GenerationPhase.INJECTION, new ComponentMethodGenerator() {
             @Override
@@ -74,14 +73,14 @@ public class OnCreateInjectionGenerator implements Generation {
                     builder.getAnalysisContext().getInjectionNodeBuilders().putType(astParameter.getASTType(), injectionBindingBuilder.buildExpression(methodDescriptor.getParameter(astParameter)));
                 }
 
-                InjectionNode injectionNode = injectionPointFactory.buildInjectionNode(target, builder.getAnalysisContext());
+                descriptor.setRootInjectionNode(injectionPointFactory.buildInjectionNode(target, builder.getAnalysisContext()));
 
                 try {
                     injectionFragmentGenerator.buildFragment(
                             block,
                             instantiationStrategyFactory.buildMethodStrategy(block, builder.getScopes()),
                             builder.getDefinedClass(),
-                            injectionNode,
+                            descriptor.getRootInjectionNode(),
                             builder.getScopes(),
                             builder.getExpressionMap());
                 } catch (JClassAlreadyExistsException e) {

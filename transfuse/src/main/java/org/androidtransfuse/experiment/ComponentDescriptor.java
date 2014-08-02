@@ -19,6 +19,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.model.InjectionNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,7 @@ public class ComponentDescriptor {
     private final List<Generation> generators = new ArrayList<Generation>();
     private final List<MethodSignature> generateFirst = new ArrayList<MethodSignature>();
     private AnalysisContext analysisContext;
+    private InjectionNode rootInjectionNode;
 
     public ComponentDescriptor(ASTType target, ASTType componentType, PackageClass packageClass) {
         this.target = target;
@@ -68,5 +70,13 @@ public class ComponentDescriptor {
 
     public List<MethodSignature> getGenerateFirst() {
         return generateFirst;
+    }
+
+    public InjectionNode getRootInjectionNode() {
+        return rootInjectionNode;
+    }
+
+    public void setRootInjectionNode(InjectionNode rootInjectionNode) {
+        this.rootInjectionNode = rootInjectionNode;
     }
 }
