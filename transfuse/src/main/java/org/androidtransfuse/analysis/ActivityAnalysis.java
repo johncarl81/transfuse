@@ -34,7 +34,6 @@ import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
-import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
@@ -168,8 +167,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                 activityDescriptor.getGenerators().add(generator);
             }
 
-            //todo: proper context scoping activityDescriptor.addGenerators(contextScopeComponentBuilder);
-
             activityDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                     getASTMethod("onCreate", AndroidLiterals.BUNDLE),
                     getASTMethod("onResume"),
@@ -200,7 +197,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
-        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         if(activityType != null){
             ASTType activityASTType = activityType.accept(astTypeBuilderVisitor, null);

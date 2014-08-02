@@ -17,9 +17,7 @@ package org.androidtransfuse.analysis.repository;
 
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.annotations.ContextScope;
 import org.androidtransfuse.annotations.TransfuseModule;
-import org.androidtransfuse.gen.scopeBuilder.ContextScopeAspectFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 
@@ -33,15 +31,12 @@ import javax.inject.Singleton;
 public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionNodeBuilderRepository> {
 
     private final SingletonScopeAspectFactory singletonScopeAspectFactory;
-    private final ContextScopeAspectFactory contextScopeAspectFactory;
     private final ASTClassFactory astClassFactory;
 
     @Inject
     public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory,
-                                                ContextScopeAspectFactory contextScopeAspectFactory,
                                                 ASTClassFactory astClassFactory) {
         this.singletonScopeAspectFactory = singletonScopeAspectFactory;
-        this.contextScopeAspectFactory = contextScopeAspectFactory;
         this.astClassFactory = astClassFactory;
     }
 
@@ -54,7 +49,6 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionN
 
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(TransfuseModule.class), concurrentScopeType, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), concurrentScopeType, singletonScopeAspectFactory);
-        scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(ContextScope.class), concurrentScopeType, contextScopeAspectFactory);
 
         return scopedVariableBuilderRepository;
     }

@@ -32,7 +32,6 @@ import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
-import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
@@ -230,7 +229,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.CONTEXT, "getActivity").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.FRAGMENT_MANAGER, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.FRAGMENT_MANAGER, "getFragmentManager").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.ACTIVITY).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
-        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.ACTIVITY, "getActivity").build());
 
 
         if(type != null){

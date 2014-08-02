@@ -33,7 +33,6 @@ import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
@@ -162,8 +161,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                 componentBuilderFactory.buildMethodCallbackGenerator(astClassFactory.getType(OnConfigurationChanged.class), onConfigurationChangedASTMethod, getASTMethod("onCreate"))
         );
 
-        //todo: applicationDescriptor.getPostInjectionGenerators().add(contextScopeComponentBuilder);
-
         applicationDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                 getASTMethod("onCreate"),
                 getASTMethod("onCreate"),
@@ -187,7 +184,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.buildThis((AndroidLiterals.APPLICATION)));
-        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         if(applicationType != null){
             ASTType applicationASTType = applicationType.accept(astTypeBuilderVisitor, null);

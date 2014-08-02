@@ -37,7 +37,6 @@ import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy;
 import org.androidtransfuse.model.MethodDescriptor;
-import org.androidtransfuse.scope.ContextScopeHolder;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.TypeMirrorRunnable;
 import org.apache.commons.lang.StringUtils;
@@ -172,8 +171,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         serviceDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreate")));
 
-        //todo: serviceDescriptor.getPostInjectionGenerators().add(contextScopeComponentBuilder);
-
         serviceDescriptor.getGenerators().add(observesExpressionDecoratorFactory.build(
                 getASTMethod("onCreate"),
                 getASTMethod("onCreate"),
@@ -212,7 +209,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
-        injectionNodeBuilderRepository.putType(ContextScopeHolder.class, injectionBindingBuilder.buildThis(ContextScopeHolder.class));
 
         if (type != null && !type.toString().equals(AndroidLiterals.SERVICE.getName())) {
             ASTType serviceASTType = type.accept(astTypeBuilderVisitor, null);
