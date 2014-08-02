@@ -26,11 +26,11 @@ public interface ConfigurationRepository {
 
     ComponentBuilder component(Class<? extends Annotation> annotation);
 
-    void addEvent(Class<? extends Annotation> componentType, String type, EventMapping eventMapping);
+    void addEvent(Class<? extends Annotation> componentType, ASTType type, EventMapping eventMapping);
 
-    void addMapping(Class<? extends Annotation> componentType, String type, InjectionMapping eventMapping);
+    void addMapping(Class<? extends Annotation> componentType, ASTType type, InjectionMapping eventMapping);
 
-    void addCallThroughEvent(Class<? extends Annotation> componentType, String type, Class<?> callThroughEventClass);
+    void addCallThroughEvent(Class<? extends Annotation> componentType, ASTType type, Class<?> callThroughEventClass);
 
-    void addListener(Class<? extends Annotation> componentType, String type, ASTType listenerType, String listenerMethod);
+    void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod);
 }

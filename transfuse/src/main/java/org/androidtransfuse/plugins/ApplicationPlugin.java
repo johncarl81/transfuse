@@ -22,6 +22,7 @@ import org.androidtransfuse.annotations.OnConfigurationChanged;
 import org.androidtransfuse.annotations.OnLowMemory;
 import org.androidtransfuse.annotations.OnTerminate;
 import org.androidtransfuse.bootstrap.Bootstrap;
+import org.androidtransfuse.util.AndroidLiterals;
 
 /**
  * @author John Ericksen
@@ -32,6 +33,6 @@ public class ApplicationPlugin implements TransfusePlugin{
     public void run(ConfigurationRepository repository) {
         repository.component(Application.class).method("onLowMemory").event(OnLowMemory.class);
         repository.component(Application.class).method("onTerminate").event(OnTerminate.class);
-        repository.component(Application.class).method("onConfigurationChanged", "android.content.res.Configuration").event(OnConfigurationChanged.class);
+        repository.component(Application.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class);
     }
 }

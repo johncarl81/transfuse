@@ -17,9 +17,11 @@ package org.androidtransfuse.plugins;
 
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.listeners.FragmentMenuComponent;
+import org.androidtransfuse.util.AndroidLiterals;
 
 /**
  * @author John Ericksen
@@ -28,7 +30,7 @@ import org.androidtransfuse.listeners.FragmentMenuComponent;
 public class FragmentPlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {
-        repository.component(Fragment.class).method("onActivityCreated", "android.os.Bundle").event(OnActivityCreated.class);
+        repository.component(Fragment.class).method("onActivityCreated", AndroidLiterals.BUNDLE).event(OnActivityCreated.class);
         repository.component(Fragment.class).method("onStart").event(OnStart.class);
         repository.component(Fragment.class).method("onResume").event(OnResume.class);
         repository.component(Fragment.class).method("onPause").event(OnPause.class);
@@ -37,12 +39,12 @@ public class FragmentPlugin implements TransfusePlugin{
         repository.component(Fragment.class).method("onDestroy").event(OnDestroy.class);
         repository.component(Fragment.class).method("onDetach").event(OnDetach.class);
         repository.component(Fragment.class).method("onLowMemory").event(OnLowMemory.class);
-        repository.component(Fragment.class).method("onActivityResult", "int", "int", "android.content.Intent").event(OnActivityResult.class);
-        repository.component(Fragment.class).method("onConfigurationChanged", "android.content.res.Configuration").event(OnConfigurationChanged.class);
+        repository.component(Fragment.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
+        repository.component(Fragment.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class);
 
         repository.component(Fragment.class)
-                .extending("android.support.v4.app.ListFragment")
-                .method("onListItemClick", "android.widget.ListView", "android.view.View", "int", "long").event(OnListItemClick.class);
+                .extending(AndroidLiterals.LIST_FRAGMENT)
+                .method("onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG).event(OnListItemClick.class);
 
         repository.component(Fragment.class).callThroughEvent(FragmentMenuComponent.class);
     }

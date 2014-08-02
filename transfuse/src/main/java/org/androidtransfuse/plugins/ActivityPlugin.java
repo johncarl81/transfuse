@@ -17,6 +17,7 @@ package org.androidtransfuse.plugins;
 
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
@@ -43,12 +44,12 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onStart").event(OnStart.class);
         repository.component(Activity.class).method("onStop").event(OnStop.class);
         repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class);
-        repository.component(Activity.class).method("onPostCreate", "android.os.Bundle").event(OnPostCreate.class);
-        repository.component(Activity.class).method("onActivityResult", "int", "int", "android.content.Intent").event(OnActivityResult.class);
-        repository.component(Activity.class).method("onSaveInstanceState", "android.os.Bundle").event(OnSaveInstanceState.class);
-        repository.component(Activity.class).method("onRestoreInstanceState", "android.os.Bundle").event(OnRestoreInstanceState.class);
-        repository.component(Activity.class).extending("android.app.ListActivity")
-                .method("onListItemClick", "android.widget.ListView", "android.view.View", "int", "long").event(OnListItemClick.class);
+        repository.component(Activity.class).method("onPostCreate", AndroidLiterals.BUNDLE).event(OnPostCreate.class);
+        repository.component(Activity.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
+        repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class);
+        repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class);
+        repository.component(Activity.class).extending(AndroidLiterals.LIST_ACTIVITY)
+                .method("onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG).event(OnListItemClick.class);
 
         repository.component(Activity.class).mapping(AndroidLiterals.CONTEXT).to(injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
     

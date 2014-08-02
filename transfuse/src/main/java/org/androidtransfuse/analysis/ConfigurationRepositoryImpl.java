@@ -19,7 +19,6 @@ import org.androidtransfuse.ComponentBuilder;
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.EventMapping;
 import org.androidtransfuse.InjectionMapping;
-import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.util.matcher.Matcher;
@@ -65,12 +64,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     }
 
     @Override
-    public void addEvent(Class<? extends Annotation> componentType, String type, EventMapping eventMapping) {
-        ASTType matchType = null;
-        if(type != null){
-            matchType = new ASTStringType(type);
-        }
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+    public void addEvent(Class<? extends Annotation> componentType, ASTType type, EventMapping eventMapping) {
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
 
         if(!events.containsKey(annotatedTypeMatcher)){
             events.put(annotatedTypeMatcher, new ArrayList<EventMapping>());
@@ -78,12 +73,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
         events.get(annotatedTypeMatcher).add(eventMapping);
     }
 
-    public void addMapping(Class<? extends Annotation> componentType, String type, InjectionMapping eventMapping) {
-        ASTType matchType = null;
-        if(type != null){
-            matchType = new ASTStringType(type);
-        }
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+    public void addMapping(Class<? extends Annotation> componentType, ASTType type, InjectionMapping eventMapping) {
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
 
         if(!mappings.containsKey(annotatedTypeMatcher)){
             mappings.put(annotatedTypeMatcher, new ArrayList<InjectionMapping>());
@@ -92,12 +83,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     }
 
     @Override
-    public void addCallThroughEvent(Class<? extends Annotation> componentType, String type, Class<?> callThroughEventClass) {
-        ASTType matchType = null;
-        if(type != null){
-            matchType = new ASTStringType(type);
-        }
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+    public void addCallThroughEvent(Class<? extends Annotation> componentType, ASTType type, Class<?> callThroughEventClass) {
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
 
         if(!callThroughEvents.containsKey(annotatedTypeMatcher)){
             callThroughEvents.put(annotatedTypeMatcher, new HashSet<Class<?>>());
@@ -106,12 +93,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     }
 
     @Override
-    public void addListener(Class<? extends Annotation> componentType, String type, ASTType listenerType, String listenerMethod) {
-        ASTType matchType = null;
-        if(type != null){
-            matchType = new ASTStringType(type);
-        }
-        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(matchType, astClassFactory.getType(componentType));
+    public void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod) {
+        AnnotatedTypeMatcher annotatedTypeMatcher = new AnnotatedTypeMatcher(type, astClassFactory.getType(componentType));
 
         if(!listeners.containsKey(annotatedTypeMatcher)){
             listeners.put(annotatedTypeMatcher, new HashMap<ASTType, String>());

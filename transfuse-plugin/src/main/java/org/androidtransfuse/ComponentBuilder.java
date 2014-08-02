@@ -15,10 +15,15 @@
  */
 package org.androidtransfuse;
 
+import org.androidtransfuse.adapter.ASTStringType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author John Ericksen
@@ -27,22 +32,50 @@ public class ComponentBuilder {
 
     ConfigurationRepository repository;
     Class<? extends Annotation> componentAnnotation;
-    String componentType;
+    ASTType componentType;
 
     public ComponentBuilder(ConfigurationRepository repository, Class<? extends Annotation> componentAnnotation) {
         this.repository = repository;
         this.componentAnnotation = componentAnnotation;
     }
 
-    public MethodBuilder method(String methodName, String... parameters){
-        return new MethodBuilder(methodName, parameters);
+    public MethodBuilder method(String methodName){
+        return new MethodBuilder(methodName, Collections.EMPTY_LIST);
+    }
+
+    public MethodBuilder method(String methodName, String firstParameter, String... parameters){
+        List<ASTType> parameterList = new ArrayList<ASTType>();
+        parameterList.add(new ASTStringType(firstParameter));
+        if(parameters != null){
+            for (String parameter : parameters) {
+                parameterList.add(new ASTStringType(parameter));
+            }
+        }
+        return new MethodBuilder(methodName, parameterList);
+    }
+
+    public MethodBuilder method(String methodName, ASTType firstParameter, ASTType... parameters){
+        List<ASTType> parameterList = new ArrayList<ASTType>();
+        parameterList.add(firstParameter);
+        if(parameters != null){
+            parameterList.addAll(Arrays.asList(parameters));
+        }
+        return new MethodBuilder(methodName, parameterList);
     }
 
     public ComponentBuilder extending(String className) {
         if(componentType != null){
             //todo: throw Plugin Exception
         }
-        componentType = className;
+        componentType = new ASTStringType(className);
+        return this;
+    }
+
+    public ComponentBuilder extending(ASTType componentType){
+        if(componentType != null){
+            //todo: throw Plugin Exception
+        }
+        this.componentType = componentType;
         return this;
     }
 
@@ -62,9 +95,9 @@ public class ComponentBuilder {
     public class MethodBuilder {
 
         private final String methodName;
-        private final String[] parameters;
+        private final List<ASTType> parameters;
 
-        public MethodBuilder(String methodName, String[] parameters) {
+        private MethodBuilder(String methodName, List<ASTType> parameters) {
             this.methodName = methodName;
             this.parameters = parameters;
         }
@@ -78,7 +111,7 @@ public class ComponentBuilder {
     public class MappingBuilder {
         private ASTType type;
 
-        public MappingBuilder(ASTType type) {
+        private MappingBuilder(ASTType type) {
             this.type = type;
         }
 

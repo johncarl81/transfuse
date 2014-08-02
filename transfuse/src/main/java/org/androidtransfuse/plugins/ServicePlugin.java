@@ -21,6 +21,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.listeners.ServiceOnStartCommand;
 import org.androidtransfuse.listeners.ServiceOnUnbind;
+import org.androidtransfuse.util.AndroidLiterals;
 
 /**
  * @author John Ericksen
@@ -31,10 +32,10 @@ public class ServicePlugin implements TransfusePlugin{
     public void run(ConfigurationRepository repository) {
         repository.component(Service.class).method("onDestroy").event(OnDestroy.class);
         repository.component(Service.class).method("onLowMemory").event(OnLowMemory.class);
-        repository.component(Service.class).method("onRebind", "android.content.Intent").event(OnRebind.class);
-        repository.component(Service.class).method("onConfigurationChanged", "android.content.res.Configuration").event(OnConfigurationChanged.class);
-        repository.component(Service.class).extending("android.app.IntentService")
-                .method("onHandleIntent", "android.content.Intent").event(OnHandleIntent.class);
+        repository.component(Service.class).method("onRebind", AndroidLiterals.INTENT).event(OnRebind.class);
+        repository.component(Service.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class);
+        repository.component(Service.class).extending(AndroidLiterals.INTENT_SERVICE)
+                .method("onHandleIntent", AndroidLiterals.INTENT).event(OnHandleIntent.class);
 
         repository.component(Service.class).callThroughEvent(ServiceOnStartCommand.class);
         repository.component(Service.class).callThroughEvent(ServiceOnUnbind.class);

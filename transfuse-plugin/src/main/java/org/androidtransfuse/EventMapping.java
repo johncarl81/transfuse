@@ -15,9 +15,10 @@
  */
 package org.androidtransfuse;
 
+import org.androidtransfuse.adapter.ASTType;
+
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,13 +27,13 @@ import java.util.List;
 public class EventMapping {
 
     private String methodName;
-    private List<String> methodArguments = new ArrayList<String>();
+    private List<ASTType> methodArguments = new ArrayList<ASTType>();
     private Class<? extends Annotation> annotation;
 
-    public EventMapping(String methodName, String[] methodArguments, Class<? extends Annotation> annotation) {
+    public EventMapping(String methodName, List<ASTType> methodArguments, Class<? extends Annotation> annotation) {
         this.methodName = methodName;
-        if(methodArguments != null){
-            this.methodArguments.addAll(Arrays.asList(methodArguments));
+        if(methodArguments != null) {
+            this.methodArguments.addAll(methodArguments);
         }
         this.annotation = annotation;
     }
@@ -41,7 +42,7 @@ public class EventMapping {
         return methodName;
     }
 
-    public List<String> getMethodArguments() {
+    public List<ASTType> getMethodArguments() {
         return methodArguments;
     }
 
