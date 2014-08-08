@@ -21,6 +21,7 @@ import org.androidtransfuse.TransfusePlugin;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.scope.Scopes;
 
@@ -51,7 +52,9 @@ public class PluginProcessor implements TypeProcessor {
                 try {
                     Class<TransfusePlugin> pluginClass = (Class<TransfusePlugin>) Class.forName(pluginType.getName());
                     TransfusePlugin plugin = pluginClass.newInstance();
-                    Bootstraps.getInjector(pluginClass).inject(scopes, plugin);
+                    if(pluginClass.isAnnotationPresent(Bootstrap.class)) {
+                        Bootstraps.getInjector(pluginClass).inject(scopes, plugin);
+                    }
                     plugin.run(repository);
                 } catch (InstantiationException e) {
                     throw new TransfuseAnalysisException("Unable to instantiate", e);
