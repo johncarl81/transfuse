@@ -81,6 +81,10 @@ public class ASTElementFactory {
         return typeCache.get(typeElement);
     }
 
+    public ASTType getType(Class clazz){
+        return getType(elements.getTypeElement(clazz.getCanonicalName()));
+    }
+
     private ASTType buildType(TypeElement typeElement) {
         //build placeholder for ASTElementType and contained data structures to allow for children population
         //while avoiding back link loops

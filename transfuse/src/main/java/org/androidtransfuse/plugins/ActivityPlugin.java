@@ -57,9 +57,6 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).extending(AndroidLiterals.LIST_ACTIVITY)
                 .method("onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG).event(OnListItemClick.class);
 
-        repository.component(Activity.class).mapping(AndroidLiterals.CONTEXT).to(injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
-    
-
         repository.component(Activity.class).callThroughEvent(ActivityMenuComponent.class);
         repository.component(Activity.class).callThroughEvent(ActivityOnKeyDownListener.class);
         repository.component(Activity.class).callThroughEvent(ActivityOnKeyLongPressListener.class);

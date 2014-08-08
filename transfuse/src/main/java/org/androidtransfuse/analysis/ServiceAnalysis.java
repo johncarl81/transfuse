@@ -32,8 +32,11 @@ import org.androidtransfuse.experiment.generators.ServiceManifestEntryGenerator;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
 import org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy;
+import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
@@ -52,6 +55,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
+    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final GeneratorFactory generatorFactory;
@@ -66,6 +70,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                            AnalysisContextFactory analysisContextFactory,
                            ASTElementFactory astElementFactory,
+                           ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            GeneratorFactory generatorFactory,
@@ -78,6 +83,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
+        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.generatorFactory = generatorFactory;
@@ -165,8 +171,14 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(serviceType, Service.class);
 
-        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
+
+        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
+        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
+        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.CONTEXT), applicationScopeType);
+
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
 
         while(!serviceType.equals(AndroidLiterals.SERVICE) && serviceType.inheritsFrom(AndroidLiterals.SERVICE)){

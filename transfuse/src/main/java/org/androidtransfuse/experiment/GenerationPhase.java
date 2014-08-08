@@ -24,9 +24,10 @@ public enum GenerationPhase {
     INIT,
     LAYOUT,
     SCOPES,
+    POSTSCOPES,
     INJECTION,
     POSTINJECTION,
     REGISTRATION,
     EVENT,
-    RETURN;
+    RETURN
 }

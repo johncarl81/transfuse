@@ -35,7 +35,6 @@ import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.lang.model.util.Elements;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ public class ComponentAnalysis {
     private final ConfigurationRepositoryImpl repository;
     private final ASTElementFactory astElementFactory;
     private final ASTClassFactory astClassFactory;
-    private final Elements elements;
     private final ComponentBuilderFactory componentBuilderFactory;
     private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
@@ -58,14 +56,13 @@ public class ComponentAnalysis {
     public ComponentAnalysis(ConfigurationRepositoryImpl repository,
                              ASTElementFactory astElementFactory,
                              ASTClassFactory astClassFactory,
-                             Elements elements, ComponentBuilderFactory componentBuilderFactory,
+                             ComponentBuilderFactory componentBuilderFactory,
                              SuperGenerator.SuperGeneratorFactory superGeneratorFactory,
                              Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
                              RegistrationGenerators registrationGenerators){
         this.repository = repository;
         this.astElementFactory = astElementFactory;
         this.astClassFactory = astClassFactory;
-        this.elements = elements;
         this.componentBuilderFactory = componentBuilderFactory;
         this.superGeneratorFactory = superGeneratorFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
@@ -121,7 +118,7 @@ public class ComponentAnalysis {
         }
 
         for (Class<?> listenerClass : repository.getCallThroughClasses(componentType, componentAnnotation)) {
-            ASTType listenerType = astElementFactory.getType(elements.getTypeElement(listenerClass.getCanonicalName()));
+            ASTType listenerType = astElementFactory.getType(listenerClass);
             builder.put(listenerType, registrationGenerators.buildCallThroughMethodGenerator(listenerType));
         }
 

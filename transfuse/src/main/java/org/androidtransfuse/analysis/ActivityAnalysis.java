@@ -33,6 +33,8 @@ import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
+import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
@@ -52,6 +54,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
+    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
@@ -75,6 +78,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             AnalysisContextFactory analysisContextFactory,
                             ASTElementFactory astElementFactory,
+                            ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
                             ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
@@ -96,6 +100,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
+        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
@@ -177,8 +182,13 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(activityType, Activity.class);
 
-        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.CONTEXT).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
+        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
+        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
+        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.CONTEXT), applicationScopeType);
+
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
 
         while(!activityType.equals(AndroidLiterals.ACTIVITY) && activityType.inheritsFrom(AndroidLiterals.ACTIVITY)){

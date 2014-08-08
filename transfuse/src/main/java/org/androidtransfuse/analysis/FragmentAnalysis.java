@@ -32,6 +32,8 @@ import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
+import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.apache.commons.lang.StringUtils;
 
@@ -47,6 +49,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
     private final ASTClassFactory astClassFactory;
     private final ASTElementFactory astElementFactory;
+    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -67,7 +70,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
                             ASTElementFactory astElementFactory,
-                            AnalysisContextFactory analysisContextFactory,
+                            ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder, AnalysisContextFactory analysisContextFactory,
                             InjectionBindingBuilder injectionBindingBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -85,6 +88,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ComponentAnalysis componentAnalysis) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
+        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
@@ -166,11 +170,16 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(fragmentType, Fragment.class);
 
+        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
+        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
+        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
+        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.CONTEXT), applicationScopeType);
+
         injectionNodeBuilderRepository.putType(AndroidLiterals.FRAGMENT, injectionBindingBuilder.buildThis(AndroidLiterals.FRAGMENT));
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.ACTIVITY, "getActivity").build());
-        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.CONTEXT, "getActivity").build());
         injectionNodeBuilderRepository.putType(AndroidLiterals.FRAGMENT_MANAGER, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.FRAGMENT_MANAGER, "getFragmentManager").build());
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, injectionBindingBuilder.dependency(AndroidLiterals.ACTIVITY).invoke(AndroidLiterals.APPLICATION, "getApplication").build());
 
 
         while(!fragmentType.equals(AndroidLiterals.FRAGMENT) && fragmentType.inheritsFrom(AndroidLiterals.FRAGMENT)){

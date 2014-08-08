@@ -18,7 +18,9 @@ package org.androidtransfuse.analysis.repository;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.annotations.TransfuseModule;
+import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
+import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
 
 import javax.inject.Inject;
@@ -31,12 +33,15 @@ import javax.inject.Singleton;
 public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionNodeBuilderRepository> {
 
     private final SingletonScopeAspectFactory singletonScopeAspectFactory;
+    private final CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory;
     private final ASTClassFactory astClassFactory;
 
     @Inject
     public ScopeAspectFactoryRepositoryProvider(SingletonScopeAspectFactory singletonScopeAspectFactory,
+                                                CustomScopeAspectFactoryFactory customScopeAspectFactoryFactory,
                                                 ASTClassFactory astClassFactory) {
         this.singletonScopeAspectFactory = singletonScopeAspectFactory;
+        this.customScopeAspectFactoryFactory = customScopeAspectFactoryFactory;
         this.astClassFactory = astClassFactory;
     }
 
@@ -49,6 +54,9 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionN
 
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(TransfuseModule.class), concurrentScopeType, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), concurrentScopeType, singletonScopeAspectFactory);
+        scopedVariableBuilderRepository.putScopeAspectFactory(
+                astClassFactory.getType(ApplicationScope.ApplicationScopeQualifier.class),
+                astClassFactory.getType(ApplicationScope.class), customScopeAspectFactoryFactory.buildScopeBuilder(astClassFactory.getType(ApplicationScope.ApplicationScopeQualifier.class)));
 
         return scopedVariableBuilderRepository;
     }
