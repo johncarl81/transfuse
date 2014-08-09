@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.analysis.astAnalyzer.registration;
+package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.analysis.ListenableMethod;
-import org.androidtransfuse.annotations.Factory;
 
 /**
  * @author John Ericksen
  */
-@Factory
-public interface RegistrationGenerators {
+public class ListenableMethod {
 
-    ActivityDelegateRegistrationGeneratorFactory buildCallThroughMethodGenerator(ASTType listenerInterface);
+    private final ASTType listenable;
+    private final String method;
 
-    ViewRegistrationGeneratorFactory buildViewRegistrationGenerator(ListenableMethod listenerMethod);
+    public ListenableMethod(ASTType listenable, String method) {
+        this.method = method;
+        this.listenable = listenable;
+    }
+
+    public ASTType getListenable() {
+        return listenable;
+    }
+
+    public String getMethod() {
+        return method;
+    }
 }

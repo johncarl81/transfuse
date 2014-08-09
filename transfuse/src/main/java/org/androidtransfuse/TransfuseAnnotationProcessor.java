@@ -152,7 +152,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             transfuseProcessor.checkForErrors();
         }
 
-        logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
+        //todo: debug logging
+        // logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
 
         configurationScope.exit();
 

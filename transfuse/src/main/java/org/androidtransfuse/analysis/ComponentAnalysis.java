@@ -113,7 +113,7 @@ public class ComponentAnalysis {
 
         ImmutableMap.Builder<ASTType, RegistrationGeneratorFactory> builder = ImmutableMap.builder();
 
-        for (Map.Entry<ASTType, String> listenerEntry : repository.getListeners(componentType, componentAnnotation).entrySet()) {
+        for (Map.Entry<ASTType, ListenableMethod> listenerEntry : repository.getListeners(componentType, componentAnnotation).entrySet()) {
             builder.put(listenerEntry.getKey(), registrationGenerators.buildViewRegistrationGenerator(listenerEntry.getValue()));
         }
 

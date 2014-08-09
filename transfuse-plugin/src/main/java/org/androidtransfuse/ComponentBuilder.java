@@ -88,8 +88,8 @@ public class ComponentBuilder {
         repository.addCallThroughEvent(componentAnnotation, componentType, callThroughEventClass);
     }
 
-    public void listener(ASTType listenerType, String listenerMethod) {
-        repository.addListener(componentAnnotation, componentType, listenerType, listenerMethod);
+    public void listener(ASTType listenerType, ASTType listenableType, String listenerMethod) {
+        repository.addListener(componentAnnotation, componentType, listenerType, listenableType, listenerMethod);
     }
 
     public class MethodBuilder {

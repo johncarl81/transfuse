@@ -175,9 +175,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
         ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
         injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
-        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
+        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
         injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
-        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.CONTEXT), applicationScopeType);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
 

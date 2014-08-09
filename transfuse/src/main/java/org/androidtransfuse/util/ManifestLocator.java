@@ -74,7 +74,8 @@ public class ManifestLocator {
                 if (!androidManifestFile.exists()) {
                     throw new IllegalStateException("Could not find the AndroidManifest.xml file specified by option " + ANDROID_MANIFEST_FILE_OPTION + " [" + androidManifestFilePath + "]");
                 } else {
-                    logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
+                    //todo: debug logging
+                    // logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
                 }
             } else {
                 // Backwards compatibility
@@ -111,7 +112,8 @@ public class ManifestLocator {
             dummySourceFilePath = "file://" + dummySourceFilePath;
         }
 
-        logger.info("Dummy source file: " + dummySourceFilePath);
+        //todo: debug logging
+        // logger.info("Dummy source file: " + dummySourceFilePath);
 
         URI cleanURI = new URI(dummySourceFilePath);
 
@@ -138,7 +140,8 @@ public class ManifestLocator {
         if (!androidManifestFile.exists()) {
             throw new IllegalStateException("Could not find the AndroidManifest.xml file, going up from path [" + sourcesGenerationFolder.getAbsolutePath() + "] found using dummy file [" + dummySourceFilePath + "] (max atempts: " + MAX_PARENTS_FROM_SOURCE_FOLDER + ")");
         } else {
-            logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
+            //todo: debug logging
+            // logger.info("AndroidManifest.xml file found: " + androidManifestFile.toString());
         }
 
         return androidManifestFile;

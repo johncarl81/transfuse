@@ -33,7 +33,7 @@ public interface ConfigurationRepository {
 
     void addCallThroughEvent(Class<? extends Annotation> componentType, ASTType type, Class<?> callThroughEventClass);
 
-    void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod);
+    void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, ASTType listenable, String listenerMethod);
 
     void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters);
 

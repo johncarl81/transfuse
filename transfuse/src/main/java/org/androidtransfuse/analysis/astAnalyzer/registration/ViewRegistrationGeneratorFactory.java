@@ -21,13 +21,13 @@ import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
+import org.androidtransfuse.analysis.ListenableMethod;
 import org.androidtransfuse.analysis.repository.RegistrationGeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
 import org.androidtransfuse.gen.componentBuilder.RegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.ViewRegistrationInvocationBuilder;
 import org.androidtransfuse.gen.componentBuilder.ViewTypeRegistrationInvocationBuilderImpl;
 import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -37,10 +37,10 @@ public final class ViewRegistrationGeneratorFactory implements RegistrationGener
     private final InjectionPointFactory injectionPointFactory;
     private final ASTClassFactory astClassFactory;
     private final ComponentBuilderFactory componentBuilderFactory;
-    private final String listenerMethod;
+    private final ListenableMethod listenerMethod;
 
     @Inject
-    private ViewRegistrationGeneratorFactory(/*@Assisted*/ String listenerMethod, InjectionPointFactory injectionPointFactory, ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory) {
+    private ViewRegistrationGeneratorFactory(/*@Assisted*/ ListenableMethod listenerMethod, InjectionPointFactory injectionPointFactory, ASTClassFactory astClassFactory, ComponentBuilderFactory componentBuilderFactory) {
         this.injectionPointFactory = injectionPointFactory;
         this.astClassFactory = astClassFactory;
         this.componentBuilderFactory = componentBuilderFactory;
@@ -63,7 +63,7 @@ public final class ViewRegistrationGeneratorFactory implements RegistrationGener
             throw new TransfuseAnalysisException("ASTBase type not mapped");
         }
 
-        return componentBuilderFactory.buildViewRegistrationGenerator(viewInjectionNode, listenerMethod, injectionNode, invocationBuilder);
+        return componentBuilderFactory.buildViewRegistrationGenerator(viewInjectionNode, listenerMethod.getMethod(), injectionNode, invocationBuilder);
     }
 
     private InjectionNode buildViewInjectionNode(final ASTAnnotation registerAnnotation, AnalysisContext context) {
@@ -71,7 +71,7 @@ public final class ViewRegistrationGeneratorFactory implements RegistrationGener
         ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
         ASTAnnotation viewRegistrationAnnotation = new ASTAnnotationPropertyReplacement(registerAnnotation, atViewType);
 
-        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), AndroidLiterals.VIEW, context);
+        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), listenerMethod.getListenable(), context);
     }
 
     private static final class ASTAnnotationPropertyReplacement implements ASTAnnotation {

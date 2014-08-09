@@ -45,7 +45,7 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
         private final List<InjectionMapping> mappings = new ArrayList<InjectionMapping>();
         private final List<SuperCallMapping> superCalls = new ArrayList<SuperCallMapping>();
         private final Set<Class<?>> callThroughEvents = new HashSet<Class<?>>();
-        private final Map<ASTType, String> listeners = new HashMap<ASTType, String>();
+        private final Map<ASTType, ListenableMethod> listeners = new HashMap<ASTType, ListenableMethod>();
         private Registration registraion = null;
     }
 
@@ -103,8 +103,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     }
 
     @Override
-    public void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, String listenerMethod) {
-        getConfiguration(type, componentType).listeners.put(listenerType, listenerMethod);
+    public void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, ASTType listenable, String listenerMethod) {
+        getConfiguration(type, componentType).listeners.put(listenerType, new ListenableMethod(listenable, listenerMethod));
     }
 
     public List<EventMapping> getEvents(ASTType type, Class<? extends Annotation> annotation){
@@ -125,8 +125,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
                 }).toList();
     }
 
-    public Map<ASTType, String> getListeners(ASTType type, Class<? extends Annotation> annotation) {
-        Map<ASTType, String> matchedListeners = new HashMap<ASTType, String>();
+    public Map<ASTType, ListenableMethod> getListeners(ASTType type, Class<? extends Annotation> annotation) {
+        Map<ASTType, ListenableMethod> matchedListeners = new HashMap<ASTType, ListenableMethod>();
 
         for (Configuration configuration : findConfigurations(type, annotation)) {
             matchedListeners.putAll(configuration.listeners);

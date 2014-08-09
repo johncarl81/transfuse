@@ -48,7 +48,7 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onResume").event(OnResume.class).superCall();
         repository.component(Activity.class).method("onStart").event(OnStart.class).superCall();
         repository.component(Activity.class).method("onStop").event(OnStop.class).superCall();
-        repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class).superCall();
+        repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class);
         repository.component(Activity.class).method("onPostCreate", AndroidLiterals.BUNDLE).event(OnPostCreate.class).superCall();
         repository.component(Activity.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
         repository.component(Activity.class).method("onNewIntent", AndroidLiterals.INTENT).event(OnNewIntent.class);
@@ -65,12 +65,19 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).callThroughEvent(ActivityOnTouchEventListener.class);
         repository.component(Activity.class).callThroughEvent(ActivityOnTrackballEventListener.class);
 
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CLICK_LISTENER, "setOnClickListener");
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, "setOnLongClickListener");
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, "setOnCreateContextMenuListener");
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_KEY_LISTENER, "setOnKeyListener");
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, "setOnTouchListener");
-        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, "setOnFocusChangeListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CLICK_LISTENER, AndroidLiterals.VIEW, "setOnClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_LONG_CLICK_LISTENER, AndroidLiterals.VIEW, "setOnLongClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_CREATE_CONTEXT_MENU_LISTENER, AndroidLiterals.VIEW, "setOnCreateContextMenuListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_KEY_LISTENER, AndroidLiterals.VIEW, "setOnKeyListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_TOUCH_LISTENER, AndroidLiterals.VIEW, "setOnTouchListener");
+        repository.component(Activity.class).listener(AndroidLiterals.VIEW_ON_FOCUS_CHANGE_LISTENER, AndroidLiterals.VIEW, "setOnFocusChangeListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_CLICK_LISTENER, AndroidLiterals.ADAPTER_VIEW, "setOnItemClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_LONG_CLICK_LISTENER, AndroidLiterals.ADAPTER_VIEW, "setOnItemLongClickListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ADAPTER_VIEW_ON_ITEM_SELECTED_LISTENER, AndroidLiterals.ADAPTER_VIEW, "setOnItemSelectedListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ABS_LIST_VIEW_ON_SCROLL_LISTENER, AndroidLiterals.ABS_LIST_VIEw, "setOnScrollListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ABS_LIST_VIEW_MULTI_CHOICE_MODE_LISTENER, AndroidLiterals.ABS_LIST_VIEw, "setMultiChoiceModeListener");
+        repository.component(Activity.class).listener(AndroidLiterals.ABS_LIST_VIEW_RECYCLER_LISTENER, AndroidLiterals.ABS_LIST_VIEw, "setViewRecyclerListener");
+        repository.component(Activity.class).listener(AndroidLiterals.TEXT_VIEW_ON_EDITOR_ACTION_LISTENER, AndroidLiterals.TEXT_VIEW, "setOnEditorActionListener");
 
     }
 }
