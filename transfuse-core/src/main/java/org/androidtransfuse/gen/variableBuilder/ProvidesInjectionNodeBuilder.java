@@ -78,7 +78,7 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
         Map<ASTParameter, InjectionNode> dependencyAnalysis = new HashMap<ASTParameter, InjectionNode>();
 
         for (ASTParameter parameter : providesMethod.getParameters()) {
-            InjectionNode parameterInjectionNode = injectionNodeFactory.buildInjectionNode(parameter.getASTType(), context);
+            InjectionNode parameterInjectionNode = injectionNodeFactory.buildInjectionNode(parameter.getAnnotations(), parameter.getASTType(), context);
 
             dependencyAnalysis.put(parameter, parameterInjectionNode);
         }
