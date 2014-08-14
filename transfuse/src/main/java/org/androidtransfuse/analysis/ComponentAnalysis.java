@@ -51,6 +51,7 @@ public class ComponentAnalysis {
     private final SuperGenerator.SuperGeneratorFactory superGeneratorFactory;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final RegistrationGenerators registrationGenerators;
+    private final ManualSuperGenerator.Factory manualSuperGeneratorFactory;
 
     @Inject
     public ComponentAnalysis(ConfigurationRepositoryImpl repository,
@@ -59,7 +60,8 @@ public class ComponentAnalysis {
                              ComponentBuilderFactory componentBuilderFactory,
                              SuperGenerator.SuperGeneratorFactory superGeneratorFactory,
                              Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
-                             RegistrationGenerators registrationGenerators){
+                             RegistrationGenerators registrationGenerators,
+                             ManualSuperGenerator.Factory manualSuperGeneratorFactory){
         this.repository = repository;
         this.astElementFactory = astElementFactory;
         this.astClassFactory = astClassFactory;
@@ -67,6 +69,7 @@ public class ComponentAnalysis {
         this.superGeneratorFactory = superGeneratorFactory;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.registrationGenerators = registrationGenerators;
+        this.manualSuperGeneratorFactory = manualSuperGeneratorFactory;
     }
 
 
@@ -76,6 +79,8 @@ public class ComponentAnalysis {
         descriptor.getGenerateFirst().add(new MethodSignature(registrationMethod));
         addSuperCalls(descriptor, componentType, componentAnnotation);
         addEvents(descriptor, componentType, componentAnnotation, registrationMethod);
+
+        descriptor.getGenerators().add(manualSuperGeneratorFactory.build(registrationMethod));
     }
 
     private void addSuperCalls(ComponentDescriptor descriptor, ASTType componentType, Class<? extends Annotation> componentAnnotation) {

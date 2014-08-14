@@ -20,20 +20,24 @@ import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JInvocation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.adapter.MethodSignature;
+import org.androidtransfuse.analysis.astAnalyzer.ManualSuperAspect;
 import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ComponentMethodGenerator;
 import org.androidtransfuse.experiment.Generation;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author John Ericksen
  */
-public class SuperGenerator implements Generation, ComponentMethodGenerator {
+public class SuperGenerator implements Generation {
 
     public
     @Factory
@@ -49,19 +53,39 @@ public class SuperGenerator implements Generation, ComponentMethodGenerator {
     }
 
     @Override
-    public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
-        //builder.add(method, GenerationPhase.SUPER, this);
-        builder.addLazy(method, this);
+    public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
+        builder.addLazy(method, new ComponentMethodGenerator() {
+            @Override
+            public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                if(!isSuperCanceled(builder.getExpressionMap().keySet())) {
+                    JInvocation invocation = block.invoke(JExpr._super(), method.getName());
+
+                    List<ASTParameter> parameters = methodDescriptor.getASTMethod().getParameters();
+
+                    for (ASTParameter parameter : parameters) {
+                        invocation.arg(methodDescriptor.getParameter(parameter).getExpression());
+                    }
+                }
+            }
+        });
     }
 
-    @Override
-    public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-        JInvocation invocation = block.invoke(JExpr._super(), method.getName());
+    private boolean isSuperCanceled(Set<InjectionNode> injectionNodes){
 
-        List<ASTParameter> parameters = methodDescriptor.getASTMethod().getParameters();
+        MethodSignature signature = new MethodSignature(method);
+        for (InjectionNode injectionNode : injectionNodes) {
+            if(injectionNode.containsAspect(ManualSuperAspect.class)){
+                ManualSuperAspect aspect = injectionNode.getAspect(ManualSuperAspect.class);
 
-        for (ASTParameter parameter : parameters) {
-            invocation.arg(methodDescriptor.getParameter(parameter).getExpression());
+                for (ManualSuperAspect.Method manualSuperMethod : aspect.getMethods()) {
+                    MethodSignature manualSuperMethodSignature = new MethodSignature(method.getReturnType(), manualSuperMethod.getName(), manualSuperMethod.getParameters());
+                    if(signature.equals(manualSuperMethodSignature)){
+                        return true;
+                    }
+                }
+            }
         }
+
+        return false;
     }
 }

@@ -19,6 +19,7 @@ import com.sun.codemodel.JCodeModel;
 import org.androidtransfuse.*;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.analysis.ConfigurationRepositoryImpl;
+import org.androidtransfuse.analysis.ManualSuperGenerator;
 import org.androidtransfuse.analysis.astAnalyzer.registration.RegistrationGenerators;
 import org.androidtransfuse.analysis.module.ModuleRepository;
 import org.androidtransfuse.analysis.repository.AnalysisRepository;
@@ -104,7 +105,8 @@ import javax.xml.bind.JAXBContext;
         SuperGenerator.SuperGeneratorFactory.class,
         ScopesGeneration.ScopesGenerationFactory.class,
         ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory.class,
-        NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory.class
+        NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory.class,
+        ManualSuperGenerator.Factory.class
 })
 public class TestTransfuseAndroidModule {
 
