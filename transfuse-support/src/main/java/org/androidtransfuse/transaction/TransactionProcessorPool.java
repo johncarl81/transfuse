@@ -70,7 +70,7 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor<V, R
         Map<V, R> aggregate = new HashMap<V, R>();
 
         for (Transaction<V, R> transaction : transactions) {
-            if (transaction.isComplete()) {
+            if (transaction.isComplete() && transaction.getResult() != null) {
                 aggregate.put(transaction.getValue(), transaction.getResult());
             } else {
                 return Collections.EMPTY_MAP;

@@ -39,6 +39,7 @@ public class Validator {
 
     private final String prepend;
     private final Messager messager;
+    private boolean inError = false;
 
     @Inject
     public Validator(@Named(LOG_PREPEND) String prepend, Messager messager){
@@ -47,6 +48,7 @@ public class Validator {
     }
 
     public ValidationBuilder error(String message){
+        inError = true;
         return new ValidationBuilder(Diagnostic.Kind.ERROR, prepend + message);
     }
 
@@ -95,6 +97,7 @@ public class Validator {
         }
 
         public void build(){
+            inError = kind == Diagnostic.Kind.ERROR;
             if(element != null){
                 if(annotation != null){
                     if(value != null){
@@ -122,5 +125,9 @@ public class Validator {
                         message);
             }
         }
+    }
+
+    public boolean isInError() {
+        return inError;
     }
 }
