@@ -30,13 +30,13 @@ import org.androidtransfuse.util.AndroidLiterals;
 public class ServicePlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {
-        repository.component(Service.class).method("onCreate").event(OnCreate.class).registration();
-        repository.component(Service.class).method("onDestroy").event(OnDestroy.class);
-        repository.component(Service.class).method("onLowMemory").event(OnLowMemory.class);
-        repository.component(Service.class).method("onRebind", AndroidLiterals.INTENT).event(OnRebind.class);
-        repository.component(Service.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class);
+        repository.component(Service.class).method("onCreate").event(OnCreate.class).registration().superCall();
+        repository.component(Service.class).method("onDestroy").event(OnDestroy.class).superCall();
+        repository.component(Service.class).method("onLowMemory").event(OnLowMemory.class).superCall();
+        repository.component(Service.class).method("onRebind", AndroidLiterals.INTENT).event(OnRebind.class).superCall();
+        repository.component(Service.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class).superCall();
         repository.component(Service.class).extending(AndroidLiterals.INTENT_SERVICE)
-                .method("onHandleIntent", AndroidLiterals.INTENT).event(OnHandleIntent.class);
+                .method("onHandleIntent", AndroidLiterals.INTENT).event(OnHandleIntent.class).superCall();
 
         repository.component(Service.class).callThroughEvent(ServiceOnStartCommand.class);
         repository.component(Service.class).callThroughEvent(ServiceOnUnbind.class);
