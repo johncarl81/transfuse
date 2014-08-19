@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ScopesGeneration;
@@ -43,6 +44,7 @@ import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
  */
 public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> {
 
+    private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
     private final InjectionBindingBuilder injectionBindingBuilder;
@@ -54,7 +56,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private final ComponentAnalysis componentAnalysis;
 
     @Inject
-    public BroadcastReceiverAnalysis(ASTTypeBuilderVisitor astTypeBuilderVisitor,
+    public BroadcastReceiverAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
+                                     ASTTypeBuilderVisitor astTypeBuilderVisitor,
                                      AnalysisContextFactory analysisContextFactory,
                                      InjectionBindingBuilder injectionBindingBuilder,
                                      BroadcastReceiverManifestEntryGenerator manifestEntryGenerator,
@@ -63,6 +66,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
                                      ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
                                      ComponentAnalysis componentAnalysis) {
+        this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
         this.injectionBindingBuilder = injectionBindingBuilder;
@@ -96,6 +100,12 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
             injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
             injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
+
+            injectionNodeBuilderRepository.addRepository(
+                    injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
+
+            injectionNodeBuilderRepository.addRepository(
+                    injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
             if(type != null) {
                 ASTType applicationASTType = type.accept(astTypeBuilderVisitor, null);
