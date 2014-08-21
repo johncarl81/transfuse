@@ -18,6 +18,7 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JType;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -71,7 +72,7 @@ public class InjectionBuilderContext {
         return scopeVar;
     }
 
-    public JExpression instantiateOnce(JDefinedClass providerClass) {
-        return instantiationStrategy.instantiate(providerClass);
+    public JExpression instantiateOnce(Object key, JType type, InstantiationStrategy.ExpressionBuilder builder) {
+        return instantiationStrategy.instantiate(key, type, builder);
     }
 }

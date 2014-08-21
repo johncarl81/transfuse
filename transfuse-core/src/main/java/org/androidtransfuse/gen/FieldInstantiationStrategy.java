@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class FieldInstantiationStrategy implements InstantiationStrategy {
 
-    private final Map<JDefinedClass, JExpression> fields = new HashMap<JDefinedClass, JExpression>();
+    private final Map<Object, JExpression> fields = new HashMap<Object, JExpression>();
     private final JExpression scopesVar;
     private final UniqueVariableNamer namer;
     private final JDefinedClass definedClass;
@@ -37,9 +37,7 @@ public class FieldInstantiationStrategy implements InstantiationStrategy {
             /*@Assisted*/ JDefinedClass definedClass,
             /*@Assisted*/ JBlock constructorBlock,
             /*@Assisted*/ JExpression scopes,
-            UniqueVariableNamer namer
-
-    ) {
+            UniqueVariableNamer namer) {
         this.definedClass = definedClass;
         this.constructorBlock = constructorBlock;
         this.scopesVar = scopes;
@@ -47,12 +45,13 @@ public class FieldInstantiationStrategy implements InstantiationStrategy {
     }
 
     @Override
-    public JExpression instantiate(JDefinedClass providerClass) {
-        if(!fields.containsKey(providerClass)){
-            JFieldVar field = definedClass.field(JMod.PRIVATE, providerClass, namer.generateName(providerClass));
-            constructorBlock.assign(field, JExpr._new(providerClass).arg(scopesVar));
-            fields.put(providerClass, field);
+    public JExpression instantiate(Object key, JType type, ExpressionBuilder builder) {
+        if(!fields.containsKey(key)){
+            JFieldVar field = definedClass.field(JMod.PRIVATE, type, namer.generateName(type));
+            //constructorBlock.assign(field, JExpr._new(providerClass).arg(scopesVar));
+            constructorBlock.assign(field, builder.build(constructorBlock, scopesVar));
+            fields.put(key, field);
         }
-        return fields.get(providerClass);
+        return fields.get(key);
     }
 }

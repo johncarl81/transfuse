@@ -15,14 +15,19 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JType;
 
 /**
  * @author John Ericksen
  */
 public interface InstantiationStrategy {
 
-    JExpression instantiate(JDefinedClass providerClass);
+    JExpression instantiate(Object key, JType type, ExpressionBuilder builder);
 
+    public interface ExpressionBuilder{
+
+        JExpression build(JBlock constructorBlock, JExpression scopesVar);
+    }
 }

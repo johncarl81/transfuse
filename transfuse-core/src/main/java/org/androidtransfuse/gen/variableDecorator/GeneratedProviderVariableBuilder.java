@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
+import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.gen.InjectionBuilderContext;
+import org.androidtransfuse.gen.InstantiationStrategy;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.gen.variableBuilder.ConsistentTypeVariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
@@ -45,8 +48,13 @@ public class GeneratedProviderVariableBuilder extends ConsistentTypeVariableBuil
     @Override
     public JExpression buildExpression(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
-        JDefinedClass providerClass = providerGenerator.generateProvider(providerTypeInjectionNode, false);
+        final JDefinedClass providerClass = providerGenerator.generateProvider(providerTypeInjectionNode, false);
 
-        return injectionBuilderContext.instantiateOnce(providerClass);
+        return injectionBuilderContext.instantiateOnce(providerClass, providerClass, new InstantiationStrategy.ExpressionBuilder() {
+            @Override
+            public JExpression build(JBlock constructorBlock, JExpression scopesVar) {
+                return JExpr._new(providerClass).arg(scopesVar);
+            }
+        });
     }
 }

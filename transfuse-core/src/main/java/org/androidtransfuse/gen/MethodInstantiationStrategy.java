@@ -15,7 +15,10 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JType;
+import com.sun.codemodel.JVar;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -26,7 +29,7 @@ import java.util.Map;
  */
 public class MethodInstantiationStrategy implements InstantiationStrategy {
 
-    private final Map<JDefinedClass, JExpression> variables = new HashMap<JDefinedClass, JExpression>();
+    private final Map<Object, JExpression> variables = new HashMap<Object, JExpression>();
     private final JExpression scopesVar;
     private final UniqueVariableNamer namer;
     private final JBlock block;
@@ -42,12 +45,13 @@ public class MethodInstantiationStrategy implements InstantiationStrategy {
     }
 
     @Override
-    public JExpression instantiate(JDefinedClass providerClass) {
-        if(!variables.containsKey(providerClass)){
-            JVar variable = block.decl(providerClass, namer.generateName(providerClass));
-            block.assign(variable, JExpr._new(providerClass).arg(scopesVar));
-            variables.put(providerClass, variable);
+    public JExpression instantiate(Object key, JType type, ExpressionBuilder builder) {
+        if(!variables.containsKey(key)){
+            JVar variable = block.decl(type, namer.generateName(type));
+            //block.assign(variable, JExpr._new(providerClass).arg(scopesVar));
+            block.assign(variable, builder.build(block, scopesVar));
+            variables.put(key, variable);
         }
-        return variables.get(providerClass);
+        return variables.get(key);
     }
 }

@@ -17,10 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.gen.ClassGenerationUtil;
-import org.androidtransfuse.gen.InjectionBuilderContext;
-import org.androidtransfuse.gen.ProviderGenerator;
-import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
@@ -56,13 +53,22 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
 
         //build provider
-        JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
-        JExpression provider = injectionBuilderContext.instantiateOnce(providerClass);
+        final JDefinedClass providerClass = providerGenerator.generateProvider(injectionNode, true);
+        JExpression provider = injectionBuilderContext.instantiateOnce(providerClass, providerClass, new InstantiationStrategy.ExpressionBuilder() {
+            @Override
+            public JExpression build(JBlock constructorBlock, JExpression scopesVar) {
+                return JExpr._new(providerClass).arg(scopesVar);
+            }
+        });
 
         //build scope call
         // <T> T getScopedObject(Class<T> clazz, Provider<T> provider);
-        JExpression scopesVar = injectionBuilderContext.getScopeVar();
-        JExpression scopeVar = scopesVar.invoke(Scopes.GET_SCOPE).arg(generationUtil.ref(scopeKey).dotclass());
+        JExpression scopeVar = injectionBuilderContext.instantiateOnce(scopeKey, generationUtil.ref(Scope.class), new InstantiationStrategy.ExpressionBuilder() {
+            @Override
+            public JExpression build(JBlock constructorBlock, JExpression scopesVar) {
+                return scopesVar.invoke(Scopes.GET_SCOPE).arg(generationUtil.ref(scopeKey).dotclass());
+            }
+        });
 
         JExpression expression = scopeVar.invoke(Scope.GET_SCOPED_OBJECT).arg(buildScopeKey(injectionNode)).arg(provider);
 
