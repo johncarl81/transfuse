@@ -19,6 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
+import org.androidtransfuse.SuperCaller;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -83,7 +84,12 @@ public class ManualSuperGenerator implements Generation {
 
                 try {
                     JDefinedClass superClass = builder.getDefinedClass()._class(JMod.PUBLIC, SUPER_CALLER_CLASS_NAME);
+                    superClass._implements(SuperCaller.class);
                     builder. getDefinedClass().field(JMod.PUBLIC, superClass, SUPER_NAME, JExpr._new(superClass));
+
+                    JMethod callMethod = superClass.method(JMod.PUBLIC, Object.class, SuperCaller.CALL_METHOD);
+                    JVar targetParam = callMethod.param(String.class, namer.generateName(String.class));
+                    JVar paramParam = callMethod.varParam(Object.class, namer.generateName(Object.class));
 
                     for (ManualSuperAspect.Method method : methods) {
                         ASTMethod astMethod = astElementFactory.findMethod(descriptor.getType(), method.getName(), method.getParameters().toArray(new ASTType[method.getParameters().size()]));
@@ -93,6 +99,8 @@ public class ManualSuperGenerator implements Generation {
                         }
                         //todo: validation?
                     }
+
+                    callMethod.body()._return(JExpr._null());
                 } catch (JClassAlreadyExistsException e) {
                     throw new TransfuseAnalysisException("SUPER Class already exists", e);
                 }
