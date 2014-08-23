@@ -40,13 +40,13 @@
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler</artifactId>
-            <version>0.2.11-SNAPSHOT</version>
+            <version>0.2.11</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.parceler</groupId>
             <artifactId>parceler-api</artifactId>
-            <version>0.2.11-SNAPSHOT</version>
+            <version>0.2.11</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -70,6 +70,11 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
         </dependency>
     </dependencies>
 

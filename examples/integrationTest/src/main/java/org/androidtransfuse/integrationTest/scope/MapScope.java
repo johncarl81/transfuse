@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.integrationTest.scope;
 
-import org.androidtransfuse.config.OutOfScopeException;
 import org.androidtransfuse.scope.Scope;
 import org.androidtransfuse.scope.ScopeKey;
 
