@@ -17,7 +17,10 @@ package org.androidtransfuse.transaction;
 
 import com.google.common.collect.ImmutableSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -72,8 +75,6 @@ public class TransactionProcessorPool<V, R> implements TransactionProcessor<V, R
         for (Transaction<V, R> transaction : transactions) {
             if (transaction.isComplete() && transaction.getResult() != null) {
                 aggregate.put(transaction.getValue(), transaction.getResult());
-            } else {
-                return Collections.EMPTY_MAP;
             }
         }
 
