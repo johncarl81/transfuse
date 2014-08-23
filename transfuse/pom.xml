@@ -92,9 +92,45 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>org.androidtransfuse:transfuse-api</exclude>
-                                    <exclude>org.parceler:parceler-api</exclude>
+                                    <exclude>javax.inject:javax.inject</exclude>
+                                    <exclude>aopalliance:aopalliance</exclude>
+                                    <exclude>com.google.code.findbugs:jsr305</exclude>
                                 </excludes>
                             </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.common</pattern>
+                                    <shadedPattern>org.androidtransfuse.guava</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jvnet.fastinfoset</pattern>
+                                    <shadedPattern>org.androidtransfuse.fastinfoset</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.sun_</pattern>
+                                    <shadedPattern>org.androidtransfuse.sun</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.sun</pattern>
+                                    <shadedPattern>org.androidtransfuse.sun</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>javax_</pattern>
+                                    <shadedPattern>org.androidtransfuse.javax</shadedPattern>
+                                </relocation>
+                                <!--<relocation>-->
+                                    <!--<pattern>javax.inject</pattern>-->
+                                    <!--<shadedPattern>org.androidtransfuse.javaxinject</shadedPattern>-->
+                                <!--</relocation>-->
+                                <relocation>
+                                    <pattern>java_</pattern>
+                                    <shadedPattern>org.androidtransfuse.java</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache</pattern>
+                                    <shadedPattern>org.androidtransfuse.apache</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
