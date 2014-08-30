@@ -15,9 +15,8 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-
-import java.util.List;
 
 /**
  * Abstract Syntax Tree Method node
@@ -31,7 +30,7 @@ public interface ASTMethod extends ASTBase {
      *
      * @return method parameters
      */
-    List<ASTParameter> getParameters();
+    ImmutableList<ASTParameter> getParameters();
 
     /**
      * Supplies the return type of this method

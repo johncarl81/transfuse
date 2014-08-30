@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse;
+package org.androidtransfuse.event;
 
 /**
  * @author John Ericksen
@@ -22,5 +22,5 @@ public interface SuperCaller {
 
     public String CALL_METHOD = "call";
 
-    Object call(String methodName, Object... params);
+    Object call(Object... params);
 }

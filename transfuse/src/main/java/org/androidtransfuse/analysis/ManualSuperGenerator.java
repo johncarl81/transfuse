@@ -19,7 +19,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
-import org.androidtransfuse.SuperCaller;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -41,7 +40,7 @@ import java.util.Set;
  */
 public class ManualSuperGenerator implements Generation {
 
-    private static final String SUPER_NAME = "SUPER";
+    public static final String SUPER_NAME = "SUPER";
     private static final String SUPER_CALLER_CLASS_NAME = "SuperCaller";
 
     private final UniqueVariableNamer namer;
@@ -83,24 +82,20 @@ public class ManualSuperGenerator implements Generation {
                         .toSet();
 
                 try {
-                    JDefinedClass superClass = builder.getDefinedClass()._class(JMod.PUBLIC, SUPER_CALLER_CLASS_NAME);
-                    superClass._implements(SuperCaller.class);
-                    builder. getDefinedClass().field(JMod.PUBLIC, superClass, SUPER_NAME, JExpr._new(superClass));
+                    if(!methods.isEmpty()) {
+                        JDefinedClass superClass = builder.getDefinedClass()._class(JMod.PUBLIC, SUPER_CALLER_CLASS_NAME);
 
-                    JMethod callMethod = superClass.method(JMod.PUBLIC, Object.class, SuperCaller.CALL_METHOD);
-                    JVar targetParam = callMethod.param(String.class, namer.generateName(String.class));
-                    JVar paramParam = callMethod.varParam(Object.class, namer.generateName(Object.class));
+                        builder.getDefinedClass().field(JMod.PUBLIC, superClass, SUPER_NAME, JExpr._new(superClass));
 
-                    for (ManualSuperAspect.Method method : methods) {
-                        ASTMethod astMethod = astElementFactory.findMethod(descriptor.getType(), method.getName(), method.getParameters().toArray(new ASTType[method.getParameters().size()]));
+                        for (ManualSuperAspect.Method method : methods) {
+                            ASTMethod astMethod = astElementFactory.findMethod(descriptor.getType(), method.getName(), method.getParameters().toArray(new ASTType[method.getParameters().size()]));
 
-                        if(astMethod != null) {
-                            writeSuperCallingMethod(builder.getDefinedClass(), superClass, astMethod);
+                            if (astMethod != null) {
+                                writeSuperCallingMethod(builder.getDefinedClass(), superClass, astMethod);
+                            }
+                            //todo: validation?
                         }
-                        //todo: validation?
                     }
-
-                    callMethod.body()._return(JExpr._null());
                 } catch (JClassAlreadyExistsException e) {
                     throw new TransfuseAnalysisException("SUPER Class already exists", e);
                 }

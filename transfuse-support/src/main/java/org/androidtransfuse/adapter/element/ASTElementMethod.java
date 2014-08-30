@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 
 import javax.lang.model.element.ExecutableElement;
-import java.util.List;
 
 /**
  * Element specific implementation of the AST Method
@@ -60,7 +59,7 @@ public class ASTElementMethod extends ASTElementBase implements ASTMethod {
     }
 
     @Override
-    public List<ASTParameter> getParameters() {
+    public ImmutableList<ASTParameter> getParameters() {
         return parameters;
     }
 

@@ -15,11 +15,11 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 /**
  * Class to decorate an ASTMethod with an equals and hashCode based on the method signature.  This helps enforce
@@ -41,7 +41,7 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
-    public List<ASTParameter> getParameters() {
+    public ImmutableList<ASTParameter> getParameters() {
         return method.getParameters();
     }
 

@@ -23,7 +23,6 @@ import org.androidtransfuse.adapter.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.List;
 
 /**
  * Class specific AST Method
@@ -73,7 +72,7 @@ public class ASTClassMethod implements ASTMethod {
     }
 
     @Override
-    public List<ASTParameter> getParameters() {
+    public ImmutableList<ASTParameter> getParameters() {
         return parameters;
     }
 

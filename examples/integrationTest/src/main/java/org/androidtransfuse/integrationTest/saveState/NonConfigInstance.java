@@ -18,6 +18,7 @@ package org.androidtransfuse.integrationTest.saveState;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.event.SuperCaller;
 import org.androidtransfuse.integrationTest.R;
 
 import javax.inject.Inject;
@@ -81,7 +82,8 @@ public class NonConfigInstance {
     }
 
     @OnBackPressed
-    public void cancelTask(){
+    public void cancelTask(SuperCaller superCaller){
+        superCaller.call();
         asyncTask.cancel(true);
     }
 

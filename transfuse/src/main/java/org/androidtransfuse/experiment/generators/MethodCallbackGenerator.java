@@ -15,16 +15,18 @@
  */
 package org.androidtransfuse.experiment.generators;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JStatement;
-import org.androidtransfuse.adapter.ASTJDefinedClassType;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTType;
+import com.google.common.collect.ImmutableList;
+import com.sun.codemodel.*;
+import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.ManualSuperGenerator;
 import org.androidtransfuse.analysis.astAnalyzer.ListenerAspect;
+import org.androidtransfuse.analysis.astAnalyzer.ManualSuperAspect;
+import org.androidtransfuse.event.SuperCaller;
 import org.androidtransfuse.experiment.*;
+import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InvocationBuilder;
+import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
@@ -39,13 +41,21 @@ public class MethodCallbackGenerator implements Generation {
     private final InvocationBuilder invocationBuilder;
     private final ASTMethod eventMethod;
     private final ASTMethod creationMethod;
+    private final ASTType superCallerType;
+    private final JCodeModel codeModel;
+    private final UniqueVariableNamer namer;
+    private final ClassGenerationUtil generationUtil;
 
     @Inject
-    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ @Named("eventMethod") ASTMethod eventMethod, /*@Assisted */ @Named("creationMethod") ASTMethod creationMethod, InvocationBuilder invocationBuilder) {
+    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ @Named("eventMethod") ASTMethod eventMethod, /*@Assisted */ @Named("creationMethod") ASTMethod creationMethod, InvocationBuilder invocationBuilder, ASTClassFactory astClassFactory, JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
         this.eventAnnotation = eventAnnotation;
         this.invocationBuilder = invocationBuilder;
         this.eventMethod = eventMethod;
         this.creationMethod = creationMethod;
+        this.codeModel = codeModel;
+        this.namer = namer;
+        this.generationUtil = generationUtil;
+        this.superCallerType = astClassFactory.getType(SuperCaller.class);
     }
 
     @Override
@@ -63,16 +73,26 @@ public class MethodCallbackGenerator implements Generation {
 
                         for (final ASTMethod methodCallback : methods) {
 
+                            final boolean containsSuperCaller = containsSuperCaller(methodCallback.getParameters());
+                            if(containsSuperCaller){
+                                if(!injectionNodeJExpressionEntry.getKey().containsAspect(ManualSuperAspect.class)){
+                                    injectionNodeJExpressionEntry.getKey().addAspect(new ManualSuperAspect());
+                                }
+
+                                ManualSuperAspect manualSuperAspect = injectionNodeJExpressionEntry.getKey().getAspect(ManualSuperAspect.class);
+                                manualSuperAspect.add(eventMethod);
+                            }
+
                             builder.add(eventMethod, GenerationPhase.EVENT, new ComponentMethodGenerator() {
                                 @Override
                                 public void generate(MethodDescriptor methodDescriptor, JBlock block) {
 
-                                    List<ASTParameter> matchedParameters = matchMethodArguments(methodDescriptor.getASTMethod().getParameters(), methodCallback);
-                                    List<JExpression> matchedExpressions = new ArrayList<JExpression>();
-
-                                    for (ASTParameter matchedParameter : matchedParameters) {
-                                        matchedExpressions.add(methodDescriptor.getParameters().get(matchedParameter).getExpression());
+                                    Map<ASTType, Queue<JExpression>> methodArgumentExpressions = buildMethodArgumentExpressions(methodDescriptor);
+                                    if(containsSuperCaller) {
+                                        methodArgumentExpressions.put(superCallerType, new LinkedList<JExpression>(ImmutableList.of(buildSuperCaller(eventMethod))));
                                     }
+
+                                    List<JExpression> matchedExpressions = matchMethodArguments(methodCallback.getParameters(), methodArgumentExpressions);
 
                                     JStatement methodCall = invocationBuilder.buildMethodCall(
                                             new ASTJDefinedClassType(builder.getDefinedClass()),
@@ -88,29 +108,72 @@ public class MethodCallbackGenerator implements Generation {
                         }
                     }
                 }
-
             }
         });
     }
 
-    private List<ASTParameter> matchMethodArguments(List<ASTParameter> parametersToMatch, ASTMethod methodToCall) {
-        List<ASTParameter> arguments = new ArrayList<ASTParameter>();
+    private JExpression buildSuperCaller(ASTMethod eventMethod) {
 
-        List<ASTParameter> overrideParameters = new ArrayList<ASTParameter>(parametersToMatch);
+        JDefinedClass superCallerClass = codeModel.anonymousClass(SuperCaller.class);
 
-        for (ASTParameter callParameter : methodToCall.getParameters()) {
-            Iterator<ASTParameter> overrideParameterIterator = overrideParameters.iterator();
+        JMethod callMethod = superCallerClass.method(JMod.PUBLIC, Object.class, SuperCaller.CALL_METHOD);
+        JVar objectVarargs = callMethod.varParam(Object.class, namer.generateName(Object.class));
 
-            while (overrideParameterIterator.hasNext()) {
-                ASTParameter overrideParameter = overrideParameterIterator.next();
-                if (overrideParameter.getASTType().equals(callParameter.getASTType())) {
-                    arguments.add(overrideParameter);
-                    overrideParameterIterator.remove();
-                    break;
-                }
+        JInvocation superInvocation = JExpr.ref(ManualSuperGenerator.SUPER_NAME).invoke(eventMethod.getName());
+
+        for(int i = 0; i < eventMethod.getParameters().size(); i++){
+            ASTParameter parameter = eventMethod.getParameters().get(i);
+            superInvocation = superInvocation.arg(JExpr.cast(generationUtil.ref(parameter.getASTType()), objectVarargs.component(JExpr.lit(i))));
+        }
+
+        JBlock body = callMethod.body();
+        if(eventMethod.getReturnType().equals(ASTVoidType.VOID)) {
+            body.add(superInvocation);
+            body._return(JExpr._null());
+        }
+        else{
+            body._return(superInvocation);
+        }
+
+        return JExpr._new(superCallerClass);
+    }
+
+    private boolean containsSuperCaller(ImmutableList<ASTParameter> parameters) {
+
+        for (ASTParameter parameter : parameters) {
+            if(parameter.getASTType().equals(superCallerType)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<JExpression> matchMethodArguments(List<ASTParameter> parametersToMatch, Map<ASTType, Queue<JExpression>> expressions) {
+        List<JExpression> arguments = new ArrayList<JExpression>();
+
+        for (ASTParameter callParameter : parametersToMatch) {
+            ASTType type = callParameter.getASTType();
+            if(expressions.containsKey(type) && !expressions.get(type).isEmpty()){
+                arguments.add(expressions.get(type).remove());
+            }
+            else{
+                //todo: validation error
             }
         }
 
         return arguments;
+    }
+
+    private Map<ASTType, Queue<JExpression>> buildMethodArgumentExpressions(MethodDescriptor method){
+        Map<ASTType, Queue<JExpression>> argumentExpressions = new HashMap<ASTType, Queue<JExpression>>();
+        for (ASTParameter parameter : method.getASTMethod().getParameters()) {
+            ASTType type = parameter.getASTType();
+            if(!argumentExpressions.containsKey(type)){
+                argumentExpressions.put(type, new LinkedList<JExpression>());
+            }
+
+            argumentExpressions.get(type).add(method.getParameter(parameter).getExpression());
+        }
+        return argumentExpressions;
     }
 }

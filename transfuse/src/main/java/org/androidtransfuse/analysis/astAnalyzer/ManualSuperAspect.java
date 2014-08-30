@@ -15,7 +15,11 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -36,6 +40,15 @@ public class ManualSuperAspect {
 
     public Set<Method> getMethods() {
         return methods;
+    }
+
+    public void add(ASTMethod eventMethod) {
+        add(eventMethod.getName(), FluentIterable.from(eventMethod.getParameters())
+                .transform(new Function<ASTParameter, ASTType>() {
+                    public ASTType apply(ASTParameter parameter) {
+                        return parameter.getASTType();
+                    }
+                }).toList());
     }
 
     public class Method{
