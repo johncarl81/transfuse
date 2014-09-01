@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
@@ -24,5 +25,5 @@ import org.androidtransfuse.model.InjectionSignature;
  */
 public interface InjectionNodeBuilder {
 
-    InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context);
+    InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context);
 }

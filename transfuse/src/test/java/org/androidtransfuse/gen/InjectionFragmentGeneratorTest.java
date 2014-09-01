@@ -165,7 +165,7 @@ public class InjectionFragmentGeneratorTest {
         injectionNodeBuilderRepository.putType(VariableTarget.class, new InjectionNodeBuilder() {
 
             @Override
-            public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+            public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
                 return analyzer.analyze(signature, context);
             }
         });

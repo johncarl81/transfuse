@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTUtils;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.model.InjectionNode;
@@ -35,12 +36,12 @@ public abstract class InjectionNodeBuilderSingleAnnotationAdapter implements Inj
     }
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
 
         ASTAnnotation annotation = ASTUtils.getInstance().getAnnotation(annotationClass, signature.getAnnotations());
 
-        return buildInjectionNode(signature, context, annotation);
+        return buildInjectionNode(target, signature, context, annotation);
     }
 
-    public abstract InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation);
+    public abstract InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation);
 }

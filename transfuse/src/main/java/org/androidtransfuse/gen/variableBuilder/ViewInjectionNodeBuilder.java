@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -24,6 +25,7 @@ import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.AndroidLiterals;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 
@@ -36,30 +38,40 @@ public class ViewInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotati
     private final InjectionPointFactory injectionPointFactory;
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final Analyzer analyzer;
+    private final Validator validator;
 
     @Inject
     public ViewInjectionNodeBuilder(ClassGenerationUtil generationUtil,
                                     InjectionPointFactory injectionPointFactory,
                                     VariableInjectionBuilderFactory variableInjectionBuilderFactory,
-                                    Analyzer analyzer) {
+                                    Analyzer analyzer,
+                                    Validator validator) {
         super(View.class);
         this.generationUtil = generationUtil;
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
+        this.validator = validator;
     }
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         Integer viewId = annotation.getProperty("value", Integer.class);
         String viewTag = annotation.getProperty("tag", String.class);
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
-
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, generationUtil.type(signature.getType())));
-
+        if(viewId == null && viewTag == null){
+            //validation error
+            validator.error("@View must contain ast least a value or tag parameter.")
+                    .element(target)
+                    .annotation(annotation)
+                    .build();
+        }
+        else {
+            InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildViewVariableBuilder(viewId, viewTag, activityInjectionNode, generationUtil.type(signature.getType())));
+        }
         return injectionNode;
     }
 }

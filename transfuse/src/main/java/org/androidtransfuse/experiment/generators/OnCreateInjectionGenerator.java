@@ -28,6 +28,7 @@ import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.util.TransfuseRuntimeException;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
 
@@ -42,6 +43,7 @@ public class OnCreateInjectionGenerator implements Generation {
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final InjectionPointFactory injectionPointFactory;
+    private final Validator validator;
 
     @Factory
     public interface InjectionGeneratorFactory {
@@ -54,13 +56,15 @@ public class OnCreateInjectionGenerator implements Generation {
                                       InjectionFragmentGenerator injectionFragmentGenerator,
                                       InstantiationStrategyFactory instantiationStrategyFactory,
                                       InjectionBindingBuilder injectionBindingBuilder,
-                                      InjectionPointFactory injectionPointFactory) {
+                                      InjectionPointFactory injectionPointFactory,
+                                      Validator validator) {
         this.method = method;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.target = target;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.injectionPointFactory = injectionPointFactory;
+        this.validator = validator;
     }
 
     @Override
@@ -75,16 +79,19 @@ public class OnCreateInjectionGenerator implements Generation {
 
                 descriptor.setRootInjectionNode(injectionPointFactory.buildInjectionNode(target, builder.getAnalysisContext()));
 
-                try {
-                    injectionFragmentGenerator.buildFragment(
-                            block,
-                            instantiationStrategyFactory.buildMethodStrategy(block, builder.getScopes()),
-                            builder.getDefinedClass(),
-                            descriptor.getRootInjectionNode(),
-                            builder.getScopes(),
-                            builder.getExpressionMap());
-                } catch (JClassAlreadyExistsException e) {
-                    throw new TransfuseRuntimeException("Class already exists", e);
+                if(!validator.isInError()) {
+
+                    try {
+                        injectionFragmentGenerator.buildFragment(
+                                block,
+                                instantiationStrategyFactory.buildMethodStrategy(block, builder.getScopes()),
+                                builder.getDefinedClass(),
+                                descriptor.getRootInjectionNode(),
+                                builder.getScopes(),
+                                builder.getExpressionMap());
+                    } catch (JClassAlreadyExistsException e) {
+                        throw new TransfuseRuntimeException("Class already exists", e);
+                    }
                 }
             }
         });

@@ -91,6 +91,12 @@ public class TransfuseAndroidModule {
     public static final String MANIFEST_FILE = "manifestFile";
 
     @Provides
+    @CodeGenerationScope
+    public Validator provideValidator(@Named(Validator.LOG_PREPEND) String prepend, Messager messager){
+        return new Validator(prepend, messager);
+    }
+
+    @Provides
     @Singleton
     public ConfigurationRepository getRepository(ConfigurationRepositoryImpl repository){
         return repository;

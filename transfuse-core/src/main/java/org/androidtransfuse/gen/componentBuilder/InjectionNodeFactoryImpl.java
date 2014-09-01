@@ -66,7 +66,7 @@ public class InjectionNodeFactoryImpl implements InjectionNodeFactory {
     public InjectionNode buildInjectionNode(MethodDescriptor onCreateMethodDescriptor) {
         buildVariableBuilderMap(onCreateMethodDescriptor, context.getInjectionNodeBuilders());
 
-        return injectionPointFactory.buildInjectionNode(annotations, astType, context);
+        return injectionPointFactory.buildInjectionNode(annotations, astType, astType, context);
     }
 
     private void buildVariableBuilderMap(MethodDescriptor methodDescriptor, InjectionNodeBuilderRepository injectionNodeBuilders) {

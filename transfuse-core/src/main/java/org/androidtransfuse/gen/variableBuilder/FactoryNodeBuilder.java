@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -41,7 +42,7 @@ public class FactoryNodeBuilder implements InjectionNodeBuilder {
     }
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildFactoryVariableBuilder(factoryType));

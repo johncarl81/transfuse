@@ -15,10 +15,7 @@
  */
 package org.androidtransfuse.gen.variableBuilder;
 
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -59,7 +56,7 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
 
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
         InjectionNode injectionNode = new InjectionNode(signature);
 
         if(scope != null){
@@ -78,7 +75,7 @@ public class ProvidesInjectionNodeBuilder implements InjectionNodeBuilder {
         Map<ASTParameter, InjectionNode> dependencyAnalysis = new HashMap<ASTParameter, InjectionNode>();
 
         for (ASTParameter parameter : providesMethod.getParameters()) {
-            InjectionNode parameterInjectionNode = injectionNodeFactory.buildInjectionNode(parameter.getAnnotations(), parameter.getASTType(), context);
+            InjectionNode parameterInjectionNode = injectionNodeFactory.buildInjectionNode(parameter.getAnnotations(), parameter, parameter.getASTType(), context);
 
             dependencyAnalysis.put(parameter, parameterInjectionNode);
         }

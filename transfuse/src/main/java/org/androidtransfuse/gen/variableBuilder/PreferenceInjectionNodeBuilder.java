@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
@@ -46,7 +47,7 @@ public class PreferenceInjectionNodeBuilder extends InjectionNodeBuilderSingleAn
     }
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         String preferenceName = annotation.getProperty("value", String.class);
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);

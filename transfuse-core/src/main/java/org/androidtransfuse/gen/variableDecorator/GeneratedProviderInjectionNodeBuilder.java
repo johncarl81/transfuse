@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
+import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
@@ -45,12 +46,12 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     }
 
     @Override
-    public InjectionNode buildInjectionNode(InjectionSignature signature, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
 
         ASTType providerGenericType = getProviderTemplateType(signature.getType());
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
-        InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(signature.getAnnotations(), providerGenericType, context.addDependent(injectionNode));
+        InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(signature.getAnnotations(), providerGenericType, providerGenericType, context.addDependent(injectionNode));
 
         injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode));
 

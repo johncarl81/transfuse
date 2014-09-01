@@ -71,7 +71,7 @@ public final class ViewRegistrationGeneratorFactory implements RegistrationGener
         ASTType atViewType = astClassFactory.getType(org.androidtransfuse.annotations.View.class);
         ASTAnnotation viewRegistrationAnnotation = new ASTAnnotationPropertyReplacement(registerAnnotation, atViewType);
 
-        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), listenerMethod.getListenable(), context);
+        return injectionPointFactory.buildInjectionNode(Collections.singleton(viewRegistrationAnnotation), listenerMethod.getListenable(), listenerMethod.getListenable(), context);
     }
 
     private static final class ASTAnnotationPropertyReplacement implements ASTAnnotation {

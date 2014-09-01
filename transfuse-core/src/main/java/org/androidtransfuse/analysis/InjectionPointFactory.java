@@ -81,7 +81,7 @@ public class InjectionPointFactory {
         for (ASTParameter astParameter : astConstructor.getParameters()) {
             List<ASTAnnotation> parameterAnnotations = new ArrayList<ASTAnnotation>(methodAnnotations);
             parameterAnnotations.addAll(astParameter.getAnnotations());
-            constructorInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astParameter.getASTType(), context));
+            constructorInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astParameter, astParameter.getASTType(), context));
         }
 
         return constructorInjectionPoint;
@@ -106,10 +106,10 @@ public class InjectionPointFactory {
             methodAnnotations.addAll(astMethod.getAnnotations());
         }
 
-        for (ASTParameter astField : astMethod.getParameters()) {
+        for (ASTParameter astParameter : astMethod.getParameters()) {
             List<ASTAnnotation> parameterAnnotations = new ArrayList<ASTAnnotation>(methodAnnotations);
-            parameterAnnotations.addAll(astField.getAnnotations());
-            methodInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astField.getASTType(), context));
+            parameterAnnotations.addAll(astParameter.getAnnotations());
+            methodInjectionPoint.addInjectionNode(buildInjectionNode(parameterAnnotations, astParameter, astParameter.getASTType(), context));
         }
 
         return methodInjectionPoint;
@@ -124,7 +124,7 @@ public class InjectionPointFactory {
      * @return FieldInjectionPoint
      */
     public FieldInjectionPoint buildInjectionPoint(ASTType rootContainingType, ASTType containingType, ASTField astField, AnalysisContext context) {
-        return new FieldInjectionPoint(rootContainingType, containingType, astField, buildInjectionNode(astField.getAnnotations(), astField.getASTType(), context));
+        return new FieldInjectionPoint(rootContainingType, containingType, astField, buildInjectionNode(astField.getAnnotations(), astField, astField.getASTType(), context));
     }
 
     /**
@@ -135,14 +135,14 @@ public class InjectionPointFactory {
      * @return Injection Node
      */
     public InjectionNode buildInjectionNode(ASTType astType, AnalysisContext context) {
-        return buildInjectionNode(Collections.EMPTY_LIST, astType, context);
+        return buildInjectionNode(Collections.EMPTY_LIST, astType, astType, context);
     }
 
     public InjectionNode buildInjectionNode(Class type, AnalysisContext context) {
         return buildInjectionNode(astClassFactory.getType(type), context);
     }
 
-    public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTType astType, AnalysisContext context) {
+    public InjectionNode buildInjectionNode(Collection<ASTAnnotation> annotations, ASTBase target, ASTType astType, AnalysisContext context) {
 
         ImmutableSet<ASTAnnotation> qualifiers =
                 FluentIterable.from(annotations).filter(qualifierPredicate).toSet();
@@ -150,15 +150,15 @@ public class InjectionPointFactory {
         InjectionSignature injectionSignature = new InjectionSignature(astType, qualifiers);
 
         //specific binding annotation lookup
-        return buildInjectionNode(context.getInjectionNodeBuilders(), injectionSignature, context);
+        return buildInjectionNode(context.getInjectionNodeBuilders(), target, injectionSignature, context);
     }
 
-    private InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, InjectionSignature injectionSignature, AnalysisContext context) {
+    private InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, ASTBase target, InjectionSignature injectionSignature, AnalysisContext context) {
         //check type and qualifiers
         InjectionNodeBuilder typeQualifierBuilder = get(repository.getTypeQualifierBindings(), injectionSignature);
 
         if(typeQualifierBuilder != null){
-            return typeQualifierBuilder.buildInjectionNode(injectionSignature, context);
+            return typeQualifierBuilder.buildInjectionNode(target, injectionSignature, context);
         }
 
         if(injectionSignature.getAnnotations().size() > 0){
@@ -167,11 +167,11 @@ public class InjectionPointFactory {
 
         //generated provider
         if(providerMatcher.matches(injectionSignature.getType())){
-            return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(injectionSignature, context);
+            return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(target, injectionSignature, context);
         }
 
         //default case
-        return defaultBinding.buildInjectionNode(injectionSignature, context);
+        return defaultBinding.buildInjectionNode(target, injectionSignature, context);
     }
 
     private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){
