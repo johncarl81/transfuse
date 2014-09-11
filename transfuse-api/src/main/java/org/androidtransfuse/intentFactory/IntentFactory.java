@@ -109,6 +109,29 @@ public class IntentFactory {
      * @return PendingIntent
      */
     public PendingIntent buildPendingIntent(IntentFactoryStrategy parameters){
-        return PendingIntent.getActivity(context, 0, buildIntent(parameters), 0);
+        return buildPendingIntent(0, parameters);
+    }
+
+    /**
+     * Build a PendingIntent specified by the given input Strategy.
+     *
+     * @param requestCode request code for the sender
+     * @param parameters Strategy instance
+     * @return PendingIntent
+     */
+    public PendingIntent buildPendingIntent(int requestCode, IntentFactoryStrategy parameters){
+        return buildPendingIntent(requestCode, 0, parameters);
+    }
+
+    /**
+     * Build a PendingIntent specified by the given input Strategy.
+     *
+     * @param requestCode request code for the sender
+     * @param flags intent flags
+     * @param parameters Strategy instance
+     * @return PendingIntent
+     */
+    public PendingIntent buildPendingIntent(int requestCode, int flags, IntentFactoryStrategy parameters){
+        return PendingIntent.getActivity(context, requestCode, buildIntent(parameters), flags);
     }
 }
