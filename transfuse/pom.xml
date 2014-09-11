@@ -118,10 +118,6 @@
                                     <pattern>javax_</pattern>
                                     <shadedPattern>org.androidtransfuse.javax</shadedPattern>
                                 </relocation>
-                                <!--<relocation>-->
-                                    <!--<pattern>javax.inject</pattern>-->
-                                    <!--<shadedPattern>org.androidtransfuse.javaxinject</shadedPattern>-->
-                                <!--</relocation>-->
                                 <relocation>
                                     <pattern>java_</pattern>
                                     <shadedPattern>org.androidtransfuse.java</shadedPattern>
@@ -179,6 +175,11 @@
                         <artifactId>asciidoclet</artifactId>
                         <version>1.5.0</version>
                     </docletArtifact>
+                    <additionalparam>
+                        --gem-path ${env.GEM_PATH}
+                        -r asciidoctor-diagram
+                        -a data-uri
+                    </additionalparam>
                     <linksource>true</linksource>
                 </configuration>
             </plugin>

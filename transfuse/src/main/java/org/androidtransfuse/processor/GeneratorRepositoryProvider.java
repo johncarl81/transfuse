@@ -37,16 +37,20 @@ import java.util.Map;
 /**
  * Configures the Processor chain
  *
+ *[ditaa]
+ * --
  *     +---------+             +--------------+    +----------+          +-----------------+
  * -+->| Modules +-------+--+->| Component(s) +-+->| Manifest |---+-+-+->| Package Helpers |
  *  |  +---------+       |  |  +--------------+ |  +----------+   | | |  +-----------------+
+ *  |                    |  |                   |                 | | |
  *  |  +---------------+ |  |                   |  +------------+ | | |  +-----------------+
  *  +->| ImplementedBy +-+  |                   +->| Components |-+ | +->| Virtual Proxies |
  *     +---------------+    |                      +------------+   | |  +-----------------+
+ *                          |                                       | |
  *                          |  +-------------+     +-----------+    | |  +-------------+
  *                          +->| Factory(s)  +---->| Factories +----+ +->| Scopes Util |
  *                             +-------------+     +-----------+         +-------------+
- *
+ * --
  * @author John Ericksen
  */
 public class GeneratorRepositoryProvider implements Provider<GeneratorRepository> {
