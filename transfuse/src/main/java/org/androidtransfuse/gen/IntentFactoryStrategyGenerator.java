@@ -86,6 +86,7 @@ public class IntentFactoryStrategyGenerator implements Generation {
             public void generate(org.androidtransfuse.experiment.ComponentDescriptor descriptor) {
                 try {
                     JDefinedClass strategyClass = generationUtil.defineClass(descriptor.getPackageClass().append(STRATEGY_EXT));
+                    strategyClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
                     strategyClass._extends(factoryStrategyClass);
 

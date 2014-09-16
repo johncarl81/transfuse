@@ -61,6 +61,7 @@ public abstract class AbstractRepositoryGenerator<T> extends AbstractCompletionT
             }
 
             JDefinedClass factoryRepositoryClass = generationUtil.defineClass(repositoryName);
+            factoryRepositoryClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
             factoryRepositoryClass._implements(generationUtil.ref(repositoryType).narrow(contentType));
 
