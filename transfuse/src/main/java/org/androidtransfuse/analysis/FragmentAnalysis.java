@@ -35,7 +35,6 @@ import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.lang.model.type.TypeMirror;
@@ -115,7 +114,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         if (!astType.extendsFrom(AndroidLiterals.FRAGMENT)) {
             //generated Android fragment
-            fragmentClassName = buildPackageClass(astType, fragmentAnnotation.name());
+            fragmentClassName = componentAnalysis.buildComponentPackageClass(astType, fragmentAnnotation.name(), "Fragment");
 
             TypeMirror type = getTypeMirror(fragmentAnnotation, "type");
 
@@ -196,16 +195,5 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
-    }
-
-    private PackageClass buildPackageClass(ASTType input, String fragmentName) {
-
-        PackageClass inputPackageClass = input.getPackageClass();
-
-        if (StringUtils.isBlank(fragmentName)) {
-            return inputPackageClass.append("Fragment");
-        } else {
-            return inputPackageClass.replaceName(fragmentName);
-        }
     }
 }

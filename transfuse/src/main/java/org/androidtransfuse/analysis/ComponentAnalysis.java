@@ -22,6 +22,7 @@ import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.MethodSignature;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.astAnalyzer.RegistrationAnalyzer;
@@ -32,6 +33,7 @@ import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.generators.MethodCallbackGenerator;
 import org.androidtransfuse.experiment.generators.SuperGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
+import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -130,5 +132,15 @@ public class ComponentAnalysis {
         injectionNodeBuilderRepository.getAnalysisRepository().addAnalysis(new RegistrationAnalyzer(builder.build()));
 
         return injectionNodeBuilderRepository;
+    }
+
+    public PackageClass buildComponentPackageClass(ASTType astType, String className, String componentName) {
+        PackageClass inputPackageClass = astType.getPackageClass();
+
+        if (StringUtils.isBlank(className)) {
+            return inputPackageClass.append(componentName);
+        } else {
+            return inputPackageClass.replaceName(className);
+        }
     }
 }

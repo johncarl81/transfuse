@@ -32,7 +32,6 @@ import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFact
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.lang.model.type.TypeMirror;
@@ -87,10 +86,10 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         if (astType.extendsFrom(AndroidLiterals.BROADCAST_RECEIVER)) {
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
-            PackageClass receiverClassName = buildPackageClass(astType, activityPackageClass.getClassName());
+            PackageClass receiverClassName = componentAnalysis.buildComponentPackageClass(astType, activityPackageClass.getClassName(), "BroadcastReceiver");
             receiverDescriptor = new ComponentDescriptor(astType, null, receiverClassName);
         } else {
-            PackageClass receiverClassName = buildPackageClass(astType, broadcastReceiverAnnotation.name());
+            PackageClass receiverClassName = componentAnalysis.buildComponentPackageClass(astType, broadcastReceiverAnnotation.name(), "BroadcastReceiver");
 
             TypeMirror type = getTypeMirror(broadcastReceiverAnnotation, "type");
             ASTType receiverType = type == null || type.toString().equals("java.lang.Object") ? AndroidLiterals.BROADCAST_RECEIVER : type.accept(astTypeBuilderVisitor, null);
@@ -138,15 +137,5 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
     private ASTMethod getASTMethod(ASTType type, String methodName, ASTType... args) {
         return astElementFactory.findMethod(type, methodName, args);
-    }
-
-    private PackageClass buildPackageClass(ASTType astType, String className) {
-        PackageClass inputPackageClass = astType.getPackageClass();
-
-        if (StringUtils.isBlank(className)) {
-            return inputPackageClass.append("BroadcastReceiver");
-        } else {
-            return inputPackageClass.replaceName(className);
-        }
     }
 }

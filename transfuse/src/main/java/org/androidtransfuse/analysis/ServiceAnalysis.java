@@ -38,7 +38,6 @@ import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.lang.model.type.TypeMirror;
@@ -104,12 +103,12 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         if (input.extendsFrom(AndroidLiterals.SERVICE)) {
             //vanilla Android Service
             PackageClass packageClass = input.getPackageClass();
-            serviceClassName = buildPackageClass(input, packageClass.getClassName());
+            serviceClassName = componentAnalysis.buildComponentPackageClass(input, packageClass.getClassName(), "Service");
 
             serviceDescriptor = new ComponentDescriptor(input, null, packageClass);
         } else {
             //generated Android Service
-            serviceClassName = buildPackageClass(input, serviceAnnotation.name());
+            serviceClassName = componentAnalysis.buildComponentPackageClass(input, serviceAnnotation.name(), "Service");
 
             TypeMirror type = getTypeMirror(serviceAnnotation, "type");
 
@@ -128,17 +127,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         serviceDescriptor.getGenerators().add(serviceManifestEntryGenerator);
 
         return serviceDescriptor;
-    }
-
-    private PackageClass buildPackageClass(ASTType input, String activityName) {
-
-        PackageClass inputPackageClass = input.getPackageClass();
-
-        if (StringUtils.isBlank(activityName)) {
-            return inputPackageClass.append("Service");
-        } else {
-            return inputPackageClass.replaceName(activityName);
-        }
     }
 
     private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType) {

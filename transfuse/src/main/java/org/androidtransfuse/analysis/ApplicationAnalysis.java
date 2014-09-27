@@ -33,7 +33,6 @@ import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFact
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.lang.model.type.TypeMirror;
@@ -92,11 +91,11 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         if (astType.extendsFrom(AndroidLiterals.APPLICATION)) {
             //vanilla Android Application
             PackageClass activityPackageClass = astType.getPackageClass();
-            applicationClassName = buildPackageClass(astType, activityPackageClass.getClassName());
+            applicationClassName = componentAnalysis.buildComponentPackageClass(astType, activityPackageClass.getClassName(), "Application");
             applicationDescriptor = new ComponentDescriptor(astType, null, applicationClassName);
         } else {
 
-            applicationClassName = buildPackageClass(astType, applicationAnnotation.name());
+            applicationClassName = componentAnalysis.buildComponentPackageClass(astType, applicationAnnotation.name(), "Application");
 
             TypeMirror type = getTypeMirror(applicationAnnotation, "type");
 
@@ -117,17 +116,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         applicationDescriptor.getGenerators().add(applicationManifestEntryGenerator);
 
         return applicationDescriptor;
-    }
-
-    private PackageClass buildPackageClass(ASTType input, String applicationNAme) {
-
-        PackageClass inputPackageClass = input.getPackageClass();
-
-        if (StringUtils.isBlank(applicationNAme)) {
-            return inputPackageClass.append("Application");
-        } else {
-            return inputPackageClass.replaceName(applicationNAme);
-        }
     }
 
     private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType) {

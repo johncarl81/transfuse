@@ -36,7 +36,6 @@ import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
-import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -130,11 +129,11 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         if (input.extendsFrom(AndroidLiterals.ACTIVITY)) {
             //vanilla Android activity
             PackageClass activityPackageClass = input.getPackageClass();
-            activityClassName = buildPackageClass(input, activityPackageClass.getClassName());
+            activityClassName = componentAnalysis.buildComponentPackageClass(input, activityPackageClass.getClassName(), "Activity");
             activityDescriptor = new ComponentDescriptor(input, null, activityClassName);
         } else {
             //generated Android activity
-            activityClassName = buildPackageClass(input, activityAnnotation.name());
+            activityClassName = componentAnalysis.buildComponentPackageClass(input, activityAnnotation.name(), "Activity");
 
             TypeMirror type = getTypeMirror(activityAnnotation, "type");
 
@@ -165,17 +164,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         activityDescriptor.getGenerators().add(manifestGeneratorProvider.get());
 
         return activityDescriptor;
-    }
-
-    private PackageClass buildPackageClass(ASTType input, String activityName) {
-
-        PackageClass inputPackageClass = input.getPackageClass();
-
-        if (StringUtils.isBlank(activityName)) {
-            return inputPackageClass.append("Activity");
-        } else {
-            return inputPackageClass.replaceName(activityName);
-        }
     }
 
     private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType activityType) {
