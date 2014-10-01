@@ -26,10 +26,10 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
+import org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis;
 import org.androidtransfuse.analysis.astAnalyzer.InjectionAnalyzer;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAnalysis;
 import org.androidtransfuse.analysis.module.*;
-import org.androidtransfuse.analysis.repository.AnalysisRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.componentBuilder.InjectionNodeImplFactory;
@@ -197,11 +197,11 @@ public class CoreFactory {
         return new ProviderGenerator(providerCache, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer);
     }
 
-    private AnalysisRepository buildAnalysisRepository(){
-        AnalysisRepository analysisRepository = new AnalysisRepository();
+    private Set<ASTAnalysis> buildAnalysisRepository(){
+        Set<ASTAnalysis> analysisRepository = new HashSet<ASTAnalysis>();
 
-        analysisRepository.addAnalysis(new InjectionAnalyzer(buildInjectionPointFactory()));
-        analysisRepository.addAnalysis(new ScopeAnalysis(scopePredicate, validator));
+        analysisRepository.add(new InjectionAnalyzer(buildInjectionPointFactory()));
+        analysisRepository.add(new ScopeAnalysis(scopePredicate, validator));
 
         return analysisRepository;
     }

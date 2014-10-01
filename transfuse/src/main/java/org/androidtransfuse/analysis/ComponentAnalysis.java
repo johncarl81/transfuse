@@ -129,7 +129,7 @@ public class ComponentAnalysis {
             builder.put(listenerType, registrationGenerators.buildCallThroughMethodGenerator(listenerType));
         }
 
-        injectionNodeBuilderRepository.getAnalysisRepository().addAnalysis(new RegistrationAnalyzer(builder.build()));
+        injectionNodeBuilderRepository.getAnalysisRepository().add(new RegistrationAnalyzer(builder.build()));
 
         return injectionNodeBuilderRepository;
     }

@@ -18,6 +18,7 @@ package org.androidtransfuse.analysis.repository;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.analysis.astAnalyzer.ASTAnalysis;
 import org.androidtransfuse.gen.scopeBuilder.ScopeAspectFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
@@ -26,6 +27,7 @@ import org.androidtransfuse.util.matcher.Matchers;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,13 +41,17 @@ public class InjectionNodeBuilderRepository {
     private final Map<ASTType, ASTType> scopeAnnotations = new HashMap<ASTType, ASTType>();
     private final Map<InjectionSignature, ASTType> scoping = new HashMap<InjectionSignature, ASTType>();
     private final Map<ASTType, ASTType> interceptorAnnotationMap = new HashMap<ASTType, ASTType>();
-    private final AnalysisRepository analysisRepository;
+    private final Set<ASTAnalysis> analysisSet = new HashSet<ASTAnalysis>();
     private final ASTClassFactory astClassFactory;
 
     @Inject
-    public InjectionNodeBuilderRepository(AnalysisRepository analysisRepository, ASTClassFactory astClassFactory) {
+    public InjectionNodeBuilderRepository(ASTClassFactory astClassFactory) {
         this.astClassFactory = astClassFactory;
-        this.analysisRepository = analysisRepository;
+    }
+
+    public InjectionNodeBuilderRepository(Set<ASTAnalysis> analysisSet, ASTClassFactory astClassFactory) {
+        this.astClassFactory = astClassFactory;
+        this.analysisSet.addAll(analysisSet);
     }
 
     public void putAnnotation(Class<?> viewClass, InjectionNodeBuilder viewVariableBuilder) {
@@ -121,8 +127,8 @@ public class InjectionNodeBuilderRepository {
         return interceptorAnnotationMap.containsKey(annotation.getASTType());
     }
 
-    public AnalysisRepository getAnalysisRepository() {
-        return analysisRepository;
+    public Set<ASTAnalysis> getAnalysisRepository() {
+        return analysisSet;
     }
 
     private Map<ASTType, ASTType> getInterceptorAnnotationMap() {

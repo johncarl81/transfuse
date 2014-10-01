@@ -107,7 +107,7 @@ public class Analyzer {
     }
 
     private void scanClassHierarchy(Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned, ASTType type, InjectionNode injectionNode, AnalysisContext context){
-        for (ASTAnalysis analysis : context.getInjectionNodeBuilders().getAnalysisRepository().getAnalysisSet()) {
+        for (ASTAnalysis analysis : context.getInjectionNodeBuilders().getAnalysisRepository()) {
 
             analysis.analyzeType(injectionNode, type, context);
 

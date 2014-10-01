@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis;
 
-import org.androidtransfuse.analysis.repository.AnalysisRepositoryFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 
 import javax.inject.Inject;
@@ -26,13 +25,13 @@ import javax.inject.Inject;
 public class SimpleAnalysisContextFactory {
 
     @Inject
-    private AnalysisRepositoryFactory analysisRepositoryFactory;
-    @Inject
     private InjectionNodeBuilderRepository variableBuilderRepository;
 
     public AnalysisContext buildContext() {
-        return new AnalysisContext(
+        AnalysisContext context = new AnalysisContext(
                 variableBuilderRepository
         );
+
+        return context;
     }
 }

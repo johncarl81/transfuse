@@ -48,7 +48,7 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionN
 
     @Override
     public InjectionNodeBuilderRepository get() {
-        InjectionNodeBuilderRepository scopedVariableBuilderRepository = new InjectionNodeBuilderRepository(new AnalysisRepository(), astClassFactory);
+        InjectionNodeBuilderRepository scopedVariableBuilderRepository = new InjectionNodeBuilderRepository(astClassFactory);
 
         ASTType concurrentScopeType = astClassFactory.getType(ConcurrentDoubleLockingScope.class);
 

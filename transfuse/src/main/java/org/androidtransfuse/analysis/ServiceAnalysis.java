@@ -120,31 +120,21 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
             componentAnalysis.setupGenerators(serviceDescriptor, serviceType, Service.class);
 
-            //application generation profile
-            setupServiceProfile(serviceDescriptor, input);
+            serviceDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate"), input));
+            serviceDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
+            serviceDescriptor.getGenerators().add(new OnBindGenerator());
+            serviceDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreate")));
+            serviceDescriptor.getGenerators().add(observesExpressionDecoratorFactory.build(
+                    getASTMethod("onCreate"),
+                    getASTMethod("onCreate"),
+                    getASTMethod("onDestroy")
+            ));
+            serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
         }
 
         serviceDescriptor.getGenerators().add(serviceManifestEntryGenerator);
 
         return serviceDescriptor;
-    }
-
-    private void setupServiceProfile(ComponentDescriptor serviceDescriptor, ASTType astType) {
-
-        serviceDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
-        serviceDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
-
-        serviceDescriptor.getGenerators().add(new OnBindGenerator());
-
-        serviceDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreate")));
-
-        serviceDescriptor.getGenerators().add(observesExpressionDecoratorFactory.build(
-                getASTMethod("onCreate"),
-                getASTMethod("onCreate"),
-                getASTMethod("onDestroy")
-        ));
-
-        serviceDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ServiceIntentFactoryStrategy.class));
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {

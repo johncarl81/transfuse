@@ -43,24 +43,19 @@ public class FactoryGeneratorTest {
 
     private Factory factory;
 
+    public static class FactoryTargetDependency {}
+
     public interface Factory {
-
         FactoryTarget getFactoryTarget();
-
-        FactoryTarget getTargetWithDependency(FactoryTargetDepenency dependency);
+        FactoryTarget getTargetWithDependency(FactoryTargetDependency dependency);
     }
 
     public static class FactoryTarget {
-
         @Inject
-        public FactoryTargetDepenency dependency;
-
-        public FactoryTargetDepenency getDependency() {
+        public FactoryTargetDependency dependency;
+        public FactoryTargetDependency getDependency() {
             return dependency;
         }
-    }
-
-    public static class FactoryTargetDepenency {
     }
 
     @Before
@@ -87,7 +82,7 @@ public class FactoryGeneratorTest {
 
     @Test
     public void testInjectionTargetDependency() {
-        FactoryTargetDepenency dependency = new FactoryTargetDepenency();
+        FactoryTargetDependency dependency = new FactoryTargetDependency();
 
         FactoryTarget factoryTarget = factory.getTargetWithDependency(dependency);
         assertNotNull(factoryTarget);

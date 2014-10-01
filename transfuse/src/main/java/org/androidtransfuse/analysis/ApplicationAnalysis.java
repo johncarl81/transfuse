@@ -108,29 +108,20 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
 
             componentAnalysis.setupGenerators(applicationDescriptor, applicationType, Application.class);
 
-            //application generation profile
-            setupApplicationProfile(applicationDescriptor, astType);
+            applicationDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
+            applicationDescriptor.getGenerators().add(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
+            applicationDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
+                    getASTMethod("onCreate"),
+                    getASTMethod("onCreate"),
+                    getASTMethod("onTerminate")
+            ));
+            applicationDescriptor.getGenerators().add(applicationScopeSeedGenerator);
         }
 
         //add manifest elements
         applicationDescriptor.getGenerators().add(applicationManifestEntryGenerator);
 
         return applicationDescriptor;
-    }
-
-    private void setupApplicationProfile(ComponentDescriptor applicationDescriptor, ASTType astType) {
-        //onCreate
-        applicationDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate")));
-
-        applicationDescriptor.getGenerators().add(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
-
-        applicationDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
-                getASTMethod("onCreate"),
-                getASTMethod("onCreate"),
-                getASTMethod("onTerminate")
-        ));
-
-        applicationDescriptor.getGenerators().add(applicationScopeSeedGenerator);
     }
 
     private ASTMethod getASTMethod(String methodName, ASTType... args) {

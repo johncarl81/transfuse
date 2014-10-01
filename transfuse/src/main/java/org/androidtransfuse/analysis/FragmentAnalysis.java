@@ -127,13 +127,13 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             componentAnalysis.setupGenerators(fragmentDescriptor, fragmentType, Fragment.class);
 
             //application generation profile
-            setupFragmentProfile(fragmentDescriptor, astType, fragmentType);
+            setupFragmentProfile(fragmentDescriptor, astType);
         }
 
         return fragmentDescriptor;
     }
 
-    private void setupFragmentProfile(ComponentDescriptor fragmentDescriptor, ASTType astType, ASTType fragmentType) {
+    private void setupFragmentProfile(ComponentDescriptor fragmentDescriptor, ASTType astType) {
         ASTMethod onCreateViewMethod = getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE);
 
         fragmentDescriptor.getGenerators().add(injectionGeneratorFactory.build(onCreateViewMethod, astType));
