@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse;
 
+import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
@@ -38,6 +39,7 @@ import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -76,6 +78,7 @@ import static com.google.common.collect.Collections2.transform;
         Factory.class,
         ImplementedBy.class})
 @Bootstrap
+@AutoService(Processor.class)
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
