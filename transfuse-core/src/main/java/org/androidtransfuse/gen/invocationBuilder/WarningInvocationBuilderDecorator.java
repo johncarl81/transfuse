@@ -59,14 +59,25 @@ public class WarningInvocationBuilderDecorator implements ModifiedInvocationBuil
     public JStatement buildFieldSet(boolean cast, ASTField field, TypedExpression expression, TypedExpression containingExpression) {
         StringBuilder builder = new StringBuilder();
         builder.append("Reflection is required to modify ");
-        if(field.getAccessModifier().equals(ASTAccessModifier.PRIVATE)){
+        boolean privateModifier = field.getAccessModifier().equals(ASTAccessModifier.PRIVATE);
+        boolean finalModifier = field.isFinal();
+        if(privateModifier){
             builder.append("private ");
         }
-        if(field.isFinal()){
+        if(finalModifier){
             builder.append("final ");
         }
-        builder.append(
-                "field: " + field + ", consider using non-private.");
+        builder.append( "field: " + field + ", consider using ");
+        if(privateModifier){
+            builder.append("non-private");
+        }
+        if(finalModifier){
+            if(privateModifier){
+                builder.append(" and ");
+            }
+            builder.append("non-final");
+        }
+        builder.append(".");
 
         validator.warn(builder.toString()).element(field).build();
 
