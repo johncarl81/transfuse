@@ -1,8 +1,7 @@
 = image:http://androidtransfuse.org/images/icon.png[Transfuse] Transfuse
 
 image:https://travis-ci.org/johncarl81/transfuse.png?branch=master["Build Status", link="https://travis-ci.org/johncarl81/transfuse"]
-
-Transfuse is a dependency injection and integration library for Google Android.  Transfuse extends the Android API to create a more natural, flexible and maintainable mobile platform.
+image:https://maven-badges.herokuapp.com/maven-central/org.androidtransfuse/transfuse-api/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/org.androidtransfuse/transfuse-api"]
 
 Transfuse offers a number of attractive features including Manifest management, http://jcp.org/en/jsr/detail?id=330[JSR330] Dependency Injection, Java Bean style Android components and much more.  Interested?  Check out  http://androidtransfuse.org/[the website] for details.
 
