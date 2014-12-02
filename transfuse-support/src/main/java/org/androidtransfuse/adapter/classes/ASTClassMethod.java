@@ -67,6 +67,12 @@ public class ASTClassMethod implements ASTMethod {
         return method.getName();
     }
 
+    @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(method.getModifiers());
+    }
+
+    @Override
     public boolean isFinal(){
         return Modifier.isFinal(method.getModifiers());
     }

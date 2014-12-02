@@ -60,6 +60,10 @@ public class ASTClassField implements ASTField {
         return field.isAnnotationPresent(annotation);
     }
 
+    public boolean isStatic() {
+      return Modifier.isStatic(field.getModifiers());
+    }
+
     @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return field.getAnnotation(annotation);

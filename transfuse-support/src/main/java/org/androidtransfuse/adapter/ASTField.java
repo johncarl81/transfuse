@@ -30,7 +30,7 @@ public interface ASTField extends ASTBase {
     ASTType getASTType();
 
     /**
-     * Supplies the access modifier for this field
+     * Supplies the access modifier for this field.
      *
      * @return field access modifier
      */
@@ -44,14 +44,21 @@ public interface ASTField extends ASTBase {
     boolean isFinal();
 
     /**
-     * Determines if the current field is transient;
+     * Determines if the current field is transient.
      *
      * @return field is transient
      */
     boolean isTransient();
 
     /**
-     * Supplies the constant value for this field (if one exists)
+     * Determines if the current field is static.
+     *
+     * @return field is static
+     */
+    boolean isStatic();
+
+    /**
+     * Supplies the constant value for this field (if one exists).
      * <p/>
      * IE: static String value = "constant"
      *

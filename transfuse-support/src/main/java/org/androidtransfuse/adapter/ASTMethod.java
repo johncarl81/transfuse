@@ -58,5 +58,12 @@ public interface ASTMethod extends ASTBase {
      *
      * @return final status
      */
+    boolean isStatic();
+
+    /**
+     * Determines if the current method is final
+     *
+     * @return final status
+     */
     boolean isFinal();
 }

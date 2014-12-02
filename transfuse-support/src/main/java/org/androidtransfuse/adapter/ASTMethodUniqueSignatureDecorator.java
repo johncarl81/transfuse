@@ -35,6 +35,11 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
         this.methodSignature = new MethodSignature(method);
     }
 
+   @Override
+   public boolean isStatic() {
+       return method.isStatic();
+   }
+
     @Override
     public boolean isFinal() {
         return method.isFinal();
