@@ -51,6 +51,10 @@ public class ASTElementBase implements ASTBase {
         return element.getSimpleName().toString();
     }
 
+    public boolean isStatic() {
+        return element.getModifiers().contains(Modifier.STATIC);
+    }
+
     public boolean isFinal(){
         return element.getModifiers().contains(Modifier.FINAL);
     }
