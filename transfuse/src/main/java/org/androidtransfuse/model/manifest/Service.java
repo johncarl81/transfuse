@@ -35,7 +35,7 @@ import java.util.List;
  * android:name="string"
  * android:permission="string"
  * android:process="string"
- * <p/>
+ * 
  * can contain:
  * <intent-filter>
  * <meta-data>

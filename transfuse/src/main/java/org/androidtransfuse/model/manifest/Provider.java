@@ -36,7 +36,7 @@ import java.util.List;
  * android:readPermission="string"
  * android:syncable=["true" | "false"]
  * android:writePermission="string"
- * <p/>
+ *
  * can contain:
  * <meta-data>
  * <grant-uri-permission>

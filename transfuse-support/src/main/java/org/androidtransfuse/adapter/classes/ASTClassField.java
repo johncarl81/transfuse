@@ -61,7 +61,7 @@ public class ASTClassField implements ASTField {
     }
 
     public boolean isStatic() {
-      return Modifier.isStatic(field.getModifiers());
+        return Modifier.isStatic(field.getModifiers());
     }
 
     @Override

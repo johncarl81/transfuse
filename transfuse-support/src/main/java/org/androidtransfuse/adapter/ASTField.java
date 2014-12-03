@@ -59,7 +59,7 @@ public interface ASTField extends ASTBase {
 
     /**
      * Supplies the constant value for this field (if one exists).
-     * <p/>
+     *
      * IE: static String value = "constant"
      *
      * @return constant field values

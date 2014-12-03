@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 
 /**
  * Specific AST Array Type.
- * <p/>
+ *
  * This ASTType wraps a delegate ASTType, decorating it with array attributes.
  *
  * @author John Ericksen

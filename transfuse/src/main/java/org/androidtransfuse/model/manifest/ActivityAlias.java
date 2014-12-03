@@ -29,7 +29,7 @@ import java.util.List;
  * android:name="string"
  * android:permission="string"
  * android:targetActivity="string"
- * <p/>
+ *
  * can contain:
  * <intent-filter>
  * <meta-data>

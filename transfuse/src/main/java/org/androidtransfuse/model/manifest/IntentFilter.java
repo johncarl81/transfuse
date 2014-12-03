@@ -29,10 +29,10 @@ import java.util.List;
  * android:icon="drawable resource"
  * android:label="string resource"
  * android:priority="integer"
- * <p/>
+ *
  * must contain:
  * <action>
- * <p/>
+ *
  * can contain:
  * <category>
  * <data>

@@ -50,7 +50,7 @@ import java.util.List;
  * android:taskAffinity="string"
  * android:theme="resource or theme"
  * android:uiOptions=["none" | "splitActionBarWhenNarrow"]
- * <p/>
+ *
  * can contain:
  * <activity>
  * <activity-alias>

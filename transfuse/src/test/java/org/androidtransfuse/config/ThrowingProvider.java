@@ -19,7 +19,7 @@ import javax.inject.Provider;
 
 /**
  * Toxic Provider that throws an exception if get() is called.
- * <p/>
+ *
  * Should be used as a placeholder to ensure that a scoped object is not created by this provider, but instead seeded.
  *
  * @author John Ericksen

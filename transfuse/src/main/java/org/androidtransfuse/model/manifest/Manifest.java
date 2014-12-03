@@ -35,10 +35,10 @@ import java.util.List;
  * android:versionCode="integer"
  * android:versionName="string"
  * android:installLocation=["auto" | "internalOnly" | "preferExternal"]
- * <p/>
+ *
  * must contain:
  * <application>
- * <p/>
+ *
  * can contain:
  * <instrumentation>
  * <permission>

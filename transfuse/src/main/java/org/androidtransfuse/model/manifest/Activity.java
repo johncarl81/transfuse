@@ -69,7 +69,7 @@ import java.util.List;
  * "stateAlwaysHidden", "stateVisible",
  * "stateAlwaysVisible", "adjustUnspecified",
  * "adjustResize", "adjustPan"]
- * <p/>
+ *
  * can contain:
  * <intent-filter>
  * <meta-data>

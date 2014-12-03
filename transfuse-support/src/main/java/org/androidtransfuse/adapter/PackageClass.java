@@ -33,9 +33,9 @@ public class PackageClass {
 
     /**
      * Constructor taking a fully qualified class name, including optional package and filename.
-     * <p/>
+     *
      * This fully qualified name must not end with .java, as this will be interpreted as the class name.
-     * <p/>
+     *
      * This constructor does not work with inner classes as it assumes the last substring is the Class name and
      * everything else is the package name.
      *
