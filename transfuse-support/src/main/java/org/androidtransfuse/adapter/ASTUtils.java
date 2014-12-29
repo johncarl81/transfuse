@@ -15,7 +15,12 @@
  */
 package org.androidtransfuse.adapter;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
+
+import java.util.List;
 
 /**
  * Utility singleton for AST classes.
@@ -79,5 +84,82 @@ public final class ASTUtils {
 
     public boolean isAnnotated(ASTType type, String annotationClassName){
         return getAnnotation(annotationClassName, type.getAnnotations()) != null;
+    }
+
+    public ASTConstructor findConstructor(ASTType type, ASTType... parameters){
+        ASTConstructor foundConstructor = null;
+        for (ASTConstructor astConstructor : type.getConstructors()) {
+            if (parameterTypesMatch(astConstructor.getParameters(), parameters)) {
+                foundConstructor = astConstructor;
+            }
+        }
+        return foundConstructor;
+    }
+
+    public boolean constructorExists(ASTType type, final ASTType... parameters){
+        return FluentIterable.from(type.getConstructors()).anyMatch(new Predicate<ASTConstructor>() {
+            @Override
+            public boolean apply(ASTConstructor constructor) {
+                return parameterTypesMatch(constructor.getParameters(), parameters);
+            }
+        });
+    }
+
+    public ASTMethod findMethod(ASTType containingType, String methodName, ASTType[] methodParameters) {
+        MethodSignature matchingSignature = new MethodSignature(methodName, methodParameters);
+        for (ASTMethod astMethod : containingType.getMethods()) {
+            if(new MethodSignature(astMethod).equals(matchingSignature)){
+                return astMethod;
+            }
+        }
+        return null;
+    }
+
+    public boolean methodExists(ASTType containingType, String methodName, ASTType[] methodParameters) {
+        final MethodSignature matchingSignature = new MethodSignature(methodName, methodParameters);
+        return FluentIterable.from(containingType.getMethods())
+                .transform(new Function<ASTMethod, MethodSignature>() {
+                    public MethodSignature apply(ASTMethod astMethod) {
+                        return new MethodSignature(astMethod);
+                    }
+                })
+                .anyMatch(new Predicate<MethodSignature>() {
+                    public boolean apply(MethodSignature methodSignature) {
+                        return methodSignature.equals(matchingSignature);
+                    }
+                });
+    }
+
+    public ASTField findField(ASTType containingType, final String fieldName) {
+        for (ASTField astField : containingType.getFields()) {
+            if(astField.getName().equals(fieldName)) {
+                return astField;
+            }
+        }
+        return null;
+    }
+
+    public boolean fieldExists(ASTType containingType, final String fieldName) {
+        return FluentIterable.from(containingType.getFields())
+                .anyMatch(new Predicate<ASTField>() {
+                    public boolean apply(ASTField astField) {
+                        return astField.getName().equals(fieldName);
+                    }
+                });
+    }
+
+    public boolean parameterTypesMatch(List<ASTParameter> parameters, ASTType[] types){
+        boolean matches = true;
+        if(parameters.size() == types.length) {
+            for (int i = 0; i < parameters.size(); i++) {
+                if (!parameters.get(i).getASTType().equals(types[i])) {
+                    matches = false;
+                }
+            }
+        }
+        else{
+            matches = false;
+        }
+        return matches;
     }
 }

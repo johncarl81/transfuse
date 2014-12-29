@@ -33,14 +33,13 @@ public class MethodSignature {
         this.methodSignature = makeDescriptor(method);
     }
 
-    public MethodSignature(ASTType returnType, String methodName, List<ASTType> paramTypes){
-        this.methodSignature = makeDescriptor(returnType, methodName, paramTypes);
+    public MethodSignature(String methodName, List<ASTType> paramTypes){
+        this.methodSignature = makeDescriptor(methodName, paramTypes);
     }
 
-    public MethodSignature(ASTType returnType, String methodName, ASTType... paramTypes){
-        this(returnType, methodName, Arrays.asList(paramTypes));
+    public MethodSignature(String methodName, ASTType... paramTypes){
+        this(methodName, Arrays.asList(paramTypes));
     }
-
     /**
      * Makes a descriptor for a given method.
      *
@@ -54,21 +53,20 @@ public class MethodSignature {
             paramTypes.add(parameter.getASTType());
         }
 
-        return makeDescriptor(method.getReturnType(), method.getName(), paramTypes);
+        return makeDescriptor(method.getName(), paramTypes);
     }
 
-    private String makeDescriptor(ASTType returnType, String methodName, List<ASTType> params){
-        return methodName + ':' + makeDescriptor(params, returnType);
+    private String makeDescriptor(String methodName, List<ASTType> params){
+        return methodName + ':' + makeDescriptor(params);
     }
 
     /**
      * Makes a descriptor for a given method.
      *
      * @param paramTypes  parameter types.
-     * @param retType return type.
      * @return method descriptor
      */
-    private String makeDescriptor(List<ASTType> paramTypes, ASTType retType) {
+    private String makeDescriptor(List<ASTType> paramTypes) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
         for (ASTType paramType : paramTypes) {
@@ -76,7 +74,6 @@ public class MethodSignature {
         }
 
         builder.append(')');
-        makeTypeDescriptor(builder, retType);
         return builder.toString();
     }
 

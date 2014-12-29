@@ -78,7 +78,7 @@ public class SuperGenerator implements Generation {
                 ManualSuperAspect aspect = injectionNode.getAspect(ManualSuperAspect.class);
 
                 for (ManualSuperAspect.Method manualSuperMethod : aspect.getMethods()) {
-                    MethodSignature manualSuperMethodSignature = new MethodSignature(method.getReturnType(), manualSuperMethod.getName(), manualSuperMethod.getParameters());
+                    MethodSignature manualSuperMethodSignature = new MethodSignature(manualSuperMethod.getName(), manualSuperMethod.getParameters());
                     if(signature.equals(manualSuperMethodSignature)){
                         return true;
                     }

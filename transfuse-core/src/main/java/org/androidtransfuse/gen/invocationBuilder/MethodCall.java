@@ -34,7 +34,7 @@ public class MethodCall {
         this.returnType = returnType;
         this.methodName = methodName;
         this.paramTypes = paramTypes;
-        this.methodSignature = new MethodSignature(returnType, methodName, paramTypes);
+        this.methodSignature = new MethodSignature(methodName, paramTypes);
     }
 
     public ASTType getType() {

@@ -30,7 +30,7 @@ public class ConstructorCall {
     public ConstructorCall(ASTType type, List<ASTType> paramTypes) {
         this.type = type;
         this.paramTypes = paramTypes;
-        this.methodSignature = new MethodSignature(type, type.getName(), paramTypes);
+        this.methodSignature = new MethodSignature(type.getName(), paramTypes);
     }
 
     public ASTType getType() {

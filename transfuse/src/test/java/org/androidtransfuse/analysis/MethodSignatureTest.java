@@ -17,7 +17,6 @@ package org.androidtransfuse.analysis;
 
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.bootstrap.Bootstrap;
@@ -89,6 +88,6 @@ public class MethodSignatureTest {
 
     @Test
     public void testEmptyVarargs(){
-        new MethodSignature(ASTVoidType.VOID, "test");
+        new MethodSignature("test");
     }
 }
