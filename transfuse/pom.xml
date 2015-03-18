@@ -183,10 +183,9 @@
                         <version>1.5.2</version>
                     </docletArtifact>
                     <additionalparam>
-                        --base-dir ${project.basedir}
+                        --attribute data-uri
                         --gem-path ${env.GEM_PATH}
                         -r asciidoctor-diagram
-                        -a data-uri
                     </additionalparam>
                     <linksource>true</linksource>
                 </configuration>
