@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
 import java.util.Collection;
 
@@ -47,7 +48,7 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
 
     @Override
     public Provider<ASTType> apply(Element input) {
-        return new ReloadableASTTypeProvider(input.asType().toString());
+        return new ReloadableASTTypeProvider(((TypeElement)input).getQualifiedName().toString());
     }
 
     private final class ReloadableASTTypeProvider implements Provider<ASTType> {
@@ -61,6 +62,10 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
         @Override
         public ASTType get() {
             TypeElement typeElement = elements.getTypeElement(elementName);
+
+            if(typeElement == null) {
+                System.out.println("NULL TYPE ELEMENT: " + elementName);
+            }
 
             return astElementFactory.getType(typeElement);
         }
