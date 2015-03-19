@@ -16,6 +16,9 @@
 package org.androidtransfuse;
 
 import com.google.auto.service.AutoService;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
@@ -173,10 +176,23 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     }
 
     private Collection<Provider<ASTType>> buildASTCollection(RoundEnvironment round, Class<? extends Annotation> annotation) {
-        return reloadableASTElementFactory.buildProviders(round.getElementsAnnotatedWith(annotation));
+        return reloadableASTElementFactory.buildProviders(
+                FluentIterable.from(round.getElementsAnnotatedWith(annotation))
+                        .filter(new Predicate<Element>() {
+                            public boolean apply(Element element) {
+                                //we're only dealing with TypeElements
+                                return element instanceof TypeElement;
+                            }
+                        })
+                        .transform(new Function<Element, TypeElement>() {
+                            public TypeElement apply(Element element) {
+                                return (TypeElement)element;
+                            }
+                        })
+                        .toList());
     }
 
-    private Collection<ASTType> wrapASTCollection(Collection<? extends Element> elementCollection) {
+    private Collection<ASTType> wrapASTCollection(Collection<? extends TypeElement> elementCollection) {
         return transform(elementCollection,
                 astElementConverterFactory.buildASTElementConverter(ASTType.class)
         );

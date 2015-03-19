@@ -20,9 +20,7 @@ import org.androidtransfuse.adapter.ASTType;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.*;
 import javax.lang.model.util.Elements;
 import java.util.Collection;
 
@@ -31,7 +29,7 @@ import static com.google.common.collect.Collections2.transform;
 /**
  * @author John Ericksen
  */
-public class ReloadableASTElementFactory implements Function<Element, Provider<ASTType>> {
+public class ReloadableASTElementFactory implements Function<TypeElement, Provider<ASTType>> {
 
     private final ASTElementFactory astElementFactory;
     private final Elements elements;
@@ -42,13 +40,13 @@ public class ReloadableASTElementFactory implements Function<Element, Provider<A
         this.elements = elements;
     }
 
-    public Collection<Provider<ASTType>> buildProviders(Collection<? extends Element> elementCollection) {
+    public Collection<Provider<ASTType>> buildProviders(Collection<? extends TypeElement> elementCollection) {
         return transform(elementCollection, this);
     }
 
     @Override
-    public Provider<ASTType> apply(Element input) {
-        return new ReloadableASTTypeProvider(((TypeElement)input).getQualifiedName().toString());
+    public Provider<ASTType> apply(TypeElement input) {
+        return new ReloadableASTTypeProvider(input.getQualifiedName().toString());
     }
 
     private final class ReloadableASTTypeProvider implements Provider<ASTType> {
