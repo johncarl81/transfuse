@@ -51,6 +51,7 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class).superCall();
         repository.component(Activity.class).method("onPostCreate", AndroidLiterals.BUNDLE).event(OnPostCreate.class).superCall();
         repository.component(Activity.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
+        repository.component(Activity.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class).superCall();        
         repository.component(Activity.class).method("onNewIntent", AndroidLiterals.INTENT).event(OnNewIntent.class);
         repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class).superCall();
         repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class).superCall();
