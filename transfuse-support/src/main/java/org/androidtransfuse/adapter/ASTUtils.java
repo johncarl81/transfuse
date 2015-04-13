@@ -29,6 +29,7 @@ import java.util.List;
  */
 public final class ASTUtils {
 
+    private static final ASTType OBJECT_TYPE = new ASTStringType(Object.class.getCanonicalName());
     private static final ASTUtils INSTANCE = new ASTUtils();
 
     private ASTUtils() {
@@ -61,6 +62,9 @@ public final class ASTUtils {
                     return true;
                 }
             }
+        }
+        if(extend && inheritable.equals(OBJECT_TYPE)){
+            return true;
         }
         return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
     }
