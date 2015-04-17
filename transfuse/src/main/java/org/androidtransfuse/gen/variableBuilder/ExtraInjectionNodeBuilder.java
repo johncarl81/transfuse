@@ -23,6 +23,7 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.Analyzer;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
+import org.androidtransfuse.analysis.repository.BundlePropertyBuilderRepository;
 import org.androidtransfuse.annotations.Extra;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
@@ -40,17 +41,20 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
     private final VariableInjectionBuilderFactory variableInjectionBuilderFactory;
     private final Analyzer analyzer;
     private final Validator validator;
+    private final BundlePropertyBuilderRepository repository;
 
     @Inject
     public ExtraInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                      Analyzer analyzer,
-                                     Validator validator) {
+                                     Validator validator,
+                                     BundlePropertyBuilderRepository repository) {
         super(Extra.class);
         this.injectionPointFactory = injectionPointFactory;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.analyzer = analyzer;
         this.validator = validator;
+        this.repository = repository;
     }
 
     @Override
@@ -70,6 +74,11 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
             validator.error("@Extra marked with optional=true must not annotate a primitive type.")
                     .element(target)
                     .annotation(annotation)
+                    .build();
+        }
+        else if(!repository.matches(signature.getType())){
+            validator.error("@Extra type " + signature.getType().getName() + " not available for marshalling.")
+                    .element(target)
                     .build();
         }
         else {

@@ -22,12 +22,12 @@ import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.ConfigurationScope;
 import org.androidtransfuse.TransfuseAnnotationProcessor;
 import org.androidtransfuse.adapter.ASTFactory;
+import org.androidtransfuse.adapter.ASTPrimitiveType;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.ConfigurationRepositoryImpl;
 import org.androidtransfuse.analysis.module.ModuleRepository;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
-import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryProvider;
+import org.androidtransfuse.analysis.repository.*;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.bootstrap.Namespace;
@@ -46,10 +46,9 @@ import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorChannel;
 import org.androidtransfuse.transaction.TransactionProcessorPool;
-import org.androidtransfuse.util.Generated;
-import org.androidtransfuse.util.Logger;
-import org.androidtransfuse.util.ManifestLocator;
-import org.androidtransfuse.util.MessagerLogger;
+import org.androidtransfuse.util.*;
+import org.androidtransfuse.util.matcher.ImplementsMatcher;
+import org.androidtransfuse.util.matcher.Matchers;
 import org.androidtransfuse.validation.Validator;
 
 import javax.annotation.processing.Filer;
@@ -61,6 +60,7 @@ import javax.inject.Singleton;
 import javax.lang.model.util.Elements;
 import javax.xml.bind.JAXBContext;
 import java.io.File;
+import java.io.Serializable;
 import java.util.Map;
 
 @BootstrapModule
@@ -197,5 +197,26 @@ public class TransfuseAndroidModule {
                         scopedTransactionBuilder.buildFactory(factoriesTransactionWorkerProvider));
 
         return new FactoryProcessor(processor, factoryProcessor, scopedTransactionBuilder.buildFactory(factoryTransactionWorkerProvider));
+    }
+
+    @Provides
+    @Singleton
+    public BundlePropertyBuilderRepository getBundlePropertyRepository(ASTClassFactory astClassFactory, ParcelerPropertyBuilder parcelerPropertyBuilder){
+        BundlePropertyBuilderRepository repository = new BundlePropertyBuilderRepository();
+
+        repository.add(Matchers.type(ASTPrimitiveType.BOOLEAN).build(), new SimplePropertyBuilder("getBoolean", "putBoolean"));
+        repository.add(Matchers.type(ASTPrimitiveType.BYTE).build(), new SimplePropertyBuilder("getByte", "putByte"));
+        repository.add(Matchers.type(ASTPrimitiveType.CHAR).build(), new SimplePropertyBuilder("getChar", "putChar"));
+        repository.add(Matchers.type(ASTPrimitiveType.DOUBLE).build(), new SimplePropertyBuilder("getDouble", "putDouble"));
+        repository.add(Matchers.type(ASTPrimitiveType.FLOAT).build(), new SimplePropertyBuilder("getFoat", "putFloat"));
+        repository.add(Matchers.type(ASTPrimitiveType.INT).build(), new SimplePropertyBuilder("getInt", "putInt"));
+        repository.add(Matchers.type(ASTPrimitiveType.LONG).build(), new SimplePropertyBuilder("getLong", "putLong"));
+        repository.add(Matchers.type(ASTPrimitiveType.SHORT).build(), new SimplePropertyBuilder("getShort", "putShort"));
+        repository.add(Matchers.type(astClassFactory.getType(String.class)).build(), new SimplePropertyBuilder("getString", "putString"));
+        repository.add(new ImplementsMatcher(AndroidLiterals.PARCELABLE), new SimplePropertyBuilder("getParcelable", "putParcelable"));
+        repository.add(new ParcelMatcher(), parcelerPropertyBuilder);
+        repository.add(new ImplementsMatcher(astClassFactory.getType(Serializable.class)), new SimplePropertyBuilder("getSerializable", "putSerializable"));
+
+        return repository;
     }
 }
