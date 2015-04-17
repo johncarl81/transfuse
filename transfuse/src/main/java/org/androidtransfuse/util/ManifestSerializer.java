@@ -43,7 +43,8 @@ public class ManifestSerializer {
         try{
             return (Manifest) context.createUnmarshaller().unmarshal(manifestFile);
         } catch (JAXBException e) {
-            throw new TransfuseRuntimeException("JAXBException while unmarshalling manifest", e);
+            logger.error("IOException while writing manifest", e);
+            throw new TransfuseRuntimeException("IOException while writing manifest", e);
         }
     }
 
@@ -51,7 +52,8 @@ public class ManifestSerializer {
         try{
             return (Manifest) context.createUnmarshaller().unmarshal(manifestInputStream);
         } catch (JAXBException e) {
-            throw new TransfuseRuntimeException("JAXBException while unmarshalling manifest", e);
+            logger.error("IOException while writing manifest", e);
+            throw new TransfuseRuntimeException("IOException while writing manifest", e);
         }
     }
 

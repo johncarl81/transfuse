@@ -45,4 +45,9 @@ public class JavaUtilLogger implements Logger {
     public void error(String s, Throwable e) {
         logger.throwing(s, e.getMessage(), e);
     }
+
+    @Override
+    public void debug(String value) {
+        info(value);
+    }
 }

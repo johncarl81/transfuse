@@ -27,4 +27,6 @@ public interface Logger {
     void error(String value);
 
     void error(String s, Throwable e);
+
+    void debug(String s);
 }

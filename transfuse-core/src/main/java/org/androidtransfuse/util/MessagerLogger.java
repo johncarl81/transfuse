@@ -58,4 +58,9 @@ public class MessagerLogger implements Logger {
         e.printStackTrace(new PrintStream(outputStream));
         messager.printMessage(Diagnostic.Kind.ERROR, prepend + s + "\n" + outputStream.toString());
     }
+
+    @Override
+    public void debug(String value) {
+        info(value);
+    }
 }

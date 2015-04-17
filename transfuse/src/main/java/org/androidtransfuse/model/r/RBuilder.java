@@ -17,7 +17,9 @@ package org.androidtransfuse.model.r;
 
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.util.Logger;
 
+import javax.inject.Inject;
 import java.util.Collection;
 
 /**
@@ -25,12 +27,19 @@ import java.util.Collection;
  */
 public class RBuilder {
 
+    private final Logger logger;
+
+    @Inject
+    public RBuilder(Logger logger) {
+        this.logger = logger;
+    }
+
     public RResourceMapping buildR(Collection<? extends ASTType> rInnerTypes) {
 
         RResourceMapping resourceMapping = new RResourceMapping();
 
         for (ASTType rInnerType : rInnerTypes) {
-
+            logger.debug("Mapping R: " + rInnerType);
             for (ASTField idField : rInnerType.getFields()) {
                 resourceMapping.addResource(rInnerType, idField.getName(), (Integer) idField.getConstantValue());
             }

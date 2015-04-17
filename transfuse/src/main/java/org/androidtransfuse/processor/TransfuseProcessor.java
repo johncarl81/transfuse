@@ -53,6 +53,7 @@ public class TransfuseProcessor {
     }
 
     public void submit(Class<? extends Annotation> componentAnnotation, Provider<ASTType> astProvider) {
+        log.debug("Submitted " + astProvider + " for processing under @" + componentAnnotation.getSimpleName() + ".");
         TransactionProcessorBuilder<Provider<ASTType>, ?> builder = generatorRepository.getComponentBuilder(componentAnnotation);
         if (builder == null) {
             throw new TransfuseAnalysisException("Builder for type " + componentAnnotation.getName() + " not found");

@@ -106,6 +106,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private Elements elements;
     private boolean baseModuleConfiguration = false;
+    private int round = 0;
 
     @Override
     public void init(final ProcessingEnvironment processingEnv) {
@@ -119,6 +120,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
+        logger.debug("Annotation procesing started, round " + round++);
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
@@ -158,8 +160,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             transfuseProcessor.logErrors();
         }
 
-        //todo: debug logging
-        // logger.info("Transfuse took " + (System.currentTimeMillis() - start) + "ms to process");
+        logger.debug("Took " + (System.currentTimeMillis() - start) + "ms to process");
 
         configurationScope.exit();
 
