@@ -91,7 +91,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
             injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, forceParceler, signature.getType()));
 
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, wrapped));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, forceParceler || wrapped));
         }
 
         return injectionNode;

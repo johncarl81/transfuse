@@ -37,7 +37,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     private static final String GET_INTENT = "getIntent";
     private static final String GET_EXTRAS = "getExtras";
 
-    private final boolean wrapped;
+    private final boolean parcelerWrapped;
     private final String extraId;
     private final InjectionNode activityInjectionNode;
     private final InjectionExpressionBuilder injectionExpressionBuilder;
@@ -48,7 +48,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     public ExtraValuableBuilder(/*@Assisted*/ String extraId,
                                 /*@Assisted*/ InjectionNode activityInjectionNode,
                                 /*@Assisted("nullable")*/ @Named("nullable") boolean nullable,
-                                /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped,
+                                /*@Assisted("wrapped")*/ @Named("wrapped") boolean parcelerWrapped,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
                                 ClassGenerationUtil generationUtil,
                                 TypedExpressionFactory typedExpressionFactory) {
@@ -58,7 +58,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
         this.injectionExpressionBuilder = injectionExpressionBuilder;
         this.nullable = nullable;
         this.generationUtil = generationUtil;
-        this.wrapped = wrapped;
+        this.parcelerWrapped = parcelerWrapped;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
                 .arg(JExpr.lit(extraId))
                 .arg(JExpr.lit(nullable));
 
-        if (wrapped) {
+        if (parcelerWrapped) {
             getExtraInvocation = ((JExpression) JExpr.cast(generationUtil.ref("org.parceler.ParcelWrapper"),
                     getExtraInvocation)).invoke("getParcel");
         }
