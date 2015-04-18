@@ -46,4 +46,6 @@ public @interface Extra {
      * Optional value.  Specifies the validation and IntentFactoryStrategy mutation techniques.
      */
     boolean optional() default false;
+
+    boolean forceParceler() default false;
 }

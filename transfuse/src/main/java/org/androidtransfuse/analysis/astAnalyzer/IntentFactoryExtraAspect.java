@@ -29,11 +29,13 @@ public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAs
     private final boolean required;
     private final String name;
     private final ASTType type;
+    private final boolean forceParceler;
 
-    public IntentFactoryExtraAspect(boolean required, String name, ASTType type) {
+    public IntentFactoryExtraAspect(boolean required, String name, boolean forceParceler, ASTType type) {
         this.required = required;
         this.name = name;
         this.type = type;
+        this.forceParceler = forceParceler;
     }
 
     public boolean isRequired() {
@@ -46,6 +48,10 @@ public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAs
 
     public ASTType getType() {
         return type;
+    }
+
+    public boolean isForceParceler() {
+        return forceParceler;
     }
 
     @Override

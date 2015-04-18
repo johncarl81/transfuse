@@ -17,10 +17,10 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.analysis.repository.BundlePropertyBuilderRepository;
+import org.androidtransfuse.analysis.repository.ParcelerPropertyBuilder;
 import org.androidtransfuse.analysis.repository.PropertyBuilder;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
@@ -51,18 +51,21 @@ public class IntentFactoryStrategyGenerator implements Generation {
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
     private final BundlePropertyBuilderRepository repository;
+    private final ParcelerPropertyBuilder parcelerPropertyBuilder;
 
     @Inject
     public IntentFactoryStrategyGenerator(/*@Assisted*/ Class factoryStrategyClass,
                                           ClassGenerationUtil generationUtil,
                                           UniqueVariableNamer namer,
-                                          BundlePropertyBuilderRepository repository) {
+                                          BundlePropertyBuilderRepository repository,
+                                          ParcelerPropertyBuilder parcelerPropertyBuilder) {
         this.factoryStrategyClass = factoryStrategyClass;
         this.generationUtil = generationUtil;
         this.namer = namer;
         this.repository = repository;
 
 
+        this.parcelerPropertyBuilder = parcelerPropertyBuilder;
     }
 
     @Override
@@ -105,20 +108,20 @@ public class IntentFactoryStrategyGenerator implements Generation {
                     addCategoryBody.invoke("internalAddCategory").arg(categoryParam);
                     addCategoryBody._return(JExpr._this());
 
-                    for (IntentFactoryExtraAspect extra : extras) {
-                        if (extra.isRequired()) {
-                            JVar extraParam = constructor.param(generationUtil.ref(extra.getType()), extra.getName());
+                    for (IntentFactoryExtraAspect extraAspect : extras) {
+                        if (extraAspect.isRequired()) {
+                            JVar extraParam = constructor.param(generationUtil.ref(extraAspect.getType()), extraAspect.getName());
 
-                            constructorBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                            constructorBody.add(buildBundleMethod(extraAspect, getExtrasMethod, extraParam));
 
                             javadocComments.addParam(extraParam);
                         } else {
                             //setter for non-required extra
-                            JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extra.getName()));
-                            JVar extraParam = setterMethod.param(generationUtil.ref(extra.getType()), extra.getName());
+                            JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extraAspect.getName()));
+                            JVar extraParam = setterMethod.param(generationUtil.ref(extraAspect.getType()), extraAspect.getName());
 
                             JBlock setterBody = setterMethod.body();
-                            setterBody.add(buildBundleMethod(getExtrasMethod, extra.getType(), extra.getName(), extraParam));
+                            setterBody.add(buildBundleMethod(extraAspect, getExtrasMethod, extraParam));
                             setterMethod.javadoc().append("Optional Extra parameter");
                             setterMethod.javadoc().addParam(extraParam);
 
@@ -139,15 +142,21 @@ public class IntentFactoryStrategyGenerator implements Generation {
         return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
     }
 
-    private JStatement buildBundleMethod(JInvocation extras, ASTType type, String name, JVar extraParam) {
+    private JStatement buildBundleMethod(IntentFactoryExtraAspect extraAspect, JInvocation extras, JVar extraParam) {
 
-        PropertyBuilder builder = repository.get(type);
-
-        if(builder == null){
-            throw new TransfuseAnalysisException("Unable to find appropriate type to build intent factory strategy: " + type.getName());
+        PropertyBuilder builder;
+        if(extraAspect.isForceParceler()){
+            builder = parcelerPropertyBuilder;
+        }
+        else {
+            builder = repository.get(extraAspect.getType());
         }
 
-        return builder.buildWriter(extras, name, extraParam);
+        if(builder == null){
+            throw new TransfuseAnalysisException("Unable to find appropriate type to build intent factory strategy: " + extraAspect.getType().getName());
+        }
+
+        return builder.buildWriter(extras, extraAspect.getName(), extraParam);
     }
 
     private List<IntentFactoryExtraAspect> getExtras(Map<InjectionNode, TypedExpression> expressionMap) {

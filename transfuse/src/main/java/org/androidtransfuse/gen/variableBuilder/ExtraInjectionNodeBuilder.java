@@ -61,22 +61,26 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
     public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         String extraId = annotation.getProperty("value", String.class);
         Boolean optional = annotation.getProperty("optional", Boolean.class);
+        Boolean forceParceler = annotation.getProperty("forceParceler", Boolean.class);
 
         if (optional == null) {
             optional = false;
+        }
+        if (forceParceler == null){
+            forceParceler = false;
         }
 
         boolean wrapped = ASTUtils.getInstance().isAnnotated(signature.getType(), "org.parceler.Parcel");
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
-        if(optional && signature.getType() instanceof ASTPrimitiveType){
+        if(!forceParceler && optional && signature.getType() instanceof ASTPrimitiveType){
             validator.error("@Extra marked with optional=true must not annotate a primitive type.")
                     .element(target)
                     .annotation(annotation)
                     .build();
         }
-        else if(!repository.matches(signature.getType())){
+        else if(!forceParceler && !repository.matches(signature.getType())){
             validator.error("@Extra type " + signature.getType().getName() + " not available for marshalling.")
                     .element(target)
                     .build();
@@ -85,7 +89,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
             InjectionNode activityInjectionNode = injectionPointFactory.buildInjectionNode(AndroidLiterals.ACTIVITY, context);
 
-            injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, signature.getType()));
+            injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, forceParceler, signature.getType()));
 
             injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, wrapped));
         }
