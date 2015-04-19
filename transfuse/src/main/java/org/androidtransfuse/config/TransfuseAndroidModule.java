@@ -140,7 +140,7 @@ public class TransfuseAndroidModule {
     @Provides
     @Singleton
     public Filer getFiler(ProcessingEnvironment processingEnvironment){
-        return new SynchronizedFiler(processingEnvironment.getFiler());
+        return processingEnvironment.getFiler();
     }
 
     @Provides
