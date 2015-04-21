@@ -17,6 +17,8 @@ package org.androidtransfuse.util;
 
 import javax.annotation.processing.Messager;
 import javax.tools.Diagnostic;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
  * @author John Ericksen
@@ -52,6 +54,8 @@ public class MessagerLogger implements Logger {
 
     @Override
     public void error(String s, Throwable e) {
-        messager.printMessage(Diagnostic.Kind.ERROR, s + "\n" + e.getMessage());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        e.printStackTrace(new PrintStream(outputStream));
+        messager.printMessage(Diagnostic.Kind.ERROR, prepend + s + "\n" + outputStream.toString());
     }
 }

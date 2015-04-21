@@ -155,7 +155,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         transfuseProcessor.execute();
 
         if (roundEnvironment.processingOver()) {
-            transfuseProcessor.checkForErrors();
+            transfuseProcessor.logErrors();
         }
 
         //todo: debug logging

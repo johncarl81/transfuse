@@ -15,8 +15,6 @@
  */
 package org.androidtransfuse;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * @author John Ericksen
  */
@@ -37,10 +35,5 @@ public class TransfuseAnalysisException extends RuntimeException {
 
     public TransfuseAnalysisException(Throwable throwable) {
         super(throwable);
-    }
-
-    public TransfuseAnalysisException(String message, ImmutableSet<Exception> errors) {
-        //todo: print out all errors
-        super(message, errors.isEmpty() ? null : errors.iterator().next());
     }
 }

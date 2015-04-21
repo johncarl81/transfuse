@@ -18,9 +18,12 @@ package org.androidtransfuse.processor;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.transaction.TransactionProcessorBuilder;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
@@ -32,11 +35,15 @@ import java.util.Collection;
 @Singleton
 public class TransfuseProcessor {
 
+    private final boolean stacktrace;
+    private final Logger log;
     private final GeneratorRepository generatorRepository;
 
     @Inject
-    public TransfuseProcessor(GeneratorRepository generatorRepository) {
+    public TransfuseProcessor(GeneratorRepository generatorRepository, Logger log, @Named(TransfuseAndroidModule.STACKTRACE) boolean stacktrace) {
         this.generatorRepository = generatorRepository;
+        this.log = log;
+        this.stacktrace = stacktrace;
     }
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {
@@ -58,7 +65,7 @@ public class TransfuseProcessor {
         generatorRepository.getProcessor().execute();
     }
 
-    public void checkForErrors() {
+    public void logErrors() {
         boolean errored = false;
         ImmutableSet.Builder<Exception> exceptions = ImmutableSet.builder();
 
@@ -70,7 +77,14 @@ public class TransfuseProcessor {
         }
 
         if (errored) {
-            throw new TransfuseAnalysisException("Code generation did not complete successfully.", exceptions.build());
+            if (stacktrace) {
+                for (Exception exception : exceptions.build()) {
+                    log.error("Code generation did not complete successfully.", exception);
+                }
+            }
+            else{
+                log.error("Code generation did not complete successfully.  For more details add the compiler argument transfuseStacktrace=true");
+            }
         }
     }
 }
