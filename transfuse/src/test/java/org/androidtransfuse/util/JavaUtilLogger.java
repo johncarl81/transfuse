@@ -20,6 +20,7 @@ package org.androidtransfuse.util;
  */
 public class JavaUtilLogger implements Logger {
 
+    public static boolean debug = false;
     private java.util.logging.Logger logger;
 
     public JavaUtilLogger(Object targetInstance) {
@@ -48,6 +49,8 @@ public class JavaUtilLogger implements Logger {
 
     @Override
     public void debug(String value) {
-        info(value);
+        if(debug) {
+            info(value);
+        }
     }
 }

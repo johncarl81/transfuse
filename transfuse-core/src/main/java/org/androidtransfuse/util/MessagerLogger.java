@@ -27,14 +27,16 @@ public class MessagerLogger implements Logger {
 
     private final String prepend;
     private final Messager messager;
+    private final boolean debug;
 
-    public MessagerLogger(Messager messager) {
-        this("", messager);
+    public MessagerLogger(Messager messager, boolean debug) {
+        this("", messager, debug);
     }
 
-    public MessagerLogger(String prepend, Messager messager) {
+    public MessagerLogger(String prepend, Messager messager, boolean debug) {
         this.messager = messager;
         this.prepend = prepend;
+        this.debug = debug;
     }
 
     @Override
@@ -61,6 +63,8 @@ public class MessagerLogger implements Logger {
 
     @Override
     public void debug(String value) {
-        info(value);
+        if(debug) {
+            info(value);
+        }
     }
 }

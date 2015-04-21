@@ -90,6 +90,7 @@ public class TransfuseAndroidModule {
     public static final String ORIGINAL_MANIFEST = "originalManifest";
     public static final String MANIFEST_FILE = "manifestFile";
     public static final String STACKTRACE = "transfuseStacktrace";
+    public static final String DEBUG = "transfuseDebugLogging";
 
     @Provides
     @CodeGenerationScope
@@ -128,8 +129,8 @@ public class TransfuseAndroidModule {
 
     @Provides
     @Singleton
-    public Logger getLogger(ProcessingEnvironment processingEnvironment){
-        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager());
+    public Logger getLogger(ProcessingEnvironment processingEnvironment, @Named(DEBUG) boolean debug){
+        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager(), debug);
     }
 
     @Provides
@@ -163,6 +164,15 @@ public class TransfuseAndroidModule {
     @Named(GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION)
     public String getManifestProcessing(ProcessingEnvironment processingEnvironment){
         return processingEnvironment.getOptions().get(GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION);
+    }
+
+    @Provides
+    @Named(DEBUG)
+    public boolean getDebugOption(ProcessingEnvironment processingEnvironment){
+        if(processingEnvironment.getOptions().containsKey(DEBUG)) {
+            return Boolean.parseBoolean(processingEnvironment.getOptions().get(DEBUG));
+        }
+        else return false;
     }
 
     @Provides
