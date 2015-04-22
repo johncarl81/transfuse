@@ -154,10 +154,7 @@ public class TransfuseAndroidModule {
     @Provides
     @Named(STACKTRACE)
     public boolean getStacktraceParameter(ProcessingEnvironment processingEnvironment){
-        if(processingEnvironment.getOptions().containsKey(STACKTRACE)){
-            return Boolean.parseBoolean(processingEnvironment.getOptions().get(STACKTRACE));
-        }
-        return false;
+        return processingEnvironment.getOptions().containsKey(STACKTRACE);
     }
 
     @Provides
@@ -169,10 +166,7 @@ public class TransfuseAndroidModule {
     @Provides
     @Named(DEBUG)
     public boolean getDebugOption(ProcessingEnvironment processingEnvironment){
-        if(processingEnvironment.getOptions().containsKey(DEBUG)) {
-            return Boolean.parseBoolean(processingEnvironment.getOptions().get(DEBUG));
-        }
-        else return false;
+        return processingEnvironment.getOptions().containsKey(DEBUG);
     }
 
     @Provides
