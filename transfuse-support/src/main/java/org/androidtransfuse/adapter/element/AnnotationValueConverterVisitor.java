@@ -57,42 +57,42 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
 
     @Override
     public T visitBoolean(boolean b, Void aVoid) {
-        return visitSimple(Boolean.class, b);
+        return visitSimple(boolean.class, b);
     }
 
     @Override
     public T visitByte(byte b, Void aVoid) {
-        return visitSimple(Byte.class, b);
+        return visitSimple(byte.class, b);
     }
 
     @Override
     public T visitChar(char c, Void aVoid) {
-        return visitSimple(Character.class, c);
+        return visitSimple(char.class, c);
     }
 
     @Override
     public T visitDouble(double d, Void aVoid) {
-        return visitSimple(Double.class, d);
+        return visitSimple(double.class, d);
     }
 
     @Override
     public T visitFloat(float f, Void aVoid) {
-        return visitSimple(Float.class, f);
+        return visitSimple(float.class, f);
     }
 
     @Override
     public T visitInt(int i, Void aVoid) {
-        return visitSimple(Integer.class, i);
+        return visitSimple(int.class, i);
     }
 
     @Override
     public T visitLong(long l, Void aVoid) {
-        return visitSimple(Long.class, l);
+        return visitSimple(long.class, l);
     }
 
     @Override
     public T visitShort(short s, Void aVoid) {
-        return visitSimple(Short.class, s);
+        return visitSimple(short.class, s);
     }
 
     @Override
