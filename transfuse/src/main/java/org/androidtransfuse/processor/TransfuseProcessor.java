@@ -84,7 +84,7 @@ public class TransfuseProcessor {
                 }
             }
             else{
-                log.error("Code generation did not complete successfully.  For more details add the compiler argument transfuseStacktrace=true");
+                log.error("Code generation did not complete successfully.  For more details add the compiler argument -AtransfuseStacktrace");
             }
         }
     }
