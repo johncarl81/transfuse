@@ -54,6 +54,11 @@ public class ActivityManifestEntryGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Manifest Activity Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Activity.class)) {

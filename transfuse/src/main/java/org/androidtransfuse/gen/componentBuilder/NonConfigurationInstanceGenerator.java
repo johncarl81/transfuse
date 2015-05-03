@@ -70,6 +70,11 @@ public class NonConfigurationInstanceGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "NonConfigurationInstance Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {

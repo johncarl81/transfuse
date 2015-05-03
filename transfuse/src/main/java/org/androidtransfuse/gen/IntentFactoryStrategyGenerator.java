@@ -69,6 +69,11 @@ public class IntentFactoryStrategyGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "IntentFactoryStrategy Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         builder.add(new ComponentPartGenerator() {
             @Override

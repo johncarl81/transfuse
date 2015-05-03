@@ -36,6 +36,8 @@ import java.util.*;
  */
 public class Analyzer {
 
+    private static final ASTType OBJECT_TYPE = new ASTStringType(Object.class.getName());
+
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
     private Logger log;
 
@@ -139,7 +141,7 @@ public class Analyzer {
             }
         }
 
-        if (type.getSuperClass() != null) {
+        if (type.getSuperClass() != null && !type.getSuperClass().equals(OBJECT_TYPE)) {
             scanClassHierarchy(scanned, packagePrivateScanned, type.getSuperClass(), injectionNode, context);
         }
 

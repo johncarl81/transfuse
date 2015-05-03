@@ -40,6 +40,11 @@ public class WindowFeatureGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "WindowFeature Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
         ASTType target = descriptor.getTarget();
         if (target.isAnnotated(WindowFeature.class)) {

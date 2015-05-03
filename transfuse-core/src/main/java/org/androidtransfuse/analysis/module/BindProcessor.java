@@ -19,6 +19,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.VariableASTImplementationFactory;
+import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
@@ -32,11 +33,13 @@ public class BindProcessor implements TypeProcessor {
 
     private final VariableASTImplementationFactory variableInjectionBuilderFactory;
     private final Validator validator;
+    private final Logger log;
 
     @Inject
-    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory, Validator validator) {
+    public BindProcessor(VariableASTImplementationFactory variableInjectionBuilderFactory, Validator validator, Logger log) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.validator = validator;
+        this.log = log;
     }
 
     @Override
@@ -64,6 +67,7 @@ public class BindProcessor implements TypeProcessor {
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
+            log.debug("Mapping @Binding " + type + " -> " + to);
             configurationRepository.putType(type, variableInjectionBuilderFactory.buildVariableASTBuilder(to));
         }
     }

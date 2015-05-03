@@ -39,6 +39,11 @@ public class ListenerRegistrationGenerator implements Generation {
         this.creationMethod = creationMethod;
     }
 
+    @Override
+    public String getName() {
+        return "Listener Registration Generator (" + creationMethod + ")";
+    }
+
     @Factory
     public interface ListerRegistrationGeneratorFactory {
         ListenerRegistrationGenerator build(ASTMethod creationMethod);

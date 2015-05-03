@@ -55,12 +55,12 @@ public class ManifestLocator {
 
     private final String androidManifestFilePath;
     private final Filer filer;
-    private final Logger logger;
+    private final Logger log;
 
     @Inject
-    public ManifestLocator(Filer filer, Logger logger, @Named(ANDROID_MANIFEST_FILE_OPTION) String androidManifestFilePath) {
+    public ManifestLocator(Filer filer, Logger log, @Named(ANDROID_MANIFEST_FILE_OPTION) String androidManifestFilePath) {
         this.filer = filer;
-        this.logger = logger;
+        this.log = log;
         this.androidManifestFilePath = androidManifestFilePath;
     }
 
@@ -72,19 +72,19 @@ public class ManifestLocator {
                 androidManifestFile = new File(androidManifestFilePath);
 
                 if (!androidManifestFile.exists()) {
-                    logger.error("Could not find the AndroidManifest.xml file specified by option " + ANDROID_MANIFEST_FILE_OPTION + " [" + androidManifestFilePath + "]");
+                    log.error("Could not find the AndroidManifest.xml file specified by option " + ANDROID_MANIFEST_FILE_OPTION + " [" + androidManifestFilePath + "]");
                 } else {
-                    logger.debug("AndroidManifest.xml file found: " + androidManifestFile.toString());
+                    log.debug("AndroidManifest.xml file found: " + androidManifestFile.toString());
                 }
             } else {
                 // Backwards compatibility
                 androidManifestFile = findManifestFileThrowing();
             }
         } catch (URISyntaxException e) {
-            logger.error("URISyntaxException while trying to load manifest", e);
+            log.error("URISyntaxException while trying to load manifest", e);
             throw new TransfuseAnalysisException("URISyntaxException while trying to load manifest", e);
         } catch (IOException e) {
-            logger.error("IOException while trying to load manifest", e);
+            log.error("IOException while trying to load manifest", e);
             throw new TransfuseAnalysisException("IOException while trying to load manifest", e);
         }
 
@@ -111,7 +111,7 @@ public class ManifestLocator {
             dummySourceFilePath = "file://" + dummySourceFilePath;
         }
 
-        logger.debug("Dummy source file: " + dummySourceFilePath);
+        log.debug("Dummy source file: " + dummySourceFilePath);
 
         URI cleanURI = new URI(dummySourceFilePath);
 
@@ -138,7 +138,7 @@ public class ManifestLocator {
         if (!androidManifestFile.exists()) {
             throw new IllegalStateException("Could not find the AndroidManifest.xml file, going up from path [" + sourcesGenerationFolder.getAbsolutePath() + "] found using dummy file [" + dummySourceFilePath + "] (max atempts: " + MAX_PARENTS_FROM_SOURCE_FOLDER + ")");
         } else {
-            logger.debug("AndroidManifest.xml file found: " + androidManifestFile.toString());
+            log.debug("AndroidManifest.xml file found: " + androidManifestFile.toString());
         }
 
         return androidManifestFile;

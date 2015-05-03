@@ -18,6 +18,9 @@ package org.androidtransfuse.analysis.module;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
+import org.androidtransfuse.util.Logger;
+
+import javax.inject.Inject;
 
 /**
  * Adds the given @BindInterceptor properties as a MethodInterceptor and associated annotation.
@@ -25,6 +28,13 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
  * @author John Ericksen
  */
 public class BindInterceptorProcessor implements TypeProcessor {
+
+    private final Logger log;
+
+    @Inject
+    public BindInterceptorProcessor(Logger log) {
+        this.log = log;
+    }
 
     @Override
     public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindInterceptor) {
@@ -34,8 +44,7 @@ public class BindInterceptorProcessor implements TypeProcessor {
         return new InterceptorsConfiguration(annotation, interceptor);
     }
 
-
-    private static final class InterceptorsConfiguration implements ModuleConfiguration{
+    private final class InterceptorsConfiguration implements ModuleConfiguration{
 
         private final ASTType annotation;
         private final ASTType interceptor;
@@ -47,6 +56,7 @@ public class BindInterceptorProcessor implements TypeProcessor {
 
         @Override
         public void setConfiguration(InjectionNodeBuilderRepository configurationRepository) {
+            log.debug("Adding interceptor @" + annotation.getPackageClass().getClassName() + ": " + interceptor);
             configurationRepository.putInterceptor(annotation, interceptor);
         }
     }

@@ -27,11 +27,11 @@ import java.util.Collection;
  */
 public class RBuilder {
 
-    private final Logger logger;
+    private final Logger log;
 
     @Inject
-    public RBuilder(Logger logger) {
-        this.logger = logger;
+    public RBuilder(Logger log) {
+        this.log = log;
     }
 
     public RResourceMapping buildR(Collection<? extends ASTType> rInnerTypes) {
@@ -39,7 +39,7 @@ public class RBuilder {
         RResourceMapping resourceMapping = new RResourceMapping();
 
         for (ASTType rInnerType : rInnerTypes) {
-            logger.debug("Mapping R: " + rInnerType);
+            log.debug("Mapping R: " + rInnerType);
             for (ASTField idField : rInnerType.getFields()) {
                 resourceMapping.addResource(rInnerType, idField.getName(), (Integer) idField.getConstantValue());
             }

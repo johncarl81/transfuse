@@ -63,6 +63,11 @@ public class ManualSuperGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Super Generator (" + registrationMethod + ")";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         builder.add(registrationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {

@@ -48,6 +48,11 @@ public class LayoutGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Layout Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         ASTType target = descriptor.getTarget();

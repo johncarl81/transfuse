@@ -50,6 +50,11 @@ public class ScopesGeneration implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Scopes Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         builder.add(method, GenerationPhase.SCOPES, new ComponentMethodGenerator() {
             @Override

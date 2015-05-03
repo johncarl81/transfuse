@@ -60,6 +60,11 @@ public class FragmentLayoutGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Fragment Layout Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         final ASTMethod onCreateViewMethod = astElementFactory.findMethod(AndroidLiterals.FRAGMENT, "onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE);

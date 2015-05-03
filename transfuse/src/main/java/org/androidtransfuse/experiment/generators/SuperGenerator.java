@@ -53,6 +53,11 @@ public class SuperGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Super Generator for " + method;
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         builder.addLazy(method, new ComponentMethodGenerator() {
             @Override

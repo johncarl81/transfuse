@@ -180,5 +180,10 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                 }
             });
         }
+
+        @Override
+        public String getName() {
+            return "Service OnBind Generator";
+        }
     }
 }

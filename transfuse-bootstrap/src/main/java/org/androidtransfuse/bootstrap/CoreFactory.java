@@ -282,7 +282,7 @@ public class CoreFactory {
         ProviderVariableBuilderFactory providerVariableBuilderFactory = new ProviderVariableBuilderFactory(injectionExpressionBuilder, typedExpressionFactory);
         ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilderFactory = new ProviderInjectionNodeBuilderFactory(buildAnalyser(), providerVariableBuilderFactory);
 
-        BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, validator);
+        BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, validator, log);
         BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(providerInjectionNodeBuilderFactory);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
         ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder(), validator);

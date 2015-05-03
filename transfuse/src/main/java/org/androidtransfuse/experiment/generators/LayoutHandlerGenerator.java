@@ -71,6 +71,11 @@ public class LayoutHandlerGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "LayoutHandler Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         ASTType target = descriptor.getTarget();

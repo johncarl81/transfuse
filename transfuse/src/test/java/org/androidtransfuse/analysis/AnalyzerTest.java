@@ -48,7 +48,7 @@ public class AnalyzerTest {
     //      |
     //      `-> F
 
-    public static interface B {
+    public interface B {
     }
 
     public static class A {
@@ -134,7 +134,7 @@ public class AnalyzerTest {
 
         //A -> B && A -> E
         assertEquals(1, countMethodInjectionPoints(injectionNode.getAspect(ASTInjectionAspect.class)));
-        MethodInjectionPoint bInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getMethodInjectionPoints().iterator().next();
+        MethodInjectionPoint bInjectionPoint = injectionNode.getAspect(ASTInjectionAspect.class).getCurrentGroup().getMethodInjectionPoints().iterator().next();
 
         assertEquals(2, bInjectionPoint.getInjectionNodes().size());
         //A -> B
@@ -149,7 +149,7 @@ public class AnalyzerTest {
 
         //B -> C
         assertEquals(1, countFieldInjectionPoints(bInjectionNode.getAspect(ASTInjectionAspect.class)));
-        FieldInjectionPoint cInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getFieldInjectionPoints().iterator().next();
+        FieldInjectionPoint cInjectionPoint = bInjectionNode.getAspect(ASTInjectionAspect.class).getCurrentGroup().getFieldInjectionPoints().iterator().next();
         InjectionNode cInjectionNode = cInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(cInjectionNode));
         assertEquals(C.class.getCanonicalName(), cInjectionNode.getClassName());
@@ -169,7 +169,7 @@ public class AnalyzerTest {
 
         //C -> D
         assertEquals(1, countFieldInjectionPoints(cInjectionNode.getAspect(ASTInjectionAspect.class)));
-        FieldInjectionPoint dInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getGroups().get(1).getFieldInjectionPoints().iterator().next();
+        FieldInjectionPoint dInjectionPoint = cInjectionNode.getAspect(ASTInjectionAspect.class).getCurrentGroup().getFieldInjectionPoints().iterator().next();
         InjectionNode dInjectionNode = dInjectionPoint.getInjectionNode();
         assertFalse(isProxyRequired(dInjectionNode));
         assertEquals(D.class.getCanonicalName(), dInjectionNode.getClassName());

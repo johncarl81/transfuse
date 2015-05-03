@@ -37,7 +37,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
     private final ManifestManager manifestManager;
     private final Merger merger;
     private final Manifest originalManifest;
-    private final Logger logger;
+    private final Logger log;
     private final File manifestFile;
     private ManifestSerializer manifestParser;
     private final String manifestProcessingOption;
@@ -47,7 +47,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
                                    Merger merger,
                                    @Named(TransfuseAndroidModule.ORIGINAL_MANIFEST)
                                    Manifest originalManifest,
-                                   Logger logger,
+                                   Logger log,
                                    @Named(TransfuseAndroidModule.MANIFEST_FILE)
                                    File manifestFile,
                                    ManifestSerializer manifestParser,
@@ -56,7 +56,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
         this.manifestManager = manifestManager;
         this.merger = merger;
         this.originalManifest = originalManifest;
-        this.logger = logger;
+        this.log = log;
         this.manifestFile = manifestFile;
         this.manifestParser = manifestParser;
         this.manifestProcessingOption = manifestProcessingOption;
@@ -70,7 +70,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
 
         if(!"off".equals(manifestProcessingOption)){
             if("log".equals(manifestProcessingOption)){
-                logger.info("Manifest generation piped to log");
+                log.info("Manifest generation piped to log");
                 manifestParser.writeManifest(updatedManifest, System.out);
             }
             else{
@@ -79,7 +79,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
             }
         }
         else{
-            logger.info("Manifest generation disabled");
+            log.info("Manifest generation disabled");
         }
 
         return null;
@@ -99,7 +99,7 @@ public class GenerateModuleProcessor extends AbstractCompletionTransactionWorker
 
             return mergedManifest;
         } catch (MergerException e) {
-            logger.error("InstantiationException while merging manifest", e);
+            log.error("InstantiationException while merging manifest", e);
             return originalManifest;
         }
     }

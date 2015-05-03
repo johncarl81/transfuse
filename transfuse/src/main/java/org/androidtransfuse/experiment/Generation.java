@@ -22,4 +22,6 @@ public interface Generation {
 
     void schedule(ComponentBuilder builder, ComponentDescriptor descriptor);
 
+    String getName();
+
 }

@@ -31,19 +31,19 @@ import java.io.*;
 public class ManifestSerializer {
 
     private final JAXBContext context;
-    private final Logger logger;
+    private final Logger log;
 
     @Inject
-    public ManifestSerializer(JAXBContext context, Logger logger) {
+    public ManifestSerializer(JAXBContext context, Logger log) {
         this.context = context;
-        this.logger = logger;
+        this.log = log;
     }
 
     public Manifest readManifest(File manifestFile) {
         try{
             return (Manifest) context.createUnmarshaller().unmarshal(manifestFile);
         } catch (JAXBException e) {
-            logger.error("IOException while writing manifest", e);
+            log.error("IOException while writing manifest", e);
             throw new TransfuseRuntimeException("IOException while writing manifest", e);
         }
     }
@@ -52,7 +52,7 @@ public class ManifestSerializer {
         try{
             return (Manifest) context.createUnmarshaller().unmarshal(manifestInputStream);
         } catch (JAXBException e) {
-            logger.error("IOException while writing manifest", e);
+            log.error("IOException while writing manifest", e);
             throw new TransfuseRuntimeException("IOException while writing manifest", e);
         }
     }
@@ -66,10 +66,10 @@ public class ManifestSerializer {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(manifest, writer);
         } catch (IOException e) {
-            logger.error("IOException while writing manifest", e);
+            log.error("IOException while writing manifest", e);
             throw new TransfuseRuntimeException("IOException while writing manifest", e);
         } catch (JAXBException e) {
-            logger.error("JAXBException while writing manifest", e);
+            log.error("JAXBException while writing manifest", e);
             throw new TransfuseRuntimeException("JAXBException while writing manifest", e);
         }
     }
@@ -78,7 +78,7 @@ public class ManifestSerializer {
         try {
             writeManifest(manifest, new FileOutputStream(manifestFile));
         } catch (IOException e) {
-            logger.error("IOException while writing manifest", e);
+            log.error("IOException while writing manifest", e);
             throw new TransfuseInjectionException("IOException while writing manifest", e);
         }
     }

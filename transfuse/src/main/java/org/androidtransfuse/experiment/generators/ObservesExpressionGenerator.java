@@ -92,6 +92,11 @@ public class ObservesExpressionGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Observes Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {
             @Override

@@ -29,6 +29,7 @@ import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.lang.annotation.Annotation;
 
 /**
  * Central module processor class.  Scans the input AST elements for the appropriate annotations and registers
@@ -65,35 +66,30 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
         methodProcessorsBuilder.put(astClassFactory.getType(Provides.class), providesProcessor);
 
         this.methodProcessors = methodProcessorsBuilder.build();
-
         ImmutableMap.Builder<ASTType, TypeProcessor> typeProcessorsBuilder = ImmutableMap.builder();
-        typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptor.class), bindInterceptorProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(BindInterceptors.class),
-                configurationFactory.buildConfigurationComposite(bindInterceptorProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(BindProvider.class), bindProviderProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(BindProviders.class),
-                configurationFactory.buildConfigurationComposite(bindProviderProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(Bind.class), bindProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(Bindings.class),
-                configurationFactory.buildConfigurationComposite(bindProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(UsesPermission.class), usesPermissionProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(UsesPermissions.class),
-                configurationFactory.buildConfigurationComposite(usesPermissionProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(Permission.class),permissionProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(Permissions.class),
-                configurationFactory.buildConfigurationComposite(permissionProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(UsesFeature.class), usesFeatureProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(UsesFeatures.class),
-                configurationFactory.buildConfigurationComposite(usesFeatureProcessor));
+
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, BindInterceptor.class, BindInterceptors.class, bindInterceptorProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, BindProvider.class, BindProviders.class, bindProviderProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, Bind.class, Bindings.class, bindProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, UsesPermission.class, UsesPermissions.class, usesPermissionProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, Permission.class, Permissions.class, permissionProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, UsesFeature.class, UsesFeatures.class, usesFeatureProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, DefineScope.class, DefineScopes.class, defineScopeProcessor);
+        setupProcessor(typeProcessorsBuilder, astClassFactory, configurationFactory, Plugin.class, Plugins.class, pluginProcessor);
         typeProcessorsBuilder.put(astClassFactory.getType(UsesSdk.class), usesSdkProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(DefineScope.class), defineScopeProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(DefineScopes.class),
-                configurationFactory.buildConfigurationComposite(defineScopeProcessor));
-        typeProcessorsBuilder.put(astClassFactory.getType(Plugin.class), pluginProcessor);
-        typeProcessorsBuilder.put(astClassFactory.getType(Plugins.class),
-                configurationFactory.buildConfigurationComposite(pluginProcessor));
 
         typeProcessors = typeProcessorsBuilder.build();
+    }
+
+    private void setupProcessor(ImmutableMap.Builder<ASTType, TypeProcessor> typeProcessorsBuilder,
+                                ASTClassFactory astClassFactory,
+                                BindingConfigurationFactory configurationFactory,
+                                Class<? extends Annotation> processorAnnotation,
+                                Class<? extends Annotation> pluralAnnotation,
+                                TypeProcessor processor) {
+        typeProcessorsBuilder.put(astClassFactory.getType(processorAnnotation), processor);
+        typeProcessorsBuilder.put(astClassFactory.getType(pluralAnnotation),
+                configurationFactory.buildConfigurationComposite(processor));
     }
 
     @Override

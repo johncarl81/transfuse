@@ -59,6 +59,11 @@ public class MethodCallbackGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Method Callback Generator @" + eventAnnotation.getPackageClass().getClassName() + " -> " + eventMethod;
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {

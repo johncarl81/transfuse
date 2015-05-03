@@ -16,6 +16,7 @@
 package org.androidtransfuse.experiment;
 
 import com.sun.codemodel.JDefinedClass;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 
@@ -24,11 +25,13 @@ import javax.inject.Inject;
  */
 public class ComponentGenerator {
 
-    private ComponentBuilderFactory componentBuilderFactory;
+    private final ComponentBuilderFactory componentBuilderFactory;
+    private final Logger log;
 
     @Inject
-    public ComponentGenerator(ComponentBuilderFactory componentBuilderFactory) {
+    public ComponentGenerator(ComponentBuilderFactory componentBuilderFactory, Logger log) {
         this.componentBuilderFactory = componentBuilderFactory;
+        this.log = log;
     }
 
     public JDefinedClass build(ComponentDescriptor descriptor) {
@@ -36,6 +39,8 @@ public class ComponentGenerator {
         if (descriptor == null) {
             return null;
         }
+
+        log.debug(descriptor.toString());
 
         ComponentBuilder builder = componentBuilderFactory.build(descriptor);
 

@@ -48,6 +48,11 @@ public class ApplicationScopeSeedGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Appliation Scoping Seed";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
         ASTMethod onCreateMethod = astElementFactory.findMethod(AndroidLiterals.APPLICATION, "onCreate");
         builder.add(onCreateMethod, GenerationPhase.POSTSCOPES, new ComponentMethodGenerator() {

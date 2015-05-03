@@ -64,6 +64,11 @@ public class FragmentOnSaveInstanceStateMethodCallbackGenerator implements Gener
     }
 
     @Override
+    public String getName() {
+        return "Fragment OnSaveInstanceState Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         builder.add(creationMethod, GenerationPhase.POSTINJECTION, new ComponentMethodGenerator() {

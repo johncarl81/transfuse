@@ -53,6 +53,11 @@ public class ServiceManifestEntryGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Manifest Service Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
         if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Service.class)) {
             builder.add(new ComponentPartGenerator() {

@@ -53,6 +53,11 @@ public class BroadcastReceiverManifestEntryGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Manifest BroadcastReceiver Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
         if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(BroadcastReceiver.class)) {
             builder.add(new ComponentPartGenerator() {

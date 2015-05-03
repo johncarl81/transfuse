@@ -97,7 +97,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private ManifestLocator manifestLocator;
     @Inject
-    private Logger logger;
+    private Logger log;
     @Inject
     @ScopeReference(ConfigurationScope.class)
     private EnterableScope configurationScope;
@@ -120,7 +120,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
-        logger.debug("Annotation procesing started, round " + round++);
+        log.debug("Annotation procesing started, round " + round++);
         long start = System.currentTimeMillis();
 
         //setup transfuse processor with manifest and R classes
@@ -160,7 +160,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
             transfuseProcessor.logErrors();
         }
 
-        logger.debug("Took " + (System.currentTimeMillis() - start) + "ms to process");
+        log.debug("Took " + (System.currentTimeMillis() - start) + "ms to process");
 
         configurationScope.exit();
 

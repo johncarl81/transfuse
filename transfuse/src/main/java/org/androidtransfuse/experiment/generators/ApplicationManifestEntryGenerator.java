@@ -50,6 +50,11 @@ public class ApplicationManifestEntryGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "Manifest Application Generator";
+    }
+
+    @Override
     public void schedule(ComponentBuilder builder, ComponentDescriptor descriptor) {
 
         if(descriptor.getTarget() != null && descriptor.getTarget().isAnnotated(Application.class)) {

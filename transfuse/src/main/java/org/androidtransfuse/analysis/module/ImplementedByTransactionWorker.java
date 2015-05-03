@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.analysis.module;
 
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
@@ -23,6 +22,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.annotations.ImplementedBy;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilderFactory;
 import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
@@ -43,17 +43,21 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider;
     private final Validator validator;
+    private final Logger log;
 
     @Inject
     public ImplementedByTransactionWorker(InjectionNodeBuilderRepositoryFactory injectionNodeBuilders,
                                           VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                           ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                                          Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider, Validator validator) {
+                                          Provider<InjectionNodeBuilderRepository> injectionNodeBuilderRepositoryProvider,
+                                          Validator validator,
+                                          Logger log) {
         this.injectionNodeBuilders = injectionNodeBuilders;
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryProvider = injectionNodeBuilderRepositoryProvider;
         this.validator = validator;
+        this.log = log;
     }
 
     @Override
@@ -63,7 +67,6 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
 
         ImplementedBy annotation = astType.getAnnotation(ImplementedBy.class);
 
-        InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
         if (annotation != null) {
             TypeMirror implementedClass = getTypeMirror(annotation, "value");
 
@@ -75,13 +78,15 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
                         .annotation(astType.getASTAnnotation(ImplementedBy.class))
                         .parameter("value")
                         .build();
-                throw new TransfuseAnalysisException("ImplementedBy configuration points to a class that doesn't inherit from the given base class");
             }
+            else{
+                log.debug("Mapping @ImplementedBy " + astType + " -> " + implementedClass);
 
-            repository.putType(astType, variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
+                InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
+                repository.putType(astType, variableInjectionBuilderFactory.buildVariableInjectionNodeBuilder(implAstType));
+                injectionNodeBuilders.addModuleRepository(repository);
+            }
         }
-
-        injectionNodeBuilders.addModuleRepository(repository);
 
         return null;
     }

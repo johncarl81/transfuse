@@ -34,7 +34,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
     private final InjectionNode layoutHandlerInjectionNode;
-    private final Logger logger;
+    private final Logger log;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
 
@@ -42,13 +42,13 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
     public LayoutHandlerBuilder(InjectionFragmentGenerator injectionFragmentGenerator,
                                 InstantiationStrategyFactory instantiationStrategyFactory,
                                 /*@Assisted*/ InjectionNode layoutHandlerInjectionNode,
-                                Logger logger,
+                                Logger log,
                                 UniqueVariableNamer namer,
                                 ClassGenerationUtil generationUtil) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.layoutHandlerInjectionNode = layoutHandlerInjectionNode;
-        this.logger = logger;
+        this.log = log;
         this.namer = namer;
         this.generationUtil = generationUtil;
     }
@@ -74,7 +74,7 @@ public class LayoutHandlerBuilder implements LayoutBuilder {
             block.add(layoutHandlerDelegate.invoke(LayoutHandlerDelegate.INVOKE_LAYOUT_METHOD));
 
         } catch (JClassAlreadyExistsException e) {
-            logger.error("JClassAlreadyExistsException while trying to generate LayoutHandler", e);
+            log.error("JClassAlreadyExistsException while trying to generate LayoutHandler", e);
         }
     }
 }

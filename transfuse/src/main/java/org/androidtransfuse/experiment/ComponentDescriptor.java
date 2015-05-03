@@ -80,4 +80,31 @@ public class ComponentDescriptor {
     public void setRootInjectionNode(InjectionNode rootInjectionNode) {
         this.rootInjectionNode = rootInjectionNode;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("ComponentDescriptor {");
+        builder.append("\n\ttarget=");
+        builder.append(target);
+        builder.append("\n\tcomponentType=");
+        builder.append(componentType);
+        builder.append("\n\tpackageClass=");
+        builder.append(packageClass);
+        builder.append("\n\tgenerators=");
+        for (Generation generator : generators) {
+            builder.append("\n\t\t");
+            builder.append(generator.getName());
+        }
+        builder.append("\n\tgenerateFirst=");
+        builder.append(generateFirst);
+        builder.append("\n\tanalysisContext=");
+        builder.append(analysisContext);
+        builder.append("\n\trootInjectionNode=");
+        builder.append(rootInjectionNode);
+        builder.append("\n}");
+
+        return builder.toString();
+    }
 }

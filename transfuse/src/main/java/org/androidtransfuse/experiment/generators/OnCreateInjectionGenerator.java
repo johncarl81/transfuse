@@ -68,6 +68,11 @@ public class OnCreateInjectionGenerator implements Generation {
     }
 
     @Override
+    public String getName() {
+        return "OnCreate Injection Generator";
+    }
+
+    @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         builder.add(method, GenerationPhase.INJECTION, new ComponentMethodGenerator() {
