@@ -92,6 +92,10 @@ public class MethodSignature {
         }
     }
 
+    public String toString(){
+        return methodSignature;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

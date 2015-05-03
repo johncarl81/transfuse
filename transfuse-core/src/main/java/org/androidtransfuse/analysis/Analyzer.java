@@ -23,6 +23,7 @@ import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,6 +37,7 @@ import java.util.*;
 public class Analyzer {
 
     private Provider<VariableInjectionBuilder> variableInjectionBuilderProvider;
+    private Logger log;
 
     public InjectionNode analyze(InjectionSignature signature, AnalysisContext context){
         return analyze(signature, signature, context);
@@ -107,6 +109,7 @@ public class Analyzer {
     }
 
     private void scanClassHierarchy(Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned, ASTType type, InjectionNode injectionNode, AnalysisContext context){
+        log.debug("Analyzing class: " + type);
         for (ASTAnalysis analysis : context.getInjectionNodeBuilders().getAnalysisRepository()) {
 
             analysis.analyzeType(injectionNode, type, context);
@@ -168,5 +171,10 @@ public class Analyzer {
     @Inject
     public void setVariableInjectionBuilderProvider(Provider<VariableInjectionBuilder> variableInjectionBuilderProvider) {
         this.variableInjectionBuilderProvider = variableInjectionBuilderProvider;
+    }
+
+    @Inject
+    public void setLog(Logger log) {
+        this.log = log;
     }
 }

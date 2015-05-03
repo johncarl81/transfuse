@@ -20,11 +20,12 @@ package org.androidtransfuse.util;
  */
 public class JavaUtilLogger implements Logger {
 
-    public static boolean debug = false;
-    private java.util.logging.Logger logger;
+    private final boolean debug;
+    private final java.util.logging.Logger logger;
 
-    public JavaUtilLogger(Object targetInstance) {
+    public JavaUtilLogger(Object targetInstance, boolean debug) {
         this.logger = java.util.logging.Logger.getLogger(targetInstance.getClass().getCanonicalName());
+        this.debug = debug;
     }
 
     @Override

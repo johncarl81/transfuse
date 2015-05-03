@@ -138,7 +138,7 @@ public class TestTransfuseAndroidModule {
 
     @Provides
     public Logger getLogger(){
-        return new JavaUtilLogger(this);
+        return new JavaUtilLogger(this, false);
     }
     @Provides
     public JCodeModel getCodeModel(){

@@ -20,6 +20,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,16 +46,19 @@ public class ASTElementFactory {
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final ASTFactory astFactory;
     private final Elements elements;
+    private final Logger log;
 
     @Inject
     public ASTElementFactory(Elements elements,
                              ASTFactory astFactory,
                              ASTTypeBuilderVisitor astTypeBuilderVisitor,
-                             ASTElementConverterFactory astElementConverterFactory) {
+                             ASTElementConverterFactory astElementConverterFactory,
+                             Logger log) {
         this.elements = elements;
         this.astFactory = astFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astElementConverterFactory = astElementConverterFactory;
+        this.log = log;
     }
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
@@ -86,6 +90,7 @@ public class ASTElementFactory {
     }
 
     private ASTType buildType(TypeElement typeElement) {
+        log.debug("ASTElementType building: " + typeElement.getQualifiedName());
         //build placeholder for ASTElementType and contained data structures to allow for children population
         //while avoiding back link loops
         PackageClass packageClass = buildPackageClass(typeElement);

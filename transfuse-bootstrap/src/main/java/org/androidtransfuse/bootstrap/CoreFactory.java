@@ -78,10 +78,12 @@ public class CoreFactory {
     private final Validator validator;
     private final ScopePredicate scopePredicate = new ScopePredicate(astClassFactory);
     private final InstantiationStrategyFactory instantiationStrategyFactory = new InstantiationStrategyFactoryImpl();
+    private final Logger log;
 
     private BootstrapGenerator bootstrapGenerator = null;
 
     public CoreFactory(Elements elements, Messager messager, Filer filer, String namespace) {
+        this.log = new MessagerLogger(messager, false);
         this.elements = elements;
         this.filer = filer;
         this.classNamer = new ClassNamer(namespace);
@@ -106,7 +108,7 @@ public class CoreFactory {
         //wire lazy injections
         astFactory.setElementConverterFactory(elementConverterFactory);
         astFactory.setAstElementFactoryProvider(astElementFactoryProvider);
-        astElementFactoryProvider.load(Providers.of(new ASTElementFactory(elements, astFactory, astTypeBuilderVisitor, astElementConverterFactory)));
+        astElementFactoryProvider.load(Providers.of(new ASTElementFactory(elements, astFactory, astTypeBuilderVisitor, astElementConverterFactory, log)));
 
         return astElementConverterFactory;
     }
@@ -158,6 +160,7 @@ public class CoreFactory {
     private Analyzer buildAnalyser(){
         Analyzer analyzer = new Analyzer();
         analyzer.setVariableInjectionBuilderProvider(Providers.of(buildVariableInjectionBuilder()));
+        analyzer.setLog(log);
 
         return analyzer;
     }
