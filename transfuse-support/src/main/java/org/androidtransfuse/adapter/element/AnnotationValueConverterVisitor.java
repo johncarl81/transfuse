@@ -57,42 +57,42 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
 
     @Override
     public T visitBoolean(boolean b, Void aVoid) {
-        return visitSimple(boolean.class, b);
+        return visitPrimitive(boolean.class, Boolean.class, b);
     }
 
     @Override
     public T visitByte(byte b, Void aVoid) {
-        return visitSimple(byte.class, b);
+        return visitPrimitive(byte.class, Byte.class, b);
     }
 
     @Override
     public T visitChar(char c, Void aVoid) {
-        return visitSimple(char.class, c);
+        return visitPrimitive(char.class, Character.class, c);
     }
 
     @Override
     public T visitDouble(double d, Void aVoid) {
-        return visitSimple(double.class, d);
+        return visitPrimitive(double.class, Double.class, d);
     }
 
     @Override
     public T visitFloat(float f, Void aVoid) {
-        return visitSimple(float.class, f);
+        return visitPrimitive(float.class, Float.class, f);
     }
 
     @Override
     public T visitInt(int i, Void aVoid) {
-        return visitSimple(int.class, i);
+        return visitPrimitive(int.class, Integer.class, i);
     }
 
     @Override
     public T visitLong(long l, Void aVoid) {
-        return visitSimple(long.class, l);
+        return visitPrimitive(long.class, Long.class, l);
     }
 
     @Override
     public T visitShort(short s, Void aVoid) {
-        return visitSimple(short.class, s);
+        return visitPrimitive(short.class, Short.class, s);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
         if(variableElement.getKind() == ElementKind.ENUM_CONSTANT){
-            return (T) Enum.valueOf((Class<? extends Enum>)type, variableElement.getSimpleName().toString());
+            return (T) Enum.valueOf((Class<? extends Enum>) type, variableElement.getSimpleName().toString());
         }
         return null;
     }
@@ -127,6 +127,14 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
         }
 
         return (T) annotationASTTypes.toArray((Object[]) Array.newInstance(type.getComponentType(), 0));
+    }
+
+    private <P> T visitPrimitive(Class<P> primitiveClazz, Class<P> boxedClass, P value){
+        if (type.isAssignableFrom(primitiveClazz)){
+            return (T) value;
+        }
+
+        return visitSimple(boxedClass, value);
     }
 
     private <P> T visitSimple(Class<P> clazz, P value) {
