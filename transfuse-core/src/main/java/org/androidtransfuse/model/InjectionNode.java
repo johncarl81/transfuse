@@ -78,4 +78,9 @@ public class InjectionNode {
     public Map<Class, Object> getAspects() {
         return aspects;
     }
+
+    @Override
+    public String toString() {
+        return signature.toString();
+    }
 }

@@ -26,11 +26,15 @@ import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
+import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -44,6 +48,7 @@ public class OnCreateInjectionGenerator implements Generation {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final InjectionPointFactory injectionPointFactory;
     private final Validator validator;
+    private final Logger log;
 
     @Factory
     public interface InjectionGeneratorFactory {
@@ -57,7 +62,8 @@ public class OnCreateInjectionGenerator implements Generation {
                                       InstantiationStrategyFactory instantiationStrategyFactory,
                                       InjectionBindingBuilder injectionBindingBuilder,
                                       InjectionPointFactory injectionPointFactory,
-                                      Validator validator) {
+                                      Validator validator,
+                                      Logger log) {
         this.method = method;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
@@ -65,6 +71,7 @@ public class OnCreateInjectionGenerator implements Generation {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.injectionPointFactory = injectionPointFactory;
         this.validator = validator;
+        this.log = log;
     }
 
     @Override
@@ -84,7 +91,9 @@ public class OnCreateInjectionGenerator implements Generation {
 
                 descriptor.setRootInjectionNode(injectionPointFactory.buildInjectionNode(target, builder.getAnalysisContext()));
 
-                if(!validator.isInError()) {
+                if(validator.isInError()) {
+                    log.debug("Canceling injection generation due to error during analysis.");
+                } else {
 
                     try {
                         injectionFragmentGenerator.buildFragment(
@@ -94,11 +103,25 @@ public class OnCreateInjectionGenerator implements Generation {
                                 descriptor.getRootInjectionNode(),
                                 builder.getScopes(),
                                 builder.getExpressionMap());
+                        
+                        logExpressionMap(builder.getExpressionMap());
                     } catch (JClassAlreadyExistsException e) {
                         throw new TransfuseRuntimeException("Class already exists", e);
                     }
                 }
+
             }
         });
+    }
+
+    private void logExpressionMap(Map<InjectionNode, TypedExpression> expressionMap) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Expression Map {");
+        for (Map.Entry<InjectionNode, TypedExpression> entry : expressionMap.entrySet()) {
+            builder.append("\n\t");
+            builder.append(entry.getKey()).append(" -> ").append(entry.getValue().getType());
+        }
+        builder.append('}');
+        log.debug(builder.toString());
     }
 }
