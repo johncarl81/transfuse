@@ -20,6 +20,7 @@ import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.model.manifest.*;
 import org.androidtransfuse.util.AndroidLiterals;
+import org.androidtransfuse.util.Logger;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.inject.Inject;
@@ -49,19 +50,23 @@ public class ManifestManager {
     private final List<UsesPermission> usesPermissions = new ArrayList<UsesPermission>();
     private final List<UsesFeature> usesFeatures = new ArrayList<UsesFeature>();
     private final List<Permission> permissions = new ArrayList<Permission>();
+    private final Logger log;
     private UsesSDK usesSdk;
 
     @Inject
-    public ManifestManager(@Named(TransfuseAndroidModule.ORIGINAL_MANIFEST) Manifest originalManifest) {
+    public ManifestManager(@Named(TransfuseAndroidModule.ORIGINAL_MANIFEST) Manifest originalManifest, Logger log) {
+        this.log = log;
         this.manifestPackage = originalManifest.getApplicationPackage();
     }
 
     public void addApplication(Application application) {
+        log.debug("Adding to manifest: " + application);
         this.applications.add(application);
     }
 
     public void addPermission(Permission permission){
         try {
+            log.debug("Adding to manifest: " + permission);
             updateMergeTags(Permission.class, permission);
             permissions.add(permission);
         } catch (MergerException e) {
@@ -71,6 +76,7 @@ public class ManifestManager {
     
     public void addUsesFeature(UsesFeature usesFeature){
         try {
+            log.debug("Adding to manifest: " + usesFeature);
             updateMergeTags(UsesFeature.class, usesFeature);
             usesFeatures.add(usesFeature);
         } catch (MergerException e) {
@@ -80,6 +86,7 @@ public class ManifestManager {
 
     public void addUsesPermission(UsesPermission usesPermission) {
         try {
+            log.debug("Adding to manifest: " + usesPermission);
             updateMergeTags(UsesPermission.class, usesPermission);
             usesPermissions.add(usesPermission);
         } catch (MergerException e) {
@@ -88,11 +95,13 @@ public class ManifestManager {
     }
 
     public void setUsesSdk(UsesSDK usesSdk) {
+        log.debug("Adding to manifest: " + usesSdk);
         this.usesSdk = usesSdk;
     }
 
     public void addActivity(Activity activity) {
         try {
+            log.debug("Adding to manifest: " + activity);
             updateMergeTags(Activity.class, activity);
             updateMergeTags(IntentFilter.class, activity.getIntentFilters());
             updateMergeTags(MetaData.class, activity.getMetaData());
@@ -104,6 +113,7 @@ public class ManifestManager {
 
     public void addBroadcastReceiver(Receiver broadcastReceiver) {
         try {
+            log.debug("Adding to manifest: " + broadcastReceiver);
             updateMergeTags(Receiver.class, broadcastReceiver);
             updateMergeTags(IntentFilter.class, broadcastReceiver.getIntentFilters());
             updateMergeTags(MetaData.class, broadcastReceiver.getMetaData());
@@ -121,6 +131,7 @@ public class ManifestManager {
 
     public void addService(Service service) {
         try {
+            log.debug("Adding to manifest: " + service);
             updateMergeTags(Service.class, service);
             updateMergeTags(IntentFilter.class, service.getIntentFilters());
             updateMergeTags(MetaData.class, service.getMetaData());

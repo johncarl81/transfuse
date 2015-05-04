@@ -15,6 +15,9 @@
  */
 package org.androidtransfuse.model.manifest;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import javax.xml.bind.Element;
 import javax.xml.bind.annotation.XmlAnyElement;
 import java.util.ArrayList;
@@ -41,5 +44,10 @@ public class ManifestBase {
 
     public void setElements(List<Element> elements) {
         this.elements = elements;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
