@@ -47,7 +47,7 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
 
     @Override
     public void analyzeType(InjectionNode injectionNode, ASTType concreteType, AnalysisContext context) {
-        //AOP is only available on top level
+        //Type AOP is only available on top level
         if (injectionNode.getASTType().equals(concreteType)) {
             for (ASTAnnotation annotation : concreteType.getAnnotations()) {
                 if (context.getInjectionNodeBuilders().isInterceptor(annotation)) {
@@ -67,12 +67,9 @@ public class AOPProxyAnalyzer extends ASTAnalysisAdaptor {
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
-        //AOP is only available on top level
-        if (injectionNode.getASTType().equals(concreteType)) {
-            for (ASTAnnotation annotation : astMethod.getAnnotations()) {
-                if (context.getInjectionNodeBuilders().isInterceptor(annotation)) {
-                    addInterceptor(injectionNode, Collections.singleton(astMethod), getInterceptorInjectionNode(annotation, context));
-                }
+        for (ASTAnnotation annotation : astMethod.getAnnotations()) {
+            if (context.getInjectionNodeBuilders().isInterceptor(annotation)) {
+                addInterceptor(injectionNode, Collections.singleton(astMethod), getInterceptorInjectionNode(annotation, context));
             }
         }
     }
