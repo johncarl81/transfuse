@@ -130,12 +130,12 @@ public class TransfuseAndroidModule {
     @Provides
     @Singleton
     public Logger getLogger(ProcessingEnvironment processingEnvironment, @Named(DEBUG) boolean debug){
-        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager(), debug);
+        return new MessagerLogger(getLogPrepend(), processingEnvironment.getMessager(), debug);
     }
 
     @Provides
     @Named(Validator.LOG_PREPEND)
-    public String getLogPreprend(){
+    public String getLogPrepend(){
         return "Transfuse: ";
     }
 
@@ -218,14 +218,14 @@ public class TransfuseAndroidModule {
     public BundlePropertyBuilderRepository getBundlePropertyRepository(ASTClassFactory astClassFactory, ParcelerPropertyBuilder parcelerPropertyBuilder){
         BundlePropertyBuilderRepository repository = new BundlePropertyBuilderRepository();
 
-        repository.add(Matchers.type(ASTPrimitiveType.BOOLEAN).build(), new SimplePropertyBuilder("getBoolean", "putBoolean"));
-        repository.add(Matchers.type(ASTPrimitiveType.BYTE).build(), new SimplePropertyBuilder("getByte", "putByte"));
-        repository.add(Matchers.type(ASTPrimitiveType.CHAR).build(), new SimplePropertyBuilder("getChar", "putChar"));
-        repository.add(Matchers.type(ASTPrimitiveType.DOUBLE).build(), new SimplePropertyBuilder("getDouble", "putDouble"));
-        repository.add(Matchers.type(ASTPrimitiveType.FLOAT).build(), new SimplePropertyBuilder("getFoat", "putFloat"));
-        repository.add(Matchers.type(ASTPrimitiveType.INT).build(), new SimplePropertyBuilder("getInt", "putInt"));
-        repository.add(Matchers.type(ASTPrimitiveType.LONG).build(), new SimplePropertyBuilder("getLong", "putLong"));
-        repository.add(Matchers.type(ASTPrimitiveType.SHORT).build(), new SimplePropertyBuilder("getShort", "putShort"));
+        for (ASTPrimitiveType astPrimitiveType : ASTPrimitiveType.values()) {
+            String upperFirst = StringUtil.upperFirst(astPrimitiveType.getName());
+            String getter = "get" + upperFirst;
+            String setter = "put" + upperFirst;
+            repository.add(Matchers.type(astPrimitiveType).build(), new SimplePropertyBuilder(getter, setter));
+            repository.add(Matchers.type(astClassFactory.getType(astPrimitiveType.getObjectClass())).build(), new SimplePropertyBuilder(getter, setter));
+        }
+
         repository.add(Matchers.type(astClassFactory.getType(String.class)).build(), new SimplePropertyBuilder("getString", "putString"));
         repository.add(new ImplementsMatcher(AndroidLiterals.PARCELABLE), new SimplePropertyBuilder("getParcelable", "putParcelable"));
         repository.add(new ParcelMatcher(), parcelerPropertyBuilder);
