@@ -51,7 +51,7 @@ public enum ASTPrimitiveType implements ASTType {
         AUTOBOX_TYPE_MAP = autoboxTypeMapBuilder.build();
     }
 
-    private ASTPrimitiveType(String label, Class clazz) {
+    ASTPrimitiveType(String label, Class clazz) {
         this.label = label;
         this.clazz = clazz;
     }

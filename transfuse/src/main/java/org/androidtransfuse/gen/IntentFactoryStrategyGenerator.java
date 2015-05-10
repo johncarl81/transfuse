@@ -31,6 +31,7 @@ import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.AndroidLiterals;
+import org.androidtransfuse.util.StringUtil;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -122,7 +123,7 @@ public class IntentFactoryStrategyGenerator implements Generation {
                             javadocComments.addParam(extraParam);
                         } else {
                             //setter for non-required extra
-                            JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + upperFirst(extraAspect.getName()));
+                            JMethod setterMethod = strategyClass.method(JMod.PUBLIC, strategyClass, "set" + StringUtil.upperFirst(extraAspect.getName()));
                             JVar extraParam = setterMethod.param(generationUtil.ref(extraAspect.getType()), extraAspect.getName());
 
                             JBlock setterBody = setterMethod.body();
@@ -141,10 +142,6 @@ public class IntentFactoryStrategyGenerator implements Generation {
 
             }
         });
-    }
-
-    private String upperFirst(String name) {
-        return name.substring(0, 1).toUpperCase(Locale.ENGLISH) + name.substring(1);
     }
 
     private JStatement buildBundleMethod(IntentFactoryExtraAspect extraAspect, JInvocation extras, JVar extraParam) {
