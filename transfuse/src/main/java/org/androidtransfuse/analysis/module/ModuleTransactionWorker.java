@@ -17,6 +17,8 @@ package org.androidtransfuse.analysis.module;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
 import org.androidtransfuse.Plugin;
 import org.androidtransfuse.Plugins;
 import org.androidtransfuse.adapter.ASTAnnotation;
@@ -94,35 +96,61 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
     @Override
     public Void innerRun(Provider<ASTType> astTypeProvider) {
-
-        ASTType type = astTypeProvider.get();
-
-        ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
-
-        for (ASTAnnotation typeAnnotation : type.getAnnotations()) {
-            if(typeProcessors.containsKey(typeAnnotation.getASTType())){
-                TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
-
-                configurations.add(typeProcessor.process(type, typeAnnotation));
-            }
-        }
-
-        for (ASTMethod astMethod : type.getMethods()) {
-            for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
-                if (methodProcessors.containsKey(astAnnotation.getASTType())) {
-                    MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
-
-                    configurations.add(methodProcessor.process(type, astMethod, astAnnotation));
-                }
-            }
-        }
+        ImmutableList<ModuleConfiguration> configurations = createConfigurationsForModuleType(astTypeProvider.get());
 
         InjectionNodeBuilderRepository repository = injectionNodeBuilderRepositoryProvider.get();
-        for (ModuleConfiguration moduleConfiguration : configurations.build()) {
+        for (ModuleConfiguration moduleConfiguration : configurations) {
             moduleConfiguration.setConfiguration(repository);
         }
         moduleRepository.addModuleRepository(repository);
 
         return null;
+    }
+
+    private ImmutableList<ModuleConfiguration> createConfigurationsForModuleType(ASTType moduleType) {
+        ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
+        createConfigurationsForModuleType(configurations, moduleType, moduleType.getSuperClass());
+        return configurations.build();
+    }
+
+    /**
+     * Recursive method that finds module methods and annotations on all parents of moduleAncestor and moduleAncestor, but creates configuration based on the module.
+     * This allows any class in the module hierarchy to contribute annotations or providers that can be overridden by subclasses.
+     *
+     * @param configurations the holder for annotation and method configurations
+     * @param module the module type we are configuring
+     * @param moduleAncestor either the model type or one of its ancestor types on which to look for module methods and annotations
+     */
+    private void createConfigurationsForModuleType(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType module, ASTType moduleAncestor) {
+        // if super type is null, we are at the top of the inheritance hierarchy and we can unwind.
+        ASTType target = module;
+
+        if(moduleAncestor != null) {
+            // recurse our way up the tree so we add the top most providers first and clobber them on the way down
+            createConfigurationsForModuleType(configurations, module, moduleAncestor.getSuperClass());
+            target = moduleAncestor;
+        }
+        configureModuleAnnotations(configurations, module, target.getAnnotations());
+        configureModuleMethods(configurations, module, target.getMethods());
+    }
+
+    private void configureModuleMethods(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ImmutableSet<ASTMethod> methods) {
+        for (ASTMethod astMethod : methods) {
+            for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
+                if (methodProcessors.containsKey(astAnnotation.getASTType())) {
+                    MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
+                    configurations.add(methodProcessor.process(moduleType, astMethod, astAnnotation));
+                }
+            }
+        }
+    }
+
+    private void configureModuleAnnotations(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ImmutableSet<ASTAnnotation> annotations) {
+        for (ASTAnnotation typeAnnotation : annotations) {
+            if (typeProcessors.containsKey(typeAnnotation.getASTType())) {
+                TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
+                configurations.add(typeProcessor.process(moduleType, typeAnnotation));
+            }
+        }
     }
 }
