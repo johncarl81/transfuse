@@ -55,21 +55,6 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
         builder.given(BroadcastReceiver.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@BroadcastReceiver name parameter must follow Java Bean syntax");
         builder.given(Application.class).parameterMatches("name", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Application name parameter must follow Java Bean syntax");
 
-        //module metadata
-        builder.given(Bind.class).requires(TransfuseModule.class, "@Bind annotation must be accompanied by @TransfuseModule");
-        builder.given(Bindings.class).requires(TransfuseModule.class, "@Bindings annotation must be accompanied by @TransfuseModule");
-        builder.given(BindInterceptor.class).requires(TransfuseModule.class, "@BindInterceptor annotation must be accompanied by @TransfuseModule");
-        builder.given(BindInterceptors.class).requires(TransfuseModule.class, "@BindInterceptors annotation must be accompanied by @TransfuseModule");
-        builder.given(BindProvider.class).requires(TransfuseModule.class, "@BindProvider annotation must be accompanied by @TransfuseModule");
-        builder.given(BindProviders.class).requires(TransfuseModule.class, "@BindProviders annotation must be accompanied by @TransfuseModule");
-        builder.given(DefineScope.class).requires(TransfuseModule.class, "@DefineScope annotation must be accompanied by @TransfuseModule");
-        builder.given(DefineScopes.class).requires(TransfuseModule.class, "@DefineScopes annotation must be accompanied by @TransfuseModule");
-        builder.given(UsesPermission.class).requires(TransfuseModule.class, "@UsesPermission annotation must be accompanied by @TransfuseModule");
-        builder.given(UsesPermissions.class).requires(TransfuseModule.class, "@UsesPermissions annotation must be accompanied by @TransfuseModule");
-        builder.given(UsesSdk.class).requires(TransfuseModule.class, "@UsesSdk annotation must be accompanied by @TransfuseModule");
-
-        builder.given(Provides.class).requires(TransfuseModule.class, "@Provides annotation must be accompanied by @TransfuseModule");
-
         annotationValidator = builder.build();
     }
 
