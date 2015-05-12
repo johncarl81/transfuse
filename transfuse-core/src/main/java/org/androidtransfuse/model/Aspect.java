@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen.componentBuilder;
-
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.experiment.ComponentBuilder;
-import org.androidtransfuse.model.InjectionNodeLogger;
-import org.androidtransfuse.model.TypedExpression;
+package org.androidtransfuse.model;
 
 /**
  * @author John Ericksen
  */
-public interface RegistrationGenerator {
-
-    void build(ComponentBuilder componentBuilder, ASTMethod creationMethod, TypedExpression value);
+public interface Aspect {
 
     void log(InjectionNodeLogger logger);
 }

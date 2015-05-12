@@ -16,13 +16,15 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 /**
  * Aspect to associate with the InjectionNode a builder used to build the current type in the given scope.
  *
  * @author John Ericksen
  */
-public class ScopeAspect {
+public class ScopeAspect implements Aspect {
 
     private final VariableBuilder scopeBuilder;
 
@@ -32,5 +34,10 @@ public class ScopeAspect {
 
     public VariableBuilder getScopeBuilder() {
         return scopeBuilder;
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ScopeAspect");
     }
 }

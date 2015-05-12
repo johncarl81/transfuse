@@ -15,9 +15,12 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.base.Joiner;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 import java.util.*;
 
@@ -26,7 +29,7 @@ import java.util.*;
  *
  * @author John Ericksen
  */
-public class ListenerAspect {
+public class ListenerAspect implements Aspect {
 
     private final Map<ASTType, Set<ASTMethod>> listeners = new HashMap<ASTType, Set<ASTMethod>>();
 
@@ -49,5 +52,16 @@ public class ListenerAspect {
 
     public boolean contains(ASTType annotationType) {
         return listeners.containsKey(annotationType);
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("Listeners{");
+        logger.pushIndent();
+        for (Map.Entry<ASTType, Set<ASTMethod>> entry : listeners.entrySet()) {
+            logger.append(entry.getKey() + " -> " + "(" + Joiner.on(", ").join(entry.getValue()) + ")");
+        }
+        logger.popIndent();
+        logger.append("\n}");
     }
 }

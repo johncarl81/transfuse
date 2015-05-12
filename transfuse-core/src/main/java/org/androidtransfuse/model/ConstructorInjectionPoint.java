@@ -33,4 +33,16 @@ public class ConstructorInjectionPoint extends MethodInjectionPointBase {
     public ASTConstructor getConstructor() {
         return constructor;
     }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ConstructorInjectionPoint=");
+        logger.pushIndent();
+        for (InjectionNode injectionNode : getInjectionNodes()) {
+            logger.append("\n");
+            logger.append(injectionNode);
+            logger.pushNode(injectionNode);
+        }
+        logger.popIndent();
+    }
 }

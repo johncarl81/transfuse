@@ -15,16 +15,19 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import com.google.common.base.Joiner;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTMethodUniqueSignatureDecorator;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 import java.util.*;
 
 /**
  * @author John Ericksen
  */
-public class ObservesAspect {
+public class ObservesAspect implements Aspect {
 
     private final Map<ASTType, Set<ASTMethod>> observesMap = new HashMap<ASTType, Set<ASTMethod>>();
 
@@ -46,5 +49,17 @@ public class ObservesAspect {
         }
 
         return Collections.emptySet();
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ObservesAspect{");
+        logger.pushIndent();
+        for (Map.Entry<ASTType, Set<ASTMethod>> field : observesMap.entrySet()) {
+            logger.append("\n");
+            logger.append(field.getKey()).append(" -> (").append(Joiner.on(", ").join(field.getValue())).append(")");
+        }
+        logger.popIndent();
+        logger.append("\n}");
     }
 }

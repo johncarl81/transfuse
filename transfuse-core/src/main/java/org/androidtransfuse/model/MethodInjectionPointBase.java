@@ -53,4 +53,6 @@ public abstract class MethodInjectionPointBase {
     public ASTType getContainingType() {
         return containingType;
     }
+
+    public abstract void log(InjectionNodeLogger logger);
 }

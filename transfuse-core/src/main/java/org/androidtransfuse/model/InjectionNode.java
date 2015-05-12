@@ -27,7 +27,7 @@ public class InjectionNode {
 
     private final InjectionSignature signature;
     private final InjectionSignature astType;
-    private final Map<Class, Object> aspects = new HashMap<Class, Object>();
+    private final Map<Class, Aspect> aspects = new HashMap<Class, Aspect>();
 
     public InjectionNode(InjectionSignature signature) {
         this(signature, signature);
@@ -59,15 +59,15 @@ public class InjectionNode {
         return astType.getType();
     }
 
-    public <T> T getAspect(Class<T> clazz){
+    public <T extends Aspect> T getAspect(Class<T> clazz){
         return (T) aspects.get(clazz);
     }
 
-    public void addAspect(Object object) {
+    public void addAspect(Aspect object) {
         aspects.put(object.getClass(), object);
     }
 
-    public <T> void addAspect(Class<T> clazz, T object) {
+    public <T extends Aspect> void addAspect(Class<T> clazz, T object) {
         aspects.put(clazz, object);
     }
 
@@ -75,12 +75,26 @@ public class InjectionNode {
         return aspects.containsKey(clazz);
     }
 
-    public Map<Class, Object> getAspects() {
+    public Map<Class, Aspect> getAspects() {
         return aspects;
     }
 
     @Override
     public String toString() {
         return signature.toString();
+    }
+
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this);
+        logger.append(" {");
+        for (Aspect aspect : aspects.values()) {
+            logger.pushIndent();
+            logger.append("\n");
+            aspect.log(logger);
+            logger.popIndent();
+
+        }
+        logger.append("\n}");
+
     }
 }

@@ -39,4 +39,17 @@ public class MethodInjectionPoint extends MethodInjectionPointBase {
     public ASTType getRootContainingType() {
         return rootContainingType;
     }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("MethodInjectionPoint{");
+        logger.pushIndent();
+        for (InjectionNode injectionNode : getInjectionNodes()) {
+            logger.append("\n");
+            logger.append(injectionNode);
+            logger.pushNode(injectionNode);
+        }
+        logger.popIndent();
+        logger.append("\n}");
+    }
 }

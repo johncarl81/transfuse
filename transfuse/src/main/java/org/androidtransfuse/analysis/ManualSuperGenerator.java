@@ -64,7 +64,7 @@ public class ManualSuperGenerator implements Generation {
 
     @Override
     public String getName() {
-        return "Super Generator (" + registrationMethod + ")";
+        return "Manual SUPER Generator";
     }
 
     @Override

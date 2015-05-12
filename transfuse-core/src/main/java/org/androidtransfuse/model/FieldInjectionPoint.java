@@ -17,6 +17,8 @@ package org.androidtransfuse.model;
 
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * @author John Ericksen
@@ -49,5 +51,16 @@ public class FieldInjectionPoint {
 
     public ASTField getField() {
         return field;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    public void log(InjectionNodeLogger logger) {
+        logger.append("FieldInjectionPoint=");
+        logger.append(injectionNode);
+        logger.pushNode(injectionNode);
     }
 }

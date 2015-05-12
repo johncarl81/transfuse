@@ -26,6 +26,7 @@ import org.androidtransfuse.experiment.GenerationPhase;
 import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -80,5 +81,10 @@ public class ViewRegistrationGenerator implements RegistrationGenerator {
                 }
             }
         });
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ViewRegistrationGenerator");
     }
 }

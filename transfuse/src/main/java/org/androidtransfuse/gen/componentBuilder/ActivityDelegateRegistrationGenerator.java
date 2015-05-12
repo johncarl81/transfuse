@@ -25,6 +25,7 @@ import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.experiment.ComponentBuilder;
 import org.androidtransfuse.experiment.ComponentMethodGenerator;
 import org.androidtransfuse.experiment.GenerationPhase;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 
@@ -69,5 +70,10 @@ public class ActivityDelegateRegistrationGenerator implements RegistrationGenera
                 }
             });
         }
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ActivityDelegateRegistrationGenerator");
     }
 }

@@ -16,6 +16,8 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.TypedExpression;
 
 import java.util.HashSet;
@@ -27,7 +29,7 @@ import java.util.Set;
  *
  * @author John Ericksen
  */
-public class VirtualProxyAspect {
+public class VirtualProxyAspect implements Aspect {
 
     private final Set<ASTType> proxyInterfaces = new HashSet<ASTType>();
     private boolean proxyDefined = false;
@@ -55,5 +57,11 @@ public class VirtualProxyAspect {
 
     public TypedExpression getProxyExpression() {
         return proxyExpression;
+    }
+
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("VirtualProxyAspect");
     }
 }

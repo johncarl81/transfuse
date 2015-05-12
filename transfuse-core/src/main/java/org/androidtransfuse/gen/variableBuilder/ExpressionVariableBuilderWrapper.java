@@ -17,6 +17,7 @@ package org.androidtransfuse.gen.variableBuilder;
 
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
@@ -36,5 +37,10 @@ public class ExpressionVariableBuilderWrapper implements VariableBuilder {
     @Override
     public TypedExpression buildVariable(InjectionBuilderContext injectionBuilderContext, InjectionNode injectionNode) {
         return expression;
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this.getClass().getName());
     }
 }

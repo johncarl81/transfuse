@@ -15,9 +15,7 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
-import org.androidtransfuse.model.ConstructorInjectionPoint;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.MethodInjectionPoint;
+import org.androidtransfuse.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class ASTInjectionAspect {
+public class ASTInjectionAspect implements Aspect {
 
     public enum InjectionAssignmentType {
         FIELD,
@@ -94,5 +92,27 @@ public class ASTInjectionAspect {
 
     public void setAssignmentType(InjectionAssignmentType assignmentType) {
         this.assignmentType = assignmentType;
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("InjectionAspect{");
+        logger.pushIndent();
+        if(constructorInjectionPoint != null){
+            logger.append("\n");
+            constructorInjectionPoint.log(logger);
+        }
+        for (InjectionGroup group : groups) {
+            for (FieldInjectionPoint fieldInjectionPoint : group.getFieldInjectionPoints()) {
+                logger.append("\n");
+                fieldInjectionPoint.log(logger);
+            }
+            for (MethodInjectionPoint metodInjectionPoint : group.getMethodInjectionPoints()) {
+                logger.append("\n");
+                metodInjectionPoint.log(logger);
+            }
+        }
+        logger.popIndent();
+        logger.append("\n}");
     }
 }

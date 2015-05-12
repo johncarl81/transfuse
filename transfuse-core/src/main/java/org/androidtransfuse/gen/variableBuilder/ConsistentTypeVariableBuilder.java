@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.TypedExpression;
 
 /**
@@ -54,4 +55,9 @@ public abstract class ConsistentTypeVariableBuilder implements VariableBuilder {
     }
 
     public abstract JExpression buildExpression(InjectionBuilderContext context, InjectionNode injectionNode);
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this.getClass().getName());
+    }
 }

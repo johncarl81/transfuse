@@ -16,6 +16,8 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
@@ -24,7 +26,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  *
  * @author John Ericksen
  */
-public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAspect> {
+public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAspect>, Aspect {
 
     private final boolean required;
     private final String name;
@@ -76,5 +78,10 @@ public class IntentFactoryExtraAspect implements Comparable<IntentFactoryExtraAs
     @Override
     public int compareTo(IntentFactoryExtraAspect intentFactoryExtra) {
         return getName().compareTo(intentFactoryExtra.getName());
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("IntentFactoryExtraAspect");
     }
 }

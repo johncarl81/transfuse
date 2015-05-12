@@ -27,14 +27,13 @@ import org.androidtransfuse.gen.InjectionFragmentGenerator;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.MethodDescriptor;
-import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
-import java.util.Map;
 
 /**
  * @author John Ericksen
@@ -95,6 +94,8 @@ public class OnCreateInjectionGenerator implements Generation {
                     log.debug("Canceling injection generation due to error during analysis.");
                 } else {
 
+                    logInjectionNodes(descriptor.getRootInjectionNode());
+
                     try {
                         injectionFragmentGenerator.buildFragment(
                                 block,
@@ -103,8 +104,6 @@ public class OnCreateInjectionGenerator implements Generation {
                                 descriptor.getRootInjectionNode(),
                                 builder.getScopes(),
                                 builder.getExpressionMap());
-                        
-                        logExpressionMap(builder.getExpressionMap());
                     } catch (JClassAlreadyExistsException e) {
                         throw new TransfuseRuntimeException("Class already exists", e);
                     }
@@ -114,14 +113,15 @@ public class OnCreateInjectionGenerator implements Generation {
         });
     }
 
-    private void logExpressionMap(Map<InjectionNode, TypedExpression> expressionMap) {
+    private void logInjectionNodes(InjectionNode injectionNode) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Expression Map {");
-        for (Map.Entry<InjectionNode, TypedExpression> entry : expressionMap.entrySet()) {
-            builder.append("\n\t");
-            builder.append(entry.getKey()).append(" -> ").append(entry.getValue().getType());
+        builder.append("Injection Nodes:\n");
+        InjectionNodeLogger logger = new InjectionNodeLogger(builder, injectionNode);
+        while(logger.containsUnvisitedNodes()){
+            InjectionNode node = logger.next();
+            node.log(logger);
+            logger.append("\n");
         }
-        builder.append('}');
         log.debug(builder.toString());
     }
 }

@@ -15,7 +15,9 @@
  */
 package org.androidtransfuse.analysis.astAnalyzer;
 
+import org.androidtransfuse.model.Aspect;
 import org.androidtransfuse.model.FieldInjectionPoint;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class NonConfigurationAspect {
+public class NonConfigurationAspect implements Aspect{
 
     private final List<FieldInjectionPoint> fields = new ArrayList<FieldInjectionPoint>();
 
@@ -36,5 +38,17 @@ public class NonConfigurationAspect {
 
     public List<FieldInjectionPoint> getFields() {
         return fields;
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("NonConfigurationAspect{");
+        logger.pushIndent();
+        for (FieldInjectionPoint field : fields) {
+            logger.append("\n");
+            field.log(logger);
+        }
+        logger.popIndent();
+        logger.append("\n}");
     }
 }

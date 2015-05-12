@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -30,7 +32,7 @@ import java.util.Set;
 /**
  * @author John Ericksen
  */
-public class ManualSuperAspect {
+public class ManualSuperAspect implements Aspect {
 
     private Set<Method> methods = new HashSet<Method>();
 
@@ -86,4 +88,17 @@ public class ManualSuperAspect {
             return name;
         }
     }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("ManualSuperAspect{");
+        logger.pushIndent();
+        for (Method method : methods) {
+            logger.append("\n");
+            logger.append(method.getName());
+        }
+        logger.popIndent();
+        logger.append("\n}");
+    }
+
 }

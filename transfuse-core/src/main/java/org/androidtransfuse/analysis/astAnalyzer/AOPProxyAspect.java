@@ -17,7 +17,9 @@ package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.MethodSignature;
+import org.androidtransfuse.model.Aspect;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 import java.util.*;
 
@@ -27,7 +29,7 @@ import java.util.*;
  *
  * @author John Ericksen
  */
-public class AOPProxyAspect {
+public class AOPProxyAspect implements Aspect {
 
     private final Map<MethodSignature, Set<InjectionNode>> methodInterceptors = new HashMap<MethodSignature, Set<InjectionNode>>();
     private final Map<MethodSignature, ASTMethod> methodMapping = new HashMap<MethodSignature, ASTMethod>();
@@ -57,5 +59,10 @@ public class AOPProxyAspect {
 
         methodMapping.put(methodSignature, astMethod);
         methodInterceptors.get(methodSignature).add(interceptorInjectionNode);
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("AOPProxyAspect");
     }
 }

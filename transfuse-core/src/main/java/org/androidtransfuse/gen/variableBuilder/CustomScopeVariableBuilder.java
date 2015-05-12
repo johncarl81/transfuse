@@ -20,6 +20,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scope;
@@ -84,5 +85,10 @@ public class CustomScopeVariableBuilder implements VariableBuilder {
         JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
 
         return generationUtil.ref(ScopeKey.class).staticInvoke(ScopeKey.GET_METHOD).arg(injectionNodeClassRef.dotclass()).arg(JExpr.lit(signature.buildScopeKeySignature()));
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this.getClass().getName());
     }
 }

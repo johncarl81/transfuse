@@ -16,6 +16,8 @@
 package org.androidtransfuse.analysis.astAnalyzer;
 
 import org.androidtransfuse.gen.componentBuilder.RegistrationGenerator;
+import org.androidtransfuse.model.Aspect;
+import org.androidtransfuse.model.InjectionNodeLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ import java.util.List;
  *
  * @author John Ericksen
  */
-public class RegistrationAspect {
+public class RegistrationAspect implements Aspect {
 
     private final List<RegistrationGenerator> registrationBuilders = new ArrayList<RegistrationGenerator>();
 
@@ -38,5 +40,17 @@ public class RegistrationAspect {
 
     public List<RegistrationGenerator> getRegistrationBuilders() {
         return registrationBuilders;
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append("RegistrationAspect{");
+        logger.pushIndent();
+        for (RegistrationGenerator registration : registrationBuilders) {
+            logger.append("\n");
+            registration.log(logger);
+        }
+        logger.popIndent();
+        logger.append("\n}");
     }
 }

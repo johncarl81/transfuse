@@ -19,6 +19,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
+import org.androidtransfuse.model.Aspect;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.TypedExpression;
@@ -93,7 +94,7 @@ public class ProviderGenerator {
     private InjectionNode unscoped(InjectionNode input){
         InjectionNode nonScopedInjectionNode = new InjectionNode(input.getSignature(), new InjectionSignature(input.getASTType()));
 
-        for (Map.Entry<Class, Object> aspectEntry : input.getAspects().entrySet()) {
+        for (Map.Entry<Class, Aspect> aspectEntry : input.getAspects().entrySet()) {
             nonScopedInjectionNode.addAspect(aspectEntry.getKey(), aspectEntry.getValue());
         }
 

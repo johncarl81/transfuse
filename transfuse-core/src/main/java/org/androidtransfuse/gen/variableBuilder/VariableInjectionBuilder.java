@@ -24,10 +24,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.gen.*;
 import org.androidtransfuse.gen.proxy.AOPProxyGenerator;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
-import org.androidtransfuse.model.FieldInjectionPoint;
-import org.androidtransfuse.model.InjectionNode;
-import org.androidtransfuse.model.MethodInjectionPoint;
-import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.model.*;
 import org.androidtransfuse.transaction.TransactionRuntimeException;
 import org.androidtransfuse.validation.Validator;
 
@@ -160,5 +157,10 @@ public class VariableInjectionBuilder implements VariableBuilder {
         }
 
         return typedExpressionFactory.build(injectionNode.getASTType(), variableRef);
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this.getClass().getName());
     }
 }

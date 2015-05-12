@@ -18,6 +18,7 @@ package org.androidtransfuse.gen.variableBuilder;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilder;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.model.InjectionNodeLogger;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
@@ -47,5 +48,10 @@ public class ResourceVariableBuilder implements VariableBuilder {
         ResourceIdentifier resourceIdentifier = rResource.getResourceIdentifier(resourceId);
 
         return resourceExpressionBuilder.buildExpression(injectionBuilderContext, rResourceReferenceBuilder.buildReference(resourceIdentifier));
+    }
+
+    @Override
+    public void log(InjectionNodeLogger logger) {
+        logger.append(this.getClass().getName());
     }
 }
