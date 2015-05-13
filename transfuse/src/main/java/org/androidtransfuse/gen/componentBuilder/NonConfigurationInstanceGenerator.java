@@ -19,6 +19,7 @@ import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTJDefinedClassType;
 import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.analysis.astAnalyzer.NonConfigurationAspect;
@@ -33,9 +34,9 @@ import org.androidtransfuse.model.FieldInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,13 +54,16 @@ public class NonConfigurationInstanceGenerator implements Generation {
     private final TypedExpressionFactory typeExpressionFactory;
     private final ASTElementFactory astElementFactory;
     private final ASTMethod creationMethod;
+    private final ASTType componentType;
+    private final String getMethod;
+    private final String setMethod;
 
     @Factory public interface NonconfigurationInstanceGeneratorFactory{
-        NonConfigurationInstanceGenerator build(ASTMethod creationMethod);
+        NonConfigurationInstanceGenerator build(ASTMethod creationMethod, ASTType componentType, @Named("getMethod") String getMethod, @Named("setMethod") String setMethod);
     }
 
     @Inject
-    public NonConfigurationInstanceGenerator(/*@Assisted*/ ASTMethod creationMethod, UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory, ASTElementFactory astElementFactory) {
+    public NonConfigurationInstanceGenerator(/*@Assisted*/ ASTMethod creationMethod, ASTType componentType, /*@Assisted*/ @Named("getMethod") String getMethod, /*@Assisted*/ @Named("setMethod") String setMethod, UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, InvocationBuilder invocationBuilder, TypedExpressionFactory typeExpressionFactory, ASTElementFactory astElementFactory) {
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.generationUtil = generationUtil;
@@ -67,6 +71,9 @@ public class NonConfigurationInstanceGenerator implements Generation {
         this.typeExpressionFactory = typeExpressionFactory;
         this.astElementFactory = astElementFactory;
         this.creationMethod = creationMethod;
+        this.setMethod = setMethod;
+        this.getMethod = getMethod;
+        this.componentType = componentType;
     }
 
     @Override
@@ -96,7 +103,7 @@ public class NonConfigurationInstanceGenerator implements Generation {
 
                                 //add on create init
                                 //super.getLastNonConfigurationInstance()
-                                JVar bodyVar = block.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance), JExpr.cast(nonConfigurationInstance, JExpr.invoke("getLastNonConfigurationInstance")));
+                                JVar bodyVar = block.decl(nonConfigurationInstance, variableNamer.generateName(nonConfigurationInstance), JExpr.cast(nonConfigurationInstance, JExpr.invoke(getMethod)));
                                 JBlock conditional = block._if(bodyVar.ne(JExpr._null()))._then();
 
                                 //assign variables
@@ -117,7 +124,7 @@ public class NonConfigurationInstanceGenerator implements Generation {
                             }
                         });
 
-                        ASTMethod onRetainNonConfigurationInstanceMethod = astElementFactory.findMethod(AndroidLiterals.ACTIVITY, "onRetainNonConfigurationInstance");
+                        ASTMethod onRetainNonConfigurationInstanceMethod = astElementFactory.findMethod(componentType, setMethod);
                         builder.add(onRetainNonConfigurationInstanceMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
                             @Override
                             public void generate(MethodDescriptor methodDescriptor, JBlock block) {

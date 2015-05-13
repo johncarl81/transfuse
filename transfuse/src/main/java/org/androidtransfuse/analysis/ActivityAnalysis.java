@@ -151,7 +151,12 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             //listener registration
             activityDescriptor.getGenerators().add(listerRegistrationGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
             //non configuration instance update
-            activityDescriptor.getGenerators().add(nonConfigurationInstanceGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
+            if(activityType.extendsFrom(AndroidLiterals.FRAGMENT_ACTIVITY)){
+                activityDescriptor.getGenerators().add(nonConfigurationInstanceGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), AndroidLiterals.FRAGMENT_ACTIVITY, "getLastCustomNonConfigurationInstance", "onRetainCustomNonConfigurationInstance"));
+            }
+            else {
+                activityDescriptor.getGenerators().add(nonConfigurationInstanceGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), AndroidLiterals.ACTIVITY, "getLastNonConfigurationInstance", "onRetainNonConfigurationInstance"));
+            }
 
             componentAnalysis.setupGenerators(activityDescriptor, activityType, Activity.class);
 

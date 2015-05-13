@@ -69,8 +69,10 @@ public final class AndroidLiterals {
     public static final ASTType GRAPHICS_DRAWABLE = new ASTStringType("android.graphics.drawable.Drawable");
     public static final ASTType ANIMATION = new ASTStringType("android.view.animation.Animation");
     public static final ASTType ANIMATION_UTILS = new ASTStringType("android.view.animation.AnimationUtils");
+    public static final ASTType FRAGMENT_ACTIVITY = new ASTStringType("android.support.v4.app.FragmentActivity");
 
     private AndroidLiterals(){
         //private utility class constructor
     }
+
 }
