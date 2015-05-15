@@ -139,7 +139,7 @@ public class ComponentBuilder {
         if(!methodData.containsKey(methodSignature)){
             methodData.put(methodSignature, new MethodMetaData(method));
         }
-        methodData.get(methodSignature).put(phase, partGenerator);
+        methodData.get(methodSignature).putLazy(phase, partGenerator);
     }
 
     public void add(ASTMethod method, GenerationPhase phase, ComponentMethodGenerator partGenerator){

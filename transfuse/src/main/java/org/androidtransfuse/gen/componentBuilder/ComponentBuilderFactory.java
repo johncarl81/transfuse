@@ -32,7 +32,7 @@ import javax.inject.Named;
 @Factory
 public interface ComponentBuilderFactory {
 
-    MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
+    MethodCallbackGenerator buildMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod") ASTMethod creationMethod, boolean nullDelegateCheck);
 
     FragmentOnSaveInstanceStateMethodCallbackGenerator buildFragmentOnSaveInstanceStateMethodCallbackGenerator(ASTType eventAnnotation, @Named("eventMethod") ASTMethod eventMethod, @Named("creationMethod")ASTMethod creationMethod);
 

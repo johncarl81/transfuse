@@ -103,7 +103,11 @@ public class ComponentBuilder {
         }
 
         public MethodBuilder event(Class<? extends Annotation> eventAnnotation) {
-            repository.addEvent(componentAnnotation, componentType, new EventMapping(methodName, parameters, eventAnnotation));
+            return event(eventAnnotation, false);
+        }
+
+        public MethodBuilder event(Class<? extends Annotation> eventAnnotation, boolean nullDelegateCheck) {
+            repository.addEvent(componentAnnotation, componentType, new EventMapping(methodName, parameters, eventAnnotation, nullDelegateCheck));
             return this;
         }
 

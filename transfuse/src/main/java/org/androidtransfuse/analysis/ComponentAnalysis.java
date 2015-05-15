@@ -108,7 +108,7 @@ public class ComponentAnalysis {
 
         ASTType eventAnnotation = astClassFactory.getType(eventMapping.getAnnotation());
 
-        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, registrationMethod);
+        return componentBuilderFactory.buildMethodCallbackGenerator(eventAnnotation, method, registrationMethod, eventMapping.isNullDelegateCheck());
     }
 
     private ASTMethod getASTMethod(ASTType type, String methodName, List<ASTType> args) {

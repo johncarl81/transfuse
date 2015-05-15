@@ -45,9 +45,10 @@ public class MethodCallbackGenerator implements Generation {
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
+    private final boolean nullDelegateCheck;
 
     @Inject
-    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ @Named("eventMethod") ASTMethod eventMethod, /*@Assisted */ @Named("creationMethod") ASTMethod creationMethod, InvocationBuilder invocationBuilder, ASTClassFactory astClassFactory, JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
+    public MethodCallbackGenerator(/*@Assisted*/ ASTType eventAnnotation, /*@Assisted*/ @Named("eventMethod") ASTMethod eventMethod, /*@Assisted */ @Named("creationMethod") ASTMethod creationMethod, /*@Assisted*/ boolean nullDelegateCheck, InvocationBuilder invocationBuilder, ASTClassFactory astClassFactory, JCodeModel codeModel, UniqueVariableNamer namer, ClassGenerationUtil generationUtil) {
         this.eventAnnotation = eventAnnotation;
         this.invocationBuilder = invocationBuilder;
         this.eventMethod = eventMethod;
@@ -56,6 +57,7 @@ public class MethodCallbackGenerator implements Generation {
         this.namer = namer;
         this.generationUtil = generationUtil;
         this.superCallerType = astClassFactory.getType(SuperCaller.class);
+        this.nullDelegateCheck = nullDelegateCheck;
     }
 
     @Override
@@ -107,7 +109,14 @@ public class MethodCallbackGenerator implements Generation {
                                             eventReceiverExpression
                                     );
 
-                                    block.add(methodCall);
+                                    if(nullDelegateCheck){
+                                        block._if(eventReceiverExpression.getExpression().ne(JExpr._null()))._then().block()
+                                                .add(methodCall);
+                                    }
+                                    else{
+                                        block.add(methodCall);
+                                    }
+
                                 }
                             });
                         }

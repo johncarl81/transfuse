@@ -27,7 +27,6 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.FragmentLayoutGenerator;
-import org.androidtransfuse.experiment.generators.NullDelegateCheckGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.componentBuilder.ComponentBuilderFactory;
@@ -66,7 +65,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final FragmentLayoutGenerator fragmentLayoutGenerator;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final ComponentAnalysis componentAnalysis;
-    private final NullDelegateCheckGenerator.NullDelegateCheckGeneratorFactory nullDelegateCheckGeneratorFactory;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -86,8 +84,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
                             FragmentLayoutGenerator fragmentLayoutGenerator,
                             ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                            ComponentAnalysis componentAnalysis,
-                            NullDelegateCheckGenerator.NullDelegateCheckGeneratorFactory nullDelegateCheckGeneratorFactory) {
+                            ComponentAnalysis componentAnalysis) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
@@ -107,7 +104,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.fragmentLayoutGenerator = fragmentLayoutGenerator;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.componentAnalysis = componentAnalysis;
-        this.nullDelegateCheckGeneratorFactory = nullDelegateCheckGeneratorFactory;
     }
 
     @Override
@@ -144,7 +140,6 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         fragmentDescriptor.getGenerators().add(scopesGenerationFactory.build(onCreateViewMethod));
 
         fragmentDescriptor.getGenerators().add(fragmentLayoutGenerator);
-        fragmentDescriptor.getGenerators().add(nullDelegateCheckGeneratorFactory.build(getASTMethod("onDestroy")));
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);

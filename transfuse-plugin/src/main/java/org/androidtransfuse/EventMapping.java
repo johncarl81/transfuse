@@ -29,13 +29,15 @@ public class EventMapping {
     private String methodName;
     private List<ASTType> methodArguments = new ArrayList<ASTType>();
     private Class<? extends Annotation> annotation;
+    private boolean nullDelegateCheck;
 
-    public EventMapping(String methodName, List<ASTType> methodArguments, Class<? extends Annotation> annotation) {
+    public EventMapping(String methodName, List<ASTType> methodArguments, Class<? extends Annotation> annotation, boolean nullDelegateCheck) {
         this.methodName = methodName;
         if(methodArguments != null) {
             this.methodArguments.addAll(methodArguments);
         }
         this.annotation = annotation;
+        this.nullDelegateCheck = nullDelegateCheck;
     }
 
     public String getMethodName() {
@@ -48,5 +50,9 @@ public class EventMapping {
 
     public Class<? extends Annotation> getAnnotation() {
         return annotation;
+    }
+
+    public boolean isNullDelegateCheck() {
+        return nullDelegateCheck;
     }
 }
