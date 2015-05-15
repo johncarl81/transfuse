@@ -34,6 +34,16 @@ public final class Components {
                 public Class findClass(Class clazz) {
                     return null; //cannot find class
                 }
+
+                @Override
+                public String getGeneratedClassName(Class clazz) {
+                    return COMPONENTS_REPOSITORY_NAME;
+                }
+
+                @Override
+                public String getGeneratedTypeName() {
+                    return "component";
+                }
             };
 
     private Components(){

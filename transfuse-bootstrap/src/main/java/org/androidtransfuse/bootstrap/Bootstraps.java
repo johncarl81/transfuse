@@ -43,12 +43,22 @@ public final class Bootstraps {
                 public BootstrapInjector findClass(Class clazz) {
 
                     try {
-                        Class bootstrapClass = Class.forName(Namer.name(clazz.getName()).append(IMPL_EXT).build());
+                        Class bootstrapClass = Class.forName(getGeneratedClassName(clazz));
                         return new BootstrapInjectorReflectionProxy(bootstrapClass);
                     } catch (ClassNotFoundException e) {
                         return null;
                     }
 
+                }
+
+                @Override
+                public String getGeneratedClassName(Class clazz){
+                    return Namer.name(clazz.getName()).append(IMPL_EXT).build();
+                }
+
+                @Override
+                public String getGeneratedTypeName() {
+                    return "@Bootstrap";
                 }
             };
 

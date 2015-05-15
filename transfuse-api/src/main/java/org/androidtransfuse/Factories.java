@@ -38,12 +38,22 @@ public final class Factories {
                 public FactoryBuilder findClass(Class clazz) {
 
                     try {
-                        Class factoryClass = Class.forName(Namer.name(clazz.getName()).append(IMPL_EXT).build());
+                        Class factoryClass = Class.forName(getGeneratedClassName(clazz));
                         return new FactoryBuilderReflectionProxy(factoryClass);
                     } catch (ClassNotFoundException e) {
                         return null;
                     }
 
+                }
+
+                @Override
+                public String getGeneratedClassName(Class clazz){
+                    return Namer.name(clazz.getName()).append(IMPL_EXT).build();
+                }
+
+                @Override
+                public String getGeneratedTypeName() {
+                    return "@Factory";
                 }
             };
 
