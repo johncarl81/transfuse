@@ -154,6 +154,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
 
         fragmentDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                 getASTMethod("onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE),
+                getASTMethod("onDestroy"),
                 getASTMethod("onResume"),
                 getASTMethod("onPause")
         ));

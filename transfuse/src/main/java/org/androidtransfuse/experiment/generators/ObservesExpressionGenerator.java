@@ -15,6 +15,9 @@
  */
 package org.androidtransfuse.experiment.generators;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTJDefinedClassType;
@@ -34,6 +37,7 @@ import org.androidtransfuse.model.TypedExpression;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +49,7 @@ import java.util.Map;
 public class ObservesExpressionGenerator implements Generation {
 
     private final ASTMethod creationMethod;
+    private final ASTMethod destroyMethod;
     private final ASTMethod registerMethod;
     private final ASTMethod unregisterMethod;
     private final JCodeModel codeModel;
@@ -60,12 +65,14 @@ public class ObservesExpressionGenerator implements Generation {
     @Factory
     public interface ObservesExpressionGeneratorFactory {
         ObservesExpressionGenerator build(@Named("creationMethod") ASTMethod creationMethod,
+                                          @Named("destroyMethod") ASTMethod destroyMethod,
                                           @Named("registerMethod") ASTMethod registerMethod,
                                           @Named("unregisterMethod") ASTMethod unregisterMethod);
     }
 
     @Inject
     public ObservesExpressionGenerator(@Named("creationMethod") ASTMethod creationMethod,
+                                       @Named("destroyMethod") ASTMethod destroyMethod,
                                        @Named("registerMethod") ASTMethod registerMethod,
                                        @Named("unregisterMethod") ASTMethod unregisterMethod,
                                        JCodeModel codeModel,
@@ -78,6 +85,7 @@ public class ObservesExpressionGenerator implements Generation {
                                        InjectionFragmentGenerator injectionFragmentGenerator,
                                        InstantiationStrategyFactory instantiationStrategyFactory) {
         this.creationMethod = creationMethod;
+        this.destroyMethod = destroyMethod;
         this.registerMethod = registerMethod;
         this.unregisterMethod = unregisterMethod;
         this.codeModel = codeModel;
@@ -102,28 +110,46 @@ public class ObservesExpressionGenerator implements Generation {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                 try {
-                    //mapping from event type -> observer
-                    Map<JClass, JVar> observerTuples = getObservers(builder, builder.getExpressionMap());
 
-                    if (!observerTuples.isEmpty()) {
-                        final JVar eventManager = getEventManager(builder, builder.getExpressionMap(), builder.getScopes());
+                    ImmutableList<InjectionNode> observableInjectionNodes = FluentIterable.from(builder.getExpressionMap().keySet())
+                            .filter(new Predicate<InjectionNode>() {
+                                @Override
+                                public boolean apply(InjectionNode injectionNode) {
+                                    return injectionNode.containsAspect(ObservesAspect.class);
+                                }
+                            }).toList();
 
-                        for (final Map.Entry<JClass, JVar> tupleEntry : observerTuples.entrySet()) {
+                    if(!observableInjectionNodes.isEmpty()) {
+                        //mapping from event type -> observer
+                        final JVar observerCollection = getObserversCollection(builder, observableInjectionNodes);
+
+                        if (observerCollection != null) {
+                            final JVar eventManager = getEventManager(builder, builder.getExpressionMap(), builder.getScopes());
 
                             builder.add(registerMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
                                 @Override
                                 public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                                    block.invoke(eventManager, "register")
-                                            .arg(tupleEntry.getKey().dotclass())
-                                            .arg(tupleEntry.getValue());
+                                    final JClass mapEntryType = generationUtil.ref(Map.Entry.class).narrow(EventObserver.class, Class.class);
+                                    JForEach forEachLoop = block.forEach(mapEntryType, variableNamer.generateName(EventObserver.class), observerCollection.invoke("entrySet"));
+                                    forEachLoop.body().invoke(eventManager, "register")
+                                            .arg(forEachLoop.var().invoke("getValue"))
+                                            .arg(forEachLoop.var().invoke("getKey"));
                                 }
                             });
 
                             builder.add(unregisterMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
                                 @Override
                                 public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                                    block.invoke(eventManager, "unregister")
-                                            .arg(tupleEntry.getValue());
+                                    JForEach forEachLoop = block.forEach(generationUtil.ref(EventObserver.class), variableNamer.generateName(EventObserver.class), observerCollection.invoke("keySet"));
+                                    forEachLoop.body().invoke(eventManager, "unregister")
+                                            .arg(forEachLoop.var());
+                                }
+                            });
+
+                            builder.add(destroyMethod, GenerationPhase.TEARDOWN, new ComponentMethodGenerator() {
+                                @Override
+                                public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                                    block.invoke(observerCollection, "clear");
                                 }
                             });
                         }
@@ -166,66 +192,62 @@ public class ObservesExpressionGenerator implements Generation {
         return eventManagerVar;
     }
 
-    private Map<JClass, JVar> getObservers(final ComponentBuilder builder, Map<InjectionNode, TypedExpression> expressionMap) throws JClassAlreadyExistsException {
-        Map<JClass, JVar> observerTuples = new HashMap<JClass, JVar>();
+    private JVar getObserversCollection(final ComponentBuilder builder, ImmutableList<InjectionNode> observableInjectionNodes) throws JClassAlreadyExistsException {
+        JClass mapType = generationUtil.ref(Map.class).narrow(EventObserver.class, Class.class);
+        JClass hashMapType = generationUtil.ref(HashMap.class).narrow(EventObserver.class, Class.class);
+        final JVar observersCollection = builder.getDefinedClass().field(Modifier.PRIVATE, mapType, variableNamer.generateName("observesMap"), JExpr._new(hashMapType));
 
-        for (Map.Entry<InjectionNode, TypedExpression> expressionEntry : expressionMap.entrySet()) {
+        for (InjectionNode observableInjectionNode : observableInjectionNodes) {
+            TypedExpression typedExpression = builder.getExpressionMap().get(observableInjectionNode);
+            final JExpression observerExpression = builder.getExpressionMap().get(observableInjectionNode).getExpression();
+            ObservesAspect aspect = observableInjectionNode.getAspect(ObservesAspect.class);
 
-            if (expressionEntry.getKey().containsAspect(ObservesAspect.class)) {
-                ObservesAspect aspect = expressionEntry.getKey().getAspect(ObservesAspect.class);
-                TypedExpression typedExpression = expressionEntry.getValue();
-                final JExpression observerExpression = expressionEntry.getValue().getExpression();
 
-                for (ASTType event : aspect.getEvents()) {
+            for (ASTType event : aspect.getEvents()) {
 
-                    //generate inner class EventObserver<E> (E = event)
-                    JClass eventRef = generationUtil.ref(event);
-                    JClass targetRef = generationUtil.ref(typedExpression.getType());
+                //generate inner class EventObserver<E> (E = event)
+                final JClass eventRef = generationUtil.ref(event);
+                JClass targetRef = generationUtil.ref(typedExpression.getType());
 
-                    final JDefinedClass observerClass = builder.getDefinedClass()._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(typedExpression.getType()).build().getClassName());
+                final JDefinedClass observerClass = builder.getDefinedClass()._class(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, classNamer.numberedClassName(typedExpression.getType()).build().getClassName());
 
-                    //target variable
-                    JFieldVar targetField = observerClass.field(JMod.PRIVATE, targetRef, variableNamer.generateName(typedExpression.getType()));
+                //target variable
+                JFieldVar targetField = observerClass.field(JMod.PRIVATE, targetRef, variableNamer.generateName(typedExpression.getType()));
 
-                    //match default constructor public WeakObserver(T target){
-                    JMethod constructor = observerClass.constructor(JMod.PUBLIC);
-                    JVar constTargetParam = constructor.param(targetRef, variableNamer.generateName(targetRef));
-                    constructor.body().assign(targetField, constTargetParam);
+                //match default constructor public WeakObserver(T target){
+                JMethod constructor = observerClass.constructor(JMod.PUBLIC);
+                JVar constTargetParam = constructor.param(targetRef, variableNamer.generateName(targetRef));
+                constructor.body().assign(targetField, constTargetParam);
 
-                    observerClass._implements(generationUtil.ref(EventObserver.class).narrow(eventRef));
+                observerClass._implements(generationUtil.ref(EventObserver.class).narrow(eventRef));
 
-                    JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
-                    triggerMethod.annotate(Override.class);
-                    JVar eventParam = triggerMethod.param(eventRef, variableNamer.generateName(event));
-                    JBlock triggerBody = triggerMethod.body();
+                JMethod triggerMethod = observerClass.method(JMod.PUBLIC, codeModel.VOID, EventObserver.TRIGGER);
+                triggerMethod.annotate(Override.class);
+                JVar eventParam = triggerMethod.param(eventRef, variableNamer.generateName(event));
+                JBlock triggerBody = triggerMethod.body();
 
-                    List<JExpression> parameters = new ArrayList<JExpression>();
-                    parameters.add(eventParam);
+                List<JExpression> parameters = new ArrayList<JExpression>();
+                parameters.add(eventParam);
 
-                    for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
-                        triggerBody.add(invocationBuilder.buildMethodCall(
-                                new ASTJDefinedClassType(observerClass),
-                                expressionEntry.getKey().getASTType(),
-                                observerMethod,
-                                parameters,
-                                new TypedExpression(typedExpression.getType(), targetField)));
-                    }
-
-                    final JFieldVar observerField = builder.getDefinedClass().field(JMod.PRIVATE, observerClass, variableNamer.generateName(EventObserver.class));
-
-                    observerTuples.put(eventRef, observerField);
-
-                    builder.add(creationMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
-                        @Override
-                        public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                            block.assign(observerField, JExpr._new(observerClass).arg(observerExpression));
-                        }
-                    });
-
+                for (ASTMethod observerMethod : aspect.getObserverMethods(event)) {
+                    triggerBody.add(invocationBuilder.buildMethodCall(
+                            new ASTJDefinedClassType(observerClass),
+                            typedExpression.getType(),
+                            observerMethod,
+                            parameters,
+                            new TypedExpression(typedExpression.getType(), targetField)));
                 }
+
+                builder.add(creationMethod, GenerationPhase.REGISTRATION, new ComponentMethodGenerator() {
+                    @Override
+                    public void generate(MethodDescriptor methodDescriptor, JBlock block) {
+                        block.invoke(observersCollection, "put").arg(JExpr._new(observerClass).arg(observerExpression)).arg(eventRef.dotclass());
+                    }
+                });
+
             }
         }
 
-        return observerTuples;
+        return observersCollection;
     }
 }

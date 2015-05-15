@@ -126,6 +126,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             serviceDescriptor.getGenerators().add(listenerRegistrationGeneratorFactory.build(getASTMethod("onCreate")));
             serviceDescriptor.getGenerators().add(observesExpressionDecoratorFactory.build(
                     getASTMethod("onCreate"),
+                    getASTMethod("onDestroy"),
                     getASTMethod("onCreate"),
                     getASTMethod("onDestroy")
             ));

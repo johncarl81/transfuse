@@ -29,5 +29,6 @@ public enum GenerationPhase {
     POSTINJECTION,
     REGISTRATION,
     EVENT,
+    TEARDOWN,
     RETURN
 }

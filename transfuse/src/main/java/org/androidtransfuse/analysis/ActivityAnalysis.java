@@ -162,6 +162,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
             activityDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                     getASTMethod("onCreate", AndroidLiterals.BUNDLE),
+                    getASTMethod("onDestroy"),
                     getASTMethod("onResume"),
                     getASTMethod("onPause")));
         }

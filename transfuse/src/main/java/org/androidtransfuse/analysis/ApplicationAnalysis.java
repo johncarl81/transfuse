@@ -112,6 +112,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
             applicationDescriptor.getGenerators().add(injectionGeneratorFactory.build(getASTMethod("onCreate"), astType));
             applicationDescriptor.getGenerators().add(observesExpressionGeneratorFactory.build(
                     getASTMethod("onCreate"),
+                    getASTMethod("onTerminate"),
                     getASTMethod("onCreate"),
                     getASTMethod("onTerminate")
             ));
