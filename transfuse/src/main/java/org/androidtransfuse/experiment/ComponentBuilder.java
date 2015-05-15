@@ -38,16 +38,18 @@ public class ComponentBuilder {
 
     private class MethodMetaData{
         private final Map<GenerationPhase, List<ComponentMethodGenerator>> generators = new HashMap<GenerationPhase, List<ComponentMethodGenerator>>();
-        private final List<ComponentMethodGenerator> lazyGenerators = new ArrayList<ComponentMethodGenerator>();
+        private final Map<GenerationPhase, List<ComponentMethodGenerator>> lazyGenerators = new HashMap<GenerationPhase, List<ComponentMethodGenerator>>();
         private final ASTMethod methodDefinition;
-        private MethodDescriptor descriptor;
 
         private MethodMetaData(ASTMethod methodDefinition) {
             this.methodDefinition = methodDefinition;
         }
 
-        public void addLazy(ComponentMethodGenerator partGenerator) {
-            lazyGenerators.add(partGenerator);
+        public void putLazy(GenerationPhase phase, ComponentMethodGenerator partGenerator) {
+            if(!lazyGenerators.containsKey(phase)){
+                lazyGenerators.put(phase, new ArrayList<ComponentMethodGenerator>());
+            }
+            lazyGenerators.get(phase).add(partGenerator);
         }
 
         public void put(GenerationPhase phase, ComponentMethodGenerator partGenerator) {
@@ -58,40 +60,36 @@ public class ComponentBuilder {
         }
 
         public void build() {
-            for (GenerationPhase phase : GenerationPhase.values()) {
-                if(generators.containsKey(phase)){
-                    for (ComponentMethodGenerator componentMethodGenerator : generators.get(phase)) {
-                        componentMethodGenerator.generate(getMethod(), descriptor.getMethod().body());
+            if(!generators.isEmpty()){
+                MethodDescriptor descriptor = buildMethod();
+                for (GenerationPhase phase : GenerationPhase.values()) {
+                    if(lazyGenerators.containsKey(phase)){
+                        for (ComponentMethodGenerator componentMethodGenerator : lazyGenerators.get(phase)) {
+                            componentMethodGenerator.generate(descriptor, descriptor.getMethod().body());
+                        }
+                    }
+                    if(generators.containsKey(phase)){
+                        for (ComponentMethodGenerator componentMethodGenerator : generators.get(phase)) {
+                            componentMethodGenerator.generate(descriptor, descriptor.getMethod().body());
+                        }
                     }
                 }
             }
+
         }
+        private MethodDescriptor buildMethod() {
+            JMethod method = getDefinedClass().method(JMod.PUBLIC, generationUtil.ref(methodDefinition.getReturnType()), methodDefinition.getName());
+            method.annotate(Override.class);
 
-        public void setDescriptor(MethodDescriptor descriptor){
-            this.descriptor = descriptor;
-        }
+            MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, methodDefinition);
 
-        private MethodDescriptor getMethod() {
-            if (descriptor == null) {
-                JMethod method = getDefinedClass().method(JMod.PUBLIC, generationUtil.ref(methodDefinition.getReturnType()), methodDefinition.getName());
-                method.annotate(Override.class);
-
-                MethodDescriptorBuilder methodDescriptorBuilder = new MethodDescriptorBuilder(method, methodDefinition);
-
-                //parameters
-                for (ASTParameter astParameter : methodDefinition.getParameters()) {
-                    JVar param = method.param(generationUtil.ref(astParameter.getASTType()), variableNamer.generateName(astParameter.getASTType()));
-                    methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
-                }
-
-                descriptor = methodDescriptorBuilder.build();
-
-                //todo: move to be properly lazy
-                for (ComponentMethodGenerator generator : lazyGenerators) {
-                    generator.generate(descriptor, method.body());
-                }
+            //parameters
+            for (ASTParameter astParameter : methodDefinition.getParameters()) {
+                JVar param = method.param(generationUtil.ref(astParameter.getASTType()), variableNamer.generateName(astParameter.getASTType()));
+                methodDescriptorBuilder.putParameter(astParameter, new TypedExpression(astParameter.getASTType(), param));
             }
-            return descriptor;
+
+            return methodDescriptorBuilder.build();
         }
     }
 
@@ -136,12 +134,12 @@ public class ComponentBuilder {
         generators.add(partGenerator);
     }
 
-    public void addLazy(ASTMethod method, ComponentMethodGenerator partGenerator){
+    public void addLazy(ASTMethod method, GenerationPhase phase, ComponentMethodGenerator partGenerator){
         MethodSignature methodSignature = new MethodSignature(method);
         if(!methodData.containsKey(methodSignature)){
             methodData.put(methodSignature, new MethodMetaData(method));
         }
-        methodData.get(methodSignature).addLazy(partGenerator);
+        methodData.get(methodSignature).put(phase, partGenerator);
     }
 
     public void add(ASTMethod method, GenerationPhase phase, ComponentMethodGenerator partGenerator){

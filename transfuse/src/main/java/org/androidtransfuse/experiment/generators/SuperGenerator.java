@@ -23,10 +23,7 @@ import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.MethodSignature;
 import org.androidtransfuse.analysis.astAnalyzer.ManualSuperAspect;
 import org.androidtransfuse.annotations.Factory;
-import org.androidtransfuse.experiment.ComponentBuilder;
-import org.androidtransfuse.experiment.ComponentDescriptor;
-import org.androidtransfuse.experiment.ComponentMethodGenerator;
-import org.androidtransfuse.experiment.Generation;
+import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 
@@ -59,7 +56,7 @@ public class SuperGenerator implements Generation {
 
     @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
-        builder.addLazy(method, new ComponentMethodGenerator() {
+        builder.addLazy(method, GenerationPhase.SUPER, new ComponentMethodGenerator() {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                 if(!isSuperCanceled(builder.getExpressionMap().keySet())) {
