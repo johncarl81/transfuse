@@ -20,6 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
@@ -79,7 +80,8 @@ import static com.google.common.collect.Collections2.transform;
         Fragment.class,
         TransfuseModule.class,
         Factory.class,
-        ImplementedBy.class})
+        ImplementedBy.class,
+        Install.class})
 @Bootstrap
 @AutoService(Processor.class)
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
@@ -177,8 +179,13 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     }
 
     private Collection<Provider<ASTType>> buildASTCollection(RoundEnvironment round, Class<? extends Annotation> annotation) {
+        ImmutableSet<? extends Element> components = ImmutableSet.<Element>builder()
+                .addAll(findInstalledComponents(round, annotation))
+                .addAll(round.getElementsAnnotatedWith(annotation))
+                .build();
+
         return reloadableASTElementFactory.buildProviders(
-                FluentIterable.from(round.getElementsAnnotatedWith(annotation))
+                FluentIterable.from(components)
                         .filter(new Predicate<Element>() {
                             public boolean apply(Element element) {
                                 //we're only dealing with TypeElements
@@ -187,10 +194,31 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
                         })
                         .transform(new Function<Element, TypeElement>() {
                             public TypeElement apply(Element element) {
-                                return (TypeElement)element;
+                                return (TypeElement) element;
                             }
                         })
                         .toList());
+    }
+
+    private Set<? extends Element> findInstalledComponents(RoundEnvironment round, final Class<? extends Annotation> annotation) {
+        Collection<ASTType> annotatedClasses =transform(round.getElementsAnnotatedWith(Install.class),
+                astElementConverterFactory.buildASTElementConverter(ASTType.class));
+
+        ImmutableSet.Builder<Element> builder = ImmutableSet.builder();
+
+        for (ASTType annotatedClass : annotatedClasses) {
+            ASTAnnotation installAstAnnotation = annotatedClass.getASTAnnotation(Install.class);
+
+            ASTType[] values = installAstAnnotation.getProperty("value", ASTType[].class);
+
+            for (ASTType value : values) {
+                if(value.isAnnotated(annotation)) {
+                    builder.add(elements.getTypeElement(value.getName()));
+                }
+            }
+        }
+
+        return builder.build();
     }
 
     private Collection<ASTType> wrapASTCollection(Collection<? extends TypeElement> elementCollection) {
