@@ -31,8 +31,6 @@ import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.componentBuilder.NonConfigurationInstanceGenerator;
 import org.androidtransfuse.gen.variableBuilder.*;
 import org.androidtransfuse.intentFactory.ActivityIntentFactoryStrategy;
-import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -51,7 +49,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
-    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
@@ -75,7 +72,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                             AnalysisContextFactory analysisContextFactory,
                             ASTElementFactory astElementFactory,
-                            ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder,
                             ASTTypeBuilderVisitor astTypeBuilderVisitor,
                             InjectionBindingBuilder injectionBindingBuilder,
                             ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
@@ -97,7 +93,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
-        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
@@ -177,11 +172,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(activityType, Activity.class);
 
-        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
-        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
-        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
 
@@ -195,9 +186,6 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(View.class, viewVariableBuilder);
-
-        injectionNodeBuilderRepository.addRepository(
-                injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
 
         injectionNodeBuilderRepository.addRepository(
                 injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());

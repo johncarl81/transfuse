@@ -32,11 +32,8 @@ import org.androidtransfuse.experiment.generators.ServiceManifestEntryGenerator;
 import org.androidtransfuse.gen.GeneratorFactory;
 import org.androidtransfuse.gen.componentBuilder.ListenerRegistrationGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
 import org.androidtransfuse.intentFactory.ServiceIntentFactoryStrategy;
-import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.MethodDescriptor;
-import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -54,7 +51,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory;
     private final AnalysisContextFactory analysisContextFactory;
     private final ASTElementFactory astElementFactory;
-    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final GeneratorFactory generatorFactory;
@@ -69,7 +65,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
                            AnalysisContextFactory analysisContextFactory,
                            ASTElementFactory astElementFactory,
-                           ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder,
                            InjectionBindingBuilder injectionBindingBuilder,
                            ASTTypeBuilderVisitor astTypeBuilderVisitor,
                            GeneratorFactory generatorFactory,
@@ -82,7 +77,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
-        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.generatorFactory = generatorFactory;
@@ -150,12 +144,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(serviceType, Service.class);
 
-
-        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
-        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
         injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, injectionBindingBuilder.buildThis(AndroidLiterals.CONTEXT));
-        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
 
@@ -164,7 +153,6 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
             serviceType = serviceType.getSuperClass();
         }
 
-        injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildApplicationInjections());
         injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;

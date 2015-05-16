@@ -29,9 +29,6 @@ import org.androidtransfuse.experiment.generators.ApplicationManifestEntryGenera
 import org.androidtransfuse.experiment.generators.ApplicationScopeSeedGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
-import org.androidtransfuse.gen.variableBuilder.ProviderInjectionNodeBuilderFactory;
-import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -48,7 +45,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private final ASTElementFactory astElementFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
     private final AnalysisContextFactory analysisContextFactory;
-    private final ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory;
     private final ApplicationManifestEntryGenerator applicationManifestEntryGenerator;
@@ -61,7 +57,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
                                ASTElementFactory astElementFactory,
                                ASTTypeBuilderVisitor astTypeBuilderVisitor,
                                AnalysisContextFactory analysisContextFactory,
-                               ProviderInjectionNodeBuilderFactory providerInjectionNodeBuilder,
                                ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
                                OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
                                ApplicationManifestEntryGenerator applicationManifestEntryGenerator,
@@ -72,7 +67,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         this.astElementFactory = astElementFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
-        this.providerInjectionNodeBuilder = providerInjectionNodeBuilder;
         this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
         this.injectionGeneratorFactory = injectionGeneratorFactory;
         this.applicationManifestEntryGenerator = applicationManifestEntryGenerator;
@@ -132,21 +126,6 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
     private InjectionNodeBuilderRepository buildVariableBuilderMap(ASTType applicationType) {
         InjectionNodeBuilderRepository injectionNodeBuilderRepository = componentAnalysis.setupInjectionNodeBuilderRepository(applicationType, Application.class);
 
-
-        ASTType applicationScopeType = astElementFactory.getType(ApplicationScope.ApplicationScopeQualifier.class);
-        ASTType applicationProvider = astElementFactory.getType(ApplicationScope.ApplicationProvider.class);
-        injectionNodeBuilderRepository.putType(AndroidLiterals.APPLICATION, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
-        injectionNodeBuilderRepository.putType(AndroidLiterals.CONTEXT, providerInjectionNodeBuilder.builderProviderBuilder(applicationProvider));
-        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.APPLICATION), applicationScopeType);
-        injectionNodeBuilderRepository.putScoped(new InjectionSignature(AndroidLiterals.CONTEXT), applicationScopeType);
-
-        /*while(!applicationType.equals(AndroidLiterals.APPLICATION) && applicationType.inheritsFrom(AndroidLiterals.APPLICATION)){
-            injectionNodeBuilderRepository.putType(applicationType, injectionBindingBuilder.buildThis(applicationType));
-            applicationType = applicationType.getSuperClass();
-        }*/
-
-
-        injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildApplicationInjections());
         injectionNodeBuilderRepository.addRepository(variableBuilderRepositoryFactory.buildModuleConfiguration());
 
         return injectionNodeBuilderRepository;
