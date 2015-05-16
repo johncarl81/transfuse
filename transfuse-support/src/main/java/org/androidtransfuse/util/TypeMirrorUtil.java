@@ -20,6 +20,10 @@ import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * Scab class to access the Class paramters of annotations.
+ *
+ * http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
+ *
  * @author John Ericksen
  */
 public final class TypeMirrorUtil {
@@ -29,7 +33,6 @@ public final class TypeMirrorUtil {
     }
 
     public static TypeMirror getTypeMirror(Object annotation, String parameter){
-        //http://blog.retep.org/2009/02/13/getting-class-values-from-annotations-in-an-annotationprocessor/
         try {
             annotation.getClass().getMethod(parameter).invoke(annotation);
         } catch (MirroredTypeException mte) {
