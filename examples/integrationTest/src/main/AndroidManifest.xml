@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" t:tag="+,n"/>
     <uses-permission android:maxSdkVersion="20" android:name="android.permission.ACCESS_FINE_LOCATION" t:tag="+,n,v"/>
     <uses-permission android:name="android.permission.VIBRATE" t:tag="+,n"/>
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11" t:tag="+,m,t"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21" t:tag="+,m,t"/>
     <application android:allowBackup="true" android:icon="@drawable/icon" android:label="Transfuse Integration Test" android:name=".IntegrationAppApplication" t:tag="+,ab,i,l,n">
         <activity android:label="About" android:name=".AboutActivity" t:tag="+,l,n"/>
         <activity android:label="@string/app_name" android:name=".MainActivity" t:tag="+,l,n">

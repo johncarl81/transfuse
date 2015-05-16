@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import javax.inject.Singleton;
 
@@ -35,6 +36,7 @@ import static org.junit.Assert.assertTrue;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(manifest = "src/main/AndroidManifest.xml")
 public class EventObserverTest {
 
     private EventObserver eventObserver;

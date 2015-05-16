@@ -54,7 +54,7 @@ import java.util.Random;
         @UsesPermission(name = Manifest.permission.VIBRATE)
 })
 @DefineScope(annotation = CustomScope.class, scope = MapScope.class)
-@UsesSdk(min = 5, target = 11)
+@UsesSdk(min = 14, target = 21)
 public class IntegrationModule {
 
     public static final String ONE = "one";
