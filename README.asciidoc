@@ -3,14 +3,57 @@
 image:https://travis-ci.org/johncarl81/transfuse.png?branch=master["Build Status", link="https://travis-ci.org/johncarl81/transfuse"]
 image:https://maven-badges.herokuapp.com/maven-central/org.androidtransfuse/transfuse-api/badge.svg["Maven Central", link="https://maven-badges.herokuapp.com/maven-central/org.androidtransfuse/transfuse-api"]
 
-Transfuse offers a number of attractive features including Manifest management, http://jcp.org/en/jsr/detail?id=330[JSR330] Dependency Injection, Java Bean style Android components and much more.  Interested?  Check out  http://androidtransfuse.org/[the website] for details.
+Transfuse is a Java Dependency Injection (DI) and integration library geared specifically for the Google Android API.
 
-== Getting Transfuse
+There are several key features that make Transfuse a great framework to use with Android:
+
+* Dependency Injection - Transfuse implements the http://www.jcp.org/en/jsr/detail?id=330[JSR-330] standard annotations and passes the included https://github.com/johncarl81/transfuse/blob/master/transfuse/src/test/java/org/androidtransfuse/JSR330TckTest.java[unit tests].
+* POJO Components - Transfuse gives users the ability to develop Android components in Plain Old Java Objects (POJO), enabling a testable, decoupled and flexible style.
+* Compile Time Code Generation - Transfuse is remarkably small, lightweight and fast due to the technique of generating supporting code at compile time.
+* Manifest Management - Transfuse manages the Android Manifest, eliminating the duplicated effort of declaring and registering components.
+
+All of these features help eliminate boilerplate plumbing code and make Android applications much easier to write.
+
+=== Example
+
+Using Transfuse, an Android Activity looks like the following:
+
+[source,java]
+--
+@Activity(label = "@string/app_name")
+@Layout(R.layout.main)
+public class HelloTransfuse {
+
+    @Inject @View(R.id.textview)
+    TextView textView;
+
+    @Inject @Resource(R.string.hello)
+    String helloText;
+
+    @OnCreate
+    public void hello() {
+        textView.setText(helloText);
+    }
+}
+--
+
+
+<1> Now, Activities no longer extend the android.app.Activity class.
+<2> The Android Activity lifecycle is handled via lightweight events.
+Any component within the injection graph may define event methods to be called during those phases of the lifecycle.
+<3> All specialty injections, such as injecting View elements, are designated with qualifier injections (@View, @Resource, etc.).
+<4> Activity Manifest metadata, such as the label, are now defined on the class level instead of the AndroidManifest.xml file.
+This puts all the relevant information regarding the Activity in one place.
+Transfuse handles the job of registering the Activity and all the associated metadata in the AndroidManifest.xml file.
+
+Interested?  Check out  http://androidtransfuse.org/[the website] for details.
+
+=== Download
 
 You may download Transfuse as a Maven dependency:
 
 [source,xml]
-----
+--
 <dependency>
     <groupId>org.androidtransfuse</groupId>
     <artifactId>transfuse</artifactId>
@@ -22,14 +65,14 @@ You may download Transfuse as a Maven dependency:
     <artifactId>transfuse-api</artifactId>
     <version>${transfuse.version}</version>
 </dependency>
-----
+--
 
 or Gradle:
 [source,groovy]
-----
+--
 apt "org.androidtransfuse:transfuse:${transfuseVersion}"
 compile "org.androidtransfuse:transfuse-api:${transfuseVersion}"
-----
+--
 
 Or from http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.androidtransfuse%22[Maven Central].
 
