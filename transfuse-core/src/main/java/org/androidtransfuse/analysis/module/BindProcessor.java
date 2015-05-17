@@ -43,7 +43,7 @@ public class BindProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTType moduleScanTarget, ASTAnnotation bindAnnotation) {
         ASTType type = bindAnnotation.getProperty("type", ASTType.class);
         ASTType to = bindAnnotation.getProperty("to", ASTType.class);
 

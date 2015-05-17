@@ -36,14 +36,14 @@ public class BindConfigurationComposite implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation typeAnnotation) {
 
         ASTAnnotation[] values = typeAnnotation.getProperty("value", ASTAnnotation[].class);
 
         ModuleConfigurationComposite configurations = new ModuleConfigurationComposite();
 
         for (ASTAnnotation interceptorBinding : values) {
-            configurations.add(processor.process(moduleType, interceptorBinding));
+            configurations.add(processor.process(rootModuleType, moduleAncestor, interceptorBinding));
         }
 
         return configurations;

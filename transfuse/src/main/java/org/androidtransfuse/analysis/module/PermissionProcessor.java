@@ -37,7 +37,7 @@ public class PermissionProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation permissionAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation permissionAnnotation) {
         Permission permission = new Permission();
         permission.setName(permissionAnnotation.getProperty("name", String.class));
         permission.setDescription(permissionAnnotation.getProperty("description", String.class));

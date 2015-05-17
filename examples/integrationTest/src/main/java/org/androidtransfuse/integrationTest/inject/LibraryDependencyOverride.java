@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.inject;
+package org.androidtransfuse.integrationTest.inject;
+
+import org.androidtransfuse.inject.LibraryDependency;
 
 /**
  * @author John Ericksen
  */
-public class LibraryDependency2 {}
+public class LibraryDependencyOverride implements LibraryDependency {
+}

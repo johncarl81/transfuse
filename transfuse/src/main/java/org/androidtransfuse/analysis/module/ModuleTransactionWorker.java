@@ -18,12 +18,9 @@ package org.androidtransfuse.analysis.module;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import org.androidtransfuse.Plugin;
 import org.androidtransfuse.Plugins;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.annotations.*;
@@ -32,6 +29,10 @@ import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Central module processor class.  Scans the input AST elements for the appropriate annotations and registers
@@ -109,7 +110,7 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
 
     private ImmutableList<ModuleConfiguration> createConfigurationsForModuleType(ASTType moduleType) {
         ImmutableList.Builder<ModuleConfiguration> configurations = ImmutableList.builder();
-        createConfigurationsForModuleType(configurations, moduleType, moduleType.getSuperClass());
+        createConfigurationsForModuleType(configurations, moduleType, moduleType, new HashSet<MethodSignature>(), new HashMap<String, Set<MethodSignature>>());
         return configurations.build();
     }
 
@@ -119,38 +120,68 @@ public class ModuleTransactionWorker extends AbstractCompletionTransactionWorker
      *
      * @param configurations the holder for annotation and method configurations
      * @param module the module type we are configuring
-     * @param moduleAncestor either the model type or one of its ancestor types on which to look for module methods and annotations
      */
-    private void createConfigurationsForModuleType(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType module, ASTType moduleAncestor) {
-        // if super type is null, we are at the top of the inheritance hierarchy and we can unwind.
-        ASTType target = module;
+    private void createConfigurationsForModuleType(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType module, ASTType scanTarget, Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned) {
 
-        if(moduleAncestor != null) {
-            // recurse our way up the tree so we add the top most providers first and clobber them on the way down
-            createConfigurationsForModuleType(configurations, module, moduleAncestor.getSuperClass());
-            target = moduleAncestor;
+        configureModuleAnnotations(configurations, module, scanTarget, scanTarget.getAnnotations());
+        configureModuleMethods(configurations, module, scanTarget, scanTarget.getMethods(), scanned, packagePrivateScanned);
+
+        // Add scanned methods to allow for method overriding.
+        for (ASTMethod astMethod : scanTarget.getMethods()) {
+            MethodSignature signature = new MethodSignature(astMethod);
+            if(astMethod.getAccessModifier() == ASTAccessModifier.PUBLIC || astMethod.getAccessModifier() == ASTAccessModifier.PROTECTED){
+                scanned.add(signature);
+            }
+            else if(astMethod.getAccessModifier() == ASTAccessModifier.PACKAGE_PRIVATE){
+                if(!packagePrivateScanned.containsKey(scanTarget.getPackageClass().getPackage())){
+                    packagePrivateScanned.put(scanTarget.getPackageClass().getPackage(), new HashSet<MethodSignature>());
+                }
+                packagePrivateScanned.get(scanTarget.getPackageClass().getPackage()).add(signature);
+            }
         }
-        configureModuleAnnotations(configurations, module, target.getAnnotations());
-        configureModuleMethods(configurations, module, target.getMethods());
+
+        // if super type is null, we are at the top of the inheritance hierarchy and we can unwind.
+        if(scanTarget.getSuperClass() != null) {
+            // recurse our way up the tree so we add the top most providers first and clobber them on the way down
+            createConfigurationsForModuleType(configurations, module, scanTarget.getSuperClass(), scanned, packagePrivateScanned);
+        }
     }
 
-    private void configureModuleMethods(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ImmutableSet<ASTMethod> methods) {
+    private void configureModuleMethods(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ASTType scanTarget, ImmutableSet<ASTMethod> methods, Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned) {
         for (ASTMethod astMethod : methods) {
-            for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
-                if (methodProcessors.containsKey(astAnnotation.getASTType())) {
-                    MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
-                    configurations.add(methodProcessor.process(moduleType, astMethod, astAnnotation));
+            if(!isOverridden(scanned, packagePrivateScanned, moduleType, astMethod)) {
+                for (ASTAnnotation astAnnotation : astMethod.getAnnotations()) {
+                    if (methodProcessors.containsKey(astAnnotation.getASTType())) {
+                        MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
+                        configurations.add(methodProcessor.process(moduleType, scanTarget, astMethod, astAnnotation));
+                    }
                 }
             }
         }
     }
 
-    private void configureModuleAnnotations(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ImmutableSet<ASTAnnotation> annotations) {
+    private void configureModuleAnnotations(ImmutableList.Builder<ModuleConfiguration> configurations, ASTType moduleType, ASTType scanTarget, ImmutableSet<ASTAnnotation> annotations) {
         for (ASTAnnotation typeAnnotation : annotations) {
             if (typeProcessors.containsKey(typeAnnotation.getASTType())) {
                 TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
-                configurations.add(typeProcessor.process(moduleType, typeAnnotation));
+                configurations.add(typeProcessor.process(moduleType, scanTarget, typeAnnotation));
             }
         }
+    }
+
+    private boolean isOverridden(Set<MethodSignature> scanned, Map<String, Set<MethodSignature>> packagePrivateScanned, ASTType type, ASTMethod method) {
+        MethodSignature signature = new MethodSignature(method);
+
+        if(method.getAccessModifier() == ASTAccessModifier.PRIVATE){
+            return false;
+        }
+
+        if(method.getAccessModifier() == ASTAccessModifier.PACKAGE_PRIVATE){
+            return packagePrivateScanned.containsKey(type.getPackageClass().getPackage()) &&
+                    packagePrivateScanned.get(type.getPackageClass().getPackage()).contains(signature);
+        }
+
+        // PUBLIC and PROTECTED handling
+        return scanned.contains(signature);
     }
 }

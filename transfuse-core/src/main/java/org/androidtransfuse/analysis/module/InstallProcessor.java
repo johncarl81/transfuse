@@ -35,7 +35,7 @@ public class InstallProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation installAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTType moduleScanTarget, ASTAnnotation installAnnotation) {
         ASTType[] types = installAnnotation.getProperty("value", ASTType[].class);
 
         return new InstallModuleConfiguration(types);

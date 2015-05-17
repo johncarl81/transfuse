@@ -36,7 +36,7 @@ public class UsesSdkProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation bindAnnotation) {
         Integer min = bindAnnotation.getProperty("min", Integer.class);
         Integer target = bindAnnotation.getProperty("target", Integer.class);
         Integer max = bindAnnotation.getProperty("max", Integer.class);

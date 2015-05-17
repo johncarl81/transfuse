@@ -82,7 +82,7 @@ public class ModuleProcessor {
             if(typeProcessors.containsKey(typeAnnotation.getASTType())){
                 TypeProcessor typeProcessor = typeProcessors.get(typeAnnotation.getASTType());
 
-                configurations.add(typeProcessor.process(astType, typeAnnotation));
+                configurations.add(typeProcessor.process(astType, astType, typeAnnotation));
             }
         }
 
@@ -91,7 +91,7 @@ public class ModuleProcessor {
                 if (methodProcessors.containsKey(astAnnotation.getASTType())) {
                     MethodProcessor methodProcessor = methodProcessors.get(astAnnotation.getASTType());
 
-                    configurations.add(methodProcessor.process(astType, astMethod, astAnnotation));
+                    configurations.add(methodProcessor.process(astType, astType, astMethod, astAnnotation));
                 }
             }
         }

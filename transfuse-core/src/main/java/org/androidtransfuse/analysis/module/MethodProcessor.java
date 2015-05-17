@@ -34,5 +34,5 @@ public interface MethodProcessor {
      * @param astAnnotation annotation triggering processing.
      * @return Module Configuration
      */
-    ModuleConfiguration process(ASTType moduleType, ASTMethod astMethod, ASTAnnotation astAnnotation);
+    ModuleConfiguration process(ASTType moduleType, ASTType moduleScanTarget, ASTMethod astMethod, ASTAnnotation astAnnotation);
 }

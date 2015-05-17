@@ -22,14 +22,26 @@ import javax.inject.Inject;
  */
 public class LibraryDependency1 {
 
-    private LibraryDependency2 libraryDependency2;
+    private final LibraryDependency2 libraryDependency2;
+    private final LibraryDependency3 libraryDependency3;
+    private final LibraryDependency libraryDependency;
 
     @Inject
-    public LibraryDependency1(LibraryDependency2 libraryDependency2){
+    public LibraryDependency1(LibraryDependency2 libraryDependency2, LibraryDependency3 libraryDependency3, LibraryDependency libraryDependency){
         this.libraryDependency2 = libraryDependency2;
+        this.libraryDependency3 = libraryDependency3;
+        this.libraryDependency = libraryDependency;
     }
 
     public LibraryDependency2 getLibraryDependency2() {
         return libraryDependency2;
+    }
+
+    public LibraryDependency3 getLibraryDependency3() {
+        return libraryDependency3;
+    }
+
+    public LibraryDependency getLibraryDependency() {
+        return libraryDependency;
     }
 }

@@ -38,7 +38,7 @@ public class BindProviderProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindProvider) {
+    public ModuleConfiguration process(ASTType moduleType, ASTType moduleScanTarget, ASTAnnotation bindProvider) {
         ASTType type = bindProvider.getProperty("type", ASTType.class);
         ASTType provider = bindProvider.getProperty("provider", ASTType.class);
         ASTType scope = bindProvider.getProperty("scope", ASTType.class);

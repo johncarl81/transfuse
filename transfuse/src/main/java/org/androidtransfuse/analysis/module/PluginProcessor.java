@@ -45,7 +45,7 @@ public class PluginProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation typeAnnotation) {
 
         final ASTType pluginType = typeAnnotation.getProperty("value", ASTType.class);
 

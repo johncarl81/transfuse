@@ -285,7 +285,7 @@ public class CoreFactory {
         BindProcessor bindProcessor = new BindProcessor(variableASTImplementationFactory, validator, log);
         BindProviderProcessor bindProviderProcessor = new BindProviderProcessor(providerInjectionNodeBuilderFactory);
         BindingConfigurationFactory bindingConfigurationFactory = new BindingConfigurationFactory();
-        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), astClassFactory, buildGeneratedProviderInjectionNodeBuilder(), validator);
+        ProvidesProcessor providesProcessor = new ProvidesProcessor(providesInjectionNodeBuilderFactory, new QualifierPredicate(astClassFactory), new ScopePredicate(astClassFactory), new JavaAnnotationPredicate(), astClassFactory, buildGeneratedProviderInjectionNodeBuilder(), validator);
 
         ScopeReferenceInjectionFactory scopeInjectionFactory = new ScopeReferenceInjectionFactory(typedExpressionFactory, generationUtil, buildAnalyser());
 

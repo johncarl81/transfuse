@@ -39,7 +39,7 @@ public class UsesFeatureProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation permissionAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation permissionAnnotation) {
     	UsesFeature usesFeature = new UsesFeature();
         usesFeature.setName(checkBlank(permissionAnnotation.getProperty("value", String.class)));
         usesFeature.setRequired(checkDefault(permissionAnnotation.getProperty("required", Boolean.class), true));

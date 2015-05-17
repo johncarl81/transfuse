@@ -13,9 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.inject;
+package org.androidtransfuse.util;
+
+import org.androidtransfuse.adapter.ASTAnnotation;
 
 /**
  * @author John Ericksen
  */
-public class LibraryDependency2 {}
+public class JavaAnnotationPredicate implements com.google.common.base.Predicate<ASTAnnotation> {
+
+    @Override
+    public boolean apply(ASTAnnotation input) {
+        return input.getASTType().getPackageClass().getPackage().startsWith("java");
+    }
+}

@@ -36,7 +36,7 @@ public class UsesPermissionProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindAnnotation) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation bindAnnotation) {
         UsesPermission permission = new UsesPermission();
         permission.setName(bindAnnotation.getProperty("name", String.class));
         Integer maxSdkVersion = bindAnnotation.getProperty("maxSdkVersion", Integer.class);

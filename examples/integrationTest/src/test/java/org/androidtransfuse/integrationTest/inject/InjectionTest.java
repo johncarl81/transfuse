@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.integrationTest.inject;
 
+import org.androidtransfuse.inject.LibraryDependency3;
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.androidtransfuse.integrationTest.IntegrationModule;
 import org.junit.Before;
@@ -141,5 +142,11 @@ public class InjectionTest {
         assertEquals(IntegrationModule.THREE, injection.getQualifiedThree());
         assertEquals(IntegrationModule.FOUR, injection.getQualifiedFour());
         assertEquals(IntegrationModule.FIVE, injection.getQualifierFive());
+    }
+
+    @Test
+    public void testDependencyModuleOverride(){
+        assertEquals(LibraryDependencyOverride.class, injection.getLibraryDependency().getLibraryDependency().getClass());
+        assertEquals(LibraryDependency3.class, injection.getLibraryDependency().getLibraryDependency3().getClass());
     }
 }

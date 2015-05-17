@@ -37,7 +37,7 @@ public class BindInterceptorProcessor implements TypeProcessor {
     }
 
     @Override
-    public ModuleConfiguration process(ASTType moduleType, ASTAnnotation bindInterceptor) {
+    public ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation bindInterceptor) {
         ASTType annotation = bindInterceptor.getProperty("annotation", ASTType.class);
         ASTType interceptor = bindInterceptor.getProperty("interceptor", ASTType.class);
 

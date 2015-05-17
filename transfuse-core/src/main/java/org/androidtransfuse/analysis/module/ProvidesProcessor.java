@@ -26,6 +26,7 @@ import org.androidtransfuse.annotations.Provides;
 import org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilderFactory;
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.JavaAnnotationPredicate;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopePredicate;
 import org.androidtransfuse.validation.Validator;
@@ -44,6 +45,7 @@ public class ProvidesProcessor implements MethodProcessor {
     private final ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory;
     private final QualifierPredicate qualifierPredicate;
     private final ScopePredicate scopePredicate;
+    private final JavaAnnotationPredicate javaAnnotationPredicate;
     private final ASTClassFactory astClassFactory;
     private final GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder;
     private final Validator validator;
@@ -52,18 +54,20 @@ public class ProvidesProcessor implements MethodProcessor {
     public ProvidesProcessor(ProvidesInjectionNodeBuilderFactory variableInjectionBuilderFactory,
                              QualifierPredicate qualifierPredicate,
                              ScopePredicate scopePredicate,
+                             JavaAnnotationPredicate javaAnnotationPredicate,
                              ASTClassFactory astClassFactory,
                              GeneratedProviderInjectionNodeBuilder generatedProviderInjectionNodeBuilder,
                              Validator validator) {
         this.variableInjectionBuilderFactory = variableInjectionBuilderFactory;
         this.qualifierPredicate = qualifierPredicate;
         this.scopePredicate = scopePredicate;
+        this.javaAnnotationPredicate = javaAnnotationPredicate;
         this.astClassFactory = astClassFactory;
         this.generatedProviderInjectionNodeBuilder = generatedProviderInjectionNodeBuilder;
         this.validator = validator;
     }
 
-    public ModuleConfiguration process(ASTType moduleType, ASTMethod astMethod, ASTAnnotation astAnnotation) {
+    public ModuleConfiguration process(ASTType moduleType, ASTType moduleScanTarget, ASTMethod astMethod, ASTAnnotation astAnnotation) {
 
         ImmutableSet<ASTAnnotation> qualifierAnnotations =
                 FluentIterable.from(astMethod.getAnnotations())
@@ -88,7 +92,8 @@ public class ProvidesProcessor implements MethodProcessor {
                 FluentIterable.from(annotations)
                         .filter(Predicates.and(
                                 Predicates.not(qualifierPredicate),
-                                Predicates.not(scopePredicate))).toSet();
+                                Predicates.not(scopePredicate),
+                                Predicates.not(javaAnnotationPredicate))).toSet();
 
         ImmutableSet<ASTAnnotation> scopeAnnotations =
                 FluentIterable.from(annotations)
@@ -100,7 +105,7 @@ public class ProvidesProcessor implements MethodProcessor {
         for (ASTAnnotation annotation : nonQualifierAnnotations) {
             if(!annotation.getASTType().equals(providesType)){
                 //error
-                validator.error("@Provides methods may only be annotated with scope or qualifier annotations")
+                validator.error("@Provides methods may only be annotated with scope, qualifier or standard Java annotations")
                         .element(astMethod).annotation(annotation).build();
             }
         }

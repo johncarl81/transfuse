@@ -17,6 +17,8 @@ package org.androidtransfuse.integrationTest;
 
 import android.Manifest;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.inject.DependencyModule;
+import org.androidtransfuse.inject.LibraryDependency;
 import org.androidtransfuse.integrationTest.aop.AOPInterceptor;
 import org.androidtransfuse.integrationTest.aop.DependencyInterceptor;
 import org.androidtransfuse.integrationTest.aop.InjectedInterceptor;
@@ -55,7 +57,7 @@ import java.util.Random;
 })
 @DefineScope(annotation = CustomScope.class, scope = MapScope.class)
 @UsesSdk(min = 14, target = 21)
-public class IntegrationModule {
+public class IntegrationModule extends DependencyModule {
 
     public static final String ONE = "one";
     public static final String TWO = "two";
@@ -104,5 +106,11 @@ public class IntegrationModule {
     @ValueQualifier(FIVE_QUALIFIER)
     public String getFive(){
         return FIVE;
+    }
+
+    @Override
+    @Provides
+    public LibraryDependency provideDependency() {
+        return new LibraryDependencyOverride();
     }
 }

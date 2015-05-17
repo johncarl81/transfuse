@@ -18,4 +18,4 @@ package org.androidtransfuse.inject;
 /**
  * @author John Ericksen
  */
-public class LibraryDependency2 {}
+public class LibraryDependencyImpl implements LibraryDependency {}

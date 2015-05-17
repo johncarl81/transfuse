@@ -28,9 +28,10 @@ public interface TypeProcessor {
     /**
      * Processes the found annotation configuration.
      *
-     * @param moduleType input module type
+     * @param rootModuleType input module type
+     * @param moduleAncestor type in the inheritance hierarchy that is being scanned
      * @param typeAnnotation input annotation
      * @return module configuration
      */
-    ModuleConfiguration process(ASTType moduleType, ASTAnnotation typeAnnotation);
+    ModuleConfiguration process(ASTType rootModuleType, ASTType moduleAncestor, ASTAnnotation typeAnnotation);
 }

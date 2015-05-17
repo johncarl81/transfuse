@@ -15,7 +15,20 @@
  */
 package org.androidtransfuse.inject;
 
+import org.androidtransfuse.annotations.Provides;
+
 /**
  * @author John Ericksen
  */
-public class LibraryDependency2 {}
+public abstract class DependencyModule {
+
+    @Provides
+    public LibraryDependency provideDependency() {
+        return new LibraryDependencyImpl();
+    }
+
+    @Provides
+    public LibraryDependency3 provideBaseDependency(){
+        return new LibraryDependency3();
+    }
+}
