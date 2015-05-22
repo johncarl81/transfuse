@@ -130,7 +130,6 @@ public class VirtualProxyGenerator {
         try {
 
             JDefinedClass definedClass = generationUtil.defineClass(descriptor.getProxyName());
-            definedClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
             //define delegate
             JClass delegateClass = generationUtil.ref(descriptor.getDelegate());
