@@ -46,7 +46,6 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onPause").event(OnPause.class).superCall();
         repository.component(Activity.class).method("onRestart").event(OnRestart.class).superCall();
         repository.component(Activity.class).method("onResume").event(OnResume.class).superCall();
-        //repository.component(Activity.class).method("onResumeFragments").event(OnResumeFragments.class).superCall();
         repository.component(Activity.class).method("onStart").event(OnStart.class).superCall();
         repository.component(Activity.class).method("onStop").event(OnStop.class).superCall();
         repository.component(Activity.class).method("onBackPressed").event(OnBackPressed.class).superCall();
@@ -56,6 +55,8 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onNewIntent", AndroidLiterals.INTENT).event(OnNewIntent.class);
         repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class).superCall();
         repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class).superCall();
+        repository.component(Activity.class).extending(AndroidLiterals.FRAGMENT_ACTIVITY)
+                .method("onResumeFragments").event(OnResumeFragments.class).superCall();
         repository.component(Activity.class).extending(AndroidLiterals.LIST_ACTIVITY)
                 .method("onListItemClick", AndroidLiterals.LIST_VIEW, AndroidLiterals.VIEW, ASTPrimitiveType.INT, ASTPrimitiveType.LONG).event(OnListItemClick.class);
 
