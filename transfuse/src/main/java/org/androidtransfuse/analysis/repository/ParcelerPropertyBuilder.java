@@ -42,7 +42,7 @@ public class ParcelerPropertyBuilder implements PropertyBuilder{
     }
 
     @Override
-    public JStatement buildWriter(JInvocation extras, String name, JVar extraParam) {
+    public JStatement buildWriter(JExpression extras, String name, JVar extraParam) {
         JInvocation wrappedParcel = generationUtil.ref(IntentFactoryStrategyGenerator.PARCELS_NAME)
                 .staticInvoke(IntentFactoryStrategyGenerator.WRAP_METHOD).arg(extraParam);
 

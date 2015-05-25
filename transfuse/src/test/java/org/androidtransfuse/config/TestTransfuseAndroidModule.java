@@ -110,8 +110,6 @@ import javax.xml.bind.JAXBContext;
 })
 public class TestTransfuseAndroidModule {
 
-    private final JCodeModel codeModel = new JCodeModel();
-
     @Provides
     @Singleton
     public ConfigurationRepository getRepository(ConfigurationRepositoryImpl repository){
@@ -140,8 +138,10 @@ public class TestTransfuseAndroidModule {
     public Logger getLogger(){
         return new JavaUtilLogger(this, false);
     }
+
     @Provides
+    @Singleton
     public JCodeModel getCodeModel(){
-        return codeModel;
+        return new JCodeModel();
     }
 }

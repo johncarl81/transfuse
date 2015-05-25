@@ -26,6 +26,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFa
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ScopesGeneration;
+import org.androidtransfuse.experiment.generators.FragmentFactoryGenerator;
 import org.androidtransfuse.experiment.generators.FragmentLayoutGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
@@ -62,6 +63,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final FragmentLayoutGenerator fragmentLayoutGenerator;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final ComponentAnalysis componentAnalysis;
+    private final FragmentFactoryGenerator fragmentFactoryGenerator;
 
     @Inject
     public FragmentAnalysis(ASTClassFactory astClassFactory,
@@ -81,7 +83,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             OnCreateInjectionGenerator.InjectionGeneratorFactory injectionGeneratorFactory,
                             FragmentLayoutGenerator fragmentLayoutGenerator,
                             ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                            ComponentAnalysis componentAnalysis) {
+                            ComponentAnalysis componentAnalysis,
+                            FragmentFactoryGenerator fragmentFactoryGenerator) {
         this.astClassFactory = astClassFactory;
         this.astElementFactory = astElementFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -100,6 +103,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.fragmentLayoutGenerator = fragmentLayoutGenerator;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.componentAnalysis = componentAnalysis;
+        this.fragmentFactoryGenerator = fragmentFactoryGenerator;
     }
 
     @Override
@@ -136,6 +140,8 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         fragmentDescriptor.getGenerators().add(scopesGenerationFactory.build(onCreateViewMethod));
 
         fragmentDescriptor.getGenerators().add(fragmentLayoutGenerator);
+
+        fragmentDescriptor.getGenerators().add(fragmentFactoryGenerator);
 
         // onSaveInstanceState
         ASTMethod onSaveInstanceStateMethod = getASTMethod("onSaveInstanceState", AndroidLiterals.BUNDLE);

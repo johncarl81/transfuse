@@ -16,7 +16,6 @@
 package org.androidtransfuse.analysis.repository;
 
 import com.sun.codemodel.JExpression;
-import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JStatement;
 import com.sun.codemodel.JVar;
 
@@ -39,7 +38,7 @@ public class SimplePropertyBuilder implements PropertyBuilder{
     }
 
     @Override
-    public JStatement buildWriter(JInvocation extras, String name, JVar extraParam) {
+    public JStatement buildWriter(JExpression extras, String name, JVar extraParam) {
         return extras.invoke(mutator).arg(name).arg(extraParam);
     }
 }
