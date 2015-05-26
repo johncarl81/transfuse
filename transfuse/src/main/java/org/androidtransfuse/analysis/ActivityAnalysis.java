@@ -67,6 +67,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final ComponentAnalysis componentAnalysis;
+    private final IntentFactoryGenerator intentFactoryGenerator;
 
     @Inject
     public ActivityAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -89,7 +90,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             NonConfigurationInstanceGenerator.NonconfigurationInstanceGeneratorFactory nonConfigurationInstanceGeneratorFactory,
                             OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
                             ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                            ComponentAnalysis componentAnalysis) {
+                            ComponentAnalysis componentAnalysis, IntentFactoryGenerator intentFactoryGenerator) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
@@ -111,6 +112,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.componentAnalysis = componentAnalysis;
+        this.intentFactoryGenerator = intentFactoryGenerator;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -141,6 +143,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             activityDescriptor.getGenerators().add(windowFeatureGenerator);
             activityDescriptor.getGenerators().add(scopesGenerationFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
             activityDescriptor.getGenerators().add(onCreateInjectionGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), input));
+            activityDescriptor.getGenerators().add(intentFactoryGenerator);
             //extra intent factory
             activityDescriptor.getGenerators().add(generatorFactory.buildStrategyGenerator(ActivityIntentFactoryStrategy.class));
             //listener registration

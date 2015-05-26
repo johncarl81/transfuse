@@ -21,21 +21,22 @@ import org.androidtransfuse.analysis.repository.ParcelerPropertyBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
 
 /**
  * @author John Ericksen
  */
-public class FragmentFactoryGenerator extends AbstractExtraFactoryGenerator {
+public class IntentFactoryGenerator extends AbstractExtraFactoryGenerator {
 
-    private static final String BUILD_FRAGMENT = "build";
+    private static final String BUILD_INTENT = "build";
 
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public FragmentFactoryGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer, BundlePropertyBuilderRepository repository, ParcelerPropertyBuilder parcelerPropertyBuilder) {
+    public IntentFactoryGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer, BundlePropertyBuilderRepository repository, ParcelerPropertyBuilder parcelerPropertyBuilder) {
         super(generationUtil, namer, repository, parcelerPropertyBuilder);
         this.generationUtil = generationUtil;
         this.namer = namer;
@@ -43,16 +44,19 @@ public class FragmentFactoryGenerator extends AbstractExtraFactoryGenerator {
 
     @Override
     public String getName() {
-        return "FragmentFactory Generator";
+        return "IntentFactory Generator";
     }
 
     protected void createBuilderMethod(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
         JClass targetRef = generationUtil.ref(descriptor.getPackageClass());
-        JBlock buildMethodBody = factoryClass.method(JMod.PUBLIC, targetRef, BUILD_FRAGMENT).body();
+        JClass intentRef = generationUtil.ref(AndroidLiterals.INTENT);
+        JMethod buildMethod = factoryClass.method(JMod.PUBLIC, intentRef, BUILD_INTENT);
+        JVar contextParam = buildMethod.param(generationUtil.ref(AndroidLiterals.CONTEXT), namer.generateName(AndroidLiterals.CONTEXT));
+        JBlock buildMethodBody = buildMethod.body();
 
-        JVar fragmentVar = buildMethodBody.decl(targetRef, namer.generateName(descriptor.getType()), JExpr._new(targetRef));
-        buildMethodBody.invoke(fragmentVar, "setArguments").arg(bundle);
+        JVar intentVar = buildMethodBody.decl(intentRef, namer.generateName(descriptor.getType()), JExpr._new(intentRef).arg(contextParam).arg(targetRef.dotclass()));
+        buildMethodBody.invoke(intentVar, "putExtras").arg(bundle);
 
-        buildMethodBody._return(fragmentVar);
+        buildMethodBody._return(intentVar);
     }
 }

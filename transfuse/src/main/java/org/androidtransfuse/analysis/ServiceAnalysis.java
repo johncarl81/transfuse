@@ -26,6 +26,7 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepositoryFactory;
 import org.androidtransfuse.annotations.Service;
 import org.androidtransfuse.experiment.*;
+import org.androidtransfuse.experiment.generators.IntentFactoryGenerator;
 import org.androidtransfuse.experiment.generators.ObservesExpressionGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.experiment.generators.ServiceManifestEntryGenerator;
@@ -60,6 +61,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final ComponentAnalysis componentAnalysis;
+    private final IntentFactoryGenerator intentFactoryGenerator;
 
     @Inject
     public ServiceAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -73,7 +75,8 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
                            ServiceManifestEntryGenerator serviceManifestEntryGenerator,
                            OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
                            ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                           ComponentAnalysis componentAnalysis) {
+                           ComponentAnalysis componentAnalysis,
+                           IntentFactoryGenerator intentFactoryGenerator) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.analysisContextFactory = analysisContextFactory;
         this.astElementFactory = astElementFactory;
@@ -86,6 +89,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.componentAnalysis = componentAnalysis;
+        this.intentFactoryGenerator = intentFactoryGenerator;
     }
 
     public ComponentDescriptor analyze(ASTType input) {
@@ -128,6 +132,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         }
 
         serviceDescriptor.getGenerators().add(serviceManifestEntryGenerator);
+        serviceDescriptor.getGenerators().add(intentFactoryGenerator);
 
         return serviceDescriptor;
     }

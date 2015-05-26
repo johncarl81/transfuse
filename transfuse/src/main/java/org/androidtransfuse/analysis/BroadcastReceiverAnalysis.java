@@ -26,6 +26,7 @@ import org.androidtransfuse.annotations.BroadcastReceiver;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.experiment.ScopesGeneration;
 import org.androidtransfuse.experiment.generators.BroadcastReceiverManifestEntryGenerator;
+import org.androidtransfuse.experiment.generators.IntentFactoryGenerator;
 import org.androidtransfuse.experiment.generators.OnCreateInjectionGenerator;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
 import org.androidtransfuse.util.AndroidLiterals;
@@ -49,6 +50,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
     private final OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory;
     private final ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory;
     private final ComponentAnalysis componentAnalysis;
+    private final IntentFactoryGenerator intentFactoryGenerator;
 
     @Inject
     public BroadcastReceiverAnalysis(InjectionNodeBuilderRepositoryFactory injectionNodeBuilderRepositoryFactory,
@@ -59,7 +61,8 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
                                      ASTElementFactory astElementFactory,
                                      OnCreateInjectionGenerator.InjectionGeneratorFactory onCreateInjectionGeneratorFactory,
                                      ScopesGeneration.ScopesGenerationFactory scopesGenerationFactory,
-                                     ComponentAnalysis componentAnalysis) {
+                                     ComponentAnalysis componentAnalysis,
+                                     IntentFactoryGenerator intentFactoryGenerator) {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.analysisContextFactory = analysisContextFactory;
@@ -69,6 +72,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         this.onCreateInjectionGeneratorFactory = onCreateInjectionGeneratorFactory;
         this.scopesGenerationFactory = scopesGenerationFactory;
         this.componentAnalysis = componentAnalysis;
+        this.intentFactoryGenerator = intentFactoryGenerator;
     }
 
     public ComponentDescriptor analyze(ASTType astType) {
@@ -114,6 +118,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
         }
 
         receiverDescriptor.getGenerators().add(manifestEntryGenerator);
+        receiverDescriptor.getGenerators().add(intentFactoryGenerator);
 
         return receiverDescriptor;
     }
