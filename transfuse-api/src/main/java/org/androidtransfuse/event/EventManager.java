@@ -148,12 +148,12 @@ public class EventManager {
                     }
                 }
             }
-
-            triggerQueue();
         }
         finally{
             observersLock.readLock().unlock();
         }
+        
+        triggerQueue();
     }
 
     private void triggerQueue(){
