@@ -30,5 +30,6 @@ public enum GenerationPhase {
     REGISTRATION,
     EVENT,
     TEARDOWN,
+    POST_SUPER,
     RETURN
 }

@@ -112,7 +112,12 @@ public class ComponentBuilder {
         }
 
         public MethodBuilder superCall(){
-            repository.addSuperCall(componentAnnotation, componentType, methodName, parameters);
+            superCall(false);
+            return this;
+        }
+
+        public MethodBuilder superCall(boolean executeLast){
+            repository.addSuperCall(componentAnnotation, componentType, methodName, parameters, executeLast);
             return this;
         }
 

@@ -35,7 +35,7 @@ public interface ConfigurationRepository {
 
     void addListener(Class<? extends Annotation> componentType, ASTType type, ASTType listenerType, ASTType listenable, String listenerMethod);
 
-    void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters);
+    void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters, boolean executeLast);
 
     void addRegistration(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters);
 }

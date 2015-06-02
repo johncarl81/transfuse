@@ -35,11 +35,11 @@ public class FragmentPlugin implements TransfusePlugin{
         repository.component(Fragment.class).method("onActivityCreated", AndroidLiterals.BUNDLE).event(OnActivityCreated.class).superCall();
         repository.component(Fragment.class).method("onStart").event(OnStart.class).superCall();
         repository.component(Fragment.class).method("onResume").event(OnResume.class).superCall();
-        repository.component(Fragment.class).method("onPause").event(OnPause.class).superCall();
-        repository.component(Fragment.class).method("onStop").event(OnStop.class).superCall();
-        repository.component(Fragment.class).method("onDestroyView").event(OnDestroyView.class).superCall();
-        repository.component(Fragment.class).method("onDestroy").event(OnDestroy.class, true).superCall();
-        repository.component(Fragment.class).method("onDetach").event(OnDetach.class).superCall();
+        repository.component(Fragment.class).method("onPause").event(OnPause.class).superCall(true);
+        repository.component(Fragment.class).method("onStop").event(OnStop.class).superCall(true);
+        repository.component(Fragment.class).method("onDestroyView").event(OnDestroyView.class).superCall(true);
+        repository.component(Fragment.class).method("onDestroy").event(OnDestroy.class, true).superCall(true);
+        repository.component(Fragment.class).method("onDetach").event(OnDetach.class).superCall(true);
         repository.component(Fragment.class).method("onLowMemory").event(OnLowMemory.class).superCall();
         repository.component(Fragment.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
         repository.component(Fragment.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class).superCall();
