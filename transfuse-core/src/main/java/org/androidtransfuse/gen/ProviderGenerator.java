@@ -113,7 +113,6 @@ public class ProviderGenerator {
                     .build();
 
             JDefinedClass providerClass = generationUtil.defineClass(providerClassName);
-            providerClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
             providerClass._implements(generationUtil.ref(Provider.class).narrow(injectionNodeClassRef));
 

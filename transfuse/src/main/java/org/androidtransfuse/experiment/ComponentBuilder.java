@@ -155,7 +155,6 @@ public class ComponentBuilder {
             try {
                 definedClass = generationUtil.defineClass(descriptor.getPackageClass());
                 definedClass._extends(generationUtil.ref(descriptor.getType()));
-                definedClass.annotate(SuppressWarnings.class).param("value", "unchecked");
             } catch (JClassAlreadyExistsException e) {
                 throw new TransfuseAnalysisException("Class Already Exists ", e);
             }

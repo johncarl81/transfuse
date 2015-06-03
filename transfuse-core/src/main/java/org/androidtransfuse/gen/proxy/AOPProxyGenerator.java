@@ -72,7 +72,6 @@ public class AOPProxyGenerator {
                     .build();
 
             definedClass = generationUtil.defineClass(aopClassName);
-            definedClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
             //extending injectionNode
             definedClass._extends(generationUtil.ref(injectionNode.getASTType()));

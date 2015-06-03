@@ -99,7 +99,6 @@ public class FactoryGenerator {
             PackageClass factoryClassName = getFactoryName(descriptor.getPackageClass());
 
             JDefinedClass implClass = generationUtil.defineClass(factoryClassName);
-            implClass.annotate(SuppressWarnings.class).param("value", "unchecked");
             JClass interfaceClass = generationUtil.ref(descriptor);
 
             //scope holder definition

@@ -54,6 +54,7 @@ public class ClassGenerationUtil {
         JDefinedClass definedClass = jPackage._class(className.getClassName());
 
         classGenerationStrategy.annotateGenerated(definedClass);
+        definedClass.annotate(SuppressWarnings.class).param("value", "unchecked");
 
         return definedClass;
     }
