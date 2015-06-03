@@ -87,7 +87,7 @@ public class ComponentAnalysis {
 
     private void addSuperCalls(ComponentDescriptor descriptor, ASTType componentType, Class<? extends Annotation> componentAnnotation) {
         for (SuperCallMapping superCallMapping : repository.getSuperCalls(componentType, componentAnnotation)) {
-            descriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod(componentType, superCallMapping.getMethodName(), superCallMapping.getParameters())));
+            descriptor.getGenerators().add(superGeneratorFactory.build(getASTMethod(componentType, superCallMapping.getMethodName(), superCallMapping.getParameters()), superCallMapping.isExecuteLast()));
         }
     }
 

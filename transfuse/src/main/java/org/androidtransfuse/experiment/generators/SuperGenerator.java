@@ -39,14 +39,16 @@ public class SuperGenerator implements Generation {
     public
     @Factory
     interface SuperGeneratorFactory {
-        SuperGenerator build(ASTMethod method);
+        SuperGenerator build(ASTMethod method, boolean executeLast);
     }
 
     private final ASTMethod method;
+    private final boolean executeLast;
 
     @Inject
-    public SuperGenerator(ASTMethod method) {
+    public SuperGenerator(ASTMethod method, boolean executeLast) {
         this.method = method;
+        this.executeLast = executeLast;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class SuperGenerator implements Generation {
 
     @Override
     public void schedule(final ComponentBuilder builder, ComponentDescriptor descriptor) {
-        builder.addLazy(method, GenerationPhase.SUPER, new ComponentMethodGenerator() {
+        builder.addLazy(method, executeLast? GenerationPhase.POST_SUPER : GenerationPhase.SUPER, new ComponentMethodGenerator() {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                 if(!isSuperCanceled(builder.getExpressionMap().keySet())) {

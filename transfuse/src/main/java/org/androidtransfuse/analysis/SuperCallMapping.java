@@ -25,10 +25,12 @@ import java.util.List;
 public class SuperCallMapping {
     private final String methodName;
     private final List<ASTType> parameters;
+    private final boolean executeLast;
 
-    public SuperCallMapping(String methodName, List<ASTType> parameters) {
+    public SuperCallMapping(String methodName, List<ASTType> parameters, boolean executeLast) {
         this.parameters = parameters;
         this.methodName = methodName;
+        this.executeLast = executeLast;
     }
 
     public String getMethodName() {
@@ -37,5 +39,9 @@ public class SuperCallMapping {
 
     public List<ASTType> getParameters() {
         return parameters;
+    }
+
+    public boolean isExecuteLast() {
+        return executeLast;
     }
 }

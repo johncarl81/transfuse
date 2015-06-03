@@ -79,8 +79,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository{
     }
 
     @Override
-    public void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters) {
-        getConfiguration(componentType, componentAnnotation).superCalls.add(new SuperCallMapping(methodName, parameters));
+    public void addSuperCall(Class<? extends Annotation> componentAnnotation, ASTType componentType, String methodName, List<ASTType> parameters, boolean executeLast) {
+        getConfiguration(componentType, componentAnnotation).superCalls.add(new SuperCallMapping(methodName, parameters, executeLast));
     }
 
     @Override

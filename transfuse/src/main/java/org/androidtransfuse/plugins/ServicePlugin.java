@@ -31,7 +31,7 @@ public class ServicePlugin implements TransfusePlugin{
     @Override
     public void run(ConfigurationRepository repository) {
         repository.component(Service.class).method("onCreate").event(OnCreate.class).registration().superCall();
-        repository.component(Service.class).method("onDestroy").event(OnDestroy.class).superCall();
+        repository.component(Service.class).method("onDestroy").event(OnDestroy.class).superCall(true);
         repository.component(Service.class).method("onLowMemory").event(OnLowMemory.class).superCall();
         repository.component(Service.class).method("onRebind", AndroidLiterals.INTENT).event(OnRebind.class).superCall();
         repository.component(Service.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class).superCall();
