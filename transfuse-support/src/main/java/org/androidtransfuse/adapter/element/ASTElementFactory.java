@@ -141,7 +141,7 @@ public class ASTElementFactory {
         String pkg = packageElement.getQualifiedName().toString();
         String qualifiedName = typeElement.getQualifiedName().toString();
         String name;
-        if(pkg.length() < qualifiedName.length()){
+        if(!pkg.isEmpty() && pkg.length() < qualifiedName.length()){
             name = qualifiedName.substring(pkg.length() + 1);
         }
         else{
