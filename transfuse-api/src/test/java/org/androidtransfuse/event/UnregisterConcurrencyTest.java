@@ -159,6 +159,7 @@ public class UnregisterConcurrencyTest {
     }
 
     @Test
+    @Ignore
     public void hammerLifecycleTest() throws InterruptedException {
 
         List<EventWatcher> registrations = new ArrayList<EventWatcher>();

@@ -25,8 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Centralized Bus for registering, unregistering and triggering events.  An event may be any object and the EventManager
@@ -70,7 +68,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Singleton
 public class EventManager {
 
-    private final ReadWriteLock observersLock = new ReentrantReadWriteLock();
     private final ConcurrentMap<Class, Set<EventObserver>> observers = new ConcurrentHashMap<Class, java.util.Set<EventObserver>>();
     private final ThreadLocal<ConcurrentLinkedQueue<EventExecution>> executionQueue = new ExecutionQueueThreadLocal();
     private final ThreadLocal<Boolean> executing = new BooleanThreadLocal();
@@ -108,13 +105,7 @@ public class EventManager {
         if(observer == null){
             throw new IllegalArgumentException("Null observer passed to register");
         }
-        observersLock.writeLock().lock();
-        try{
-            nullSafeGet(event).add(observer);
-        }
-        finally {
-            observersLock.writeLock().unlock();
-        }
+        nullSafeGet(event).add(observer);
     }
 
     private Set<EventObserver> nullSafeGet(Class<?> clazz) {
@@ -139,21 +130,15 @@ public class EventManager {
 
         Set<Class> eventTypes = getAllInheritedClasses(event.getClass());
 
-        observersLock.readLock().lock();
-        try{
-            for (Class eventType : eventTypes) {
-                if(observers.containsKey(eventType)){
-                    for (EventObserver eventObserver : observers.get(eventType)) {
-                        executionQueue.get().add(new EventExecution(event, eventObserver));
-                    }
+        for (Class eventType : eventTypes) {
+            if(observers.containsKey(eventType)){
+                for (EventObserver eventObserver : observers.get(eventType)) {
+                    executionQueue.get().add(new EventExecution(event, eventObserver));
                 }
             }
+        }
 
-            triggerQueue();
-        }
-        finally{
-            observersLock.readLock().unlock();
-        }
+        triggerQueue();
     }
 
     private void triggerQueue(){
@@ -203,14 +188,8 @@ public class EventManager {
      * @param observer Event Observer
      */
     public void unregister(EventObserver<?> observer){
-        observersLock.writeLock().lock();
-        try{
-            for (Map.Entry<Class, Set<EventObserver>> entry : observers.entrySet()) {
-                entry.getValue().remove(observer);
-            }
-        }
-        finally{
-            observersLock.writeLock().unlock();
+        for (Map.Entry<Class, Set<EventObserver>> entry : observers.entrySet()) {
+            entry.getValue().remove(observer);
         }
 
     }
