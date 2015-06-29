@@ -77,12 +77,17 @@ public class ASTElementFactory {
      * @param typeElement required input Element
      * @return ASTType constructed using teh input Element
      */
-    public synchronized ASTType getType(TypeElement typeElement) {
-        if (!typeCache.containsKey(typeElement)) {
-            typeCache.put(typeElement, buildType(typeElement));
-        }
+    public synchronized ASTType getType(final TypeElement typeElement) {
+        return new LazyASTType(buildPackageClass(typeElement)) {
+            @Override
+            public ASTType lazyLoad() {
+                if (!typeCache.containsKey(typeElement)) {
+                    typeCache.put(typeElement, buildType(typeElement));
+                }
 
-        return typeCache.get(typeElement);
+                return typeCache.get(typeElement);
+            }
+        };
     }
 
     public ASTType getType(Class clazz){
