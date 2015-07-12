@@ -66,6 +66,11 @@ public class ASTIntersectionType implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }

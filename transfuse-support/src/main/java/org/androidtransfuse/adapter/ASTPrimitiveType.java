@@ -95,7 +95,13 @@ public enum ASTPrimitiveType implements ASTType {
         return false;
     }
 
+    @Override
     public boolean isInterface() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnum() {
         return false;
     }
 

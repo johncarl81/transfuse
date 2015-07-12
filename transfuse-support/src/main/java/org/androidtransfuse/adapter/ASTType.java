@@ -68,6 +68,13 @@ public interface ASTType extends ASTBase {
     boolean isFinal();
 
     /**
+     * Determines if the given AST type represents an enum
+     *
+     * @return if the type is an enum
+     */
+    boolean isEnum();
+
+    /**
      * Supplies the super class (by extension) of this type
      *
      * @return supertype

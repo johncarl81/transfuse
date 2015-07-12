@@ -64,6 +64,11 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }

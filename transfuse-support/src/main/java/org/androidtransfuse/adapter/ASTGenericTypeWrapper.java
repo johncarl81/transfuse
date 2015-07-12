@@ -22,6 +22,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 
 /**
@@ -65,6 +66,11 @@ public class ASTGenericTypeWrapper implements ASTType {
 
     public boolean isInterface() {
         return astType.isInterface();
+    }
+
+    @Override
+    public boolean isEnum() {
+        return astType.isEnum();
     }
 
     @Override

@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import java.lang.annotation.Annotation;
 
@@ -90,6 +91,10 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public boolean isInterface() {
         return typeElement.getKind().isInterface();
+    }
+
+    public boolean isEnum() {
+        return typeElement.getKind().equals(ElementKind.ENUM);
     }
 
     @Override

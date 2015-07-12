@@ -92,6 +92,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return delegate.isEnum();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return delegate.getSuperClass();
     }

@@ -104,6 +104,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return clazz.isEnum();
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotationList;
     }

@@ -58,6 +58,10 @@ public abstract class LazyASTType implements ASTType{
         return getProxy().isInterface();
     }
 
+    public boolean isEnum() {
+        return getProxy().isEnum();
+    }
+
     @Override
     public ASTType getSuperClass() {
         return getProxy().getSuperClass();

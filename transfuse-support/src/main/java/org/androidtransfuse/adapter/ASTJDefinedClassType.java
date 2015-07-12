@@ -21,6 +21,7 @@ import com.sun.codemodel.JDefinedClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 
 /**
@@ -64,7 +65,13 @@ public class ASTJDefinedClassType implements ASTType{
         return true;
     }
 
+    @Override
     public boolean isInterface() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnum() {
         return false;
     }
 

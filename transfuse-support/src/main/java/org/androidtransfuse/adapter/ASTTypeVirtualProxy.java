@@ -76,6 +76,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return getProxy().isEnum();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return getProxy().getSuperClass();
     }

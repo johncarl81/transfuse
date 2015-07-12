@@ -54,6 +54,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public boolean isEnum() {
+        return proxyASTType.isEnum();
+    }
+
+    @Override
     public String getName() {
         return name;
     }

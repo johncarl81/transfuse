@@ -65,6 +65,10 @@ public enum ASTVoidType implements ASTType {
         return true;
     }
 
+    @Override
+    public boolean isEnum() {
+        return false;
+    }
 
     @Override
     public ASTType getSuperClass() {
