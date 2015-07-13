@@ -19,12 +19,14 @@ import android.app.ListActivity;
 import android.widget.ArrayAdapter;
 import org.androidtransfuse.Components;
 import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.integrationTest.activity.Drawer;
 import org.androidtransfuse.integrationTest.activity.ManifestManagedActivity;
 import org.androidtransfuse.integrationTest.activity.NotManagedActivity;
 import org.androidtransfuse.integrationTest.activity.Preferences;
 import org.androidtransfuse.integrationTest.activtyResult.ResultOne;
 import org.androidtransfuse.integrationTest.aop.AOP;
 import org.androidtransfuse.integrationTest.broadcastReceiver.ToastTrigger;
+import org.androidtransfuse.integrationTest.fragments.DialogFragmentMain;
 import org.androidtransfuse.integrationTest.fragments.FragmentMain;
 import org.androidtransfuse.integrationTest.inject.*;
 import org.androidtransfuse.integrationTest.layout.VariableLayout;
@@ -89,6 +91,8 @@ public class Main {
                 createLI(Components.get(PreferenceInjection.class), "Preference Injection"),
                 createLI(Components.get(ViewInjection.class), "View Injection"),
                 createLI(Components.get(FragmentMain.class), "Fragments"),
+                createLI(Components.get(Drawer.class), "Drawer"),
+                createLI(Components.get(DialogFragmentMain.class), "Dialog Fragments"),
                 createLI(Components.get(EventObserver.class), "Event Observer"),
                 createLI(Components.get(SaveInstanceState.class), "Save Instance State"),
                 createLI(Components.get(NonConfigInstance.class), "NonConfiguration AsyncTask"),

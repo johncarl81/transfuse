@@ -72,6 +72,6 @@ public class TypeInvocationHelper {
                 return JExpr.cast(generationUtil.ref(objectType), typedExpression.getExpression());
             }
         }
-        throw new TransfuseAnalysisException("Non-coercible types encountered");
+        throw new TransfuseAnalysisException("Non-coercible types encountered: " + typedExpression.getType() + " -> " + targetType);
     }
 }

@@ -15,22 +15,46 @@
  */
 package org.androidtransfuse.adapter.element;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.adapter.*;
+import com.google.common.collect.Lists;
+
+import org.androidtransfuse.adapter.ASTAccessModifier;
+import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTBase;
+import org.androidtransfuse.adapter.ASTConstructor;
+import org.androidtransfuse.adapter.ASTFactory;
+import org.androidtransfuse.adapter.ASTField;
+import org.androidtransfuse.adapter.ASTMethod;
+import org.androidtransfuse.adapter.ASTParameter;
+import org.androidtransfuse.adapter.ASTStringType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.ASTTypeVirtualProxy;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Logger;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.lang.model.element.*;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -41,6 +65,7 @@ import java.util.Map;
 public class ASTElementFactory {
 
     private final Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
+    private final Map<PackageClass, ASTType> blacklist = new HashMap<PackageClass, ASTType>();
 
     private final ASTElementConverterFactory astElementConverterFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -59,6 +84,15 @@ public class ASTElementFactory {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astElementConverterFactory = astElementConverterFactory;
         this.log = log;
+
+        //blacklist
+        // this is to work around a bug in the support library
+        // https://code.google.com/p/android/issues/detail?id=175086
+        blacklist.put(new PackageClass("android.support.v4.app", "DialogFragment"),
+                        new ASTStubType("android.support.v4.app.DialogFragment", "android.support.v4.app.Fragment"));
+
+        blacklist.put(new PackageClass("android.support.v4.widget", "DrawerLayout"),
+                        new ASTStubType("android.support.v4.widget.DrawerLayout", "android.view.ViewGroup", "android.view.View"));
     }
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
@@ -100,12 +134,12 @@ public class ASTElementFactory {
         //while avoiding back link loops
         PackageClass packageClass = buildPackageClass(typeElement);
 
+        if (blacklist.containsKey(packageClass)) {
+            return blacklist.get(packageClass);
+        }
+
         ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
         typeCache.put(typeElement, astTypeProxy);
-
-        ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
-        ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
-        ImmutableSet.Builder<ASTMethod> methods = ImmutableSet.builder();
 
         ASTType superClass = null;
         if (typeElement.getSuperclass() != null) {
@@ -117,13 +151,15 @@ public class ASTElementFactory {
                 .toSet();
 
         ImmutableSet.Builder<ASTAnnotation> annotations = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTMethod> methods = ImmutableSet.builder();
 
         //iterate and build the contained elements within this TypeElement
+        annotations.addAll(getAnnotations(typeElement));
         constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
         fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
         methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
-
-        annotations.addAll(getAnnotations(typeElement));
 
         ASTType astType = new ASTElementType(packageClass,
                 typeElement,
@@ -297,5 +333,44 @@ public class ASTElementFactory {
         }
 
         return true;
+    }
+
+    public class ASTStubType extends ASTStringType {
+
+        private final Set<String> implementing = new HashSet<String>();
+        private final List<String> superClassNames;
+
+        public ASTStubType(String name, String... superClassNames) {
+            super(name);
+            this.superClassNames = Lists.newArrayList(superClassNames);
+        }
+
+        @Override
+        public ASTType getSuperClass() {
+            return getType(elements.getTypeElement(superClassNames.get(0)));
+        }
+
+        @Override
+        public ImmutableSet<ASTType> getInterfaces() {
+            return FluentIterable.from(implementing)
+                    .transform(new Function<String, ASTType>() {
+                        @Nullable
+                        @Override
+                        public ASTType apply(String input) {
+                            return getType(elements.getTypeElement(input));
+                        }
+                    }).toSet();
+        }
+
+        @SuppressWarnings("unused")
+        public ASTStubType addImplements(String extension) {
+            implementing.add(extension);
+            return this;
+        }
+
+        @Override
+        public boolean inheritsFrom(ASTType type) {
+            return superClassNames.contains(type.getPackageClass().getFullyQualifiedName());
+        }
     }
 }

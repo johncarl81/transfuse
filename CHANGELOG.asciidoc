@@ -1,0 +1,3 @@
+=== 3.0.0 (in progress)
+
+07-14:: work around https://code.google.com/p/android/issues/detail?id=175086[bug in android support libraries]
