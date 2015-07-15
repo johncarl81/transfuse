@@ -20,41 +20,17 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-
-import org.androidtransfuse.adapter.ASTAccessModifier;
-import org.androidtransfuse.adapter.ASTAnnotation;
-import org.androidtransfuse.adapter.ASTBase;
-import org.androidtransfuse.adapter.ASTConstructor;
-import org.androidtransfuse.adapter.ASTFactory;
-import org.androidtransfuse.adapter.ASTField;
-import org.androidtransfuse.adapter.ASTMethod;
-import org.androidtransfuse.adapter.ASTParameter;
-import org.androidtransfuse.adapter.ASTStringType;
-import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.ASTTypeVirtualProxy;
-import org.androidtransfuse.adapter.PackageClass;
+import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.util.Logger;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import java.util.*;
 
 /**
  * Factory class to build a specific AST tree element from the provided Element base type
@@ -92,7 +68,7 @@ public class ASTElementFactory {
                         new ASTStubType("android.support.v4.app.DialogFragment", "android.support.v4.app.Fragment"));
 
         blacklist.put(new PackageClass("android.support.v4.widget", "DrawerLayout"),
-                        new ASTStubType("android.support.v4.widget.DrawerLayout", "android.view.ViewGroup", "android.view.View"));
+                        new ASTStubType("android.support.v4.widget.DrawerLayout", "android.view.ViewGroup"));
     }
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
@@ -338,16 +314,16 @@ public class ASTElementFactory {
     public class ASTStubType extends ASTStringType {
 
         private final Set<String> implementing = new HashSet<String>();
-        private final List<String> superClassNames;
+        private final String extending;
 
-        public ASTStubType(String name, String... superClassNames) {
+        public ASTStubType(String name, String extending) {
             super(name);
-            this.superClassNames = Lists.newArrayList(superClassNames);
+            this.extending = extending;
         }
 
         @Override
         public ASTType getSuperClass() {
-            return getType(elements.getTypeElement(superClassNames.get(0)));
+            return getType(elements.getTypeElement(extending));
         }
 
         @Override
@@ -366,11 +342,6 @@ public class ASTElementFactory {
         public ASTStubType addImplements(String extension) {
             implementing.add(extension);
             return this;
-        }
-
-        @Override
-        public boolean inheritsFrom(ASTType type) {
-            return superClassNames.contains(type.getPackageClass().getFullyQualifiedName());
         }
     }
 }
