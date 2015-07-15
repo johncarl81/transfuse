@@ -47,7 +47,6 @@
         <module>transfuse-plugin</module>
         <module>transfuse-api</module>
         <module>transfuse</module>
-        <module>examples</module>
     </modules>
 
     <build>
