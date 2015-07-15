@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 
 /**
@@ -96,17 +95,17 @@ public class ASTStringType implements ASTType {
 
     @Override
     public boolean inheritsFrom(ASTType type) {
-        return false;
+        return ASTUtils.getInstance().inherits(this, type, true, true);
     }
 
     @Override
     public boolean extendsFrom(ASTType type) {
-        return false;
+        return ASTUtils.getInstance().inherits(this, type, false, true);
     }
 
     @Override
     public boolean implementsFrom(ASTType type) {
-        return false;
+        return ASTUtils.getInstance().inherits(this, type, true, false);
     }
 
     @Override
