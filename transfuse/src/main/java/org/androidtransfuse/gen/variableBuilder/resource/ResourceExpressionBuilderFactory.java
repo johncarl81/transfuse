@@ -52,7 +52,6 @@ public class ResourceExpressionBuilderFactory {
         this.astClassFactory = astClassFactory;
 
         addMethodBasedResourceBuider(String.class, GET_STRING);
-        addMethodBasedResourceBuider(String.class, GET_STRING);
         addMethodBasedResourceBuider(Boolean.class, GET_BOOLEAN);
         addMethodBasedResourceBuider(boolean.class, GET_BOOLEAN);
         addMethodBasedResourceBuider(AndroidLiterals.COLOR_STATE_LIST, GET_COLORSTATELIST);
