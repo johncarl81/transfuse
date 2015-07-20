@@ -17,7 +17,9 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
-import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.adapter.ASTArrayType;
+import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
@@ -70,6 +72,8 @@ public class ClassGenerationUtil {
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
         } catch (ExceptionInInitializerError e){
             // Tried to initalize an Android class
+            return codeModel.directClass(astType.getName());
+        } catch (NoClassDefFoundError e){
             return codeModel.directClass(astType.getName());
         }
     }
