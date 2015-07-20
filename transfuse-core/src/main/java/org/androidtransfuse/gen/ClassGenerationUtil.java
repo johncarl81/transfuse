@@ -70,6 +70,11 @@ public class ClassGenerationUtil {
         } catch (ClassNotFoundException e) {
             validator.error("Unable to parse type " + astType.getName()).element(astType).build();
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
+        } catch (ExceptionInInitializerError e){
+            // Tried to initalize an Android class
+            return codeModel.directClass(astType.getName());
+        } catch (NoClassDefFoundError e){
+            return codeModel.directClass(astType.getName());
         }
     }
 
