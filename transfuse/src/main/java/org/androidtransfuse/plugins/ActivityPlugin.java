@@ -17,11 +17,36 @@ package org.androidtransfuse.plugins;
 
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
+import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.adapter.ASTStringType;
+import org.androidtransfuse.annotations.Activity;
+import org.androidtransfuse.annotations.OnActivityResult;
+import org.androidtransfuse.annotations.OnBackPressed;
+import org.androidtransfuse.annotations.OnConfigurationChanged;
+import org.androidtransfuse.annotations.OnCreate;
+import org.androidtransfuse.annotations.OnDestroy;
+import org.androidtransfuse.annotations.OnListItemClick;
+import org.androidtransfuse.annotations.OnNewIntent;
+import org.androidtransfuse.annotations.OnPause;
+import org.androidtransfuse.annotations.OnPostCreate;
+import org.androidtransfuse.annotations.OnRequestPermissionsResult;
+import org.androidtransfuse.annotations.OnRestart;
+import org.androidtransfuse.annotations.OnRestoreInstanceState;
+import org.androidtransfuse.annotations.OnResume;
+import org.androidtransfuse.annotations.OnResumeFragments;
+import org.androidtransfuse.annotations.OnSaveInstanceState;
+import org.androidtransfuse.annotations.OnStart;
+import org.androidtransfuse.annotations.OnStop;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
-import org.androidtransfuse.listeners.*;
+import org.androidtransfuse.listeners.ActivityMenuComponent;
+import org.androidtransfuse.listeners.ActivityOnKeyDownListener;
+import org.androidtransfuse.listeners.ActivityOnKeyLongPressListener;
+import org.androidtransfuse.listeners.ActivityOnKeyMultipleListener;
+import org.androidtransfuse.listeners.ActivityOnKeyUpListener;
+import org.androidtransfuse.listeners.ActivityOnTouchEventListener;
+import org.androidtransfuse.listeners.ActivityOnTrackballEventListener;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -55,6 +80,9 @@ public class ActivityPlugin implements TransfusePlugin{
         repository.component(Activity.class).method("onNewIntent", AndroidLiterals.INTENT).event(OnNewIntent.class);
         repository.component(Activity.class).method("onSaveInstanceState", AndroidLiterals.BUNDLE).event(OnSaveInstanceState.class).superCall();
         repository.component(Activity.class).method("onRestoreInstanceState", AndroidLiterals.BUNDLE).event(OnRestoreInstanceState.class).superCall();
+        repository.component(Activity.class).method("onRequestPermissionsResult",
+                ASTPrimitiveType.INT, new ASTArrayType(new ASTStringType("java.lang.String")), new ASTArrayType(ASTPrimitiveType.INT))
+                .event(OnRequestPermissionsResult.class).superCall();
         repository.component(Activity.class).extending(AndroidLiterals.FRAGMENT_ACTIVITY)
                 .method("onResumeFragments").event(OnResumeFragments.class).superCall();
         repository.component(Activity.class).extending(AndroidLiterals.LIST_ACTIVITY)
