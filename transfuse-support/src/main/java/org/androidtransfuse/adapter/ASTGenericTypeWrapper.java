@@ -22,7 +22,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.inject.Inject;
-import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 
 /**
@@ -76,6 +75,16 @@ public class ASTGenericTypeWrapper implements ASTType {
     @Override
     public boolean isFinal() {
         return astType.isFinal();
+    }
+
+    @Override
+    public boolean isStatic() {
+        return astType.isStatic();
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return astType.isInnerClass();
     }
 
     public ASTType getSuperClass() {

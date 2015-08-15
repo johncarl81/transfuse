@@ -59,6 +59,16 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return proxyASTType.isStatic();
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return proxyASTType.isInnerClass();
+    }
+
+    @Override
     public String getName() {
         return name;
     }

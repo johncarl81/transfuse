@@ -81,6 +81,16 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return getProxy().isStatic();
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return getProxy().isInnerClass();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return getProxy().getSuperClass();
     }

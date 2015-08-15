@@ -110,6 +110,15 @@ public enum ASTPrimitiveType implements ASTType {
         return true;
     }
 
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return false;
+    }
 
     @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {

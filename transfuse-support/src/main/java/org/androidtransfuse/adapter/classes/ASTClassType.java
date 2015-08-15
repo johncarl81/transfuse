@@ -104,6 +104,16 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return Modifier.isStatic(clazz.getModifiers());
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return clazz.getEnclosingClass() != null;
+    }
+
+    @Override
     public boolean isEnum() {
         return clazz.isEnum();
     }

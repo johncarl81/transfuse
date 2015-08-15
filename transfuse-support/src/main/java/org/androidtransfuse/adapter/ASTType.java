@@ -68,6 +68,20 @@ public interface ASTType extends ASTBase {
     boolean isFinal();
 
     /**
+     * Determines if the given AST type is static
+     *
+     * @return static status
+     */
+    boolean isStatic();
+
+    /**
+     * Determines if the given AST type is an inner class.
+     *
+     * @return is inner class
+     */
+    boolean isInnerClass();
+
+    /**
      * Determines if the given AST type represents an enum
      *
      * @return if the type is an enum

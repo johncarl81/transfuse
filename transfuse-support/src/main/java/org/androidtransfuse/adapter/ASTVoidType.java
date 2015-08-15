@@ -66,6 +66,16 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return false;
+    }
+
+    @Override
     public boolean isEnum() {
         return false;
     }

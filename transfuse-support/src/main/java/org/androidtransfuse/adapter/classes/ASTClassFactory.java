@@ -232,7 +232,19 @@ public class ASTClassFactory {
     public ASTConstructor getConstructor(Constructor constructor) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
-        ImmutableList<ASTParameter> constructorParameters = getParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), constructor.getParameterAnnotations());
+        Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
+
+        if(constructor.getDeclaringClass().getEnclosingClass() != null && !Modifier.isStatic(constructor.getDeclaringClass().getModifiers())){
+            // An inner class constructor contains a hidden non-annotated prameter
+            Annotation[][] paddedParameterAnnotations = new Annotation[parameterAnnotations.length + 1][];
+
+            paddedParameterAnnotations[0] = new Annotation[0];
+            System.arraycopy(parameterAnnotations, 0, paddedParameterAnnotations, 1, parameterAnnotations.length);
+
+            parameterAnnotations = paddedParameterAnnotations;
+        }
+
+        ImmutableList<ASTParameter> constructorParameters = getParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), parameterAnnotations);
         ImmutableSet<ASTType> throwsTypes = getTypes(constructor.getExceptionTypes());
 
         return new ASTClassConstructor(getAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);

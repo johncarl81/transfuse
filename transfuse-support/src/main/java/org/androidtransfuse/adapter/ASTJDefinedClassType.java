@@ -21,7 +21,6 @@ import com.sun.codemodel.JDefinedClass;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import javax.lang.model.element.ElementKind;
 import java.lang.annotation.Annotation;
 
 /**
@@ -77,6 +76,16 @@ public class ASTJDefinedClassType implements ASTType{
 
     @Override
     public boolean isFinal() {
+        return false;
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isInnerClass() {
         return false;
     }
 

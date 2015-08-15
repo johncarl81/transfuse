@@ -97,6 +97,16 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return delegate.isStatic();
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return delegate.isInnerClass();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return delegate.getSuperClass();
     }

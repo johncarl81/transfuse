@@ -79,6 +79,16 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isInnerClass() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }
