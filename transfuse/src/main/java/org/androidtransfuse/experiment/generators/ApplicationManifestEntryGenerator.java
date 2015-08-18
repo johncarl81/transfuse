@@ -99,6 +99,7 @@ public class ApplicationManifestEntryGenerator implements Generation {
         manifestApplication.setTheme(checkBlank(annotation.theme()));
         manifestApplication.setUiOptions(checkDefault(annotation.uiOptions(), UIOptions.NONE));
         manifestApplication.setAllowBackup(annotation.allowBackup());
+        manifestApplication.setFullBackupContent(checkBlank(annotation.fullBackupContent()));
         manifestApplication.setLargeHeap(checkDefault(annotation.largeHeap(), false));
         manifestApplication.setSupportsRtl(checkDefault(annotation.supportsRtl(), false));
         manifestApplication.setRestrictedAccountType(checkDefault(annotation.restrictedAccountType(), false));
