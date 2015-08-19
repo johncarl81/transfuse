@@ -17,8 +17,24 @@ package org.androidtransfuse.plugins;
 
 import org.androidtransfuse.ConfigurationRepository;
 import org.androidtransfuse.TransfusePlugin;
+import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTPrimitiveType;
-import org.androidtransfuse.annotations.*;
+import org.androidtransfuse.adapter.ASTStringType;
+import org.androidtransfuse.annotations.Fragment;
+import org.androidtransfuse.annotations.OnActivityCreated;
+import org.androidtransfuse.annotations.OnActivityResult;
+import org.androidtransfuse.annotations.OnConfigurationChanged;
+import org.androidtransfuse.annotations.OnCreate;
+import org.androidtransfuse.annotations.OnDestroy;
+import org.androidtransfuse.annotations.OnDestroyView;
+import org.androidtransfuse.annotations.OnDetach;
+import org.androidtransfuse.annotations.OnListItemClick;
+import org.androidtransfuse.annotations.OnLowMemory;
+import org.androidtransfuse.annotations.OnPause;
+import org.androidtransfuse.annotations.OnRequestPermissionsResult;
+import org.androidtransfuse.annotations.OnResume;
+import org.androidtransfuse.annotations.OnStart;
+import org.androidtransfuse.annotations.OnStop;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.listeners.FragmentMenuComponent;
 import org.androidtransfuse.util.AndroidLiterals;
@@ -43,6 +59,10 @@ public class FragmentPlugin implements TransfusePlugin{
         repository.component(Fragment.class).method("onLowMemory").event(OnLowMemory.class).superCall();
         repository.component(Fragment.class).method("onActivityResult", ASTPrimitiveType.INT, ASTPrimitiveType.INT, AndroidLiterals.INTENT).event(OnActivityResult.class);
         repository.component(Fragment.class).method("onConfigurationChanged", AndroidLiterals.CONTENT_CONFIGURATION).event(OnConfigurationChanged.class).superCall();
+
+        repository.component(Fragment.class).method("onRequestPermissionsResult",
+                ASTPrimitiveType.INT, new ASTArrayType(new ASTStringType("java.lang.String")), new ASTArrayType(ASTPrimitiveType.INT))
+                .event(OnRequestPermissionsResult.class).superCall();
 
         repository.component(Fragment.class)
                 .extending(AndroidLiterals.LIST_FRAGMENT)

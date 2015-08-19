@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Activity `onRequestPermissionsResult()` callback method annotation.  Registers the annotated method
+ * Activity / Fragment `onRequestPermissionsResult()` callback method annotation.  Registers the annotated method
  * to be called if the `onRequestPermissionsResult()` function is called.
  *
  * @author Dan Bachelder
