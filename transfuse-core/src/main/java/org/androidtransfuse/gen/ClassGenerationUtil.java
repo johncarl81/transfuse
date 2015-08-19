@@ -15,16 +15,23 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JClass;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JPackage;
+import com.sun.codemodel.JType;
+
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.validation.Validator;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Utility class unifying the creation of a basic class from a PackageClass
@@ -71,7 +78,7 @@ public class ClassGenerationUtil {
             validator.error("Unable to parse type " + astType.getName()).element(astType).build();
             throw new TransfuseAnalysisException("Unable to parse type " + astType.getName(), e);
         } catch (ExceptionInInitializerError e){
-            // Tried to initalize an Android class
+            // Tried to initialize an Android class
             return codeModel.directClass(astType.getName());
         } catch (NoClassDefFoundError e){
             return codeModel.directClass(astType.getName());

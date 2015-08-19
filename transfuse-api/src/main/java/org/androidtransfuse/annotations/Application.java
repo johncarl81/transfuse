@@ -44,6 +44,8 @@ public @interface Application {
 
     boolean allowBackup() default true;
 
+    String fullBackupContent() default "";
+
     boolean largeHeap() default false;
 
     boolean supportsRtl() default false;

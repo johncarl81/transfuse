@@ -21,18 +21,20 @@ import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * attributes
  * android:allowTaskReparenting=["true" | "false"]
  * android:backupAgent="string"
  * android:debuggable=["true" | "false"]
+ * android:fullBackupContent="xml resource"
  * android:description="string resource"
  * android:enabled=["true" | "false"]
  * android:hasCode=["true" | "false"]
@@ -84,6 +86,7 @@ public class Application extends Mergeable implements Identified {
     private String theme;
     private UIOptions uiOptions;
     private Boolean allowBackup;
+    private String fullBackupContent;
     private Boolean largeHeap;
     private Boolean supportsRtl;
     private Boolean restrictedAccountType;
@@ -374,6 +377,16 @@ public class Application extends Mergeable implements Identified {
 
     public void setAllowBackup(Boolean allowBackup) {
         this.allowBackup = allowBackup;
+    }
+
+    @Merge("fbc")
+    @XmlAttribute(name = "fullBackupContent", namespace = ManifestNamespaceMapper.ANDROID_URI)
+    public String getFullBackupContent() {
+        return fullBackupContent;
+    }
+
+    public void setFullBackupContent(String fullBackupContent) {
+        this.fullBackupContent = fullBackupContent;
     }
 
     @Merge("lh")
