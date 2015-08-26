@@ -16,11 +16,11 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JType;
+import org.androidtransfuse.CodeGenerationScope;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.util.Namer;
 
-import javax.inject.Singleton;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author John Ericksen
  */
-@Singleton
+@CodeGenerationScope
 public class UniqueVariableNamer {
 
     private final ConcurrentMap<String, AtomicInteger> nameMap = new ConcurrentHashMap<String, AtomicInteger>();
