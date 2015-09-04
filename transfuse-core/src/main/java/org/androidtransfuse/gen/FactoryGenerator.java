@@ -119,7 +119,7 @@ public class FactoryGenerator {
             for (ASTMethod interfaceMethod : descriptor.getMethods()) {
                 MirroredMethodGenerator mirroredMethodGenerator = mirroredMethodGeneratorFactory.buildMirroredMethodGenerator(interfaceMethod, false);
                 MethodDescriptor methodDescriptor = mirroredMethodGenerator.buildMethod(implClass);
-                JBlock block = methodDescriptor.getMethod().body();
+                JBlock block = methodDescriptor.getBody();
 
                 InjectionNodeBuilderRepository injectionNodeBuilderRepository = injectionNodeBuilderRepositoryProvider.get();
                 injectionNodeBuilderRepository.addRepository(injectionNodeBuilderRepositoryFactory.buildModuleConfiguration());
