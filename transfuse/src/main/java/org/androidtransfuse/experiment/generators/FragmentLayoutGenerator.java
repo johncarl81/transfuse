@@ -15,10 +15,7 @@
  */
 package org.androidtransfuse.experiment.generators;
 
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JInvocation;
-import com.sun.codemodel.JVar;
+import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
@@ -68,19 +65,23 @@ public class FragmentLayoutGenerator implements Generation {
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
 
         final ASTMethod onCreateViewMethod = astElementFactory.findMethod(AndroidLiterals.FRAGMENT, "onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE);
-        builder.add(onCreateViewMethod, GenerationPhase.LAYOUT, new ComponentMethodGenerator() {
+        builder.add(onCreateViewMethod, GenerationPhase.POSTSCOPES, new ComponentMethodGenerator() {
             @Override
             public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                 ASTType target = descriptor.getTarget();
-                final JVar viewDeclaration = block.decl(generationUtil.ref(AndroidLiterals.VIEW), namer.generateName(AndroidLiterals.VIEW));
+                final JVar viewDeclaration = builder.getDefinedClass().field(JMod.PRIVATE, generationUtil.ref(AndroidLiterals.VIEW), namer.generateName(AndroidLiterals.VIEW));
                 builder.getAnalysisContext().getInjectionNodeBuilders().putType(AndroidLiterals.VIEW, injectionBindingBuilder.buildExpression(new TypedExpression(AndroidLiterals.VIEW, viewDeclaration)));
+
+                JBlock isNullconditionalBlock = block._if(viewDeclaration.eq(JExpr._null()))._then();
+
+                methodDescriptor.pushBody(isNullconditionalBlock);
 
                 if (target.isAnnotated(Layout.class)) {
                     Layout layoutAnnotation = target.getAnnotation(Layout.class);
 
                     Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
 
-                    block.assign(viewDeclaration, methodDescriptor.getExpression(AndroidLiterals.LAYOUT_INFLATER).getExpression()
+                    isNullconditionalBlock.assign(viewDeclaration, methodDescriptor.getExpression(AndroidLiterals.LAYOUT_INFLATER).getExpression()
                             .invoke("inflate")
                             .arg(rResourceReferenceBuilder.buildReference(layout))
                             .arg(methodDescriptor.getExpression(AndroidLiterals.VIEW_GROUP).getExpression())
@@ -92,13 +93,14 @@ public class FragmentLayoutGenerator implements Generation {
                         onCreateView.arg(methodDescriptor.getExpression(astParameter.getASTType()).getExpression());
                     }
 
-                    block.assign(viewDeclaration, onCreateView);
+                    isNullconditionalBlock.assign(viewDeclaration, onCreateView);
                 }
 
                 builder.add(onCreateViewMethod, GenerationPhase.RETURN, new ComponentMethodGenerator() {
                     @Override
                     public void generate(MethodDescriptor methodDescriptor, JBlock block) {
-                        block._return(viewDeclaration);
+                        methodDescriptor.popBody();
+                        methodDescriptor.getBody()._return(viewDeclaration);
                     }
                 });
             }

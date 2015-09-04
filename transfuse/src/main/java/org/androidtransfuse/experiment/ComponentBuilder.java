@@ -65,12 +65,12 @@ public class ComponentBuilder {
                 for (GenerationPhase phase : GenerationPhase.values()) {
                     if(lazyGenerators.containsKey(phase)){
                         for (ComponentMethodGenerator componentMethodGenerator : lazyGenerators.get(phase)) {
-                            componentMethodGenerator.generate(descriptor, descriptor.getMethod().body());
+                            componentMethodGenerator.generate(descriptor, descriptor.getBody());
                         }
                     }
                     if(generators.containsKey(phase)){
                         for (ComponentMethodGenerator componentMethodGenerator : generators.get(phase)) {
-                            componentMethodGenerator.generate(descriptor, descriptor.getMethod().body());
+                            componentMethodGenerator.generate(descriptor, descriptor.getBody());
                         }
                     }
                 }

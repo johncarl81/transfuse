@@ -94,8 +94,8 @@ public class FragmentOnSaveInstanceStateMethodCallbackGenerator implements Gener
                         public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                             //super call
                             JExpression bundle = methodDescriptor.getExpression(AndroidLiterals.BUNDLE).getExpression();
-                            methodDescriptor.getMethod().body().add(JExpr._super().invoke("onCreate").arg(bundle));
-                            methodDescriptor.getMethod().body().assign(bundleField, bundle);
+                            methodDescriptor.getBody().add(JExpr._super().invoke("onCreate").arg(bundle));
+                            methodDescriptor.getBody().assign(bundleField, bundle);
                         }
                     });
 

@@ -16,6 +16,7 @@
 package org.androidtransfuse.model;
 
 import com.google.common.collect.ImmutableMap;
+import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JMethod;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
@@ -24,6 +25,7 @@ import org.androidtransfuse.adapter.ASTType;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * @author John Ericksen
@@ -31,6 +33,7 @@ import java.util.Set;
 public class MethodDescriptor {
 
     private final JMethod method;
+    private final Stack<JBlock> blocks = new Stack<JBlock>();
     private final ImmutableMap<ASTParameter, TypedExpression> parameterMap;
     private final ImmutableMap<ASTType, TypedExpression> querymap;
     private final ASTMethod astMethod;
@@ -39,6 +42,7 @@ public class MethodDescriptor {
         this.method = method;
         this.astMethod = astMethod;
         this.parameterMap = parameterMap;
+        this.blocks.push(method.body());
 
         ImmutableMap.Builder<ASTType, TypedExpression> queryBuilder = ImmutableMap.builder();
 
@@ -59,6 +63,18 @@ public class MethodDescriptor {
 
     public JMethod getMethod() {
         return method;
+    }
+
+    public JBlock getBody(){
+        return blocks.peek();
+    }
+
+    public void pushBody(JBlock block){
+        blocks.push(block);
+    }
+
+    public JBlock popBody(){
+        return blocks.pop();
     }
 
     public TypedExpression getParameter(ASTParameter astParameter) {
