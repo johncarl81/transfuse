@@ -62,6 +62,8 @@ public abstract class AbstractExtraFactoryGenerator implements Generation {
                 try {
                     JDefinedClass factoryClass = generationUtil.defineClass(descriptor.getPackageClass().append(FACTORY_EXT));
 
+                    setupClass(descriptor, factoryClass);
+
                     List<IntentFactoryExtraAspect> extras = getExtras(builder.getExpressionMap());
 
                     JMethod constructor = factoryClass.constructor(JMod.PUBLIC);
@@ -72,7 +74,7 @@ public abstract class AbstractExtraFactoryGenerator implements Generation {
                     JClass bundleRef = generationUtil.ref(AndroidLiterals.BUNDLE);
                     JFieldVar bundle = factoryClass.field(JMod.PRIVATE | JMod.FINAL, bundleRef, namer.generateName(AndroidLiterals.BUNDLE), JExpr._new(bundleRef));
 
-                    createBuilderMethod(descriptor, factoryClass, bundle);
+                    createMethods(descriptor, factoryClass, bundle);
 
                     for (IntentFactoryExtraAspect extraAspect : extras) {
                         if (extraAspect.isRequired()) {
@@ -103,7 +105,9 @@ public abstract class AbstractExtraFactoryGenerator implements Generation {
         });
     }
 
-    protected abstract void createBuilderMethod(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle);
+    protected abstract void setupClass(ComponentDescriptor descriptor, JDefinedClass factoryClass);
+
+    protected abstract void createMethods(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle);
 
     private JStatement buildBundleMethod(IntentFactoryExtraAspect extraAspect, JExpression extras, JVar extraParam) {
 

@@ -21,6 +21,7 @@ import org.androidtransfuse.analysis.repository.ParcelerPropertyBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.intentFactory.ComponentFactory;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -33,13 +34,15 @@ public class IntentFactoryGenerator extends AbstractExtraFactoryGenerator {
     private static final String BUILD_INTENT = "build";
 
     private final ClassGenerationUtil generationUtil;
+    private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
 
     @Inject
-    public IntentFactoryGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer, BundlePropertyBuilderRepository repository, ParcelerPropertyBuilder parcelerPropertyBuilder) {
+    public IntentFactoryGenerator(ClassGenerationUtil generationUtil, UniqueVariableNamer namer, BundlePropertyBuilderRepository repository, ParcelerPropertyBuilder parcelerPropertyBuilder, JCodeModel codeModel) {
         super(generationUtil, namer, repository, parcelerPropertyBuilder);
         this.generationUtil = generationUtil;
         this.namer = namer;
+        this.codeModel = codeModel;
     }
 
     @Override
@@ -47,14 +50,46 @@ public class IntentFactoryGenerator extends AbstractExtraFactoryGenerator {
         return "IntentFactory Generator";
     }
 
-    protected void createBuilderMethod(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
+    @Override
+    protected void setupClass(ComponentDescriptor descriptor, JDefinedClass factoryClass) {
+        factoryClass._extends(generationUtil.ref(ComponentFactory.class));
+    }
+
+    protected void createMethods(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
+        createBuildMethod(descriptor, factoryClass, bundle);
+        createAddFlagMethod(factoryClass);
+        createAddCategoryMethod(factoryClass);
+    }
+
+    private void createAddFlagMethod(JDefinedClass factoryClass) {
+        JMethod getFlagMethod = factoryClass.method(JMod.PUBLIC, factoryClass, ComponentFactory.ADD_FLAG_METHOD);
+        JVar flagParam = getFlagMethod.param(codeModel.INT, namer.generateName(codeModel.INT));
+        JBlock body = getFlagMethod.body();
+
+        body.invoke(ComponentFactory.INTERNAL_ADD_FLAG_METHOD).arg(flagParam);
+
+        body._return(JExpr._this());
+    }
+
+    private void createAddCategoryMethod(JDefinedClass factoryClass) {
+        JMethod getFlagMethod = factoryClass.method(JMod.PUBLIC, factoryClass, ComponentFactory.ADD_CATEGORY_METHOD);
+        JVar categoryParam = getFlagMethod.param(generationUtil.ref(String.class), namer.generateName(String.class));
+        JBlock body = getFlagMethod.body();
+
+        body.invoke(ComponentFactory.INTERNAL_ADD_CATEGORY_METHOD).arg(categoryParam);
+
+        body._return(JExpr._this());
+    }
+
+    private void createBuildMethod(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
         JClass targetRef = generationUtil.ref(descriptor.getPackageClass());
         JClass intentRef = generationUtil.ref(AndroidLiterals.INTENT);
         JMethod buildMethod = factoryClass.method(JMod.PUBLIC, intentRef, BUILD_INTENT);
         JVar contextParam = buildMethod.param(generationUtil.ref(AndroidLiterals.CONTEXT), namer.generateName(AndroidLiterals.CONTEXT));
         JBlock buildMethodBody = buildMethod.body();
 
-        JVar intentVar = buildMethodBody.decl(intentRef, namer.generateName(descriptor.getType()), JExpr._new(intentRef).arg(contextParam).arg(targetRef.dotclass()));
+        JVar intentVar = buildMethodBody.decl(intentRef, namer.generateName(intentRef), JExpr._new(intentRef).arg(contextParam).arg(targetRef.dotclass()));
+        buildMethodBody.invoke(intentVar, "setFlags").arg(JExpr.invoke(ComponentFactory.INTERNAL_GET_FLAGS_METHOD));
         buildMethodBody.invoke(intentVar, "putExtras").arg(bundle);
 
         buildMethodBody._return(intentVar);

@@ -21,6 +21,7 @@ import org.androidtransfuse.analysis.repository.ParcelerPropertyBuilder;
 import org.androidtransfuse.experiment.ComponentDescriptor;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.UniqueVariableNamer;
+import org.androidtransfuse.intentFactory.FragmentFactory;
 
 import javax.inject.Inject;
 
@@ -46,11 +47,16 @@ public class FragmentFactoryGenerator extends AbstractExtraFactoryGenerator {
         return "FragmentFactory Generator";
     }
 
-    protected void createBuilderMethod(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
+    @Override
+    protected void setupClass(ComponentDescriptor descriptor, JDefinedClass factoryClass) {
+        factoryClass._implements(generationUtil.ref(FragmentFactory.class).narrow(generationUtil.ref(descriptor.getPackageClass())));
+    }
+
+    protected void createMethods(ComponentDescriptor descriptor, JDefinedClass factoryClass, JFieldVar bundle) {
         JClass targetRef = generationUtil.ref(descriptor.getPackageClass());
         JBlock buildMethodBody = factoryClass.method(JMod.PUBLIC, targetRef, BUILD_FRAGMENT).body();
 
-        JVar fragmentVar = buildMethodBody.decl(targetRef, namer.generateName(descriptor.getType()), JExpr._new(targetRef));
+        JVar fragmentVar = buildMethodBody.decl(targetRef, namer.generateName(targetRef), JExpr._new(targetRef));
         buildMethodBody.invoke(fragmentVar, "setArguments").arg(bundle);
 
         buildMethodBody._return(fragmentVar);
