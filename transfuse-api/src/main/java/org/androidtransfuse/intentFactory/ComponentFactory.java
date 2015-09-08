@@ -54,7 +54,7 @@ public abstract class ComponentFactory {
 
     public abstract Intent build(Context context);
 
-    public Context start(Context context) {
+    public <T extends Context> T start(T context) {
         context.startActivity(build(context));
         return context;
     }
