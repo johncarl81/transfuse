@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -53,7 +54,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
     private final InjectionBindingBuilder injectionBindingBuilder;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
     private final ViewInjectionNodeBuilder viewVariableBuilder;
-    private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
+    private final ExtraInjectionNodeBuilder.ExtraInjectionNodeBuilderFactory extraInjectionNodeBuilderFactory;
     private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
     private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
     private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
@@ -77,7 +78,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
                             InjectionBindingBuilder injectionBindingBuilder,
                             ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
                             ViewInjectionNodeBuilder viewVariableBuilder,
-                            ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
+                            ExtraInjectionNodeBuilder.ExtraInjectionNodeBuilderFactory extraInjectionNodeBuilderFactory,
                             SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
                             ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
                             PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
@@ -98,7 +99,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         this.injectionBindingBuilder = injectionBindingBuilder;
         this.observesExpressionGeneratorFactory = observesExpressionGeneratorFactory;
         this.viewVariableBuilder = viewVariableBuilder;
-        this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
+        this.extraInjectionNodeBuilderFactory = extraInjectionNodeBuilderFactory;
         this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
         this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
         this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
@@ -184,7 +185,12 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             activityType = activityType.getSuperClass();
         }
 
-        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilderFactory.build(new ExtraVariableBuilder.GetExtraExpressionBuilder() {
+            @Override
+            public JExpression buildGetExtraBundle(JExpression expression) {
+                return expression.invoke("getIntent").invoke("getExtras");
+            }
+        }));
         injectionNodeBuilderRepository.putAnnotation(Resource.class, resourceInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);

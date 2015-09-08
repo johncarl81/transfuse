@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.analysis;
 
+import com.sun.codemodel.JExpr;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
@@ -54,7 +56,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
     private final ComponentBuilderFactory componentBuilderFactory;
     private final ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listenerRegistrationGeneratorFactory;
     private final ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory;
-    private final ExtraInjectionNodeBuilder extraInjectionNodeBuilder;
+    private final ExtraInjectionNodeBuilder.ExtraInjectionNodeBuilderFactory extraInjectionNodeBuilderFactory;
     private final SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder;
     private final ResourceInjectionNodeBuilder resourceInjectionNodeBuilder;
     private final PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder;
@@ -75,7 +77,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
                             ComponentBuilderFactory componentBuilderFactory,
                             ListenerRegistrationGenerator.ListerRegistrationGeneratorFactory listenerRegistrationGeneratorFactory,
                             ObservesExpressionGenerator.ObservesExpressionGeneratorFactory observesExpressionGeneratorFactory,
-                            ExtraInjectionNodeBuilder extraInjectionNodeBuilder,
+                            ExtraInjectionNodeBuilder.ExtraInjectionNodeBuilderFactory extraInjectionNodeBuilderFactory,
                             SystemServiceBindingInjectionNodeBuilder systemServiceBindingInjectionNodeBuilder,
                             ResourceInjectionNodeBuilder resourceInjectionNodeBuilder,
                             PreferenceInjectionNodeBuilder preferenceInjectionNodeBuilder,
@@ -92,7 +94,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.componentBuilderFactory = componentBuilderFactory;
-        this.extraInjectionNodeBuilder = extraInjectionNodeBuilder;
+        this.extraInjectionNodeBuilderFactory = extraInjectionNodeBuilderFactory;
         this.systemServiceBindingInjectionNodeBuilder = systemServiceBindingInjectionNodeBuilder;
         this.resourceInjectionNodeBuilder = resourceInjectionNodeBuilder;
         this.preferenceInjectionNodeBuilder = preferenceInjectionNodeBuilder;
@@ -181,7 +183,12 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
             fragmentType = fragmentType.getSuperClass();
         }
 
-        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilder);
+        injectionNodeBuilderRepository.putAnnotation(Extra.class, extraInjectionNodeBuilderFactory.build(new ExtraVariableBuilder.GetExtraExpressionBuilder() {
+            @Override
+            public JExpression buildGetExtraBundle(JExpression expression) {
+                return JExpr._this().invoke("getArguments");
+            }
+        }));
         injectionNodeBuilderRepository.putAnnotation(Resource.class, resourceInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(SystemService.class, systemServiceBindingInjectionNodeBuilder);
         injectionNodeBuilderRepository.putAnnotation(Preference.class, preferenceInjectionNodeBuilder);

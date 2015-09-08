@@ -25,6 +25,7 @@ import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.analysis.astAnalyzer.IntentFactoryExtraAspect;
 import org.androidtransfuse.analysis.repository.BundlePropertyBuilderRepository;
 import org.androidtransfuse.annotations.Extra;
+import org.androidtransfuse.annotations.Factory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.util.AndroidLiterals;
@@ -42,9 +43,17 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
     private final Analyzer analyzer;
     private final Validator validator;
     private final BundlePropertyBuilderRepository repository;
+    private final ExtraVariableBuilder.GetExtraExpressionBuilder getExtraExpressionBuilder;
+
+    @Factory
+    public interface ExtraInjectionNodeBuilderFactory {
+
+        ExtraInjectionNodeBuilder build(ExtraVariableBuilder.GetExtraExpressionBuilder getExtraExpressionBuilder);
+    }
 
     @Inject
-    public ExtraInjectionNodeBuilder(InjectionPointFactory injectionPointFactory,
+    public ExtraInjectionNodeBuilder(/*@Assisted*/ExtraVariableBuilder.GetExtraExpressionBuilder getExtraExpressionBuilder,
+                                     InjectionPointFactory injectionPointFactory,
                                      VariableInjectionBuilderFactory variableInjectionBuilderFactory,
                                      Analyzer analyzer,
                                      Validator validator,
@@ -55,6 +64,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
         this.analyzer = analyzer;
         this.validator = validator;
         this.repository = repository;
+        this.getExtraExpressionBuilder = getExtraExpressionBuilder;
     }
 
     @Override
@@ -91,7 +101,7 @@ public class ExtraInjectionNodeBuilder extends InjectionNodeBuilderSingleAnnotat
 
             injectionNode.addAspect(IntentFactoryExtraAspect.class, new IntentFactoryExtraAspect(!optional, extraId, forceParceler, signature.getType()));
 
-            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, forceParceler || wrapped));
+            injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildExtraVariableBuilder(extraId, activityInjectionNode, optional, forceParceler || wrapped, getExtraExpressionBuilder));
         }
 
         return injectionNode;
