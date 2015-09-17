@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.intentFactory;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -57,6 +58,11 @@ public abstract class ComponentFactory {
     public <T extends Context> T start(T context) {
         context.startActivity(build(context));
         return context;
+    }
+    
+    public Activity startActivityForResult(Activity activity) {
+        activity.startActivityForResult(build(activity), flags);
+        return activity;
     }
 
     public PendingIntent buildPendingIntent(Context context){
