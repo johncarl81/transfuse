@@ -60,8 +60,8 @@ public abstract class ComponentFactory {
         return context;
     }
     
-    public Activity startActivityForResult(Activity activity) {
-        activity.startActivityForResult(build(activity), flags);
+    public Activity startActivityForResult(Activity activity, int requestCode) {
+        activity.startActivityForResult(build(activity), requestCode);
         return activity;
     }
 
