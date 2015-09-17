@@ -42,7 +42,7 @@ public interface VariableInjectionBuilderFactory {
 
     ResourceVariableBuilder buildResourceVariableBuilder(int resourceId, ResourceExpressionBuilder resourceExpressionBuilder);
 
-    ExtraValuableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, /*@Assisted("nullable")*/ @Named("nullable") boolean nullable, /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped);
+    ExtraVariableBuilder buildExtraVariableBuilder(String extraId, InjectionNode activityInjectionNode, /*@Assisted("nullable")*/ @Named("nullable") boolean nullable, /*@Assisted("wrapped")*/ @Named("wrapped") boolean wrapped, ExtraVariableBuilder.GetExtraExpressionBuilder getExtraExpressionBuilder);
 
     ViewVariableBuilder buildViewVariableBuilder(Integer viewId, String viewTag, InjectionNode activityInjectionNode, JType jType);
 

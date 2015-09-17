@@ -32,10 +32,7 @@ import javax.inject.Named;
 /**
  * @author John Ericksen
  */
-public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
-
-    private static final String GET_INTENT = "getIntent";
-    private static final String GET_EXTRAS = "getExtras";
+public class ExtraVariableBuilder extends ConsistentTypeVariableBuilder {
 
     private final boolean parcelerWrapped;
     private final String extraId;
@@ -43,12 +40,14 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
     private final InjectionExpressionBuilder injectionExpressionBuilder;
     private final boolean nullable;
     private final ClassGenerationUtil generationUtil;
+    private final GetExtraExpressionBuilder getExtraExpressionBuilder;
 
     @Inject
-    public ExtraValuableBuilder(/*@Assisted*/ String extraId,
+    public ExtraVariableBuilder(/*@Assisted*/ String extraId,
                                 /*@Assisted*/ InjectionNode activityInjectionNode,
                                 /*@Assisted("nullable")*/ @Named("nullable") boolean nullable,
                                 /*@Assisted("wrapped")*/ @Named("wrapped") boolean parcelerWrapped,
+                                /*@Assisted*/ GetExtraExpressionBuilder getExtraExpressionBuilder,
                                 InjectionExpressionBuilder injectionExpressionBuilder,
                                 ClassGenerationUtil generationUtil,
                                 TypedExpressionFactory typedExpressionFactory) {
@@ -59,6 +58,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
         this.nullable = nullable;
         this.generationUtil = generationUtil;
         this.parcelerWrapped = parcelerWrapped;
+        this.getExtraExpressionBuilder = getExtraExpressionBuilder;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
 
         JInvocation getExtraInvocation = generationUtil.ref(ExtraUtil.class)
                 .staticInvoke(ExtraUtil.GET_EXTRA)
-                .arg(contextVar.getExpression().invoke(GET_INTENT).invoke(GET_EXTRAS))
+                .arg(getExtraExpressionBuilder.buildGetExtraBundle(contextVar.getExpression()))
                 .arg(JExpr.lit(extraId))
                 .arg(JExpr.lit(nullable));
 
@@ -77,5 +77,10 @@ public class ExtraValuableBuilder extends ConsistentTypeVariableBuilder {
         }
 
         return getExtraInvocation;
+    }
+
+    public interface GetExtraExpressionBuilder {
+
+        JExpression buildGetExtraBundle(JExpression expression);
     }
 }
