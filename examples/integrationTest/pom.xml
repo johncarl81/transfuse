@@ -21,16 +21,6 @@
             <artifactId>transfuse</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>android.support</groupId>
-                    <artifactId>compatibility-v7-appcompat</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>android.support</groupId>
-                    <artifactId>compatibility-v7-appcompat</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.androidtransfuse</groupId>
