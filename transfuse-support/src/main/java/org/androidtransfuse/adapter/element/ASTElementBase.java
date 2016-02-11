@@ -29,7 +29,7 @@ import java.lang.annotation.Annotation;
  *
  * @author John Ericksen
  */
-public class ASTElementBase implements ASTBase {
+public class ASTElementBase implements ASTBase, ElementHolder{
 
     private final Element element;
     private final ImmutableSet<ASTAnnotation> annotations;

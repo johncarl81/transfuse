@@ -88,7 +88,7 @@ public class ASTElementFactory {
      * @return ASTType constructed using teh input Element
      */
     public synchronized ASTType getType(final TypeElement typeElement) {
-        return new LazyASTType(buildPackageClass(typeElement)) {
+        return new LazyASTType(buildPackageClass(typeElement), typeElement) {
             @Override
             public ASTType lazyLoad() {
                 if (!typeCache.containsKey(typeElement)) {

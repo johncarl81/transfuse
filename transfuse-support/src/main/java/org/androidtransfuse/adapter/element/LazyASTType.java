@@ -20,18 +20,21 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import javax.lang.model.element.Element;
 import java.lang.annotation.Annotation;
 
 /**
  * @author John Ericksen
  */
-public abstract class LazyASTType implements ASTType{
+public abstract class LazyASTType implements ASTType, ElementHolder{
 
+    private final Element element;
     private final PackageClass packageClass;
     private ASTType proxy;
 
-    public LazyASTType(PackageClass packageClass) {
+    public LazyASTType(PackageClass packageClass, Element element) {
         this.packageClass = packageClass;
+        this.element = element;
     }
 
     private synchronized ASTType getProxy() {
@@ -169,5 +172,10 @@ public abstract class LazyASTType implements ASTType{
     @Override
     public int hashCode() {
         return getProxy().hashCode();
+    }
+
+    @Override
+    public Element getElement() {
+        return element;
     }
 }
