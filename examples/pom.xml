@@ -20,6 +20,7 @@
         <module>integrationTestGenerator</module>
         <module>integrationTest</module>
         <module>helloAndroid</module>
+        <module>gradle</module>
     </modules>
 
     <build>
