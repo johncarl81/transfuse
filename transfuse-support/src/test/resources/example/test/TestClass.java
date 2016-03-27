@@ -2,7 +2,7 @@ package example.test;
 
 import java.util.Map;
 
-public class TestClass extends Base {
+public class TestClass extends Base implements Test {
 
     private String value;
     private Values[] valueArray;

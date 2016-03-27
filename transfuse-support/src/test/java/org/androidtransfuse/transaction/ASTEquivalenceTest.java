@@ -1,5 +1,8 @@
 package org.androidtransfuse.transaction;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.adapter.element.*;
@@ -7,7 +10,9 @@ import org.androidtransfuse.util.MessagerLogger;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import sun.misc.Unsafe;
 
+import javax.annotation.Nullable;
 import javax.annotation.processing.*;
 import javax.inject.Provider;
 import javax.lang.model.SourceVersion;
@@ -18,9 +23,12 @@ import javax.lang.model.type.DeclaredType;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author John Ericksen
@@ -100,7 +108,7 @@ public class ASTEquivalenceTest {
             }
             scanned.add(comparison.getName());
             if(comparison.getMethods().size() != astType.getMethods().size()) {
-                messager.printMessage(Diagnostic.Kind.ERROR, "Method count differs" + comparison.getMethods().size() + " vs " + astType.getMethods().size());
+                messager.printMessage(Diagnostic.Kind.ERROR, "Method count differs " + comparison.getMethods().size() + " vs " + astType.getMethods().size());
             }
             for (ASTMethod comparisonMethod : comparison.getMethods()) {
                 MethodSignature comparisonMethodSignature = new MethodSignature(comparisonMethod);
@@ -265,43 +273,40 @@ public class ASTEquivalenceTest {
     }
 
     @Test
-    public void runme() {
-        Collection<String> stuff = new ArrayList<String>();
-        classFactory.getType(stuff.getClass());
-    }
-
-
-    @Test
     public void testClassEquivalence() throws Exception {
 
-        classFactory.getType(String.class);
-
-
-        PackageClass testClassName = new PackageClass("example.test", "TestClass");
+        PackageClass testImplClassName = new PackageClass("example.test", "TestClass");
         PackageClass baseClassName = new PackageClass("example.test", "Base");
-        final String value = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(testClassName.getCanonicalName().replace(".", "/") + ".java"));
+        PackageClass testClassName = new PackageClass("example.test", "Test");
+
+        final String testImplValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(testImplClassName.getCanonicalName().replace(".", "/") + ".java"));
         final String baseValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(baseClassName.getCanonicalName().replace(".", "/") + ".java"));
+        final String testValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(testClassName.getCanonicalName().replace(".", "/") + ".java"));
 
         MemoryClassLoader classLoader = new MemoryClassLoader();
 
         Map<PackageClass, String> targetClassMap = new HashMap<PackageClass, String>();
-        targetClassMap.put(testClassName, value);
+        targetClassMap.put(testImplClassName, testImplValue);
         targetClassMap.put(baseClassName, baseValue);
+        targetClassMap.put(testClassName, testValue);
 
         classLoader.add(targetClassMap);
 
-        Class<?> testClass = Class.forName(testClassName.getCanonicalName(), true, classLoader);
+        Class<?> testClass = Class.forName(testImplClassName.getCanonicalName(), true, classLoader);
 
         ASTType testClassType = classFactory.getType(testClass);
 
         MemoryClassLoader processorRunningClassLoader = new MemoryClassLoader();
 
         DiagnosticCollector<JavaFileObject> diagnosticListener = new DiagnosticCollector<JavaFileObject>();
-        processorRunningClassLoader.add(targetClassMap, diagnosticListener, Collections.singletonList(new CompareProcessor(testClassType)));
+        boolean pass = processorRunningClassLoader.add(targetClassMap, diagnosticListener, Collections.singletonList(new CompareProcessor(testClassType)));
 
+        StringBuilder builder = new StringBuilder();
         for (Diagnostic<? extends JavaFileObject> diagnostic : diagnosticListener.getDiagnostics()) {
-            System.out.println("Values: " + diagnostic.getMessage(Locale.US));
+            builder.append(diagnostic.getMessage(Locale.US));
         }
+
+        assertTrue(builder.toString(), pass);
     }
 
     @Test

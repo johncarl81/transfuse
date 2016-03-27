@@ -76,10 +76,10 @@ public class LazyParametrizedTypeParameterBuilder implements LazyTypeParameterBu
             ASTType extendsBound = null;
             ASTType superBound = null;
             if(wildcardType.getUpperBounds().length > 0){
-                superBound = getClass(wildcardType.getUpperBounds()[0]);
+                extendsBound = getClass(wildcardType.getUpperBounds()[0]);
             }
             if(wildcardType.getLowerBounds().length > 0){
-                extendsBound = getClass(wildcardType.getLowerBounds()[0]);
+                superBound = getClass(wildcardType.getLowerBounds()[0]);
             }
             return new ASTWildcardType(superBound, extendsBound);
         } else {

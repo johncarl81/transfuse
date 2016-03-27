@@ -23,7 +23,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class ASTWildcardType extends ASTEmptyType {
 
-    public static final ASTWildcardType WILDCARD = new ASTWildcardType();
+    private static final ASTType OBJECT_TYPE = new ASTStringType(Object.class.getName());
 
     private final ASTType superBound;
     private final ASTType extendsBound;
@@ -34,8 +34,8 @@ public class ASTWildcardType extends ASTEmptyType {
 
     public ASTWildcardType(ASTType superBound, ASTType extendsBound) {
         super("?");
-        this.superBound = superBound;
-        this.extendsBound = extendsBound;
+        this.superBound = OBJECT_TYPE.equals(superBound) ? null : superBound;
+        this.extendsBound = OBJECT_TYPE.equals(extendsBound) ? null : extendsBound;
     }
 
     public ASTType getSuperBound() {
