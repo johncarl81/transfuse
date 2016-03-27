@@ -268,7 +268,7 @@ public class ASTElementFactory {
         ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            ASTType type = getType((TypeElement) annotationMirror.getAnnotationType().asElement());
+            ASTType type = annotationMirror.getAnnotationType().accept(astTypeBuilderVisitor, null);
 
             annotationBuilder.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
         }

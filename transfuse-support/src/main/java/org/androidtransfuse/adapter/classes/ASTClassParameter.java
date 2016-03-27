@@ -79,8 +79,8 @@ public class ASTClassParameter implements ASTParameter {
 
     public String toString(){
         if(name != null){
-            return astType.getPackageClass().getClassName() + " " + name;
+            return astType.toString() + " " + name;
         }
-        return astType.getPackageClass().getClassName();
+        return astType.toString();
     }
 }

@@ -100,8 +100,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     @Override
     public boolean isInnerClass() {
-        return typeElement.getNestingKind() == NestingKind.LOCAL ||
-                typeElement.getNestingKind() == NestingKind.ANONYMOUS;
+        return typeElement.getNestingKind() != NestingKind.TOP_LEVEL && !isStatic();
     }
 
     @Override

@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen.classloader;
+package org.androidtransfuse.transaction;
+
+import org.androidtransfuse.adapter.PackageClass;
 
 import javax.annotation.processing.Processor;
+import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
@@ -35,33 +38,37 @@ public class MemoryClassLoader extends ClassLoader {
         super(MemoryClassLoader.class.getClassLoader());
     }
 
-    public void add(String classname, String fileContent) {
+    public void add(PackageClass classname, String fileContent) {
         add(Collections.singletonMap(classname, fileContent));
     }
 
-    public void add(Map<String, String> map) {
-        this.add(map, null);
+    public void add(Map<PackageClass, String> map) {
+        this.add(map, null, null);
     }
 
-    public void add(Map<String, String> map, List<? extends Processor> processors) {
+    public Boolean add(Map<PackageClass, String> map, DiagnosticListener<? super JavaFileObject> diagnosticListener, List<? extends Processor> processors) {
         List<Source> list = new ArrayList<Source>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            list.add(new Source(entry.getKey(), JavaFileObject.Kind.SOURCE, entry.getValue()));
+        for (Map.Entry<PackageClass, String> entry : map.entrySet()) {
+            list.add(new Source(entry.getKey().getCanonicalName(), JavaFileObject.Kind.SOURCE, entry.getValue()));
+            if(getPackage(entry.getKey().getPackage()) == null) {
+                definePackage(entry.getKey().getPackage(), null, null, null, null, null, null, null);
+            }
         }
-        JavaCompiler.CompilationTask task = this.compiler.getTask(null, this.manager, null, null, null, list);
+        JavaCompiler.CompilationTask task = this.compiler.getTask(null, this.manager, diagnosticListener, null, null, list);
         if(processors != null) {
             task.setProcessors(processors);
         }
-        task.call();
+        return task.call();
     }
+
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         synchronized (this.manager) {
-            Output mc = this.manager.map.remove(name);
-            if (mc != null) {
-                byte[] array = mc.toByteArray();
-                return defineClass(name, array, 0, array.length);
+            Output compilerOutput = this.manager.map.remove(name);
+            if (compilerOutput != null) {
+                byte[] byteCode = compilerOutput.toByteArray();
+                return defineClass(name, byteCode, 0, byteCode.length);
             }
         }
         return super.findClass(name);

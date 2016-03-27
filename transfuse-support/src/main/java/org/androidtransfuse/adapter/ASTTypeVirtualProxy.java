@@ -168,4 +168,8 @@ public class ASTTypeVirtualProxy implements ASTType {
     public int hashCode() {
         return proxy != null ? proxy.hashCode() : 0;
     }
+
+    public String toString() {
+        return getProxy().toString();
+    }
 }

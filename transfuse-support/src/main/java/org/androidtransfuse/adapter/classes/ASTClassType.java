@@ -110,7 +110,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public boolean isInnerClass() {
-        return clazz.getEnclosingClass() != null;
+        return clazz.getDeclaringClass() != null && !isStatic();
     }
 
     @Override

@@ -41,11 +41,9 @@ public class ASTClassFactory {
     }
 
     private final Map<String, ASTType> typeCache = new HashMap<String, ASTType>();
-    private final ASTFactory astFactory;
 
     @Inject
-    public ASTClassFactory(ASTFactory astFactory) {
-        this.astFactory = astFactory;
+    public ASTClassFactory() {
         //seed with primitives and void
         typeCache.put(ASTVoidType.VOID.getName(), ASTVoidType.VOID);
         for (ASTPrimitiveType primitive : ASTPrimitiveType.values()) {
@@ -76,7 +74,7 @@ public class ASTClassFactory {
 
         if (genericType instanceof ParameterizedType) {
             //wrap with a parametrized type
-            astType = astFactory.buildGenericTypeWrapper(astType, astFactory.buildParameterBuilder((ParameterizedType) genericType));
+            astType = new ASTGenericTypeWrapper(astType, new LazyParametrizedTypeParameterBuilder((ParameterizedType) genericType, this));
         }
 
         return astType;
@@ -113,15 +111,23 @@ public class ASTClassFactory {
         //building after the class types have been defined avoids an infinite loop between
         //defining classes and their attributes
         for (Constructor constructor : clazz.getDeclaredConstructors()) {
-            constructorBuilder.add(getConstructor(constructor));
+            if (!constructor.isSynthetic()) {
+                constructorBuilder.add(getConstructor(constructor,
+                        clazz.isEnum(),
+                        (clazz.getDeclaringClass() != null && !Modifier.isStatic(clazz.getModifiers()))));
+            }
         }
 
         for (Method method : clazz.getDeclaredMethods()) {
-            methodBuilder.add(getMethod(method));
+            if(!method.isBridge() && !method.isSynthetic()) {
+                methodBuilder.add(getMethod(method));
+            }
         }
 
         for (Field field : clazz.getDeclaredFields()) {
-            fieldBuilder.add(getField(field));
+            if(!field.isSynthetic()) {
+                fieldBuilder.add(getField(field));
+            }
         }
 
         annotationBuilder.addAll(getAnnotations(clazz));
@@ -229,7 +235,7 @@ public class ASTClassFactory {
      * @param constructor
      * @return AST Constructor
      */
-    public ASTConstructor getConstructor(Constructor constructor) {
+    public ASTConstructor getConstructor(Constructor constructor, boolean isEnum, boolean isInnerClass) {
         ASTAccessModifier modifier = ASTAccessModifier.getModifier(constructor.getModifiers());
 
         Annotation[][] parameterAnnotations = constructor.getParameterAnnotations();
@@ -245,6 +251,12 @@ public class ASTClassFactory {
         }
 
         ImmutableList<ASTParameter> constructorParameters = getParameters(constructor.getParameterTypes(), constructor.getGenericParameterTypes(), parameterAnnotations);
+        if(isEnum) {
+            constructorParameters = constructorParameters.subList(2, constructorParameters.size());
+        }
+        if(isInnerClass){
+            constructorParameters = constructorParameters.subList(1, constructorParameters.size());
+        }
         ImmutableSet<ASTType> throwsTypes = getTypes(constructor.getExceptionTypes());
 
         return new ASTClassConstructor(getAnnotations(constructor), constructor, constructorParameters, modifier, throwsTypes);
