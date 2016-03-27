@@ -93,7 +93,7 @@ public class ASTArrayType implements ASTType {
 
     @Override
     public boolean isEnum() {
-        return delegate.isEnum();
+        return false;
     }
 
     @Override
