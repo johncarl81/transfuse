@@ -8,8 +8,8 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-22.0.1
-    - android-22
+    - build-tools-23.0.3
+    - android-23
     - extra-android-support
     - extra-android-m2repository
 
@@ -17,7 +17,7 @@ before_install:
   - mkdir -p ~/.m2/repository
   - cp -R $ANDROID_HOME/extras/android/m2repository/com ~/.m2/repository
   - git clone https://github.com/simpligility/maven-android-sdk-deployer.git ~/maven-android-sdk-deployer
-  - pushd ~/maven-android-sdk-deployer; mvn install -P 5.1; mvn install -P extra; popd
+  - pushd ~/maven-android-sdk-deployer; mvn install -P 6.0; mvn install -P extra; popd
 
 install: "mvn clean"
 script: "mvn -Dmaven.javadoc.skip=true install -B"

@@ -74,7 +74,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
+                <version>2.10.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -88,7 +88,7 @@
                     <docletArtifact>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoclet</artifactId>
-                        <version>1.5.2</version>
+                        <version>1.5.4</version>
                     </docletArtifact>
                     <linksource>true</linksource>
                     <additionalparam>--base-dir ${project.basedir}</additionalparam>

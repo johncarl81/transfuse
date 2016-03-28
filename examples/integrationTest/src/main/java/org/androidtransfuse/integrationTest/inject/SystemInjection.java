@@ -90,8 +90,6 @@ public class SystemInjection {
             //setup return from notification
             PendingIntent contentIntent = intentFactory.buildPendingIntent(new SystemInjectionActivityStrategy());
 
-            notification.setLatestEventInfo(context, "Transfuse Integration Application", "Notification", contentIntent);
-
             ((NotificationManager) notificationService).notify("Transfuse Notification", NOTIFICATION_ID, notification);
         }
     };
