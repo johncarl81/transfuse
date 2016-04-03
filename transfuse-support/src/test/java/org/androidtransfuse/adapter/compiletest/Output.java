@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.adapter.element;
+package org.androidtransfuse.adapter.compiletest;
 
-import javax.lang.model.element.Element;
+import javax.tools.SimpleJavaFileObject;
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
 
-/**
- * @author John Ericksen
- */
-public interface ElementHolder {
+class Output extends SimpleJavaFileObject {
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-    Element getElement();
+    Output(String name, Kind kind) {
+        super(URI.create("memo:///" + name.replace('.', '/') + kind.extension), kind);
+    }
+
+    byte[] toByteArray() {
+        return this.outputStream.toByteArray();
+    }
+
+    @Override
+    public ByteArrayOutputStream openOutputStream() {
+        return this.outputStream;
+    }
 }

@@ -67,6 +67,11 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return ASTAccessModifier.PUBLIC;
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return ImmutableSet.of();
     }
@@ -92,7 +97,7 @@ public enum ASTPrimitiveType implements ASTType {
 
     @Override
     public boolean isConcreteClass() {
-        return false;
+        return true;
     }
 
     @Override

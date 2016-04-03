@@ -18,6 +18,7 @@ package org.androidtransfuse.adapter.classes;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import org.androidtransfuse.adapter.ASTGenericTypeWrapper;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTWildcardType;
 import org.androidtransfuse.adapter.LazyTypeParameterBuilder;
@@ -64,7 +65,8 @@ public class LazyParametrizedTypeParameterBuilder implements LazyTypeParameterBu
         if (type instanceof Class) {
             return astClassFactory.getType((Class) type);
         } else if (type instanceof ParameterizedType) {
-            return getClass(((ParameterizedType) type).getRawType());
+            ASTType rawType = getClass(((ParameterizedType) type).getRawType());
+            return new ASTGenericTypeWrapper(rawType, new LazyParametrizedTypeParameterBuilder((ParameterizedType)type, astClassFactory));
         } else if (type instanceof GenericArrayType) {
             return getClass(((GenericArrayType) type).getGenericComponentType());
         } else if(type instanceof TypeVariable){
@@ -74,10 +76,10 @@ public class LazyParametrizedTypeParameterBuilder implements LazyTypeParameterBu
             ASTType extendsBound = null;
             ASTType superBound = null;
             if(wildcardType.getUpperBounds().length > 0){
-                superBound = getClass(wildcardType.getUpperBounds()[0]);
+                extendsBound = getClass(wildcardType.getUpperBounds()[0]);
             }
             if(wildcardType.getLowerBounds().length > 0){
-                extendsBound = getClass(wildcardType.getLowerBounds()[0]);
+                superBound = getClass(wildcardType.getLowerBounds()[0]);
             }
             return new ASTWildcardType(superBound, extendsBound);
         } else {

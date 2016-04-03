@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.adapter.element;
+package example.test;
 
-import javax.lang.model.element.Element;
+public class Base {
 
-/**
- * @author John Ericksen
- */
-public interface ElementHolder {
+    String another;
 
-    Element getElement();
 }

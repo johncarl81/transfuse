@@ -167,7 +167,7 @@ public class PackageClass {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(fileName).append(fileName).hashCode();
+        return new HashCodeBuilder().append(pkg).append(fileName).hashCode();
     }
 
     public String getCanonicalName() {

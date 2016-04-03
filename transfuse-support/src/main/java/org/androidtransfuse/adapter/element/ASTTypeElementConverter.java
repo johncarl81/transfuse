@@ -31,6 +31,8 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
 
     private static final String CONSTRUCTOR_IDENTIFIER = "<init>";
     private static final String STATIC_INITIALIZER_IDENTIFIER = "<clinit>";
+    private static final String UNSAFE_TYPE = "sun.misc.Unsafe";
+    private static final String GET_UNSAFE = "getUnsafe";
 
     private final Class<T> astTypeClass;
     private final ASTElementFactory astElementFactory;
@@ -63,6 +65,9 @@ public class ASTTypeElementConverter<T> extends ElementVisitorAdaptor<T, Void> {
         //is that it is named <init>
         if (executableElement.getSimpleName().contentEquals(STATIC_INITIALIZER_IDENTIFIER)){
             return null; // ignoring static initializer block
+        }
+        if (executableElement.getEnclosingElement().asType().toString().equals(UNSAFE_TYPE) && executableElement.getSimpleName().contentEquals(GET_UNSAFE)) {
+            return null; // ignoring Unsafe.getUnsafe()
         }
         if (executableElement.getSimpleName().contentEquals(CONSTRUCTOR_IDENTIFIER)) {
             if (astTypeClass.isAssignableFrom(ASTConstructor.class)) {

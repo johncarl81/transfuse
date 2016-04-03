@@ -13,57 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.gen.classloader;
+package org.androidtransfuse.adapter.compiletest;
 
-import javax.annotation.processing.Processor;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author John Ericksen
  */
-public class MemoryClassLoader extends ClassLoader {
-    private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-    private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
+public class TestCompiler {
 
-    public MemoryClassLoader(){
-        super(MemoryClassLoader.class.getClassLoader());
-    }
+    private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    private final Map<String, String> source = new HashMap<String, String>();
+    private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
     public void add(String classname, String fileContent) {
         add(Collections.singletonMap(classname, fileContent));
     }
 
     public void add(Map<String, String> map) {
-        this.add(map, null);
+        source.putAll(map);
     }
 
-    public void add(Map<String, String> map, List<? extends Processor> processors) {
+    public void compile() {
         List<Source> list = new ArrayList<Source>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, String> entry : source.entrySet()) {
             list.add(new Source(entry.getKey(), JavaFileObject.Kind.SOURCE, entry.getValue()));
         }
-        JavaCompiler.CompilationTask task = this.compiler.getTask(null, this.manager, null, null, null, list);
-        if(processors != null) {
-            task.setProcessors(processors);
-        }
-        task.call();
+        this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }
 
-    @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        synchronized (this.manager) {
-            Output mc = this.manager.map.remove(name);
-            if (mc != null) {
-                byte[] array = mc.toByteArray();
-                return defineClass(name, array, 0, array.length);
-            }
-        }
-        return super.findClass(name);
+    public byte[] getByteCode(String name) {
+        return this.manager.map.get(name).toByteArray();
     }
 }

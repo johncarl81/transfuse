@@ -26,6 +26,13 @@ import com.google.common.collect.ImmutableSet;
 public interface ASTType extends ASTBase {
 
     /**
+     * Access modifier for this type
+     *
+     * @return access modifier for constructor
+     */
+    ASTAccessModifier getAccessModifier();
+
+    /**
      * Supplies all available methods
      *
      * @return available methods

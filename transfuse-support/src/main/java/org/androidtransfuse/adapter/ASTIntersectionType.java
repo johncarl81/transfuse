@@ -36,6 +36,11 @@ public class ASTIntersectionType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return ASTAccessModifier.PUBLIC;
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return ImmutableSet.of();
     }

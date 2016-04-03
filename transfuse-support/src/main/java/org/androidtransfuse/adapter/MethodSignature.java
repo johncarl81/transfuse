@@ -27,14 +27,14 @@ import java.util.List;
  */
 public class MethodSignature {
 
-    private final String methodSignature;
+    private final String signature;
 
     public MethodSignature(ASTMethod method) {
-        this.methodSignature = makeDescriptor(method);
+        this.signature = makeSignature(method);
     }
 
     public MethodSignature(String methodName, List<ASTType> paramTypes){
-        this.methodSignature = makeDescriptor(methodName, paramTypes);
+        this.signature = makeSignature(methodName, paramTypes);
     }
 
     public MethodSignature(String methodName, ASTType... paramTypes){
@@ -46,18 +46,18 @@ public class MethodSignature {
      * @param method
      * @return descriptor
      */
-    private String makeDescriptor(ASTMethod method) {
+    private String makeSignature(ASTMethod method) {
         List<ASTType> paramTypes = new ArrayList<ASTType>();
 
         for (ASTParameter parameter : method.getParameters()) {
             paramTypes.add(parameter.getASTType());
         }
 
-        return makeDescriptor(method.getName(), paramTypes);
+        return makeSignature(method.getName(), paramTypes);
     }
 
-    private String makeDescriptor(String methodName, List<ASTType> params){
-        return methodName + ':' + makeDescriptor(params);
+    private String makeSignature(String methodName, List<ASTType> params){
+        return methodName + ':' + makeSignature(params);
     }
 
     /**
@@ -66,7 +66,7 @@ public class MethodSignature {
      * @param paramTypes  parameter types.
      * @return method descriptor
      */
-    private String makeDescriptor(List<ASTType> paramTypes) {
+    private String makeSignature(List<ASTType> paramTypes) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
         for (ASTType paramType : paramTypes) {
@@ -93,7 +93,7 @@ public class MethodSignature {
     }
 
     public String toString(){
-        return methodSignature;
+        return signature;
     }
 
     @Override
@@ -107,11 +107,11 @@ public class MethodSignature {
 
         MethodSignature that = (MethodSignature) o;
 
-        return new EqualsBuilder().append(methodSignature, that.methodSignature).isEquals();
+        return new EqualsBuilder().append(signature, that.signature).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(methodSignature).hashCode();
+        return new HashCodeBuilder().append(signature).hashCode();
     }
 }

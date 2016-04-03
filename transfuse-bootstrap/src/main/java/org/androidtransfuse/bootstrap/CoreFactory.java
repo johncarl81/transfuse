@@ -19,8 +19,6 @@ import com.google.common.collect.ImmutableSet;
 import com.sun.codemodel.*;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
-import org.androidtransfuse.adapter.classes.LazyClassParameterBuilder;
-import org.androidtransfuse.adapter.classes.LazyParametrizedTypeParameterBuilder;
 import org.androidtransfuse.adapter.element.*;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.AnalysisContextFactory;
@@ -56,7 +54,6 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.util.Elements;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**
@@ -67,7 +64,7 @@ public class CoreFactory {
     private final Elements elements;
     private final JCodeModel codeModel = new JCodeModel();
     private final VirtualProxyGenerator.VirtualProxyGeneratorCache virtualProxyCache;
-    private final ASTClassFactory astClassFactory = new ASTClassFactory(new ConcreteASTFactory());
+    private final ASTClassFactory astClassFactory = new ASTClassFactory();
     private final TypedExpressionFactory typedExpressionFactory = new TypedExpressionFactory(astClassFactory);
     private final UniqueVariableNamer variableNamer = new UniqueVariableNamer();
     private final ClassNamer classNamer;
@@ -365,21 +362,6 @@ public class CoreFactory {
         @Override
         public ASTElementAnnotation buildASTElementAnnotation(AnnotationMirror annotationMirror, ASTType type) {
             return new ASTElementAnnotation(annotationMirror, type, elementConverterFactory);
-        }
-
-        @Override
-        public LazyParametrizedTypeParameterBuilder buildParameterBuilder(ParameterizedType genericType) {
-            return new LazyParametrizedTypeParameterBuilder(genericType, astClassFactory);
-        }
-
-        @Override
-        public LazyClassParameterBuilder buildParameterBuilder(Class type) {
-            return new LazyClassParameterBuilder(type, astClassFactory);
-        }
-
-        @Override
-        public LazyASTTypeParameterBuilder buildParameterBuilder(ASTType type) {
-            return new LazyASTTypeParameterBuilder(type);
         }
 
         @Override

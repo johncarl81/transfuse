@@ -47,6 +47,11 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType;
     }
 
+    @Override
+    public ASTAccessModifier getAccessModifier() {
+        return astType.getAccessModifier();
+    }
+
     public ImmutableSet<ASTMethod> getMethods() {
         return astType.getMethods();
     }

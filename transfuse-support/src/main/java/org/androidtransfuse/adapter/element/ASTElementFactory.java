@@ -137,7 +137,8 @@ public class ASTElementFactory {
         fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
         methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
 
-        ASTType astType = new ASTElementType(packageClass,
+        ASTType astType = new ASTElementType(buildAccessModifier(typeElement),
+                packageClass,
                 typeElement,
                 constructors.build(),
                 methods.build(),
@@ -268,7 +269,7 @@ public class ASTElementFactory {
         ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            ASTType type = getType((TypeElement) annotationMirror.getAnnotationType().asElement());
+            ASTType type = annotationMirror.getAnnotationType().accept(astTypeBuilderVisitor, null);
 
             annotationBuilder.add(astFactory.buildASTElementAnnotation(annotationMirror, type));
         }

@@ -39,6 +39,11 @@ public class ASTStringType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return ASTAccessModifier.PUBLIC;
+    }
+
+    @Override
     public PackageClass getPackageClass() {
         return new PackageClass(name);
     }
