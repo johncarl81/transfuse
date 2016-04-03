@@ -137,7 +137,8 @@ public class ASTElementFactory {
         fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
         methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
 
-        ASTType astType = new ASTElementType(packageClass,
+        ASTType astType = new ASTElementType(buildAccessModifier(typeElement),
+                packageClass,
                 typeElement,
                 constructors.build(),
                 methods.build(),

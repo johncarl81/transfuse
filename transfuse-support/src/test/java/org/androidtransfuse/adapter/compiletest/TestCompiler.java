@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.transaction;
+package org.androidtransfuse.adapter.compiletest;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * @author John Ericksen
  */
-public class Compiler {
+public class TestCompiler {
 
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final Map<String, String> source = new HashMap<String, String>();

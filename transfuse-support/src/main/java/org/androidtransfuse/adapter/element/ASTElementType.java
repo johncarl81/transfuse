@@ -33,6 +33,7 @@ import java.lang.annotation.Annotation;
  */
 public class ASTElementType extends ASTElementBase implements ASTType {
 
+    private final ASTAccessModifier modifier;
     private final TypeElement typeElement;
     private final PackageClass packageClass;
     private final ImmutableSet<ASTMethod> methods;
@@ -41,7 +42,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     private final ImmutableSet<ASTType> interfaces;
     private final ASTType superClass;
 
-    public ASTElementType(PackageClass packageClass,
+    public ASTElementType(ASTAccessModifier modifier, PackageClass packageClass,
                           TypeElement typeElement,
                           ImmutableSet<ASTConstructor> constructors,
                           ImmutableSet<ASTMethod> methods,
@@ -50,6 +51,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
                           ImmutableSet<ASTType> interfaces,
                           ImmutableSet<ASTAnnotation> annotations) {
         super(typeElement, annotations);
+        this.modifier = modifier;
         this.packageClass = packageClass;
         this.typeElement = typeElement;
         this.constructors = constructors;
@@ -67,6 +69,11 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public PackageClass getPackageClass() {
         return packageClass;
+    }
+
+    @Override
+    public ASTAccessModifier getAccessModifier() {
+        return modifier;
     }
 
     @Override

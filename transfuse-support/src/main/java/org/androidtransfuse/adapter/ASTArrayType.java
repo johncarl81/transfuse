@@ -31,6 +31,8 @@ import java.lang.annotation.Annotation;
  */
 public class ASTArrayType implements ASTType {
 
+    private static final ASTType OBJECT_TYPE = new ASTStringType(Object.class.getCanonicalName());
+
     private final ASTType delegate;
 
     public ASTArrayType(ASTType delegate) {
@@ -62,6 +64,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return delegate.getAccessModifier();
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return delegate.getMethods();
     }
@@ -78,17 +85,17 @@ public class ASTArrayType implements ASTType {
 
     @Override
     public boolean isConcreteClass() {
-        return delegate.isConcreteClass();
+        return true;
     }
 
     @Override
     public boolean isInterface() {
-        return delegate.isInterface();
+        return false;
     }
 
     @Override
     public boolean isFinal() {
-        return delegate.isFinal();
+        return true;
     }
 
     @Override
@@ -98,7 +105,7 @@ public class ASTArrayType implements ASTType {
 
     @Override
     public boolean isStatic() {
-        return delegate.isStatic();
+        return false;
     }
 
     @Override
@@ -108,7 +115,7 @@ public class ASTArrayType implements ASTType {
 
     @Override
     public ASTType getSuperClass() {
-        return delegate.getSuperClass();
+        return OBJECT_TYPE;
     }
 
     @Override

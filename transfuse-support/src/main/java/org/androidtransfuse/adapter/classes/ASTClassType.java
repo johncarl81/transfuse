@@ -69,6 +69,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return ASTAccessModifier.getModifier(clazz.getModifiers());
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return methods;
     }
@@ -90,7 +95,7 @@ public class ASTClassType implements ASTType {
 
     @Override
     public boolean isConcreteClass() {
-        return !clazz.isInterface() && !clazz.isSynthetic();
+        return !clazz.isInterface() && !clazz.isAnnotation();
     }
 
     @Override

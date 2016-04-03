@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.transaction;
+package org.androidtransfuse.adapter;
 
-import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
+import org.androidtransfuse.adapter.compiletest.MemoryClassLoader;
+import org.androidtransfuse.adapter.compiletest.SimpleClassLoader;
+import org.androidtransfuse.adapter.compiletest.TestCompiler;
 import org.androidtransfuse.adapter.element.*;
 import org.androidtransfuse.util.MessagerLogger;
 import org.apache.commons.io.IOUtils;
@@ -128,6 +130,9 @@ public class ASTEquivalenceTest {
                     MethodSignature methodSignature = new MethodSignature(method);
                     equals("getMethod() -> " + comparisonMethodSignature.toString(), comparisonMethodSignature, methodSignature);
                     equals(comparisonMethod.getReturnType(), method.getReturnType());
+                    equals("AccessModifier", comparisonMethod.getAccessModifier(), method.getAccessModifier());
+                    equals("isStatic()", comparisonMethod.isStatic(), method.isStatic());
+                    equals("isFinal()", comparisonMethod.isFinal(), method.isFinal());
                 }
             }
             for (ASTField comparisonField : comparison.getFields()) {
@@ -138,6 +143,10 @@ public class ASTEquivalenceTest {
                 else {
                     equals(comparisonField.getASTType(), field.getASTType());
                     equals("getField() -> " + field.getASTType() + " Name ", comparisonField.getName(), field.getName());
+                    equals("AccessModifier", comparisonField.getAccessModifier(), field.getAccessModifier());
+                    equals("isTransient()", comparisonField.isTransient(), field.isTransient());
+                    equals("isStatic()", comparisonField.isStatic(), field.isStatic());
+                    equals("isFinal()", comparisonField.isFinal(), field.isFinal());
                 }
             }
             for (ASTConstructor comparisonConstructor : comparison.getConstructors()) {
@@ -181,12 +190,6 @@ public class ASTEquivalenceTest {
                 messager.printMessage(Diagnostic.Kind.ERROR, comparison.getName() + " and " + astType.getName() + "Generic Parametrs count differs" + comparison.getGenericParameters().size() + " vs " + astType.getGenericParameters().size());
             }
 
-
-
-            //comparison.getGenericParameters();
-            //astType.inheritsFrom(ASTType type);
-            //astType.extendsFrom(ASTType type);
-            //astType.implementsFrom(ASTType type);
             equals("getPackageClass", comparison.getPackageClass(), astType.getPackageClass());
         }
 
@@ -319,7 +322,7 @@ public class ASTEquivalenceTest {
 
     @Test
     public void example() throws ClassNotFoundException {
-        Compiler compiler = new Compiler();
+        TestCompiler compiler = new TestCompiler();
         String className = "example.test.TestClass";
         String source = "package example.test; public class TestClass{}";
 

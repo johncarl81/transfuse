@@ -21,6 +21,7 @@ public class TestClass extends Base implements Test {
 
     private String value;
     private Values[] valueArray;
+    private int primitiveValue;
 
     private enum Values {
         A, B, C
@@ -39,5 +40,21 @@ public class TestClass extends Base implements Test {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Values[] getValueArray() {
+        return valueArray;
+    }
+
+    public void setValueArray(Values[] valueArray) {
+        this.valueArray = valueArray;
+    }
+
+    public int getPrimitiveValue() {
+        return primitiveValue;
+    }
+
+    public void setPrimitiveValue(int primitiveValue) {
+        this.primitiveValue = primitiveValue;
     }
 }

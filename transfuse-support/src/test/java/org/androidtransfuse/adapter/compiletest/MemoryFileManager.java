@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidtransfuse.transaction;
+package org.androidtransfuse.adapter.compiletest;
 
 import javax.tools.*;
 import java.util.HashMap;

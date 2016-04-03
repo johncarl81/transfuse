@@ -46,6 +46,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return getProxy().getAccessModifier();
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return getProxy().getMethods();
     }

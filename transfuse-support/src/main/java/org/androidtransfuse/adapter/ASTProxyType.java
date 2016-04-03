@@ -74,6 +74,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return proxyASTType.getAccessModifier();
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return proxyASTType.getMethods();
     }

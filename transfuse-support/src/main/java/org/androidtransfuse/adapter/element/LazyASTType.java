@@ -47,6 +47,11 @@ public abstract class LazyASTType implements ASTType, ElementHolder{
     public abstract ASTType lazyLoad();
 
     @Override
+    public ASTAccessModifier getAccessModifier() {
+        return getProxy().getAccessModifier();
+    }
+
+    @Override
     public ImmutableSet<ASTMethod> getMethods() {
         return getProxy().getMethods();
     }
