@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.neenbedankt.android-apt'
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    compile 'com.google.android:android:2.1_r1'
+    compile 'com.android.support:appcompat-v7:23.+'
+    apt 'org.rBridge:rBridge:0.1.0-SNAPSHOT'
+    compile 'org.rBridge:rBridge-api:0.1.0-SNAPSHOT'
+    apt 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
+    compile 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
+    testCompile 'junit:junit:4.12'
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
+        transfuseStacktrace true
+        transfuseDebugLogging true
+    }
+}
