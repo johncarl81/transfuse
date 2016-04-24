@@ -44,7 +44,5 @@ dependencies {
 apt {
     arguments {
         androidManifestFile variant.outputs[0]?.processResources?.manifestFile
-        transfuseStacktrace true
-        transfuseDebugLogging true
     }
 }
