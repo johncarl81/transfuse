@@ -25,6 +25,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;
+import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Inject;
@@ -39,45 +40,43 @@ public class RBridgeWorker extends AbstractCompletionTransactionWorker<Provider<
 
     private final ClassGenerationUtil generationUtil;
     private final JCodeModel codeModel;
+    private final Logger log;
     private int id = -1;
 
     @Inject
     public RBridgeWorker(ClassGenerationUtil generationUtil,
-                         JCodeModel codeModel) {
+                         JCodeModel codeModel, Logger log) {
         this.generationUtil = generationUtil;
         this.codeModel = codeModel;
+        this.log = log;
     }
 
     @Override
     public JDefinedClass innerRun(Provider<ASTType> astTypeProvider) {
         ASTType implementation = astTypeProvider.get();
+        log.debug("Processing @Bridge on " + implementation);
         ASTAnnotation bridgeAnnotation = implementation.getASTAnnotation(Bridge.class);
         ASTType target = bridgeAnnotation.getProperty("value", ASTType.class);
 
         try {
+            log.debug("Creating Bridge for " + target);
             JDefinedClass rBridgeImpl = generationUtil.defineClass(ClassNamer.className(target).build().append("Bridge"));
 
             for (ASTType innerType : target.getInnerTypes()) {
 
-                JDefinedClass innerBridge = null;
                 String innerName = innerType.getPackageClass().getCanonicalName();
                 if(innerName.contains(".")) {
                     innerName = innerName.substring(innerName.lastIndexOf(".") + 1);
                 }
-                innerBridge = rBridgeImpl._class(PUBLIC | STATIC | FINAL, innerName);
+                JDefinedClass innerBridge = rBridgeImpl._class(PUBLIC | STATIC | FINAL, innerName);
 
                 for (ASTField field : innerType.getFields()) {
-                    //if(/*&& !field.isStatic()*/) {
-                        if(innerBridge == null) {
-                            // Lazily create inner type
-                            innerBridge = rBridgeImpl._class(PUBLIC | STATIC | FINAL, innerName);
-                        }
+                    log.debug("Mapping " + target + "." + innerName + "." + field.getName() + " = " + id);
 
-                        innerBridge.field(PUBLIC | STATIC | FINAL, codeModel.INT, field.getName(), JExpr.lit(id--))
-                                .annotate(RMapping.class)
-                                .param("clazz", generationUtil.ref(innerType).dotclass())
-                                .param("name", field.getName());
-                    //}
+                    innerBridge.field(PUBLIC | STATIC | FINAL, codeModel.INT, field.getName(), JExpr.lit(id--))
+                        .annotate(RMapping.class)
+                            .param("clazz", generationUtil.ref(innerType).dotclass())
+                            .param("name", field.getName());
 
                 }
             }

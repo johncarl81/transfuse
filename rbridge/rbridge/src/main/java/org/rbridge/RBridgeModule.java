@@ -86,7 +86,7 @@ public class RBridgeModule {
     @Provides
     @Singleton
     public Logger getLogger(ProcessingEnvironment processingEnvironment){
-        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager(), false);
+        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager(), true);
     }
 
     @Provides
@@ -115,10 +115,11 @@ public class RBridgeModule {
 
     @Provides
     public RBridgeProcessor buildRBridgeProcessor(Provider<RBridgeWorker> rbridgeTransactionFactory,
-                                                 ScopedTransactionBuilder scopedTransactionBuilder){
+                                                  ScopedTransactionBuilder scopedTransactionBuilder,
+                                                  Logger logger){
 
         TransactionProcessorPool<Provider<ASTType>, JDefinedClass> workingPool = new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
 
-        return new RBridgeProcessor(workingPool, workingPool, rbridgeTransactionFactory, scopedTransactionBuilder);
+        return new RBridgeProcessor(workingPool, workingPool, rbridgeTransactionFactory, scopedTransactionBuilder, logger);
     }
 }
