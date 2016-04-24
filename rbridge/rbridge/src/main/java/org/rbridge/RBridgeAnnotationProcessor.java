@@ -27,6 +27,7 @@ import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
 import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.scope.ScopeKey;
+import org.androidtransfuse.util.Logger;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
@@ -51,8 +52,11 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private ReloadableASTElementFactory reloadableASTElementFactory;
     @Inject
+    private Logger log;
+    @Inject
     @ScopeReference(ProcessingScope.class)
     private EnterableScope processingScope;
+    private int round = 0;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -66,9 +70,14 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
     @Override
     public boolean process(Set<? extends TypeElement> typeElements, RoundEnvironment roundEnvironment) {
 
+        log.debug("Annotation procesing started, round " + round++);
+        long start = System.currentTimeMillis();
+
         processingScope.enter();
 
         processingScope.seed(ScopeKey.of(RoundEnvironment.class), roundEnvironment);
+
+        log.debug("Found " + roundEnvironment.getElementsAnnotatedWith(Bridge.class).size() + " classes annotated by @Bridge");
 
         rBridgeProcessor.submit(Bridge.class, reloadableASTElementFactory.buildProviders(
                 FluentIterable.from(roundEnvironment.getElementsAnnotatedWith(Bridge.class))
@@ -93,6 +102,8 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
         }
 
         processingScope.exit();
+
+        log.debug("Took " + (System.currentTimeMillis() - start) + "ms to process");
 
         return true;
     }

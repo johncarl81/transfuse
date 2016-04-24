@@ -20,10 +20,12 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorPool;
+import org.androidtransfuse.util.Logger;
 
 import javax.inject.Provider;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -34,15 +36,17 @@ public class RBridgeProcessor {
     private final TransactionProcessorPool<Provider<ASTType>, JDefinedClass> rBridgeProcessor;
     private final Provider<RBridgeWorker> rBridgeTransactionFactory;
     private final ScopedTransactionBuilder scopedTransactionBuilder;
+    private final Logger logger;
 
     public RBridgeProcessor(TransactionProcessor processor,
                             TransactionProcessorPool<Provider<ASTType>, JDefinedClass> rBridgeProcessor,
                             Provider<RBridgeWorker> rBridgeTransactionFactory,
-                            ScopedTransactionBuilder scopedTransactionBuilder) {
+                            ScopedTransactionBuilder scopedTransactionBuilder, Logger logger) {
         this.processor = processor;
         this.rBridgeProcessor = rBridgeProcessor;
         this.rBridgeTransactionFactory = rBridgeTransactionFactory;
         this.scopedTransactionBuilder = scopedTransactionBuilder;
+        this.logger = logger;
     }
 
     public void submit(Class<? extends Annotation> componentAnnotation, Collection<Provider<ASTType>> astProviders) {
@@ -59,7 +63,9 @@ public class RBridgeProcessor {
 
     public void checkForErrors() {
         if (!processor.isComplete()) {
-            //throw new TransfuseAnalysisException("@Bridge code generation did not complete successfully.", processor.getErrors());
+            for (Exception exception : (Set<Exception>) processor.getErrors()) {
+                logger.error("Code generation did not complete successfully.", exception);
+            }
         }
     }
 }
