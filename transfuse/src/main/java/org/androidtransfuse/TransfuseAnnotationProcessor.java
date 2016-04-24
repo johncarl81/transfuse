@@ -24,6 +24,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
@@ -50,7 +51,6 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -96,6 +96,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private ReloadableASTElementFactory reloadableASTElementFactory;
     @Inject
     private ReloadableASTClassFactory reloadableASTClassFactory;
+    @Inject
+    private ASTElementFactory astElementFactory;
     @Inject
     private ManifestLocator manifestLocator;
     @Inject
@@ -172,8 +174,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private RResource buildR(RBuilder rBuilder, String className) {
         TypeElement rTypeElement = elements.getTypeElement(className);
         if (rTypeElement != null) {
-            Collection<ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
-            return rBuilder.buildR(rInnerTypes);
+            return rBuilder.buildR(astElementFactory.getType(rTypeElement).getInnerTypes());
         }
         return null;
     }

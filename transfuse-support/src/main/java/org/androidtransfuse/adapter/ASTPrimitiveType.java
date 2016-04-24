@@ -175,6 +175,11 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return ImmutableSet.of();
+    }
+
+    @Override
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return ASTUtils.getInstance().getAnnotation(annotation, getAnnotations());
     }

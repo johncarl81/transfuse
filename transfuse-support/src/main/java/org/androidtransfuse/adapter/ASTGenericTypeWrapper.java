@@ -127,6 +127,11 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.getAnnotation(annotation);
     }
 
+    @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return astType.getInnerTypes();
+    }
+
     public String getName() {
         return astType.getName();
     }

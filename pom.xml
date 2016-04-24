@@ -46,6 +46,7 @@
         <module>transfuse-bootstrap-test</module>
         <module>transfuse-plugin</module>
         <module>transfuse-api</module>
+        <module>rbridge</module>
         <module>transfuse</module>
         <!--<module>examples</module>-->
     </modules>
