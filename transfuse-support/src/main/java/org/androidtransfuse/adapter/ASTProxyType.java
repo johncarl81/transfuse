@@ -69,6 +69,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return proxyASTType.getInnerTypes();
+    }
+
+    @Override
     public String getName() {
         return name;
     }

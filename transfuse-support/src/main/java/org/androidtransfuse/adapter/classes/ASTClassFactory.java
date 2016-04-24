@@ -15,6 +15,8 @@
  */
 package org.androidtransfuse.adapter.classes;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
@@ -23,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,12 +133,21 @@ public class ASTClassFactory {
             }
         }
 
+        ImmutableSet<ASTType> innerTypes = FluentIterable.from(Arrays.asList(clazz.getDeclaredClasses()))
+                .transform(new Function<Class<?>, ASTType>() {
+                    @Override
+                    public ASTType apply(Class innerClazz) {
+                        return getType(innerClazz);
+                    }
+                }).toSet();
+
         annotationBuilder.addAll(getAnnotations(clazz));
 
         ASTType astType = new ASTClassType(clazz, packageClass, annotationBuilder.build(),
                 constructorBuilder.build(),
                 methodBuilder.build(),
                 fieldBuilder.build(),
+                innerTypes,
                 superClass,
                 interfaceBuilder.build());
 

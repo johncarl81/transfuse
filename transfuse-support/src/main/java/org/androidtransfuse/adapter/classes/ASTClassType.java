@@ -37,6 +37,7 @@ public class ASTClassType implements ASTType {
     private final ImmutableSet<ASTMethod> methods;
     private final ImmutableSet<ASTConstructor> constructors;
     private final ImmutableSet<ASTField> fields;
+    private final ImmutableSet<ASTType> innerTypes;
     private final ASTType superClass;
     private final ImmutableSet<ASTType> interfaces;
 
@@ -46,7 +47,7 @@ public class ASTClassType implements ASTType {
                         ImmutableSet<ASTConstructor> constructors,
                         ImmutableSet<ASTMethod> methods,
                         ImmutableSet<ASTField> fields,
-                        ASTType superClass,
+                        ImmutableSet<ASTType> innerTypes, ASTType superClass,
                         ImmutableSet<ASTType> interfaces) {
         this.clazz = clazz;
         this.packageClass = packageClass;
@@ -54,6 +55,7 @@ public class ASTClassType implements ASTType {
         this.constructors = constructors;
         this.methods = methods;
         this.fields = fields;
+        this.innerTypes = innerTypes;
         this.superClass = superClass;
         this.interfaces = interfaces;
     }
@@ -141,6 +143,11 @@ public class ASTClassType implements ASTType {
     @Override
     public PackageClass getPackageClass() {
         return packageClass;
+    }
+
+    @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return innerTypes;
     }
 
     @Override

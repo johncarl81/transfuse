@@ -29,6 +29,7 @@ import javax.inject.Singleton;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import java.util.*;
 
@@ -130,12 +131,19 @@ public class ASTElementFactory {
         ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
         ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
         ImmutableSet.Builder<ASTMethod> methods = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTType> innerTypes = ImmutableSet.builder();
 
         //iterate and build the contained elements within this TypeElement
         annotations.addAll(getAnnotations(typeElement));
         constructors.addAll(transformAST(typeElement.getEnclosedElements(), ASTConstructor.class));
         fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
         methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
+        innerTypes.addAll(FluentIterable.from(ElementFilter.typesIn(typeElement.getEnclosedElements())).transform(new Function<TypeElement, ASTType>() {
+            @Override
+            public ASTType apply(TypeElement typeElement) {
+                return getType(typeElement);
+            }
+        }));
 
         ASTType astType = new ASTElementType(buildAccessModifier(typeElement),
                 packageClass,
@@ -145,7 +153,8 @@ public class ASTElementFactory {
                 fields.build(),
                 superClass,
                 interfaces,
-                annotations.build());
+                annotations.build(),
+                innerTypes.build());
 
         astTypeProxy.load(astType);
 

@@ -101,6 +101,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return getProxy().getInnerTypes();
+    }
+
+    @Override
     public ImmutableSet<ASTType> getInterfaces() {
         return getProxy().getInterfaces();
     }

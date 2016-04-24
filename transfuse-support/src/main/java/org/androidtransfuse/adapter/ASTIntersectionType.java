@@ -101,6 +101,11 @@ public class ASTIntersectionType implements ASTType {
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return ImmutableSet.of();
+    }
+
+    @Override
     public boolean inheritsFrom(ASTType type) {
         for (ASTType astType : intersection) {
             if(astType.inheritsFrom(type)){

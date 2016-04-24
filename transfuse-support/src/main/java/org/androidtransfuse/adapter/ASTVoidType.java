@@ -31,10 +31,9 @@ public enum ASTVoidType implements ASTType {
 
     private final String label;
 
-    private ASTVoidType(String label) {
+    ASTVoidType(String label) {
         this.label = label;
     }
-
 
     @Override
     public ASTAccessModifier getAccessModifier() {
@@ -119,6 +118,11 @@ public enum ASTVoidType implements ASTType {
     @Override
     public PackageClass getPackageClass() {
         return new PackageClass(null, label);
+    }
+
+    @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return ImmutableSet.of();
     }
 
     @Override

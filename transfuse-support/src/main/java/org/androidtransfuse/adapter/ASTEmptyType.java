@@ -124,6 +124,11 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return ImmutableSet.of();
+    }
+
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return null;
     }

@@ -25,11 +25,12 @@ import java.lang.annotation.Annotation;
 /**
  * @author John Ericksen
  */
-public class ASTStringType implements ASTType {
+public class ASTStringType extends ASTEmptyType {
 
     private final String name;
 
     public ASTStringType(String name) {
+        super(name);
         this.name = name;
     }
 

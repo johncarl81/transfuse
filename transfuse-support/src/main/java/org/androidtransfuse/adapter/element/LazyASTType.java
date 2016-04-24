@@ -141,6 +141,11 @@ public abstract class LazyASTType implements ASTType, ElementHolder{
     }
 
     @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return getProxy().getInnerTypes();
+    }
+
+    @Override
     public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
         return getProxy().getASTAnnotation(annotation);
     }
