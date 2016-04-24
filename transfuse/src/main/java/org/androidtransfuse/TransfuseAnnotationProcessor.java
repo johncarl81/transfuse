@@ -133,6 +133,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
         RResourceComposite r = new RResourceComposite(
                 buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
+                buildR(rBuilder, manifest.getApplicationPackage() + ".RBridge"),
                 buildR(rBuilder, "android.R"));
 
         configurationScope.enter();

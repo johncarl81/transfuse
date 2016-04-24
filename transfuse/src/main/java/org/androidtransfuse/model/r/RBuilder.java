@@ -15,9 +15,11 @@
  */
 package org.androidtransfuse.model.r;
 
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.util.Logger;
+import org.rbridge.RMapping;
 
 import javax.inject.Inject;
 import java.util.Collection;
@@ -39,9 +41,18 @@ public class RBuilder {
         RResourceMapping resourceMapping = new RResourceMapping();
 
         for (ASTType rInnerType : rInnerTypes) {
-            log.debug("Mapping R: " + rInnerType);
             for (ASTField idField : rInnerType.getFields()) {
-                resourceMapping.addResource(rInnerType, idField.getName(), (Integer) idField.getConstantValue());
+                if(idField.isAnnotated(RMapping.class)) {
+                    ASTAnnotation rMappingAnnotation = idField.getASTAnnotation(RMapping.class);
+                    ASTType mappedInnerType = rMappingAnnotation.getProperty("clazz", ASTType.class);
+                    String mappedName = rMappingAnnotation.getProperty("name", String.class);
+                    log.debug("Mapping R Bridge: " + rInnerType + " to " + mappedInnerType + "." + mappedName);
+                    resourceMapping.addResource(mappedInnerType, mappedName, (Integer) idField.getConstantValue());
+                }
+                else {
+                    log.debug("Mapping R: " + rInnerType + "." + idField.getName());
+                    resourceMapping.addResource(rInnerType, idField.getName(), (Integer) idField.getConstantValue());
+                }
             }
         }
 
