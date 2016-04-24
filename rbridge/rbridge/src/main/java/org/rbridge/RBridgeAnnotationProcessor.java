@@ -15,6 +15,7 @@
  */
 package org.rbridge;
 
+import com.google.auto.service.AutoService;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -28,6 +29,7 @@ import org.androidtransfuse.config.EnterableScope;
 import org.androidtransfuse.scope.ScopeKey;
 
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,7 +43,7 @@ import java.util.Set;
  */
 @SupportedAnnotations({Bridge.class})
 @Bootstrap
-//@AutoService(Processor.class)
+@AutoService(Processor.class)
 public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
