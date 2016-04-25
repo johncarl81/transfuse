@@ -21,12 +21,19 @@ import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.OnCreate;
 import org.rbridge.Bridge;
+import javax.inject.Inject;
 
 @Bridge(R.class)
 @Activity(type = AppCompatActivity.class)
 @Layout(RBridge.layout.activity_library)
 public class LibraryActivity {
+    Thingy thingy;
+
+    @Inject
+    public LibraryActivity(Thingy thingy) {
+        this.thingy = thingy;
+    }
 
     @OnCreate
-    public void create(){}
+    public void create() { }
 }
