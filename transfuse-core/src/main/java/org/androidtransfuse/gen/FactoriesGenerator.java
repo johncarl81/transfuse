@@ -23,6 +23,7 @@ import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 
 /**
@@ -36,18 +37,24 @@ public class FactoriesGenerator extends AbstractRepositoryGenerator<JDefinedClas
     private final ClassGenerationUtil generationUtil;
     private final ClassNamer classNamer;
     private final UniqueVariableNamer variableNamer;
+    private final Boolean libraryProject;
 
     @Inject
-    public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
+    public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer, @Named("libraryProject") Boolean libraryProject) {
         super(Repository.class, generationUtil, variableNamer, REPOSITORY_NAME, Factories.FactoryBuilder.class);
         this.generationUtil = generationUtil;
         this.classNamer = classNamer;
         this.variableNamer = variableNamer;
+        this.libraryProject = libraryProject;
     }
 
     @Override
     protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
 
+        if(libraryProject){
+            return ImmutableMap.of();
+        }
+        
         //factory builder
         JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(interfaceClass).build().getClassName());
         factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));

@@ -29,4 +29,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Scope
-public @interface TransfuseModule {}
+public @interface TransfuseModule {
+    boolean library() default false;
+}
