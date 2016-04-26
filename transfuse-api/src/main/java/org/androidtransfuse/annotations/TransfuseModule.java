@@ -31,4 +31,5 @@ import java.lang.annotation.Target;
 @Scope
 public @interface TransfuseModule {
     boolean library() default false;
+    String namespace() default "";
 }

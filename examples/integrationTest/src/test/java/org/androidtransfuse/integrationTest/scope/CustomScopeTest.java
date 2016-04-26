@@ -17,6 +17,7 @@ package org.androidtransfuse.integrationTest.scope;
 
 import org.androidtransfuse.integrationTest.DelegateUtil;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -42,6 +43,7 @@ public class CustomScopeTest {
     }
 
     @Test
+    @Ignore
     public void testSingleton() {
         assertNotNull(customScopeExample.getScope());
     }

@@ -43,6 +43,7 @@ import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
 
+import javax.annotation.Nullable;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
@@ -111,6 +112,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private Elements elements;
     private boolean baseModuleConfiguration = false;
     private int round = 0;
+    private boolean libraryProject = false;
+    private String namspace = "";
 
     @Override
     public void init(final ProcessingEnvironment processingEnv) {
@@ -142,6 +145,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         configurationScope.seed(ScopeKey.of(RResource.class), r);
         configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
         configurationScope.seed(ScopeKey.of(Boolean.class).annotatedBy("@javax.inject.Named(value=libraryProject)"), isLibraryProject(roundEnvironment));
+        configurationScope.seed(ScopeKey.of(String.class).annotatedBy("@javax.inject.Named(value=namespace)"), getNamespace(roundEnvironment));
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
@@ -238,11 +242,44 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     }
 
     private boolean isLibraryProject(RoundEnvironment roundEnvironment) {
-        for(ASTType modules : wrapASTCollection(findInstalledComponents(roundEnvironment, TransfuseModule.class))) {
+        for(ASTType modules : getASTTypesAnnotatedBy(roundEnvironment, TransfuseModule.class)) {
             if(modules.getAnnotation(TransfuseModule.class).library()) {
-                return true;
+                libraryProject = true;
             }
         }
-        return false;
+        return libraryProject;
+    }
+
+    private String getNamespace(RoundEnvironment roundEnvironment) {
+
+        for(ASTType modules : getASTTypesAnnotatedBy(roundEnvironment, TransfuseModule.class)) {
+            if(!modules.getAnnotation(TransfuseModule.class).namespace().isEmpty()) {
+                namspace = modules.getAnnotation(TransfuseModule.class).namespace();
+            }
+        }
+        return namspace;
+    }
+
+    private Collection<ASTType> getASTTypesAnnotatedBy(RoundEnvironment roundEnvironment, Class<? extends Annotation> annotation) {
+        return FluentIterable.from(roundEnvironment.getElementsAnnotatedWith(TransfuseModule.class))
+                .filter(new Predicate<Element>() {
+                    public boolean apply(Element element) {
+                        //we're only dealing with TypeElements
+                        return element instanceof TypeElement;
+                    }
+                })
+                .transform(new Function<Element, TypeElement>() {
+                    public TypeElement apply(Element element) {
+                        return (TypeElement) element;
+                    }
+                })
+                .transform(new Function<TypeElement, ASTType>() {
+                    @Nullable
+                    @Override
+                    public ASTType apply(@Nullable TypeElement element) {
+                        return astElementFactory.getType(element);
+                    }
+                })
+                .toSet();
     }
 }
