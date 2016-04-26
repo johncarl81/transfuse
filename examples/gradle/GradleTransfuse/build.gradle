@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':testlibrary')
     compile 'com.google.android:android:2.1_r1'
     annotationProcessor 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
     compile 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'

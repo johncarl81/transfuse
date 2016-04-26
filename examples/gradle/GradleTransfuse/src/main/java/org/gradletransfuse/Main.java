@@ -16,6 +16,8 @@
 package org.gradletransfuse;
 
 import org.androidtransfuse.annotations.*;
+import com.example.john.testlibrary.ViewWrapper;
+import javax.inject.Inject;
 
 @Activity
 @Layout(R.layout.activity_main)
@@ -24,5 +26,8 @@ import org.androidtransfuse.annotations.*;
         @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })
 public class Main {
-    
+    @Inject
+    public Main(ViewWrapper wrapper) {
+
+    }
 }
