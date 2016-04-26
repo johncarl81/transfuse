@@ -196,6 +196,13 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
+    @ConfigurationScope
+    @Named("libraryProject")
+    public Boolean provideLibraryProject(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
     public FactoryProcessor getFactoryProcessor(Provider<FactoryTransactionWorker> factoryTransactionWorkerProvider,
                                                 Provider<FactoriesTransactionWorker> factoriesTransactionWorkerProvider,
                                                 ScopedTransactionBuilder scopedTransactionBuilder) {

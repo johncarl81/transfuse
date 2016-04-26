@@ -141,6 +141,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         configurationScope.seed(ScopeKey.of(File.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.MANIFEST_FILE + ")"), manifestFile);
         configurationScope.seed(ScopeKey.of(RResource.class), r);
         configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
+        configurationScope.seed(ScopeKey.of(Boolean.class).annotatedBy("@javax.inject.Named(value=libraryProject)"), isLibraryProject(roundEnvironment));
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
@@ -202,11 +203,11 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
                         .toList());
     }
 
-    private Set<? extends Element> findInstalledComponents(RoundEnvironment round, final Class<? extends Annotation> annotation) {
+    private Set<? extends TypeElement> findInstalledComponents(RoundEnvironment round, final Class<? extends Annotation> annotation) {
         Collection<ASTType> annotatedClasses =transform(round.getElementsAnnotatedWith(Install.class),
                 astElementConverterFactory.buildASTElementConverter(ASTType.class));
 
-        ImmutableSet.Builder<Element> builder = ImmutableSet.builder();
+        ImmutableSet.Builder<TypeElement> builder = ImmutableSet.builder();
 
         for (ASTType annotatedClass : annotatedClasses) {
             ASTAnnotation installAstAnnotation = annotatedClass.getASTAnnotation(Install.class);
@@ -234,5 +235,14 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         return ImmutableSet.of(
                 GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION,
                 ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
+    }
+
+    private boolean isLibraryProject(RoundEnvironment roundEnvironment) {
+        for(ASTType modules : wrapASTCollection(findInstalledComponents(roundEnvironment, TransfuseModule.class))) {
+            if(modules.getAnnotation(TransfuseModule.class).library()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
