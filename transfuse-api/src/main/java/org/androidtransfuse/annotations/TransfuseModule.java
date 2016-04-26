@@ -32,4 +32,5 @@ import java.lang.annotation.Target;
 public @interface TransfuseModule {
     boolean library() default false;
     String namespace() default "";
+    Class[] rFiles() default {};
 }
