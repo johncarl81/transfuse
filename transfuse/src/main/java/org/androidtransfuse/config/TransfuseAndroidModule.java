@@ -32,6 +32,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.bootstrap.Namespace;
 import org.androidtransfuse.gen.ClassGenerationStrategy;
+import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
@@ -200,6 +201,19 @@ public class TransfuseAndroidModule {
     @Named("libraryProject")
     public Boolean provideLibraryProject(){
         throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    @Named("namespace")
+    public String provideNamespace(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    public ClassNamer provideClassNamer(@Named("namespace") String namespace){
+        return new ClassNamer(namespace);
     }
 
     @Provides

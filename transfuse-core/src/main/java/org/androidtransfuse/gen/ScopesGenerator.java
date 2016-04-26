@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class ScopesGenerator {
 
-    public static final PackageClass TRANSFUSE_SCOPES_UTIL = new PackageClass("org.androidtransfuse", Namer.name("Transfuse").append("ScopesUtil").build());
+    public static final PackageClass TRANSFUSE_SCOPES_UTIL = new PackageClass("org.androidtransfuse.scope", Namer.name("ScopesUtil").build());
     public static final String GET_INSTANCE = "getInstance";
 
     private final ClassGenerationUtil generationUtil;
@@ -43,8 +43,10 @@ public class ScopesGenerator {
         this.repository = repository;
     }
 
-    public void generate(){
+    public void generate() {
+    }
 
+    public void todo() {
         try {
             JDefinedClass scopesUtil = generationUtil.defineClass(TRANSFUSE_SCOPES_UTIL);
             scopesUtil.mods().setFinal(true);
