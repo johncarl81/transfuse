@@ -19,6 +19,8 @@ import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.*;
 
@@ -32,6 +34,13 @@ public class PackageHelperRepository {
     private static final String PACKAGE_HELPER_NAME = "PackageHelper";
 
     private final Map<PackageClass, PackageHelperDescriptor> packageHelpers = new HashMap<PackageClass, PackageHelperDescriptor>();
+
+    private final String namespace;
+
+    @Inject
+    public PackageHelperRepository(@Named("namespace") String namespace) {
+        this.namespace = namespace;
+    }
 
     public synchronized ProtectedAccessorMethod getConstructorCall(ASTType type, List<ASTParameter> parameters) {
         List<ASTType> parameterTypes = new ArrayList<ASTType>();
@@ -107,7 +116,7 @@ public class PackageHelperRepository {
     }
 
     private PackageHelperDescriptor getPackageHelper(ASTType type) {
-        PackageClass helperPackageClass = type.getPackageClass().append("$$").append(PACKAGE_HELPER_NAME);
+        PackageClass helperPackageClass = type.getPackageClass().append("$$").append(PACKAGE_HELPER_NAME).prepend(namespace);
         if (!packageHelpers.containsKey(helperPackageClass)) {
             packageHelpers.put(helperPackageClass, new PackageHelperDescriptor(helperPackageClass));
         }

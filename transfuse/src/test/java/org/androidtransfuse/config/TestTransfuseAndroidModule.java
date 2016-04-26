@@ -153,4 +153,11 @@ public class TestTransfuseAndroidModule {
     public Boolean provideLibraryProject(){
         return false;
     }
+
+    @Provides
+    @ConfigurationScope
+    @Named("namespace")
+    public String provideNamespace(){
+        return "Transfuse";
+    }
 }
