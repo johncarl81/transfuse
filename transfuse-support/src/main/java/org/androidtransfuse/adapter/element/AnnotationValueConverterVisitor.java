@@ -138,13 +138,13 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
     }
 
     private <P> T visitSimple(Class<P> clazz, P value) {
-        if (type.isAssignableFrom(clazz)) {
-            return (T) value;
-        }
         // The ErrorType is represented in annotations as a string value "<error>".  Therefore, we need to watch for
         // this and throw an Exception if the case arises.
-        if (type.equals(ASTType.class) && value.equals(ERROR_TYPE)){
+        if (value.equals(ERROR_TYPE)){
             throw new TransactionRuntimeException("Encountered ErrorType " + value.toString() + ", unable to recover");
+        }
+        if (type.isAssignableFrom(clazz)) {
+            return (T) value;
         }
         return null;
     }

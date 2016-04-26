@@ -26,7 +26,6 @@ import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuild
 import org.androidtransfuse.gen.variableBuilder.resource.ResourceExpressionBuilderFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
-import org.androidtransfuse.transaction.TransactionRuntimeException;
 
 import javax.inject.Inject;
 
@@ -55,9 +54,7 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
     @Override
     public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         Integer resourceId = annotation.getProperty("value", Integer.class);
-        if(resourceId == null) {
-            throw new TransactionRuntimeException("Injection node not mapped: " + signature.buildScopeKeySignature());
-        }
+        
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         JType resourceType = generationUtil.type(signature.getType());
