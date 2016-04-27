@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':testlibrary')
     compile 'com.google.android:android:2.1_r1'
 
     apt 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
@@ -40,6 +41,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 

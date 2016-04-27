@@ -22,11 +22,9 @@ import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.OnCreate;
 import org.rbridge.Bridge;
 
-@Bridge(R.class)
 @Activity(type = AppCompatActivity.class)
 @Layout(RBridge.layout.activity_library)
 public class LibraryActivity {
-
     @OnCreate
     public void create(){}
 }
