@@ -21,11 +21,13 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpression;
 import org.androidtransfuse.Components;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.Map;
 
 /**
@@ -42,10 +44,15 @@ public class ComponentsGenerator extends AbstractRepositoryGenerator<JDefinedCla
     }
 
     @Override
-    protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
+    public JDefinedClass generate(Map<Provider<ASTType>, JDefinedClass> aggregate) {
         if(libraryProject) {
-            return ImmutableMap.of();
+            return null;
         }
+        return super.generate(aggregate);
+    }
+
+    @Override
+    protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
         return ImmutableMap.of(interfaceClass.dotclass(), concreteType.dotclass());
     }
 }
