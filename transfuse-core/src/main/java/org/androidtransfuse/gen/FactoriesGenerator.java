@@ -18,12 +18,14 @@ package org.androidtransfuse.gen;
 import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Factories;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.Map;
 
 /**
@@ -49,12 +51,16 @@ public class FactoriesGenerator extends AbstractRepositoryGenerator<JDefinedClas
     }
 
     @Override
+    public JDefinedClass generate(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+        if(libraryProject) {
+            return null;
+        }
+        return super.generate(aggregate);
+    }
+
+    @Override
     protected Map<? extends JExpression, ? extends JExpression> generateMapping(JDefinedClass factoryRepositoryClass, JClass interfaceClass, JDefinedClass concreteType) throws JClassAlreadyExistsException {
 
-        if(libraryProject){
-            return ImmutableMap.of();
-        }
-        
         //factory builder
         JDefinedClass factoryClass = factoryRepositoryClass._class(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, classNamer.numberedClassName(interfaceClass).build().getClassName());
         factoryClass._implements(generationUtil.ref(Factories.FactoryBuilder.class).narrow(interfaceClass));
