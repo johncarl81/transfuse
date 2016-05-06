@@ -59,6 +59,7 @@ import javax.lang.model.util.Elements;
         InjectionBuilderContextFactory.class})
 @Namespace("RBridge")
 public class RBridgeModule {
+    public static final String DEBUG = "rBridgeDebugLogging";
 
     @Provides
     public ClassGenerationStrategy getClassGenerationStrategy(){
@@ -85,13 +86,19 @@ public class RBridgeModule {
 
     @Provides
     @Singleton
-    public Logger getLogger(ProcessingEnvironment processingEnvironment){
-        return new MessagerLogger(getLogPreprend(), processingEnvironment.getMessager(), true);
+    public Logger getLogger(ProcessingEnvironment processingEnvironment, @Named(DEBUG) boolean debug){
+        return new MessagerLogger(getLogPrepend(), processingEnvironment.getMessager(), debug);
+    }
+
+    @Provides
+    @Named(DEBUG)
+    public boolean getDebugOption(ProcessingEnvironment processingEnvironment){
+        return processingEnvironment.getOptions().containsKey(DEBUG);
     }
 
     @Provides
     @Named(Validator.LOG_PREPEND)
-    public String getLogPreprend(){
+    public String getLogPrepend(){
         return "RBridge: ";
     }
 
