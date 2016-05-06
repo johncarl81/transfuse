@@ -16,21 +16,36 @@
 package org.androidtransfuse.experiment.generators;
 
 import com.sun.codemodel.*;
+import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.element.ASTElementFactory;
+import org.androidtransfuse.adapter.element.ASTTypeBuilderVisitor;
+import org.androidtransfuse.analysis.AnalysisContext;
+import org.androidtransfuse.analysis.InjectionPointFactory;
+import org.androidtransfuse.annotations.FragmentLayoutHandler;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.experiment.*;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.gen.variableBuilder.InjectionBindingBuilder;
+import org.androidtransfuse.layout.FragmentLayoutHandlerDelegate;
+import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.model.r.RResourceReferenceBuilder;
 import org.androidtransfuse.util.AndroidLiterals;
+import org.androidtransfuse.validation.Validator;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.lang.model.type.TypeMirror;
+import java.util.Map;
+
+import static org.androidtransfuse.util.TypeMirrorUtil.getTypeMirror;
 
 /**
  * @author John Ericksen
@@ -42,18 +57,33 @@ public class FragmentLayoutGenerator implements Generation {
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
     private final InjectionBindingBuilder injectionBindingBuilder;
+    private final InjectionFragmentGenerator injectionFragmentGenerator;
+    private final InstantiationStrategyFactory instantiationStrategyFactory;
+    private final InjectionPointFactory injectionPointFactory;
+    private final Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider;
+    private final Validator validator;
 
     @Inject
     public FragmentLayoutGenerator(RResourceReferenceBuilder rResourceReferenceBuilder,
                                    ASTElementFactory astElementFactory,
                                    UniqueVariableNamer namer,
                                    ClassGenerationUtil generationUtil,
-                                   InjectionBindingBuilder injectionBindingBuilder) {
+                                   InjectionBindingBuilder injectionBindingBuilder,
+                                   InjectionFragmentGenerator injectionFragmentGenerator,
+                                   InstantiationStrategyFactory instantiationStrategyFactory,
+                                   InjectionPointFactory injectionPointFactory,
+                                   Provider<ASTTypeBuilderVisitor> astTypeBuilderVisitorProvider,
+                                   Validator validator) {
         this.rResourceReferenceBuilder = rResourceReferenceBuilder;
         this.astElementFactory = astElementFactory;
         this.namer = namer;
         this.generationUtil = generationUtil;
         this.injectionBindingBuilder = injectionBindingBuilder;
+        this.injectionFragmentGenerator = injectionFragmentGenerator;
+        this.instantiationStrategyFactory = instantiationStrategyFactory;
+        this.injectionPointFactory = injectionPointFactory;
+        this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
+        this.validator = validator;
     }
 
     @Override
@@ -63,6 +93,17 @@ public class FragmentLayoutGenerator implements Generation {
 
     @Override
     public void schedule(final ComponentBuilder builder, final ComponentDescriptor descriptor) {
+
+        final InjectionNode layoutHandlerInjectionNode;
+        ASTType target = descriptor.getTarget();
+
+        if(target.isAnnotated(FragmentLayoutHandler.class)) {
+            FragmentLayoutHandler layoutHandlerAnnotation = target.getAnnotation(FragmentLayoutHandler.class);
+            layoutHandlerInjectionNode = buildLayoutHandlerInjectionNode(layoutHandlerAnnotation, builder.getAnalysisContext());
+        }
+        else {
+            layoutHandlerInjectionNode = null;
+        }
 
         final ASTMethod onCreateViewMethod = astElementFactory.findMethod(AndroidLiterals.FRAGMENT, "onCreateView", AndroidLiterals.LAYOUT_INFLATER, AndroidLiterals.VIEW_GROUP, AndroidLiterals.BUNDLE);
         builder.add(onCreateViewMethod, GenerationPhase.POSTSCOPES, new ComponentMethodGenerator() {
@@ -76,6 +117,8 @@ public class FragmentLayoutGenerator implements Generation {
 
                 methodDescriptor.pushBody(isNullconditionalBlock);
 
+                boolean handled = false;
+
                 if (target.isAnnotated(Layout.class)) {
                     Layout layoutAnnotation = target.getAnnotation(Layout.class);
 
@@ -86,7 +129,41 @@ public class FragmentLayoutGenerator implements Generation {
                             .arg(rResourceReferenceBuilder.buildReference(layout))
                             .arg(methodDescriptor.getExpression(AndroidLiterals.VIEW_GROUP).getExpression())
                             .arg(JExpr.lit(false)));
-                } else {
+
+                    handled = true;
+                }
+
+                if (layoutHandlerInjectionNode != null) {
+                    if(handled){
+                        validator.error("Layout is already defined with @Layout")
+                                .element(target)
+                                .annotation(target.getASTAnnotation(FragmentLayoutHandler.class))
+                                .build();
+                    }
+                    try {
+                        Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(isNullconditionalBlock,
+                                instantiationStrategyFactory.buildMethodStrategy(isNullconditionalBlock, builder.getScopes()),
+                                builder.getDefinedClass(),
+                                layoutHandlerInjectionNode,
+                                builder.getScopes());
+
+                        //FragmentLayoutHandlerDelegate.invokeLayout(layoutInflater, viewGroup)
+                        JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();
+
+                        isNullconditionalBlock.invoke(layoutHandlerDelegate, FragmentLayoutHandlerDelegate.INVOKE_LAYOUT_METHOD)
+                            .arg(methodDescriptor.getParameter(methodDescriptor.getASTMethod().getParameters().get(0)).getExpression())
+                            .arg(methodDescriptor.getParameter(methodDescriptor.getASTMethod().getParameters().get(1)).getExpression());
+
+
+                    } catch (JClassAlreadyExistsException e) {
+                        throw new TransfuseAnalysisException("Class Already Exists ", e);
+                    }
+
+
+                    handled = true;
+                }
+
+                if (!handled) {
                     JInvocation onCreateView = JExpr._super().invoke("onCreateView");
 
                     for (ASTParameter astParameter : methodDescriptor.getASTMethod().getParameters()) {
@@ -105,5 +182,17 @@ public class FragmentLayoutGenerator implements Generation {
                 });
             }
         });
+    }
+
+    private InjectionNode buildLayoutHandlerInjectionNode(final FragmentLayoutHandler layoutHandlerAnnotation, AnalysisContext context) {
+        if (layoutHandlerAnnotation != null) {
+            TypeMirror layoutHandlerType = getTypeMirror(layoutHandlerAnnotation, "value");
+
+            if (layoutHandlerType != null) {
+                ASTType layoutHandlerASTType = layoutHandlerType.accept(astTypeBuilderVisitorProvider.get(), null);
+                return injectionPointFactory.buildInjectionNode(layoutHandlerASTType, context);
+            }
+        }
+        return null;
     }
 }

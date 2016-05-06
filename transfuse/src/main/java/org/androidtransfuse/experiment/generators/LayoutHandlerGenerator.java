@@ -15,7 +15,9 @@
  */
 package org.androidtransfuse.experiment.generators;
 
-import com.sun.codemodel.*;
+import com.sun.codemodel.JBlock;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JExpression;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTType;
@@ -25,12 +27,12 @@ import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.annotations.LayoutHandler;
 import org.androidtransfuse.experiment.*;
-import org.androidtransfuse.gen.*;
+import org.androidtransfuse.gen.InjectionFragmentGenerator;
+import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.layout.LayoutHandlerDelegate;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.MethodDescriptor;
 import org.androidtransfuse.model.TypedExpression;
-import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.AndroidLiterals;
 
 import javax.inject.Inject;
@@ -49,8 +51,6 @@ public class LayoutHandlerGenerator implements Generation {
     private final InjectionPointFactory injectionPointFactory;
     private final InjectionFragmentGenerator injectionFragmentGenerator;
     private final InstantiationStrategyFactory instantiationStrategyFactory;
-    private final UniqueVariableNamer namer;
-    private final ClassGenerationUtil generationUtil;
     private final ASTElementFactory astElementFactory;
 
     @Inject
@@ -58,15 +58,11 @@ public class LayoutHandlerGenerator implements Generation {
                                   InjectionPointFactory injectionPointFactory,
                                   InjectionFragmentGenerator injectionFragmentGenerator,
                                   InstantiationStrategyFactory instantiationStrategyFactory,
-                                  UniqueVariableNamer namer,
-                                  ClassGenerationUtil generationUtil,
                                   ASTElementFactory astElementFactory) {
         this.astTypeBuilderVisitorProvider = astTypeBuilderVisitorProvider;
         this.injectionPointFactory = injectionPointFactory;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
-        this.namer = namer;
-        this.generationUtil = generationUtil;
         this.astElementFactory = astElementFactory;
     }
 
@@ -90,18 +86,12 @@ public class LayoutHandlerGenerator implements Generation {
                 @Override
                 public void generate(MethodDescriptor methodDescriptor, JBlock block) {
                     try {
-                        JDefinedClass definedClass = builder.getDefinedClass();
-
-                        // Scopes instance
-                        JClass scopesRef = generationUtil.ref(Scopes.class);
-                        JInvocation scopesBuildInvocation = generationUtil.ref(ScopesGenerator.TRANSFUSE_SCOPES_UTIL).staticInvoke(ScopesGenerator.GET_INSTANCE);
-                        JVar scopesVar = block.decl(scopesRef, namer.generateName(Scopes.class), scopesBuildInvocation);
 
                         Map<InjectionNode, TypedExpression> expressionMap = injectionFragmentGenerator.buildFragment(block,
-                                instantiationStrategyFactory.buildMethodStrategy(block, scopesVar),
-                                definedClass,
+                                instantiationStrategyFactory.buildMethodStrategy(block, builder.getScopes()),
+                                builder.getDefinedClass(),
                                 layoutHandlerInjectionNode,
-                                scopesVar);
+                                builder.getScopes());
 
                         //LayoutHandlerDelegate.invokeLayout()
                         JExpression layoutHandlerDelegate = expressionMap.get(layoutHandlerInjectionNode).getExpression();
