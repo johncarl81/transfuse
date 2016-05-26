@@ -144,18 +144,8 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
-        return proxyASTType.inheritsFrom(type);
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        return proxyASTType.extendsFrom(type);
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
-        return proxyASTType.implementsFrom(type);
+    public boolean inherits(ASTType type) {
+        return proxyASTType.inherits(type);
     }
 
     @Override

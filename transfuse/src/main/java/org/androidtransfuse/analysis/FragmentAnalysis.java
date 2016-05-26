@@ -114,7 +114,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass fragmentClassName;
         ComponentDescriptor fragmentDescriptor = null;
 
-        if (!astType.extendsFrom(AndroidLiterals.FRAGMENT)) {
+        if (!astType.inherits(AndroidLiterals.FRAGMENT)) {
             //generated Android fragment
             fragmentClassName = componentAnalysis.buildComponentPackageClass(astType, fragmentAnnotation.name(), "Fragment");
 
@@ -178,7 +178,7 @@ public class FragmentAnalysis implements Analysis<ComponentDescriptor> {
         injectionNodeBuilderRepository.putType(AndroidLiterals.FRAGMENT_MANAGER, injectionBindingBuilder.dependency(AndroidLiterals.FRAGMENT).invoke(AndroidLiterals.FRAGMENT_MANAGER, "getFragmentManager").build());
 
 
-        while(!fragmentType.equals(AndroidLiterals.FRAGMENT) && fragmentType.inheritsFrom(AndroidLiterals.FRAGMENT)){
+        while(!fragmentType.equals(AndroidLiterals.FRAGMENT) && fragmentType.inherits(AndroidLiterals.FRAGMENT)){
             injectionNodeBuilderRepository.putType(fragmentType, injectionBindingBuilder.buildThis(fragmentType));
             fragmentType = fragmentType.getSuperClass();
         }

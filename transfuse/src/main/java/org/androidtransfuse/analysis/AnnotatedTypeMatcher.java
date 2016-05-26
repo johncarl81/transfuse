@@ -38,7 +38,7 @@ public class AnnotatedTypeMatcher implements Matcher<AnnotatedType>{
         boolean match = true;
 
         if(type != null){
-            match = input.getType().inheritsFrom(type);
+            match = input.getType().inherits(type);
         }
         if(annotation != null){
             match &= input.getAnnotation().equals(annotation);

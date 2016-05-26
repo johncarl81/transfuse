@@ -122,7 +122,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass activityClassName;
         ComponentDescriptor activityDescriptor;
 
-        if (input.extendsFrom(AndroidLiterals.ACTIVITY)) {
+        if (input.inherits(AndroidLiterals.ACTIVITY)) {
             //vanilla Android activity
             PackageClass activityPackageClass = input.getPackageClass();
             activityClassName = componentAnalysis.buildComponentPackageClass(input, activityPackageClass.getClassName(), "Activity");
@@ -150,7 +150,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
             //listener registration
             activityDescriptor.getGenerators().add(listerRegistrationGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE)));
             //non configuration instance update
-            if(activityType.extendsFrom(AndroidLiterals.FRAGMENT_ACTIVITY)){
+            if(activityType.inherits(AndroidLiterals.FRAGMENT_ACTIVITY)){
                 activityDescriptor.getGenerators().add(nonConfigurationInstanceGeneratorFactory.build(getASTMethod("onCreate", AndroidLiterals.BUNDLE), AndroidLiterals.FRAGMENT_ACTIVITY, "getLastCustomNonConfigurationInstance", "onRetainCustomNonConfigurationInstance"));
             }
             else {
@@ -180,7 +180,7 @@ public class ActivityAnalysis implements Analysis<ComponentDescriptor> {
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.ACTIVITY, injectionBindingBuilder.buildThis(AndroidLiterals.ACTIVITY));
 
-        while(!activityType.equals(AndroidLiterals.ACTIVITY) && activityType.inheritsFrom(AndroidLiterals.ACTIVITY)){
+        while(!activityType.equals(AndroidLiterals.ACTIVITY) && activityType.inherits(AndroidLiterals.ACTIVITY)){
             injectionNodeBuilderRepository.putType(activityType, injectionBindingBuilder.buildThis(activityType));
             activityType = activityType.getSuperClass();
         }

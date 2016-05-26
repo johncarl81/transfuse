@@ -45,7 +45,7 @@ public class ASTTypeMatcher implements Matcher<ASTType> {
                 return this.astType.equals(astType);
             }
             else if(subtypesAllowed) {
-                return this.astType.inheritsFrom(astType);
+                return this.astType.inherits(astType);
             }
         }
 

@@ -98,7 +98,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass serviceClassName;
         ComponentDescriptor serviceDescriptor = null;
 
-        if (input.extendsFrom(AndroidLiterals.SERVICE)) {
+        if (input.inherits(AndroidLiterals.SERVICE)) {
             //vanilla Android Service
             PackageClass packageClass = input.getPackageClass();
             serviceClassName = componentAnalysis.buildComponentPackageClass(input, packageClass.getClassName(), "Service");
@@ -153,7 +153,7 @@ public class ServiceAnalysis implements Analysis<ComponentDescriptor> {
 
         injectionNodeBuilderRepository.putType(AndroidLiterals.SERVICE, injectionBindingBuilder.buildThis(AndroidLiterals.SERVICE));
 
-        while(!serviceType.equals(AndroidLiterals.SERVICE) && serviceType.inheritsFrom(AndroidLiterals.SERVICE)){
+        while(!serviceType.equals(AndroidLiterals.SERVICE) && serviceType.inherits(AndroidLiterals.SERVICE)){
             injectionNodeBuilderRepository.putType(serviceType, injectionBindingBuilder.buildThis(serviceType));
             serviceType = serviceType.getSuperClass();
         }

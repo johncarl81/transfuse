@@ -122,23 +122,7 @@ public interface ASTType extends ASTBase {
      * @param type implementing from
      * @return inheritance
      */
-    boolean inheritsFrom(ASTType type);
-
-    /**
-     * Determines if the current type extends from the given type.
-     *
-     * @param type implementing from
-     * @return inheritance
-     */
-    boolean extendsFrom(ASTType type);
-
-    /**
-     * Determines if the current type implements the given type.
-     *
-     * @param type implementing from
-     * @return inheritance
-     */
-    boolean implementsFrom(ASTType type);
+    boolean inherits(ASTType type);
 
     /**
      * Returns a parsed package and class for this type

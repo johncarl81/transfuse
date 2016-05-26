@@ -82,7 +82,7 @@ public class ApplicationAnalysis implements Analysis<ComponentDescriptor> {
         PackageClass applicationClassName;
         ComponentDescriptor applicationDescriptor = null;
 
-        if (astType.extendsFrom(AndroidLiterals.APPLICATION)) {
+        if (astType.inherits(AndroidLiterals.APPLICATION)) {
             //vanilla Android Application
             PackageClass activityPackageClass = astType.getPackageClass();
             applicationClassName = componentAnalysis.buildComponentPackageClass(astType, activityPackageClass.getClassName(), "Application");

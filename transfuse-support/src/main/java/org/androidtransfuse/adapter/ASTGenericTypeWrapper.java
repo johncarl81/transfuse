@@ -117,18 +117,8 @@ public class ASTGenericTypeWrapper implements ASTType {
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
-        return astType.inheritsFrom(type);
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        return astType.extendsFrom(type);
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
-        return astType.implementsFrom(type);
+    public boolean inherits(ASTType type) {
+        return astType.inherits(type);
     }
 
     @Override

@@ -101,29 +101,9 @@ public class ASTIntersectionType implements ASTType {
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
+    public boolean inherits(ASTType type) {
         for (ASTType astType : intersection) {
-            if(astType.inheritsFrom(type)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        for (ASTType astType : intersection) {
-            if(astType.extendsFrom(type)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
-        for (ASTType astType : intersection) {
-            if(astType.implementsFrom(type)){
+            if(astType.inherits(type)){
                 return true;
             }
         }

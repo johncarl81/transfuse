@@ -47,7 +47,7 @@ public class BindProcessor implements TypeProcessor {
         ASTType type = bindAnnotation.getProperty("type", ASTType.class);
         ASTType to = bindAnnotation.getProperty("to", ASTType.class);
 
-        if(!to.inheritsFrom(type)){
+        if(!to.inherits(type)){
             validator.error("@Bind to parameter class must inherit from type parameter")
                     .element(moduleType).annotation(bindAnnotation).parameter("to").build();
         }

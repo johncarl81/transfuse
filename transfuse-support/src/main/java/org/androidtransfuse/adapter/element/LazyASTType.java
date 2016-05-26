@@ -111,18 +111,8 @@ public abstract class LazyASTType implements ASTType, ElementHolder{
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
-        return getProxy().inheritsFrom(type);
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        return getProxy().extendsFrom(type);
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
-        return getProxy().implementsFrom(type);
+    public boolean inherits(ASTType type) {
+        return getProxy().inherits(type);
     }
 
     @Override
