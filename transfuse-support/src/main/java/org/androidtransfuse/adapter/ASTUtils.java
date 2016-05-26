@@ -66,7 +66,7 @@ public final class ASTUtils {
         if(extend && inheritable.equals(OBJECT_TYPE)){
             return true;
         }
-        return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
+        return inherits(astType.getSuperClass(), inheritable, implement, extend);
     }
 
     public ASTAnnotation getAnnotation(Class annotationClass, ImmutableSet<ASTAnnotation> annotations) {
