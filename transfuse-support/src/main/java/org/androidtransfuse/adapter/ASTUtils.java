@@ -51,7 +51,7 @@ public final class ASTUtils {
         if (astType == null) {
             return false;
         }
-        if(inheritable.equals(OBJECT_TYPE)){
+        if(inheritable == null || inheritable.equals(OBJECT_TYPE)){
             return true;
         }
         if (astType.equals(inheritable)) {
