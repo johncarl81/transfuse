@@ -48,6 +48,7 @@ import javax.annotation.Nullable;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedOptions;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -88,6 +89,12 @@ import static com.google.common.collect.Collections2.transform;
         Install.class})
 @Bootstrap
 @AutoService(Processor.class)
+@SupportedOptions({
+        TransfuseAndroidModule.DEBUG,
+        TransfuseAndroidModule.MANIFEST_FILE,
+        TransfuseAndroidModule.ORIGINAL_MANIFEST,
+        TransfuseAndroidModule.STACKTRACE
+})
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject

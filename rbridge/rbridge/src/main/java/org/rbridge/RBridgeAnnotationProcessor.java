@@ -32,6 +32,7 @@ import org.androidtransfuse.util.Logger;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedOptions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.lang.model.SourceVersion;
@@ -45,6 +46,7 @@ import java.util.Set;
 @SupportedAnnotations({Bridge.class})
 @Bootstrap
 @AutoService(Processor.class)
+@SupportedOptions(RBridgeModule.DEBUG)
 public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
