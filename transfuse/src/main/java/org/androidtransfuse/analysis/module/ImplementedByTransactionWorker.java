@@ -72,7 +72,7 @@ public class ImplementedByTransactionWorker extends AbstractCompletionTransactio
 
             ASTType implAstType = implementedClass.accept(astTypeBuilderVisitor, null);
 
-            if (!implAstType.inheritsFrom(astType)) {
+            if (!implAstType.inherits(astType)) {
                 validator.error("@ImplementedBy must reference a subclass")
                         .element(astType)
                         .annotation(astType.getASTAnnotation(ImplementedBy.class))

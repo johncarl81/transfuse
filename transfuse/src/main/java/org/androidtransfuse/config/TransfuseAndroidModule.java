@@ -47,7 +47,7 @@ import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorChannel;
 import org.androidtransfuse.transaction.TransactionProcessorPool;
 import org.androidtransfuse.util.*;
-import org.androidtransfuse.util.matcher.ImplementsMatcher;
+import org.androidtransfuse.util.matcher.InheritsMatcher;
 import org.androidtransfuse.util.matcher.Matchers;
 import org.androidtransfuse.validation.Validator;
 
@@ -227,9 +227,9 @@ public class TransfuseAndroidModule {
         }
 
         repository.add(Matchers.type(astClassFactory.getType(String.class)).build(), new SimplePropertyBuilder("getString", "putString"));
-        repository.add(new ImplementsMatcher(AndroidLiterals.PARCELABLE), new SimplePropertyBuilder("getParcelable", "putParcelable"));
+        repository.add(new InheritsMatcher(AndroidLiterals.PARCELABLE), new SimplePropertyBuilder("getParcelable", "putParcelable"));
         repository.add(new ParcelMatcher(), parcelerPropertyBuilder);
-        repository.add(new ImplementsMatcher(astClassFactory.getType(Serializable.class)), new SimplePropertyBuilder("getSerializable", "putSerializable"));
+        repository.add(new InheritsMatcher(astClassFactory.getType(Serializable.class)), new SimplePropertyBuilder("getSerializable", "putSerializable"));
 
         return repository;
     }

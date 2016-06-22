@@ -81,7 +81,7 @@ public class RegistrationAnalyzer implements ASTAnalysis {
 
         for (Map.Entry<ASTType, RegistrationGeneratorFactory> generatorFactoryEntry : generatorFactories.entrySet()) {
             if ((interfaceList.isEmpty() || interfaceList.contains(generatorFactoryEntry.getKey()))
-                    && astType.inheritsFrom(generatorFactoryEntry.getKey())) {
+                    && astType.inherits(generatorFactoryEntry.getKey())) {
                 generators.add(generatorFactoryEntry.getValue().buildRegistrationGenerator(injectionNode, astBase, registerAnnotation, context));
             }
         }

@@ -145,18 +145,8 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
-        return ASTUtils.getInstance().inherits(this, type, true, true);
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        return ASTUtils.getInstance().inherits(this, type, false, true);
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
-        return ASTUtils.getInstance().inherits(this, type, true, false);
+    public boolean inherits(ASTType type) {
+        return ASTUtils.getInstance().inherits(this, type);
     }
 
     @Override

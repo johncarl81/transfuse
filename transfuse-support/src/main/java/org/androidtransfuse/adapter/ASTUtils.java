@@ -45,28 +45,24 @@ public final class ASTUtils {
      *
      * @param astType     target
      * @param inheritable inheritance target
-     * @param implement flag to trigger the method to search for implements inheritance
-     * @param extend flag to trigger the method to search for extends inheritance
      * @return true if the given astType target inherits from the inheritable type with the given rules.
      */
-    public boolean inherits(ASTType astType, ASTType inheritable, boolean implement, boolean extend) {
+    public boolean inherits(ASTType astType, ASTType inheritable) {
         if (astType == null) {
             return false;
+        }
+        if(inheritable == null || inheritable.equals(OBJECT_TYPE)){
+            return true;
         }
         if (astType.equals(inheritable)) {
             return true;
         }
-        if (implement) {
-            for (ASTType typeInterfaces : astType.getInterfaces()) {
-                if (inherits(typeInterfaces, inheritable, implement, extend)) {
-                    return true;
-                }
+        for (ASTType typeInterfaces : astType.getInterfaces()) {
+            if (inherits(typeInterfaces, inheritable)) {
+                return true;
             }
         }
-        if(extend && inheritable.equals(OBJECT_TYPE)){
-            return true;
-        }
-        return extend && inherits(astType.getSuperClass(), inheritable, implement, extend);
+        return inherits(astType.getSuperClass(), inheritable);
     }
 
     public ASTAnnotation getAnnotation(Class annotationClass, ImmutableSet<ASTAnnotation> annotations) {

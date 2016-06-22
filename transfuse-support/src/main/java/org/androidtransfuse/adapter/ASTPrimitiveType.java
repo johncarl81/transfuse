@@ -150,17 +150,7 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
-    public boolean inheritsFrom(ASTType type) {
-        return type == this;
-    }
-
-    @Override
-    public boolean extendsFrom(ASTType type) {
-        return type == this;
-    }
-
-    @Override
-    public boolean implementsFrom(ASTType type) {
+    public boolean inherits(ASTType type) {
         return type == this;
     }
 

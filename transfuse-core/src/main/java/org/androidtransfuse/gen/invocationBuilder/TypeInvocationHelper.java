@@ -57,10 +57,10 @@ public class TypeInvocationHelper {
     }
 
     public JExpression coerceType(ASTType targetType, TypedExpression typedExpression) {
-        if (typedExpression.getType().inheritsFrom(targetType)) {
+        if (typedExpression.getType().inherits(targetType)) {
             return typedExpression.getExpression();
         }
-        if (targetType.inheritsFrom(typedExpression.getType())) {
+        if (targetType.inherits(typedExpression.getType())) {
             return JExpr.cast(generationUtil.ref(targetType), typedExpression.getExpression());
         }
         if (targetType instanceof ASTPrimitiveType) {
@@ -68,7 +68,7 @@ public class TypeInvocationHelper {
 
             ASTType objectType = astClassFactory.getType(primitiveTargetType.getObjectClass());
 
-            if (objectType.inheritsFrom(typedExpression.getType())) {
+            if (objectType.inherits(typedExpression.getType())) {
                 return JExpr.cast(generationUtil.ref(objectType), typedExpression.getExpression());
             }
         }

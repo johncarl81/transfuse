@@ -81,7 +81,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
 
         ComponentDescriptor receiverDescriptor;
 
-        if (astType.extendsFrom(AndroidLiterals.BROADCAST_RECEIVER)) {
+        if (astType.inherits(AndroidLiterals.BROADCAST_RECEIVER)) {
             //vanilla Android broadcast receiver
             PackageClass activityPackageClass = astType.getPackageClass();
             PackageClass receiverClassName = componentAnalysis.buildComponentPackageClass(astType, activityPackageClass.getClassName(), "BroadcastReceiver");
@@ -100,7 +100,7 @@ public class BroadcastReceiverAnalysis implements Analysis<ComponentDescriptor> 
             if(type != null) {
                 ASTType applicationASTType = type.accept(astTypeBuilderVisitor, null);
 
-                while(!applicationASTType.equals(AndroidLiterals.BROADCAST_RECEIVER) && applicationASTType.inheritsFrom(AndroidLiterals.BROADCAST_RECEIVER)){
+                while(!applicationASTType.equals(AndroidLiterals.BROADCAST_RECEIVER) && applicationASTType.inherits(AndroidLiterals.BROADCAST_RECEIVER)){
                     injectionNodeBuilderRepository.putType(applicationASTType, injectionBindingBuilder.buildThis(applicationASTType));
                     applicationASTType = applicationASTType.getSuperClass();
                 }

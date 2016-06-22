@@ -98,7 +98,7 @@ public class InvocationBuilder {
 
     private ModifiedInvocationBuilder getInjectionBuilder(ASTType user, ASTType target, ASTAccessModifier modifier) {
 
-        if(modifier.equals(ASTAccessModifier.PROTECTED) && (target.inheritsFrom(user) || user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage()))){
+        if(modifier.equals(ASTAccessModifier.PROTECTED) && (target.inherits(user) || user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage()))){
             return invocationBuilderStrategy.getInjectionBuilder(ASTAccessModifier.PUBLIC);
         }
         if(modifier.equals(ASTAccessModifier.PACKAGE_PRIVATE) && user.getPackageClass().getPackage().equals(target.getPackageClass().getPackage())){

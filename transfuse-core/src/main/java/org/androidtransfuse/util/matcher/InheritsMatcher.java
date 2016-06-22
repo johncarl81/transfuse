@@ -30,6 +30,6 @@ public class InheritsMatcher implements Matcher<ASTType> {
 
     @Override
     public boolean matches(ASTType astType) {
-        return astType.inheritsFrom(superType);
+        return astType.inherits(superType);
     }
 }
