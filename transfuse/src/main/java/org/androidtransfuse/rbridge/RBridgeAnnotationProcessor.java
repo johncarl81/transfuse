@@ -22,10 +22,10 @@ import com.google.common.collect.FluentIterable;
 import org.androidtransfuse.AnnotationProcessorBase;
 import org.androidtransfuse.SupportedAnnotations;
 import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
-import org.androidtransfuse.annotations.ScopeReference;
+import org.androidtransfuse.annotations.Bridge;
 import org.androidtransfuse.bootstrap.Bootstrap;
 import org.androidtransfuse.bootstrap.Bootstraps;
-import org.androidtransfuse.config.EnterableScope;
+import org.androidtransfuse.config.TransfuseAndroidModule;
 import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;
 
@@ -46,7 +46,7 @@ import java.util.Set;
 @SupportedAnnotations({Bridge.class})
 @Bootstrap
 @AutoService(Processor.class)
-@SupportedOptions(RBridgeModule.DEBUG)
+@SupportedOptions(TransfuseAndroidModule.DEBUG)
 public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
@@ -55,9 +55,7 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
     private ReloadableASTElementFactory reloadableASTElementFactory;
     @Inject
     private Logger log;
-    @Inject
-    @ScopeReference(ProcessingScope.class)
-    private EnterableScope processingScope;
+
     private int round = 0;
 
     @Override
@@ -74,10 +72,6 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
 
         log.debug("Annotation procesing started, round " + round++);
         long start = System.currentTimeMillis();
-
-        processingScope.enter();
-
-        processingScope.seed(ScopeKey.of(RoundEnvironment.class), roundEnvironment);
 
         log.debug("Found " + roundEnvironment.getElementsAnnotatedWith(Bridge.class).size() + " classes annotated by @Bridge");
 
@@ -102,8 +96,6 @@ public class RBridgeAnnotationProcessor extends AnnotationProcessorBase {
             // Throws an exception if errors still exist.
             rBridgeProcessor.checkForErrors();
         }
-
-        processingScope.exit();
 
         log.debug("Took " + (System.currentTimeMillis() - start) + "ms to process");
 

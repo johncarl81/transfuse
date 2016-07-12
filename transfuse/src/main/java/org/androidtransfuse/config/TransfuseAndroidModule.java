@@ -43,6 +43,8 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFacto
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.*;
+import org.androidtransfuse.rbridge.RBridgeProcessor;
+import org.androidtransfuse.rbridge.RBridgeWorker;
 import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorChannel;
@@ -253,5 +255,16 @@ public class TransfuseAndroidModule {
         repository.add(new InheritsMatcher(astClassFactory.getType(Serializable.class)), new SimplePropertyBuilder("getSerializable", "putSerializable"));
 
         return repository;
+    }
+
+    @Provides
+    @Singleton
+    public RBridgeProcessor buildRBridgeProcessor(Provider<RBridgeWorker> rbridgeTransactionFactory,
+                                                  ScopedTransactionBuilder scopedTransactionBuilder,
+                                                  Logger logger){
+
+        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> workingPool = new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
+
+        return new RBridgeProcessor(workingPool, workingPool, rbridgeTransactionFactory, scopedTransactionBuilder, logger);
     }
 }

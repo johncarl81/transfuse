@@ -22,6 +22,8 @@ import com.sun.codemodel.JExpr;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.annotations.Bridge;
+import org.androidtransfuse.annotations.RMapping;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.transaction.AbstractCompletionTransactionWorker;

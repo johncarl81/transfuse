@@ -1,4 +1,4 @@
-package org.androidtransfuse.rbridge;
+package org.androidtransfuse.annotations;
 
 /**
  * @author John Ericksen

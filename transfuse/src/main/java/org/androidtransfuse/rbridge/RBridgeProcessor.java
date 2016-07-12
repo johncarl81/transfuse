@@ -17,6 +17,7 @@ package org.androidtransfuse.rbridge;
 
 import com.sun.codemodel.JDefinedClass;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.annotations.Bridge;
 import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorPool;
