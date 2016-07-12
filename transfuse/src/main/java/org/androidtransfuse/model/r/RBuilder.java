@@ -18,8 +18,8 @@ package org.androidtransfuse.model.r;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTField;
 import org.androidtransfuse.adapter.ASTType;
+import org.androidtransfuse.rbridge.RMapping;
 import org.androidtransfuse.util.Logger;
-import org.rbridge.RMapping;
 
 import javax.inject.Inject;
 import java.util.Collection;

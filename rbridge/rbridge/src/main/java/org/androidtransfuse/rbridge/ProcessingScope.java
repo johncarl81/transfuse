@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.rbridge;
+package org.androidtransfuse.rbridge;
 
 import javax.inject.Scope;
 import java.lang.annotation.ElementType;

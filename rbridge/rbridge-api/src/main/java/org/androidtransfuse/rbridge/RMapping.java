@@ -1,4 +1,4 @@
-package org.rbridge;
+package org.androidtransfuse.rbridge;
 
 /**
  * @author John Ericksen

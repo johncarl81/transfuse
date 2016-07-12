@@ -9,7 +9,7 @@
     <name>R Bridge</name>
 
     <parent>
-        <groupId>org.rBridge</groupId>
+        <groupId>org.androidtransfuse</groupId>
         <artifactId>rBridge-project</artifactId>
         <version>0.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -18,7 +18,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.rBridge</groupId>
+            <groupId>org.androidtransfuse</groupId>
             <artifactId>rBridge-api</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -62,42 +62,43 @@
                         <configuration>
                             <artifactSet>
                                 <excludes>
-                                    <exclude>org.rbridge:rbridge-api</exclude>
+                                    <exclude>org.androidtransfuse:rbridge-api</exclude>
                                     <exclude>com.google.code.findbugs:jsr305</exclude>
                                 </excludes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>com.google.common</pattern>
-                                    <shadedPattern>org.rbridge.guava</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.guava</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.sun.codemodel</pattern>
-                                    <shadedPattern>org.rbridge.codemodel</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.codemodel</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.sun_.codemodel</pattern>
-                                    <shadedPattern>org.rbridge.codemodel</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.codemodel</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>javax.inject</pattern>
-                                    <shadedPattern>org.rbridge.javaxinject</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.javaxinject</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>javax_.annotation</pattern>
-                                    <shadedPattern>org.rbridge.javaxannotation</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.javaxannotation</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.androidtransfuse</pattern>
-                                    <shadedPattern>org.rbridge.transfuse</shadedPattern>
+                                    <excludes><exclude>org.androidtransfuse.rbridge.*</exclude></excludes>
+                                    <shadedPattern>org.androidtransfuse.rbridge.transfuse</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.apache</pattern>
-                                    <shadedPattern>org.rbridge.apache</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.aopalliance</pattern>
-                                    <shadedPattern>org.rbridge.aopalliance</shadedPattern>
+                                    <shadedPattern>org.androidtransfuse.rbridge.aopalliance</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
