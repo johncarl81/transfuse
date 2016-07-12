@@ -38,8 +38,6 @@ android {
 dependencies {
     compile 'com.google.android:android:2.1_r1'
     compile 'com.android.support:appcompat-v7:23.+'
-    apt 'org.rBridge:rBridge:0.1.0-SNAPSHOT'
-    compile 'org.rBridge:rBridge-api:0.1.0-SNAPSHOT'
     apt 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
     compile 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'

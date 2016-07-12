@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import org.androidtransfuse.annotations.Activity;
 import org.androidtransfuse.annotations.Layout;
 import org.androidtransfuse.annotations.OnCreate;
-import org.androidtransfuse.rbridge.Bridge;
 
 @Activity(type = AppCompatActivity.class)
 @Layout(RBridge.layout.activity_library)
