@@ -38,11 +38,15 @@ public class ASTTypeVirtualProxy implements ASTType {
         this.proxy = proxy;
     }
 
+    public boolean isLoaded() {
+        return proxy != null;
+    }
+
     private ASTType getProxy() {
         if (proxy != null) {
             return proxy;
         }
-        throw new TransfuseAdapterException("Proxy not initialized prior to use");
+        throw new TransfuseAdapterException("Proxy not initialized prior to use: " + packageClass.getCanonicalName());
     }
 
     @Override

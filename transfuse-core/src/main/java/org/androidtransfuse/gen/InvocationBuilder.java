@@ -49,7 +49,7 @@ public class InvocationBuilder {
         return injectionBuilder.buildMethodCall(cast, method, parameters, expression);
     }
 
-    public boolean isHiddenMethod(ASTType rootType, ASTType holdingType, ASTMethod inputMethod){
+    private boolean isHiddenMethod(ASTType rootType, ASTType holdingType, ASTMethod inputMethod){
         return inputMethod.getAccessModifier().equals(ASTAccessModifier.PACKAGE_PRIVATE) &&
                 !rootType.getPackageClass().getPackage().equals(holdingType.getPackageClass().getPackage());
     }
@@ -71,7 +71,7 @@ public class InvocationBuilder {
         return injectionBuilder.buildFieldSet(cast, field, expression, containingExpression);
     }
 
-    public boolean isHiddenField(ASTType rootType, ASTType holdingType, String name){
+    private boolean isHiddenField(ASTType rootType, ASTType holdingType, String name){
         for(ASTType iterType = rootType; !iterType.equals(holdingType); iterType = iterType.getSuperClass()){
             for(ASTField field : iterType.getFields()){
                 if(field.getName().equals(name)){
