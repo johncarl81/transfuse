@@ -64,6 +64,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return proxyASTType.isAbstract();
+    }
+
+    @Override
     public boolean isInnerClass() {
         return proxyASTType.isInnerClass();
     }

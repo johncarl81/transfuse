@@ -88,6 +88,11 @@ public class ASTGenericTypeWrapper implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return astType.isAbstract();
+    }
+
+    @Override
     public boolean isInnerClass() {
         return astType.isInnerClass();
     }

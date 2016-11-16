@@ -77,6 +77,11 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return false;
+    }
+
+    @Override
     public boolean isInnerClass() {
         return false;
     }

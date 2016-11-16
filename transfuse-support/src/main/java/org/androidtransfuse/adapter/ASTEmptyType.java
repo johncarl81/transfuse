@@ -89,6 +89,11 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return false;
+    }
+
+    @Override
     public ImmutableSet<ASTType> getInterfaces() {
         return ImmutableSet.of();
     }
@@ -130,7 +135,7 @@ public class ASTEmptyType implements ASTType {
 
     @Override
     public PackageClass getPackageClass() {
-        return new PackageClass(null, name);
+        return new PackageClass(name);
     }
 
     @Override
@@ -138,13 +143,13 @@ public class ASTEmptyType implements ASTType {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ASTEmptyType)) {
+        if (!(o instanceof ASTType)) {
             return false;
         }
 
-        ASTEmptyType that = (ASTEmptyType) o;
+        ASTType that = (ASTType) o;
 
-        return new EqualsBuilder().append(name, that.name).isEquals();
+        return new EqualsBuilder().append(name, that.getName()).isEquals();
     }
 
     @Override

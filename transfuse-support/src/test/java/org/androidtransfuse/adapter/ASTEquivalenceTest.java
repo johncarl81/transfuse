@@ -170,6 +170,7 @@ public class ASTEquivalenceTest {
             equals("isStatic", comparison.isStatic(), astType.isStatic());
             equals("isInnerClass", comparison.isInnerClass(), astType.isInnerClass());
             equals("isEnum", comparison.isEnum(), astType.isEnum());
+            equals("isAbstract", comparison.isAbstract(), astType.isAbstract());
             equals("getSuperClass", comparison.getSuperClass(), astType.getSuperClass());
             if(comparison.getInterfaces().size() == astType.getInterfaces().size()) {
                 for (ASTType comparisonInterfaceType : comparison.getInterfaces()) {

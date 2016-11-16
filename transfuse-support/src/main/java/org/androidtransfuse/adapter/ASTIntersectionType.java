@@ -16,88 +16,21 @@
 package org.androidtransfuse.adapter;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
  * @author John Ericksen
  */
-public class ASTIntersectionType implements ASTType {
+public class ASTIntersectionType extends ASTEmptyType {
 
     private List<ASTType> intersection;
 
     public ASTIntersectionType(List<ASTType> intersection){
+        super(Joiner.on("&").join(intersection));
         this.intersection = intersection;
-    }
-
-    @Override
-    public ASTAccessModifier getAccessModifier() {
-        return ASTAccessModifier.PUBLIC;
-    }
-
-    @Override
-    public ImmutableSet<ASTMethod> getMethods() {
-        return ImmutableSet.of();
-    }
-
-    @Override
-    public ImmutableSet<ASTField> getFields() {
-        return ImmutableSet.of();
-    }
-
-    @Override
-    public ImmutableSet<ASTConstructor> getConstructors() {
-        return ImmutableSet.of();
-    }
-
-    @Override
-    public boolean isConcreteClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isInterface() {
-        return false;
-    }
-
-    @Override
-    public boolean isFinal() {
-        return false;
-    }
-
-    @Override
-    public boolean isStatic() {
-        return false;
-    }
-
-    @Override
-    public boolean isInnerClass() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnum() {
-        return false;
-    }
-
-    @Override
-    public ASTType getSuperClass() {
-        return null;
-    }
-
-    @Override
-    public ImmutableSet<ASTType> getInterfaces() {
-        return ImmutableSet.of();
-    }
-
-    @Override
-    public ImmutableList<ASTType> getGenericParameters() {
-        return ImmutableList.of();
     }
 
     @Override
@@ -113,31 +46,6 @@ public class ASTIntersectionType implements ASTType {
     @Override
     public PackageClass getPackageClass() {
         return intersection.iterator().next().getPackageClass();
-    }
-
-    @Override
-    public boolean isAnnotated(Class<? extends Annotation> annotation) {
-        return false;
-    }
-
-    @Override
-    public ImmutableSet<ASTAnnotation> getAnnotations() {
-        return ImmutableSet.of();
-    }
-
-    @Override
-    public <A extends Annotation> A getAnnotation(Class<A> annotation) {
-        return null;
-    }
-
-    @Override
-    public ASTAnnotation getASTAnnotation(Class<? extends Annotation> annotation) {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return Joiner.on("&").join(intersection);
     }
 
     @Override

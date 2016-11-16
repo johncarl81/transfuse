@@ -109,6 +109,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return delegate.isAbstract();
+    }
+
+    @Override
     public boolean isInnerClass() {
         return delegate.isInnerClass();
     }

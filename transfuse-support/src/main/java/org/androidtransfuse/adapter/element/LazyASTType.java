@@ -86,6 +86,11 @@ public abstract class LazyASTType implements ASTType, ElementHolder{
     }
 
     @Override
+    public boolean isAbstract() {
+        return getProxy().isAbstract();
+    }
+
+    @Override
     public boolean isStatic() {
         return getProxy().isStatic();
     }

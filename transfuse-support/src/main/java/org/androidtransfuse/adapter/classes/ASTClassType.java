@@ -124,6 +124,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return Modifier.isAbstract(clazz.getModifiers());
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return annotationList;
     }

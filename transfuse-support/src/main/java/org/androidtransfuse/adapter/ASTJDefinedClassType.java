@@ -95,6 +95,11 @@ public class ASTJDefinedClassType implements ASTType{
     }
 
     @Override
+    public boolean isAbstract() {
+        return false;
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }
