@@ -105,7 +105,7 @@ public final class ASTUtils {
         });
     }
 
-    public ASTMethod findMethod(ASTType containingType, String methodName, ASTType[] methodParameters) {
+    public ASTMethod findMethod(ASTType containingType, String methodName, ASTType... methodParameters) {
         MethodSignature matchingSignature = new MethodSignature(methodName, methodParameters);
         for (ASTMethod astMethod : containingType.getMethods()) {
             if(new MethodSignature(astMethod).equals(matchingSignature)){
@@ -115,7 +115,7 @@ public final class ASTUtils {
         return null;
     }
 
-    public boolean methodExists(ASTType containingType, String methodName, ASTType[] methodParameters) {
+    public boolean methodExists(ASTType containingType, String methodName, ASTType... methodParameters) {
         final MethodSignature matchingSignature = new MethodSignature(methodName, methodParameters);
         return FluentIterable.from(containingType.getMethods())
                 .transform(new Function<ASTMethod, MethodSignature>() {
@@ -148,7 +148,7 @@ public final class ASTUtils {
                 });
     }
 
-    public boolean parameterTypesMatch(List<ASTParameter> parameters, ASTType[] types){
+    public boolean parameterTypesMatch(List<ASTParameter> parameters, ASTType... types){
         boolean matches = true;
         if(parameters.size() == types.length) {
             for (int i = 0; i < parameters.size(); i++) {

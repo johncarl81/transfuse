@@ -39,8 +39,13 @@ public class ASTGenericTypeWrapper implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
         return lazyTypeParameterBuilder.buildGenericParameters();
+    }
+
+    @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return astType.getGenericArguments();
     }
 
     public ASTType getWrappedType(){
@@ -149,7 +154,7 @@ public class ASTGenericTypeWrapper implements ASTType {
 
         return new EqualsBuilder()
                 .append(getName(), that.getName())
-                .append(getGenericParameters(), that.getGenericParameters())
+                .append(getGenericArgumentTypes(), that.getGenericArgumentTypes())
                 .isEquals();
     }
 
@@ -163,7 +168,7 @@ public class ASTGenericTypeWrapper implements ASTType {
         StringBuilder builder = new StringBuilder();
 
         builder.append('<');
-        builder.append(StringUtils.join(getGenericParameters(), ","));
+        builder.append(StringUtils.join(getGenericArgumentTypes(), ", "));
         builder.append('>');
 
         return getName() + builder.toString();

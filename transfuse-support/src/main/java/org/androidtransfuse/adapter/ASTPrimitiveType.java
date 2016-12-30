@@ -141,12 +141,17 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return ImmutableList.of();
+    }
+
+    @Override
     public ASTType getSuperClass() {
         return null;
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
         return ImmutableList.of();
     }
 

@@ -39,9 +39,11 @@ public class ASTClassType implements ASTType {
     private final ImmutableSet<ASTField> fields;
     private final ASTType superClass;
     private final ImmutableSet<ASTType> interfaces;
+    private final ImmutableList<ASTGenericArgument> genericArguments;
 
     public ASTClassType(Class<?> clazz,
                         PackageClass packageClass,
+                        ImmutableList<ASTGenericArgument> genericArguments,
                         ImmutableSet<ASTAnnotation> annotationList,
                         ImmutableSet<ASTConstructor> constructors,
                         ImmutableSet<ASTMethod> methods,
@@ -49,6 +51,7 @@ public class ASTClassType implements ASTType {
                         ASTType superClass,
                         ImmutableSet<ASTType> interfaces) {
         this.clazz = clazz;
+        this.genericArguments = genericArguments;
         this.packageClass = packageClass;
         this.annotationList = annotationList;
         this.constructors = constructors;
@@ -168,8 +171,12 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
         return ImmutableList.of();
+    }
+
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return genericArguments;
     }
 
     @Override

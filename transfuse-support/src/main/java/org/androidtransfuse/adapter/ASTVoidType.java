@@ -102,7 +102,12 @@ public enum ASTVoidType implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
         return ImmutableList.of();
     }
 

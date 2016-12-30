@@ -111,8 +111,13 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
-        return getProxy().getGenericParameters();
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
+        return getProxy().getGenericArgumentTypes();
+    }
+
+    @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return getProxy().getGenericArguments();
     }
 
     @Override

@@ -112,6 +112,12 @@ public class ASTEquivalenceTest {
             return false;
         }
 
+        private void equals(ASTGenericArgument comparison, ASTGenericArgument argument) {
+            if(!comparison.equals(argument)) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "Argument " + comparison.getName() + " not equal to argument " + argument);
+            }
+        }
+
         private void equals(ASTType comparison, ASTType astType) {
             if(scanned.contains(comparison.getName())){
                 return;
@@ -182,14 +188,24 @@ public class ASTEquivalenceTest {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Interface lists of unequal size.");
             }
 
-            if(comparison.getGenericParameters().size() == astType.getGenericParameters().size()) {
-                for(int i = 0; i < comparison.getGenericParameters().size(); i++){
-                    equals(comparison.getGenericParameters().get(i), astType.getGenericParameters().get(i));
+            if(comparison.getGenericArgumentTypes().size() == astType.getGenericArgumentTypes().size()) {
+                for(int i = 0; i < comparison.getGenericArgumentTypes().size(); i++){
+                    equals(comparison.getGenericArgumentTypes().get(i), astType.getGenericArgumentTypes().get(i));
                 }
             }
             else {
-                messager.printMessage(Diagnostic.Kind.ERROR, comparison.getName() + " and " + astType.getName() + "Generic Parametrs count differs" + comparison.getGenericParameters().size() + " vs " + astType.getGenericParameters().size());
+                messager.printMessage(Diagnostic.Kind.ERROR, comparison.getName() + " and " + astType.getName() + "Generic Parametrs count differs" + comparison.getGenericArgumentTypes().size() + " vs " + astType.getGenericArgumentTypes().size());
             }
+
+            if(comparison.getGenericArguments().size() == astType.getGenericArguments().size()) {
+                for(int i = 0; i < comparison.getGenericArguments().size(); i++){
+                    equals(comparison.getGenericArguments().get(i), astType.getGenericArguments().get(i));
+                }
+            }
+            else {
+                messager.printMessage(Diagnostic.Kind.ERROR, comparison.getName() + " and " + astType.getName() + "Generic Parametrs count differs" + comparison.getGenericArgumentTypes().size() + " vs " + astType.getGenericArgumentTypes().size());
+            }
+
 
             equals("getPackageClass", comparison.getPackageClass(), astType.getPackageClass());
         }
