@@ -18,12 +18,15 @@ package org.androidtransfuse.gen.variableBuilder;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JInvocation;
+import com.sun.codemodel.JType;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.InjectionBuilderContext;
 import org.androidtransfuse.gen.InjectionExpressionBuilder;
+import org.androidtransfuse.gen.IntentFactoryStrategyGenerator;
 import org.androidtransfuse.gen.variableDecorator.TypedExpressionFactory;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.TypedExpression;
+import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.ExtraUtil;
 
 import javax.inject.Inject;
@@ -72,8 +75,10 @@ public class ExtraVariableBuilder extends ConsistentTypeVariableBuilder {
                 .arg(JExpr.lit(nullable));
 
         if (parcelerWrapped) {
-            getExtraInvocation = ((JExpression) JExpr.cast(generationUtil.ref("org.parceler.ParcelWrapper"),
-                    getExtraInvocation)).invoke("getParcel");
+            JType parcelableType = generationUtil.ref(AndroidLiterals.PARCELABLE);
+            getExtraInvocation = generationUtil.ref(IntentFactoryStrategyGenerator.PARCELS_NAME)
+                    .staticInvoke(IntentFactoryStrategyGenerator.UNWRAP_METHOD)
+                    .arg(JExpr.cast(parcelableType, getExtraInvocation));
         }
 
         return getExtraInvocation;

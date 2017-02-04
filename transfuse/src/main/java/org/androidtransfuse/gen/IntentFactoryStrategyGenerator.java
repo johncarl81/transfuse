@@ -45,6 +45,7 @@ public class IntentFactoryStrategyGenerator implements Generation {
     public static final PackageClass ATPARCEL_NAME = new PackageClass("org.parceler", "Parcel");
     public static final PackageClass PARCELS_NAME = new PackageClass("org.parceler", "Parcels");
     public static final String WRAP_METHOD = "wrap";
+    public static final String UNWRAP_METHOD = "unwrap";
 
     private static final String STRATEGY_EXT = "Strategy";
 
