@@ -18,6 +18,7 @@ package org.androidtransfuse.adapter.classes;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.*;
+import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -61,7 +62,7 @@ public class ASTClassFactory {
         return getType(clazz, null);
     }
 
-    private synchronized ASTType getType(Class<?> clazz, Type genericType) {
+    public synchronized ASTType getType(Class<?> clazz, Type genericType) {
         if(clazz.isArray()){
             return new ASTArrayType(getType(clazz.getComponentType(), genericType));
         }
@@ -72,33 +73,39 @@ public class ASTClassFactory {
 
         ASTType astType = typeCache.get(clazz.getName());
 
+        //wrap with a parametrized type
         if (genericType instanceof ParameterizedType) {
-            //wrap with a parametrized type
-            astType = new ASTGenericTypeWrapper(astType, new LazyParametrizedTypeParameterBuilder((ParameterizedType) genericType, this));
+            astType = new ASTGenericTypeWrapper(astType, new LazyParametrizedTypeParameterBuilder(astType, (ParameterizedType) genericType, this));
+        } else if (genericType instanceof TypeVariable) {
+            astType = new ASTGenericParameterType(new ASTGenericArgument(((TypeVariable) genericType).getName()), astType);
         }
 
         return astType;
     }
 
     private ASTType buildType(Class<?> clazz) {
+        ImmutableList.Builder<ASTGenericArgument> genericArgumentsBuilder = ImmutableList.builder();
         ImmutableSet.Builder<ASTConstructor> constructorBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<ASTMethod> methodBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<ASTField> fieldBuilder = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTType> interfaceBuilder = ImmutableSet.builder();
+        ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
 
         ASTType superClass = null;
         if (clazz.getSuperclass() != null) {
             superClass = getType(clazz.getSuperclass(), clazz.getGenericSuperclass());
         }
 
-        ImmutableSet.Builder<ASTType> interfaceBuilder = ImmutableSet.builder();
-
-        ImmutableSet.Builder<ASTAnnotation> annotationBuilder = ImmutableSet.builder();
-
         PackageClass packageClass = new PackageClass(clazz);
 
         ASTTypeVirtualProxy astClassTypeProxy = new ASTTypeVirtualProxy(packageClass);
 
         typeCache.put(clazz.getName(), astClassTypeProxy);
+
+        TypeVariable<? extends Class<?>>[] typeParameters = clazz.getTypeParameters();
+        for (TypeVariable<? extends Class<?>> typeParameter : typeParameters) {
+            genericArgumentsBuilder.add(new ASTGenericArgument(typeParameter.getName()));
+        }
 
         Class<?>[] classInterfaces = clazz.getInterfaces();
         Type[] classGenericInterfaces = clazz.getGenericInterfaces();
@@ -132,7 +139,10 @@ public class ASTClassFactory {
 
         annotationBuilder.addAll(getAnnotations(clazz));
 
-        ASTType astType = new ASTClassType(clazz, packageClass, annotationBuilder.build(),
+        ASTType astType = new ASTClassType(clazz,
+                packageClass,
+                genericArgumentsBuilder.build(),
+                annotationBuilder.build(),
                 constructorBuilder.build(),
                 methodBuilder.build(),
                 fieldBuilder.build(),

@@ -34,8 +34,8 @@ public class ASTWildcardType extends ASTEmptyType {
 
     public ASTWildcardType(ASTType superBound, ASTType extendsBound) {
         super("?");
-        this.superBound = OBJECT_TYPE.equals(superBound) ? null : superBound;
-        this.extendsBound = OBJECT_TYPE.equals(extendsBound) ? null : extendsBound;
+        this.superBound = superBound != null && superBound.equals(OBJECT_TYPE) ? null : superBound;
+        this.extendsBound = extendsBound != null && extendsBound.equals(OBJECT_TYPE) ? null : extendsBound;
     }
 
     public ASTType getSuperBound() {
@@ -67,5 +67,21 @@ public class ASTWildcardType extends ASTEmptyType {
     @Override
     public int hashCode() {
         return new HashCodeBuilder().appendSuper(super.hashCode()).append(superBound).append(extendsBound).hashCode();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("?");
+        if(superBound != null){
+            builder.append(" super ");
+            builder.append(superBound);
+        }
+        if(extendsBound != null) {
+            builder.append(" extends ");
+            builder.append(extendsBound);
+        }
+        return builder.toString();
     }
 }

@@ -15,23 +15,16 @@
  */
 package org.androidtransfuse.gen;
 
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JPackage;
-import com.sun.codemodel.JType;
-
+import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.ASTArrayType;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.validation.Validator;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Utility class unifying the creation of a basic class from a PackageClass
@@ -100,10 +93,10 @@ public class ClassGenerationUtil {
     public JClass narrowRef(ASTType astType){
         JClass reference = ref(astType);
 
-        if(astType.getGenericParameters().size() > 0){
+        if(astType.getGenericArgumentTypes().size() > 0){
             List<JClass> genericParameterRefs = new ArrayList<JClass>();
 
-            for (ASTType genericParam : astType.getGenericParameters()) {
+            for (ASTType genericParam : astType.getGenericArgumentTypes()) {
                 genericParameterRefs.add(narrowRef(genericParam));
             }
 

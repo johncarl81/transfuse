@@ -59,6 +59,6 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     }
 
     private ASTType getProviderTemplateType(ASTType astType) {
-        return astType.getGenericParameters().iterator().next();
+        return astType.getGenericArgumentTypes().iterator().next();
     }
 }

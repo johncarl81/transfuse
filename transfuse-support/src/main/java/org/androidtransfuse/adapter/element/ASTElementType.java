@@ -22,6 +22,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
 import java.lang.annotation.Annotation;
@@ -36,6 +37,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     private final ASTAccessModifier modifier;
     private final TypeElement typeElement;
     private final PackageClass packageClass;
+    private final ImmutableList<ASTGenericArgument> genericArguments;
     private final ImmutableSet<ASTMethod> methods;
     private final ImmutableSet<ASTConstructor> constructors;
     private final ImmutableSet<ASTField> fields;
@@ -44,7 +46,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
 
     public ASTElementType(ASTAccessModifier modifier, PackageClass packageClass,
                           TypeElement typeElement,
-                          ImmutableSet<ASTConstructor> constructors,
+                          ImmutableList<ASTGenericArgument> genericArguments, ImmutableSet<ASTConstructor> constructors,
                           ImmutableSet<ASTMethod> methods,
                           ImmutableSet<ASTField> fields,
                           ASTType superClass,
@@ -54,6 +56,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
         this.modifier = modifier;
         this.packageClass = packageClass;
         this.typeElement = typeElement;
+        this.genericArguments = genericArguments;
         this.constructors = constructors;
         this.methods = methods;
         this.fields = fields;
@@ -106,6 +109,11 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
+    public boolean isAbstract() {
+        return typeElement.getModifiers().contains(Modifier.ABSTRACT);
+    }
+
+    @Override
     public boolean isInnerClass() {
         return typeElement.getNestingKind() != NestingKind.TOP_LEVEL && !isStatic();
     }
@@ -140,8 +148,13 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
         return ImmutableList.of();
+    }
+
+    @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return genericArguments;
     }
 
     @Override

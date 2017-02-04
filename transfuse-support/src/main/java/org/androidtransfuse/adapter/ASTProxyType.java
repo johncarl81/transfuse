@@ -41,11 +41,11 @@ public class ASTProxyType implements ASTType {
 
     @Override
     public boolean isConcreteClass() {
-        return true;
+        return proxyASTType.isConcreteClass();
     }
 
     public boolean isInterface() {
-        return false;
+        return proxyASTType.isInterface();
     }
 
     @Override
@@ -61,6 +61,11 @@ public class ASTProxyType implements ASTType {
     @Override
     public boolean isStatic() {
         return proxyASTType.isStatic();
+    }
+
+    @Override
+    public boolean isAbstract() {
+        return proxyASTType.isAbstract();
     }
 
     @Override
@@ -110,12 +115,12 @@ public class ASTProxyType implements ASTType {
 
     @Override
     public ASTType getSuperClass() {
-        return null;
+        return proxyASTType.getSuperClass();
     }
 
     @Override
     public ImmutableSet<ASTType> getInterfaces() {
-        return ImmutableSet.of();
+        return proxyASTType.getInterfaces();
     }
 
     @Override
@@ -139,8 +144,13 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
-    public ImmutableList<ASTType> getGenericParameters() {
-        return proxyASTType.getGenericParameters();
+    public ImmutableList<ASTType> getGenericArgumentTypes() {
+        return proxyASTType.getGenericArgumentTypes();
+    }
+
+    @Override
+    public ImmutableList<ASTGenericArgument> getGenericArguments() {
+        return proxyASTType.getGenericArguments();
     }
 
     @Override

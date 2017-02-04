@@ -126,6 +126,7 @@ public class ASTElementFactory {
                 .transform(astTypeBuilderVisitor)
                 .toSet();
 
+        ImmutableList.Builder<ASTGenericArgument> genericArguments = ImmutableList.builder();
         ImmutableSet.Builder<ASTAnnotation> annotations = ImmutableSet.builder();
         ImmutableSet.Builder<ASTConstructor> constructors = ImmutableSet.builder();
         ImmutableSet.Builder<ASTField> fields = ImmutableSet.builder();
@@ -137,9 +138,14 @@ public class ASTElementFactory {
         fields.addAll(transformAST(typeElement.getEnclosedElements(), ASTField.class));
         methods.addAll(transformAST(typeElement.getEnclosedElements(), ASTMethod.class));
 
+        for (TypeParameterElement typeParameter : typeElement.getTypeParameters()) {
+            genericArguments.add(new ASTGenericArgument(typeParameter.toString()));
+        }
+
         ASTType astType = new ASTElementType(buildAccessModifier(typeElement),
                 packageClass,
                 typeElement,
+                genericArguments.build(),
                 constructors.build(),
                 methods.build(),
                 fields.build(),

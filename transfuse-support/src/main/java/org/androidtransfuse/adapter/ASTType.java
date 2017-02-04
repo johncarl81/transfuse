@@ -82,6 +82,13 @@ public interface ASTType extends ASTBase {
     boolean isStatic();
 
     /**
+     * Determins if the given AST type is abstract
+     *
+     * @return abstract status
+     */
+    boolean isAbstract();
+
+    /**
      * Determines if the given AST type is an inner class.
      *
      * @return is inner class
@@ -114,7 +121,9 @@ public interface ASTType extends ASTBase {
      *
      * @return generic parameters
      */
-    ImmutableList<ASTType> getGenericParameters();
+    ImmutableList<ASTType> getGenericArgumentTypes();
+
+    ImmutableList<ASTGenericArgument> getGenericArguments();
 
     /**
      * Determines if the current type inherits (extends or implements) from the given type.
