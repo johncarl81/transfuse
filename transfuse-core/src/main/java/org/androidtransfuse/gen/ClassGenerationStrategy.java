@@ -18,17 +18,11 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.JDefinedClass;
 
 import java.lang.annotation.Annotation;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author John Ericksen
  */
 public class ClassGenerationStrategy {
-
-    // ISO 8601 standard date format
-    private static final DateFormat ISO_8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     private final Class<? extends Annotation> generatedClass;
     private final String generatorName;
@@ -40,7 +34,6 @@ public class ClassGenerationStrategy {
 
     public void annotateGenerated(JDefinedClass definedClass) {
         definedClass.annotate(generatedClass)
-                .param("value", generatorName)
-                .param("date", ISO_8601.format(new Date()));
+                .param("value", generatorName);
     }
 }
