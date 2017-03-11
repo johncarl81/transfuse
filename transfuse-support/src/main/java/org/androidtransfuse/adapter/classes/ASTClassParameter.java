@@ -53,6 +53,11 @@ public class ASTClassParameter implements ASTParameter {
         return annotationMap.containsKey(annotation);
     }
 
+    @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return (A) annotationMap.get(annotation);
     }

@@ -109,6 +109,11 @@ public class ASTProxyType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return proxyASTType.isAnnotated(annotation);
+    }
+
+    @Override
     public ImmutableSet<ASTConstructor> getConstructors() {
         return proxyASTType.getConstructors();
     }

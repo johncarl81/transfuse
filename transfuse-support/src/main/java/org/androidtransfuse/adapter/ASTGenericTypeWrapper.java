@@ -114,6 +114,11 @@ public class ASTGenericTypeWrapper implements ASTType {
         return astType.isAnnotated(annotation);
     }
 
+    @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return astType.getAnnotations();
     }

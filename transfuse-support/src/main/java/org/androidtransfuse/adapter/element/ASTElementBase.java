@@ -18,6 +18,7 @@ package org.androidtransfuse.adapter.element;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTBase;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTUtils;
 
 import javax.lang.model.element.Element;
@@ -41,6 +42,11 @@ public class ASTElementBase implements ASTBase, ElementHolder{
 
     public boolean isAnnotated(Class<? extends Annotation> annotation) {
         return getASTAnnotation(annotation) != null;
+    }
+
+    @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
     }
 
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {

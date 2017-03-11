@@ -65,6 +65,14 @@ public final class ASTUtils {
         return inherits(astType.getSuperClass(), inheritable);
     }
 
+    public boolean isAnnotated(ASTType annotatationType, ImmutableSet<ASTAnnotation> annotations) {
+        return getAnnotation(annotatationType, annotations) != null;
+    }
+
+    public ASTAnnotation getAnnotation(ASTType annotationType, ImmutableSet<ASTAnnotation> annotations) {
+        return getAnnotation(annotationType.getName(), annotations);
+    }
+
     public ASTAnnotation getAnnotation(Class annotationClass, ImmutableSet<ASTAnnotation> annotations) {
         return getAnnotation(annotationClass.getCanonicalName(), annotations);
     }

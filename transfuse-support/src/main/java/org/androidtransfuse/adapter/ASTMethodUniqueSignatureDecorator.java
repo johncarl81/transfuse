@@ -71,6 +71,11 @@ public class ASTMethodUniqueSignatureDecorator implements ASTMethod{
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return method.getAnnotations();
     }

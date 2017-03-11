@@ -63,6 +63,11 @@ public class ASTClassMethod implements ASTMethod {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
+    @Override
     public String getName() {
         return method.getName();
     }

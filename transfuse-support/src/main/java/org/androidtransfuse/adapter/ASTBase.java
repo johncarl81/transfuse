@@ -34,6 +34,14 @@ public interface ASTBase {
      */
     boolean isAnnotated(Class<? extends Annotation> annotation);
 
+    /**
+     * Determines if the current element is annotated with the given annotation class
+     *
+     * @param annotation key
+     * @return annotated conditional
+     */
+    boolean isAnnotated(ASTType annotation);
+
 
     /**
      * Supplies the set of annotations

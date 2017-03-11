@@ -62,6 +62,11 @@ public enum ASTPrimitiveType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return false;
+    }
+
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return null;
     }
