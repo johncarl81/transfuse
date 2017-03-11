@@ -131,6 +131,11 @@ public abstract class LazyASTType implements ASTType, ElementHolder{
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return getProxy().isAnnotated(annotation);
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return getProxy().getAnnotations();
     }

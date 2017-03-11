@@ -63,6 +63,9 @@ public class ASTEquivalenceTest {
 
         public CompareProcessor(ASTType comparison) {
             this.comparison = comparison;
+
+            // Avoids an error accessing sun.invoke.util.Wrapper
+            scanned.add("java.lang.Class");
         }
 
         @Override

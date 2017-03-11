@@ -131,6 +131,11 @@ public class ASTTypeVirtualProxy implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return getProxy().isAnnotated(annotation);
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return getProxy().getAnnotations();
     }

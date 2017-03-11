@@ -119,6 +119,11 @@ public class ASTEmptyType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return false;
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return ImmutableSet.of();
     }

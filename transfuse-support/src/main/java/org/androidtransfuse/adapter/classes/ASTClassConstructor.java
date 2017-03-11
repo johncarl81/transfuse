@@ -52,6 +52,11 @@ public class ASTClassConstructor implements ASTConstructor {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
+    @Override
     public <A extends Annotation> A getAnnotation(Class<A> annotation) {
         return (A) constructor.getAnnotation(annotation);
     }

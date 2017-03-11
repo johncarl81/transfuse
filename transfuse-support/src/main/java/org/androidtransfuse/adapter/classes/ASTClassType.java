@@ -72,6 +72,11 @@ public class ASTClassType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return ASTUtils.getInstance().isAnnotated(annotation, getAnnotations());
+    }
+
+    @Override
     public ASTAccessModifier getAccessModifier() {
         return ASTAccessModifier.getModifier(clazz.getModifiers());
     }

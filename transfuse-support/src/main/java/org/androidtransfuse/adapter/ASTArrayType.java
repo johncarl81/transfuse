@@ -49,6 +49,11 @@ public class ASTArrayType implements ASTType {
     }
 
     @Override
+    public boolean isAnnotated(ASTType annotation) {
+        return delegate.isAnnotated(annotation);
+    }
+
+    @Override
     public ImmutableSet<ASTAnnotation> getAnnotations() {
         return delegate.getAnnotations();
     }
