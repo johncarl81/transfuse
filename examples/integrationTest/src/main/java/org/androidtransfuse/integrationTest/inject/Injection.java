@@ -80,6 +80,12 @@ public class Injection extends InjectionBase {
     @ValueQualifier(IntegrationModule.FIVE_QUALIFIER)
     private String qualifierFive;
     @Inject
+    @Named(IntegrationModule.SIX)
+    private String qualifierSix;
+    @Inject
+    @Named(IntegrationModule.SEVEN)
+    private String qualifierSeven;
+    @Inject
     private TargetFactory targetFactory;
 
     @Inject
@@ -187,6 +193,14 @@ public class Injection extends InjectionBase {
 
     public String getQualifierFive() {
         return qualifierFive;
+    }
+
+    public String getQualifierSix() {
+        return qualifierSix;
+    }
+
+    public String getQualifierSeven() {
+        return qualifierSeven;
     }
 
     public InnerClass getInnerClass() {

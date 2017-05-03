@@ -92,7 +92,7 @@ public class ProviderGenerator {
     }
 
     private InjectionNode unscoped(InjectionNode input){
-        InjectionNode nonScopedInjectionNode = new InjectionNode(input.getSignature(), new InjectionSignature(input.getASTType()));
+        InjectionNode nonScopedInjectionNode = new InjectionNode(input.getSignature(), input.getTypeSignature());
 
         for (Map.Entry<Class, Aspect> aspectEntry : input.getAspects().entrySet()) {
             nonScopedInjectionNode.addAspect(aspectEntry.getKey(), aspectEntry.getValue());
