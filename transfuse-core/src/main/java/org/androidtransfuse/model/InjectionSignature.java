@@ -61,7 +61,7 @@ public class InjectionSignature {
     public String buildScopeKeySignature(){
         StringBuilder builder = new StringBuilder();
 
-        builder.append(type);
+        builder.append(type.getName());
 
         for (ASTAnnotation annotation : annotations) {
             builder.append('@');

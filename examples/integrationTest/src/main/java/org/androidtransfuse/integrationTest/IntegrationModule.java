@@ -31,6 +31,7 @@ import org.androidtransfuse.integrationTest.scope.CustomScope;
 import org.androidtransfuse.integrationTest.scope.MapScope;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.Random;
 
 /**
@@ -64,6 +65,8 @@ public class IntegrationModule extends DependencyModule {
     public static final String THREE = "three";
     public static final String FOUR = "four";
     public static final String FIVE = "five";
+    public static final String SIX = "six";
+    public static final String SEVEN = "seven";
     public static final int FOUR_QUALIFIER = 4;
     public static final int FIVE_QUALIFIER = 5;
 
@@ -107,6 +110,16 @@ public class IntegrationModule extends DependencyModule {
     public String getFive(){
         return FIVE;
     }
+
+    @Provides
+    @Singleton
+    @Named(SIX)
+    public String getSix(){ return SIX;}
+
+    @Provides
+    @Singleton
+    @Named(SEVEN)
+    public String getSeven(){ return SEVEN;}
 
     @Override
     @Provides

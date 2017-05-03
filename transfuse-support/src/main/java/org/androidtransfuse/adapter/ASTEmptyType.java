@@ -110,7 +110,7 @@ public class ASTEmptyType implements ASTType {
 
     @Override
     public boolean inherits(ASTType type) {
-        return false;
+        return ASTUtils.getInstance().inherits(this, type);
     }
 
     @Override

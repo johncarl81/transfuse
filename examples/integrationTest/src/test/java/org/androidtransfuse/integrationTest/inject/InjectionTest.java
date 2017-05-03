@@ -142,6 +142,8 @@ public class InjectionTest {
         assertEquals(IntegrationModule.THREE, injection.getQualifiedThree());
         assertEquals(IntegrationModule.FOUR, injection.getQualifiedFour());
         assertEquals(IntegrationModule.FIVE, injection.getQualifierFive());
+        assertEquals(IntegrationModule.SIX, injection.getQualifierSix());
+        assertEquals(IntegrationModule.SEVEN, injection.getQualifierSeven());
     }
 
     @Test
