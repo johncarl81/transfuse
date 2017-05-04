@@ -15,6 +15,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+	<repositories>
+    <repository>
+        <id>android-support</id>
+        <url>file:///${env.ANDROID_HOME}/extras/android/m2repository</url>
+    </repository>
+	</repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.androidtransfuse</groupId>

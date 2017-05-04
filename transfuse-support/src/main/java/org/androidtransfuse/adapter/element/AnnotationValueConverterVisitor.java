@@ -111,6 +111,7 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
         if(variableElement.getKind() == ElementKind.ENUM_CONSTANT){
+            // valueOf throws an NPE here
             return (T) Enum.valueOf((Class<? extends Enum>) type, variableElement.getSimpleName().toString());
         }
         return null;
