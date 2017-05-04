@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.util.Contract;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -62,6 +63,12 @@ public class InjectionSignature {
         StringBuilder builder = new StringBuilder();
 
         builder.append(type.getName());
+
+        if(!type.getGenericArgumentTypes().isEmpty()) {
+            builder.append('<');
+            builder.append(StringUtils.join(type.getGenericArgumentTypes(), ", "));
+            builder.append('>');
+        }
 
         for (ASTAnnotation annotation : annotations) {
             builder.append('@');
