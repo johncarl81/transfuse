@@ -16,6 +16,7 @@
 package org.androidtransfuse.adapter.element;
 
 import org.androidtransfuse.adapter.ASTAnnotation;
+import org.androidtransfuse.adapter.ASTEnumConstant;
 import org.androidtransfuse.adapter.ASTFactory;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.transaction.TransactionRuntimeException;
@@ -110,23 +111,34 @@ public class AnnotationValueConverterVisitor<T> extends SimpleAnnotationValueVis
 
     @Override
     public T visitEnumConstant(VariableElement variableElement, Void aVoid) {
-        if(variableElement.getKind() == ElementKind.ENUM_CONSTANT){
+        if(variableElement.getKind() == ElementKind.ENUM_CONSTANT && type != null && type.isEnum()){
             return (T) Enum.valueOf((Class<? extends Enum>) type, variableElement.getSimpleName().toString());
+        } else if (type != null && type == String.class) {
+            return (T) variableElement.getSimpleName().toString();
+        } else {
+            return (T) new ASTEnumConstant(variableElement.getSimpleName().toString());
         }
-        return null;
     }
 
     @Override
     public T visitArray(List<? extends AnnotationValue> annotationValues, Void aVoid) {
         List annotationASTTypes = new ArrayList();
 
+        Class componentType;
+        if(type.isArray()) {
+            componentType = type.getComponentType();
+        }
+        else {
+            componentType = Object.class;
+        }
+
         for (AnnotationValue annotationValue : annotationValues) {
             annotationASTTypes.add(annotationValue.accept(
-                    new AnnotationValueConverterVisitor(type.getComponentType(), astTypeBuilderVisitor, astTypeElementConverterFactory, astFactory),
+                    new AnnotationValueConverterVisitor(componentType, astTypeBuilderVisitor, astTypeElementConverterFactory, astFactory),
                     null));
         }
 
-        return (T) annotationASTTypes.toArray((Object[]) Array.newInstance(type.getComponentType(), 0));
+        return (T) annotationASTTypes.toArray((Object[]) Array.newInstance(componentType, annotationASTTypes.size()));
     }
 
     private <P> T visitPrimitive(Class<P> primitiveClazz, Class<P> boxedClass, P value){
