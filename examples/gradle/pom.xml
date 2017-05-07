@@ -29,13 +29,13 @@
             <plugin>
                 <groupId>org.fortasoft</groupId>
                 <artifactId>gradle-maven-plugin</artifactId>
-                <version>1.0.7</version>
+                <version>1.0.8</version>
                 <configuration>
                     <tasks>
                         <task>clean</task>
                         <task>build</task>
                     </tasks>
-                    <gradleVersion>2.12</gradleVersion>
+                    <gradleVersion>3.3</gradleVersion>
                 </configuration>
                 <executions>
                     <execution>

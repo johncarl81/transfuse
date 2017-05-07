@@ -16,20 +16,13 @@
 package org.gradletransfuse;
 
 import org.androidtransfuse.annotations.*;
-import android.support.v7.app.AppCompatActivity;
 
-
-@Activity(type=AppCompatActivity.class)
+@Activity
 @Layout(R.layout.activity_main)
 @IntentFilter({
         @Intent(type = IntentType.ACTION, name = android.content.Intent.ACTION_MAIN),
         @Intent(type = IntentType.CATEGORY, name = android.content.Intent.CATEGORY_LAUNCHER)
 })
 public class Main {
-    private AppCompatActivity activity;
-
-    @javax.inject.Inject
-    public Main(AppCompatActivity activity) {
-        this.activity = activity;
-    }
+    
 }

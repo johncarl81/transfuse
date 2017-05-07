@@ -19,14 +19,12 @@ repositories {
 
 dependencies {
     compile 'com.google.android:android:2.1_r1'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-
     annotationProcessor 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
     compile 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
-    annotationProcessor 'org.parceler:parceler:1.0.4'
-    compile 'org.parceler:parceler-api:1.0.4'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
+    compile 'org.parceler:parceler-api:1.1.6'
 }
-
+ 
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.3'
@@ -37,11 +35,8 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        // figuring out the actual location for the Manifest turns out to be a monumental pain in the ass right now in gradle
-                        // we're going to hard code the location of our manifest.... this will work until we have more than one of them!
                         androidManifestFile: "${project.projectDir.absolutePath}/src/main/AndroidManifest.xml".toString(),
                         transfuseManifestProcessing : "off"
-//                        ,transfuseDebugLogging: "true"
                 ]
             }
         }
