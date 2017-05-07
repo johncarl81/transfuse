@@ -60,11 +60,6 @@ public class ReloadableASTElementFactory implements Function<TypeElement, Provid
         @Override
         public ASTType get() {
             TypeElement typeElement = elements.getTypeElement(elementName);
-
-            if(typeElement == null) {
-                System.out.println("NULL TYPE ELEMENT: " + elementName);
-            }
-
             return astElementFactory.getType(typeElement);
         }
 

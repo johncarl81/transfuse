@@ -66,7 +66,7 @@ public class ASTTypeBuilderVisitor extends SimpleTypeVisitor6<ASTType, Void> imp
 
     @Override
     public ASTType visitError(ErrorType errorType, Void v) {
-        throw new TransactionRuntimeException("Encountered ErrorType " + errorType.asElement().getSimpleName() + ", unable to recover");
+        throw new TransactionRuntimeException("Encountered ErrorType " + errorType.asElement().toString() + ", unable to recover");
     }
 
     @Override
