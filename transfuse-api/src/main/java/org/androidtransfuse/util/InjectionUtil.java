@@ -15,12 +15,10 @@
  */
 package org.androidtransfuse.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 /**
  * Utility class for performing a variety of operations through reflection.  This functionality should be used sparingly
@@ -38,6 +36,9 @@ public final class InjectionUtil {
     private InjectionUtil() {
         //singleton constructor
     }
+
+    public static final class GenericType<T>{}
+
     /**
      * Returns the value of a field.
      *
@@ -63,6 +64,10 @@ public final class InjectionUtil {
         } catch (Exception e) {
             throw new TransfuseInjectionException("Exception during field injection", e);
         }
+    }
+
+    public static <T> T getField(GenericType<T> returnType, Class<?> targetClass, Object target, String field) {
+        return (T) getField(Object.class, targetClass, target, field);
     }
 
     private static final class GetFieldPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Field> {
@@ -152,6 +157,10 @@ public final class InjectionUtil {
         }
     }
 
+    public static <T> T callMethod(GenericType<T> retClass, Class<?> targetClass, Object target, String method, Class[] argClasses, Object[] args) {
+        return (T) callMethod(Object.class, targetClass, target, method, argClasses, args);
+    }
+
     private static final class SetMethodPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Method> {
 
         private final Object target;
@@ -195,6 +204,10 @@ public final class InjectionUtil {
             throw new TransfuseInjectionException("Exception during field injection", e);
         }
         return output;
+    }
+
+    public static <T> T callConstructor(GenericType<T> targetClass, Class[] argClasses, Object[] args) {
+        return (T) callConstructor(Object.class, argClasses, args);
     }
 
     private static final class SetConstructorPrivilegedAction<T> extends AccessibleElementPrivilegedAction<T, Constructor> {

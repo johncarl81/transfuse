@@ -30,7 +30,6 @@ import java.util.List;
  * @author John Ericksen
  */
 public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
-
     private final ClassGenerationUtil generationUtil;
 
     @Inject
@@ -43,7 +42,7 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
 
         //InjectionUtil.setConstructor(Class<T> targetClass, Class[] argClasses,Object[] args)
         JInvocation constructorInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.CALL_CONSTRUCTOR_METHOD)
-                .arg(generationUtil.ref(type).dotclass());
+                .arg(buildTargetType(type));
 
         //add classes
         JArray classArray = JExpr.newArray(generationUtil.ref(Class.class));
@@ -64,7 +63,7 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
         JClass targetType = generationUtil.ref(expression.getType());
         //InjectionUtil.getInstance().setMethod(Class targetClass, Object target, String method, Class[] argClasses,Object[] args)
         JInvocation methodInvocation = generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.CALL_METHOD_METHOD)
-                .arg(generationUtil.ref(method.getReturnType()).dotclass())
+                .arg(buildTargetType(method.getReturnType()))
                 .arg(targetType.dotclass())
                 .arg(expression.getExpression())
                 .arg(method.getName());
@@ -86,7 +85,7 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
     public JExpression buildFieldGet(boolean cast, ASTField field, TypedExpression targetExpression) {
         //InjectionUtil.getInstance().getField(Class returnType, Class targetClass, Object target, String field)
         return generationUtil.ref(InjectionUtil.class).staticInvoke(InjectionUtil.GET_FIELD_METHOD)
-                .arg(generationUtil.ref(field.getASTType()).dotclass())
+                .arg(buildTargetType(field.getASTType()))
                 .arg(generationUtil.ref(targetExpression.getType()).dotclass())
                 .arg(targetExpression.getExpression())
                 .arg(field.getName());
@@ -108,5 +107,14 @@ public class PrivateInvocationBuilder implements ModifiedInvocationBuilder {
             argArray.add(parameter);
         }
         return argArray;
+    }
+
+    private JExpression buildTargetType(ASTType type) {
+        if(type.getGenericArguments().isEmpty()) {
+            return generationUtil.ref(type).dotclass();
+        }
+        else {
+            return JExpr._new(generationUtil.ref(InjectionUtil.GenericType.class).narrow(generationUtil.narrowRef(type)));
+        }
     }
 }
