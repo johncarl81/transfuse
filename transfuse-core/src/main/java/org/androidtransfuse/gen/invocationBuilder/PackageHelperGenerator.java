@@ -100,7 +100,7 @@ public class PackageHelperGenerator {
 
 
     private void buildMethodCall(ASTType returnType, ASTType targetExpressionsType, String methodName, List<ASTType> argTypes, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = generationUtil.ref(returnType);
+        JClass returnTypeRef = generationUtil.narrowRef(returnType);
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
@@ -122,7 +122,7 @@ public class PackageHelperGenerator {
     }
 
     private void buildFieldGet(ASTType returnType, ASTType variableType, String name, String accessorMethodName, JDefinedClass helperClass) {
-        JClass returnTypeRef = generationUtil.ref(returnType);
+        JClass returnTypeRef = generationUtil.narrowRef(returnType);
         //get, ClassName, FG, fieldName
         JMethod accessorMethod = helperClass.method(JMod.PUBLIC | JMod.STATIC, returnTypeRef, accessorMethodName);
 
