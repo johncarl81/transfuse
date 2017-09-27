@@ -1,8 +1,12 @@
 package org.androidtransfuse.adapter;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +16,7 @@ import java.util.Set;
  */
 public final class GenericsUtil {
 
-    private static class TypeArgument{
+    private static class TypeArgument {
         ASTType type;
         ASTGenericArgument argument;
 
@@ -51,15 +55,30 @@ public final class GenericsUtil {
 
     private static final GenericsUtil INSTANCE = new GenericsUtil();
 
-    private GenericsUtil() {}
+    private GenericsUtil() {
+    }
 
     public static GenericsUtil getInstance() {
         return INSTANCE;
     }
 
-    public ASTType getType(ASTType rootType, ASTType containingType, ASTType targetGenericType) {
+    public ASTType getType(final ASTType rootType, final ASTType containingType, final ASTType targetGenericType) {
         if (targetGenericType instanceof ASTGenericParameterType) {
-            return getType(rootType, containingType, ((ASTGenericParameterType)targetGenericType).getArgument());
+            return getType(rootType, containingType, ((ASTGenericParameterType) targetGenericType).getArgument());
+        }
+        if (targetGenericType instanceof ASTGenericTypeWrapper) {
+            return new ASTGenericTypeWrapper(((ASTGenericTypeWrapper) targetGenericType).getWrappedType(),
+                    new LazyTypeParameterBuilder() {
+                        @Override
+                        public ImmutableList<ASTType> buildGenericParameters() {
+                            return FluentIterable.from(targetGenericType.getGenericArgumentTypes())
+                                    .transform(new Function<ASTType, ASTType>() {
+                                        public ASTType apply(ASTType input) {
+                                            return getType(rootType, containingType, input);
+                                        }
+                                    }).toList();
+                        }
+                    });
         }
         return targetGenericType;
     }
@@ -75,7 +94,7 @@ public final class GenericsUtil {
 
     private void recursivePopulate(Map<TypeArgument, TypeArgument> implementations, Map<TypeArgument, ASTType> concretes, ASTType implementationType, ASTType declaredType) {
 
-        if(implementationType != null) {
+        if (implementationType != null) {
             for (int i = 0; i < declaredType.getGenericArgumentTypes().size(); i++) {
                 ASTType genericArgumentType = declaredType.getGenericArgumentTypes().get(i);
                 TypeArgument genericArgument = new TypeArgument(declaredType, declaredType.getGenericArguments().get(i));
