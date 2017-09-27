@@ -4,6 +4,9 @@ import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -13,6 +16,8 @@ public class GenericsUtilTest {
 
     static class SuperType<SuperT, SuperR, SuperS, IntermediateR> {
         public SuperT value;
+        public Map<List<SuperT>, SuperS> collection;
+
 
         public SuperR getValue(SuperS parameter){return null;}
     }
@@ -69,5 +74,20 @@ public class GenericsUtilTest {
         ASTType returnType = GenericsUtil.getInstance().getType(subType, superType, method.getParameters().get(0).getASTType());
 
         assertEquals(targetType3, returnType);
+    }
+
+    @Test
+    public void testGenericTypes() {
+        ASTField field = ASTUtils.getInstance().findField(superType, "collection");
+
+        ASTType value = GenericsUtil.getInstance().getType(subType, superType, field.getASTType());
+
+        List<ASTType> arguments = ((ASTGenericTypeWrapper)value).getGenericArgumentTypes();
+
+        ASTType subArgument1 = arguments.get(0).getGenericArgumentTypes().get(0);
+        ASTType subArgument2 = arguments.get(1);
+
+        assertEquals(targetType1, subArgument1);
+        assertEquals(targetType3, subArgument2);
     }
 }
