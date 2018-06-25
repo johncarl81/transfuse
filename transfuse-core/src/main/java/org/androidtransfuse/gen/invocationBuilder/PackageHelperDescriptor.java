@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.invocationBuilder;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 
 import java.util.HashMap;
@@ -25,18 +26,24 @@ import java.util.Map;
  */
 public class PackageHelperDescriptor {
 
+    private final ASTType target;
     private final PackageClass name;
     private final Map<ConstructorCall, String> constructorMapping = new HashMap<ConstructorCall, String>();
     private final Map<FieldReference, String> fieldSetMapping = new HashMap<FieldReference, String>();
     private final Map<FieldReference, String> fieldGetMapping = new HashMap<FieldReference, String>();
     private final Map<MethodCall, String> methodCallMapping = new HashMap<MethodCall, String>();
 
-    public PackageHelperDescriptor(PackageClass name) {
+    public PackageHelperDescriptor(ASTType target, PackageClass name) {
+        this.target = target;
         this.name = name;
     }
 
     public PackageClass getName() {
         return name;
+    }
+
+    public ASTType getTarget() {
+        return target;
     }
 
     public Map<ConstructorCall, String> getConstructorMapping() {

@@ -109,7 +109,7 @@ public class PackageHelperRepository {
     private PackageHelperDescriptor getPackageHelper(ASTType type) {
         PackageClass helperPackageClass = type.getPackageClass().append("$$").append(PACKAGE_HELPER_NAME);
         if (!packageHelpers.containsKey(helperPackageClass)) {
-            packageHelpers.put(helperPackageClass, new PackageHelperDescriptor(helperPackageClass));
+            packageHelpers.put(helperPackageClass, new PackageHelperDescriptor(type, helperPackageClass));
         }
         return packageHelpers.get(helperPackageClass);
     }

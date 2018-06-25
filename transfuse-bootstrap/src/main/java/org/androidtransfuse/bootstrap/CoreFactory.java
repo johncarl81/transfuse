@@ -76,6 +76,7 @@ public class CoreFactory {
     private final ScopePredicate scopePredicate = new ScopePredicate(astClassFactory);
     private final InstantiationStrategyFactory instantiationStrategyFactory = new InstantiationStrategyFactoryImpl();
     private final Logger log;
+    private final Originating originating = new Originating();
 
     private BootstrapGenerator bootstrapGenerator = null;
 
@@ -136,7 +137,7 @@ public class CoreFactory {
     }
 
     private VariableInjectionBuilder buildVariableInjectionBuilder(){
-        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(variableNamer, classNamer, generationUtil, validator);
+        AOPProxyGenerator aopProxyGenerator = new AOPProxyGenerator(variableNamer, classNamer, generationUtil, validator, originating);
         InjectionExpressionBuilder injectionExpressionBuilder = new InjectionExpressionBuilder();
         injectionExpressionBuilder.setExpressionDecorator(new ExpressionDecoratorFactory(new ConcreteVariableExpressionBuilderFactory()).get());
         ExceptionWrapper exceptionWrapper = new ExceptionWrapper(generationUtil);
@@ -194,7 +195,7 @@ public class CoreFactory {
     }
 
     private ProviderGenerator buildProviderGenerator(){
-        return new ProviderGenerator(providerCache, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer);
+        return new ProviderGenerator(providerCache, buildInjectionGenerator(), instantiationStrategyFactory, generationUtil, variableNamer, classNamer, originating);
     }
 
     private Set<ASTAnalysis> buildAnalysisRepository(){
@@ -234,7 +235,7 @@ public class CoreFactory {
     }
 
     public CodeWriter buildCodeWriter() {
-        return new FilerSourceCodeWriter(filer);
+        return new FilerSourceCodeWriter(filer, originating);
     }
 
     public CodeWriter buildResourceWriter(){
@@ -309,7 +310,7 @@ public class CoreFactory {
                 new MirroredMethodGeneratorFactory(variableNamer, generationUtil),
                 generationUtil,
                 variableNamer,
-                validator);
+                validator, originating);
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {

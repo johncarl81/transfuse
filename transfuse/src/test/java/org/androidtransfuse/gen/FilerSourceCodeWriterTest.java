@@ -47,7 +47,7 @@ public class FilerSourceCodeWriterTest {
         mockFile = mock(JavaFileObject.class);
         mockOutputStream = mock(OutputStream.class);
 
-        codeWriter = new FilerSourceCodeWriter(mockFiler);
+        codeWriter = new FilerSourceCodeWriter(mockFiler, new Originating());
         codeModel = new JCodeModel();
     }
 

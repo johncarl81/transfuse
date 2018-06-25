@@ -35,17 +35,20 @@ import java.util.HashSet;
 public class FilerSourceCodeWriter extends CodeWriter {
 
     private final Filer filer;
+    private final Originating originating;
     private final Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
-    public FilerSourceCodeWriter(Filer filer) {
+    public FilerSourceCodeWriter(Filer filer, Originating originating) {
         this.filer = filer;
+        this.originating = originating;
     }
 
     @Override
     public OutputStream openBinary(JPackage jPackage, String fileName) throws IOException {
-        //generate a source file based on package and filename
-        JavaFileObject sourceFile = filer.createSourceFile(toQualifiedClassName(jPackage, fileName));
+        //generate a source file based on package and fileName
+        String qualified = toQualifiedClassName(jPackage, fileName);
+        JavaFileObject sourceFile = filer.createSourceFile(qualified, originating.getOriginatingElements(qualified));
 
         OutputStream os = sourceFile.openOutputStream();
         openStreams.add(os);

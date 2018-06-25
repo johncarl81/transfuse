@@ -48,6 +48,7 @@ public class ProviderGenerator {
     private final ClassGenerationUtil generationUtil;
     private final UniqueVariableNamer variableNamer;
     private final ClassNamer classNamer;
+    private final Originating originating;
 
     @Singleton
     public static class ProviderCache {
@@ -71,13 +72,14 @@ public class ProviderGenerator {
     }
 
     @Inject
-    public ProviderGenerator(ProviderCache cache, InjectionFragmentGenerator injectionFragmentGenerator, InstantiationStrategyFactory instantiationStrategyFactory, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer) {
+    public ProviderGenerator(ProviderCache cache, InjectionFragmentGenerator injectionFragmentGenerator, InstantiationStrategyFactory instantiationStrategyFactory, ClassGenerationUtil generationUtil, UniqueVariableNamer variableNamer, ClassNamer classNamer, Originating originating) {
         this.cache = cache;
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.generationUtil = generationUtil;
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
+        this.originating = originating;
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode, boolean removeScope) {
@@ -113,6 +115,8 @@ public class ProviderGenerator {
                     .build();
 
             JDefinedClass providerClass = generationUtil.defineClass(providerClassName);
+            originating.associate(providerClassName.getFullyQualifiedName(), injectionNode.getASTType());
+
 
             providerClass._implements(generationUtil.ref(Provider.class).narrow(injectionNodeClassRef));
 

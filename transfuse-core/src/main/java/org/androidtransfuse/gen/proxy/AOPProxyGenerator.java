@@ -23,6 +23,7 @@ import org.androidtransfuse.analysis.astAnalyzer.ASTInjectionAspect;
 import org.androidtransfuse.aop.MethodInterceptorChain;
 import org.androidtransfuse.gen.ClassGenerationUtil;
 import org.androidtransfuse.gen.ClassNamer;
+import org.androidtransfuse.gen.Originating;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 import org.androidtransfuse.model.ConstructorInjectionPoint;
 import org.androidtransfuse.model.InjectionNode;
@@ -48,13 +49,15 @@ public class AOPProxyGenerator {
     private final ClassNamer classNamer;
     private final ClassGenerationUtil generationUtil;
     private final Validator validator;
+    private final Originating originating;
 
     @Inject
-    public AOPProxyGenerator(UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator) {
+    public AOPProxyGenerator(UniqueVariableNamer variableNamer, ClassNamer classNamer, ClassGenerationUtil generationUtil, Validator validator, Originating originating) {
         this.variableNamer = variableNamer;
         this.classNamer = classNamer;
         this.generationUtil = generationUtil;
         this.validator = validator;
+        this.originating = originating;
     }
 
     public InjectionNode generateProxy(InjectionNode injectionNode) {
@@ -72,6 +75,7 @@ public class AOPProxyGenerator {
                     .build();
 
             definedClass = generationUtil.defineClass(aopClassName);
+            originating.associate(aopClassName.getFullyQualifiedName(), injectionNode.getASTType());
 
             //extending injectionNode
             definedClass._extends(generationUtil.ref(injectionNode.getASTType()));
