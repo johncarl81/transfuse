@@ -54,6 +54,7 @@ public class FactoryGenerator {
     private final ModuleRepository injectionNodeBuilderRepositoryFactory;
     private final UniqueVariableNamer variableNamer;
     private final Validator validator;
+    private final Originating originating;
 
     @Inject
     public FactoryGenerator(InjectionFragmentGenerator injectionFragmentGenerator,
@@ -64,7 +65,7 @@ public class FactoryGenerator {
                             MirroredMethodGeneratorFactory mirroredMethodGeneratorFactory,
                             ClassGenerationUtil generationUtil,
                             UniqueVariableNamer variableNamer,
-                            Validator validator) {
+                            Validator validator, Originating originating) {
         this.injectionFragmentGenerator = injectionFragmentGenerator;
         this.instantiationStrategyFactory = instantiationStrategyFactory;
         this.analysisContextFactory = analysisContextFactory;
@@ -75,6 +76,7 @@ public class FactoryGenerator {
         this.injectionNodeBuilderRepositoryFactory = injectionNodeBuilderRepositoryFactory;
         this.variableNamer = variableNamer;
         this.validator = validator;
+        this.originating = originating;
     }
 
     public static PackageClass getFactoryName(ASTType factoryType) {
@@ -99,6 +101,8 @@ public class FactoryGenerator {
             PackageClass factoryClassName = getFactoryName(descriptor.getPackageClass());
 
             JDefinedClass implClass = generationUtil.defineClass(factoryClassName);
+            originating.associate(factoryClassName.getFullyQualifiedName(), descriptor);
+
             JClass interfaceClass = generationUtil.ref(descriptor);
 
             //scope holder definition

@@ -21,6 +21,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.ASTVoidType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.gen.ClassGenerationUtil;
+import org.androidtransfuse.gen.Originating;
 import org.androidtransfuse.gen.UniqueVariableNamer;
 
 import javax.inject.Inject;
@@ -36,21 +37,25 @@ public class PackageHelperGenerator {
     private final JCodeModel codeModel;
     private final UniqueVariableNamer namer;
     private final ClassGenerationUtil generationUtil;
+    private final Originating originating;
 
     @Inject
     public PackageHelperGenerator(PackageHelperRepository repository,
                                   JCodeModel codeModel,
                                   UniqueVariableNamer namer,
-                                  ClassGenerationUtil generationUtil) {
+                                  ClassGenerationUtil generationUtil,
+                                  Originating originating) {
         this.repository = repository;
         this.codeModel = codeModel;
         this.namer = namer;
         this.generationUtil = generationUtil;
+        this.originating = originating;
     }
 
     public void generate() {
         for (PackageHelperDescriptor packageHelper : repository.getPackageHelpers()) {
             JDefinedClass packageHelperClass = buildPackageHelper(packageHelper.getName());
+            originating.associate(packageHelper.getName().getFullyQualifiedName(), packageHelper.getTarget());
 
             //constructor
             for (Map.Entry<ConstructorCall, String> constructorEntry : packageHelper.getConstructorMapping().entrySet()) {
