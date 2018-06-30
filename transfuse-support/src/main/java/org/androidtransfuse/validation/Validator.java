@@ -23,22 +23,27 @@ import org.androidtransfuse.adapter.element.ElementHolder;
 import javax.annotation.processing.Messager;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.tools.Diagnostic;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
  */
+@Singleton
 public class Validator {
 
     public static final String LOG_PREPEND = "logPrepend";
 
     private final String prepend;
     private final Messager messager;
+    private final Set<ASTBase> suppressWarnings = new HashSet<ASTBase>();
     private boolean inError = false;
 
     @Inject
@@ -62,6 +67,7 @@ public class Validator {
         private Element element;
         private AnnotationMirror annotation;
         private AnnotationValue value;
+        private boolean suppress = false;
 
         private ValidationBuilder(Diagnostic.Kind kind, String message){
             //empty utility class constructor
@@ -72,6 +78,9 @@ public class Validator {
         public ValidationBuilder element(ASTBase astBase){
             if(astBase instanceof ElementHolder){
                 this.element = ((ElementHolder)astBase).getElement();
+            }
+            if(kind == Diagnostic.Kind.WARNING && suppressWarnings.contains(astBase)) {
+                this.suppress = true;
             }
             return this;
         }
@@ -99,25 +108,25 @@ public class Validator {
         public void build(){
             inError = kind == Diagnostic.Kind.ERROR;
             if(element != null){
-                if(annotation != null){
-                    if(value != null){
+                if(!suppress) {
+                    if (annotation != null) {
+                        if (value != null) {
+                            messager.printMessage(kind,
+                                    message,
+                                    element,
+                                    annotation,
+                                    value);
+                        } else {
+                            messager.printMessage(kind,
+                                    message,
+                                    element,
+                                    annotation);
+                        }
+                    } else {
                         messager.printMessage(kind,
                                 message,
-                                element,
-                                annotation,
-                                value);
+                                element);
                     }
-                    else{
-                        messager.printMessage(kind,
-                                message,
-                                element,
-                                annotation);
-                    }
-                }
-                else{
-                    messager.printMessage(kind,
-                            message,
-                            element);
                 }
             }
             else{
@@ -129,5 +138,9 @@ public class Validator {
 
     public boolean isInError() {
         return inError;
+    }
+
+    public void addSuppression(ASTBase ast) {
+        this.suppressWarnings.add(ast);
     }
 }
