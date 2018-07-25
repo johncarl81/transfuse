@@ -18,11 +18,14 @@ package org.androidtransfuse.gen;
 import com.google.common.collect.ImmutableMap;
 import com.sun.codemodel.*;
 import org.androidtransfuse.Factories;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.scope.Scopes;
 import org.androidtransfuse.util.Repository;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.Map;
 
 /**
@@ -36,13 +39,23 @@ public class FactoriesGenerator extends AbstractRepositoryGenerator<JDefinedClas
     private final ClassGenerationUtil generationUtil;
     private final ClassNamer classNamer;
     private final UniqueVariableNamer variableNamer;
+    private final Boolean libraryProject;
 
     @Inject
-    public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer) {
+    public FactoriesGenerator(ClassGenerationUtil generationUtil, ClassNamer classNamer, UniqueVariableNamer variableNamer, @Named("libraryProject") Boolean libraryProject) {
         super(Repository.class, generationUtil, variableNamer, REPOSITORY_NAME, Factories.FactoryBuilder.class);
         this.generationUtil = generationUtil;
         this.classNamer = classNamer;
         this.variableNamer = variableNamer;
+        this.libraryProject = libraryProject;
+    }
+
+    @Override
+    public JDefinedClass generate(Map<Provider<ASTType>, JDefinedClass> aggregate) {
+        if(libraryProject) {
+            return null;
+        }
+        return super.generate(aggregate);
     }
 
     @Override

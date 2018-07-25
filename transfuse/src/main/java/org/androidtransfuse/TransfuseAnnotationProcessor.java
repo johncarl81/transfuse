@@ -24,6 +24,7 @@ import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.classes.ReloadableASTClassFactory;
 import org.androidtransfuse.adapter.element.ASTElementConverterFactory;
+import org.androidtransfuse.adapter.element.ASTElementFactory;
 import org.androidtransfuse.adapter.element.ReloadableASTElementFactory;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.Bootstrap;
@@ -41,20 +42,24 @@ import org.androidtransfuse.scope.ScopeKey;
 import org.androidtransfuse.util.Logger;
 import org.androidtransfuse.util.ManifestLocator;
 import org.androidtransfuse.util.ManifestSerializer;
+import org.androidtransfuse.util.TypeMirrorUtil;
 
+import javax.annotation.Nullable;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedOptions;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.ElementFilter;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Collections2.transform;
@@ -84,6 +89,12 @@ import static com.google.common.collect.Collections2.transform;
         Install.class})
 @Bootstrap
 @AutoService(Processor.class)
+@SupportedOptions({
+        TransfuseAndroidModule.DEBUG,
+        TransfuseAndroidModule.MANIFEST_FILE,
+        TransfuseAndroidModule.ORIGINAL_MANIFEST,
+        TransfuseAndroidModule.STACKTRACE
+})
 public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
 
     @Inject
@@ -97,6 +108,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     @Inject
     private ReloadableASTClassFactory reloadableASTClassFactory;
     @Inject
+    private ASTElementFactory astElementFactory;
+    @Inject
     private ManifestLocator manifestLocator;
     @Inject
     private Logger log;
@@ -109,6 +122,8 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private Elements elements;
     private boolean baseModuleConfiguration = false;
     private int round = 0;
+    private boolean libraryProject = false;
+    private String namspace = "";
 
     @Override
     public void init(final ProcessingEnvironment processingEnv) {
@@ -129,15 +144,28 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         File manifestFile = manifestLocator.findManifest();
         Manifest manifest = manifestParser.readManifest(manifestFile);
 
-        RResourceComposite r = new RResourceComposite(
-                buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
-                buildR(rBuilder, "android.R"));
+        RResource[] rResources = FluentIterable.from(getRClasses(roundEnvironment))
+                .transform(new Function<String, RResource>() {
+                    public RResource apply(String aClass) {
+                        return buildR(rBuilder, aClass);
+                    }
+                })
+                .append(
+                        buildR(rBuilder, manifest.getApplicationPackage() + ".R"),
+                        buildR(rBuilder, manifest.getApplicationPackage() + ".RBridge"),
+                        buildR(rBuilder, "android.R")
+                )
+                .toArray(RResource.class);
+
+        RResourceComposite r = new RResourceComposite(rResources);
 
         configurationScope.enter();
 
         configurationScope.seed(ScopeKey.of(File.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.MANIFEST_FILE + ")"), manifestFile);
         configurationScope.seed(ScopeKey.of(RResource.class), r);
         configurationScope.seed(ScopeKey.of(Manifest.class).annotatedBy("@javax.inject.Named(value=" + TransfuseAndroidModule.ORIGINAL_MANIFEST + ")"), manifest);
+        configurationScope.seed(ScopeKey.of(Boolean.class).annotatedBy("@javax.inject.Named(value=libraryProject)"), isLibraryProject(roundEnvironment));
+        configurationScope.seed(ScopeKey.of(String.class).annotatedBy("@javax.inject.Named(value=namespace)"), getNamespace(roundEnvironment));
 
         TransfuseProcessor transfuseProcessor = processorProvider.get();
 
@@ -172,8 +200,7 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
     private RResource buildR(RBuilder rBuilder, String className) {
         TypeElement rTypeElement = elements.getTypeElement(className);
         if (rTypeElement != null) {
-            Collection<ASTType> rInnerTypes = wrapASTCollection(ElementFilter.typesIn(rTypeElement.getEnclosedElements()));
-            return rBuilder.buildR(rInnerTypes);
+            return rBuilder.buildR(astElementFactory.getType(rTypeElement).getInnerTypes());
         }
         return null;
     }
@@ -200,11 +227,11 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
                         .toList());
     }
 
-    private Set<? extends Element> findInstalledComponents(RoundEnvironment round, final Class<? extends Annotation> annotation) {
+    private Set<? extends TypeElement> findInstalledComponents(RoundEnvironment round, final Class<? extends Annotation> annotation) {
         Collection<ASTType> annotatedClasses =transform(round.getElementsAnnotatedWith(Install.class),
                 astElementConverterFactory.buildASTElementConverter(ASTType.class));
 
-        ImmutableSet.Builder<Element> builder = ImmutableSet.builder();
+        ImmutableSet.Builder<TypeElement> builder = ImmutableSet.builder();
 
         for (ASTType annotatedClass : annotatedClasses) {
             ASTAnnotation installAstAnnotation = annotatedClass.getASTAnnotation(Install.class);
@@ -221,16 +248,63 @@ public class TransfuseAnnotationProcessor extends AnnotationProcessorBase {
         return builder.build();
     }
 
-    private Collection<ASTType> wrapASTCollection(Collection<? extends TypeElement> elementCollection) {
-        return transform(elementCollection,
-                astElementConverterFactory.buildASTElementConverter(ASTType.class)
-        );
-    }
-
     @Override
     public Set<String> getSupportedOptions() {
         return ImmutableSet.of(
                 GenerateModuleProcessor.MANIFEST_PROCESSING_OPTION,
                 ManifestLocator.ANDROID_MANIFEST_FILE_OPTION);
+    }
+
+    private boolean isLibraryProject(RoundEnvironment roundEnvironment) {
+        for(ASTType modules : getASTTypesAnnotatedBy(roundEnvironment, TransfuseModule.class)) {
+            if(modules.getAnnotation(TransfuseModule.class).library()) {
+                libraryProject = true;
+            }
+        }
+        return libraryProject;
+    }
+
+    private String getNamespace(RoundEnvironment roundEnvironment) {
+        for(ASTType modules : getASTTypesAnnotatedBy(roundEnvironment, TransfuseModule.class)) {
+            if(!modules.getAnnotation(TransfuseModule.class).namespace().isEmpty()) {
+                namspace = modules.getAnnotation(TransfuseModule.class).namespace();
+            }
+        }
+        return namspace;
+    }
+
+    private Iterable<String> getRClasses(RoundEnvironment roundEnvironment) {
+        return FluentIterable.from(getASTTypesAnnotatedBy(roundEnvironment, TransfuseModule.class))
+                .transformAndConcat(new Function<ASTType, List<? extends TypeMirror>>() {
+                    public List<? extends TypeMirror> apply(ASTType astType) {
+                        return TypeMirrorUtil.getTypeMirrors(astType.getAnnotation(TransfuseModule.class), "rFiles");
+                    }
+                }).transform(new Function<TypeMirror, String>() {
+                    public String apply(TypeMirror aClass) {
+                        return aClass.toString();
+                    }
+                });
+    }
+
+    private Iterable<ASTType> getASTTypesAnnotatedBy(RoundEnvironment roundEnvironment, Class<? extends Annotation> annotation) {
+        return FluentIterable.from(roundEnvironment.getElementsAnnotatedWith(annotation))
+                .filter(new Predicate<Element>() {
+                    public boolean apply(Element element) {
+                        //we're only dealing with TypeElements
+                        return element instanceof TypeElement;
+                    }
+                })
+                .transform(new Function<Element, TypeElement>() {
+                    public TypeElement apply(Element element) {
+                        return (TypeElement) element;
+                    }
+                })
+                .transform(new Function<TypeElement, ASTType>() {
+                    @Nullable
+                    @Override
+                    public ASTType apply(@Nullable TypeElement element) {
+                        return astElementFactory.getType(element);
+                    }
+                });
     }
 }

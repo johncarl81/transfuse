@@ -146,4 +146,18 @@ public class TestTransfuseAndroidModule {
     public JCodeModel getCodeModel(){
         return new JCodeModel();
     }
+
+    @Provides
+    @ConfigurationScope
+    @Named("libraryProject")
+    public Boolean provideLibraryProject(){
+        return false;
+    }
+
+    @Provides
+    @ConfigurationScope
+    @Named("namespace")
+    public String provideNamespace(){
+        return "Transfuse";
+    }
 }

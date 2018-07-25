@@ -42,6 +42,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     private final ImmutableSet<ASTConstructor> constructors;
     private final ImmutableSet<ASTField> fields;
     private final ImmutableSet<ASTType> interfaces;
+    private final ImmutableSet<ASTType> innerTypes;
     private final ASTType superClass;
 
     public ASTElementType(ASTAccessModifier modifier, PackageClass packageClass,
@@ -51,7 +52,8 @@ public class ASTElementType extends ASTElementBase implements ASTType {
                           ImmutableSet<ASTField> fields,
                           ASTType superClass,
                           ImmutableSet<ASTType> interfaces,
-                          ImmutableSet<ASTAnnotation> annotations) {
+                          ImmutableSet<ASTAnnotation> annotations,
+                          ImmutableSet<ASTType> innerTypes) {
         super(typeElement, annotations);
         this.modifier = modifier;
         this.packageClass = packageClass;
@@ -62,6 +64,7 @@ public class ASTElementType extends ASTElementBase implements ASTType {
         this.fields = fields;
         this.superClass = superClass;
         this.interfaces = interfaces;
+        this.innerTypes = innerTypes;
     }
 
     @Override
@@ -72,6 +75,11 @@ public class ASTElementType extends ASTElementBase implements ASTType {
     @Override
     public PackageClass getPackageClass() {
         return packageClass;
+    }
+
+    @Override
+    public ImmutableSet<ASTType> getInnerTypes() {
+        return innerTypes;
     }
 
     @Override

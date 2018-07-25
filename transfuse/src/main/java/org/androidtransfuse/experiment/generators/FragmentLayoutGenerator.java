@@ -17,6 +17,7 @@ package org.androidtransfuse.experiment.generators;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTMethod;
 import org.androidtransfuse.adapter.ASTParameter;
 import org.androidtransfuse.adapter.ASTType;
@@ -120,9 +121,9 @@ public class FragmentLayoutGenerator implements Generation {
                 boolean handled = false;
 
                 if (target.isAnnotated(Layout.class)) {
-                    Layout layoutAnnotation = target.getAnnotation(Layout.class);
+                    ASTAnnotation layoutAnnotation = target.getASTAnnotation(Layout.class);
 
-                    Integer layout = layoutAnnotation == null ? null : layoutAnnotation.value();
+                    Integer layout = layoutAnnotation == null ? null : layoutAnnotation.getProperty("value", Integer.class);
 
                     isNullconditionalBlock.assign(viewDeclaration, methodDescriptor.getExpression(AndroidLiterals.LAYOUT_INFLATER).getExpression()
                             .invoke("inflate")

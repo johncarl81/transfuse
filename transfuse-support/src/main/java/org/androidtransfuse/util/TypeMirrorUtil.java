@@ -16,8 +16,10 @@
 package org.androidtransfuse.util;
 
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * Scab class to access the Class paramters of annotations.
@@ -40,6 +42,24 @@ public final class TypeMirrorUtil {
         } catch (InvocationTargetException invocationException) {
             if(invocationException.getCause() instanceof MirroredTypeException){
                 return ((MirroredTypeException)invocationException.getCause()).getTypeMirror();
+            }
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", invocationException);
+        } catch (IllegalAccessException e) {
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", e);
+        } catch (NoSuchMethodException e) {
+            throw new TransfuseRuntimeException("Error invoking annotation parameter", e);
+        }
+        return null;
+    }
+
+    public static List<? extends TypeMirror> getTypeMirrors(Object annotation, String parameter){
+        try {
+            annotation.getClass().getMethod(parameter).invoke(annotation);
+        } catch (MirroredTypeException mte) {
+
+        } catch (InvocationTargetException invocationException) {
+            if(invocationException.getCause() instanceof MirroredTypesException){
+                return ((MirroredTypesException)invocationException.getCause()).getTypeMirrors();
             }
             throw new TransfuseRuntimeException("Error invoking annotation parameter", invocationException);
         } catch (IllegalAccessException e) {

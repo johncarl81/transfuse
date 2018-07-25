@@ -54,7 +54,7 @@ public class ResourceInjectionNodeBuilder extends InjectionNodeBuilderSingleAnno
     @Override
     public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context, ASTAnnotation annotation) {
         Integer resourceId = annotation.getProperty("value", Integer.class);
-
+        
         InjectionNode injectionNode = analyzer.analyze(signature, context);
 
         JType resourceType = generationUtil.type(signature.getType());

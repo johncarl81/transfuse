@@ -139,4 +139,6 @@ public interface ASTType extends ASTBase {
      * @return package class.
      */
     PackageClass getPackageClass();
+
+    ImmutableSet<ASTType> getInnerTypes();
 }

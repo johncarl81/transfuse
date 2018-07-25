@@ -1,1 +1,1 @@
-include ':GradleTransfuse'
+include ':GradleTransfuse', ':testlibrary'

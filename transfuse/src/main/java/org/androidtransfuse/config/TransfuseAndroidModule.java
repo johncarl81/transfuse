@@ -32,6 +32,7 @@ import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.bootstrap.BootstrapModule;
 import org.androidtransfuse.bootstrap.Namespace;
 import org.androidtransfuse.gen.ClassGenerationStrategy;
+import org.androidtransfuse.gen.ClassNamer;
 import org.androidtransfuse.gen.InjectionBuilderContextFactory;
 import org.androidtransfuse.gen.InstantiationStrategyFactory;
 import org.androidtransfuse.gen.invocationBuilder.DefaultInvocationBuilderStrategy;
@@ -42,6 +43,8 @@ import org.androidtransfuse.gen.variableDecorator.VariableExpressionBuilderFacto
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.r.RResource;
 import org.androidtransfuse.processor.*;
+import org.androidtransfuse.rbridge.RBridgeProcessor;
+import org.androidtransfuse.rbridge.RBridgeWorker;
 import org.androidtransfuse.transaction.ScopedTransactionBuilder;
 import org.androidtransfuse.transaction.TransactionProcessor;
 import org.androidtransfuse.transaction.TransactionProcessorChannel;
@@ -196,6 +199,26 @@ public class TransfuseAndroidModule {
     }
 
     @Provides
+    @ConfigurationScope
+    @Named("libraryProject")
+    public Boolean provideLibraryProject(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    @Named("namespace")
+    public String provideNamespace(){
+        throw new OutOfScopeException("Expected seeded object, unable to construct directly.");
+    }
+
+    @Provides
+    @ConfigurationScope
+    public ClassNamer provideClassNamer(@Named("namespace") String namespace){
+        return new ClassNamer(namespace);
+    }
+
+    @Provides
     public FactoryProcessor getFactoryProcessor(Provider<FactoryTransactionWorker> factoryTransactionWorkerProvider,
                                                 Provider<FactoriesTransactionWorker> factoriesTransactionWorkerProvider,
                                                 ScopedTransactionBuilder scopedTransactionBuilder) {
@@ -232,5 +255,16 @@ public class TransfuseAndroidModule {
         repository.add(new InheritsMatcher(astClassFactory.getType(Serializable.class)), new SimplePropertyBuilder("getSerializable", "putSerializable"));
 
         return repository;
+    }
+
+    @Provides
+    @Singleton
+    public RBridgeProcessor buildRBridgeProcessor(Provider<RBridgeWorker> rbridgeTransactionFactory,
+                                                  ScopedTransactionBuilder scopedTransactionBuilder,
+                                                  Logger logger){
+
+        TransactionProcessorPool<Provider<ASTType>, JDefinedClass> workingPool = new TransactionProcessorPool<Provider<ASTType>, JDefinedClass>();
+
+        return new RBridgeProcessor(workingPool, workingPool, rbridgeTransactionFactory, scopedTransactionBuilder, logger);
     }
 }

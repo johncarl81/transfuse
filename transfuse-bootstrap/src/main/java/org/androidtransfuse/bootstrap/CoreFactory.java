@@ -314,7 +314,7 @@ public class CoreFactory {
     }
 
     public FactoriesGenerator buildFactoriesGenerator() {
-        return new FactoriesGenerator(generationUtil, classNamer, variableNamer);
+        return new FactoriesGenerator(generationUtil, classNamer, variableNamer, false);
     }
 
     public VirtualProxyGenerator buildVirtualProxyGenerator(){
