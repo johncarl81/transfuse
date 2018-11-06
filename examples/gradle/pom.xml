@@ -35,7 +35,7 @@
                         <task>clean</task>
                         <task>build</task>
                     </tasks>
-                    <gradleVersion>3.3</gradleVersion>
+                    <gradleVersion>4.8</gradleVersion>
                 </configuration>
                 <executions>
                     <execution>
