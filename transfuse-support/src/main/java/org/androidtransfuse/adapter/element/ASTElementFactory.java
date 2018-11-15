@@ -41,7 +41,6 @@ import java.util.*;
 public class ASTElementFactory {
 
     private final Map<TypeElement, ASTType> typeCache = new HashMap<TypeElement, ASTType>();
-    private final Map<PackageClass, ASTType> blacklist = new HashMap<PackageClass, ASTType>();
 
     private final ASTElementConverterFactory astElementConverterFactory;
     private final ASTTypeBuilderVisitor astTypeBuilderVisitor;
@@ -60,15 +59,6 @@ public class ASTElementFactory {
         this.astTypeBuilderVisitor = astTypeBuilderVisitor;
         this.astElementConverterFactory = astElementConverterFactory;
         this.log = log;
-
-        //blacklist
-        // this is to work around a bug in the support library
-        // https://code.google.com/p/android/issues/detail?id=175086
-        blacklist.put(new PackageClass("android.support.v4.app", "DialogFragment"),
-                        new ASTStubType("android.support.v4.app.DialogFragment", "android.support.v4.app.Fragment"));
-
-        blacklist.put(new PackageClass("android.support.v4.widget", "DrawerLayout"),
-                        new ASTStubType("android.support.v4.widget.DrawerLayout", "android.view.ViewGroup"));
     }
 
     public ASTType buildASTElementType(DeclaredType declaredType) {
@@ -109,10 +99,6 @@ public class ASTElementFactory {
         //build placeholder for ASTElementType and contained data structures to allow for children population
         //while avoiding back link loops
         PackageClass packageClass = buildPackageClass(typeElement);
-
-        if (blacklist.containsKey(packageClass)) {
-            return blacklist.get(packageClass);
-        }
 
         ASTTypeVirtualProxy astTypeProxy = new ASTTypeVirtualProxy(packageClass);
         try{
