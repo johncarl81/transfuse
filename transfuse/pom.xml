@@ -185,7 +185,6 @@
                     <additionalparam>
                         --attribute data-uri
                         --gem-path ${env.GEM_PATH}
-                        -r asciidoctor-diagram
                         --base-dir ${project.basedir}
                     </additionalparam>
                     <linksource>true</linksource>
