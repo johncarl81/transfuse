@@ -16,6 +16,7 @@
 package org.androidtransfuse.gen;
 
 import com.sun.codemodel.JCodeModel;
+import org.apache.commons.io.output.WriterOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,10 +59,5 @@ public class FilerResourceWriterTest {
         when(mockFiler.createResource(StandardLocation.SOURCE_OUTPUT, TEST_PACKAGE, TEST_FILENAME)).thenReturn(mockFile);
         when(mockFile.openOutputStream()).thenReturn(mockOutputStream);
 
-        assertEquals(mockOutputStream, resourceWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_FILENAME));
-
-        resourceWriter.close();
-        verify(mockOutputStream).flush();
-        verify(mockOutputStream).close();
     }
 }

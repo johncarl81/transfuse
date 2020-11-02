@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashSet;
+import org.apache.commons.io.output.WriterOutputStream;
 
 /**
  * Adapter class to allow codemodel to write its output source and source files to the Java Annotation Processor Filer
@@ -36,7 +37,6 @@ public class FilerSourceCodeWriter extends CodeWriter {
 
     private final Filer filer;
     private final Originating originating;
-    private final Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
     public FilerSourceCodeWriter(Filer filer, Originating originating) {
@@ -50,9 +50,8 @@ public class FilerSourceCodeWriter extends CodeWriter {
         String qualified = toQualifiedClassName(jPackage, fileName);
         JavaFileObject sourceFile = filer.createSourceFile(qualified, originating.getOriginatingElements(qualified));
 
-        OutputStream os = sourceFile.openOutputStream();
-        openStreams.add(os);
 
+        OutputStream os = new WriterOutputStream(sourceFile.openWriter());
         return os;
     }
 
@@ -62,9 +61,6 @@ public class FilerSourceCodeWriter extends CodeWriter {
 
     @Override
     public void close() throws IOException {
-        for (OutputStream openStream : openStreams) {
-            openStream.flush();
-            openStream.close();
-        }
+
     }
 }

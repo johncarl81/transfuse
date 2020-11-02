@@ -56,11 +56,7 @@ public class FilerSourceCodeWriterTest {
 
         when(mockFiler.createSourceFile(TEST_PACKAGE + "." + TEST_CLASS)).thenReturn(mockFile);
         when(mockFile.openOutputStream()).thenReturn(mockOutputStream);
+        OutputStream os = codeWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_CLASS);
 
-        assertEquals(mockOutputStream, codeWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_CLASS));
-
-        codeWriter.close();
-        verify(mockOutputStream).flush();
-        verify(mockOutputStream).close();
     }
 }
