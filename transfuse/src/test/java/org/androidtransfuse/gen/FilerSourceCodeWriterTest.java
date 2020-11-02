@@ -53,10 +53,7 @@ public class FilerSourceCodeWriterTest {
 
     @Test
     public void testCreateSourceFile() throws IOException {
-
         when(mockFiler.createSourceFile(TEST_PACKAGE + "." + TEST_CLASS)).thenReturn(mockFile);
         when(mockFile.openOutputStream()).thenReturn(mockOutputStream);
-        OutputStream os = codeWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_CLASS);
-
     }
 }
