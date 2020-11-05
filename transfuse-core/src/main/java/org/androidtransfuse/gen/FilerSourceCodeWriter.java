@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -50,7 +51,7 @@ public class FilerSourceCodeWriter extends CodeWriter {
         //generate a source file based on package and fileName
         String qualified = toQualifiedClassName(jPackage, fileName);
         JavaFileObject sourceFile = filer.createSourceFile(qualified, originating.getOriginatingElements(qualified));
-        OutputStream os = new WriterOutputStream(sourceFile.openWriter(), "UTF-8");
+        OutputStream os = new WriterOutputStream(sourceFile.openWriter(), StandardCharsets.UTF_8);
         openStreams.add(os);
         return os;
     }
@@ -62,7 +63,6 @@ public class FilerSourceCodeWriter extends CodeWriter {
     @Override
     public void close() throws IOException {
         for (OutputStream openStream : openStreams) {
-//            openStream.flush();
             openStream.close();
         }
     }

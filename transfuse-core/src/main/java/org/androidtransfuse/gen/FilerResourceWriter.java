@@ -26,6 +26,7 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -42,7 +43,7 @@ public class FilerResourceWriter extends CodeWriter {
     @Override
     public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
         FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, pkg.name(), fileName);
-        WriterOutputStream os = new WriterOutputStream(resource.openWriter(),"UTF-8");
+        WriterOutputStream os = new WriterOutputStream(resource.openWriter(), StandardCharsets.UTF_8);
         openStreams.add(os);
         return os;
     }
@@ -51,7 +52,6 @@ public class FilerResourceWriter extends CodeWriter {
     @Override
     public void close() throws IOException {
         for (OutputStream openStream : openStreams) {
-//            openStream.flush();
             openStream.close();
         }
     }
