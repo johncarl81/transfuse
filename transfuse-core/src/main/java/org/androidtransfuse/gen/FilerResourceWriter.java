@@ -17,7 +17,8 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
-import org.apache.commons.io.output.WriterOutputStream;
+import org.androidtransfuse.util.apache.commons.WriterOutputStream;
+
 
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import java.util.HashSet;
 public class FilerResourceWriter extends CodeWriter {
 
     private final Filer filer;
+    private final Collection<OutputStream> openStreams = new HashSet<OutputStream>();
 
     @Inject
     public FilerResourceWriter(Filer filer) {
@@ -40,14 +42,17 @@ public class FilerResourceWriter extends CodeWriter {
     @Override
     public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
         FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, pkg.name(), fileName);
-
-        OutputStream os = new WriterOutputStream(resource.openWriter());
+        WriterOutputStream os = new WriterOutputStream(resource.openWriter(),"UTF-8");
+        openStreams.add(os);
         return os;
     }
 
 
     @Override
     public void close() throws IOException {
-
+        for (OutputStream openStream : openStreams) {
+//            openStream.flush();
+            openStream.close();
+        }
     }
 }
