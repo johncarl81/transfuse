@@ -17,7 +17,6 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
-import org.androidtransfuse.util.apache.commons.WriterOutputStream;
 
 
 import javax.annotation.processing.Filer;
@@ -26,6 +25,7 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
@@ -43,11 +43,13 @@ public class FilerResourceWriter extends CodeWriter {
     @Override
     public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
         FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, pkg.name(), fileName);
-        WriterOutputStream os = new WriterOutputStream(resource.openWriter(), StandardCharsets.UTF_8);
+        OutputStream os = getWriterOutputStream(resource.openWriter());
         openStreams.add(os);
         return os;
     }
-
+    public OutputStream getWriterOutputStream(Writer writer) {
+        return new WriterOutputStream(writer, StandardCharsets.UTF_8);
+    }
 
     @Override
     public void close() throws IOException {

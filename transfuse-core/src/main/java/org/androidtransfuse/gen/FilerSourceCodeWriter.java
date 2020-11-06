@@ -1,12 +1,12 @@
 /**
  * Copyright 2011-2015 John Ericksen
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,13 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
 import org.androidtransfuse.adapter.PackageClass;
-import org.androidtransfuse.util.apache.commons.WriterOutputStream;
 
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,9 +51,14 @@ public class FilerSourceCodeWriter extends CodeWriter {
         //generate a source file based on package and fileName
         String qualified = toQualifiedClassName(jPackage, fileName);
         JavaFileObject sourceFile = filer.createSourceFile(qualified, originating.getOriginatingElements(qualified));
-        OutputStream os = new WriterOutputStream(sourceFile.openWriter(), StandardCharsets.UTF_8);
+        OutputStream os = getWriterOutputStream(sourceFile.openWriter());
         openStreams.add(os);
+
         return os;
+    }
+
+    public OutputStream getWriterOutputStream(Writer writer) {
+        return new WriterOutputStream(writer, StandardCharsets.UTF_8);
     }
 
     private String toQualifiedClassName(JPackage pkg, String fileName) {

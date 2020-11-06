@@ -1,4 +1,4 @@
-package org.androidtransfuse.util.apache.commons;
+package org.androidtransfuse.gen;
 
 
 import java.io.IOException;
