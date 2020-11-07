@@ -18,7 +18,6 @@ package org.androidtransfuse.gen;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
 
-
 import javax.annotation.processing.Filer;
 import javax.inject.Inject;
 import javax.tools.FileObject;
@@ -26,7 +25,7 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -48,7 +47,7 @@ public class FilerResourceWriter extends CodeWriter {
         return os;
     }
     public OutputStream getWriterOutputStream(Writer writer) {
-        return new WriterOutputStream(writer, StandardCharsets.UTF_8);
+        return new WriterOutputStream(writer, Charset.forName("UTF-8"));
     }
 
     @Override
