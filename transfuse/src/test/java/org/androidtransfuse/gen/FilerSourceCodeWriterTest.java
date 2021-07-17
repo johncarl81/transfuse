@@ -19,17 +19,19 @@ import com.sun.codemodel.JCodeModel;
 import org.junit.Before;
 import org.junit.Test;
 
+
 import javax.annotation.processing.Filer;
 import javax.tools.JavaFileObject;
-import java.io.IOException;
 import java.io.OutputStream;
-
+import java.io.Writer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+
 
 /**
  * @author John Ericksen
  */
+
 public class FilerSourceCodeWriterTest {
 
     private static final String TEST_PACKAGE = "org.test";
@@ -39,28 +41,26 @@ public class FilerSourceCodeWriterTest {
     private Filer mockFiler;
     private JavaFileObject mockFile;
     private OutputStream mockOutputStream;
+    private Writer mockWriter;
     private JCodeModel codeModel;
 
     @Before
     public void setUp() throws Exception {
+        mockWriter = mock(Writer.class);
         mockFiler = mock(Filer.class);
         mockFile = mock(JavaFileObject.class);
         mockOutputStream = mock(OutputStream.class);
-
-        codeWriter = new FilerSourceCodeWriter(mockFiler, new Originating());
+        codeWriter = spy(new FilerSourceCodeWriter(mockFiler, new Originating()));
         codeModel = new JCodeModel();
     }
 
     @Test
-    public void testCreateSourceFile() throws IOException {
-
+    public void testCreateSourceFile() throws Exception {
         when(mockFiler.createSourceFile(TEST_PACKAGE + "." + TEST_CLASS)).thenReturn(mockFile);
-        when(mockFile.openOutputStream()).thenReturn(mockOutputStream);
-
+        doReturn(mockWriter).when(mockFile).openWriter();
+        doReturn(mockOutputStream).when(codeWriter).getWriterOutputStream(mockWriter);
         assertEquals(mockOutputStream, codeWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_CLASS));
-
         codeWriter.close();
-        verify(mockOutputStream).flush();
         verify(mockOutputStream).close();
     }
 }

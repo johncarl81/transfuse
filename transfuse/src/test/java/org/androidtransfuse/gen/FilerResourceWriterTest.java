@@ -24,6 +24,7 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author John Ericksen
  */
+
 public class FilerResourceWriterTest {
 
     private static final String TEST_PACKAGE = "org.test";
@@ -40,6 +42,7 @@ public class FilerResourceWriterTest {
     private Filer mockFiler;
     private FileObject mockFile;
     private OutputStream mockOutputStream;
+    private Writer mockWriter;
     private JCodeModel codeModel;
 
     @Before
@@ -47,21 +50,19 @@ public class FilerResourceWriterTest {
         mockFiler = mock(Filer.class);
         mockFile = mock(FileObject.class);
         mockOutputStream = mock(OutputStream.class);
+        mockWriter = mock(Writer.class);
 
-        resourceWriter = new FilerResourceWriter(mockFiler);
+        resourceWriter = spy(new FilerResourceWriter(mockFiler));
         codeModel = new JCodeModel();
     }
 
     @Test
     public void testCreateResource() throws IOException {
-
         when(mockFiler.createResource(StandardLocation.SOURCE_OUTPUT, TEST_PACKAGE, TEST_FILENAME)).thenReturn(mockFile);
-        when(mockFile.openOutputStream()).thenReturn(mockOutputStream);
-
+        doReturn(mockWriter).when(mockFile).openWriter();
+        doReturn(mockOutputStream).when(resourceWriter).getWriterOutputStream(mockWriter);
         assertEquals(mockOutputStream, resourceWriter.openBinary(codeModel._package(TEST_PACKAGE), TEST_FILENAME));
-
         resourceWriter.close();
-        verify(mockOutputStream).flush();
         verify(mockOutputStream).close();
     }
 }

@@ -24,6 +24,8 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -40,18 +42,17 @@ public class FilerResourceWriter extends CodeWriter {
     @Override
     public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
         FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, pkg.name(), fileName);
-
-        OutputStream os = resource.openOutputStream();
+        OutputStream os = getWriterOutputStream(resource.openWriter());
         openStreams.add(os);
-
         return os;
     }
-
+    public OutputStream getWriterOutputStream(Writer writer) {
+        return new WriterOutputStream(writer, Charset.forName("UTF-8"));
+    }
 
     @Override
     public void close() throws IOException {
         for (OutputStream openStream : openStreams) {
-            openStream.flush();
             openStream.close();
         }
     }

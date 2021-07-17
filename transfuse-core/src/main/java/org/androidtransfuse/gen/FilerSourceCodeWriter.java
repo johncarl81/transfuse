@@ -24,6 +24,8 @@ import javax.inject.Inject;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -49,11 +51,14 @@ public class FilerSourceCodeWriter extends CodeWriter {
         //generate a source file based on package and fileName
         String qualified = toQualifiedClassName(jPackage, fileName);
         JavaFileObject sourceFile = filer.createSourceFile(qualified, originating.getOriginatingElements(qualified));
-
-        OutputStream os = sourceFile.openOutputStream();
+        OutputStream os = getWriterOutputStream(sourceFile.openWriter());
         openStreams.add(os);
 
         return os;
+    }
+
+    public OutputStream getWriterOutputStream(Writer writer) {
+        return new WriterOutputStream(writer, Charset.forName("UTF-8"));
     }
 
     private String toQualifiedClassName(JPackage pkg, String fileName) {
@@ -63,7 +68,6 @@ public class FilerSourceCodeWriter extends CodeWriter {
     @Override
     public void close() throws IOException {
         for (OutputStream openStream : openStreams) {
-            openStream.flush();
             openStream.close();
         }
     }
