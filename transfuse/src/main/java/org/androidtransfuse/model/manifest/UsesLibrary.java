@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 
 /**

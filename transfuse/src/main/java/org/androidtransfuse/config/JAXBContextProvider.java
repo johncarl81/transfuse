@@ -18,11 +18,11 @@ package org.androidtransfuse.config;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.manifest.UsesPermission;
 import org.androidtransfuse.util.TransfuseRuntimeException;
-import com.sun.xml.bind.v2.ContextFactory;
+import org.glassfish.jaxb.runtime.v2.ContextFactory;
 
 import javax.inject.Provider;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * @author John Ericksen

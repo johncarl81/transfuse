@@ -20,9 +20,9 @@ import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.processor.Merge;
 import org.androidtransfuse.processor.MergeCollection;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ import java.util.List;
  * android:name="string"
  * android:permission="string"
  * android:process="string"
- * 
+ *
  * can contain:
  * <meta-data>
  * <intent-filter>

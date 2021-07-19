@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.processor;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;

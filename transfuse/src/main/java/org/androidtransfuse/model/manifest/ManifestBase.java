@@ -18,8 +18,8 @@ package org.androidtransfuse.model.manifest;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import javax.xml.bind.Element;
-import javax.xml.bind.annotation.XmlAnyElement;
+import jakarta.xml.bind.Element;
+import jakarta.xml.bind.annotation.XmlAnyElement;
 import java.util.ArrayList;
 import java.util.List;
 

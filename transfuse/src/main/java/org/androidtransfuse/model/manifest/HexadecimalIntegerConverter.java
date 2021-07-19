@@ -15,7 +15,7 @@
  */
 package org.androidtransfuse.model.manifest;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author John Ericksen

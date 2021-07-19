@@ -27,6 +27,7 @@
         <robolectric.version>4.11.1</robolectric.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <jaxb-runtime.version>2.3.8</jaxb-runtime.version>
+        <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     </properties>
 
     <licenses>
