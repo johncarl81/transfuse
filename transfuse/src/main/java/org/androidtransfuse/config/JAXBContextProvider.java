@@ -20,8 +20,8 @@ import org.androidtransfuse.model.manifest.UsesPermission;
 import org.androidtransfuse.util.TransfuseRuntimeException;
 
 import javax.inject.Provider;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * @author John Ericksen

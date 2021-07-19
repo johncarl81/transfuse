@@ -20,9 +20,9 @@ import org.androidtransfuse.model.manifest.ManifestNamespaceMapper;
 import org.androidtransfuse.processor.MergeableTagConverter;
 import org.androidtransfuse.processor.MergeableTags;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @author John Ericksen

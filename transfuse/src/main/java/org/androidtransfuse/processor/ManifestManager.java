@@ -21,7 +21,6 @@ import org.androidtransfuse.model.Mergeable;
 import org.androidtransfuse.model.manifest.*;
 import org.androidtransfuse.util.AndroidLiterals;
 import org.androidtransfuse.util.Logger;
-import org.apache.commons.beanutils.PropertyUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,7 +30,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +71,7 @@ public class ManifestManager {
             throw new TransfuseAnalysisException("Unable to Merge UsesPermission", e);
         }
     }
-    
+
     public void addUsesFeature(UsesFeature usesFeature){
         try {
             log.debug("Adding to manifest: " + usesFeature);
@@ -166,7 +164,7 @@ public class ManifestManager {
         manifest.getApplications().add(localApplication);
 
         manifest.getUsesPermissions().addAll(usesPermissions);
-        
+
         manifest.getUsesFeatures().addAll(usesFeatures);
 
         manifest.getPermissions().addAll(permissions);
@@ -191,19 +189,11 @@ public class ManifestManager {
                 Method writeMethod = propertyDescriptor.getWriteMethod();
 
                 Merge mergeAnnotation = findAnnotation(Merge.class, writeMethod, readMethod);
-                Object property = PropertyUtils.getProperty(mergeable, propertyDescriptor.getName());
-
-                if (mergeAnnotation != null && property != null) {
+                if (mergeAnnotation != null) {
                     mergeable.addMergeTag(mergeAnnotation.value());
                 }
             }
         } catch (IntrospectionException e) {
-            throw new MergerException(e);
-        } catch (InvocationTargetException e) {
-            throw new MergerException(e);
-        } catch (NoSuchMethodException e) {
-            throw new MergerException(e);
-        } catch (IllegalAccessException e) {
             throw new MergerException(e);
         }
     }

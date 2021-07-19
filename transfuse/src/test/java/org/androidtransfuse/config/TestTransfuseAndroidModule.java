@@ -62,7 +62,7 @@ import javax.annotation.processing.Messager;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.lang.model.util.Elements;
-import javax.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContext;
 
 @BootstrapModule
 @BindInterceptors({

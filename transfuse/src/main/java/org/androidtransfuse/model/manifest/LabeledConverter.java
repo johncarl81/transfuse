@@ -17,7 +17,7 @@ package org.androidtransfuse.model.manifest;
 
 import org.androidtransfuse.annotations.*;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.HashMap;
 import java.util.Map;
 
