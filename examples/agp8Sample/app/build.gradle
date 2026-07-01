@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application' version '8.5.2'
+}
+
+android {
+    namespace 'org.androidtransfuse.example.agp8'
+    compileSdk 34
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'org.androidtransfuse.example.agp8'
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // Transfuse manages the AndroidManifest when enabled; this sample declares the
+                // generated activity statically instead, so manifest processing is turned off.
+                // The manifest location is still supplied so Transfuse can resolve the app package.
+                arguments = [
+                        androidManifestFile        : "${projectDir}/transfuse/AndroidManifest.xml".toString(),
+                        transfuseManifestProcessing: 'off'
+                ]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
+    annotationProcessor 'org.androidtransfuse:transfuse:0.3.0-SNAPSHOT'
+    // AGP 8 removed includeCompileClasspath, so the processor's runtime types (transfuse-api,
+    // which the shaded processor jar excludes) must be on the annotationProcessor path explicitly.
+    annotationProcessor 'org.androidtransfuse:transfuse-api:0.3.0-SNAPSHOT'
+    // The processor resolves android.* types (e.g. android.app.Application) at processing time.
+    annotationProcessor 'com.google.android:android:4.1.1.4'
+
+    // jakarta.inject annotations used by the sample's dependency graph
+    implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
+
+    // JAXB runtime required by the Transfuse processor
+    annotationProcessor 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    annotationProcessor 'com.sun.xml.bind:jaxb-impl:3.0.1'
+}

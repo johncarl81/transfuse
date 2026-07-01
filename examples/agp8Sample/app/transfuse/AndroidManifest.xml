@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Transfuse-only manifest. AGP 8 no longer allows a package attribute in the real
+    src/main/AndroidManifest.xml (it uses the module namespace), but Transfuse still derives the
+    R class package from a manifest package. This file supplies that package to the processor via
+    the androidManifestFile argument; AGP never sees it.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.androidtransfuse.example.agp8">
+    <application/>
+</manifest>
