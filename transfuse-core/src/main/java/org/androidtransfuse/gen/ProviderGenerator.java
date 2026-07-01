@@ -17,6 +17,7 @@ package org.androidtransfuse.gen;
 
 import com.sun.codemodel.*;
 import org.androidtransfuse.TransfuseAnalysisException;
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.adapter.PackageClass;
 import org.androidtransfuse.analysis.astAnalyzer.ScopeAspect;
 import org.androidtransfuse.model.Aspect;
@@ -24,9 +25,9 @@ import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
 import org.androidtransfuse.model.TypedExpression;
 import org.androidtransfuse.scope.Scopes;
+import org.androidtransfuse.util.InjectionAnnotations;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,15 +55,17 @@ public class ProviderGenerator {
     public static class ProviderCache {
         private final Map<String, Map<InjectionSignature, JDefinedClass>> providerExtendedClasses = new HashMap<String, Map<InjectionSignature, JDefinedClass>>();
 
-        public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator, String extension) {
+        public synchronized JDefinedClass getCached(InjectionNode injectionNode, ProviderGenerator providerGenerator, String extension, ASTType providerType) {
 
-            if(!providerExtendedClasses.containsKey(extension)){
-                providerExtendedClasses.put(extension, new HashMap<InjectionSignature, JDefinedClass>());
+            //separate cache bucket per Provider namespace so javax and jakarta providers do not collide
+            String cacheKey = extension + "|" + providerType.getName();
+            if(!providerExtendedClasses.containsKey(cacheKey)){
+                providerExtendedClasses.put(cacheKey, new HashMap<InjectionSignature, JDefinedClass>());
             }
-            Map<InjectionSignature, JDefinedClass> providerClasses = providerExtendedClasses.get(extension);
+            Map<InjectionSignature, JDefinedClass> providerClasses = providerExtendedClasses.get(cacheKey);
 
             if (!providerClasses.containsKey(injectionNode.getTypeSignature())) {
-                JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode, extension);
+                JDefinedClass providerClass = providerGenerator.innerGenerateProvider(injectionNode, extension, providerType);
                 providerClasses.put(injectionNode.getTypeSignature(), providerClass);
                 providerGenerator.fillInProvider(injectionNode, providerClass);
             }
@@ -83,13 +86,17 @@ public class ProviderGenerator {
     }
 
     public JDefinedClass generateProvider(InjectionNode injectionNode, boolean removeScope) {
+        return generateProvider(injectionNode, removeScope, InjectionAnnotations.JAVAX_PROVIDER);
+    }
+
+    public JDefinedClass generateProvider(InjectionNode injectionNode, boolean removeScope, ASTType providerType) {
 
         if(removeScope){
-            return cache.getCached(unscoped(injectionNode), this, UNSCOPED_EXTENSION);
+            return cache.getCached(unscoped(injectionNode), this, UNSCOPED_EXTENSION, providerType);
 
         }
         else{
-            return cache.getCached(injectionNode, this, SCOPED_EXTENSION);
+            return cache.getCached(injectionNode, this, SCOPED_EXTENSION, providerType);
         }
     }
 
@@ -104,7 +111,7 @@ public class ProviderGenerator {
         return nonScopedInjectionNode;
     }
 
-    protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode, String extension) {
+    protected JDefinedClass innerGenerateProvider(InjectionNode injectionNode, String extension, ASTType providerType) {
 
         try {
             JClass injectionNodeClassRef = generationUtil.ref(injectionNode.getASTType());
@@ -118,7 +125,7 @@ public class ProviderGenerator {
             originating.associate(providerClassName.getFullyQualifiedName(), injectionNode.getASTType());
 
 
-            providerClass._implements(generationUtil.ref(Provider.class).narrow(injectionNodeClassRef));
+            providerClass._implements(generationUtil.ref(providerType).narrow(injectionNodeClassRef));
 
             return providerClass;
 

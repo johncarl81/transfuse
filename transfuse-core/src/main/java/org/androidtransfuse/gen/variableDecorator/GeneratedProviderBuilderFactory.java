@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.gen.variableDecorator;
 
+import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.gen.ProviderGenerator;
 import org.androidtransfuse.model.InjectionNode;
 
@@ -36,8 +37,8 @@ public class GeneratedProviderBuilderFactory {
         this.typedExpressionFactoryProvider = typedExpressionFactoryProvider;
     }
 
-    public GeneratedProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerTypeInjectionNode){
+    public GeneratedProviderVariableBuilder buildProviderVariableBuilder(InjectionNode providerTypeInjectionNode, ASTType providerType){
 
-        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerGeneratorProvider.get(), typedExpressionFactoryProvider.get());
+        return new GeneratedProviderVariableBuilder(providerTypeInjectionNode, providerType, providerGeneratorProvider.get(), typedExpressionFactoryProvider.get());
     }
 }

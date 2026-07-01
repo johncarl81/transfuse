@@ -24,6 +24,7 @@ import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableBuilder;
 import org.androidtransfuse.model.InjectionNode;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.InjectionAnnotations;
 
 import javax.inject.Inject;
 
@@ -49,11 +50,12 @@ public class GeneratedProviderInjectionNodeBuilder implements InjectionNodeBuild
     public InjectionNode buildInjectionNode(ASTBase target, InjectionSignature signature, AnalysisContext context) {
 
         ASTType providerGenericType = getProviderTemplateType(signature.getType());
+        ASTType providerType = InjectionAnnotations.providerTypeFor(signature.getType());
 
         InjectionNode injectionNode = analyzer.analyze(signature, context);
         InjectionNode providerInjectionNode = injectionPointFactory.buildInjectionNode(signature.getAnnotations(), providerGenericType, providerGenericType, context.addDependent(injectionNode));
 
-        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode));
+        injectionNode.addAspect(VariableBuilder.class, variableInjectionBuilderFactory.buildProviderVariableBuilder(providerInjectionNode, providerType));
 
         return injectionNode;
     }

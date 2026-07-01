@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import jakarta.inject.Qualifier;
 import jakarta.inject.Singleton;
 
@@ -63,15 +64,17 @@ public class JakartaInjectTest {
         private final Engine engine;
         private final Seat namedSeat;
         private final Seat qualifiedSeat;
+        private final Provider<Seat> seatProvider;
         @Inject
         Seat fieldSeat;
         Seat methodSeat;
 
         @Inject
-        public Car(Engine engine, @Named("driver") Seat namedSeat, @Leather Seat qualifiedSeat) {
+        public Car(Engine engine, @Named("driver") Seat namedSeat, @Leather Seat qualifiedSeat, Provider<Seat> seatProvider) {
             this.engine = engine;
             this.namedSeat = namedSeat;
             this.qualifiedSeat = qualifiedSeat;
+            this.seatProvider = seatProvider;
         }
 
         @Inject
@@ -89,6 +92,10 @@ public class JakartaInjectTest {
 
         public Seat getQualifiedSeat() {
             return qualifiedSeat;
+        }
+
+        public Provider<Seat> getSeatProvider() {
+            return seatProvider;
         }
     }
 
@@ -153,6 +160,13 @@ public class JakartaInjectTest {
         Car car = factory.buildCar();
         assertNotNull(car.getQualifiedSeat());
         assertTrue(car.getQualifiedSeat() instanceof LeatherSeat);
+    }
+
+    @Test
+    public void testProviderInjection() {
+        Provider<Seat> provider = factory.buildCar().getSeatProvider();
+        assertNotNull(provider);
+        assertNotNull(provider.get());
     }
 
     @Test

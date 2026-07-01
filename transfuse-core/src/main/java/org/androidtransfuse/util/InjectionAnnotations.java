@@ -86,4 +86,18 @@ public final class InjectionAnnotations {
     public static boolean isProvider(ASTType astType) {
         return PROVIDER.contains(astType);
     }
+
+    /**
+     * Resolves the {@code Provider} type (javax or jakarta) that a generated provider should implement,
+     * matching the namespace of the declared injection point so the generated code assigns cleanly.
+     *
+     * @param declaredProviderType the declared Provider type at the injection point (e.g. {@code jakarta.inject.Provider<Foo>})
+     * @return the raw Provider type to emit; defaults to {@link #JAVAX_PROVIDER}
+     */
+    public static ASTType providerTypeFor(ASTType declaredProviderType) {
+        if (JAKARTA_PROVIDER.getName().equals(declaredProviderType.getName())) {
+            return JAKARTA_PROVIDER;
+        }
+        return JAVAX_PROVIDER;
+    }
 }
