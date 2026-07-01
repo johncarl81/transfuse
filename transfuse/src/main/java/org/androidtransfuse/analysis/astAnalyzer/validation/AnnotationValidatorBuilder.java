@@ -96,6 +96,10 @@ public class AnnotationValidatorBuilder {
             annotationValidator = new AnnotationAccompaniesValidator(validator, annotationTypes.build(), message);
         }
 
+        public void requiresAny(ImmutableSet<ASTType> annotationTypes, String message) {
+            annotationValidator = new AnnotationAccompaniesValidator(validator, annotationTypes, message);
+        }
+
         public void parameterMatches(String parameterName, String regex, String message) {
             annotationValidator = new AnnotationParameterRegexValidator(regex, parameterName, validator, message);
         }

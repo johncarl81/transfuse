@@ -83,7 +83,7 @@ public class InjectionNodeBuilderRepository {
     }
 
     public boolean containsScope(ASTAnnotation scopeAnnotation) {
-        return scopeAnnotations.containsKey(scopeAnnotation.getASTType());
+        return scopeVariableBuilderMap.containsKey(scopeAnnotation.getASTType());
     }
 
     public Map<ASTType, ASTType> getScopeAnnotations(){
@@ -97,6 +97,15 @@ public class InjectionNodeBuilderRepository {
     public void putScopeAspectFactory(ASTType scopeAnnotation, ASTType scopeType, ScopeAspectFactory scopeAspectFactory) {
         scopeVariableBuilderMap.put(scopeAnnotation, scopeAspectFactory);
         scopeAnnotations.put(scopeAnnotation, scopeType);
+    }
+
+    /**
+     * Registers a scope annotation alias that applies an existing scope aspect without contributing a
+     * separate generated scope registration. Used to canonicalize the jakarta.inject scope annotations
+     * onto their javax.inject equivalents so generated code references only the javax.inject namespace.
+     */
+    public void putScopeAspectFactoryAlias(ASTType scopeAnnotation, ScopeAspectFactory scopeAspectFactory) {
+        scopeVariableBuilderMap.put(scopeAnnotation, scopeAspectFactory);
     }
 
     private Map<ASTType, ScopeAspectFactory> getScopeVariableBuilderMap() {

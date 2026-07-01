@@ -22,6 +22,7 @@ import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.analysis.AnalysisContext;
 import org.androidtransfuse.analysis.InjectionPointFactory;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.InjectionAnnotations;
 
 import javax.inject.Inject;
 
@@ -50,7 +51,7 @@ public class InjectionAnalyzer implements ASTAnalysis {
             ASTConstructor annotatedConstructor = null;
 
             for (ASTConstructor astConstructor : concreteType.getConstructors()) {
-                if (astConstructor.isAnnotated(Inject.class)) {
+                if (InjectionAnnotations.isAnnotated(astConstructor, InjectionAnnotations.INJECT)) {
                     annotatedConstructor = astConstructor;
                     getInjectionToken(injectionNode).set(injectionPointFactory.buildInjectionPoint(concreteType, astConstructor, context));
                 }
@@ -68,14 +69,14 @@ public class InjectionAnalyzer implements ASTAnalysis {
 
     @Override
     public void analyzeMethod(InjectionNode injectionNode, ASTType concreteType, ASTMethod astMethod, AnalysisContext context) {
-        if (astMethod.isAnnotated(Inject.class)) {
+        if (InjectionAnnotations.isAnnotated(astMethod, InjectionAnnotations.INJECT)) {
             getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(injectionNode.getASTType(), concreteType, astMethod, context));
         }
     }
 
     @Override
     public void analyzeField(InjectionNode injectionNode, ASTType concreteType, ASTField astField, AnalysisContext context) {
-        if (astField.isAnnotated(Inject.class)) {
+        if (InjectionAnnotations.isAnnotated(astField, InjectionAnnotations.INJECT)) {
             getInjectionToken(injectionNode).getCurrentGroup().add(injectionPointFactory.buildInjectionPoint(injectionNode.getASTType(), concreteType, astField, context));
         }
     }

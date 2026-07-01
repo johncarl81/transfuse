@@ -16,23 +16,23 @@
 package org.androidtransfuse.util;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
 
 import java.util.Collection;
 
 /**
- * Predicate that matches an ASTAnnotation by class.
+ * Predicate that matches an ASTAnnotation meta-annotated by any of the given annotation types.
  *
  * @author John Ericksen
  */
 public class AnnotatedPredicate implements Predicate<ASTAnnotation> {
 
-    private final ASTType annotationType;
+    private final ImmutableSet<ASTType> annotationTypes;
 
-    public AnnotatedPredicate(ASTClassFactory astClassFactory, Class annotationClass){
-        annotationType = astClassFactory.getType(annotationClass);
+    public AnnotatedPredicate(ImmutableSet<ASTType> annotationTypes){
+        this.annotationTypes = annotationTypes;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AnnotatedPredicate implements Predicate<ASTAnnotation> {
         Collection<ASTAnnotation> annotations = input.getASTType().getAnnotations();
 
         for (ASTAnnotation astAnnotation : annotations) {
-            if(astAnnotation.getASTType().equals(annotationType)){
+            if(annotationTypes.contains(astAnnotation.getASTType())){
                 return true;
             }
         }

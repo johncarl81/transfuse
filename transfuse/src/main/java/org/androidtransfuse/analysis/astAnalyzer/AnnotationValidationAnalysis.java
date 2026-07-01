@@ -22,6 +22,7 @@ import org.androidtransfuse.analysis.astAnalyzer.validation.AnnotationValidator;
 import org.androidtransfuse.analysis.astAnalyzer.validation.AnnotationValidatorBuilder;
 import org.androidtransfuse.annotations.*;
 import org.androidtransfuse.model.InjectionNode;
+import org.androidtransfuse.util.InjectionAnnotations;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -37,12 +38,12 @@ public class AnnotationValidationAnalysis implements ASTAnalysis {
     public AnnotationValidationAnalysis(AnnotationValidatorBuilder builder) {
 
         //built in specialty qualifiers
-        builder.given(Extra.class).requires(Inject.class, "@Extra annotation must be accompanied by @Inject");
+        builder.given(Extra.class).requiresAny(InjectionAnnotations.INJECT, "@Extra annotation must be accompanied by @Inject");
         builder.given(Extra.class).parameterMatches("value", "^[a-zA-Z][a-zA-Z0-9_]*$", "@Extra value parameter must follow Java Bean syntax");
-        builder.given(View.class).requires(Inject.class, "@View annotation must be accompanied by @Inject");
-        builder.given(Preference.class).requires(Inject.class, "@Preference annotation must be accompanied by @Inject");
-        builder.given(Resource.class).requires(Inject.class, "@Resource annotation must be accompanied by @Inject");
-        builder.given(SystemService.class).requires(Inject.class, "@SystemService annotation must be accompanied by @Inject");
+        builder.given(View.class).requiresAny(InjectionAnnotations.INJECT, "@View annotation must be accompanied by @Inject");
+        builder.given(Preference.class).requiresAny(InjectionAnnotations.INJECT, "@Preference annotation must be accompanied by @Inject");
+        builder.given(Resource.class).requiresAny(InjectionAnnotations.INJECT, "@Resource annotation must be accompanied by @Inject");
+        builder.given(SystemService.class).requiresAny(InjectionAnnotations.INJECT, "@SystemService annotation must be accompanied by @Inject");
 
         //activity metadata
         builder.given(Layout.class).requires(Arrays.asList(Activity.class, Fragment.class), "@Layout annotation must be accompanied by @Activity");

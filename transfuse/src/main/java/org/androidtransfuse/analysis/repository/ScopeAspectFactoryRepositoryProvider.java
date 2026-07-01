@@ -22,6 +22,7 @@ import org.androidtransfuse.gen.scopeBuilder.CustomScopeAspectFactoryFactory;
 import org.androidtransfuse.gen.scopeBuilder.SingletonScopeAspectFactory;
 import org.androidtransfuse.scope.ApplicationScope;
 import org.androidtransfuse.scope.ConcurrentDoubleLockingScope;
+import org.androidtransfuse.util.InjectionAnnotations;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -54,6 +55,7 @@ public class ScopeAspectFactoryRepositoryProvider implements Provider<InjectionN
 
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(TransfuseModule.class), concurrentScopeType, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putScopeAspectFactory(astClassFactory.getType(Singleton.class), concurrentScopeType, singletonScopeAspectFactory);
+        scopedVariableBuilderRepository.putScopeAspectFactoryAlias(InjectionAnnotations.JAKARTA_SINGLETON, singletonScopeAspectFactory);
         scopedVariableBuilderRepository.putScopeAspectFactory(
                 astClassFactory.getType(ApplicationScope.ApplicationScopeQualifier.class),
                 astClassFactory.getType(ApplicationScope.class), customScopeAspectFactoryFactory.buildScopeBuilder(astClassFactory.getType(ApplicationScope.ApplicationScopeQualifier.class)));

@@ -15,20 +15,17 @@
  */
 package org.androidtransfuse.util;
 
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
-
 import javax.inject.Inject;
-import javax.inject.Qualifier;
 
 /**
- * Matches all annotations annotated with @Qualifier
+ * Matches all annotations meta-annotated with @Qualifier (javax.inject or jakarta.inject)
  *
  * @author John Ericksen
  */
 public class QualifierPredicate extends AnnotatedPredicate {
 
     @Inject
-    public QualifierPredicate(ASTClassFactory astClassFactory){
-        super(astClassFactory, Qualifier.class);
+    public QualifierPredicate(){
+        super(InjectionAnnotations.QUALIFIER);
     }
 }

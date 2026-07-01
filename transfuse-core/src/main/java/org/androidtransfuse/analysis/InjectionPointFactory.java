@@ -24,7 +24,9 @@ import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
 import org.androidtransfuse.gen.variableBuilder.InjectionNodeBuilder;
 import org.androidtransfuse.gen.variableBuilder.VariableInjectionNodeBuilder;
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
+import com.google.common.collect.ImmutableList;
 import org.androidtransfuse.model.*;
+import org.androidtransfuse.util.InjectionAnnotations;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.matcher.Matcher;
 import org.androidtransfuse.util.matcher.Matchers;
@@ -44,7 +46,7 @@ public class InjectionPointFactory {
     private final ASTClassFactory astClassFactory;
     private final QualifierPredicate qualifierPredicate;
     private final VariableInjectionNodeBuilder defaultBinding;
-    private final Matcher<ASTType> providerMatcher;
+    private final ImmutableList<Matcher<ASTType>> providerMatchers;
     private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
 
     @Inject
@@ -57,7 +59,10 @@ public class InjectionPointFactory {
         this.defaultBinding = defaultBinding;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
 
-        this.providerMatcher = Matchers.type(astClassFactory.getType(Provider.class)).ignoreGenerics().build();
+        //match a Provider<T> injection point from either the javax.inject or jakarta.inject namespace
+        this.providerMatchers = ImmutableList.of(
+                Matchers.type(InjectionAnnotations.JAVAX_PROVIDER).ignoreGenerics().build(),
+                Matchers.type(InjectionAnnotations.JAKARTA_PROVIDER).ignoreGenerics().build());
     }
 
     /**
@@ -166,12 +171,21 @@ public class InjectionPointFactory {
         }
 
         //generated provider
-        if(providerMatcher.matches(injectionSignature.getType())){
+        if(matchesProvider(injectionSignature.getType())){
             return generatedProviderInjectionNodeBuilderProvider.get().buildInjectionNode(target, injectionSignature, context);
         }
 
         //default case
         return defaultBinding.buildInjectionNode(target, injectionSignature, context);
+    }
+
+    private boolean matchesProvider(ASTType astType){
+        for (Matcher<ASTType> providerMatcher : providerMatchers) {
+            if(providerMatcher.matches(astType)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){

@@ -15,18 +15,17 @@
  */
 package org.androidtransfuse.util;
 
-import org.androidtransfuse.adapter.classes.ASTClassFactory;
-
 import javax.inject.Inject;
-import javax.inject.Scope;
 
 /**
+ * Matches all annotations meta-annotated with @Scope (javax.inject or jakarta.inject)
+ *
  * @author John Ericksen
  */
 public class ScopePredicate extends AnnotatedPredicate {
 
     @Inject
-    public ScopePredicate(ASTClassFactory astClassFactory){
-        super(astClassFactory, Scope.class);
+    public ScopePredicate(){
+        super(InjectionAnnotations.SCOPE);
     }
 }
