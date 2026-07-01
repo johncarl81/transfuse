@@ -187,11 +187,16 @@ public class ManifestManager {
             BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
 
             for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
+                String propertyName = propertyDescriptor.getDisplayName();
+                if ("class".equals(propertyName)) {
+                    // ignore Introspector's synthetic property
+                    continue;
+                }
                 Method readMethod = propertyDescriptor.getReadMethod();
                 Method writeMethod = propertyDescriptor.getWriteMethod();
 
                 Merge mergeAnnotation = findAnnotation(Merge.class, writeMethod, readMethod);
-                Object property = PropertyUtils.getProperty(mergeable, propertyDescriptor.getName());
+                Object property = PropertyUtils.getProperty(mergeable, propertyName);
 
                 if (mergeAnnotation != null && property != null) {
                     mergeable.addMergeTag(mergeAnnotation.value());

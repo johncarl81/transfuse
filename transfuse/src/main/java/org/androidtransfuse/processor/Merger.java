@@ -62,6 +62,10 @@ public class Merger {
                 Method setter = propertyDescriptor.getWriteMethod();
 
                 String propertyName = propertyDescriptor.getDisplayName();
+                if ("class".equals(propertyName)) {
+                    // synthetic descriptor from Introspector; skip to avoid merge noise
+                    continue;
+                }
 
                 if (PropertyUtils.isWriteable(target, propertyName)) {
 

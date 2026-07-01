@@ -15,7 +15,6 @@
  */
 package org.androidtransfuse.intentFactory;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +22,7 @@ import android.os.Bundle;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest=Config.NONE)
+@Config(sdk = 30, manifest = Config.NONE)
 public class ServiceIntentFactoryStrategyTest {
 
     private ServiceIntentFactoryStrategy activityIntentFactoryStrategy;
@@ -42,7 +42,7 @@ public class ServiceIntentFactoryStrategyTest {
 
     @Before
     public void setup(){
-        mockContext = new Activity();
+        mockContext = RuntimeEnvironment.getApplication();
         mockBundle = new Bundle();
         mockIntent = new Intent();
         activityIntentFactoryStrategy = new ServiceIntentFactoryStrategy(Service.class, mockBundle);

@@ -16,6 +16,7 @@
 package org.androidtransfuse.integrationTest.externalGenerator;
 
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 /**
  * @author John Ericksen
@@ -23,13 +24,16 @@ import org.parceler.Parcel;
 @Parcel(Parcel.Serialization.METHOD)
 public class Tester {
 
-    private ProxiedProxy proxy;
+    @Transient
+    private Proxied proxy;
 
-    public ProxiedProxy getProxy() {
+    @Transient
+    public Proxied getProxy() {
         return proxy;
     }
 
-    public void setProxy(ProxiedProxy proxy) {
+    @Transient
+    public void setProxy(Proxied proxy) {
         this.proxy = proxy;
     }
 }

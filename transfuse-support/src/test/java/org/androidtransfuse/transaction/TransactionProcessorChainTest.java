@@ -56,7 +56,7 @@ public class TransactionProcessorChainTest {
         chain.execute();
 
         Mockito.verify(mockProcessor1).execute();
-        Mockito.verifyZeroInteractions(mockProcessor2);
+        Mockito.verifyNoInteractions(mockProcessor2);
     }
 
     @Test

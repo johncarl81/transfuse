@@ -21,6 +21,7 @@ import android.os.Bundle;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -30,7 +31,7 @@ import static org.junit.Assert.assertEquals;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest=Config.NONE)
+@Config(sdk = 30, manifest = Config.NONE)
 public class ActivityIntentFactoryStrategyTest {
 
     private ActivityIntentFactoryStrategy activityIntentFactoryStrategy;
@@ -40,7 +41,7 @@ public class ActivityIntentFactoryStrategyTest {
 
     @Before
     public void setup(){
-        mockContext = new Activity();
+        mockContext = Robolectric.buildActivity(Activity.class).setup().get();
         mockBundle = new Bundle();
         mockIntent = new Intent();
         activityIntentFactoryStrategy = new ActivityIntentFactoryStrategy(Activity.class, mockBundle);

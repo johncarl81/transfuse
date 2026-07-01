@@ -18,6 +18,7 @@ package org.androidtransfuse.config;
 import org.androidtransfuse.model.manifest.Manifest;
 import org.androidtransfuse.model.manifest.UsesPermission;
 import org.androidtransfuse.util.TransfuseRuntimeException;
+import com.sun.xml.bind.v2.ContextFactory;
 
 import javax.inject.Provider;
 import javax.xml.bind.JAXBContext;
@@ -30,7 +31,8 @@ public class JAXBContextProvider implements Provider<JAXBContext> {
 
     public JAXBContext get(){
         try {
-            return JAXBContext.newInstance(Manifest.class, UsesPermission.class);
+            // Prefer the concrete JAXB RI factory to avoid relying on service lookups
+            return ContextFactory.createContext(new Class[]{Manifest.class, UsesPermission.class}, null);
         } catch (JAXBException e) {
             throw new TransfuseRuntimeException("Unable to create JAXBContext", e);
         }

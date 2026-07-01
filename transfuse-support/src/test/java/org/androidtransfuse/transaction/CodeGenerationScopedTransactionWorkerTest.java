@@ -22,15 +22,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * @author John Ericksen
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(JCodeModel.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CodeGenerationScopedTransactionWorkerTest {
 
     private CodeGenerationScopedTransactionWorker<Object, Object> worker;
@@ -43,10 +40,10 @@ public class CodeGenerationScopedTransactionWorkerTest {
     @Before
     public void setUp() throws Exception {
 
-        mockCodeModel = PowerMockito.mock(JCodeModel.class);
-        mockCodeWriter = PowerMockito.mock(CodeWriter.class);
-        mockResourceWriter = PowerMockito.mock(CodeWriter.class);
-        mockWorker = PowerMockito.mock(TransactionWorker.class);
+        mockCodeModel = Mockito.mock(JCodeModel.class);
+        mockCodeWriter = Mockito.mock(CodeWriter.class);
+        mockResourceWriter = Mockito.mock(CodeWriter.class);
+        mockWorker = Mockito.mock(TransactionWorker.class);
 
         worker = new CodeGenerationScopedTransactionWorker<Object, Object>(mockCodeModel, mockCodeWriter, mockResourceWriter, mockWorker);
     }
@@ -56,7 +53,7 @@ public class CodeGenerationScopedTransactionWorkerTest {
 
         Assert.assertFalse(worker.isComplete());
 
-        Object mockValue = PowerMockito.mock(Object.class);
+        Object mockValue = Mockito.mock(Object.class);
 
         worker.run(mockValue);
 

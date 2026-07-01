@@ -16,10 +16,12 @@
 package org.androidtransfuse.integrationTest.inject;
 
 import org.androidtransfuse.test.generator.Proxy;
+import org.parceler.Parcel;
 
 /**
  * @author John Ericksen
  */
+@Parcel
 @Proxy(round = 1)
 public class ParcelProxy {
 }

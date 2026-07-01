@@ -187,12 +187,13 @@ public class ReflectionEquivalenceTest {
                 }
             }
 
-            assertEquals(clazz.getTypeParameters().length, type.getGenericArgumentTypes().size());
-            for(int i = 0; i < clazz.getTypeParameters().length; i++) {
-                if(clazz.getTypeParameters()[i] instanceof ParameterizedType) {
-                    Class genericType = (Class)((ParameterizedType)clazz.getTypeParameters()[i]).getRawType();
-                    equals(genericType, type.getGenericArgumentTypes().get(i));
-                }
+            TypeVariable<? extends Class<?>>[] typeParameters = clazz.getTypeParameters();
+            List<ASTGenericArgument> genericArguments = type.getGenericArguments();
+
+            assertEquals("Generic parameter count mismatch for " + clazz.getName(),
+                    typeParameters.length, genericArguments.size());
+            for (int i = 0; i < typeParameters.length; i++) {
+                assertEquals(typeParameters[i].getName(), genericArguments.get(i).getName());
             }
         }
 

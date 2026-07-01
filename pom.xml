@@ -18,6 +18,17 @@
     <url>http://androidtransfuse.org</url>
     <description>A dependency injection and integration library for Google Android</description>
 
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
+        <mockito.version>4.11.0</mockito.version>
+        <robolectric.version>4.11.1</robolectric.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <jaxb-runtime.version>2.3.8</jaxb-runtime.version>
+    </properties>
+
     <licenses>
         <license>
             <name>Apache 2.0</name>
@@ -50,6 +61,14 @@
         <!--<module>examples</module>-->
     </modules>
 
+    <repositories>
+        <repository>
+            <id>google</id>
+            <name>Google Maven</name>
+            <url>https://maven.google.com</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -75,6 +94,11 @@
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <strictCheck>true</strictCheck>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

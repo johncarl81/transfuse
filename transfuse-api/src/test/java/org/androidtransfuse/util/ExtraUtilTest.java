@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * @author John Ericksen
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest=Config.NONE)
+@Config(sdk = 30, manifest = Config.NONE)
 public class ExtraUtilTest {
 
     private static final String TEST_NAME = "test extra";

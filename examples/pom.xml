@@ -23,6 +23,11 @@
         <module>gradle</module>
     </modules>
 
+    <properties>
+        <!-- Examples stay on Java 8 bytecode so the legacy Android Maven plugin/dx can dex them -->
+        <maven.compiler.release>8</maven.compiler.release>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

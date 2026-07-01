@@ -29,7 +29,7 @@ public class ASTIntersectionType extends ASTEmptyType {
     private List<ASTType> intersection;
 
     public ASTIntersectionType(List<ASTType> intersection){
-        super(Joiner.on("&").join(intersection));
+        super(Joiner.on("&").join(intersection.stream().map(ASTType::getName).iterator()));
         this.intersection = intersection;
     }
 

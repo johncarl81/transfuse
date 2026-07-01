@@ -16,6 +16,7 @@
 package org.androidtransfuse.integrationTest.inject;
 
 import org.parceler.Parcel;
+import org.parceler.Transient;
 
 /**
  * @author John Ericksen
@@ -23,13 +24,14 @@ import org.parceler.Parcel;
 @Parcel(Parcel.Serialization.METHOD)
 public class Tester {
 
-    private ParcelProxyProxy proxy;
+    @Transient
+    private ParcelProxy proxy;
 
-    public ParcelProxyProxy getProxy() {
+    public ParcelProxy getProxy() {
         return proxy;
     }
 
-    public void setProxy(ParcelProxyProxy proxy) {
+    public void setProxy(ParcelProxy proxy) {
         this.proxy = proxy;
     }
 }
