@@ -15,8 +15,11 @@
  */
 package example.test;
 
-public interface Test {
+import java.util.List;
+
+public interface Test<T> {
 
     String getValue();
 
+    List<T> getValues();
 }

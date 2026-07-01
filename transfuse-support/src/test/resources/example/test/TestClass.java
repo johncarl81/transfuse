@@ -15,13 +15,19 @@
  */
 package example.test;
 
+import java.util.List;
 import java.util.Map;
 
-public class TestClass extends Base implements Test {
+public class TestClass extends Base implements Test<String> {
 
     private String value;
     private Values[] valueArray;
     private int primitiveValue;
+    private List<String> stringList;
+    private Map<String, List<Integer>> nestedMap;
+    private List<? extends Number> boundedList;
+    private Point point;
+    private Shape shape;
 
     private enum Values {
         A, B, C
@@ -42,6 +48,10 @@ public class TestClass extends Base implements Test {
         this.value = value;
     }
 
+    public List<String> getValues() {
+        return stringList;
+    }
+
     public Values[] getValueArray() {
         return valueArray;
     }
@@ -56,5 +66,25 @@ public class TestClass extends Base implements Test {
 
     public void setPrimitiveValue(int primitiveValue) {
         this.primitiveValue = primitiveValue;
+    }
+
+    public List<String> getStringList() {
+        return stringList;
+    }
+
+    public Map<String, List<Integer>> getNestedMap() {
+        return nestedMap;
+    }
+
+    public List<? extends Number> getBoundedList() {
+        return boundedList;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public Shape getShape() {
+        return shape;
     }
 }

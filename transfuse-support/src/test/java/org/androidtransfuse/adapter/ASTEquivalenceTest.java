@@ -317,10 +317,14 @@ public class ASTEquivalenceTest {
         PackageClass testImplClassName = new PackageClass("example.test", "TestClass");
         PackageClass baseClassName = new PackageClass("example.test", "Base");
         PackageClass testClassName = new PackageClass("example.test", "Test");
+        PackageClass pointClassName = new PackageClass("example.test", "Point");
+        PackageClass shapeClassName = new PackageClass("example.test", "Shape");
 
         final String testImplValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(testImplClassName.getCanonicalName().replace(".", "/") + ".java"));
         final String baseValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(baseClassName.getCanonicalName().replace(".", "/") + ".java"));
         final String testValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(testClassName.getCanonicalName().replace(".", "/") + ".java"));
+        final String pointValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(pointClassName.getCanonicalName().replace(".", "/") + ".java"));
+        final String shapeValue = IOUtils.toString(ASTEquivalenceTest.class.getClassLoader().getResourceAsStream(shapeClassName.getCanonicalName().replace(".", "/") + ".java"));
 
         MemoryClassLoader classLoader = new MemoryClassLoader();
 
@@ -328,6 +332,8 @@ public class ASTEquivalenceTest {
         targetClassMap.put(testImplClassName, testImplValue);
         targetClassMap.put(baseClassName, baseValue);
         targetClassMap.put(testClassName, testValue);
+        targetClassMap.put(pointClassName, pointValue);
+        targetClassMap.put(shapeClassName, shapeValue);
 
         classLoader.add(targetClassMap);
 

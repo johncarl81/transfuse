@@ -15,11 +15,13 @@
  */
 package example.test;
 
-import java.util.Map;
+public sealed interface Shape permits Shape.Circle {
 
-public class Base {
+    double area();
 
-    String another;
-    Map<String, Integer> baseMap;
-
+    record Circle(double radius) implements Shape {
+        public double area() {
+            return Math.PI * radius * radius;
+        }
+    }
 }

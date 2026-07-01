@@ -15,11 +15,5 @@
  */
 package example.test;
 
-import java.util.Map;
-
-public class Base {
-
-    String another;
-    Map<String, Integer> baseMap;
-
+public record Point(int x, int y) {
 }
