@@ -26,6 +26,7 @@ import org.androidtransfuse.annotations.Provides;
 import org.androidtransfuse.gen.variableBuilder.ProvidesInjectionNodeBuilderFactory;
 import org.androidtransfuse.gen.variableDecorator.GeneratedProviderInjectionNodeBuilder;
 import org.androidtransfuse.model.InjectionSignature;
+import org.androidtransfuse.util.InjectionAnnotations;
 import org.androidtransfuse.util.JavaAnnotationPredicate;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.ScopePredicate;
@@ -138,7 +139,14 @@ public class ProvidesProcessor implements MethodProcessor {
 
             configurationRepository.putType(signature, variableInjectionBuilderFactory.buildProvidesBuilder(moduleType, astMethod, scope));
 
-            ASTType providerType = new ASTGenericTypeWrapper(astClassFactory.getType(Provider.class), new LazyTypeParameterBuilder() {
+            //register a Provider<T> binding for each supported namespace so both javax.inject.Provider
+            //and jakarta.inject.Provider injection points resolve to this @Provides method
+            putProviderBinding(configurationRepository, astClassFactory.getType(Provider.class));
+            putProviderBinding(configurationRepository, InjectionAnnotations.JAKARTA_PROVIDER);
+        }
+
+        private void putProviderBinding(InjectionNodeBuilderRepository configurationRepository, ASTType providerRawType) {
+            ASTType providerType = new ASTGenericTypeWrapper(providerRawType, new LazyTypeParameterBuilder() {
                 @Override
                 public ImmutableList<ASTType> buildGenericParameters() {
                     return ImmutableList.of(astMethod.getReturnType());
