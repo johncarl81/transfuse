@@ -17,7 +17,6 @@ package org.androidtransfuse.analysis;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import org.androidtransfuse.TransfuseAnalysisException;
 import org.androidtransfuse.adapter.*;
 import org.androidtransfuse.adapter.classes.ASTClassFactory;
 import org.androidtransfuse.analysis.repository.InjectionNodeBuilderRepository;
@@ -30,6 +29,7 @@ import org.androidtransfuse.util.InjectionAnnotations;
 import org.androidtransfuse.util.QualifierPredicate;
 import org.androidtransfuse.util.matcher.Matcher;
 import org.androidtransfuse.util.matcher.Matchers;
+import org.androidtransfuse.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -48,16 +48,19 @@ public class InjectionPointFactory {
     private final VariableInjectionNodeBuilder defaultBinding;
     private final ImmutableList<Matcher<ASTType>> providerMatchers;
     private final Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider;
+    private final Validator validator;
 
     @Inject
     public InjectionPointFactory(ASTClassFactory astClassFactory,
                                  QualifierPredicate qualifierPredicate,
                                  VariableInjectionNodeBuilder defaultBinding,
-                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider) {
+                                 Provider<GeneratedProviderInjectionNodeBuilder> generatedProviderInjectionNodeBuilderProvider,
+                                 Validator validator) {
         this.astClassFactory = astClassFactory;
         this.qualifierPredicate = qualifierPredicate;
         this.defaultBinding = defaultBinding;
         this.generatedProviderInjectionNodeBuilderProvider = generatedProviderInjectionNodeBuilderProvider;
+        this.validator = validator;
 
         //match a Provider<T> injection point from either the javax.inject or jakarta.inject namespace
         this.providerMatchers = ImmutableList.of(
@@ -160,14 +163,18 @@ public class InjectionPointFactory {
 
     private InjectionNode buildInjectionNode(InjectionNodeBuilderRepository repository, ASTBase target, InjectionSignature injectionSignature, AnalysisContext context) {
         //check type and qualifiers
-        InjectionNodeBuilder typeQualifierBuilder = get(repository.getTypeQualifierBindings(), injectionSignature);
+        InjectionNodeBuilder typeQualifierBuilder = get(repository.getTypeQualifierBindings(), injectionSignature, target);
 
         if(typeQualifierBuilder != null){
             return typeQualifierBuilder.buildInjectionNode(target, injectionSignature, context);
         }
 
         if(injectionSignature.getAnnotations().size() > 0){
-            throw new TransfuseAnalysisException("Unable to find injection node for annotated type: " + injectionSignature);
+            validator.error("Unable to inject " + injectionSignature + ": no binding, @Provides or @Bind was found for this qualified dependency")
+                    .element(target)
+                    .build();
+            //report and continue with a placeholder; the emitted compiler error fails the build
+            return defaultBinding.buildInjectionNode(target, injectionSignature, context);
         }
 
         //generated provider
@@ -188,7 +195,7 @@ public class InjectionPointFactory {
         return false;
     }
 
-    private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input){
+    private <T> InjectionNodeBuilder get(Map<Matcher<T>, InjectionNodeBuilder> builderMap, T input, ASTBase target){
         List<InjectionNodeBuilder> builders = new ArrayList<InjectionNodeBuilder>();
         for (Map.Entry<Matcher<T>, InjectionNodeBuilder> bindingEntry : builderMap.entrySet()) {
             if (bindingEntry.getKey().matches(input)) {
@@ -196,9 +203,11 @@ public class InjectionPointFactory {
             }
         }
         if(builders.size() > 1){
-            throw new TransfuseAnalysisException("Multiple types matched on type " + input + ":" + StringUtils.join(builders, ","));
+            validator.error("Ambiguous binding for " + input + ": multiple bindings match (" + StringUtils.join(builders, ", ") + ")")
+                    .element(target)
+                    .build();
         }
-        if(builders.size() == 1){
+        if(builders.size() >= 1){
             return builders.get(0);
         }
         return null;

@@ -117,7 +117,8 @@ public class CoreFactory {
         return new InjectionPointFactory(astClassFactory, qualifierPredicate,
                 new VariableInjectionNodeBuilder(buildAnalyser(),
                 buildVariableInjectionBuilder()),
-                new GeneratedProviderInjectionNodeBuilderProvider());
+                new GeneratedProviderInjectionNodeBuilderProvider(),
+                validator);
     }
 
     public ScopesGenerator buildScopesGenerator() {
