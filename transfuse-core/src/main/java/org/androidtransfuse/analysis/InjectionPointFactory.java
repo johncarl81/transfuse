@@ -170,7 +170,8 @@ public class InjectionPointFactory {
         }
 
         if(injectionSignature.getAnnotations().size() > 0){
-            validator.error("Unable to inject " + injectionSignature + ": no binding, @Provides or @Bind was found for this qualified dependency")
+            validator.error("Unable to inject " + injectionSignature + ": no binding, @Provides or @Bind was found for this qualified dependency"
+                    + dependencyPath(context, injectionSignature.getType()))
                     .element(target)
                     .build();
             //report and continue with a placeholder; the emitted compiler error fails the build
@@ -184,6 +185,18 @@ public class InjectionPointFactory {
 
         //default case
         return defaultBinding.buildInjectionNode(target, injectionSignature, context);
+    }
+
+    private String dependencyPath(AnalysisContext context, ASTType target){
+        List<String> path = new ArrayList<String>();
+        for (InjectionNode node : context.getDependencyHistory()) {
+            path.add(node.getASTType().getName());
+        }
+        path.add(target.getName());
+        if(path.size() <= 1){
+            return "";
+        }
+        return " (dependency path: " + StringUtils.join(path, " -> ") + ")";
     }
 
     private boolean matchesProvider(ASTType astType){
