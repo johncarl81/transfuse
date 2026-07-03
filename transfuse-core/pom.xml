@@ -74,25 +74,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doclet>org.asciidoctor.Asciidoclet</doclet>
-                    <docletArtifact>
-                        <groupId>org.asciidoctor</groupId>
-                        <artifactId>asciidoclet</artifactId>
-                        <version>1.5.6</version>
-                    </docletArtifact>
-                    <linksource>true</linksource>
-                    <additionalparam>--base-dir ${project.basedir}</additionalparam>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

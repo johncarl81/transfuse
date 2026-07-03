@@ -29,6 +29,8 @@
         <mockito.version>4.11.0</mockito.version>
         <robolectric.version>4.11.1</robolectric.version>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+        <asciidoclet.version>2.0.0</asciidoclet.version>
         <jaxb-runtime.version>2.3.8</jaxb-runtime.version>
         <jakarta.xml.bind.version>3.0.1</jakarta.xml.bind.version>
     </properties>
@@ -75,6 +77,64 @@
     </repositories>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Centralized Javadoc config. asciidoclet 1.5.6 used the pre-JDK-9 com.sun.javadoc
+                     API and needed the removed tools.jar; asciidoclet 2.x moved to the modern
+                     jdk.javadoc.doclet API, so it builds on JDK 17 with a current javadoc plugin. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doclet>org.asciidoctor.asciidoclet.Asciidoclet</doclet>
+                        <docletArtifact>
+                            <groupId>org.asciidoctor</groupId>
+                            <artifactId>asciidoclet</artifactId>
+                            <version>${asciidoclet.version}</version>
+                        </docletArtifact>
+                        <failOnError>false</failOnError>
+                        <quiet>true</quiet>
+                        <linksource>true</linksource>
+                        <!-- asciidoclet 2.x reaches into jdk.javadoc internals, strongly encapsulated
+                             since JDK 16; forward the opens to the javadoc tool JVM with -J so they
+                             apply to the JVM rather than as javac options (which clash with release). -->
+                        <additionalJOptions>
+                            <additionalJOption>-J--add-exports=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</additionalJOption>
+                            <additionalJOption>-J--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</additionalJOption>
+                        </additionalJOptions>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
