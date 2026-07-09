@@ -15,6 +15,7 @@
  */
 package org.androidtransfuse.util;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTBase;
 import org.androidtransfuse.adapter.ASTStringType;
@@ -56,6 +57,15 @@ public final class InjectionAnnotations {
     public static final ASTType JAVAX_PROVIDER = new ASTStringType("javax.inject.Provider");
     public static final ASTType JAKARTA_PROVIDER = new ASTStringType("jakarta.inject.Provider");
     public static final ImmutableSet<ASTType> PROVIDER = ImmutableSet.of(JAVAX_PROVIDER, JAKARTA_PROVIDER);
+
+    private static final ImmutableMap<String, ASTType> JAKARTA_TO_JAVAX = ImmutableMap.<String, ASTType>builder()
+            .put(JAKARTA_INJECT.getName(), JAVAX_INJECT)
+            .put(JAKARTA_QUALIFIER.getName(), JAVAX_QUALIFIER)
+            .put(JAKARTA_SCOPE.getName(), JAVAX_SCOPE)
+            .put(JAKARTA_SINGLETON.getName(), JAVAX_SINGLETON)
+            .put(JAKARTA_NAMED.getName(), JAVAX_NAMED)
+            .put(JAKARTA_PROVIDER.getName(), JAVAX_PROVIDER)
+            .build();
 
     private InjectionAnnotations() {
         //private utility constructor
@@ -99,5 +109,24 @@ public final class InjectionAnnotations {
             return JAKARTA_PROVIDER;
         }
         return JAVAX_PROVIDER;
+    }
+
+    /**
+     * Names a jakarta injection annotation under its javax equivalent, leaving every other annotation
+     * type untouched. A {@code jakarta.inject.Named("a")} qualifier names the same injection point as
+     * {@code javax.inject.Named("a")}, so the two must reduce to a single identity.
+     *
+     * Only the name is canonicalized. Substituting the annotation's ASTType would discard its
+     * meta-annotations, and qualifier detection reads those (see AnnotatedPredicate).
+     *
+     * @param annotationType the annotation type under inspection
+     * @return the javax equivalent's name, or the type's own name if it is not a jakarta annotation
+     */
+    public static String canonicalName(ASTType annotationType) {
+        ASTType javaxEquivalent = JAKARTA_TO_JAVAX.get(annotationType.getName());
+        if (javaxEquivalent == null) {
+            return annotationType.getName();
+        }
+        return javaxEquivalent.getName();
     }
 }

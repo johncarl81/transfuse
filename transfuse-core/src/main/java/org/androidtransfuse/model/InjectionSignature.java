@@ -19,13 +19,18 @@ import com.google.common.collect.ImmutableSet;
 import org.androidtransfuse.adapter.ASTAnnotation;
 import org.androidtransfuse.adapter.ASTType;
 import org.androidtransfuse.util.Contract;
+import org.androidtransfuse.util.InjectionAnnotations;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author John Ericksen
@@ -72,7 +77,7 @@ public class InjectionSignature {
 
         for (ASTAnnotation annotation : annotations) {
             builder.append('@');
-            builder.append(annotation.getASTType().getName());
+            builder.append(InjectionAnnotations.canonicalName(annotation.getASTType()));
             builder.append('(');
             List<String> propertyNames = new ArrayList<String>(annotation.getPropertyNames());
             Collections.sort(propertyNames);
@@ -107,11 +112,40 @@ public class InjectionSignature {
 
         return new EqualsBuilder()
                 .append(type, that.type)
-                .append(annotations, that.annotations).isEquals();
+                .append(canonicalAnnotationProperties(), that.canonicalAnnotationProperties()).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(type).append(annotations).hashCode();
+        return new HashCodeBuilder().append(type).append(canonicalAnnotationNames()).hashCode();
+    }
+
+    /**
+     * Identity of the annotations, keyed by canonical name so a jakarta qualifier names the same
+     * injection point as its javax counterpart. The ASTAnnotations themselves are left alone -
+     * qualifier detection reads their meta-annotations, which only the original types carry.
+     */
+    private Map<String, Map<String, Object>> canonicalAnnotationProperties() {
+        Map<String, Map<String, Object>> canonical = new HashMap<String, Map<String, Object>>();
+
+        for (ASTAnnotation annotation : annotations) {
+            Map<String, Object> properties = new HashMap<String, Object>();
+            for (String property : annotation.getPropertyNames()) {
+                properties.put(property, annotation.getProperty(property, Object.class));
+            }
+            canonical.put(InjectionAnnotations.canonicalName(annotation.getASTType()), properties);
+        }
+
+        return canonical;
+    }
+
+    private Set<String> canonicalAnnotationNames() {
+        Set<String> names = new HashSet<String>();
+
+        for (ASTAnnotation annotation : annotations) {
+            names.add(InjectionAnnotations.canonicalName(annotation.getASTType()));
+        }
+
+        return names;
     }
 }
