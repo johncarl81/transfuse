@@ -108,10 +108,14 @@ public class ASTClassFactory {
         }
 
         Class<?>[] classInterfaces = clazz.getInterfaces();
+        //getGenericInterfaces() reads the Signature attribute while getInterfaces() reads the
+        //interfaces array; bytecode weavers (Robolectric's instrumentation, for one) append a
+        //marker interface to the latter without updating the former, so the generic view can be
+        //the shorter of the two. The appended entries carry no generic information to recover.
         Type[] classGenericInterfaces = clazz.getGenericInterfaces();
 
         for (int i = 0; i < classInterfaces.length; i++) {
-            interfaceBuilder.add(getType(classInterfaces[i], classGenericInterfaces[i]));
+            interfaceBuilder.add(getType(classInterfaces[i], nullSafeAccess(classGenericInterfaces, i)));
         }
 
         //fill in the guts after building the class tree
